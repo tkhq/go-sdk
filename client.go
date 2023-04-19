@@ -35,12 +35,12 @@ type Client struct {
 }
 
 // DefaultOrganization returns the first organization found in the APIKey's set of organizations.
-func (c *Client) DefaultOrganization() string {
+func (c *Client) DefaultOrganization() *string {
 	for _, o := range c.APIKey.Organizations {
-		return o
+		return &o
 	}
 
-	return ""
+	return nil
 }
 
 // V0 returns the raw initial Turnkey API client.

@@ -18,7 +18,7 @@
 
         tklint = pkgs.writeScriptBin "lint" ''
           #!/bin/sh
-          ${pkgs.gofumpt}/bin/gofumpt -w . pkg/*
+          ${pkgs.gofumpt}/bin/gofumpt -w . ./examples/ ./pkg/*
           ${pkgs.golangci-lint}/bin/golangci-lint run ./...
         '';
       in

@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -62,7 +63,15 @@ type APIStamp struct {
 }
 
 // New generates a new Turnkey API key.
-func New() (*Key, error) {
+func New(organizationID string) (*Key, error) {
+	if organizationID == "" {
+		return nil, fmt.Errorf("please supply a valid Organization UUID")
+	}
+
+	if _, err := uuid.Parse(organizationID); err != nil {
+		return nil, fmt.Errorf("failed to parse organization ID")
+	}
+
 	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return nil, err
@@ -72,6 +81,9 @@ func New() (*Key, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	apiKey.Metadata.Organizations = append(apiKey.Metadata.Organizations, organizationID)
+	apiKey.Metadata.PublicKey = apiKey.PublicKey
 
 	return apiKey, nil
 }

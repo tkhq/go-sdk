@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/tkhq/go-sdk/pkg/apikey"
 
 	"github.com/stretchr/testify/assert"
@@ -81,7 +82,7 @@ func Test_Sign(t *testing.T) {
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
 	for i := 0; i < 1000; i++ {
-		apiKey, err := apikey.New()
+		apiKey, err := apikey.New(uuid.New().String())
 		assert.Nil(t, err)
 		assert.Equal(t, 66, len(apiKey.TkPublicKey), "attempt %d: expected 66 characters for public key %s", i, apiKey.TkPublicKey)
 		assert.Equal(t, 64, len(apiKey.TkPrivateKey), "attempt %d: expected 64 characters for private key %s", i, apiKey.TkPrivateKey)
