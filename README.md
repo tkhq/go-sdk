@@ -1,4 +1,5 @@
 # Turnkey GO SDK
+[![GoDocs](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/tkhq/go-sdk) 
 
 The Turnkey Go SDK is an early tool for interacting with the Turnkey API.
 
