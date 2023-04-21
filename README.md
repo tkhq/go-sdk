@@ -11,8 +11,8 @@ import (
 	"fmt"
 
 	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/store"
+	"github.com/tkhq/go-sdk/pkg/users"
+	"github.com/tkhq/go-sdk/pkg/models"
 )
 
 func ExampleClient() {
