@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/tkhq/go-sdk/pkg/apikey"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/tkhq/go-sdk/pkg/apikey"
 )
 
 func Test_FromTkPrivateKey(t *testing.T) {

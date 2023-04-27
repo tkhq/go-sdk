@@ -48,7 +48,8 @@ func (k *Key) MergeMetadata(md *Metadata) error {
 	return nil
 }
 
-const TURNKEY_API_SIGNATURE_SCHEME = "SIGNATURE_SCHEME_TK_API_P256"
+// TurnkeyAPISignatureScheme is the signature scheme to use for the API request signature.
+const TurnkeyAPISignatureScheme = "SIGNATURE_SCHEME_TK_API_P256"
 
 // APIStamp defines the stamp format used to authenticate payloads to the API.
 type APIStamp struct {
@@ -89,13 +90,13 @@ func New(organizationID string) (*Key, error) {
 }
 
 // EncodePrivateKey encodes an ECDSA private key into the Turnkey format.
-// For now, "Turnkey format" = raw DER form
+// For now, "Turnkey format" = raw DER form.
 func EncodePrivateKey(privateKey *ecdsa.PrivateKey) string {
 	return fmt.Sprintf("%064x", privateKey.D)
 }
 
 // EncodePublicKey encodes an ECDSA public key into the Turnkey format.
-// For now, "Turnkey format" = standard compressed form for ECDSA keys
+// For now, "Turnkey format" = standard compressed form for ECDSA keys.
 func EncodePublicKey(publicKey *ecdsa.PublicKey) string {
 	// ANSI X9.62 point encoding
 	var prefix string
@@ -151,6 +152,7 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return apiKey, nil
 }
 
@@ -187,7 +189,7 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 	stamp := APIStamp{
 		PublicKey: apiKey.TkPublicKey,
 		Signature: hex.EncodeToString(sigBytes),
-		Scheme:    TURNKEY_API_SIGNATURE_SCHEME,
+		Scheme:    TurnkeyAPISignatureScheme,
 	}
 
 	jsonStamp, err := json.Marshal(stamp)
