@@ -1,15 +1,17 @@
+// Package sdk provides a Go SDK with which to interact with the Turnkey API service.
 package sdk
 
 import (
-	"github.com/tkhq/go-sdk/pkg/api/client"
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/store"
-
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/pkg/errors"
+
+	"github.com/tkhq/go-sdk/pkg/api/client"
+	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/store"
 )
 
+// New returns a new API Client with the given API key name from the default keystore.
 func New(keyname string) (*Client, error) {
 	apiKey, err := store.Default.Load(keyname)
 	if err != nil {
@@ -49,7 +51,6 @@ func (c *Client) V0() *client.TurnkeyPublicAPI {
 	return c.client
 }
 
-// LoadKeypair require-loads the keypair referenced by the given name (or the default, if not specified).
 // Authenticator provides a runtime.ClientAuthInfoWriter for use with the swagger API client.
 type Authenticator struct {
 	// Key optionally overrides the globally-parsed APIKeypair with a custom key.

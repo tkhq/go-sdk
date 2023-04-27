@@ -1,4 +1,4 @@
-// Package to encapsulate CLI filesystem operations
+// Package store defines a key storage interface.
 package store
 
 import (
