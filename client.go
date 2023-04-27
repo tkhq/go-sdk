@@ -25,6 +25,12 @@ func New(keyname string) (*Client, error) {
 	}, nil
 }
 
+// NewHTTPClient returns a new bare HTTP API client.
+// Most users will call New() instead.
+func NewHTTPClient(formats strfmt.Registry) *client.TurnkeyPublicAPI {
+	return client.NewHTTPClient(formats)
+}
+
 // Client provides a handle by which to interact with the Turnkey API.
 type Client struct {
 	client *client.TurnkeyPublicAPI
