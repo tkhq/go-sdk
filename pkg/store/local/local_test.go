@@ -12,30 +12,41 @@ import (
 // MacOSX has $HOME set by default.
 func TestGetKeyDirPathMacOSX(t *testing.T) {
 	assert.Nil(t, os.Setenv("HOME", "/home/dir"))
-	defer assert.Nil(t, os.Unsetenv("HOME"))
+
+	defer func() {
+		assert.Nil(t, os.Unsetenv("HOME"))
+	}()
 
 	// Need to unset this explicitly: the test runner has this set by default!
 	originalValue := os.Getenv("XDG_CONFIG_HOME")
 
 	assert.Nil(t, os.Unsetenv("XDG_CONFIG_HOME"))
 
-	defer assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", originalValue))
+	defer func() {
+		assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", originalValue))
+	}()
 
 	dir := local.DefaultKeysDir()
-	assert.Equal(t, dir, "/home/dir/.config/turnkey/keys")
+	assert.Equal(t, "/home/dir/.config/turnkey/keys", dir)
 }
 
 // On UNIX, we expect XDG_CONFIG_HOME to be set.
 // If it's not set, we're back to a MacOSX-like system.
 func TestGetKeyDirPathUnix(t *testing.T) {
 	assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", "/special/dir"))
-	defer assert.Nil(t, os.Unsetenv("XDG_CONFIG_HOME"))
+
+	defer func() {
+		assert.Nil(t, os.Unsetenv("XDG_CONFIG_HOME"))
+	}()
 
 	assert.Nil(t, os.Setenv("HOME", "/home/dir"))
-	defer assert.Nil(t, os.Unsetenv("HOME"))
+
+	defer func() {
+		assert.Nil(t, os.Unsetenv("HOME"))
+	}()
 
 	dir := local.DefaultKeysDir()
-	assert.Equal(t, dir, "/special/dir/turnkey/keys")
+	assert.Equal(t, "/special/dir/turnkey/keys", dir)
 }
 
 // If calling with a path, we should get this back if the path exists.

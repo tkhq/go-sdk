@@ -35,6 +35,7 @@
           ${pkgs.gofumpt}/bin/gofumpt -w . ./examples/ ./pkg/*
           ${gci}/bin/gci write --skip-generated -s standard -s default -s "Prefix(github.com/tkhq)" .
           ${pkgs.golangci-lint}/bin/golangci-lint run ./...
+          ${pkgs.go}/bin/go test -v ./...
         '';
       in
       {
