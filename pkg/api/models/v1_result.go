@@ -21,6 +21,9 @@ type V1Result struct {
 	// accept invitation result
 	AcceptInvitationResult *V1AcceptInvitationResult `json:"acceptInvitationResult,omitempty"`
 
+	// activate billing tier result
+	ActivateBillingTierResult *V1ActivateBillingTierResult `json:"activateBillingTierResult,omitempty"`
+
 	// create Api keys result
 	CreateAPIKeysResult *V1CreateAPIKeysResult `json:"createApiKeysResult,omitempty"`
 
@@ -60,6 +63,9 @@ type V1Result struct {
 	// delete organization result
 	DeleteOrganizationResult *V1DeleteOrganizationResult `json:"deleteOrganizationResult,omitempty"`
 
+	// delete payment method result
+	DeletePaymentMethodResult *V1DeletePaymentMethodResult `json:"deletePaymentMethodResult,omitempty"`
+
 	// delete policy result
 	DeletePolicyResult *V1DeletePolicyResult `json:"deletePolicyResult,omitempty"`
 
@@ -75,6 +81,9 @@ type V1Result struct {
 	// disable private key result
 	DisablePrivateKeyResult *V1DisablePrivateKeyResult `json:"disablePrivateKeyResult,omitempty"`
 
+	// set payment method result
+	SetPaymentMethodResult *V1SetPaymentMethodResult `json:"setPaymentMethodResult,omitempty"`
+
 	// sign raw payload result
 	SignRawPayloadResult *V1SignRawPayloadResult `json:"signRawPayloadResult,omitempty"`
 
@@ -87,6 +96,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAcceptInvitationResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateActivateBillingTierResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -142,6 +155,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeletePaymentMethodResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeletePolicyResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -159,6 +176,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDisablePrivateKeyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSetPaymentMethodResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -187,6 +208,25 @@ func (m *V1Result) validateAcceptInvitationResult(formats strfmt.Registry) error
 				return ve.ValidateName("acceptInvitationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) validateActivateBillingTierResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.ActivateBillingTierResult) { // not required
+		return nil
+	}
+
+	if m.ActivateBillingTierResult != nil {
+		if err := m.ActivateBillingTierResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("activateBillingTierResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("activateBillingTierResult")
 			}
 			return err
 		}
@@ -442,6 +482,25 @@ func (m *V1Result) validateDeleteOrganizationResult(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *V1Result) validateDeletePaymentMethodResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePaymentMethodResult) { // not required
+		return nil
+	}
+
+	if m.DeletePaymentMethodResult != nil {
+		if err := m.DeletePaymentMethodResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePaymentMethodResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePaymentMethodResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Result) validateDeletePolicyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeletePolicyResult) { // not required
 		return nil
@@ -537,6 +596,25 @@ func (m *V1Result) validateDisablePrivateKeyResult(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *V1Result) validateSetPaymentMethodResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.SetPaymentMethodResult) { // not required
+		return nil
+	}
+
+	if m.SetPaymentMethodResult != nil {
+		if err := m.SetPaymentMethodResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Result) validateSignRawPayloadResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.SignRawPayloadResult) { // not required
 		return nil
@@ -580,6 +658,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	var res []error
 
 	if err := m.contextValidateAcceptInvitationResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateActivateBillingTierResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -635,6 +717,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeletePaymentMethodResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeletePolicyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -652,6 +738,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateDisablePrivateKeyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSetPaymentMethodResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -677,6 +767,22 @@ func (m *V1Result) contextValidateAcceptInvitationResult(ctx context.Context, fo
 				return ve.ValidateName("acceptInvitationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateActivateBillingTierResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ActivateBillingTierResult != nil {
+		if err := m.ActivateBillingTierResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("activateBillingTierResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("activateBillingTierResult")
 			}
 			return err
 		}
@@ -893,6 +999,22 @@ func (m *V1Result) contextValidateDeleteOrganizationResult(ctx context.Context, 
 	return nil
 }
 
+func (m *V1Result) contextValidateDeletePaymentMethodResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePaymentMethodResult != nil {
+		if err := m.DeletePaymentMethodResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePaymentMethodResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePaymentMethodResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Result) contextValidateDeletePolicyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePolicyResult != nil {
@@ -965,6 +1087,22 @@ func (m *V1Result) contextValidateDisablePrivateKeyResult(ctx context.Context, f
 				return ve.ValidateName("disablePrivateKeyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("disablePrivateKeyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateSetPaymentMethodResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SetPaymentMethodResult != nil {
+		if err := m.SetPaymentMethodResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodResult")
 			}
 			return err
 		}

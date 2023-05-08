@@ -20,6 +20,14 @@ import (
 // swagger:model v1Policy
 type V1Policy struct {
 
+	// A condition expression that evalutes to true or false.
+	// Required: true
+	Condition *string `json:"condition"`
+
+	// A consensus expression that evalutes to true or false.
+	// Required: true
+	Consensus *string `json:"consensus"`
+
 	// created at
 	// Required: true
 	CreatedAt *V1Timestamp `json:"createdAt"`
@@ -53,6 +61,14 @@ type V1Policy struct {
 func (m *V1Policy) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateCondition(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateConsensus(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreatedAt(formats); err != nil {
 		res = append(res, err)
 	}
@@ -84,6 +100,24 @@ func (m *V1Policy) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *V1Policy) validateCondition(formats strfmt.Registry) error {
+
+	if err := validate.Required("condition", "body", m.Condition); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *V1Policy) validateConsensus(formats strfmt.Registry) error {
+
+	if err := validate.Required("consensus", "body", m.Consensus); err != nil {
+		return err
+	}
+
 	return nil
 }
 
