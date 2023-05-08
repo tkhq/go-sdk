@@ -27,7 +27,7 @@
 
         tkgenerate = pkgs.writeScriptBin "generate" ''
           #!/bin/sh
-          swagger generate client -f https://raw.githubusercontent.com/tkhq/sdk/main/packages/http/src/__generated__/services/coordinator/public/v1/public_api.swagger.json -t pkg/api;
+          swagger generate client -f inputs/public_api.swagger.json -t pkg/api;
         '';
 
         tklint = pkgs.writeScriptBin "lint" ''
