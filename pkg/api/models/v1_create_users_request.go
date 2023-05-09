@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1CreatePolicyRequest v1 create policy request
+// V1CreateUsersRequest v1 create users request
 //
-// swagger:model v1CreatePolicyRequest
-type V1CreatePolicyRequest struct {
+// swagger:model v1CreateUsersRequest
+type V1CreateUsersRequest struct {
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +26,7 @@ type V1CreatePolicyRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreatePolicyIntentV2 `json:"parameters"`
+	Parameters *V1CreateUsersIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +34,12 @@ type V1CreatePolicyRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_POLICY_V2]
+	// Enum: [ACTIVITY_TYPE_CREATE_USERS]
 	Type *string `json:"type"`
 }
 
-// Validate validates this v1 create policy request
-func (m *V1CreatePolicyRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this v1 create users request
+func (m *V1CreateUsersRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *V1CreatePolicyRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *V1CreateUsersRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *V1CreatePolicyRequest) validateOrganizationID(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateParameters(formats strfmt.Registry) error {
+func (m *V1CreateUsersRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +93,7 @@ func (m *V1CreatePolicyRequest) validateParameters(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *V1CreateUsersRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +102,33 @@ func (m *V1CreatePolicyRequest) validateTimestampMs(formats strfmt.Registry) err
 	return nil
 }
 
-var v1CreatePolicyRequestTypeTypePropEnum []interface{}
+var v1CreateUsersRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_POLICY_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_USERS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		v1CreatePolicyRequestTypeTypePropEnum = append(v1CreatePolicyRequestTypeTypePropEnum, v)
+		v1CreateUsersRequestTypeTypePropEnum = append(v1CreateUsersRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// V1CreatePolicyRequestTypeACTIVITYTYPECREATEPOLICYV2 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V2"
-	V1CreatePolicyRequestTypeACTIVITYTYPECREATEPOLICYV2 string = "ACTIVITY_TYPE_CREATE_POLICY_V2"
+	// V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERS captures enum value "ACTIVITY_TYPE_CREATE_USERS"
+	V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERS string = "ACTIVITY_TYPE_CREATE_USERS"
 )
 
 // prop value enum
-func (m *V1CreatePolicyRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, v1CreatePolicyRequestTypeTypePropEnum, true); err != nil {
+func (m *V1CreateUsersRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, v1CreateUsersRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateType(formats strfmt.Registry) error {
+func (m *V1CreateUsersRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +142,8 @@ func (m *V1CreatePolicyRequest) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this v1 create policy request based on the context it is used
-func (m *V1CreatePolicyRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this v1 create users request based on the context it is used
+func (m *V1CreateUsersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +156,7 @@ func (m *V1CreatePolicyRequest) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *V1CreateUsersRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
@@ -173,7 +173,7 @@ func (m *V1CreatePolicyRequest) contextValidateParameters(ctx context.Context, f
 }
 
 // MarshalBinary interface implementation
-func (m *V1CreatePolicyRequest) MarshalBinary() ([]byte, error) {
+func (m *V1CreateUsersRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -181,8 +181,8 @@ func (m *V1CreatePolicyRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *V1CreatePolicyRequest) UnmarshalBinary(b []byte) error {
-	var res V1CreatePolicyRequest
+func (m *V1CreateUsersRequest) UnmarshalBinary(b []byte) error {
+	var res V1CreateUsersRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

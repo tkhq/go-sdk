@@ -22,6 +22,9 @@ type V1Intent struct {
 	// accept invitation intent
 	AcceptInvitationIntent *V1AcceptInvitationIntent `json:"acceptInvitationIntent,omitempty"`
 
+	// activate billing tier intent
+	ActivateBillingTierIntent *V1ActivateBillingTierIntent `json:"activateBillingTierIntent,omitempty"`
+
 	// approve activity intent
 	ApproveActivityIntent *V1ApproveActivityIntent `json:"approveActivityIntent,omitempty"`
 
@@ -43,6 +46,9 @@ type V1Intent struct {
 
 	// create policy intent v2
 	CreatePolicyIntentV2 *V1CreatePolicyIntentV2 `json:"createPolicyIntentV2,omitempty"`
+
+	// create policy intent v3
+	CreatePolicyIntentV3 *V1CreatePolicyIntentV3 `json:"createPolicyIntentV3,omitempty"`
 
 	// create private key tag intent
 	CreatePrivateKeyTagIntent *V1CreatePrivateKeyTagIntent `json:"createPrivateKeyTagIntent,omitempty"`
@@ -68,6 +74,9 @@ type V1Intent struct {
 	// delete organization intent
 	DeleteOrganizationIntent *V1DeleteOrganizationIntent `json:"deleteOrganizationIntent,omitempty"`
 
+	// delete payment method intent
+	DeletePaymentMethodIntent *V1DeletePaymentMethodIntent `json:"deletePaymentMethodIntent,omitempty"`
+
 	// delete policy intent
 	DeletePolicyIntent *V1DeletePolicyIntent `json:"deletePolicyIntent,omitempty"`
 
@@ -86,6 +95,9 @@ type V1Intent struct {
 	// reject activity intent
 	RejectActivityIntent *V1RejectActivityIntent `json:"rejectActivityIntent,omitempty"`
 
+	// set payment method intent
+	SetPaymentMethodIntent *V1SetPaymentMethodIntent `json:"setPaymentMethodIntent,omitempty"`
+
 	// sign raw payload intent
 	SignRawPayloadIntent *V1SignRawPayloadIntent `json:"signRawPayloadIntent,omitempty"`
 
@@ -98,6 +110,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAcceptInvitationIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateActivateBillingTierIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -126,6 +142,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatePolicyIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatePolicyIntentV3(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -161,6 +181,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeletePaymentMethodIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeletePolicyIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -182,6 +206,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateRejectActivityIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSetPaymentMethodIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -210,6 +238,25 @@ func (m *V1Intent) validateAcceptInvitationIntent(formats strfmt.Registry) error
 				return ve.ValidateName("acceptInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateActivateBillingTierIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.ActivateBillingTierIntent) { // not required
+		return nil
+	}
+
+	if m.ActivateBillingTierIntent != nil {
+		if err := m.ActivateBillingTierIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("activateBillingTierIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("activateBillingTierIntent")
 			}
 			return err
 		}
@@ -344,6 +391,25 @@ func (m *V1Intent) validateCreatePolicyIntentV2(formats strfmt.Registry) error {
 				return ve.ValidateName("createPolicyIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPolicyIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreatePolicyIntentV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatePolicyIntentV3) { // not required
+		return nil
+	}
+
+	if m.CreatePolicyIntentV3 != nil {
+		if err := m.CreatePolicyIntentV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPolicyIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPolicyIntentV3")
 			}
 			return err
 		}
@@ -504,6 +570,25 @@ func (m *V1Intent) validateDeleteOrganizationIntent(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *V1Intent) validateDeletePaymentMethodIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePaymentMethodIntent) { // not required
+		return nil
+	}
+
+	if m.DeletePaymentMethodIntent != nil {
+		if err := m.DeletePaymentMethodIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePaymentMethodIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePaymentMethodIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateDeletePolicyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeletePolicyIntent) { // not required
 		return nil
@@ -618,6 +703,25 @@ func (m *V1Intent) validateRejectActivityIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *V1Intent) validateSetPaymentMethodIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.SetPaymentMethodIntent) { // not required
+		return nil
+	}
+
+	if m.SetPaymentMethodIntent != nil {
+		if err := m.SetPaymentMethodIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateSignRawPayloadIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.SignRawPayloadIntent) { // not required
 		return nil
@@ -664,6 +768,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateActivateBillingTierIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateApproveActivityIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -689,6 +797,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateCreatePolicyIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatePolicyIntentV3(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -724,6 +836,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeletePaymentMethodIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeletePolicyIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -745,6 +861,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateRejectActivityIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSetPaymentMethodIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -770,6 +890,22 @@ func (m *V1Intent) contextValidateAcceptInvitationIntent(ctx context.Context, fo
 				return ve.ValidateName("acceptInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateActivateBillingTierIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ActivateBillingTierIntent != nil {
+		if err := m.ActivateBillingTierIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("activateBillingTierIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("activateBillingTierIntent")
 			}
 			return err
 		}
@@ -882,6 +1018,22 @@ func (m *V1Intent) contextValidateCreatePolicyIntentV2(ctx context.Context, form
 				return ve.ValidateName("createPolicyIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPolicyIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreatePolicyIntentV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatePolicyIntentV3 != nil {
+		if err := m.CreatePolicyIntentV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPolicyIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPolicyIntentV3")
 			}
 			return err
 		}
@@ -1018,6 +1170,22 @@ func (m *V1Intent) contextValidateDeleteOrganizationIntent(ctx context.Context, 
 	return nil
 }
 
+func (m *V1Intent) contextValidateDeletePaymentMethodIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePaymentMethodIntent != nil {
+		if err := m.DeletePaymentMethodIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePaymentMethodIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePaymentMethodIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateDeletePolicyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePolicyIntent != nil {
@@ -1106,6 +1274,22 @@ func (m *V1Intent) contextValidateRejectActivityIntent(ctx context.Context, form
 				return ve.ValidateName("rejectActivityIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("rejectActivityIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateSetPaymentMethodIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SetPaymentMethodIntent != nil {
+		if err := m.SetPaymentMethodIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodIntent")
 			}
 			return err
 		}

@@ -41,3 +41,13 @@ In order to use the SDK, you will need an API key.
 When creating API keys, the private part never leaves the local system, but the public part must be registered to your Turnkey account.
 
 The easiest way to manage your API keys is with the [Turnkey CLI](https://github.com/tkhq/tkcli), but you can also create one using this SDK.  See [this example](./examples/apikey/).
+
+## Updating the SDK with the latest Swagger definitions
+
+1. Install [go-swagger](https://goswagger.io/install.html):
+```
+brew tap go-swagger/go-swagger
+brew install go-swagger
+```
+2. Update the swagger file in `inputs/` with a new one
+3. Run `make generate`
