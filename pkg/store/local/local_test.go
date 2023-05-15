@@ -2,7 +2,6 @@ package local_test
 
 import (
 	"os"
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,10 +33,6 @@ func TestGetKeyDirPathMacOSX(t *testing.T) {
 // On UNIX, we expect XDG_CONFIG_HOME to be set.
 // If it's not set, we're back to a MacOSX-like system.
 func TestGetKeyDirPathUnix(t *testing.T) {
-	if runtime.GOOS == "darwin" {
-		t.Skip("Skipping on macOS (default path is `~/.config/turkey` unless you specify an override via the CLI)")
-	}
-
 	assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", "/special/dir"))
 
 	defer func() {

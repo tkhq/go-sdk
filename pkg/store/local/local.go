@@ -73,28 +73,33 @@ func (s *Store) MetadataFile(name string) string {
 func DefaultKeysDir() string {
 	var cfgDir string
 
+	shouldUseHomeDir := false
+
 	// The default `UserConfigDir` in golang doesn't make sense on macOS
 	// https://github.com/golang/go/issues/29960#issuecomment-505321146
 	// Solution: always use `~/.config/turkey` on macOS when possible
 	if runtime.GOOS == "darwin" {
-		homeDir, err := os.UserHomeDir()
+		if os.Getenv("XDG_CONFIG_HOME") != "" {
+			cfgDir = os.Getenv("XDG_CONFIG_HOME")
+		} else {
+			shouldUseHomeDir = true
+		}
+	} else {
+		var err error
 
+		cfgDir, err = os.UserConfigDir()
+
+		if err != nil {
+			shouldUseHomeDir = true
+		}
+	}
+
+	if shouldUseHomeDir {
+		homeDir, err := os.UserHomeDir()
 		if err != nil {
 			cfgDir = "."
 		} else {
 			cfgDir = path.Join(homeDir, ".config")
-		}
-	} else {
-		var err error
-		cfgDir, err = os.UserConfigDir()
-
-		if err != nil {
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				cfgDir = "."
-			} else {
-				cfgDir = path.Join(homeDir, ".config")
-			}
 		}
 	}
 
