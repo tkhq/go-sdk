@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	"runtime"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -70,13 +71,30 @@ func (s *Store) MetadataFile(name string) string {
 
 // DefaultKeysDir returns the default directory for key storage for the user's system.
 func DefaultKeysDir() string {
-	cfgDir, err := os.UserConfigDir()
-	if err != nil {
+	var cfgDir string
+
+	// The default `UserConfigDir` in golang doesn't make sense on macOS
+	// https://github.com/golang/go/issues/29960#issuecomment-505321146
+	// Solution: always use `~/.config/turkey` on macOS when possible
+	if runtime.GOOS == "darwin" {
 		homeDir, err := os.UserHomeDir()
+
 		if err != nil {
 			cfgDir = "."
 		} else {
 			cfgDir = path.Join(homeDir, ".config")
+		}
+	} else {
+		var err error
+		cfgDir, err = os.UserConfigDir()
+
+		if err != nil {
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				cfgDir = "."
+			} else {
+				cfgDir = path.Join(homeDir, ".config")
+			}
 		}
 	}
 
