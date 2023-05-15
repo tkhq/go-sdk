@@ -69,6 +69,30 @@ func (s *Store) MetadataFile(name string) string {
 	return path.Join(s.KeyDirectory, fmt.Sprintf("%s.%s", name, metadataExtension))
 }
 
+// DeprecatedDefaultKeysDir checks the deprecated location on macOS;
+// returns the full path if it exists on disk.
+// `~/Library/Application Support/turnkey/keys/`.
+func DeprecatedDefaultKeysDir() string {
+	if runtime.GOOS != "darwin" {
+		return ""
+	}
+
+	cfgDir, err := os.UserConfigDir()
+	if err == nil {
+		return ""
+	}
+
+	keysDir := path.Join(cfgDir, turnkeyDirectoryName, keysDirectoryName)
+
+	exists, _ := checkFolderExists(keysDir) //nolint: errcheck
+
+	if !exists {
+		return ""
+	}
+
+	return keysDir
+}
+
 // DefaultKeysDir returns the default directory for key storage for the user's system.
 func DefaultKeysDir() string {
 	var cfgDir string
@@ -241,6 +265,19 @@ func createMetadataFile(path string, key *apikey.Key, mode fs.FileMode) error {
 	defer f.Close() //nolint: errcheck
 
 	return json.NewEncoder(f).Encode(key)
+}
+
+func checkFolderExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if errors.Is(err, fs.ErrNotExist) {
+		return false, nil
+	}
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // checkFileExists checks that the given file exists and has a non-zero size.
