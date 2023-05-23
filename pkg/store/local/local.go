@@ -78,7 +78,7 @@ func DeprecatedDefaultKeysDir() string {
 	}
 
 	cfgDir, err := os.UserConfigDir()
-	if err == nil {
+	if err != nil {
 		return ""
 	}
 
