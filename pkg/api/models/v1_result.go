@@ -27,6 +27,9 @@ type V1Result struct {
 	// create Api keys result
 	CreateAPIKeysResult *V1CreateAPIKeysResult `json:"createApiKeysResult,omitempty"`
 
+	// create Api only users result
+	CreateAPIOnlyUsersResult *V1CreateAPIOnlyUsersResult `json:"createApiOnlyUsersResult,omitempty"`
+
 	// create authenticators result
 	CreateAuthenticatorsResult *V1CreateAuthenticatorsResult `json:"createAuthenticatorsResult,omitempty"`
 
@@ -89,6 +92,9 @@ type V1Result struct {
 
 	// sign transaction result
 	SignTransactionResult *V1SignTransactionResult `json:"signTransactionResult,omitempty"`
+
+	// update root quorum result
+	UpdateRootQuorumResult V1UpdateRootQuorumResult `json:"updateRootQuorumResult,omitempty"`
 }
 
 // Validate validates this v1 result
@@ -104,6 +110,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateAPIKeysResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateAPIOnlyUsersResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -246,6 +256,25 @@ func (m *V1Result) validateCreateAPIKeysResult(formats strfmt.Registry) error {
 				return ve.ValidateName("createApiKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) validateCreateAPIOnlyUsersResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAPIOnlyUsersResult) { // not required
+		return nil
+	}
+
+	if m.CreateAPIOnlyUsersResult != nil {
+		if err := m.CreateAPIOnlyUsersResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiOnlyUsersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiOnlyUsersResult")
 			}
 			return err
 		}
@@ -669,6 +698,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateAPIOnlyUsersResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateAuthenticatorsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -799,6 +832,22 @@ func (m *V1Result) contextValidateCreateAPIKeysResult(ctx context.Context, forma
 				return ve.ValidateName("createApiKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateCreateAPIOnlyUsersResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAPIOnlyUsersResult != nil {
+		if err := m.CreateAPIOnlyUsersResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiOnlyUsersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiOnlyUsersResult")
 			}
 			return err
 		}

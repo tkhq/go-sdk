@@ -25,7 +25,7 @@ type V1CreateUserTagIntent struct {
 	// Required: true
 	UserIds []string `json:"userIds"`
 
-	// @inject_tag: validate:"required,max=20"
+	// @inject_tag: validate:"required,tk_label,tk_label_length"
 	//
 	// Human-readable name for a User Tag.
 	// Required: true

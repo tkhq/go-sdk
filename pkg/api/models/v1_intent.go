@@ -31,6 +31,9 @@ type V1Intent struct {
 	// create Api keys intent
 	CreateAPIKeysIntent *V1CreateAPIKeysIntent `json:"createApiKeysIntent,omitempty"`
 
+	// create Api only users intent
+	CreateAPIOnlyUsersIntent *V1CreateAPIOnlyUsersIntent `json:"createApiOnlyUsersIntent,omitempty"`
+
 	// create authenticators intent
 	CreateAuthenticatorsIntent *V1CreateAuthenticatorsIntent `json:"createAuthenticatorsIntent,omitempty"`
 
@@ -103,6 +106,9 @@ type V1Intent struct {
 
 	// sign transaction intent
 	SignTransactionIntent *V1SignTransactionIntent `json:"signTransactionIntent,omitempty"`
+
+	// update root quorum intent
+	UpdateRootQuorumIntent *V1UpdateRootQuorumIntent `json:"updateRootQuorumIntent,omitempty"`
 }
 
 // Validate validates this v1 intent
@@ -122,6 +128,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateAPIKeysIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateAPIOnlyUsersIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -221,6 +231,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUpdateRootQuorumIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -295,6 +309,25 @@ func (m *V1Intent) validateCreateAPIKeysIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreateAPIOnlyUsersIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAPIOnlyUsersIntent) { // not required
+		return nil
+	}
+
+	if m.CreateAPIOnlyUsersIntent != nil {
+		if err := m.CreateAPIOnlyUsersIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiOnlyUsersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiOnlyUsersIntent")
 			}
 			return err
 		}
@@ -760,6 +793,25 @@ func (m *V1Intent) validateSignTransactionIntent(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *V1Intent) validateUpdateRootQuorumIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateRootQuorumIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateRootQuorumIntent != nil {
+		if err := m.UpdateRootQuorumIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateRootQuorumIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateRootQuorumIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this v1 intent based on the context it is used
 func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -777,6 +829,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateCreateAPIKeysIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateAPIOnlyUsersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -876,6 +932,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdateRootQuorumIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -938,6 +998,22 @@ func (m *V1Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, forma
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreateAPIOnlyUsersIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAPIOnlyUsersIntent != nil {
+		if err := m.CreateAPIOnlyUsersIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiOnlyUsersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiOnlyUsersIntent")
 			}
 			return err
 		}
@@ -1322,6 +1398,22 @@ func (m *V1Intent) contextValidateSignTransactionIntent(ctx context.Context, for
 				return ve.ValidateName("signTransactionIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("signTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateRootQuorumIntent != nil {
+		if err := m.UpdateRootQuorumIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateRootQuorumIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateRootQuorumIntent")
 			}
 			return err
 		}

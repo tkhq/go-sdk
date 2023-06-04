@@ -36,10 +36,12 @@ type V1UserParams struct {
 	// Required: true
 	Authenticators []*V1AuthenticatorParams `json:"authenticators"`
 
+	// @inject_tag: validate:"omitempty,email,tk_email"
+	//
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length,tk_label"
 	//
 	// Human-readable name for a User.
 	// Required: true

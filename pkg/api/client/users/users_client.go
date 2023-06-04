@@ -30,6 +30,10 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	PublicAPIServiceCreateAPIKeys(params *PublicAPIServiceCreateAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAPIKeysOK, error)
 
+	PublicAPIServiceCreateAPIOnlyUsers(params *PublicAPIServiceCreateAPIOnlyUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAPIOnlyUsersOK, error)
+
+	PublicAPIServiceCreateUsers(params *PublicAPIServiceCreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUsersOK, error)
+
 	PublicAPIServiceDeleteAPIKeys(params *PublicAPIServiceDeleteAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteAPIKeysOK, error)
 
 	PublicAPIServiceGetUser(params *PublicAPIServiceGetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetUserOK, error)
@@ -78,6 +82,86 @@ func (a *Client) PublicAPIServiceCreateAPIKeys(params *PublicAPIServiceCreateAPI
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceCreateAPIKeysDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceCreateAPIOnlyUsers creates API only users
+
+Create API-only Users in an existing Organization
+*/
+func (a *Client) PublicAPIServiceCreateAPIOnlyUsers(params *PublicAPIServiceCreateAPIOnlyUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAPIOnlyUsersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreateAPIOnlyUsersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreateApiOnlyUsers",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_api_only_users",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreateAPIOnlyUsersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreateAPIOnlyUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreateAPIOnlyUsersDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceCreateUsers creates users
+
+Create Users in an existing Organization
+*/
+func (a *Client) PublicAPIServiceCreateUsers(params *PublicAPIServiceCreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUsersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreateUsersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreateUsers",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_users",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreateUsersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreateUsersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreateUsersDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
