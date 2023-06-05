@@ -67,10 +67,13 @@ linters-settings:
     # minimal occurrences count to trigger, 3 by default
     min-occurrences: 3
   depguard:
-    list-type: blacklist
-    packages:
-      - github.com/golang/protobuf/proto
-      - google.golang.org/protobuf/proto
+    rules:
+      main: 
+        deny:
+          - pkg: "github.com/golang/protobuf/proto"
+            desc: not allowed
+          - pkg: "google.golang.org/protobuf/proto"
+            desc: not allowed
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
@@ -163,7 +166,6 @@ linters:
     - typecheck
     - varnamelen # too annoying
     - wrapcheck
-    - contextcheck # enable once golangci-lint 1.50.1 or 1.51 lands
     - dupword # too annoying
 
     # linters awaiting generics support: https://github.com/golangci/golangci-lint/issues/2649
