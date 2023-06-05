@@ -27,7 +27,7 @@ type V1CreatePolicyIntentV2 struct {
 	// notes
 	Notes string `json:"notes,omitempty"`
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length"
 	//
 	// Human-readable name for a Policy.
 	// Required: true

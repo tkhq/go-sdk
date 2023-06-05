@@ -19,13 +19,13 @@ import (
 // swagger:model v1SetPaymentMethodIntent
 type V1SetPaymentMethodIntent struct {
 
-	// @inject_tag: validate:"required,email"
+	// @inject_tag: validate:"required,email,tk_email"
 	//
 	// The email that will receive invoices for the credit card.
 	// Required: true
 	CardHolderEmail *string `json:"cardHolderEmail"`
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length"
 	//
 	// The name associated with the credit card.
 	// Required: true

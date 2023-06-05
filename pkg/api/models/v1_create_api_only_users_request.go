@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1CreatePolicyRequest v1 create policy request
+// V1CreateAPIOnlyUsersRequest v1 create Api only users request
 //
-// swagger:model v1CreatePolicyRequest
-type V1CreatePolicyRequest struct {
+// swagger:model v1CreateApiOnlyUsersRequest
+type V1CreateAPIOnlyUsersRequest struct {
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +26,7 @@ type V1CreatePolicyRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreatePolicyIntentV3 `json:"parameters"`
+	Parameters *V1CreateAPIOnlyUsersIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +34,12 @@ type V1CreatePolicyRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_POLICY_V3]
+	// Enum: [ACTIVITY_TYPE_CREATE_API_ONLY_USERS]
 	Type *string `json:"type"`
 }
 
-// Validate validates this v1 create policy request
-func (m *V1CreatePolicyRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this v1 create Api only users request
+func (m *V1CreateAPIOnlyUsersRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *V1CreatePolicyRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *V1CreateAPIOnlyUsersRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *V1CreatePolicyRequest) validateOrganizationID(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateParameters(formats strfmt.Registry) error {
+func (m *V1CreateAPIOnlyUsersRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +93,7 @@ func (m *V1CreatePolicyRequest) validateParameters(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *V1CreateAPIOnlyUsersRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +102,33 @@ func (m *V1CreatePolicyRequest) validateTimestampMs(formats strfmt.Registry) err
 	return nil
 }
 
-var v1CreatePolicyRequestTypeTypePropEnum []interface{}
+var v1CreateApiOnlyUsersRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_POLICY_V3"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_API_ONLY_USERS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		v1CreatePolicyRequestTypeTypePropEnum = append(v1CreatePolicyRequestTypeTypePropEnum, v)
+		v1CreateApiOnlyUsersRequestTypeTypePropEnum = append(v1CreateApiOnlyUsersRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// V1CreatePolicyRequestTypeACTIVITYTYPECREATEPOLICYV3 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V3"
-	V1CreatePolicyRequestTypeACTIVITYTYPECREATEPOLICYV3 string = "ACTIVITY_TYPE_CREATE_POLICY_V3"
+	// V1CreateAPIOnlyUsersRequestTypeACTIVITYTYPECREATEAPIONLYUSERS captures enum value "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
+	V1CreateAPIOnlyUsersRequestTypeACTIVITYTYPECREATEAPIONLYUSERS string = "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
 )
 
 // prop value enum
-func (m *V1CreatePolicyRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, v1CreatePolicyRequestTypeTypePropEnum, true); err != nil {
+func (m *V1CreateAPIOnlyUsersRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, v1CreateApiOnlyUsersRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) validateType(formats strfmt.Registry) error {
+func (m *V1CreateAPIOnlyUsersRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +142,8 @@ func (m *V1CreatePolicyRequest) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this v1 create policy request based on the context it is used
-func (m *V1CreatePolicyRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this v1 create Api only users request based on the context it is used
+func (m *V1CreateAPIOnlyUsersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +156,7 @@ func (m *V1CreatePolicyRequest) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *V1CreatePolicyRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *V1CreateAPIOnlyUsersRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
@@ -173,7 +173,7 @@ func (m *V1CreatePolicyRequest) contextValidateParameters(ctx context.Context, f
 }
 
 // MarshalBinary interface implementation
-func (m *V1CreatePolicyRequest) MarshalBinary() ([]byte, error) {
+func (m *V1CreateAPIOnlyUsersRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -181,8 +181,8 @@ func (m *V1CreatePolicyRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *V1CreatePolicyRequest) UnmarshalBinary(b []byte) error {
-	var res V1CreatePolicyRequest
+func (m *V1CreateAPIOnlyUsersRequest) UnmarshalBinary(b []byte) error {
+	var res V1CreateAPIOnlyUsersRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

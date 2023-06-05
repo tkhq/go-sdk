@@ -19,7 +19,7 @@ import (
 // swagger:model v1ApiKeyParams
 type V1APIKeyParams struct {
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length,tk_label"
 	//
 	// Human-readable name for an API Key.
 	// Required: true

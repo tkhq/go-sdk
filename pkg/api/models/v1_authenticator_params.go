@@ -23,7 +23,7 @@ type V1AuthenticatorParams struct {
 	// Required: true
 	Attestation *V1PublicKeyCredentialWithAttestation `json:"attestation"`
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length,tk_label"
 	//
 	// Human-readable name for an Authenticator.
 	// Required: true

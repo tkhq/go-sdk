@@ -26,6 +26,9 @@ type V1GetActivitiesRequest struct {
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
+
+	// pagination options
+	PaginationOptions *V1PaginationOptions `json:"paginationOptions,omitempty"`
 }
 
 // Validate validates this v1 get activities request
@@ -37,6 +40,10 @@ func (m *V1GetActivitiesRequest) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOrganizationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePaginationOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -76,11 +83,34 @@ func (m *V1GetActivitiesRequest) validateOrganizationID(formats strfmt.Registry)
 	return nil
 }
 
+func (m *V1GetActivitiesRequest) validatePaginationOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.PaginationOptions) { // not required
+		return nil
+	}
+
+	if m.PaginationOptions != nil {
+		if err := m.PaginationOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this v1 get activities request based on the context it is used
 func (m *V1GetActivitiesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateFilterByStatus(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePaginationOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -103,6 +133,22 @@ func (m *V1GetActivitiesRequest) contextValidateFilterByStatus(ctx context.Conte
 			return err
 		}
 
+	}
+
+	return nil
+}
+
+func (m *V1GetActivitiesRequest) contextValidatePaginationOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PaginationOptions != nil {
+		if err := m.PaginationOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
 	}
 
 	return nil

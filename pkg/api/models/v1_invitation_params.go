@@ -23,13 +23,13 @@ type V1InvitationParams struct {
 	// Required: true
 	AccessType *Immutableactivityv1AccessType `json:"accessType"`
 
-	// @inject_tag: validate:"required,email"
+	// @inject_tag: validate:"required,email,tk_email"
 	//
 	// The email address of the intended Invitation recipient.
 	// Required: true
 	ReceiverUserEmail *string `json:"receiverUserEmail"`
 
-	// @inject_tag: validate:"required,max=40"
+	// @inject_tag: validate:"required,tk_label_length,tk_label"
 	//
 	// The name of the intended Invitation recipient.
 	// Required: true

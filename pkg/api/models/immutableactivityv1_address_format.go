@@ -14,10 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Immutableactivityv1AddressFormat - ADDRESS_FORMAT_UNCOMPRESSED: 04<X_COORDINATE><Y_COORDINATE>
+// Immutableactivityv1AddressFormat  - ADDRESS_FORMAT_UNCOMPRESSED: 04<X_COORDINATE><Y_COORDINATE>
 //   - ADDRESS_FORMAT_COMPRESSED: 02 or 03, followed by the X coordinate
 //   - ADDRESS_FORMAT_ETHEREUM: Your standard Ethereum address (0x...). We apply EIP55 casing.
-//   - ADDRESS_FORMAT_BITCOIN_P2PKH: Bitcoin formats. See https://en.bitcoin.it/wiki/List_of_address_prefixes
 //
 // swagger:model immutableactivityv1AddressFormat
 type Immutableactivityv1AddressFormat string
@@ -41,12 +40,6 @@ const (
 
 	// Immutableactivityv1AddressFormatADDRESSFORMATETHEREUM captures enum value "ADDRESS_FORMAT_ETHEREUM"
 	Immutableactivityv1AddressFormatADDRESSFORMATETHEREUM Immutableactivityv1AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
-
-	// Immutableactivityv1AddressFormatADDRESSFORMATBITCOINP2PKH captures enum value "ADDRESS_FORMAT_BITCOIN_P2PKH"
-	Immutableactivityv1AddressFormatADDRESSFORMATBITCOINP2PKH Immutableactivityv1AddressFormat = "ADDRESS_FORMAT_BITCOIN_P2PKH"
-
-	// Immutableactivityv1AddressFormatADDRESSFORMATBITCOINP2PKHTESTNET captures enum value "ADDRESS_FORMAT_BITCOIN_P2PKH_TESTNET"
-	Immutableactivityv1AddressFormatADDRESSFORMATBITCOINP2PKHTESTNET Immutableactivityv1AddressFormat = "ADDRESS_FORMAT_BITCOIN_P2PKH_TESTNET"
 )
 
 // for schema
@@ -54,7 +47,7 @@ var immutableactivityv1AddressFormatEnum []interface{}
 
 func init() {
 	var res []Immutableactivityv1AddressFormat
-	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM","ADDRESS_FORMAT_BITCOIN_P2PKH","ADDRESS_FORMAT_BITCOIN_P2PKH_TESTNET"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
