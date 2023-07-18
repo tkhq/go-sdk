@@ -20,24 +20,6 @@ import (
 // swagger:model v1OrganizationData
 type V1OrganizationData struct {
 
-	// deleted Api keys
-	DeletedAPIKeys []*V1APIKey `json:"deletedApiKeys"`
-
-	// deleted authenticators
-	DeletedAuthenticators []*V1Authenticator `json:"deletedAuthenticators"`
-
-	// deleted invitations
-	DeletedInvitations []*V1Invitation `json:"deletedInvitations"`
-
-	// deleted policies
-	DeletedPolicies []*V1Policy `json:"deletedPolicies"`
-
-	// deleted tags
-	DeletedTags []*Datav1Tag `json:"deletedTags"`
-
-	// deleted users
-	DeletedUsers []*V1User `json:"deletedUsers"`
-
 	// disabled private keys
 	DisabledPrivateKeys []*V1PrivateKey `json:"disabledPrivateKeys"`
 
@@ -56,6 +38,9 @@ type V1OrganizationData struct {
 	// private keys
 	PrivateKeys []*V1PrivateKey `json:"privateKeys"`
 
+	// root quorum
+	RootQuorum *V1Quorum `json:"rootQuorum,omitempty"`
+
 	// tags
 	Tags []*Datav1Tag `json:"tags"`
 
@@ -66,30 +51,6 @@ type V1OrganizationData struct {
 // Validate validates this v1 organization data
 func (m *V1OrganizationData) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateDeletedAPIKeys(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDeletedAuthenticators(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDeletedInvitations(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDeletedPolicies(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDeletedTags(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateDeletedUsers(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateDisabledPrivateKeys(formats); err != nil {
 		res = append(res, err)
@@ -107,6 +68,10 @@ func (m *V1OrganizationData) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateRootQuorum(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
@@ -118,162 +83,6 @@ func (m *V1OrganizationData) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedAPIKeys(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedAPIKeys) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedAPIKeys); i++ {
-		if swag.IsZero(m.DeletedAPIKeys[i]) { // not required
-			continue
-		}
-
-		if m.DeletedAPIKeys[i] != nil {
-			if err := m.DeletedAPIKeys[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedApiKeys" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedApiKeys" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedAuthenticators(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedAuthenticators) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedAuthenticators); i++ {
-		if swag.IsZero(m.DeletedAuthenticators[i]) { // not required
-			continue
-		}
-
-		if m.DeletedAuthenticators[i] != nil {
-			if err := m.DeletedAuthenticators[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedAuthenticators" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedAuthenticators" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedInvitations(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedInvitations) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedInvitations); i++ {
-		if swag.IsZero(m.DeletedInvitations[i]) { // not required
-			continue
-		}
-
-		if m.DeletedInvitations[i] != nil {
-			if err := m.DeletedInvitations[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedInvitations" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedInvitations" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedPolicies(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedPolicies) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedPolicies); i++ {
-		if swag.IsZero(m.DeletedPolicies[i]) { // not required
-			continue
-		}
-
-		if m.DeletedPolicies[i] != nil {
-			if err := m.DeletedPolicies[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedPolicies" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedPolicies" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedTags(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedTags) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedTags); i++ {
-		if swag.IsZero(m.DeletedTags[i]) { // not required
-			continue
-		}
-
-		if m.DeletedTags[i] != nil {
-			if err := m.DeletedTags[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedTags" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedTags" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) validateDeletedUsers(formats strfmt.Registry) error {
-	if swag.IsZero(m.DeletedUsers) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.DeletedUsers); i++ {
-		if swag.IsZero(m.DeletedUsers[i]) { // not required
-			continue
-		}
-
-		if m.DeletedUsers[i] != nil {
-			if err := m.DeletedUsers[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedUsers" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedUsers" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -381,6 +190,25 @@ func (m *V1OrganizationData) validatePrivateKeys(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *V1OrganizationData) validateRootQuorum(formats strfmt.Registry) error {
+	if swag.IsZero(m.RootQuorum) { // not required
+		return nil
+	}
+
+	if m.RootQuorum != nil {
+		if err := m.RootQuorum.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rootQuorum")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("rootQuorum")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1OrganizationData) validateTags(formats strfmt.Registry) error {
 	if swag.IsZero(m.Tags) { // not required
 		return nil
@@ -437,30 +265,6 @@ func (m *V1OrganizationData) validateUsers(formats strfmt.Registry) error {
 func (m *V1OrganizationData) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateDeletedAPIKeys(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateDeletedAuthenticators(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateDeletedInvitations(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateDeletedPolicies(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateDeletedTags(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateDeletedUsers(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateDisabledPrivateKeys(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -477,6 +281,10 @@ func (m *V1OrganizationData) ContextValidate(ctx context.Context, formats strfmt
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateRootQuorum(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -488,126 +296,6 @@ func (m *V1OrganizationData) ContextValidate(ctx context.Context, formats strfmt
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedAPIKeys(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedAPIKeys); i++ {
-
-		if m.DeletedAPIKeys[i] != nil {
-			if err := m.DeletedAPIKeys[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedApiKeys" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedApiKeys" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedAuthenticators(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedAuthenticators); i++ {
-
-		if m.DeletedAuthenticators[i] != nil {
-			if err := m.DeletedAuthenticators[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedAuthenticators" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedAuthenticators" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedInvitations(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedInvitations); i++ {
-
-		if m.DeletedInvitations[i] != nil {
-			if err := m.DeletedInvitations[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedInvitations" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedInvitations" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedPolicies(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedPolicies); i++ {
-
-		if m.DeletedPolicies[i] != nil {
-			if err := m.DeletedPolicies[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedPolicies" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedPolicies" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedTags(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedTags); i++ {
-
-		if m.DeletedTags[i] != nil {
-			if err := m.DeletedTags[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedTags" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedTags" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *V1OrganizationData) contextValidateDeletedUsers(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.DeletedUsers); i++ {
-
-		if m.DeletedUsers[i] != nil {
-			if err := m.DeletedUsers[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("deletedUsers" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("deletedUsers" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -686,6 +374,22 @@ func (m *V1OrganizationData) contextValidatePrivateKeys(ctx context.Context, for
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *V1OrganizationData) contextValidateRootQuorum(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RootQuorum != nil {
+		if err := m.RootQuorum.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rootQuorum")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("rootQuorum")
+			}
+			return err
+		}
 	}
 
 	return nil

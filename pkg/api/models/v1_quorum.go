@@ -14,26 +14,22 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1UpdateRootQuorumIntent v1 update root quorum intent
+// V1Quorum v1 quorum
 //
-// swagger:model v1UpdateRootQuorumIntent
-type V1UpdateRootQuorumIntent struct {
+// swagger:model v1Quorum
+type V1Quorum struct {
 
-	// @inject_tag: validate:"required"
-	//
-	// The threshold of unique approvals to reach quorum.
+	// Count of unique approvals required to meet quorum.
 	// Required: true
 	Threshold *int32 `json:"threshold"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
-	// The unique identifiers of users who comprise the quorum set.
+	// Unique identifiers of quorum set members.
 	// Required: true
 	UserIds []string `json:"userIds"`
 }
 
-// Validate validates this v1 update root quorum intent
-func (m *V1UpdateRootQuorumIntent) Validate(formats strfmt.Registry) error {
+// Validate validates this v1 quorum
+func (m *V1Quorum) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateThreshold(formats); err != nil {
@@ -50,7 +46,7 @@ func (m *V1UpdateRootQuorumIntent) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *V1UpdateRootQuorumIntent) validateThreshold(formats strfmt.Registry) error {
+func (m *V1Quorum) validateThreshold(formats strfmt.Registry) error {
 
 	if err := validate.Required("threshold", "body", m.Threshold); err != nil {
 		return err
@@ -59,7 +55,7 @@ func (m *V1UpdateRootQuorumIntent) validateThreshold(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *V1UpdateRootQuorumIntent) validateUserIds(formats strfmt.Registry) error {
+func (m *V1Quorum) validateUserIds(formats strfmt.Registry) error {
 
 	if err := validate.Required("userIds", "body", m.UserIds); err != nil {
 		return err
@@ -68,13 +64,13 @@ func (m *V1UpdateRootQuorumIntent) validateUserIds(formats strfmt.Registry) erro
 	return nil
 }
 
-// ContextValidate validates this v1 update root quorum intent based on context it is used
-func (m *V1UpdateRootQuorumIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this v1 quorum based on context it is used
+func (m *V1Quorum) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *V1UpdateRootQuorumIntent) MarshalBinary() ([]byte, error) {
+func (m *V1Quorum) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -82,8 +78,8 @@ func (m *V1UpdateRootQuorumIntent) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *V1UpdateRootQuorumIntent) UnmarshalBinary(b []byte) error {
-	var res V1UpdateRootQuorumIntent
+func (m *V1Quorum) UnmarshalBinary(b []byte) error {
+	var res V1Quorum
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

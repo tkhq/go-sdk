@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1CreateUsersRequest v1 create users request
+// V1UpdateUserTagRequest v1 update user tag request
 //
-// swagger:model v1CreateUsersRequest
-type V1CreateUsersRequest struct {
+// swagger:model v1UpdateUserTagRequest
+type V1UpdateUserTagRequest struct {
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +26,7 @@ type V1CreateUsersRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreateUsersIntentV2 `json:"parameters"`
+	Parameters *V1UpdateUserTagIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +34,12 @@ type V1CreateUsersRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_USERS_V2]
+	// Enum: [ACTIVITY_TYPE_UPDATE_USER_TAG]
 	Type *string `json:"type"`
 }
 
-// Validate validates this v1 create users request
-func (m *V1CreateUsersRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this v1 update user tag request
+func (m *V1UpdateUserTagRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *V1CreateUsersRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *V1CreateUsersRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *V1UpdateUserTagRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *V1CreateUsersRequest) validateOrganizationID(formats strfmt.Registry) e
 	return nil
 }
 
-func (m *V1CreateUsersRequest) validateParameters(formats strfmt.Registry) error {
+func (m *V1UpdateUserTagRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +93,7 @@ func (m *V1CreateUsersRequest) validateParameters(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *V1CreateUsersRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *V1UpdateUserTagRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +102,33 @@ func (m *V1CreateUsersRequest) validateTimestampMs(formats strfmt.Registry) erro
 	return nil
 }
 
-var v1CreateUsersRequestTypeTypePropEnum []interface{}
+var v1UpdateUserTagRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_USERS_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_UPDATE_USER_TAG"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		v1CreateUsersRequestTypeTypePropEnum = append(v1CreateUsersRequestTypeTypePropEnum, v)
+		v1UpdateUserTagRequestTypeTypePropEnum = append(v1UpdateUserTagRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERSV2 captures enum value "ACTIVITY_TYPE_CREATE_USERS_V2"
-	V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERSV2 string = "ACTIVITY_TYPE_CREATE_USERS_V2"
+	// V1UpdateUserTagRequestTypeACTIVITYTYPEUPDATEUSERTAG captures enum value "ACTIVITY_TYPE_UPDATE_USER_TAG"
+	V1UpdateUserTagRequestTypeACTIVITYTYPEUPDATEUSERTAG string = "ACTIVITY_TYPE_UPDATE_USER_TAG"
 )
 
 // prop value enum
-func (m *V1CreateUsersRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, v1CreateUsersRequestTypeTypePropEnum, true); err != nil {
+func (m *V1UpdateUserTagRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, v1UpdateUserTagRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *V1CreateUsersRequest) validateType(formats strfmt.Registry) error {
+func (m *V1UpdateUserTagRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +142,8 @@ func (m *V1CreateUsersRequest) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this v1 create users request based on the context it is used
-func (m *V1CreateUsersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this v1 update user tag request based on the context it is used
+func (m *V1UpdateUserTagRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +156,7 @@ func (m *V1CreateUsersRequest) ContextValidate(ctx context.Context, formats strf
 	return nil
 }
 
-func (m *V1CreateUsersRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *V1UpdateUserTagRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
@@ -173,7 +173,7 @@ func (m *V1CreateUsersRequest) contextValidateParameters(ctx context.Context, fo
 }
 
 // MarshalBinary interface implementation
-func (m *V1CreateUsersRequest) MarshalBinary() ([]byte, error) {
+func (m *V1UpdateUserTagRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -181,8 +181,8 @@ func (m *V1CreateUsersRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *V1CreateUsersRequest) UnmarshalBinary(b []byte) error {
-	var res V1CreateUsersRequest
+func (m *V1UpdateUserTagRequest) UnmarshalBinary(b []byte) error {
+	var res V1UpdateUserTagRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

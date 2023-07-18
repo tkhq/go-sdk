@@ -19,7 +19,7 @@ import (
 // swagger:model v1DeleteAuthenticatorsIntent
 type V1DeleteAuthenticatorsIntent struct {
 
-	// @inject_tag: validate:"required,div,required,uuid"
+	// @inject_tag: validate:"required,dive,required,uuid"
 	//
 	// A list of Authenticator IDs.
 	// Required: true

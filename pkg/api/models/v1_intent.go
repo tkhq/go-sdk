@@ -22,6 +22,9 @@ type V1Intent struct {
 	// accept invitation intent
 	AcceptInvitationIntent *V1AcceptInvitationIntent `json:"acceptInvitationIntent,omitempty"`
 
+	// accept invitation intent v2
+	AcceptInvitationIntentV2 *V1AcceptInvitationIntentV2 `json:"acceptInvitationIntentV2,omitempty"`
+
 	// activate billing tier intent
 	ActivateBillingTierIntent *V1ActivateBillingTierIntent `json:"activateBillingTierIntent,omitempty"`
 
@@ -37,12 +40,18 @@ type V1Intent struct {
 	// create authenticators intent
 	CreateAuthenticatorsIntent *V1CreateAuthenticatorsIntent `json:"createAuthenticatorsIntent,omitempty"`
 
+	// create authenticators intent v2
+	CreateAuthenticatorsIntentV2 *V1CreateAuthenticatorsIntentV2 `json:"createAuthenticatorsIntentV2,omitempty"`
+
 	// create invitations intent
 	CreateInvitationsIntent *V1CreateInvitationsIntent `json:"createInvitationsIntent,omitempty"`
 
 	// create organization intent
 	// Required: true
 	CreateOrganizationIntent *V1CreateOrganizationIntent `json:"createOrganizationIntent"`
+
+	// create organization intent v2
+	CreateOrganizationIntentV2 *V1CreateOrganizationIntentV2 `json:"createOrganizationIntentV2,omitempty"`
 
 	// create policy intent
 	CreatePolicyIntent *V1CreatePolicyIntent `json:"createPolicyIntent,omitempty"`
@@ -59,11 +68,20 @@ type V1Intent struct {
 	// create private keys intent
 	CreatePrivateKeysIntent *V1CreatePrivateKeysIntent `json:"createPrivateKeysIntent,omitempty"`
 
+	// create sub organization intent
+	CreateSubOrganizationIntent *V1CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
+
+	// create sub organization intent v2
+	CreateSubOrganizationIntentV2 *V1CreateSubOrganizationIntentV2 `json:"createSubOrganizationIntentV2,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *V1CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
 	// create users intent
 	CreateUsersIntent *V1CreateUsersIntent `json:"createUsersIntent,omitempty"`
+
+	// create users intent v2
+	CreateUsersIntentV2 *V1CreateUsersIntentV2 `json:"createUsersIntentV2,omitempty"`
 
 	// delete Api keys intent
 	DeleteAPIKeysIntent *V1DeleteAPIKeysIntent `json:"deleteApiKeysIntent,omitempty"`
@@ -107,8 +125,14 @@ type V1Intent struct {
 	// sign transaction intent
 	SignTransactionIntent *V1SignTransactionIntent `json:"signTransactionIntent,omitempty"`
 
+	// update private key tag intent
+	UpdatePrivateKeyTagIntent *V1UpdatePrivateKeyTagIntent `json:"updatePrivateKeyTagIntent,omitempty"`
+
 	// update root quorum intent
 	UpdateRootQuorumIntent *V1UpdateRootQuorumIntent `json:"updateRootQuorumIntent,omitempty"`
+
+	// update user tag intent
+	UpdateUserTagIntent *V1UpdateUserTagIntent `json:"updateUserTagIntent,omitempty"`
 }
 
 // Validate validates this v1 intent
@@ -116,6 +140,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAcceptInvitationIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAcceptInvitationIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -139,11 +167,19 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateAuthenticatorsIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateInvitationsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateCreateOrganizationIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateOrganizationIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -167,11 +203,23 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSubOrganizationIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateSubOrganizationIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateCreateUsersIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateUsersIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -231,7 +279,15 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUpdatePrivateKeyTagIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUpdateRootQuorumIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -252,6 +308,25 @@ func (m *V1Intent) validateAcceptInvitationIntent(formats strfmt.Registry) error
 				return ve.ValidateName("acceptInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateAcceptInvitationIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.AcceptInvitationIntentV2) { // not required
+		return nil
+	}
+
+	if m.AcceptInvitationIntentV2 != nil {
+		if err := m.AcceptInvitationIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("acceptInvitationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("acceptInvitationIntentV2")
 			}
 			return err
 		}
@@ -355,6 +430,25 @@ func (m *V1Intent) validateCreateAuthenticatorsIntent(formats strfmt.Registry) e
 	return nil
 }
 
+func (m *V1Intent) validateCreateAuthenticatorsIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAuthenticatorsIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateAuthenticatorsIntentV2 != nil {
+		if err := m.CreateAuthenticatorsIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createAuthenticatorsIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createAuthenticatorsIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateCreateInvitationsIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateInvitationsIntent) { // not required
 		return nil
@@ -386,6 +480,25 @@ func (m *V1Intent) validateCreateOrganizationIntent(formats strfmt.Registry) err
 				return ve.ValidateName("createOrganizationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreateOrganizationIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateOrganizationIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateOrganizationIntentV2 != nil {
+		if err := m.CreateOrganizationIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOrganizationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOrganizationIntentV2")
 			}
 			return err
 		}
@@ -489,6 +602,44 @@ func (m *V1Intent) validateCreatePrivateKeysIntent(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *V1Intent) validateCreateSubOrganizationIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntent) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntent != nil {
+		if err := m.CreateSubOrganizationIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreateSubOrganizationIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV2 != nil {
+		if err := m.CreateSubOrganizationIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateCreateUserTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateUserTagIntent) { // not required
 		return nil
@@ -519,6 +670,25 @@ func (m *V1Intent) validateCreateUsersIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("createUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreateUsersIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateUsersIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateUsersIntentV2 != nil {
+		if err := m.CreateUsersIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createUsersIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createUsersIntentV2")
 			}
 			return err
 		}
@@ -793,6 +963,25 @@ func (m *V1Intent) validateSignTransactionIntent(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *V1Intent) validateUpdatePrivateKeyTagIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatePrivateKeyTagIntent) { // not required
+		return nil
+	}
+
+	if m.UpdatePrivateKeyTagIntent != nil {
+		if err := m.UpdatePrivateKeyTagIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePrivateKeyTagIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePrivateKeyTagIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateUpdateRootQuorumIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdateRootQuorumIntent) { // not required
 		return nil
@@ -812,11 +1001,34 @@ func (m *V1Intent) validateUpdateRootQuorumIntent(formats strfmt.Registry) error
 	return nil
 }
 
+func (m *V1Intent) validateUpdateUserTagIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserTagIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateUserTagIntent != nil {
+		if err := m.UpdateUserTagIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserTagIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserTagIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this v1 intent based on the context it is used
 func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAcceptInvitationIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAcceptInvitationIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -840,11 +1052,19 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateAuthenticatorsIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateInvitationsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateCreateOrganizationIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateOrganizationIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -868,11 +1088,23 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateSubOrganizationIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateCreateUsersIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateUsersIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -932,7 +1164,15 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdatePrivateKeyTagIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUpdateRootQuorumIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -950,6 +1190,22 @@ func (m *V1Intent) contextValidateAcceptInvitationIntent(ctx context.Context, fo
 				return ve.ValidateName("acceptInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("acceptInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateAcceptInvitationIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AcceptInvitationIntentV2 != nil {
+		if err := m.AcceptInvitationIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("acceptInvitationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("acceptInvitationIntentV2")
 			}
 			return err
 		}
@@ -1038,6 +1294,22 @@ func (m *V1Intent) contextValidateCreateAuthenticatorsIntent(ctx context.Context
 	return nil
 }
 
+func (m *V1Intent) contextValidateCreateAuthenticatorsIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAuthenticatorsIntentV2 != nil {
+		if err := m.CreateAuthenticatorsIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createAuthenticatorsIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createAuthenticatorsIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateCreateInvitationsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateInvitationsIntent != nil {
@@ -1062,6 +1334,22 @@ func (m *V1Intent) contextValidateCreateOrganizationIntent(ctx context.Context, 
 				return ve.ValidateName("createOrganizationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreateOrganizationIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateOrganizationIntentV2 != nil {
+		if err := m.CreateOrganizationIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOrganizationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOrganizationIntentV2")
 			}
 			return err
 		}
@@ -1150,6 +1438,38 @@ func (m *V1Intent) contextValidateCreatePrivateKeysIntent(ctx context.Context, f
 	return nil
 }
 
+func (m *V1Intent) contextValidateCreateSubOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntent != nil {
+		if err := m.CreateSubOrganizationIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreateSubOrganizationIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV2 != nil {
+		if err := m.CreateSubOrganizationIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateCreateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagIntent != nil {
@@ -1174,6 +1494,22 @@ func (m *V1Intent) contextValidateCreateUsersIntent(ctx context.Context, formats
 				return ve.ValidateName("createUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreateUsersIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateUsersIntentV2 != nil {
+		if err := m.CreateUsersIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createUsersIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createUsersIntentV2")
 			}
 			return err
 		}
@@ -1406,6 +1742,22 @@ func (m *V1Intent) contextValidateSignTransactionIntent(ctx context.Context, for
 	return nil
 }
 
+func (m *V1Intent) contextValidateUpdatePrivateKeyTagIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatePrivateKeyTagIntent != nil {
+		if err := m.UpdatePrivateKeyTagIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePrivateKeyTagIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePrivateKeyTagIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateRootQuorumIntent != nil {
@@ -1414,6 +1766,22 @@ func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, fo
 				return ve.ValidateName("updateRootQuorumIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateRootQuorumIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateUpdateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserTagIntent != nil {
+		if err := m.UpdateUserTagIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserTagIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserTagIntent")
 			}
 			return err
 		}

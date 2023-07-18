@@ -28,7 +28,7 @@ type V1GetActivitiesRequest struct {
 	OrganizationID *string `json:"organizationId"`
 
 	// pagination options
-	PaginationOptions *V1PaginationOptions `json:"paginationOptions,omitempty"`
+	PaginationOptions *V1Pagination `json:"paginationOptions,omitempty"`
 }
 
 // Validate validates this v1 get activities request
