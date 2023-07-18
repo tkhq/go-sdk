@@ -25,7 +25,7 @@ type V1UpdateRootQuorumIntent struct {
 	// Required: true
 	Threshold *int32 `json:"threshold"`
 
-	// @inject_tag: validate:"required,uuid"
+	// @inject_tag: validate:"dive,uuid"
 	//
 	// The unique identifiers of users who comprise the quorum set.
 	// Required: true

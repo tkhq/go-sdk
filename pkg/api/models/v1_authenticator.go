@@ -59,10 +59,6 @@ type V1Authenticator struct {
 	// updated at
 	// Required: true
 	UpdatedAt *V1Timestamp `json:"updatedAt"`
-
-	// Unique identifier for a given User.
-	// Required: true
-	UserID *string `json:"userId"`
 }
 
 // Validate validates this v1 authenticator
@@ -106,10 +102,6 @@ func (m *V1Authenticator) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUserID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -250,15 +242,6 @@ func (m *V1Authenticator) validateUpdatedAt(formats strfmt.Registry) error {
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *V1Authenticator) validateUserID(formats strfmt.Registry) error {
-
-	if err := validate.Required("userId", "body", m.UserID); err != nil {
-		return err
 	}
 
 	return nil

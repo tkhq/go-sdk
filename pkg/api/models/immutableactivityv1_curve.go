@@ -32,6 +32,9 @@ const (
 
 	// Immutableactivityv1CurveCURVESECP256K1 captures enum value "CURVE_SECP256K1"
 	Immutableactivityv1CurveCURVESECP256K1 Immutableactivityv1Curve = "CURVE_SECP256K1"
+
+	// Immutableactivityv1CurveCURVEED25519 captures enum value "CURVE_ED25519"
+	Immutableactivityv1CurveCURVEED25519 Immutableactivityv1Curve = "CURVE_ED25519"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var immutableactivityv1CurveEnum []interface{}
 
 func init() {
 	var res []Immutableactivityv1Curve
-	if err := json.Unmarshal([]byte(`["CURVE_SECP256K1"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CURVE_SECP256K1","CURVE_ED25519"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

@@ -26,7 +26,7 @@ type V1CreateUsersRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreateUsersIntent `json:"parameters"`
+	Parameters *V1CreateUsersIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type V1CreateUsersRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_USERS]
+	// Enum: [ACTIVITY_TYPE_CREATE_USERS_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1CreateUsersRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_USERS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_USERS_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERS captures enum value "ACTIVITY_TYPE_CREATE_USERS"
-	V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERS string = "ACTIVITY_TYPE_CREATE_USERS"
+	// V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERSV2 captures enum value "ACTIVITY_TYPE_CREATE_USERS_V2"
+	V1CreateUsersRequestTypeACTIVITYTYPECREATEUSERSV2 string = "ACTIVITY_TYPE_CREATE_USERS_V2"
 )
 
 // prop value enum

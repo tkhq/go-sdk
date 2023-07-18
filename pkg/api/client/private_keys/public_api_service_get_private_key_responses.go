@@ -93,11 +93,11 @@ func (o *PublicAPIServiceGetPrivateKeyOK) IsCode(code int) bool {
 }
 
 func (o *PublicAPIServiceGetPrivateKeyOK) Error() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyOK) String() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyOK) GetPayload() *models.V1GetPrivateKeyResponse {
@@ -156,11 +156,11 @@ func (o *PublicAPIServiceGetPrivateKeyForbidden) IsCode(code int) bool {
 }
 
 func (o *PublicAPIServiceGetPrivateKeyForbidden) Error() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyForbidden) String() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyForbidden) GetPayload() interface{} {
@@ -217,11 +217,11 @@ func (o *PublicAPIServiceGetPrivateKeyNotFound) IsCode(code int) bool {
 }
 
 func (o *PublicAPIServiceGetPrivateKeyNotFound) Error() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyNotFound) String() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyNotFound) GetPayload() string {
@@ -287,11 +287,11 @@ func (o *PublicAPIServiceGetPrivateKeyDefault) IsCode(code int) bool {
 }
 
 func (o *PublicAPIServiceGetPrivateKeyDefault) Error() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] PublicApiService_GetPrivateKey default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] PublicApiService_GetPrivateKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyDefault) String() string {
-	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] PublicApiService_GetPrivateKey default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] PublicApiService_GetPrivateKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PublicAPIServiceGetPrivateKeyDefault) GetPayload() *models.RPCStatus {
