@@ -19,24 +19,18 @@ import (
 // swagger:model v1CreateOrganizationIntent
 type V1CreateOrganizationIntent struct {
 
-	// @inject_tag: validate:"required,tk_label_length"
-	//
 	// Human-readable name for an Organization.
 	// Required: true
 	OrganizationName *string `json:"organizationName"`
 
-	// root authenticator
+	// The root user's Authenticator.
 	// Required: true
 	RootAuthenticator *V1AuthenticatorParams `json:"rootAuthenticator"`
 
-	// @inject_tag: validate:"required,email,tk_email"
-	//
 	// The root user's email address.
 	// Required: true
 	RootEmail *string `json:"rootEmail"`
 
-	// @inject_tag: validate:"uuid"
-	//
 	// Unique identifier for the root user object.
 	RootUserID string `json:"rootUserId,omitempty"`
 }

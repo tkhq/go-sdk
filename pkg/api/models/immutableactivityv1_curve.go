@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Immutableactivityv1Curve Cryptographic Curve used to generate a given Private Key.
+// Immutableactivityv1Curve immutableactivityv1 curve
 //
 // swagger:model immutableactivityv1Curve
 type Immutableactivityv1Curve string

@@ -28,55 +28,11 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceApproveActivity(params *PublicAPIServiceApproveActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceApproveActivityOK, error)
-
 	PublicAPIServiceGetActivities(params *PublicAPIServiceGetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivitiesOK, error)
 
 	PublicAPIServiceGetActivity(params *PublicAPIServiceGetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivityOK, error)
 
-	PublicAPIServiceRejectActivity(params *PublicAPIServiceRejectActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRejectActivityOK, error)
-
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-PublicAPIServiceApproveActivity approves activity
-
-Approve an Activity
-*/
-func (a *Client) PublicAPIServiceApproveActivity(params *PublicAPIServiceApproveActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceApproveActivityOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceApproveActivityParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_ApproveActivity",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/approve_activity",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceApproveActivityReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceApproveActivityOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceApproveActivityDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -156,46 +112,6 @@ func (a *Client) PublicAPIServiceGetActivity(params *PublicAPIServiceGetActivity
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetActivityDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceRejectActivity rejects activity
-
-Reject an Activity
-*/
-func (a *Client) PublicAPIServiceRejectActivity(params *PublicAPIServiceRejectActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRejectActivityOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceRejectActivityParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_RejectActivity",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/reject_activity",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceRejectActivityReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceRejectActivityOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceRejectActivityDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

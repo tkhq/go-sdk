@@ -29,18 +29,6 @@ func (o *PublicAPIServiceGetUserReader) ReadResponse(response runtime.ClientResp
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceGetUserForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceGetUserNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceGetUserDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceGetUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get user o k response
+func (o *PublicAPIServiceGetUserOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetUserOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_user][%d] publicApiServiceGetUserOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceGetUserOK) readResponse(response runtime.ClientResponse
 	return nil
 }
 
-// NewPublicAPIServiceGetUserForbidden creates a PublicAPIServiceGetUserForbidden with default headers values
-func NewPublicAPIServiceGetUserForbidden() *PublicAPIServiceGetUserForbidden {
-	return &PublicAPIServiceGetUserForbidden{}
-}
-
-/*
-PublicAPIServiceGetUserForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceGetUserForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service get user forbidden response has a 2xx status code
-func (o *PublicAPIServiceGetUserForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get user forbidden response has a 3xx status code
-func (o *PublicAPIServiceGetUserForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get user forbidden response has a 4xx status code
-func (o *PublicAPIServiceGetUserForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get user forbidden response has a 5xx status code
-func (o *PublicAPIServiceGetUserForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get user forbidden response a status code equal to that given
-func (o *PublicAPIServiceGetUserForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceGetUserForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_user][%d] publicApiServiceGetUserForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetUserForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_user][%d] publicApiServiceGetUserForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetUserForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetUserForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceGetUserNotFound creates a PublicAPIServiceGetUserNotFound with default headers values
-func NewPublicAPIServiceGetUserNotFound() *PublicAPIServiceGetUserNotFound {
-	return &PublicAPIServiceGetUserNotFound{}
-}
-
-/*
-PublicAPIServiceGetUserNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceGetUserNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service get user not found response has a 2xx status code
-func (o *PublicAPIServiceGetUserNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get user not found response has a 3xx status code
-func (o *PublicAPIServiceGetUserNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get user not found response has a 4xx status code
-func (o *PublicAPIServiceGetUserNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get user not found response has a 5xx status code
-func (o *PublicAPIServiceGetUserNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get user not found response a status code equal to that given
-func (o *PublicAPIServiceGetUserNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceGetUserNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_user][%d] publicApiServiceGetUserNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetUserNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_user][%d] publicApiServiceGetUserNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetUserNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceGetUserDefault creates a PublicAPIServiceGetUserDefault with default headers values
 func NewPublicAPIServiceGetUserDefault(code int) *PublicAPIServiceGetUserDefault {
 	return &PublicAPIServiceGetUserDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceGetUserDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service get user default response
-func (o *PublicAPIServiceGetUserDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service get user default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceGetUserDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get user default response a status code equal to that given
 func (o *PublicAPIServiceGetUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get user default response
+func (o *PublicAPIServiceGetUserDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetUserDefault) Error() string {

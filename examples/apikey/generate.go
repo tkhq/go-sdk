@@ -31,7 +31,7 @@ func main() {
 		log.Fatalln("failed to generate API key:", err)
 	}
 
-	if err := store.Default.Store(keyName, key); err != nil {
+	if err = store.Default.Store(keyName, key); err != nil {
 		log.Fatalln("failed to store new API key:", err)
 	}
 

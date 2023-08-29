@@ -19,25 +19,17 @@ import (
 // swagger:model v1UpdateUserTagIntent
 type V1UpdateUserTagIntent struct {
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of User IDs to add this tag to.
 	// Required: true
 	AddUserIds []string `json:"addUserIds"`
 
-	// @inject_tag: validate:"omitempty,tk_label,tk_label_length"
-	//
 	// The new, human-readable name for the tag with the given ID.
 	NewUserTagName string `json:"newUserTagName,omitempty"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of User IDs to remove this tag from.
 	// Required: true
 	RemoveUserIds []string `json:"removeUserIds"`
 
-	// @inject_tag: validate:"uuid"
-	//
 	// Unique identifier for a given User Tag.
 	// Required: true
 	UserTagID *string `json:"userTagId"`

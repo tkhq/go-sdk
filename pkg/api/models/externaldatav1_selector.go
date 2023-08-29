@@ -19,7 +19,7 @@ import (
 // swagger:model externaldatav1Selector
 type Externaldatav1Selector struct {
 
-	// operator
+	// Logical operators like OPERATOR_CONTAINS or OPERATOR_EQUAL.
 	// Required: true
 	Operator *Externaldatav1Operator `json:"operator"`
 

@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1ActivityStatus The current processing status of an Activity.
+// V1ActivityStatus v1 activity status
 //
 // swagger:model v1ActivityStatus
 type V1ActivityStatus string

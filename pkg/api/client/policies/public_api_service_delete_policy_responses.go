@@ -29,18 +29,6 @@ func (o *PublicAPIServiceDeletePolicyReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceDeletePolicyForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceDeletePolicyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceDeletePolicyDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceDeletePolicyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service delete policy o k response
+func (o *PublicAPIServiceDeletePolicyOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceDeletePolicyOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/delete_policy][%d] publicApiServiceDeletePolicyOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceDeletePolicyOK) readResponse(response runtime.ClientRes
 	return nil
 }
 
-// NewPublicAPIServiceDeletePolicyForbidden creates a PublicAPIServiceDeletePolicyForbidden with default headers values
-func NewPublicAPIServiceDeletePolicyForbidden() *PublicAPIServiceDeletePolicyForbidden {
-	return &PublicAPIServiceDeletePolicyForbidden{}
-}
-
-/*
-PublicAPIServiceDeletePolicyForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceDeletePolicyForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service delete policy forbidden response has a 2xx status code
-func (o *PublicAPIServiceDeletePolicyForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service delete policy forbidden response has a 3xx status code
-func (o *PublicAPIServiceDeletePolicyForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service delete policy forbidden response has a 4xx status code
-func (o *PublicAPIServiceDeletePolicyForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service delete policy forbidden response has a 5xx status code
-func (o *PublicAPIServiceDeletePolicyForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service delete policy forbidden response a status code equal to that given
-func (o *PublicAPIServiceDeletePolicyForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceDeletePolicyForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_policy][%d] publicApiServiceDeletePolicyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceDeletePolicyForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_policy][%d] publicApiServiceDeletePolicyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceDeletePolicyForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceDeletePolicyForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceDeletePolicyNotFound creates a PublicAPIServiceDeletePolicyNotFound with default headers values
-func NewPublicAPIServiceDeletePolicyNotFound() *PublicAPIServiceDeletePolicyNotFound {
-	return &PublicAPIServiceDeletePolicyNotFound{}
-}
-
-/*
-PublicAPIServiceDeletePolicyNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceDeletePolicyNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service delete policy not found response has a 2xx status code
-func (o *PublicAPIServiceDeletePolicyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service delete policy not found response has a 3xx status code
-func (o *PublicAPIServiceDeletePolicyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service delete policy not found response has a 4xx status code
-func (o *PublicAPIServiceDeletePolicyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service delete policy not found response has a 5xx status code
-func (o *PublicAPIServiceDeletePolicyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service delete policy not found response a status code equal to that given
-func (o *PublicAPIServiceDeletePolicyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceDeletePolicyNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_policy][%d] publicApiServiceDeletePolicyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceDeletePolicyNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_policy][%d] publicApiServiceDeletePolicyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceDeletePolicyNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceDeletePolicyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceDeletePolicyDefault creates a PublicAPIServiceDeletePolicyDefault with default headers values
 func NewPublicAPIServiceDeletePolicyDefault(code int) *PublicAPIServiceDeletePolicyDefault {
 	return &PublicAPIServiceDeletePolicyDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceDeletePolicyDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service delete policy default response
-func (o *PublicAPIServiceDeletePolicyDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service delete policy default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceDeletePolicyDefault) IsServerError() bool {
 // IsCode returns true when this public Api service delete policy default response a status code equal to that given
 func (o *PublicAPIServiceDeletePolicyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service delete policy default response
+func (o *PublicAPIServiceDeletePolicyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceDeletePolicyDefault) Error() string {

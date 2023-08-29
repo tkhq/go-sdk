@@ -19,8 +19,6 @@ import (
 // swagger:model v1DeleteInvitationIntent
 type V1DeleteInvitationIntent struct {
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Invitation object.
 	// Required: true
 	InvitationID *string `json:"invitationId"`

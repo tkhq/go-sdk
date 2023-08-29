@@ -20,20 +20,14 @@ import (
 // swagger:model v1Attestation
 type V1Attestation struct {
 
-	// @inject_tag: validate:"required"
-	//
 	// A base64 url encoded payload containing authenticator data and any attestation the webauthn provider chooses.
 	// Required: true
 	AttestationObject *string `json:"attestationObject"`
 
-	// @inject_tag: validate:"required"
-	//
 	// A base64 url encoded payload containing metadata about the signing context and the challenge.
 	// Required: true
 	ClientDataJSON *string `json:"clientDataJson"`
 
-	// @inject_tag: validate:"required,max=256"
-	//
 	// The cbor encoded then base64 url encoded id of the credential.
 	// Required: true
 	CredentialID *string `json:"credentialId"`

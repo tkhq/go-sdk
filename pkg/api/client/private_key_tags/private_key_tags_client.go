@@ -28,9 +28,51 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	PublicAPIServiceCreatePrivateKeyTag(params *PublicAPIServiceCreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeyTagOK, error)
+
 	PublicAPIServiceUpdatePrivateKeyTag(params *PublicAPIServiceUpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePrivateKeyTagOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+PublicAPIServiceCreatePrivateKeyTag creates private key tag
+
+Create a private key tag and add it to private keys.
+*/
+func (a *Client) PublicAPIServiceCreatePrivateKeyTag(params *PublicAPIServiceCreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeyTagOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreatePrivateKeyTagParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreatePrivateKeyTag",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_private_key_tag",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreatePrivateKeyTagReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreatePrivateKeyTagOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreatePrivateKeyTagDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

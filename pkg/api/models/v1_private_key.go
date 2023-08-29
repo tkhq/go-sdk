@@ -28,7 +28,7 @@ type V1PrivateKey struct {
 	// Required: true
 	CreatedAt *V1Timestamp `json:"createdAt"`
 
-	// curve
+	// Cryptographic Curve used to generate a given Private Key.
 	// Required: true
 	Curve *Externaldatav1Curve `json:"curve"`
 

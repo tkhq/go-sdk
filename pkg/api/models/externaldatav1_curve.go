@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Externaldatav1Curve Cryptographic Curve used to generate a given Private Key.
+// Externaldatav1Curve externaldatav1 curve
 //
 // swagger:model externaldatav1Curve
 type Externaldatav1Curve string

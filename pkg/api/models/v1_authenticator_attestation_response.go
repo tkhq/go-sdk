@@ -21,7 +21,7 @@ import (
 // swagger:model v1AuthenticatorAttestationResponse
 type V1AuthenticatorAttestationResponse struct {
 
-	// ENCODING: base64url
+	// attestation object
 	// Required: true
 	AttestationObject *string `json:"attestationObject"`
 
@@ -29,7 +29,7 @@ type V1AuthenticatorAttestationResponse struct {
 	// Enum: [cross-platform platform]
 	AuthenticatorAttachment *string `json:"authenticatorAttachment,omitempty"`
 
-	// ENCODING: base64url
+	// client data Json
 	// Required: true
 	ClientDataJSON *string `json:"clientDataJson"`
 

@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1Intent Intent object crafted by Turnkey based on the user request, used to assess the permissibility of an action.
+// V1Intent v1 intent
 //
 // swagger:model v1Intent
 type V1Intent struct {
@@ -68,6 +68,9 @@ type V1Intent struct {
 	// create private keys intent
 	CreatePrivateKeysIntent *V1CreatePrivateKeysIntent `json:"createPrivateKeysIntent,omitempty"`
 
+	// create private keys intent v2
+	CreatePrivateKeysIntentV2 *V1CreatePrivateKeysIntentV2 `json:"createPrivateKeysIntentV2,omitempty"`
+
 	// create sub organization intent
 	CreateSubOrganizationIntent *V1CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
 
@@ -119,17 +122,29 @@ type V1Intent struct {
 	// set payment method intent
 	SetPaymentMethodIntent *V1SetPaymentMethodIntent `json:"setPaymentMethodIntent,omitempty"`
 
+	// set payment method intent v2
+	SetPaymentMethodIntentV2 *V1SetPaymentMethodIntentV2 `json:"setPaymentMethodIntentV2,omitempty"`
+
 	// sign raw payload intent
 	SignRawPayloadIntent *V1SignRawPayloadIntent `json:"signRawPayloadIntent,omitempty"`
 
 	// sign transaction intent
 	SignTransactionIntent *V1SignTransactionIntent `json:"signTransactionIntent,omitempty"`
 
+	// update allowed origins intent
+	UpdateAllowedOriginsIntent *V1UpdateAllowedOriginsIntent `json:"updateAllowedOriginsIntent,omitempty"`
+
+	// update policy intent
+	UpdatePolicyIntent *V1UpdatePolicyIntent `json:"updatePolicyIntent,omitempty"`
+
 	// update private key tag intent
 	UpdatePrivateKeyTagIntent *V1UpdatePrivateKeyTagIntent `json:"updatePrivateKeyTagIntent,omitempty"`
 
 	// update root quorum intent
 	UpdateRootQuorumIntent *V1UpdateRootQuorumIntent `json:"updateRootQuorumIntent,omitempty"`
+
+	// update user intent
+	UpdateUserIntent *V1UpdateUserIntent `json:"updateUserIntent,omitempty"`
 
 	// update user tag intent
 	UpdateUserTagIntent *V1UpdateUserTagIntent `json:"updateUserTagIntent,omitempty"`
@@ -203,6 +218,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreatePrivateKeysIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateSubOrganizationIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -271,6 +290,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSetPaymentMethodIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateSignRawPayloadIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -279,11 +302,23 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUpdateAllowedOriginsIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatePolicyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUpdatePrivateKeyTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateUpdateRootQuorumIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -594,6 +629,25 @@ func (m *V1Intent) validateCreatePrivateKeysIntent(formats strfmt.Registry) erro
 				return ve.ValidateName("createPrivateKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateCreatePrivateKeysIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatePrivateKeysIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreatePrivateKeysIntentV2 != nil {
+		if err := m.CreatePrivateKeysIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPrivateKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPrivateKeysIntentV2")
 			}
 			return err
 		}
@@ -925,6 +979,25 @@ func (m *V1Intent) validateSetPaymentMethodIntent(formats strfmt.Registry) error
 	return nil
 }
 
+func (m *V1Intent) validateSetPaymentMethodIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.SetPaymentMethodIntentV2) { // not required
+		return nil
+	}
+
+	if m.SetPaymentMethodIntentV2 != nil {
+		if err := m.SetPaymentMethodIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateSignRawPayloadIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.SignRawPayloadIntent) { // not required
 		return nil
@@ -963,6 +1036,44 @@ func (m *V1Intent) validateSignTransactionIntent(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *V1Intent) validateUpdateAllowedOriginsIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateAllowedOriginsIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateAllowedOriginsIntent != nil {
+		if err := m.UpdateAllowedOriginsIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAllowedOriginsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAllowedOriginsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateUpdatePolicyIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatePolicyIntent) { // not required
+		return nil
+	}
+
+	if m.UpdatePolicyIntent != nil {
+		if err := m.UpdatePolicyIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateUpdatePrivateKeyTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePrivateKeyTagIntent) { // not required
 		return nil
@@ -993,6 +1104,25 @@ func (m *V1Intent) validateUpdateRootQuorumIntent(formats strfmt.Registry) error
 				return ve.ValidateName("updateRootQuorumIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateRootQuorumIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateUpdateUserIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateUserIntent != nil {
+		if err := m.UpdateUserIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserIntent")
 			}
 			return err
 		}
@@ -1088,6 +1218,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreatePrivateKeysIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1156,6 +1290,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateSetPaymentMethodIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateSignRawPayloadIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1164,11 +1302,23 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdateAllowedOriginsIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatePolicyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUpdatePrivateKeyTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateUpdateRootQuorumIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1430,6 +1580,22 @@ func (m *V1Intent) contextValidateCreatePrivateKeysIntent(ctx context.Context, f
 				return ve.ValidateName("createPrivateKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateCreatePrivateKeysIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatePrivateKeysIntentV2 != nil {
+		if err := m.CreatePrivateKeysIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPrivateKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPrivateKeysIntentV2")
 			}
 			return err
 		}
@@ -1710,6 +1876,22 @@ func (m *V1Intent) contextValidateSetPaymentMethodIntent(ctx context.Context, fo
 	return nil
 }
 
+func (m *V1Intent) contextValidateSetPaymentMethodIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SetPaymentMethodIntentV2 != nil {
+		if err := m.SetPaymentMethodIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("setPaymentMethodIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("setPaymentMethodIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateSignRawPayloadIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignRawPayloadIntent != nil {
@@ -1742,6 +1924,38 @@ func (m *V1Intent) contextValidateSignTransactionIntent(ctx context.Context, for
 	return nil
 }
 
+func (m *V1Intent) contextValidateUpdateAllowedOriginsIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateAllowedOriginsIntent != nil {
+		if err := m.UpdateAllowedOriginsIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAllowedOriginsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAllowedOriginsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateUpdatePolicyIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatePolicyIntent != nil {
+		if err := m.UpdatePolicyIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateUpdatePrivateKeyTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePrivateKeyTagIntent != nil {
@@ -1766,6 +1980,22 @@ func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, fo
 				return ve.ValidateName("updateRootQuorumIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateRootQuorumIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) contextValidateUpdateUserIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserIntent != nil {
+		if err := m.UpdateUserIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserIntent")
 			}
 			return err
 		}

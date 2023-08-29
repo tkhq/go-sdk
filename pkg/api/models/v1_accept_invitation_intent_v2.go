@@ -19,18 +19,14 @@ import (
 // swagger:model v1AcceptInvitationIntentV2
 type V1AcceptInvitationIntentV2 struct {
 
-	// authenticator
+	// WebAuthN hardware devices that can be used to log in to the Turnkey web app.
 	// Required: true
 	Authenticator *V1AuthenticatorParamsV2 `json:"authenticator"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Invitation object.
 	// Required: true
 	InvitationID *string `json:"invitationId"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

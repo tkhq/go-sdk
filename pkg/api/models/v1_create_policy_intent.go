@@ -20,21 +20,17 @@ import (
 // swagger:model v1CreatePolicyIntent
 type V1CreatePolicyIntent struct {
 
-	// effect
+	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
 	Effect *Immutableactivityv1Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
 
-	// @inject_tag: validate:"required,tk_label_length"
-	//
 	// Human-readable name for a Policy.
 	// Required: true
 	PolicyName *string `json:"policyName"`
 
-	// @inject_tag: validate:"required,dive,required"
-	//
 	// A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details.
 	// Required: true
 	Selectors []*Immutableactivityv1Selector `json:"selectors"`

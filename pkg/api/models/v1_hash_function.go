@@ -14,15 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1HashFunction  - HASH_FUNCTION_UNSPECIFIED: Default value if a hash function is not set explicitly.
-//   - HASH_FUNCTION_NO_OP: No-op function. Useful if you want to pass raw digests to sign (ECDSA-only)
-//   - HASH_FUNCTION_SHA256: Standard SHA-256. Used in the Bitcoin ecosystem.
-//   - HASH_FUNCTION_KECCAK256: Keccak-256 (not the same as NIST SHA-3!).
-//
-// This is the hash function used in the Ethereum ecosystem.
-//   - HASH_FUNCTION_NOT_APPLICABLE: Callers must use this enum value when signing with ed25519 keys.
-//
-// This is because, unlike ECDSA, EdDSA's API does not support signing raw digests (see RFC 8032).
+// V1HashFunction v1 hash function
 //
 // swagger:model v1HashFunction
 type V1HashFunction string

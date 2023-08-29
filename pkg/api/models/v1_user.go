@@ -20,7 +20,7 @@ import (
 // swagger:model v1User
 type V1User struct {
 
-	// access type
+	// The User's permissible access method(s).
 	// Required: true
 	AccessType *Externaldatav1AccessType `json:"accessType"`
 
@@ -40,8 +40,6 @@ type V1User struct {
 	// Required: true
 	UpdatedAt *V1Timestamp `json:"updatedAt"`
 
-	// some users do not have emails (programmatic users)
-	//
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
 

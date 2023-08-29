@@ -1,3 +1,4 @@
+// Package main demonstrates an API client which returns the UserID of its API key.
 package main
 
 import (
@@ -5,7 +6,7 @@ import (
 	"log"
 
 	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/users"
+	"github.com/tkhq/go-sdk/pkg/api/client/who_am_i"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 )
 
@@ -16,11 +17,11 @@ func main() {
 		log.Fatal("failed to create new SDK client:", err)
 	}
 
-	p := users.NewPublicAPIServiceGetWhoamiParams().WithBody(&models.V1GetWhoamiRequest{
+	p := who_am_i.NewPublicAPIServiceGetWhoamiParams().WithBody(&models.V1GetWhoamiRequest{
 		OrganizationID: client.DefaultOrganization(),
 	})
 
-	resp, err := client.V0().Users.PublicAPIServiceGetWhoami(p, client.Authenticator)
+	resp, err := client.V0().WhoAmi.PublicAPIServiceGetWhoami(p, client.Authenticator)
 	if err != nil {
 		log.Fatal("failed to make WhoAmI request:", err)
 	}

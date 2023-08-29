@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Immutableactivityv1TransactionType - TRANSACTION_TYPE_ETHEREUM: Unsigned Ethereum transaction, RLP-encoded and hex-encoded
+// Immutableactivityv1TransactionType immutableactivityv1 transaction type
 //
 // swagger:model immutableactivityv1TransactionType
 type Immutableactivityv1TransactionType string

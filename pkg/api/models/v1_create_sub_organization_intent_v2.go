@@ -20,20 +20,14 @@ import (
 // swagger:model v1CreateSubOrganizationIntentV2
 type V1CreateSubOrganizationIntentV2 struct {
 
-	// @inject_tag: validate:"required"
-	//
 	// The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users
 	// Required: true
 	RootQuorumThreshold *int32 `json:"rootQuorumThreshold"`
 
-	// @inject_tag: validate:"required"
-	//
 	// Root users to create within this sub-organization
 	// Required: true
 	RootUsers []*V1RootUserParams `json:"rootUsers"`
 
-	// @inject_tag: validate:"omitempty,tk_label,tk_label_length"
-	//
 	// Name for this sub-organization
 	// Required: true
 	SubOrganizationName *string `json:"subOrganizationName"`

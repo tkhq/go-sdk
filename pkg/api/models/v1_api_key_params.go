@@ -19,14 +19,10 @@ import (
 // swagger:model v1ApiKeyParams
 type V1APIKeyParams struct {
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for an API Key.
 	// Required: true
 	APIKeyName *string `json:"apiKeyName"`
 
-	// @inject_tag: validate:"hexadecimal,len=66"
-	//
 	// The public component of a cryptographic key pair used to sign messages and transactions.
 	// Required: true
 	PublicKey *string `json:"publicKey"`

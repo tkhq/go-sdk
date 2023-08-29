@@ -29,18 +29,6 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersReader) ReadResponse(response runtime
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceCreateAPIOnlyUsersForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceCreateAPIOnlyUsersNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceCreateAPIOnlyUsersDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create Api only users o k response
+func (o *PublicAPIServiceCreateAPIOnlyUsersOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreateAPIOnlyUsersOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersOK) readResponse(response runtime.Cli
 	return nil
 }
 
-// NewPublicAPIServiceCreateAPIOnlyUsersForbidden creates a PublicAPIServiceCreateAPIOnlyUsersForbidden with default headers values
-func NewPublicAPIServiceCreateAPIOnlyUsersForbidden() *PublicAPIServiceCreateAPIOnlyUsersForbidden {
-	return &PublicAPIServiceCreateAPIOnlyUsersForbidden{}
-}
-
-/*
-PublicAPIServiceCreateAPIOnlyUsersForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceCreateAPIOnlyUsersForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service create Api only users forbidden response has a 2xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create Api only users forbidden response has a 3xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create Api only users forbidden response has a 4xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create Api only users forbidden response has a 5xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create Api only users forbidden response a status code equal to that given
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceCreateAPIOnlyUsersNotFound creates a PublicAPIServiceCreateAPIOnlyUsersNotFound with default headers values
-func NewPublicAPIServiceCreateAPIOnlyUsersNotFound() *PublicAPIServiceCreateAPIOnlyUsersNotFound {
-	return &PublicAPIServiceCreateAPIOnlyUsersNotFound{}
-}
-
-/*
-PublicAPIServiceCreateAPIOnlyUsersNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceCreateAPIOnlyUsersNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service create Api only users not found response has a 2xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create Api only users not found response has a 3xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create Api only users not found response has a 4xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create Api only users not found response has a 5xx status code
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create Api only users not found response a status code equal to that given
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateAPIOnlyUsersNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceCreateAPIOnlyUsersDefault creates a PublicAPIServiceCreateAPIOnlyUsersDefault with default headers values
 func NewPublicAPIServiceCreateAPIOnlyUsersDefault(code int) *PublicAPIServiceCreateAPIOnlyUsersDefault {
 	return &PublicAPIServiceCreateAPIOnlyUsersDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceCreateAPIOnlyUsersDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service create Api only users default response
-func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service create Api only users default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create Api only users default response a status code equal to that given
 func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create Api only users default response
+func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Error() string {

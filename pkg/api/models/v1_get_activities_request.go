@@ -23,11 +23,14 @@ type V1GetActivitiesRequest struct {
 	// Array of Activity Statuses filtering which Activities will be listed in the response.
 	FilterByStatus []V1ActivityStatus `json:"filterByStatus"`
 
+	// Array of Activity Types filtering which Activities will be listed in the response.
+	FilterByType []V1ActivityType `json:"filterByType"`
+
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// pagination options
+	// Parameters used for cursor-based pagination.
 	PaginationOptions *V1Pagination `json:"paginationOptions,omitempty"`
 }
 
@@ -36,6 +39,10 @@ func (m *V1GetActivitiesRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateFilterByStatus(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFilterByType(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,6 +72,27 @@ func (m *V1GetActivitiesRequest) validateFilterByStatus(formats strfmt.Registry)
 				return ve.ValidateName("filterByStatus" + "." + strconv.Itoa(i))
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("filterByStatus" + "." + strconv.Itoa(i))
+			}
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1GetActivitiesRequest) validateFilterByType(formats strfmt.Registry) error {
+	if swag.IsZero(m.FilterByType) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.FilterByType); i++ {
+
+		if err := m.FilterByType[i].Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("filterByType" + "." + strconv.Itoa(i))
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("filterByType" + "." + strconv.Itoa(i))
 			}
 			return err
 		}
@@ -110,6 +138,10 @@ func (m *V1GetActivitiesRequest) ContextValidate(ctx context.Context, formats st
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateFilterByType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidatePaginationOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -129,6 +161,24 @@ func (m *V1GetActivitiesRequest) contextValidateFilterByStatus(ctx context.Conte
 				return ve.ValidateName("filterByStatus" + "." + strconv.Itoa(i))
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("filterByStatus" + "." + strconv.Itoa(i))
+			}
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1GetActivitiesRequest) contextValidateFilterByType(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.FilterByType); i++ {
+
+		if err := m.FilterByType[i].ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("filterByType" + "." + strconv.Itoa(i))
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("filterByType" + "." + strconv.Itoa(i))
 			}
 			return err
 		}

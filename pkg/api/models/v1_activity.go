@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1Activity An action that can that can be taken within the Turnkey infrastructure.
+// V1Activity v1 activity
 //
 // swagger:model v1Activity
 type V1Activity struct {
@@ -40,7 +40,7 @@ type V1Activity struct {
 	// Required: true
 	ID *string `json:"id"`
 
-	// intent
+	// Intent object crafted by Turnkey based on the user request, used to assess the permissibility of an action.
 	// Required: true
 	Intent *V1Intent `json:"intent"`
 
@@ -48,15 +48,15 @@ type V1Activity struct {
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// result
+	// Result of the intended action.
 	// Required: true
 	Result *V1Result `json:"result"`
 
-	// status
+	// The current processing status of a specified Activity.
 	// Required: true
 	Status *V1ActivityStatus `json:"status"`
 
-	// type
+	// Type of Activity, such as Add User, or Sign Transaction.
 	// Required: true
 	Type *V1ActivityType `json:"type"`
 

@@ -29,18 +29,6 @@ func (o *PublicAPIServiceCreateAuthenticatorsReader) ReadResponse(response runti
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceCreateAuthenticatorsForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceCreateAuthenticatorsNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceCreateAuthenticatorsDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceCreateAuthenticatorsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create authenticators o k response
+func (o *PublicAPIServiceCreateAuthenticatorsOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreateAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] publicApiServiceCreateAuthenticatorsOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceCreateAuthenticatorsOK) readResponse(response runtime.C
 	return nil
 }
 
-// NewPublicAPIServiceCreateAuthenticatorsForbidden creates a PublicAPIServiceCreateAuthenticatorsForbidden with default headers values
-func NewPublicAPIServiceCreateAuthenticatorsForbidden() *PublicAPIServiceCreateAuthenticatorsForbidden {
-	return &PublicAPIServiceCreateAuthenticatorsForbidden{}
-}
-
-/*
-PublicAPIServiceCreateAuthenticatorsForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceCreateAuthenticatorsForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service create authenticators forbidden response has a 2xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create authenticators forbidden response has a 3xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create authenticators forbidden response has a 4xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create authenticators forbidden response has a 5xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create authenticators forbidden response a status code equal to that given
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] publicApiServiceCreateAuthenticatorsForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] publicApiServiceCreateAuthenticatorsForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceCreateAuthenticatorsNotFound creates a PublicAPIServiceCreateAuthenticatorsNotFound with default headers values
-func NewPublicAPIServiceCreateAuthenticatorsNotFound() *PublicAPIServiceCreateAuthenticatorsNotFound {
-	return &PublicAPIServiceCreateAuthenticatorsNotFound{}
-}
-
-/*
-PublicAPIServiceCreateAuthenticatorsNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceCreateAuthenticatorsNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service create authenticators not found response has a 2xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create authenticators not found response has a 3xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create authenticators not found response has a 4xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create authenticators not found response has a 5xx status code
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create authenticators not found response a status code equal to that given
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] publicApiServiceCreateAuthenticatorsNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] publicApiServiceCreateAuthenticatorsNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateAuthenticatorsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceCreateAuthenticatorsDefault creates a PublicAPIServiceCreateAuthenticatorsDefault with default headers values
 func NewPublicAPIServiceCreateAuthenticatorsDefault(code int) *PublicAPIServiceCreateAuthenticatorsDefault {
 	return &PublicAPIServiceCreateAuthenticatorsDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceCreateAuthenticatorsDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service create authenticators default response
-func (o *PublicAPIServiceCreateAuthenticatorsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service create authenticators default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceCreateAuthenticatorsDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create authenticators default response a status code equal to that given
 func (o *PublicAPIServiceCreateAuthenticatorsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create authenticators default response
+func (o *PublicAPIServiceCreateAuthenticatorsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateAuthenticatorsDefault) Error() string {

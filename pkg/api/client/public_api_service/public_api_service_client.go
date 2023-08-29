@@ -34,7 +34,7 @@ type ClientService interface {
 }
 
 /*
-PublicAPIServiceNOOPCodegenAnchor this route does nothing and does not need an implementation but please don t remove it it s used at compile time for generating extra open API type script types that are not directly referenced in requests
+PublicAPIServiceNOOPCodegenAnchor public Api service n o o p codegen anchor API
 */
 func (a *Client) PublicAPIServiceNOOPCodegenAnchor(params *PublicAPIServiceNOOPCodegenAnchorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceNOOPCodegenAnchorOK, error) {
 	// TODO: Validate the params before sending

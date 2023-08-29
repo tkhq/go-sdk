@@ -32,7 +32,7 @@ type V1PublicKeyCredentialWithAttestation struct {
 	// Required: true
 	ID *string `json:"id"`
 
-	// ENCODING: base64url
+	// raw Id
 	// Required: true
 	RawID *string `json:"rawId"`
 
@@ -40,7 +40,7 @@ type V1PublicKeyCredentialWithAttestation struct {
 	// Required: true
 	Response *V1AuthenticatorAttestationResponse `json:"response"`
 
-	// Must be literal string "public-key"
+	// type
 	// Required: true
 	// Enum: [public-key]
 	Type *string `json:"type"`

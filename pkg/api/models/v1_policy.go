@@ -32,7 +32,7 @@ type V1Policy struct {
 	// Required: true
 	CreatedAt *V1Timestamp `json:"createdAt"`
 
-	// effect
+	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
 	Effect *Externaldatav1Effect `json:"effect"`
 

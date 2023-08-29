@@ -19,14 +19,10 @@ import (
 // swagger:model v1CreateUserTagIntent
 type V1CreateUserTagIntent struct {
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of User IDs.
 	// Required: true
 	UserIds []string `json:"userIds"`
 
-	// @inject_tag: validate:"required,tk_label,tk_label_length"
-	//
 	// Human-readable name for a User Tag.
 	// Required: true
 	UserTagName *string `json:"userTagName"`

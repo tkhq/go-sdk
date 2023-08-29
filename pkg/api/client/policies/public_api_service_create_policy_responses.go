@@ -29,18 +29,6 @@ func (o *PublicAPIServiceCreatePolicyReader) ReadResponse(response runtime.Clien
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceCreatePolicyForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceCreatePolicyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceCreatePolicyDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceCreatePolicyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create policy o k response
+func (o *PublicAPIServiceCreatePolicyOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreatePolicyOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceCreatePolicyOK) readResponse(response runtime.ClientRes
 	return nil
 }
 
-// NewPublicAPIServiceCreatePolicyForbidden creates a PublicAPIServiceCreatePolicyForbidden with default headers values
-func NewPublicAPIServiceCreatePolicyForbidden() *PublicAPIServiceCreatePolicyForbidden {
-	return &PublicAPIServiceCreatePolicyForbidden{}
-}
-
-/*
-PublicAPIServiceCreatePolicyForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceCreatePolicyForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service create policy forbidden response has a 2xx status code
-func (o *PublicAPIServiceCreatePolicyForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create policy forbidden response has a 3xx status code
-func (o *PublicAPIServiceCreatePolicyForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create policy forbidden response has a 4xx status code
-func (o *PublicAPIServiceCreatePolicyForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create policy forbidden response has a 5xx status code
-func (o *PublicAPIServiceCreatePolicyForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create policy forbidden response a status code equal to that given
-func (o *PublicAPIServiceCreatePolicyForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceCreatePolicyForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreatePolicyForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreatePolicyForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreatePolicyForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceCreatePolicyNotFound creates a PublicAPIServiceCreatePolicyNotFound with default headers values
-func NewPublicAPIServiceCreatePolicyNotFound() *PublicAPIServiceCreatePolicyNotFound {
-	return &PublicAPIServiceCreatePolicyNotFound{}
-}
-
-/*
-PublicAPIServiceCreatePolicyNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceCreatePolicyNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service create policy not found response has a 2xx status code
-func (o *PublicAPIServiceCreatePolicyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create policy not found response has a 3xx status code
-func (o *PublicAPIServiceCreatePolicyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create policy not found response has a 4xx status code
-func (o *PublicAPIServiceCreatePolicyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create policy not found response has a 5xx status code
-func (o *PublicAPIServiceCreatePolicyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create policy not found response a status code equal to that given
-func (o *PublicAPIServiceCreatePolicyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceCreatePolicyNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreatePolicyNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreatePolicyNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreatePolicyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceCreatePolicyDefault creates a PublicAPIServiceCreatePolicyDefault with default headers values
 func NewPublicAPIServiceCreatePolicyDefault(code int) *PublicAPIServiceCreatePolicyDefault {
 	return &PublicAPIServiceCreatePolicyDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceCreatePolicyDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service create policy default response
-func (o *PublicAPIServiceCreatePolicyDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service create policy default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceCreatePolicyDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create policy default response a status code equal to that given
 func (o *PublicAPIServiceCreatePolicyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create policy default response
+func (o *PublicAPIServiceCreatePolicyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreatePolicyDefault) Error() string {

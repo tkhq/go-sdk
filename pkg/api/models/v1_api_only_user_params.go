@@ -20,25 +20,17 @@ import (
 // swagger:model v1ApiOnlyUserParams
 type V1APIOnlyUserParams struct {
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of API Key parameters.
 	// Required: true
 	APIKeys []*V1APIKeyParams `json:"apiKeys"`
 
-	// @inject_tag: validate:"omitempty,email,tk_email"
-	//
 	// The email address for this API-only User (optional).
 	UserEmail string `json:"userEmail,omitempty"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// The name of the new API-only User.
 	// Required: true
 	UserName *string `json:"userName"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of tags assigned to the new API-only User.
 	// Required: true
 	UserTags []string `json:"userTags"`

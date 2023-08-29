@@ -20,25 +20,17 @@ import (
 // swagger:model v1RootUserParams
 type V1RootUserParams struct {
 
-	// @inject_tag: validate:"dive"
-	//
 	// A list of API Key parameters.
 	// Required: true
 	APIKeys []*V1APIKeyParams `json:"apiKeys"`
 
-	// @inject_tag: validate:"dive"
-	//
 	// A list of Authenticator parameters.
 	// Required: true
 	Authenticators []*V1AuthenticatorParamsV2 `json:"authenticators"`
 
-	// @inject_tag: validate:"omitempty,email,tk_email"
-	//
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for a User.
 	// Required: true
 	UserName *string `json:"userName"`

@@ -29,18 +29,6 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagReader) ReadResponse(response runtim
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceUpdatePrivateKeyTagForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceUpdatePrivateKeyTagNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceUpdatePrivateKeyTagDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service update private key tag o k response
+func (o *PublicAPIServiceUpdatePrivateKeyTagOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceUpdatePrivateKeyTagOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagOK) readResponse(response runtime.Cl
 	return nil
 }
 
-// NewPublicAPIServiceUpdatePrivateKeyTagForbidden creates a PublicAPIServiceUpdatePrivateKeyTagForbidden with default headers values
-func NewPublicAPIServiceUpdatePrivateKeyTagForbidden() *PublicAPIServiceUpdatePrivateKeyTagForbidden {
-	return &PublicAPIServiceUpdatePrivateKeyTagForbidden{}
-}
-
-/*
-PublicAPIServiceUpdatePrivateKeyTagForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceUpdatePrivateKeyTagForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service update private key tag forbidden response has a 2xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service update private key tag forbidden response has a 3xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service update private key tag forbidden response has a 4xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service update private key tag forbidden response has a 5xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service update private key tag forbidden response a status code equal to that given
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceUpdatePrivateKeyTagNotFound creates a PublicAPIServiceUpdatePrivateKeyTagNotFound with default headers values
-func NewPublicAPIServiceUpdatePrivateKeyTagNotFound() *PublicAPIServiceUpdatePrivateKeyTagNotFound {
-	return &PublicAPIServiceUpdatePrivateKeyTagNotFound{}
-}
-
-/*
-PublicAPIServiceUpdatePrivateKeyTagNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceUpdatePrivateKeyTagNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service update private key tag not found response has a 2xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service update private key tag not found response has a 3xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service update private key tag not found response has a 4xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service update private key tag not found response has a 5xx status code
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service update private key tag not found response a status code equal to that given
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceUpdatePrivateKeyTagNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceUpdatePrivateKeyTagDefault creates a PublicAPIServiceUpdatePrivateKeyTagDefault with default headers values
 func NewPublicAPIServiceUpdatePrivateKeyTagDefault(code int) *PublicAPIServiceUpdatePrivateKeyTagDefault {
 	return &PublicAPIServiceUpdatePrivateKeyTagDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceUpdatePrivateKeyTagDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service update private key tag default response
-func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service update private key tag default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) IsServerError() bool {
 // IsCode returns true when this public Api service update private key tag default response a status code equal to that given
 func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service update private key tag default response
+func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Error() string {

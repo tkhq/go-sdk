@@ -29,18 +29,6 @@ func (o *PublicAPIServiceGetPoliciesReader) ReadResponse(response runtime.Client
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceGetPoliciesForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceGetPoliciesNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceGetPoliciesDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceGetPoliciesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get policies o k response
+func (o *PublicAPIServiceGetPoliciesOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetPoliciesOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceGetPoliciesOK) readResponse(response runtime.ClientResp
 	return nil
 }
 
-// NewPublicAPIServiceGetPoliciesForbidden creates a PublicAPIServiceGetPoliciesForbidden with default headers values
-func NewPublicAPIServiceGetPoliciesForbidden() *PublicAPIServiceGetPoliciesForbidden {
-	return &PublicAPIServiceGetPoliciesForbidden{}
-}
-
-/*
-PublicAPIServiceGetPoliciesForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceGetPoliciesForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service get policies forbidden response has a 2xx status code
-func (o *PublicAPIServiceGetPoliciesForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get policies forbidden response has a 3xx status code
-func (o *PublicAPIServiceGetPoliciesForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get policies forbidden response has a 4xx status code
-func (o *PublicAPIServiceGetPoliciesForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get policies forbidden response has a 5xx status code
-func (o *PublicAPIServiceGetPoliciesForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get policies forbidden response a status code equal to that given
-func (o *PublicAPIServiceGetPoliciesForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceGetPoliciesForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPoliciesForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPoliciesForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetPoliciesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceGetPoliciesNotFound creates a PublicAPIServiceGetPoliciesNotFound with default headers values
-func NewPublicAPIServiceGetPoliciesNotFound() *PublicAPIServiceGetPoliciesNotFound {
-	return &PublicAPIServiceGetPoliciesNotFound{}
-}
-
-/*
-PublicAPIServiceGetPoliciesNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceGetPoliciesNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service get policies not found response has a 2xx status code
-func (o *PublicAPIServiceGetPoliciesNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get policies not found response has a 3xx status code
-func (o *PublicAPIServiceGetPoliciesNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get policies not found response has a 4xx status code
-func (o *PublicAPIServiceGetPoliciesNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get policies not found response has a 5xx status code
-func (o *PublicAPIServiceGetPoliciesNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get policies not found response a status code equal to that given
-func (o *PublicAPIServiceGetPoliciesNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceGetPoliciesNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPoliciesNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPoliciesNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetPoliciesNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceGetPoliciesDefault creates a PublicAPIServiceGetPoliciesDefault with default headers values
 func NewPublicAPIServiceGetPoliciesDefault(code int) *PublicAPIServiceGetPoliciesDefault {
 	return &PublicAPIServiceGetPoliciesDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceGetPoliciesDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service get policies default response
-func (o *PublicAPIServiceGetPoliciesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service get policies default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceGetPoliciesDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get policies default response a status code equal to that given
 func (o *PublicAPIServiceGetPoliciesDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get policies default response
+func (o *PublicAPIServiceGetPoliciesDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetPoliciesDefault) Error() string {

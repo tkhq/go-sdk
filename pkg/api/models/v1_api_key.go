@@ -31,7 +31,7 @@ type V1APIKey struct {
 	// Required: true
 	CreatedAt *V1Timestamp `json:"createdAt"`
 
-	// credential
+	// A User credential that can be used to authenticate to Turnkey.
 	// Required: true
 	Credential *V1Credential `json:"credential"`
 

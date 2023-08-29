@@ -19,18 +19,14 @@ import (
 // swagger:model v1AuthenticatorParamsV2
 type V1AuthenticatorParamsV2 struct {
 
-	// attestation
+	// The attestation that proves custody of the authenticator and provides metadata about it.
 	// Required: true
 	Attestation *V1Attestation `json:"attestation"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for an Authenticator.
 	// Required: true
 	AuthenticatorName *string `json:"authenticatorName"`
 
-	// @inject_tag: validate:"required,max=256"
-	//
 	// Challenge presented for authentication purposes.
 	// Required: true
 	Challenge *string `json:"challenge"`

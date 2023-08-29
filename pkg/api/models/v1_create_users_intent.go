@@ -20,8 +20,6 @@ import (
 // swagger:model v1CreateUsersIntent
 type V1CreateUsersIntent struct {
 
-	// @inject_tag: validate:"required,dive,required"
-	//
 	// A list of Users.
 	// Required: true
 	Users []*V1UserParams `json:"users"`

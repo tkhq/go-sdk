@@ -19,7 +19,7 @@ import (
 // swagger:model v1GetPrivateKeyResponse
 type V1GetPrivateKeyResponse struct {
 
-	// private key
+	// Cryptographic public/private key pair that can be used for cryptocurrency needs or more generalized encryption.
 	// Required: true
 	PrivateKey *V1PrivateKey `json:"privateKey"`
 }

@@ -19,14 +19,10 @@ import (
 // swagger:model v1DeleteApiKeysIntent
 type V1DeleteAPIKeysIntent struct {
 
-	// @inject_tag: validate:"required,dive,required,uuid"
-	//
 	// A list of API Key IDs.
 	// Required: true
 	APIKeyIds []string `json:"apiKeyIds"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

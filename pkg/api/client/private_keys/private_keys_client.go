@@ -32,8 +32,6 @@ type ClientService interface {
 
 	PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyOK, error)
 
-	PublicAPIServiceGetPrivateKeyBackwardsCompat(params *PublicAPIServiceGetPrivateKeyBackwardsCompatParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyBackwardsCompatOK, error)
-
 	PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeysOK, error)
 
 	PublicAPIServiceSignRawPayload(params *PublicAPIServiceSignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignRawPayloadOK, error)
@@ -120,46 +118,6 @@ func (a *Client) PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivat
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetPrivateKeyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceGetPrivateKeyBackwardsCompat gets private key
-
-Get details about a Private Key
-*/
-func (a *Client) PublicAPIServiceGetPrivateKeyBackwardsCompat(params *PublicAPIServiceGetPrivateKeyBackwardsCompatParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyBackwardsCompatOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceGetPrivateKeyBackwardsCompatParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetPrivateKeyBackwardsCompat",
-		Method:             "POST",
-		PathPattern:        "/tkhq/public/v1/query/get_private_key",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceGetPrivateKeyBackwardsCompatReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceGetPrivateKeyBackwardsCompatOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetPrivateKeyBackwardsCompatDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
