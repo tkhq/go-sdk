@@ -28,9 +28,51 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	PublicAPIServiceCreateUserTag(params *PublicAPIServiceCreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUserTagOK, error)
+
 	PublicAPIServiceUpdateUserTag(params *PublicAPIServiceUpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateUserTagOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+PublicAPIServiceCreateUserTag creates user tag
+
+Create a user tag and add it to users.
+*/
+func (a *Client) PublicAPIServiceCreateUserTag(params *PublicAPIServiceCreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUserTagOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreateUserTagParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreateUserTag",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_user_tag",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreateUserTagReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreateUserTagOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreateUserTagDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

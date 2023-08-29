@@ -20,24 +20,18 @@ import (
 // swagger:model v1PrivateKeyParams
 type V1PrivateKeyParams struct {
 
-	// @inject_tag: validate:"dive"
-	//
 	// Cryptocurrency-specific formats for a derived address (e.g., Ethereum).
 	// Required: true
 	AddressFormats []Immutableactivityv1AddressFormat `json:"addressFormats"`
 
-	// curve
+	// Cryptographic Curve used to generate a given Private Key.
 	// Required: true
 	Curve *Immutableactivityv1Curve `json:"curve"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for a Private Key.
 	// Required: true
 	PrivateKeyName *string `json:"privateKeyName"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of Private Key Tag IDs.
 	// Required: true
 	PrivateKeyTags []string `json:"privateKeyTags"`

@@ -14,9 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Externaldatav1AddressFormat  - ADDRESS_FORMAT_UNCOMPRESSED: 04<X_COORDINATE><Y_COORDINATE>
-//   - ADDRESS_FORMAT_COMPRESSED: 02 or 03, followed by the X coordinate
-//   - ADDRESS_FORMAT_ETHEREUM: Your standard Ethereum address (0x...). We apply EIP55 casing.
+// Externaldatav1AddressFormat externaldatav1 address format
 //
 // swagger:model externaldatav1AddressFormat
 type Externaldatav1AddressFormat string

@@ -19,8 +19,6 @@ import (
 // swagger:model v1RejectActivityIntent
 type V1RejectActivityIntent struct {
 
-	// @inject_tag: validate:"required"
-	//
 	// An artifact verifying a User's action.
 	// Required: true
 	Fingerprint *string `json:"fingerprint"`

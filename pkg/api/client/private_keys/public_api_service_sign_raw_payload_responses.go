@@ -29,18 +29,6 @@ func (o *PublicAPIServiceSignRawPayloadReader) ReadResponse(response runtime.Cli
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceSignRawPayloadForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceSignRawPayloadNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceSignRawPayloadDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceSignRawPayloadOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service sign raw payload o k response
+func (o *PublicAPIServiceSignRawPayloadOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceSignRawPayloadOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceSignRawPayloadOK) readResponse(response runtime.ClientR
 	return nil
 }
 
-// NewPublicAPIServiceSignRawPayloadForbidden creates a PublicAPIServiceSignRawPayloadForbidden with default headers values
-func NewPublicAPIServiceSignRawPayloadForbidden() *PublicAPIServiceSignRawPayloadForbidden {
-	return &PublicAPIServiceSignRawPayloadForbidden{}
-}
-
-/*
-PublicAPIServiceSignRawPayloadForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceSignRawPayloadForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service sign raw payload forbidden response has a 2xx status code
-func (o *PublicAPIServiceSignRawPayloadForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service sign raw payload forbidden response has a 3xx status code
-func (o *PublicAPIServiceSignRawPayloadForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service sign raw payload forbidden response has a 4xx status code
-func (o *PublicAPIServiceSignRawPayloadForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service sign raw payload forbidden response has a 5xx status code
-func (o *PublicAPIServiceSignRawPayloadForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service sign raw payload forbidden response a status code equal to that given
-func (o *PublicAPIServiceSignRawPayloadForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceSignRawPayloadForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceSignRawPayloadForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceSignRawPayloadForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceSignRawPayloadForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceSignRawPayloadNotFound creates a PublicAPIServiceSignRawPayloadNotFound with default headers values
-func NewPublicAPIServiceSignRawPayloadNotFound() *PublicAPIServiceSignRawPayloadNotFound {
-	return &PublicAPIServiceSignRawPayloadNotFound{}
-}
-
-/*
-PublicAPIServiceSignRawPayloadNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceSignRawPayloadNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service sign raw payload not found response has a 2xx status code
-func (o *PublicAPIServiceSignRawPayloadNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service sign raw payload not found response has a 3xx status code
-func (o *PublicAPIServiceSignRawPayloadNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service sign raw payload not found response has a 4xx status code
-func (o *PublicAPIServiceSignRawPayloadNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service sign raw payload not found response has a 5xx status code
-func (o *PublicAPIServiceSignRawPayloadNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service sign raw payload not found response a status code equal to that given
-func (o *PublicAPIServiceSignRawPayloadNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceSignRawPayloadNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceSignRawPayloadNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceSignRawPayloadNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceSignRawPayloadNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceSignRawPayloadDefault creates a PublicAPIServiceSignRawPayloadDefault with default headers values
 func NewPublicAPIServiceSignRawPayloadDefault(code int) *PublicAPIServiceSignRawPayloadDefault {
 	return &PublicAPIServiceSignRawPayloadDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceSignRawPayloadDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service sign raw payload default response
-func (o *PublicAPIServiceSignRawPayloadDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service sign raw payload default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceSignRawPayloadDefault) IsServerError() bool {
 // IsCode returns true when this public Api service sign raw payload default response a status code equal to that given
 func (o *PublicAPIServiceSignRawPayloadDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service sign raw payload default response
+func (o *PublicAPIServiceSignRawPayloadDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceSignRawPayloadDefault) Error() string {

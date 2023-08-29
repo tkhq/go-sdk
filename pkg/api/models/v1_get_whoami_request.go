@@ -19,7 +19,7 @@ import (
 // swagger:model v1GetWhoamiRequest
 type V1GetWhoamiRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given Organization. If the request is being made by a WebAuthN user and their Sub-Organization ID is unknown, this can be the Parent Organization ID; using the Sub-Organization ID when possible is preferred due to performance reasons.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 }

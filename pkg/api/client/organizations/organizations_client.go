@@ -28,55 +28,15 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateInvitations(params *PublicAPIServiceCreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateInvitationsOK, error)
-
 	PublicAPIServiceCreateSubOrganization(params *PublicAPIServiceCreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateSubOrganizationOK, error)
-
-	PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteInvitationOK, error)
 
 	PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetOrganizationOK, error)
 
+	PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateAllowedOriginsOK, error)
+
+	PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateRootQuorumOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-PublicAPIServiceCreateInvitations creates invitations
-
-Create Invitations to join an existing Organization
-*/
-func (a *Client) PublicAPIServiceCreateInvitations(params *PublicAPIServiceCreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateInvitationsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceCreateInvitationsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateInvitations",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/create_invitations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceCreateInvitationsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceCreateInvitationsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateInvitationsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -120,46 +80,6 @@ func (a *Client) PublicAPIServiceCreateSubOrganization(params *PublicAPIServiceC
 }
 
 /*
-PublicAPIServiceDeleteInvitation deletes invitation
-
-Delete an existing Invitation
-*/
-func (a *Client) PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteInvitationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceDeleteInvitationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_DeleteInvitation",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/delete_invitations",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceDeleteInvitationReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceDeleteInvitationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceDeleteInvitationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 PublicAPIServiceGetOrganization gets organization
 
 Get details about an Organization
@@ -196,6 +116,86 @@ func (a *Client) PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrga
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetOrganizationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceUpdateAllowedOrigins updates allowable origins
+
+Update the allowable origins for credentials and requests
+*/
+func (a *Client) PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateAllowedOriginsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceUpdateAllowedOriginsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_UpdateAllowedOrigins",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_allowed_origins",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceUpdateAllowedOriginsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceUpdateAllowedOriginsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceUpdateAllowedOriginsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceUpdateRootQuorum updates root quorum
+
+Set the threshold and members of the root quorum. This must be approved by the current root quorum.
+*/
+func (a *Client) PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateRootQuorumOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceUpdateRootQuorumParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_UpdateRootQuorum",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_root_quorum",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceUpdateRootQuorumReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceUpdateRootQuorumOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceUpdateRootQuorumDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

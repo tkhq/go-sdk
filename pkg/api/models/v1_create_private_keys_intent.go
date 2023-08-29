@@ -20,8 +20,6 @@ import (
 // swagger:model v1CreatePrivateKeysIntent
 type V1CreatePrivateKeysIntent struct {
 
-	// @inject_tag: validate:"dive,required"
-	//
 	// A list of Private Keys.
 	// Required: true
 	PrivateKeys []*V1PrivateKeyParams `json:"privateKeys"`

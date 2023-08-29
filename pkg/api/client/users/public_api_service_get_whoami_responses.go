@@ -92,6 +92,11 @@ func (o *PublicAPIServiceGetWhoamiOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get whoami o k response
+func (o *PublicAPIServiceGetWhoamiOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetWhoamiOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] publicApiServiceGetWhoamiOK  %+v", 200, o.Payload)
 }
@@ -155,6 +160,11 @@ func (o *PublicAPIServiceGetWhoamiForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the public Api service get whoami forbidden response
+func (o *PublicAPIServiceGetWhoamiForbidden) Code() int {
+	return 403
+}
+
 func (o *PublicAPIServiceGetWhoamiForbidden) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] publicApiServiceGetWhoamiForbidden  %+v", 403, o.Payload)
 }
@@ -216,6 +226,11 @@ func (o *PublicAPIServiceGetWhoamiNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the public Api service get whoami not found response
+func (o *PublicAPIServiceGetWhoamiNotFound) Code() int {
+	return 404
+}
+
 func (o *PublicAPIServiceGetWhoamiNotFound) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] publicApiServiceGetWhoamiNotFound  %+v", 404, o.Payload)
 }
@@ -256,11 +271,6 @@ type PublicAPIServiceGetWhoamiDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service get whoami default response
-func (o *PublicAPIServiceGetWhoamiDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service get whoami default response has a 2xx status code
 func (o *PublicAPIServiceGetWhoamiDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -284,6 +294,11 @@ func (o *PublicAPIServiceGetWhoamiDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get whoami default response a status code equal to that given
 func (o *PublicAPIServiceGetWhoamiDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get whoami default response
+func (o *PublicAPIServiceGetWhoamiDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetWhoamiDefault) Error() string {

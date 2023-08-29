@@ -14,14 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1PayloadEncoding - PAYLOAD_ENCODING_UNSPECIFIED: Default value if payload encoding is not set explicitly
-//   - PAYLOAD_ENCODING_HEXADECIMAL: Payload is encoded in hexadecimal
-//
-// We accept 0x-prefixed or non-0x prefixed payloads.
-// We accept any casing (uppercase, lowercase, or mixed)
-//   - PAYLOAD_ENCODING_TEXT_UTF8: Payload is encoded as utf-8 text
-//
-// Will be converted to bytes for signature with Rust's standard String.as_bytes()
+// V1PayloadEncoding v1 payload encoding
 //
 // swagger:model v1PayloadEncoding
 type V1PayloadEncoding string

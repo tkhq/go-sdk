@@ -19,7 +19,7 @@ import (
 // swagger:model v1GetPolicyResponse
 type V1GetPolicyResponse struct {
 
-	// policy
+	// Object that codifies rules defining the actions that are permissible within an Organization.
 	// Required: true
 	Policy *V1Policy `json:"policy"`
 }

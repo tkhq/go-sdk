@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// V1Result Result of the intended action.
+// V1Result v1 result
 //
 // swagger:model v1Result
 type V1Result struct {
@@ -47,6 +47,9 @@ type V1Result struct {
 
 	// create private keys result
 	CreatePrivateKeysResult *V1CreatePrivateKeysResult `json:"createPrivateKeysResult,omitempty"`
+
+	// create private keys result v2
+	CreatePrivateKeysResultV2 *V1CreatePrivateKeysResultV2 `json:"createPrivateKeysResultV2,omitempty"`
 
 	// create sub organization result
 	CreateSubOrganizationResult *V1CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
@@ -96,11 +99,20 @@ type V1Result struct {
 	// sign transaction result
 	SignTransactionResult *V1SignTransactionResult `json:"signTransactionResult,omitempty"`
 
+	// update allowed origins result
+	UpdateAllowedOriginsResult V1UpdateAllowedOriginsResult `json:"updateAllowedOriginsResult,omitempty"`
+
+	// update policy result
+	UpdatePolicyResult *V1UpdatePolicyResult `json:"updatePolicyResult,omitempty"`
+
 	// update private key tag result
 	UpdatePrivateKeyTagResult *V1UpdatePrivateKeyTagResult `json:"updatePrivateKeyTagResult,omitempty"`
 
 	// update root quorum result
 	UpdateRootQuorumResult V1UpdateRootQuorumResult `json:"updateRootQuorumResult,omitempty"`
+
+	// update user result
+	UpdateUserResult *V1UpdateUserResult `json:"updateUserResult,omitempty"`
 
 	// update user tag result
 	UpdateUserTagResult *V1UpdateUserTagResult `json:"updateUserTagResult,omitempty"`
@@ -147,6 +159,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatePrivateKeysResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatePrivateKeysResultV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -214,7 +230,15 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUpdatePolicyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUpdatePrivateKeyTagResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -410,6 +434,25 @@ func (m *V1Result) validateCreatePrivateKeysResult(formats strfmt.Registry) erro
 				return ve.ValidateName("createPrivateKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) validateCreatePrivateKeysResultV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatePrivateKeysResultV2) { // not required
+		return nil
+	}
+
+	if m.CreatePrivateKeysResultV2 != nil {
+		if err := m.CreatePrivateKeysResultV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPrivateKeysResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPrivateKeysResultV2")
 			}
 			return err
 		}
@@ -722,6 +765,25 @@ func (m *V1Result) validateSignTransactionResult(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *V1Result) validateUpdatePolicyResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatePolicyResult) { // not required
+		return nil
+	}
+
+	if m.UpdatePolicyResult != nil {
+		if err := m.UpdatePolicyResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Result) validateUpdatePrivateKeyTagResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePrivateKeyTagResult) { // not required
 		return nil
@@ -733,6 +795,25 @@ func (m *V1Result) validateUpdatePrivateKeyTagResult(formats strfmt.Registry) er
 				return ve.ValidateName("updatePrivateKeyTagResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePrivateKeyTagResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) validateUpdateUserResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserResult) { // not required
+		return nil
+	}
+
+	if m.UpdateUserResult != nil {
+		if err := m.UpdateUserResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserResult")
 			}
 			return err
 		}
@@ -804,6 +885,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreatePrivateKeysResultV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -868,7 +953,15 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdatePolicyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUpdatePrivateKeyTagResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1034,6 +1127,22 @@ func (m *V1Result) contextValidateCreatePrivateKeysResult(ctx context.Context, f
 				return ve.ValidateName("createPrivateKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateCreatePrivateKeysResultV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatePrivateKeysResultV2 != nil {
+		if err := m.CreatePrivateKeysResultV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPrivateKeysResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPrivateKeysResultV2")
 			}
 			return err
 		}
@@ -1298,6 +1407,22 @@ func (m *V1Result) contextValidateSignTransactionResult(ctx context.Context, for
 	return nil
 }
 
+func (m *V1Result) contextValidateUpdatePolicyResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatePolicyResult != nil {
+		if err := m.UpdatePolicyResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Result) contextValidateUpdatePrivateKeyTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePrivateKeyTagResult != nil {
@@ -1306,6 +1431,22 @@ func (m *V1Result) contextValidateUpdatePrivateKeyTagResult(ctx context.Context,
 				return ve.ValidateName("updatePrivateKeyTagResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePrivateKeyTagResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateUpdateUserResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserResult != nil {
+		if err := m.UpdateUserResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserResult")
 			}
 			return err
 		}

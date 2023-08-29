@@ -14,11 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// V1OrganizationData This proto definition is used in our external-facing APIs.
-// It's important to leverage annotations because they're used in our external interfaces.
+// V1OrganizationData v1 organization data
 //
 // swagger:model v1OrganizationData
 type V1OrganizationData struct {
+
+	// allowed origins
+	AllowedOrigins []string `json:"allowedOrigins"`
 
 	// disabled private keys
 	DisabledPrivateKeys []*V1PrivateKey `json:"disabledPrivateKeys"`

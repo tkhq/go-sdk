@@ -26,7 +26,7 @@ type V1CreatePrivateKeysRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreatePrivateKeysIntent `json:"parameters"`
+	Parameters *V1CreatePrivateKeysIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type V1CreatePrivateKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_PRIVATE_KEYS]
+	// Enum: [ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1CreatePrivateKeysRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1CreatePrivateKeysRequestTypeACTIVITYTYPECREATEPRIVATEKEYS captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
-	V1CreatePrivateKeysRequestTypeACTIVITYTYPECREATEPRIVATEKEYS string = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
+	// V1CreatePrivateKeysRequestTypeACTIVITYTYPECREATEPRIVATEKEYSV2 captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
+	V1CreatePrivateKeysRequestTypeACTIVITYTYPECREATEPRIVATEKEYSV2 string = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
 )
 
 // prop value enum

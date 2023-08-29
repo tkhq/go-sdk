@@ -29,18 +29,6 @@ func (o *PublicAPIServiceCreateSubOrganizationReader) ReadResponse(response runt
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceCreateSubOrganizationForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceCreateSubOrganizationNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceCreateSubOrganizationDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceCreateSubOrganizationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create sub organization o k response
+func (o *PublicAPIServiceCreateSubOrganizationOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreateSubOrganizationOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_sub_organization][%d] publicApiServiceCreateSubOrganizationOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceCreateSubOrganizationOK) readResponse(response runtime.
 	return nil
 }
 
-// NewPublicAPIServiceCreateSubOrganizationForbidden creates a PublicAPIServiceCreateSubOrganizationForbidden with default headers values
-func NewPublicAPIServiceCreateSubOrganizationForbidden() *PublicAPIServiceCreateSubOrganizationForbidden {
-	return &PublicAPIServiceCreateSubOrganizationForbidden{}
-}
-
-/*
-PublicAPIServiceCreateSubOrganizationForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceCreateSubOrganizationForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service create sub organization forbidden response has a 2xx status code
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create sub organization forbidden response has a 3xx status code
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create sub organization forbidden response has a 4xx status code
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create sub organization forbidden response has a 5xx status code
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create sub organization forbidden response a status code equal to that given
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_sub_organization][%d] publicApiServiceCreateSubOrganizationForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_sub_organization][%d] publicApiServiceCreateSubOrganizationForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceCreateSubOrganizationNotFound creates a PublicAPIServiceCreateSubOrganizationNotFound with default headers values
-func NewPublicAPIServiceCreateSubOrganizationNotFound() *PublicAPIServiceCreateSubOrganizationNotFound {
-	return &PublicAPIServiceCreateSubOrganizationNotFound{}
-}
-
-/*
-PublicAPIServiceCreateSubOrganizationNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceCreateSubOrganizationNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service create sub organization not found response has a 2xx status code
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service create sub organization not found response has a 3xx status code
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service create sub organization not found response has a 4xx status code
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service create sub organization not found response has a 5xx status code
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service create sub organization not found response a status code equal to that given
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_sub_organization][%d] publicApiServiceCreateSubOrganizationNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_sub_organization][%d] publicApiServiceCreateSubOrganizationNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceCreateSubOrganizationNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceCreateSubOrganizationDefault creates a PublicAPIServiceCreateSubOrganizationDefault with default headers values
 func NewPublicAPIServiceCreateSubOrganizationDefault(code int) *PublicAPIServiceCreateSubOrganizationDefault {
 	return &PublicAPIServiceCreateSubOrganizationDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceCreateSubOrganizationDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service create sub organization default response
-func (o *PublicAPIServiceCreateSubOrganizationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service create sub organization default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceCreateSubOrganizationDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create sub organization default response a status code equal to that given
 func (o *PublicAPIServiceCreateSubOrganizationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create sub organization default response
+func (o *PublicAPIServiceCreateSubOrganizationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateSubOrganizationDefault) Error() string {

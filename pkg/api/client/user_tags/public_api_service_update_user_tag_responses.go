@@ -29,18 +29,6 @@ func (o *PublicAPIServiceUpdateUserTagReader) ReadResponse(response runtime.Clie
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceUpdateUserTagForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceUpdateUserTagNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceUpdateUserTagDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceUpdateUserTagOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service update user tag o k response
+func (o *PublicAPIServiceUpdateUserTagOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceUpdateUserTagOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceUpdateUserTagOK) readResponse(response runtime.ClientRe
 	return nil
 }
 
-// NewPublicAPIServiceUpdateUserTagForbidden creates a PublicAPIServiceUpdateUserTagForbidden with default headers values
-func NewPublicAPIServiceUpdateUserTagForbidden() *PublicAPIServiceUpdateUserTagForbidden {
-	return &PublicAPIServiceUpdateUserTagForbidden{}
-}
-
-/*
-PublicAPIServiceUpdateUserTagForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceUpdateUserTagForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service update user tag forbidden response has a 2xx status code
-func (o *PublicAPIServiceUpdateUserTagForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service update user tag forbidden response has a 3xx status code
-func (o *PublicAPIServiceUpdateUserTagForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service update user tag forbidden response has a 4xx status code
-func (o *PublicAPIServiceUpdateUserTagForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service update user tag forbidden response has a 5xx status code
-func (o *PublicAPIServiceUpdateUserTagForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service update user tag forbidden response a status code equal to that given
-func (o *PublicAPIServiceUpdateUserTagForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceUpdateUserTagForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdateUserTagForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdateUserTagForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceUpdateUserTagForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceUpdateUserTagNotFound creates a PublicAPIServiceUpdateUserTagNotFound with default headers values
-func NewPublicAPIServiceUpdateUserTagNotFound() *PublicAPIServiceUpdateUserTagNotFound {
-	return &PublicAPIServiceUpdateUserTagNotFound{}
-}
-
-/*
-PublicAPIServiceUpdateUserTagNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceUpdateUserTagNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service update user tag not found response has a 2xx status code
-func (o *PublicAPIServiceUpdateUserTagNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service update user tag not found response has a 3xx status code
-func (o *PublicAPIServiceUpdateUserTagNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service update user tag not found response has a 4xx status code
-func (o *PublicAPIServiceUpdateUserTagNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service update user tag not found response has a 5xx status code
-func (o *PublicAPIServiceUpdateUserTagNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service update user tag not found response a status code equal to that given
-func (o *PublicAPIServiceUpdateUserTagNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceUpdateUserTagNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdateUserTagNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceUpdateUserTagNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceUpdateUserTagNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceUpdateUserTagDefault creates a PublicAPIServiceUpdateUserTagDefault with default headers values
 func NewPublicAPIServiceUpdateUserTagDefault(code int) *PublicAPIServiceUpdateUserTagDefault {
 	return &PublicAPIServiceUpdateUserTagDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceUpdateUserTagDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service update user tag default response
-func (o *PublicAPIServiceUpdateUserTagDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service update user tag default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceUpdateUserTagDefault) IsServerError() bool {
 // IsCode returns true when this public Api service update user tag default response a status code equal to that given
 func (o *PublicAPIServiceUpdateUserTagDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service update user tag default response
+func (o *PublicAPIServiceUpdateUserTagDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceUpdateUserTagDefault) Error() string {

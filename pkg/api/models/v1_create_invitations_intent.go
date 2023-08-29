@@ -20,8 +20,6 @@ import (
 // swagger:model v1CreateInvitationsIntent
 type V1CreateInvitationsIntent struct {
 
-	// @inject_tag: validate:"required,dive,required"
-	//
 	// A list of Invitations.
 	// Required: true
 	Invitations []*V1InvitationParams `json:"invitations"`

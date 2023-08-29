@@ -36,6 +36,8 @@ type ClientService interface {
 
 	PublicAPIServiceGetPolicy(params *PublicAPIServiceGetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPolicyOK, error)
 
+	PublicAPIServiceUpdatePolicy(params *PublicAPIServiceUpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePolicyOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -196,6 +198,46 @@ func (a *Client) PublicAPIServiceGetPolicy(params *PublicAPIServiceGetPolicyPara
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetPolicyDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceUpdatePolicy updates policy
+
+Update an existing Policy
+*/
+func (a *Client) PublicAPIServiceUpdatePolicy(params *PublicAPIServiceUpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePolicyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceUpdatePolicyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_UpdatePolicy",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_policy",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceUpdatePolicyReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceUpdatePolicyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceUpdatePolicyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

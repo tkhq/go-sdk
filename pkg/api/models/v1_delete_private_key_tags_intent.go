@@ -19,8 +19,6 @@ import (
 // swagger:model v1DeletePrivateKeyTagsIntent
 type V1DeletePrivateKeyTagsIntent struct {
 
-	// @inject_tag: validate:"required,dive,required,uuid"
-	//
 	// A list of Private Key Tag IDs.
 	// Required: true
 	PrivateKeyTagIds []string `json:"privateKeyTagIds"`

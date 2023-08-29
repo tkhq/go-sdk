@@ -19,22 +19,18 @@ import (
 // swagger:model v1SignRawPayloadIntent
 type V1SignRawPayloadIntent struct {
 
-	// encoding
+	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	// Required: true
 	Encoding *V1PayloadEncoding `json:"encoding"`
 
-	// hash function
+	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	// Required: true
 	HashFunction *V1HashFunction `json:"hashFunction"`
 
-	// @inject_tag: validate:"required"
-	//
 	// Raw unsigned payload to be signed.
 	// Required: true
 	Payload *string `json:"payload"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Private Key.
 	// Required: true
 	PrivateKeyID *string `json:"privateKeyId"`

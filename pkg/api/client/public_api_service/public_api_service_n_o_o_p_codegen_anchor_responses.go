@@ -29,18 +29,6 @@ func (o *PublicAPIServiceNOOPCodegenAnchorReader) ReadResponse(response runtime.
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceNOOPCodegenAnchorForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceNOOPCodegenAnchorNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceNOOPCodegenAnchorDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceNOOPCodegenAnchorOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service n o o p codegen anchor o k response
+func (o *PublicAPIServiceNOOPCodegenAnchorOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceNOOPCodegenAnchorOK) Error() string {
 	return fmt.Sprintf("[POST /tkhq/api/v1/noop-codegen-anchor][%d] publicApiServiceNOOPCodegenAnchorOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceNOOPCodegenAnchorOK) readResponse(response runtime.Clie
 	return nil
 }
 
-// NewPublicAPIServiceNOOPCodegenAnchorForbidden creates a PublicAPIServiceNOOPCodegenAnchorForbidden with default headers values
-func NewPublicAPIServiceNOOPCodegenAnchorForbidden() *PublicAPIServiceNOOPCodegenAnchorForbidden {
-	return &PublicAPIServiceNOOPCodegenAnchorForbidden{}
-}
-
-/*
-PublicAPIServiceNOOPCodegenAnchorForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceNOOPCodegenAnchorForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service n o o p codegen anchor forbidden response has a 2xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service n o o p codegen anchor forbidden response has a 3xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service n o o p codegen anchor forbidden response has a 4xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service n o o p codegen anchor forbidden response has a 5xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service n o o p codegen anchor forbidden response a status code equal to that given
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) Error() string {
-	return fmt.Sprintf("[POST /tkhq/api/v1/noop-codegen-anchor][%d] publicApiServiceNOOPCodegenAnchorForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) String() string {
-	return fmt.Sprintf("[POST /tkhq/api/v1/noop-codegen-anchor][%d] publicApiServiceNOOPCodegenAnchorForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceNOOPCodegenAnchorNotFound creates a PublicAPIServiceNOOPCodegenAnchorNotFound with default headers values
-func NewPublicAPIServiceNOOPCodegenAnchorNotFound() *PublicAPIServiceNOOPCodegenAnchorNotFound {
-	return &PublicAPIServiceNOOPCodegenAnchorNotFound{}
-}
-
-/*
-PublicAPIServiceNOOPCodegenAnchorNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceNOOPCodegenAnchorNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service n o o p codegen anchor not found response has a 2xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service n o o p codegen anchor not found response has a 3xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service n o o p codegen anchor not found response has a 4xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service n o o p codegen anchor not found response has a 5xx status code
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service n o o p codegen anchor not found response a status code equal to that given
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) Error() string {
-	return fmt.Sprintf("[POST /tkhq/api/v1/noop-codegen-anchor][%d] publicApiServiceNOOPCodegenAnchorNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) String() string {
-	return fmt.Sprintf("[POST /tkhq/api/v1/noop-codegen-anchor][%d] publicApiServiceNOOPCodegenAnchorNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceNOOPCodegenAnchorNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceNOOPCodegenAnchorDefault creates a PublicAPIServiceNOOPCodegenAnchorDefault with default headers values
 func NewPublicAPIServiceNOOPCodegenAnchorDefault(code int) *PublicAPIServiceNOOPCodegenAnchorDefault {
 	return &PublicAPIServiceNOOPCodegenAnchorDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceNOOPCodegenAnchorDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service n o o p codegen anchor default response
-func (o *PublicAPIServiceNOOPCodegenAnchorDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service n o o p codegen anchor default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceNOOPCodegenAnchorDefault) IsServerError() bool {
 // IsCode returns true when this public Api service n o o p codegen anchor default response a status code equal to that given
 func (o *PublicAPIServiceNOOPCodegenAnchorDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service n o o p codegen anchor default response
+func (o *PublicAPIServiceNOOPCodegenAnchorDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceNOOPCodegenAnchorDefault) Error() string {

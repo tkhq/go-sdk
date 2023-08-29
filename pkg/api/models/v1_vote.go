@@ -15,7 +15,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// V1Vote Object representing a particular User's approval or rejection of a Consensus request, including all relevant metadata.
+// V1Vote v1 vote
 //
 // swagger:model v1Vote
 type V1Vote struct {
@@ -53,7 +53,7 @@ type V1Vote struct {
 	// Required: true
 	Signature *string `json:"signature"`
 
-	// user
+	// Web and/or API user within your Organization.
 	// Required: true
 	User *V1User `json:"user"`
 

@@ -29,18 +29,6 @@ func (o *PublicAPIServiceSignTransactionReader) ReadResponse(response runtime.Cl
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceSignTransactionForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceSignTransactionNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceSignTransactionDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceSignTransactionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service sign transaction o k response
+func (o *PublicAPIServiceSignTransactionOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceSignTransactionOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] publicApiServiceSignTransactionOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceSignTransactionOK) readResponse(response runtime.Client
 	return nil
 }
 
-// NewPublicAPIServiceSignTransactionForbidden creates a PublicAPIServiceSignTransactionForbidden with default headers values
-func NewPublicAPIServiceSignTransactionForbidden() *PublicAPIServiceSignTransactionForbidden {
-	return &PublicAPIServiceSignTransactionForbidden{}
-}
-
-/*
-PublicAPIServiceSignTransactionForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceSignTransactionForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service sign transaction forbidden response has a 2xx status code
-func (o *PublicAPIServiceSignTransactionForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service sign transaction forbidden response has a 3xx status code
-func (o *PublicAPIServiceSignTransactionForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service sign transaction forbidden response has a 4xx status code
-func (o *PublicAPIServiceSignTransactionForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service sign transaction forbidden response has a 5xx status code
-func (o *PublicAPIServiceSignTransactionForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service sign transaction forbidden response a status code equal to that given
-func (o *PublicAPIServiceSignTransactionForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceSignTransactionForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] publicApiServiceSignTransactionForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceSignTransactionForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] publicApiServiceSignTransactionForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceSignTransactionForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceSignTransactionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceSignTransactionNotFound creates a PublicAPIServiceSignTransactionNotFound with default headers values
-func NewPublicAPIServiceSignTransactionNotFound() *PublicAPIServiceSignTransactionNotFound {
-	return &PublicAPIServiceSignTransactionNotFound{}
-}
-
-/*
-PublicAPIServiceSignTransactionNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceSignTransactionNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service sign transaction not found response has a 2xx status code
-func (o *PublicAPIServiceSignTransactionNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service sign transaction not found response has a 3xx status code
-func (o *PublicAPIServiceSignTransactionNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service sign transaction not found response has a 4xx status code
-func (o *PublicAPIServiceSignTransactionNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service sign transaction not found response has a 5xx status code
-func (o *PublicAPIServiceSignTransactionNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service sign transaction not found response a status code equal to that given
-func (o *PublicAPIServiceSignTransactionNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceSignTransactionNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] publicApiServiceSignTransactionNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceSignTransactionNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] publicApiServiceSignTransactionNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceSignTransactionNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceSignTransactionNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceSignTransactionDefault creates a PublicAPIServiceSignTransactionDefault with default headers values
 func NewPublicAPIServiceSignTransactionDefault(code int) *PublicAPIServiceSignTransactionDefault {
 	return &PublicAPIServiceSignTransactionDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceSignTransactionDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service sign transaction default response
-func (o *PublicAPIServiceSignTransactionDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service sign transaction default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceSignTransactionDefault) IsServerError() bool {
 // IsCode returns true when this public Api service sign transaction default response a status code equal to that given
 func (o *PublicAPIServiceSignTransactionDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service sign transaction default response
+func (o *PublicAPIServiceSignTransactionDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceSignTransactionDefault) Error() string {

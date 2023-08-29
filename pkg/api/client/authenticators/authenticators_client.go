@@ -30,6 +30,12 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	PublicAPIServiceCreateAuthenticators(params *PublicAPIServiceCreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAuthenticatorsOK, error)
 
+	PublicAPIServiceDeleteAuthenticators(params *PublicAPIServiceDeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteAuthenticatorsOK, error)
+
+	PublicAPIServiceGetAuthenticator(params *PublicAPIServiceGetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorOK, error)
+
+	PublicAPIServiceGetAuthenticators(params *PublicAPIServiceGetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -70,6 +76,126 @@ func (a *Client) PublicAPIServiceCreateAuthenticators(params *PublicAPIServiceCr
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceCreateAuthenticatorsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceDeleteAuthenticators deletes authenticators
+
+Remove authenticators from a User
+*/
+func (a *Client) PublicAPIServiceDeleteAuthenticators(params *PublicAPIServiceDeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteAuthenticatorsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceDeleteAuthenticatorsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_DeleteAuthenticators",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_authenticators",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceDeleteAuthenticatorsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceDeleteAuthenticatorsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceDeleteAuthenticatorsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceGetAuthenticator gets authenticator
+
+Get details about an authenticator
+*/
+func (a *Client) PublicAPIServiceGetAuthenticator(params *PublicAPIServiceGetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceGetAuthenticatorParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_GetAuthenticator",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_authenticator",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceGetAuthenticatorReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceGetAuthenticatorOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceGetAuthenticatorDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceGetAuthenticators gets authenticators
+
+Get details about authenticators for a user
+*/
+func (a *Client) PublicAPIServiceGetAuthenticators(params *PublicAPIServiceGetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceGetAuthenticatorsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_GetAuthenticators",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_authenticators",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceGetAuthenticatorsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceGetAuthenticatorsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceGetAuthenticatorsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -29,18 +29,6 @@ func (o *PublicAPIServiceGetPrivateKeyReader) ReadResponse(response runtime.Clie
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceGetPrivateKeyForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceGetPrivateKeyNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceGetPrivateKeyDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceGetPrivateKeyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get private key o k response
+func (o *PublicAPIServiceGetPrivateKeyOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetPrivateKeyOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceGetPrivateKeyOK) readResponse(response runtime.ClientRe
 	return nil
 }
 
-// NewPublicAPIServiceGetPrivateKeyForbidden creates a PublicAPIServiceGetPrivateKeyForbidden with default headers values
-func NewPublicAPIServiceGetPrivateKeyForbidden() *PublicAPIServiceGetPrivateKeyForbidden {
-	return &PublicAPIServiceGetPrivateKeyForbidden{}
-}
-
-/*
-PublicAPIServiceGetPrivateKeyForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceGetPrivateKeyForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service get private key forbidden response has a 2xx status code
-func (o *PublicAPIServiceGetPrivateKeyForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get private key forbidden response has a 3xx status code
-func (o *PublicAPIServiceGetPrivateKeyForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get private key forbidden response has a 4xx status code
-func (o *PublicAPIServiceGetPrivateKeyForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get private key forbidden response has a 5xx status code
-func (o *PublicAPIServiceGetPrivateKeyForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get private key forbidden response a status code equal to that given
-func (o *PublicAPIServiceGetPrivateKeyForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceGetPrivateKeyForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPrivateKeyForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPrivateKeyForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetPrivateKeyForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceGetPrivateKeyNotFound creates a PublicAPIServiceGetPrivateKeyNotFound with default headers values
-func NewPublicAPIServiceGetPrivateKeyNotFound() *PublicAPIServiceGetPrivateKeyNotFound {
-	return &PublicAPIServiceGetPrivateKeyNotFound{}
-}
-
-/*
-PublicAPIServiceGetPrivateKeyNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceGetPrivateKeyNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service get private key not found response has a 2xx status code
-func (o *PublicAPIServiceGetPrivateKeyNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get private key not found response has a 3xx status code
-func (o *PublicAPIServiceGetPrivateKeyNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get private key not found response has a 4xx status code
-func (o *PublicAPIServiceGetPrivateKeyNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get private key not found response has a 5xx status code
-func (o *PublicAPIServiceGetPrivateKeyNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get private key not found response a status code equal to that given
-func (o *PublicAPIServiceGetPrivateKeyNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceGetPrivateKeyNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPrivateKeyNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetPrivateKeyNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetPrivateKeyNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceGetPrivateKeyDefault creates a PublicAPIServiceGetPrivateKeyDefault with default headers values
 func NewPublicAPIServiceGetPrivateKeyDefault(code int) *PublicAPIServiceGetPrivateKeyDefault {
 	return &PublicAPIServiceGetPrivateKeyDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceGetPrivateKeyDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service get private key default response
-func (o *PublicAPIServiceGetPrivateKeyDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service get private key default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceGetPrivateKeyDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get private key default response a status code equal to that given
 func (o *PublicAPIServiceGetPrivateKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get private key default response
+func (o *PublicAPIServiceGetPrivateKeyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetPrivateKeyDefault) Error() string {

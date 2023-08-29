@@ -11,15 +11,18 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	"github.com/tkhq/go-sdk/pkg/api/client/activities"
+	"github.com/tkhq/go-sdk/pkg/api/client/api_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/authenticators"
+	"github.com/tkhq/go-sdk/pkg/api/client/consensus"
+	"github.com/tkhq/go-sdk/pkg/api/client/invitations"
 	"github.com/tkhq/go-sdk/pkg/api/client/organizations"
 	"github.com/tkhq/go-sdk/pkg/api/client/policies"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_key_tags"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/public_api_service"
-	"github.com/tkhq/go-sdk/pkg/api/client/root_quorum"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_tags"
 	"github.com/tkhq/go-sdk/pkg/api/client/users"
+	"github.com/tkhq/go-sdk/pkg/api/client/who_am_i"
 )
 
 // Default turnkey public API HTTP client.
@@ -28,7 +31,7 @@ var Default = NewHTTPClient(nil)
 const (
 	// DefaultHost is the default Host
 	// found in Meta (info) section of spec file
-	DefaultHost string = "coordinator-beta.turnkey.io"
+	DefaultHost string = "api.turnkey.com"
 	// DefaultBasePath is the default BasePath
 	// found in Meta (info) section of spec file
 	DefaultBasePath string = "/"
@@ -65,15 +68,18 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyPub
 	cli := new(TurnkeyPublicAPI)
 	cli.Transport = transport
 	cli.Activities = activities.New(transport, formats)
+	cli.APIKeys = api_keys.New(transport, formats)
 	cli.Authenticators = authenticators.New(transport, formats)
+	cli.Consensus = consensus.New(transport, formats)
+	cli.Invitations = invitations.New(transport, formats)
 	cli.Organizations = organizations.New(transport, formats)
 	cli.Policies = policies.New(transport, formats)
 	cli.PrivateKeyTags = private_key_tags.New(transport, formats)
 	cli.PrivateKeys = private_keys.New(transport, formats)
 	cli.PublicAPIService = public_api_service.New(transport, formats)
-	cli.RootQuorum = root_quorum.New(transport, formats)
 	cli.UserTags = user_tags.New(transport, formats)
 	cli.Users = users.New(transport, formats)
+	cli.WhoAmi = who_am_i.New(transport, formats)
 	return cli
 }
 
@@ -120,7 +126,13 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 type TurnkeyPublicAPI struct {
 	Activities activities.ClientService
 
+	APIKeys api_keys.ClientService
+
 	Authenticators authenticators.ClientService
+
+	Consensus consensus.ClientService
+
+	Invitations invitations.ClientService
 
 	Organizations organizations.ClientService
 
@@ -132,11 +144,11 @@ type TurnkeyPublicAPI struct {
 
 	PublicAPIService public_api_service.ClientService
 
-	RootQuorum root_quorum.ClientService
-
 	UserTags user_tags.ClientService
 
 	Users users.ClientService
+
+	WhoAmi who_am_i.ClientService
 
 	Transport runtime.ClientTransport
 }
@@ -145,13 +157,16 @@ type TurnkeyPublicAPI struct {
 func (c *TurnkeyPublicAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.Activities.SetTransport(transport)
+	c.APIKeys.SetTransport(transport)
 	c.Authenticators.SetTransport(transport)
+	c.Consensus.SetTransport(transport)
+	c.Invitations.SetTransport(transport)
 	c.Organizations.SetTransport(transport)
 	c.Policies.SetTransport(transport)
 	c.PrivateKeyTags.SetTransport(transport)
 	c.PrivateKeys.SetTransport(transport)
 	c.PublicAPIService.SetTransport(transport)
-	c.RootQuorum.SetTransport(transport)
 	c.UserTags.SetTransport(transport)
 	c.Users.SetTransport(transport)
+	c.WhoAmi.SetTransport(transport)
 }

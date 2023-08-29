@@ -23,8 +23,8 @@ type V1Pagination struct {
 	// A pagination cursor. This is an object ID that enables you to fetch all objects before this ID.
 	Before string `json:"before,omitempty"`
 
-	// A limit of the number of object to be returned, between 1 and 100. Defaults to 10 if omitted or set to 0.
-	Limit int32 `json:"limit,omitempty"`
+	// A limit of the number of object to be returned, between 1 and 100. Defaults to 10.
+	Limit string `json:"limit,omitempty"`
 }
 
 // Validate validates this v1 pagination

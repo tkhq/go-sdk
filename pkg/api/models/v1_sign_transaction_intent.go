@@ -19,8 +19,6 @@ import (
 // swagger:model v1SignTransactionIntent
 type V1SignTransactionIntent struct {
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Private Key.
 	// Required: true
 	PrivateKeyID *string `json:"privateKeyId"`
@@ -29,8 +27,6 @@ type V1SignTransactionIntent struct {
 	// Required: true
 	Type *Immutableactivityv1TransactionType `json:"type"`
 
-	// @inject_tag: validate:"required"
-	//
 	// Raw unsigned transaction to be signed by a particular Private Key.
 	// Required: true
 	UnsignedTransaction *string `json:"unsignedTransaction"`

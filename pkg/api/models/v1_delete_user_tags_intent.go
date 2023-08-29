@@ -19,8 +19,6 @@ import (
 // swagger:model v1DeleteUserTagsIntent
 type V1DeleteUserTagsIntent struct {
 
-	// @inject_tag: validate:"required,dive,required,uuid"
-	//
 	// A list of User Tag IDs.
 	// Required: true
 	UserTagIds []string `json:"userTagIds"`

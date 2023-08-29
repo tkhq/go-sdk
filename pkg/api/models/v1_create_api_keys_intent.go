@@ -20,14 +20,10 @@ import (
 // swagger:model v1CreateApiKeysIntent
 type V1CreateAPIKeysIntent struct {
 
-	// @inject_tag: validate:"dive,required"
-	//
 	// A list of API Keys.
 	// Required: true
 	APIKeys []*V1APIKeyParams `json:"apiKeys"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

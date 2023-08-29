@@ -20,14 +20,10 @@ import (
 // swagger:model v1CreateAuthenticatorsIntentV2
 type V1CreateAuthenticatorsIntentV2 struct {
 
-	// @inject_tag: validate:"dive,required"
-	//
 	// A list of Authenticators.
 	// Required: true
 	Authenticators []*V1AuthenticatorParamsV2 `json:"authenticators"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

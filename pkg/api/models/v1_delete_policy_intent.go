@@ -19,8 +19,6 @@ import (
 // swagger:model v1DeletePolicyIntent
 type V1DeletePolicyIntent struct {
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Policy.
 	// Required: true
 	PolicyID *string `json:"policyId"`

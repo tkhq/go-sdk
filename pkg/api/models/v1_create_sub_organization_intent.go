@@ -19,13 +19,11 @@ import (
 // swagger:model v1CreateSubOrganizationIntent
 type V1CreateSubOrganizationIntent struct {
 
-	// @inject_tag: validate:"omitempty,tk_label,tk_label_length"
-	//
 	// Name for this sub-organization
 	// Required: true
 	Name *string `json:"name"`
 
-	// root authenticator
+	// Root User authenticator for this new sub-organization
 	// Required: true
 	RootAuthenticator *V1AuthenticatorParamsV2 `json:"rootAuthenticator"`
 }

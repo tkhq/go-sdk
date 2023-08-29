@@ -20,35 +20,25 @@ import (
 // swagger:model v1UserParamsV2
 type V1UserParamsV2 struct {
 
-	// access type
+	// The User's permissible access method(s).
 	// Required: true
 	AccessType *Immutableactivityv1AccessType `json:"accessType"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of API Key parameters.
 	// Required: true
 	APIKeys []*V1APIKeyParams `json:"apiKeys"`
 
-	// @inject_tag: validate:"dive"
-	//
 	// A list of Authenticator parameters.
 	// Required: true
 	Authenticators []*V1AuthenticatorParamsV2 `json:"authenticators"`
 
-	// @inject_tag: validate:"omitempty,email,tk_email"
-	//
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for a User.
 	// Required: true
 	UserName *string `json:"userName"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of User Tag IDs.
 	// Required: true
 	UserTags []string `json:"userTags"`

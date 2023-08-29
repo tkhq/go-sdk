@@ -92,6 +92,11 @@ func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get private key backwards compat o k response
+func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatOK) Error() string {
 	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyBackwardsCompatOK  %+v", 200, o.Payload)
 }
@@ -155,6 +160,11 @@ func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatForbidden) IsCode(code int)
 	return code == 403
 }
 
+// Code gets the status code for the public Api service get private key backwards compat forbidden response
+func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatForbidden) Code() int {
+	return 403
+}
+
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatForbidden) Error() string {
 	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyBackwardsCompatForbidden  %+v", 403, o.Payload)
 }
@@ -216,6 +226,11 @@ func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatNotFound) IsCode(code int) 
 	return code == 404
 }
 
+// Code gets the status code for the public Api service get private key backwards compat not found response
+func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatNotFound) Code() int {
+	return 404
+}
+
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatNotFound) Error() string {
 	return fmt.Sprintf("[POST /tkhq/public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyBackwardsCompatNotFound  %+v", 404, o.Payload)
 }
@@ -256,11 +271,6 @@ type PublicAPIServiceGetPrivateKeyBackwardsCompatDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service get private key backwards compat default response
-func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service get private key backwards compat default response has a 2xx status code
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -284,6 +294,11 @@ func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) IsServerError() bo
 // IsCode returns true when this public Api service get private key backwards compat default response a status code equal to that given
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get private key backwards compat default response
+func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetPrivateKeyBackwardsCompatDefault) Error() string {

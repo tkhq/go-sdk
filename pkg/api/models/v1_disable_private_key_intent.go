@@ -19,8 +19,6 @@ import (
 // swagger:model v1DisablePrivateKeyIntent
 type V1DisablePrivateKeyIntent struct {
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Private Key.
 	// Required: true
 	PrivateKeyID *string `json:"privateKeyId"`

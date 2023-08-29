@@ -19,14 +19,10 @@ import (
 // swagger:model v1UpdateRootQuorumIntent
 type V1UpdateRootQuorumIntent struct {
 
-	// @inject_tag: validate:"required"
-	//
 	// The threshold of unique approvals to reach quorum.
 	// Required: true
 	Threshold *int32 `json:"threshold"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// The unique identifiers of users who comprise the quorum set.
 	// Required: true
 	UserIds []string `json:"userIds"`

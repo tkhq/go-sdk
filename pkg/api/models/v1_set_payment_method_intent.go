@@ -19,38 +19,26 @@ import (
 // swagger:model v1SetPaymentMethodIntent
 type V1SetPaymentMethodIntent struct {
 
-	// @inject_tag: validate:"required,email,tk_email"
-	//
 	// The email that will receive invoices for the credit card.
 	// Required: true
 	CardHolderEmail *string `json:"cardHolderEmail"`
 
-	// @inject_tag: validate:"required,tk_label_length"
-	//
 	// The name associated with the credit card.
 	// Required: true
 	CardHolderName *string `json:"cardHolderName"`
 
-	// @inject_tag: validate:"required,max=4,numeric"
-	//
 	// The verification digits of the customer's credit card.
 	// Required: true
 	Cvv *string `json:"cvv"`
 
-	// @inject_tag: validate:"required,numeric,len=2"
-	//
 	// The month that the credit card expires.
 	// Required: true
 	ExpiryMonth *string `json:"expiryMonth"`
 
-	// @inject_tag: validate:"required,numeric,len=4"
-	//
 	// The year that the credit card expires.
 	// Required: true
 	ExpiryYear *string `json:"expiryYear"`
 
-	// @inject_tag: validate:"required,max=16,numeric"
-	//
 	// The account number of the customer's credit card.
 	// Required: true
 	Number *string `json:"number"`

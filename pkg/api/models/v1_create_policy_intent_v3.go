@@ -25,15 +25,13 @@ type V1CreatePolicyIntentV3 struct {
 	// The consensus expression that triggers the Effect
 	Consensus string `json:"consensus,omitempty"`
 
-	// effect
+	// The instruction to DENY or ALLOW an activity.
 	// Required: true
 	Effect *Immutableactivityv1Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
 
-	// @inject_tag: validate:"required,tk_label,tk_label_length"
-	//
 	// Human-readable name for a Policy.
 	// Required: true
 	PolicyName *string `json:"policyName"`

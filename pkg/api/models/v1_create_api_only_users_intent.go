@@ -20,8 +20,6 @@ import (
 // swagger:model v1CreateApiOnlyUsersIntent
 type V1CreateAPIOnlyUsersIntent struct {
 
-	// @inject_tag: validate:"required,dive,required"
-	//
 	// A list of API-only Users to create.
 	// Required: true
 	APIOnlyUsers []*V1APIOnlyUserParams `json:"apiOnlyUsers"`

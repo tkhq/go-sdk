@@ -23,20 +23,14 @@ type V1AuthenticatorParams struct {
 	// Required: true
 	Attestation *V1PublicKeyCredentialWithAttestation `json:"attestation"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// Human-readable name for an Authenticator.
 	// Required: true
 	AuthenticatorName *string `json:"authenticatorName"`
 
-	// @inject_tag: validate:"required,max=256"
-	//
 	// Challenge presented for authentication purposes.
 	// Required: true
 	Challenge *string `json:"challenge"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

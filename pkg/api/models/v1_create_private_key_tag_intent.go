@@ -19,14 +19,10 @@ import (
 // swagger:model v1CreatePrivateKeyTagIntent
 type V1CreatePrivateKeyTagIntent struct {
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of Private Key IDs.
 	// Required: true
 	PrivateKeyIds []string `json:"privateKeyIds"`
 
-	// @inject_tag: validate:"required,tk_label,tk_label_length"
-	//
 	// Human-readable name for a Private Key Tag.
 	// Required: true
 	PrivateKeyTagName *string `json:"privateKeyTagName"`

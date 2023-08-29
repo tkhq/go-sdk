@@ -19,8 +19,6 @@ import (
 // swagger:model v1DeleteOrganizationIntent
 type V1DeleteOrganizationIntent struct {
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`

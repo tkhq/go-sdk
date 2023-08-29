@@ -92,6 +92,11 @@ func (o *PublicAPIServiceCreateAPIKeysOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create Api keys o k response
+func (o *PublicAPIServiceCreateAPIKeysOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreateAPIKeysOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] publicApiServiceCreateApiKeysOK  %+v", 200, o.Payload)
 }
@@ -155,6 +160,11 @@ func (o *PublicAPIServiceCreateAPIKeysForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the public Api service create Api keys forbidden response
+func (o *PublicAPIServiceCreateAPIKeysForbidden) Code() int {
+	return 403
+}
+
 func (o *PublicAPIServiceCreateAPIKeysForbidden) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] publicApiServiceCreateApiKeysForbidden  %+v", 403, o.Payload)
 }
@@ -216,6 +226,11 @@ func (o *PublicAPIServiceCreateAPIKeysNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the public Api service create Api keys not found response
+func (o *PublicAPIServiceCreateAPIKeysNotFound) Code() int {
+	return 404
+}
+
 func (o *PublicAPIServiceCreateAPIKeysNotFound) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] publicApiServiceCreateApiKeysNotFound  %+v", 404, o.Payload)
 }
@@ -256,11 +271,6 @@ type PublicAPIServiceCreateAPIKeysDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service create Api keys default response
-func (o *PublicAPIServiceCreateAPIKeysDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service create Api keys default response has a 2xx status code
 func (o *PublicAPIServiceCreateAPIKeysDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -284,6 +294,11 @@ func (o *PublicAPIServiceCreateAPIKeysDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create Api keys default response a status code equal to that given
 func (o *PublicAPIServiceCreateAPIKeysDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create Api keys default response
+func (o *PublicAPIServiceCreateAPIKeysDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateAPIKeysDefault) Error() string {

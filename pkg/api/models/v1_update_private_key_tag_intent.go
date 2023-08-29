@@ -19,25 +19,17 @@ import (
 // swagger:model v1UpdatePrivateKeyTagIntent
 type V1UpdatePrivateKeyTagIntent struct {
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of Private Keys IDs to add this tag to.
 	// Required: true
 	AddPrivateKeyIds []string `json:"addPrivateKeyIds"`
 
-	// @inject_tag: validate:"omitempty,tk_label,tk_label_length"
-	//
 	// The new, human-readable name for the tag with the given ID.
 	NewPrivateKeyTagName string `json:"newPrivateKeyTagName,omitempty"`
 
-	// @inject_tag: validate:"uuid"
-	//
 	// Unique identifier for a given Private Key Tag.
 	// Required: true
 	PrivateKeyTagID *string `json:"privateKeyTagId"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of Private Key IDs to remove this tag from.
 	// Required: true
 	RemovePrivateKeyIds []string `json:"removePrivateKeyIds"`

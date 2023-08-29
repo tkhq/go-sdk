@@ -19,7 +19,7 @@ import (
 // swagger:model v1Invitation
 type V1Invitation struct {
 
-	// access type
+	// The User's permissible access method(s).
 	// Required: true
 	AccessType *Externaldatav1AccessType `json:"accessType"`
 
@@ -47,7 +47,7 @@ type V1Invitation struct {
 	// Required: true
 	SenderUserID *string `json:"senderUserId"`
 
-	// status
+	// The current processing status of a specified Invitation.
 	// Required: true
 	Status *V1InvitationStatus `json:"status"`
 

@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Externaldatav1Operator Logical operators.
+// Externaldatav1Operator externaldatav1 operator
 //
 // swagger:model externaldatav1Operator
 type Externaldatav1Operator string

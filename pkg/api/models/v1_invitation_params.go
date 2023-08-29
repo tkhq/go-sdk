@@ -19,30 +19,22 @@ import (
 // swagger:model v1InvitationParams
 type V1InvitationParams struct {
 
-	// access type
+	// The User's permissible access method(s).
 	// Required: true
 	AccessType *Immutableactivityv1AccessType `json:"accessType"`
 
-	// @inject_tag: validate:"required,email,tk_email"
-	//
 	// The email address of the intended Invitation recipient.
 	// Required: true
 	ReceiverUserEmail *string `json:"receiverUserEmail"`
 
-	// @inject_tag: validate:"required,tk_label_length,tk_label"
-	//
 	// The name of the intended Invitation recipient.
 	// Required: true
 	ReceiverUserName *string `json:"receiverUserName"`
 
-	// @inject_tag: validate:"dive,uuid"
-	//
 	// A list of tags assigned to the Invitation recipient.
 	// Required: true
 	ReceiverUserTags []string `json:"receiverUserTags"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for the Sender of an Invitation.
 	// Required: true
 	SenderUserID *string `json:"senderUserId"`

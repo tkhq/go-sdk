@@ -19,8 +19,6 @@ import (
 // swagger:model v1ActivateBillingTierIntent
 type V1ActivateBillingTierIntent struct {
 
-	// @inject_tag: validate:"required"
-	//
 	// The product that the customer wants to subscribe to.
 	// Required: true
 	ProductID *string `json:"productId"`

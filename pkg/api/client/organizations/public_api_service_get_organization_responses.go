@@ -29,18 +29,6 @@ func (o *PublicAPIServiceGetOrganizationReader) ReadResponse(response runtime.Cl
 			return nil, err
 		}
 		return result, nil
-	case 403:
-		result := NewPublicAPIServiceGetOrganizationForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 404:
-		result := NewPublicAPIServiceGetOrganizationNotFound()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewPublicAPIServiceGetOrganizationDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -92,6 +80,11 @@ func (o *PublicAPIServiceGetOrganizationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get organization o k response
+func (o *PublicAPIServiceGetOrganizationOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetOrganizationOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_organization][%d] publicApiServiceGetOrganizationOK  %+v", 200, o.Payload)
 }
@@ -116,128 +109,6 @@ func (o *PublicAPIServiceGetOrganizationOK) readResponse(response runtime.Client
 	return nil
 }
 
-// NewPublicAPIServiceGetOrganizationForbidden creates a PublicAPIServiceGetOrganizationForbidden with default headers values
-func NewPublicAPIServiceGetOrganizationForbidden() *PublicAPIServiceGetOrganizationForbidden {
-	return &PublicAPIServiceGetOrganizationForbidden{}
-}
-
-/*
-PublicAPIServiceGetOrganizationForbidden describes a response with status code 403, with default header values.
-
-Returned when the user does not have permission to access the resource.
-*/
-type PublicAPIServiceGetOrganizationForbidden struct {
-	Payload interface{}
-}
-
-// IsSuccess returns true when this public Api service get organization forbidden response has a 2xx status code
-func (o *PublicAPIServiceGetOrganizationForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get organization forbidden response has a 3xx status code
-func (o *PublicAPIServiceGetOrganizationForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get organization forbidden response has a 4xx status code
-func (o *PublicAPIServiceGetOrganizationForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get organization forbidden response has a 5xx status code
-func (o *PublicAPIServiceGetOrganizationForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get organization forbidden response a status code equal to that given
-func (o *PublicAPIServiceGetOrganizationForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *PublicAPIServiceGetOrganizationForbidden) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_organization][%d] publicApiServiceGetOrganizationForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetOrganizationForbidden) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_organization][%d] publicApiServiceGetOrganizationForbidden  %+v", 403, o.Payload)
-}
-
-func (o *PublicAPIServiceGetOrganizationForbidden) GetPayload() interface{} {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetOrganizationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
-// NewPublicAPIServiceGetOrganizationNotFound creates a PublicAPIServiceGetOrganizationNotFound with default headers values
-func NewPublicAPIServiceGetOrganizationNotFound() *PublicAPIServiceGetOrganizationNotFound {
-	return &PublicAPIServiceGetOrganizationNotFound{}
-}
-
-/*
-PublicAPIServiceGetOrganizationNotFound describes a response with status code 404, with default header values.
-
-Returned when the resource does not exist.
-*/
-type PublicAPIServiceGetOrganizationNotFound struct {
-	Payload string
-}
-
-// IsSuccess returns true when this public Api service get organization not found response has a 2xx status code
-func (o *PublicAPIServiceGetOrganizationNotFound) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this public Api service get organization not found response has a 3xx status code
-func (o *PublicAPIServiceGetOrganizationNotFound) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this public Api service get organization not found response has a 4xx status code
-func (o *PublicAPIServiceGetOrganizationNotFound) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this public Api service get organization not found response has a 5xx status code
-func (o *PublicAPIServiceGetOrganizationNotFound) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this public Api service get organization not found response a status code equal to that given
-func (o *PublicAPIServiceGetOrganizationNotFound) IsCode(code int) bool {
-	return code == 404
-}
-
-func (o *PublicAPIServiceGetOrganizationNotFound) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_organization][%d] publicApiServiceGetOrganizationNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetOrganizationNotFound) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_organization][%d] publicApiServiceGetOrganizationNotFound  %+v", 404, o.Payload)
-}
-
-func (o *PublicAPIServiceGetOrganizationNotFound) GetPayload() string {
-	return o.Payload
-}
-
-func (o *PublicAPIServiceGetOrganizationNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
-}
-
 // NewPublicAPIServiceGetOrganizationDefault creates a PublicAPIServiceGetOrganizationDefault with default headers values
 func NewPublicAPIServiceGetOrganizationDefault(code int) *PublicAPIServiceGetOrganizationDefault {
 	return &PublicAPIServiceGetOrganizationDefault{
@@ -254,11 +125,6 @@ type PublicAPIServiceGetOrganizationDefault struct {
 	_statusCode int
 
 	Payload *models.RPCStatus
-}
-
-// Code gets the status code for the public Api service get organization default response
-func (o *PublicAPIServiceGetOrganizationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this public Api service get organization default response has a 2xx status code
@@ -284,6 +150,11 @@ func (o *PublicAPIServiceGetOrganizationDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get organization default response a status code equal to that given
 func (o *PublicAPIServiceGetOrganizationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get organization default response
+func (o *PublicAPIServiceGetOrganizationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetOrganizationDefault) Error() string {

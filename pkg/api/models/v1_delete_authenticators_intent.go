@@ -19,14 +19,10 @@ import (
 // swagger:model v1DeleteAuthenticatorsIntent
 type V1DeleteAuthenticatorsIntent struct {
 
-	// @inject_tag: validate:"required,dive,required,uuid"
-	//
 	// A list of Authenticator IDs.
 	// Required: true
 	AuthenticatorIds []string `json:"authenticatorIds"`
 
-	// @inject_tag: validate:"required,uuid"
-	//
 	// Unique identifier for a given User.
 	// Required: true
 	UserID *string `json:"userId"`

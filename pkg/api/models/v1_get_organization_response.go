@@ -19,7 +19,7 @@ import (
 // swagger:model v1GetOrganizationResponse
 type V1GetOrganizationResponse struct {
 
-	// organization data
+	// Object representing the full current and deleted / disabled collection of Users, Policies, Private Keys, and Invitations attributable to a particular Organization.
 	// Required: true
 	OrganizationData *V1OrganizationData `json:"organizationData"`
 }

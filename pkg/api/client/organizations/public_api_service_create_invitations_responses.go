@@ -92,6 +92,11 @@ func (o *PublicAPIServiceCreateInvitationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create invitations o k response
+func (o *PublicAPIServiceCreateInvitationsOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreateInvitationsOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] publicApiServiceCreateInvitationsOK  %+v", 200, o.Payload)
 }
@@ -155,6 +160,11 @@ func (o *PublicAPIServiceCreateInvitationsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the public Api service create invitations forbidden response
+func (o *PublicAPIServiceCreateInvitationsForbidden) Code() int {
+	return 403
+}
+
 func (o *PublicAPIServiceCreateInvitationsForbidden) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] publicApiServiceCreateInvitationsForbidden  %+v", 403, o.Payload)
 }
@@ -216,6 +226,11 @@ func (o *PublicAPIServiceCreateInvitationsNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the public Api service create invitations not found response
+func (o *PublicAPIServiceCreateInvitationsNotFound) Code() int {
+	return 404
+}
+
 func (o *PublicAPIServiceCreateInvitationsNotFound) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] publicApiServiceCreateInvitationsNotFound  %+v", 404, o.Payload)
 }
@@ -256,11 +271,6 @@ type PublicAPIServiceCreateInvitationsDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service create invitations default response
-func (o *PublicAPIServiceCreateInvitationsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service create invitations default response has a 2xx status code
 func (o *PublicAPIServiceCreateInvitationsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -284,6 +294,11 @@ func (o *PublicAPIServiceCreateInvitationsDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create invitations default response a status code equal to that given
 func (o *PublicAPIServiceCreateInvitationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create invitations default response
+func (o *PublicAPIServiceCreateInvitationsDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateInvitationsDefault) Error() string {

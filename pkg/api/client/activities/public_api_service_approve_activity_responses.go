@@ -92,6 +92,11 @@ func (o *PublicAPIServiceApproveActivityOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service approve activity o k response
+func (o *PublicAPIServiceApproveActivityOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceApproveActivityOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] publicApiServiceApproveActivityOK  %+v", 200, o.Payload)
 }
@@ -155,6 +160,11 @@ func (o *PublicAPIServiceApproveActivityForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the public Api service approve activity forbidden response
+func (o *PublicAPIServiceApproveActivityForbidden) Code() int {
+	return 403
+}
+
 func (o *PublicAPIServiceApproveActivityForbidden) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] publicApiServiceApproveActivityForbidden  %+v", 403, o.Payload)
 }
@@ -216,6 +226,11 @@ func (o *PublicAPIServiceApproveActivityNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the public Api service approve activity not found response
+func (o *PublicAPIServiceApproveActivityNotFound) Code() int {
+	return 404
+}
+
 func (o *PublicAPIServiceApproveActivityNotFound) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] publicApiServiceApproveActivityNotFound  %+v", 404, o.Payload)
 }
@@ -256,11 +271,6 @@ type PublicAPIServiceApproveActivityDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service approve activity default response
-func (o *PublicAPIServiceApproveActivityDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service approve activity default response has a 2xx status code
 func (o *PublicAPIServiceApproveActivityDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -284,6 +294,11 @@ func (o *PublicAPIServiceApproveActivityDefault) IsServerError() bool {
 // IsCode returns true when this public Api service approve activity default response a status code equal to that given
 func (o *PublicAPIServiceApproveActivityDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service approve activity default response
+func (o *PublicAPIServiceApproveActivityDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceApproveActivityDefault) Error() string {
