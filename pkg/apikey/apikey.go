@@ -17,9 +17,16 @@ import (
 
 // Metadata stores non-secret metadata about the API key.
 type Metadata struct {
-	Name          string   `json:"name"`
+	// ID is the unique identifier of the API key inside the Turnkey database.
+	ID string `json:"id"`
+
+	// Name is the arbitrary human-readable label of this key.
+	Name string `json:"name"`
+
+	// Organizations is the set of organizations to which this API key is bound and for which this API key can enact API calls.
 	Organizations []string `json:"organizations"`
 
+	// PublicKey is the text form of the PublicKey, for display purposes.
 	PublicKey string `json:"public_key"`
 }
 
@@ -41,6 +48,7 @@ func (k *Key) MergeMetadata(md *Metadata) error {
 		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
 	}
 
+	k.Metadata.ID = md.ID
 	k.Metadata.Name = md.Name
 	k.Metadata.Organizations = md.Organizations
 	k.Metadata.PublicKey = md.PublicKey
