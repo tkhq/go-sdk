@@ -23,11 +23,14 @@ type Metadata struct {
 	// Name is the arbitrary human-readable label of this key.
 	Name string `json:"name"`
 
-	// Organizations is the set of organizations to which this API key is bound and for which this API key can enact API calls.
+	// Organizations is the set unique identifiers of organizations to which this API key is bound and for which this API key can enact API calls.
 	Organizations []string `json:"organizations"`
 
 	// PublicKey is the text form of the PublicKey, for display purposes.
 	PublicKey string `json:"public_key"`
+
+	// User is the unique identifier of the user to which this API key is attached and on behalf of whom activities by this key will be taken.
+	User string `json:"user"`
 }
 
 // Key defines a structure in which to hold both serialized and ecdsa-lib-friendly versions of a Turnkey API keypair.
@@ -52,6 +55,7 @@ func (k *Key) MergeMetadata(md *Metadata) error {
 	k.Metadata.Name = md.Name
 	k.Metadata.Organizations = md.Organizations
 	k.Metadata.PublicKey = md.PublicKey
+	k.Metadata.User = md.User
 
 	return nil
 }
