@@ -80,11 +80,6 @@ func (o *PublicAPIServiceDeleteAuthenticatorsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the public Api service delete authenticators o k response
-func (o *PublicAPIServiceDeleteAuthenticatorsOK) Code() int {
-	return 200
-}
-
 func (o *PublicAPIServiceDeleteAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/delete_authenticators][%d] publicApiServiceDeleteAuthenticatorsOK  %+v", 200, o.Payload)
 }
@@ -127,6 +122,11 @@ type PublicAPIServiceDeleteAuthenticatorsDefault struct {
 	Payload *models.RPCStatus
 }
 
+// Code gets the status code for the public Api service delete authenticators default response
+func (o *PublicAPIServiceDeleteAuthenticatorsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this public Api service delete authenticators default response has a 2xx status code
 func (o *PublicAPIServiceDeleteAuthenticatorsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,11 +150,6 @@ func (o *PublicAPIServiceDeleteAuthenticatorsDefault) IsServerError() bool {
 // IsCode returns true when this public Api service delete authenticators default response a status code equal to that given
 func (o *PublicAPIServiceDeleteAuthenticatorsDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the public Api service delete authenticators default response
-func (o *PublicAPIServiceDeleteAuthenticatorsDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *PublicAPIServiceDeleteAuthenticatorsDefault) Error() string {

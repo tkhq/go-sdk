@@ -80,11 +80,6 @@ func (o *PublicAPIServiceGetAuthenticatorsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the public Api service get authenticators o k response
-func (o *PublicAPIServiceGetAuthenticatorsOK) Code() int {
-	return 200
-}
-
 func (o *PublicAPIServiceGetAuthenticatorsOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_authenticators][%d] publicApiServiceGetAuthenticatorsOK  %+v", 200, o.Payload)
 }
@@ -127,6 +122,11 @@ type PublicAPIServiceGetAuthenticatorsDefault struct {
 	Payload *models.RPCStatus
 }
 
+// Code gets the status code for the public Api service get authenticators default response
+func (o *PublicAPIServiceGetAuthenticatorsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this public Api service get authenticators default response has a 2xx status code
 func (o *PublicAPIServiceGetAuthenticatorsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,11 +150,6 @@ func (o *PublicAPIServiceGetAuthenticatorsDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get authenticators default response a status code equal to that given
 func (o *PublicAPIServiceGetAuthenticatorsDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the public Api service get authenticators default response
-func (o *PublicAPIServiceGetAuthenticatorsDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetAuthenticatorsDefault) Error() string {

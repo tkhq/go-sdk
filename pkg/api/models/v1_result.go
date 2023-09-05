@@ -54,6 +54,9 @@ type V1Result struct {
 	// create sub organization result
 	CreateSubOrganizationResult *V1CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
 
+	// create sub organization result v3
+	CreateSubOrganizationResultV3 *V1CreateSubOrganizationResultV3 `json:"createSubOrganizationResultV3,omitempty"`
+
 	// create user tag result
 	CreateUserTagResult *V1CreateUserTagResult `json:"createUserTagResult,omitempty"`
 
@@ -167,6 +170,10 @@ func (m *V1Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateSubOrganizationResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateSubOrganizationResultV3(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -472,6 +479,25 @@ func (m *V1Result) validateCreateSubOrganizationResult(formats strfmt.Registry) 
 				return ve.ValidateName("createSubOrganizationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) validateCreateSubOrganizationResultV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationResultV3) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationResultV3 != nil {
+		if err := m.CreateSubOrganizationResultV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationResultV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationResultV3")
 			}
 			return err
 		}
@@ -893,6 +919,10 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationResultV3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1159,6 +1189,22 @@ func (m *V1Result) contextValidateCreateSubOrganizationResult(ctx context.Contex
 				return ve.ValidateName("createSubOrganizationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Result) contextValidateCreateSubOrganizationResultV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationResultV3 != nil {
+		if err := m.CreateSubOrganizationResultV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationResultV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationResultV3")
 			}
 			return err
 		}

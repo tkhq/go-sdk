@@ -80,11 +80,6 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the public Api service create Api only users o k response
-func (o *PublicAPIServiceCreateAPIOnlyUsersOK) Code() int {
-	return 200
-}
-
 func (o *PublicAPIServiceCreateAPIOnlyUsersOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_api_only_users][%d] publicApiServiceCreateApiOnlyUsersOK  %+v", 200, o.Payload)
 }
@@ -127,6 +122,11 @@ type PublicAPIServiceCreateAPIOnlyUsersDefault struct {
 	Payload *models.RPCStatus
 }
 
+// Code gets the status code for the public Api service create Api only users default response
+func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this public Api service create Api only users default response has a 2xx status code
 func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,11 +150,6 @@ func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create Api only users default response a status code equal to that given
 func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the public Api service create Api only users default response
-func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreateAPIOnlyUsersDefault) Error() string {
