@@ -80,11 +80,6 @@ func (o *PublicAPIServiceGetPoliciesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the public Api service get policies o k response
-func (o *PublicAPIServiceGetPoliciesOK) Code() int {
-	return 200
-}
-
 func (o *PublicAPIServiceGetPoliciesOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/list_policies][%d] publicApiServiceGetPoliciesOK  %+v", 200, o.Payload)
 }
@@ -127,6 +122,11 @@ type PublicAPIServiceGetPoliciesDefault struct {
 	Payload *models.RPCStatus
 }
 
+// Code gets the status code for the public Api service get policies default response
+func (o *PublicAPIServiceGetPoliciesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this public Api service get policies default response has a 2xx status code
 func (o *PublicAPIServiceGetPoliciesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,11 +150,6 @@ func (o *PublicAPIServiceGetPoliciesDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get policies default response a status code equal to that given
 func (o *PublicAPIServiceGetPoliciesDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the public Api service get policies default response
-func (o *PublicAPIServiceGetPoliciesDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetPoliciesDefault) Error() string {

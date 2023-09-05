@@ -80,11 +80,6 @@ func (o *PublicAPIServiceSignRawPayloadOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the public Api service sign raw payload o k response
-func (o *PublicAPIServiceSignRawPayloadOK) Code() int {
-	return 200
-}
-
 func (o *PublicAPIServiceSignRawPayloadOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/sign_raw_payload][%d] publicApiServiceSignRawPayloadOK  %+v", 200, o.Payload)
 }
@@ -127,6 +122,11 @@ type PublicAPIServiceSignRawPayloadDefault struct {
 	Payload *models.RPCStatus
 }
 
+// Code gets the status code for the public Api service sign raw payload default response
+func (o *PublicAPIServiceSignRawPayloadDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this public Api service sign raw payload default response has a 2xx status code
 func (o *PublicAPIServiceSignRawPayloadDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,11 +150,6 @@ func (o *PublicAPIServiceSignRawPayloadDefault) IsServerError() bool {
 // IsCode returns true when this public Api service sign raw payload default response a status code equal to that given
 func (o *PublicAPIServiceSignRawPayloadDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the public Api service sign raw payload default response
-func (o *PublicAPIServiceSignRawPayloadDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *PublicAPIServiceSignRawPayloadDefault) Error() string {
