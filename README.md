@@ -10,28 +10,30 @@ Example:
 ```go
 import (
 	"fmt"
+	"log"
 
 	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/users"
+	"github.com/tkhq/go-sdk/pkg/api/client/who_am_i"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 )
 
-func ExampleClient() {
-	client, err := sdk.New("")
+func main() {
+	// NB: make sure to create and register an API key, first.
+	client, err := sdk.New("") // your local API key name
 	if err != nil {
-		return
+		log.Fatal("failed to create new SDK client:", err)
 	}
 
-	p := users.NewPublicAPIServiceGetWhoamiParams().WithBody(&models.V1GetWhoamiRequest{
-		OrganizationID: client.DefaultOrganization(),
+	p := who_am_i.NewPublicAPIServiceGetWhoamiParams().WithBody(&models.V1GetWhoamiRequest{
+		OrganizationID: client.DefaultOrganization(), // alternatively, specify your desired organization ID
 	})
 
-	resp, err := client.V0().Users.PublicAPIServiceGetWhoami(p, client.Authenticator)
+	resp, err := client.V0().WhoAmi.PublicAPIServiceGetWhoami(p, client.Authenticator)
 	if err != nil {
-		return
+		log.Fatal("failed to make WhoAmI request:", err)
 	}
 
-	fmt.Println(*resp.Payload.UserID)
+	fmt.Println("UserID: ", *resp.Payload.UserID)
 }
 ```
 
