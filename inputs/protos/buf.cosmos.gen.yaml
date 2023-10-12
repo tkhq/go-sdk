@@ -1,0 +1,13 @@
+# https://docs.buf.build/configuration/v1/buf-gen-yaml
+version: v1
+
+plugins:
+  - name: go
+    out: ../../pkg/
+    opt:
+      - paths=source_relative
+
+  - name: go-grpc
+    out: ../../pkg/
+    opt:
+      - paths=source_relative

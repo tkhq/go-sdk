@@ -1,0 +1,14 @@
+// buf:lint:ignore PACKAGE_VERSION_SUFFIX
+
+syntax = "proto3";
+
+package signer.cosmos;
+
+option go_package = "github.com/tkhq/go-sdk/inputs/protos/signer/cosmos";
+
+message TurnkeyPublicKey {
+  string id = 1;
+  string organization_id = 2;
+  string public_key = 3;
+  string key_type = 4;
+}

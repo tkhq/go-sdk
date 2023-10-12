@@ -96,6 +96,7 @@ func (m *V1Credential) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *V1Credential) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Type != nil {
+
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("type")
