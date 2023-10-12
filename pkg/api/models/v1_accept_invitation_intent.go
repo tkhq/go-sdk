@@ -109,6 +109,7 @@ func (m *V1AcceptInvitationIntent) ContextValidate(ctx context.Context, formats 
 func (m *V1AcceptInvitationIntent) contextValidateAuthenticator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Authenticator != nil {
+
 		if err := m.Authenticator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("authenticator")

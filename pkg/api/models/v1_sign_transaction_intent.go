@@ -25,7 +25,7 @@ type V1SignTransactionIntent struct {
 
 	// type
 	// Required: true
-	Type *Immutableactivityv1TransactionType `json:"type"`
+	Type *V1TransactionType `json:"type"`
 
 	// Raw unsigned transaction to be signed by a particular Private Key.
 	// Required: true
@@ -113,6 +113,7 @@ func (m *V1SignTransactionIntent) ContextValidate(ctx context.Context, formats s
 func (m *V1SignTransactionIntent) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Type != nil {
+
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("type")

@@ -80,6 +80,11 @@ func (o *PublicAPIServiceUpdateRootQuorumOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service update root quorum o k response
+func (o *PublicAPIServiceUpdateRootQuorumOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceUpdateRootQuorumOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/update_root_quorum][%d] publicApiServiceUpdateRootQuorumOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceUpdateRootQuorumDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service update root quorum default response
-func (o *PublicAPIServiceUpdateRootQuorumDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service update root quorum default response has a 2xx status code
 func (o *PublicAPIServiceUpdateRootQuorumDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceUpdateRootQuorumDefault) IsServerError() bool {
 // IsCode returns true when this public Api service update root quorum default response a status code equal to that given
 func (o *PublicAPIServiceUpdateRootQuorumDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service update root quorum default response
+func (o *PublicAPIServiceUpdateRootQuorumDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceUpdateRootQuorumDefault) Error() string {

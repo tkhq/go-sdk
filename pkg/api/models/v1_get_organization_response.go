@@ -75,6 +75,7 @@ func (m *V1GetOrganizationResponse) ContextValidate(ctx context.Context, formats
 func (m *V1GetOrganizationResponse) contextValidateOrganizationData(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OrganizationData != nil {
+
 		if err := m.OrganizationData.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("organizationData")

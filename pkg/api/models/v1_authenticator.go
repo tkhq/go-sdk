@@ -38,11 +38,11 @@ type V1Authenticator struct {
 
 	// created at
 	// Required: true
-	CreatedAt *V1Timestamp `json:"createdAt"`
+	CreatedAt *Externaldatav1Timestamp `json:"createdAt"`
 
 	// A User credential that can be used to authenticate to Turnkey.
 	// Required: true
-	Credential *V1Credential `json:"credential"`
+	Credential *Externaldatav1Credential `json:"credential"`
 
 	// Unique identifier for a WebAuthn credential.
 	// Required: true
@@ -58,7 +58,7 @@ type V1Authenticator struct {
 
 	// updated at
 	// Required: true
-	UpdatedAt *V1Timestamp `json:"updatedAt"`
+	UpdatedAt *Externaldatav1Timestamp `json:"updatedAt"`
 }
 
 // Validate validates this v1 authenticator
@@ -276,6 +276,7 @@ func (m *V1Authenticator) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *V1Authenticator) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -292,6 +293,7 @@ func (m *V1Authenticator) contextValidateCreatedAt(ctx context.Context, formats 
 func (m *V1Authenticator) contextValidateCredential(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credential != nil {
+
 		if err := m.Credential.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credential")
@@ -308,6 +310,10 @@ func (m *V1Authenticator) contextValidateCredential(ctx context.Context, formats
 func (m *V1Authenticator) contextValidateTransports(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Transports); i++ {
+
+		if swag.IsZero(m.Transports[i]) { // not required
+			return nil
+		}
 
 		if err := m.Transports[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -326,6 +332,7 @@ func (m *V1Authenticator) contextValidateTransports(ctx context.Context, formats
 func (m *V1Authenticator) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

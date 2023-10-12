@@ -80,6 +80,11 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service update private key tag o k response
+func (o *PublicAPIServiceUpdatePrivateKeyTagOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceUpdatePrivateKeyTagOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] publicApiServiceUpdatePrivateKeyTagOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceUpdatePrivateKeyTagDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service update private key tag default response
-func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service update private key tag default response has a 2xx status code
 func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) IsServerError() bool {
 // IsCode returns true when this public Api service update private key tag default response a status code equal to that given
 func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service update private key tag default response
+func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceUpdatePrivateKeyTagDefault) Error() string {

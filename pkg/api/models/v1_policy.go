@@ -30,7 +30,7 @@ type V1Policy struct {
 
 	// created at
 	// Required: true
-	CreatedAt *V1Timestamp `json:"createdAt"`
+	CreatedAt *Externaldatav1Timestamp `json:"createdAt"`
 
 	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
@@ -54,7 +54,7 @@ type V1Policy struct {
 
 	// updated at
 	// Required: true
-	UpdatedAt *V1Timestamp `json:"updatedAt"`
+	UpdatedAt *Externaldatav1Timestamp `json:"updatedAt"`
 }
 
 // Validate validates this v1 policy
@@ -268,6 +268,7 @@ func (m *V1Policy) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *V1Policy) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -284,6 +285,7 @@ func (m *V1Policy) contextValidateCreatedAt(ctx context.Context, formats strfmt.
 func (m *V1Policy) contextValidateEffect(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Effect != nil {
+
 		if err := m.Effect.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("effect")
@@ -302,6 +304,11 @@ func (m *V1Policy) contextValidateSelectors(ctx context.Context, formats strfmt.
 	for i := 0; i < len(m.Selectors); i++ {
 
 		if m.Selectors[i] != nil {
+
+			if swag.IsZero(m.Selectors[i]) { // not required
+				return nil
+			}
+
 			if err := m.Selectors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("selectors" + "." + strconv.Itoa(i))
@@ -320,6 +327,7 @@ func (m *V1Policy) contextValidateSelectors(ctx context.Context, formats strfmt.
 func (m *V1Policy) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

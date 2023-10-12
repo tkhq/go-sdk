@@ -28,9 +28,97 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	PublicAPIServiceCreateWallet(params *PublicAPIServiceCreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletOK, error)
+
+	PublicAPIServiceCreateWalletAccounts(params *PublicAPIServiceCreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletAccountsOK, error)
+
 	PublicAPIServiceNOOPCodegenAnchor(params *PublicAPIServiceNOOPCodegenAnchorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceNOOPCodegenAnchorOK, error)
 
+	PublicAPIServiceSignRawPayloadV2(params *PublicAPIServiceSignRawPayloadV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignRawPayloadV2OK, error)
+
+	PublicAPIServiceSignTransactionV2(params *PublicAPIServiceSignTransactionV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignTransactionV2OK, error)
+
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+PublicAPIServiceCreateWallet creates wallet
+
+Create a Wallet
+*/
+func (a *Client) PublicAPIServiceCreateWallet(params *PublicAPIServiceCreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreateWalletParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreateWallet",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_wallet",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreateWalletReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreateWalletOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreateWalletDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceCreateWalletAccounts creates wallet accounts
+
+Create Wallet accounts
+*/
+func (a *Client) PublicAPIServiceCreateWalletAccounts(params *PublicAPIServiceCreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletAccountsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceCreateWalletAccountsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_CreateWalletAccounts",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_wallet_accounts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceCreateWalletAccountsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceCreateWalletAccountsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceCreateWalletAccountsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -68,6 +156,86 @@ func (a *Client) PublicAPIServiceNOOPCodegenAnchor(params *PublicAPIServiceNOOPC
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceNOOPCodegenAnchorDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceSignRawPayloadV2 signs raw payload
+
+Sign a raw payload with a Private Key id or address
+*/
+func (a *Client) PublicAPIServiceSignRawPayloadV2(params *PublicAPIServiceSignRawPayloadV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignRawPayloadV2OK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceSignRawPayloadV2Params()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_SignRawPayloadV2",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/sign_raw_payload_v2",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceSignRawPayloadV2Reader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceSignRawPayloadV2OK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceSignRawPayloadV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceSignTransactionV2 signs transaction
+
+Sign a transaction with a Private Key id or address
+*/
+func (a *Client) PublicAPIServiceSignTransactionV2(params *PublicAPIServiceSignTransactionV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignTransactionV2OK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceSignTransactionV2Params()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_SignTransactionV2",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/sign_transaction_v2",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceSignTransactionV2Reader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceSignTransactionV2OK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceSignTransactionV2Default)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

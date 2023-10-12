@@ -80,6 +80,11 @@ func (o *PublicAPIServiceGetActivityOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get activity o k response
+func (o *PublicAPIServiceGetActivityOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetActivityOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_activity][%d] publicApiServiceGetActivityOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceGetActivityDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service get activity default response
-func (o *PublicAPIServiceGetActivityDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service get activity default response has a 2xx status code
 func (o *PublicAPIServiceGetActivityDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceGetActivityDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get activity default response a status code equal to that given
 func (o *PublicAPIServiceGetActivityDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get activity default response
+func (o *PublicAPIServiceGetActivityDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetActivityDefault) Error() string {

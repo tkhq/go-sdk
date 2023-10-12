@@ -31,7 +31,7 @@ func main() {
 		TimestampMs:    &timestampString,
 		Parameters: &models.V1SignTransactionIntent{
 			PrivateKeyID:        &privateKeyID,
-			Type:                models.Immutableactivityv1TransactionTypeTRANSACTIONTYPEETHEREUM.Pointer(),
+			Type:                models.V1TransactionTypeTRANSACTIONTYPEETHEREUM.Pointer(),
 			UnsignedTransaction: &unsignedTransaction,
 		},
 		Type: (*string)(models.V1ActivityTypeACTIVITYTYPESIGNTRANSACTION.Pointer()),
