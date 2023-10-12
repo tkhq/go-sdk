@@ -80,6 +80,11 @@ func (o *PublicAPIServiceUpdateUserTagOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service update user tag o k response
+func (o *PublicAPIServiceUpdateUserTagOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceUpdateUserTagOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/update_user_tag][%d] publicApiServiceUpdateUserTagOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceUpdateUserTagDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service update user tag default response
-func (o *PublicAPIServiceUpdateUserTagDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service update user tag default response has a 2xx status code
 func (o *PublicAPIServiceUpdateUserTagDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceUpdateUserTagDefault) IsServerError() bool {
 // IsCode returns true when this public Api service update user tag default response a status code equal to that given
 func (o *PublicAPIServiceUpdateUserTagDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service update user tag default response
+func (o *PublicAPIServiceUpdateUserTagDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceUpdateUserTagDefault) Error() string {

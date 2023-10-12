@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	PublicAPIServiceCreatePrivateKeys(params *PublicAPIServiceCreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeysOK, error)
 
+	PublicAPIServiceExportPrivateKey(params *PublicAPIServiceExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportPrivateKeyOK, error)
+
 	PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyOK, error)
 
 	PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeysOK, error)
@@ -78,6 +80,46 @@ func (a *Client) PublicAPIServiceCreatePrivateKeys(params *PublicAPIServiceCreat
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceCreatePrivateKeysDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceExportPrivateKey exports private key
+
+Exports a Private Key
+*/
+func (a *Client) PublicAPIServiceExportPrivateKey(params *PublicAPIServiceExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportPrivateKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceExportPrivateKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_ExportPrivateKey",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/export_private_key",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceExportPrivateKeyReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceExportPrivateKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceExportPrivateKeyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

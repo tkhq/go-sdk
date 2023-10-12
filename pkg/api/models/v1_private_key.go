@@ -26,11 +26,15 @@ type V1PrivateKey struct {
 
 	// created at
 	// Required: true
-	CreatedAt *V1Timestamp `json:"createdAt"`
+	CreatedAt *Externaldatav1Timestamp `json:"createdAt"`
 
 	// Cryptographic Curve used to generate a given Private Key.
 	// Required: true
 	Curve *Externaldatav1Curve `json:"curve"`
+
+	// True when a given Private Key is exported, false otherwise.
+	// Required: true
+	Exported *bool `json:"exported"`
 
 	// Unique identifier for a given Private Key.
 	// Required: true
@@ -47,6 +51,10 @@ type V1PrivateKey struct {
 	// The public component of a cryptographic key pair used to sign messages and transactions.
 	// Required: true
 	PublicKey *string `json:"publicKey"`
+
+	// updated at
+	// Required: true
+	UpdatedAt *Externaldatav1Timestamp `json:"updatedAt"`
 }
 
 // Validate validates this v1 private key
@@ -65,6 +73,10 @@ func (m *V1PrivateKey) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateExported(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePrivateKeyID(formats); err != nil {
 		res = append(res, err)
 	}
@@ -78,6 +90,10 @@ func (m *V1PrivateKey) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePublicKey(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -158,6 +174,15 @@ func (m *V1PrivateKey) validateCurve(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *V1PrivateKey) validateExported(formats strfmt.Registry) error {
+
+	if err := validate.Required("exported", "body", m.Exported); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *V1PrivateKey) validatePrivateKeyID(formats strfmt.Registry) error {
 
 	if err := validate.Required("privateKeyId", "body", m.PrivateKeyID); err != nil {
@@ -194,6 +219,26 @@ func (m *V1PrivateKey) validatePublicKey(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *V1PrivateKey) validateUpdatedAt(formats strfmt.Registry) error {
+
+	if err := validate.Required("updatedAt", "body", m.UpdatedAt); err != nil {
+		return err
+	}
+
+	if m.UpdatedAt != nil {
+		if err := m.UpdatedAt.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatedAt")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatedAt")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this v1 private key based on the context it is used
 func (m *V1PrivateKey) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -210,6 +255,10 @@ func (m *V1PrivateKey) ContextValidate(ctx context.Context, formats strfmt.Regis
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -221,6 +270,11 @@ func (m *V1PrivateKey) contextValidateAddresses(ctx context.Context, formats str
 	for i := 0; i < len(m.Addresses); i++ {
 
 		if m.Addresses[i] != nil {
+
+			if swag.IsZero(m.Addresses[i]) { // not required
+				return nil
+			}
+
 			if err := m.Addresses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("addresses" + "." + strconv.Itoa(i))
@@ -239,6 +293,7 @@ func (m *V1PrivateKey) contextValidateAddresses(ctx context.Context, formats str
 func (m *V1PrivateKey) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -255,11 +310,29 @@ func (m *V1PrivateKey) contextValidateCreatedAt(ctx context.Context, formats str
 func (m *V1PrivateKey) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
+
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("curve")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PrivateKey) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatedAt != nil {
+
+		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatedAt")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatedAt")
 			}
 			return err
 		}

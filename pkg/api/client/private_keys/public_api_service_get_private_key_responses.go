@@ -80,6 +80,11 @@ func (o *PublicAPIServiceGetPrivateKeyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service get private key o k response
+func (o *PublicAPIServiceGetPrivateKeyOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceGetPrivateKeyOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/query/get_private_key][%d] publicApiServiceGetPrivateKeyOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceGetPrivateKeyDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service get private key default response
-func (o *PublicAPIServiceGetPrivateKeyDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service get private key default response has a 2xx status code
 func (o *PublicAPIServiceGetPrivateKeyDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceGetPrivateKeyDefault) IsServerError() bool {
 // IsCode returns true when this public Api service get private key default response a status code equal to that given
 func (o *PublicAPIServiceGetPrivateKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service get private key default response
+func (o *PublicAPIServiceGetPrivateKeyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceGetPrivateKeyDefault) Error() string {

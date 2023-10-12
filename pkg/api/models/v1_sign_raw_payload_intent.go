@@ -21,11 +21,11 @@ type V1SignRawPayloadIntent struct {
 
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	// Required: true
-	Encoding *V1PayloadEncoding `json:"encoding"`
+	Encoding *Immutableactivityv1PayloadEncoding `json:"encoding"`
 
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	// Required: true
-	HashFunction *V1HashFunction `json:"hashFunction"`
+	HashFunction *Immutableactivityv1HashFunction `json:"hashFunction"`
 
 	// Raw unsigned payload to be signed.
 	// Required: true
@@ -149,6 +149,7 @@ func (m *V1SignRawPayloadIntent) ContextValidate(ctx context.Context, formats st
 func (m *V1SignRawPayloadIntent) contextValidateEncoding(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Encoding != nil {
+
 		if err := m.Encoding.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("encoding")
@@ -165,6 +166,7 @@ func (m *V1SignRawPayloadIntent) contextValidateEncoding(ctx context.Context, fo
 func (m *V1SignRawPayloadIntent) contextValidateHashFunction(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HashFunction != nil {
+
 		if err := m.HashFunction.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hashFunction")

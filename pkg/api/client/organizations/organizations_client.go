@@ -32,6 +32,12 @@ type ClientService interface {
 
 	PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetOrganizationOK, error)
 
+	PublicAPIServiceInitUserEmailRecovery(params *PublicAPIServiceInitUserEmailRecoveryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceInitUserEmailRecoveryOK, error)
+
+	PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServiceRemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRemoveOrganizationFeatureOK, error)
+
+	PublicAPIServiceSetOrganizationFeature(params *PublicAPIServiceSetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSetOrganizationFeatureOK, error)
+
 	PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateAllowedOriginsOK, error)
 
 	PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateRootQuorumOK, error)
@@ -116,6 +122,126 @@ func (a *Client) PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrga
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetOrganizationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceInitUserEmailRecovery inits recovery
+
+Initializes a new recovery
+*/
+func (a *Client) PublicAPIServiceInitUserEmailRecovery(params *PublicAPIServiceInitUserEmailRecoveryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceInitUserEmailRecoveryOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceInitUserEmailRecoveryParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_InitUserEmailRecovery",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/init_user_email_recovery",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceInitUserEmailRecoveryReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceInitUserEmailRecoveryOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceInitUserEmailRecoveryDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceRemoveOrganizationFeature removes organization feature
+
+Removes an organization feature
+*/
+func (a *Client) PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServiceRemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRemoveOrganizationFeatureOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceRemoveOrganizationFeatureParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_RemoveOrganizationFeature",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/remove_organization_feature",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceRemoveOrganizationFeatureReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceRemoveOrganizationFeatureOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceRemoveOrganizationFeatureDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceSetOrganizationFeature sets organization feature
+
+Sets an organization feature
+*/
+func (a *Client) PublicAPIServiceSetOrganizationFeature(params *PublicAPIServiceSetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSetOrganizationFeatureOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceSetOrganizationFeatureParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_SetOrganizationFeature",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/set_organization_feature",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceSetOrganizationFeatureReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceSetOrganizationFeatureOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceSetOrganizationFeatureDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -80,6 +80,11 @@ func (o *PublicAPIServiceCreatePolicyOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the public Api service create policy o k response
+func (o *PublicAPIServiceCreatePolicyOK) Code() int {
+	return 200
+}
+
 func (o *PublicAPIServiceCreatePolicyOK) Error() string {
 	return fmt.Sprintf("[POST /public/v1/submit/create_policy][%d] publicApiServiceCreatePolicyOK  %+v", 200, o.Payload)
 }
@@ -122,11 +127,6 @@ type PublicAPIServiceCreatePolicyDefault struct {
 	Payload *models.RPCStatus
 }
 
-// Code gets the status code for the public Api service create policy default response
-func (o *PublicAPIServiceCreatePolicyDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this public Api service create policy default response has a 2xx status code
 func (o *PublicAPIServiceCreatePolicyDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,6 +150,11 @@ func (o *PublicAPIServiceCreatePolicyDefault) IsServerError() bool {
 // IsCode returns true when this public Api service create policy default response a status code equal to that given
 func (o *PublicAPIServiceCreatePolicyDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the public Api service create policy default response
+func (o *PublicAPIServiceCreatePolicyDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *PublicAPIServiceCreatePolicyDefault) Error() string {
