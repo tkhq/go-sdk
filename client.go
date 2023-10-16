@@ -11,9 +11,12 @@ import (
 	"github.com/tkhq/go-sdk/pkg/store"
 )
 
-// New returns a new API Client with the given API key name from the default keystore.
-func New(keyname string) (*Client, error) {
-	apiKey, err := store.Default.Load(keyname)
+// New returns a new API Client with the given API key name from the given keystore. When nil, "keystore" reverts to store.Default
+func New(keyname string, keystore store.Store) (*Client, error) {
+	if keystore == nil {
+		keystore = store.Default
+	}
+	apiKey, err := keystore.Load(keyname)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to load API key")
 	}
