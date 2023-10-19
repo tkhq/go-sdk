@@ -75,10 +75,6 @@ func (m *V1SelectorV2) ContextValidate(ctx context.Context, formats strfmt.Regis
 
 func (m *V1SelectorV2) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Operator) { // not required
-		return nil
-	}
-
 	if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("operator")

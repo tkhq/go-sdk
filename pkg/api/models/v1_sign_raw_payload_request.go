@@ -26,7 +26,7 @@ type V1SignRawPayloadRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1SignRawPayloadIntent `json:"parameters"`
+	Parameters *V1SignRawPayloadIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type V1SignRawPayloadRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_SIGN_RAW_PAYLOAD]
+	// Enum: [ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1SignRawPayloadRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1SignRawPayloadRequestTypeACTIVITYTYPESIGNRAWPAYLOAD captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
-	V1SignRawPayloadRequestTypeACTIVITYTYPESIGNRAWPAYLOAD string = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
+	// V1SignRawPayloadRequestTypeACTIVITYTYPESIGNRAWPAYLOADV2 captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
+	V1SignRawPayloadRequestTypeACTIVITYTYPESIGNRAWPAYLOADV2 string = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
 )
 
 // prop value enum
@@ -159,7 +159,6 @@ func (m *V1SignRawPayloadRequest) ContextValidate(ctx context.Context, formats s
 func (m *V1SignRawPayloadRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
-
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("parameters")

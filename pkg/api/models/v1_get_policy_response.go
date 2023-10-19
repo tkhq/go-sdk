@@ -75,7 +75,6 @@ func (m *V1GetPolicyResponse) ContextValidate(ctx context.Context, formats strfm
 func (m *V1GetPolicyResponse) contextValidatePolicy(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Policy != nil {
-
 		if err := m.Policy.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("policy")

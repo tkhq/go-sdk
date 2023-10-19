@@ -75,7 +75,6 @@ func (m *V1GetAuthenticatorResponse) ContextValidate(ctx context.Context, format
 func (m *V1GetAuthenticatorResponse) contextValidateAuthenticator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Authenticator != nil {
-
 		if err := m.Authenticator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("authenticator")

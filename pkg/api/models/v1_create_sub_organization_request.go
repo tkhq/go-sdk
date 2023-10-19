@@ -26,7 +26,7 @@ type V1CreateSubOrganizationRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1CreateSubOrganizationIntentV3 `json:"parameters"`
+	Parameters *V1CreateSubOrganizationIntentV4 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -159,7 +159,6 @@ func (m *V1CreateSubOrganizationRequest) ContextValidate(ctx context.Context, fo
 func (m *V1CreateSubOrganizationRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
-
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("parameters")

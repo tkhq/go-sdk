@@ -85,11 +85,6 @@ func (m *V1PrivateKeyResult) contextValidateAddresses(ctx context.Context, forma
 	for i := 0; i < len(m.Addresses); i++ {
 
 		if m.Addresses[i] != nil {
-
-			if swag.IsZero(m.Addresses[i]) { // not required
-				return nil
-			}
-
 			if err := m.Addresses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("addresses" + "." + strconv.Itoa(i))

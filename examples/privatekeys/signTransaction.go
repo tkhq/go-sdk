@@ -29,8 +29,8 @@ func main() {
 	pkParams := private_keys.NewPublicAPIServiceSignTransactionParams().WithBody(&models.V1SignTransactionRequest{
 		OrganizationID: client.DefaultOrganization(),
 		TimestampMs:    &timestampString,
-		Parameters: &models.V1SignTransactionIntent{
-			PrivateKeyID:        &privateKeyID,
+		Parameters: &models.V1SignTransactionIntentV2{
+			SignWith:            &privateKeyID,
 			Type:                models.V1TransactionTypeTRANSACTIONTYPEETHEREUM.Pointer(),
 			UnsignedTransaction: &unsignedTransaction,
 		},

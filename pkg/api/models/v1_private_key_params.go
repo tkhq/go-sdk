@@ -149,10 +149,6 @@ func (m *V1PrivateKeyParams) contextValidateAddressFormats(ctx context.Context, 
 
 	for i := 0; i < len(m.AddressFormats); i++ {
 
-		if swag.IsZero(m.AddressFormats[i]) { // not required
-			return nil
-		}
-
 		if err := m.AddressFormats[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("addressFormats" + "." + strconv.Itoa(i))
@@ -170,7 +166,6 @@ func (m *V1PrivateKeyParams) contextValidateAddressFormats(ctx context.Context, 
 func (m *V1PrivateKeyParams) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
-
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")

@@ -159,7 +159,6 @@ func (m *V1CreatePrivateKeyTagRequest) ContextValidate(ctx context.Context, form
 func (m *V1CreatePrivateKeyTagRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
-
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("parameters")

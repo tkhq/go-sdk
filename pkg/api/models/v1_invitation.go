@@ -264,7 +264,6 @@ func (m *V1Invitation) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *V1Invitation) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AccessType != nil {
-
 		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("accessType")
@@ -281,7 +280,6 @@ func (m *V1Invitation) contextValidateAccessType(ctx context.Context, formats st
 func (m *V1Invitation) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
-
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -298,7 +296,6 @@ func (m *V1Invitation) contextValidateCreatedAt(ctx context.Context, formats str
 func (m *V1Invitation) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
-
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")
@@ -315,7 +312,6 @@ func (m *V1Invitation) contextValidateStatus(ctx context.Context, formats strfmt
 func (m *V1Invitation) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
-
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

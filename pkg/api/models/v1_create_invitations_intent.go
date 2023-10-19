@@ -85,11 +85,6 @@ func (m *V1CreateInvitationsIntent) contextValidateInvitations(ctx context.Conte
 	for i := 0; i < len(m.Invitations); i++ {
 
 		if m.Invitations[i] != nil {
-
-			if swag.IsZero(m.Invitations[i]) { // not required
-				return nil
-			}
-
 			if err := m.Invitations[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("invitations" + "." + strconv.Itoa(i))

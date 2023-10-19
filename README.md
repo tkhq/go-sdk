@@ -46,6 +46,13 @@ The easiest way to manage your API keys is with the [Turnkey CLI](https://github
 
 ## Updating the SDK with the latest Swagger definitions
 
+### With Nix
+1. Install Nix: https://nixos.org/download.html
+2. Run `nix develop` to get a new nix shell
+3. Run `make generate`
+
+### Without Nix
+The following assumes you have Go 1.20 installed locally:
 1. Install [go-swagger](https://goswagger.io/install.html):
 ```
 brew tap go-swagger/go-swagger
