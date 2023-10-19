@@ -241,7 +241,6 @@ func (m *V1PublicKeyCredentialWithAttestation) ContextValidate(ctx context.Conte
 func (m *V1PublicKeyCredentialWithAttestation) contextValidateClientExtensionResults(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ClientExtensionResults != nil {
-
 		if err := m.ClientExtensionResults.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clientExtensionResults")
@@ -258,7 +257,6 @@ func (m *V1PublicKeyCredentialWithAttestation) contextValidateClientExtensionRes
 func (m *V1PublicKeyCredentialWithAttestation) contextValidateResponse(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Response != nil {
-
 		if err := m.Response.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("response")

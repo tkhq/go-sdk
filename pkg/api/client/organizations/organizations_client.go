@@ -34,6 +34,8 @@ type ClientService interface {
 
 	PublicAPIServiceInitUserEmailRecovery(params *PublicAPIServiceInitUserEmailRecoveryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceInitUserEmailRecoveryOK, error)
 
+	PublicAPIServiceRecoverUser(params *PublicAPIServiceRecoverUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRecoverUserOK, error)
+
 	PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServiceRemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRemoveOrganizationFeatureOK, error)
 
 	PublicAPIServiceSetOrganizationFeature(params *PublicAPIServiceSetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSetOrganizationFeatureOK, error)
@@ -162,6 +164,46 @@ func (a *Client) PublicAPIServiceInitUserEmailRecovery(params *PublicAPIServiceI
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceInitUserEmailRecoveryDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PublicAPIServiceRecoverUser recovers a user
+
+Completes the process of recovering a user by adding an authenticator
+*/
+func (a *Client) PublicAPIServiceRecoverUser(params *PublicAPIServiceRecoverUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRecoverUserOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPublicAPIServiceRecoverUserParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "PublicApiService_RecoverUser",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/recover_user",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PublicAPIServiceRecoverUserReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PublicAPIServiceRecoverUserOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PublicAPIServiceRecoverUserDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -276,7 +276,6 @@ func (m *V1User) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 func (m *V1User) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AccessType != nil {
-
 		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("accessType")
@@ -295,11 +294,6 @@ func (m *V1User) contextValidateAPIKeys(ctx context.Context, formats strfmt.Regi
 	for i := 0; i < len(m.APIKeys); i++ {
 
 		if m.APIKeys[i] != nil {
-
-			if swag.IsZero(m.APIKeys[i]) { // not required
-				return nil
-			}
-
 			if err := m.APIKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("apiKeys" + "." + strconv.Itoa(i))
@@ -320,11 +314,6 @@ func (m *V1User) contextValidateAuthenticators(ctx context.Context, formats strf
 	for i := 0; i < len(m.Authenticators); i++ {
 
 		if m.Authenticators[i] != nil {
-
-			if swag.IsZero(m.Authenticators[i]) { // not required
-				return nil
-			}
-
 			if err := m.Authenticators[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("authenticators" + "." + strconv.Itoa(i))
@@ -343,7 +332,6 @@ func (m *V1User) contextValidateAuthenticators(ctx context.Context, formats strf
 func (m *V1User) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
-
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -360,7 +348,6 @@ func (m *V1User) contextValidateCreatedAt(ctx context.Context, formats strfmt.Re
 func (m *V1User) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
-
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

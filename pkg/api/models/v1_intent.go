@@ -80,6 +80,9 @@ type V1Intent struct {
 	// create sub organization intent v3
 	CreateSubOrganizationIntentV3 *V1CreateSubOrganizationIntentV3 `json:"createSubOrganizationIntentV3,omitempty"`
 
+	// create sub organization intent v4
+	CreateSubOrganizationIntentV4 *V1CreateSubOrganizationIntentV4 `json:"createSubOrganizationIntentV4,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *V1CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
@@ -127,6 +130,9 @@ type V1Intent struct {
 
 	// export private key intent
 	ExportPrivateKeyIntent *V1ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
+
+	// export wallet intent
+	ExportWalletIntent *V1ExportWalletIntent `json:"exportWalletIntent,omitempty"`
 
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *V1InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
@@ -264,6 +270,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSubOrganizationIntentV4(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -325,6 +335,10 @@ func (m *V1Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExportPrivateKeyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExportWalletIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -783,6 +797,25 @@ func (m *V1Intent) validateCreateSubOrganizationIntentV3(formats strfmt.Registry
 	return nil
 }
 
+func (m *V1Intent) validateCreateSubOrganizationIntentV4(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV4) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV4 != nil {
+		if err := m.CreateSubOrganizationIntentV4.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV4")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV4")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) validateCreateUserTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateUserTagIntent) { // not required
 		return nil
@@ -1079,6 +1112,25 @@ func (m *V1Intent) validateExportPrivateKeyIntent(formats strfmt.Registry) error
 				return ve.ValidateName("exportPrivateKeyIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("exportPrivateKeyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Intent) validateExportWalletIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExportWalletIntent) { // not required
+		return nil
+	}
+
+	if m.ExportWalletIntent != nil {
+		if err := m.ExportWalletIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletIntent")
 			}
 			return err
 		}
@@ -1494,6 +1546,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationIntentV4(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1555,6 +1611,10 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateExportPrivateKeyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExportWalletIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1635,11 +1695,6 @@ func (m *V1Intent) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *V1Intent) contextValidateAcceptInvitationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AcceptInvitationIntent != nil {
-
-		if swag.IsZero(m.AcceptInvitationIntent) { // not required
-			return nil
-		}
-
 		if err := m.AcceptInvitationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("acceptInvitationIntent")
@@ -1656,11 +1711,6 @@ func (m *V1Intent) contextValidateAcceptInvitationIntent(ctx context.Context, fo
 func (m *V1Intent) contextValidateAcceptInvitationIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AcceptInvitationIntentV2 != nil {
-
-		if swag.IsZero(m.AcceptInvitationIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.AcceptInvitationIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("acceptInvitationIntentV2")
@@ -1677,11 +1727,6 @@ func (m *V1Intent) contextValidateAcceptInvitationIntentV2(ctx context.Context, 
 func (m *V1Intent) contextValidateActivateBillingTierIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ActivateBillingTierIntent != nil {
-
-		if swag.IsZero(m.ActivateBillingTierIntent) { // not required
-			return nil
-		}
-
 		if err := m.ActivateBillingTierIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("activateBillingTierIntent")
@@ -1698,11 +1743,6 @@ func (m *V1Intent) contextValidateActivateBillingTierIntent(ctx context.Context,
 func (m *V1Intent) contextValidateApproveActivityIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ApproveActivityIntent != nil {
-
-		if swag.IsZero(m.ApproveActivityIntent) { // not required
-			return nil
-		}
-
 		if err := m.ApproveActivityIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("approveActivityIntent")
@@ -1719,11 +1759,6 @@ func (m *V1Intent) contextValidateApproveActivityIntent(ctx context.Context, for
 func (m *V1Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAPIKeysIntent != nil {
-
-		if swag.IsZero(m.CreateAPIKeysIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateAPIKeysIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createApiKeysIntent")
@@ -1740,11 +1775,6 @@ func (m *V1Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, forma
 func (m *V1Intent) contextValidateCreateAPIOnlyUsersIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAPIOnlyUsersIntent != nil {
-
-		if swag.IsZero(m.CreateAPIOnlyUsersIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateAPIOnlyUsersIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createApiOnlyUsersIntent")
@@ -1761,11 +1791,6 @@ func (m *V1Intent) contextValidateCreateAPIOnlyUsersIntent(ctx context.Context, 
 func (m *V1Intent) contextValidateCreateAuthenticatorsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAuthenticatorsIntent != nil {
-
-		if swag.IsZero(m.CreateAuthenticatorsIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateAuthenticatorsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createAuthenticatorsIntent")
@@ -1782,11 +1807,6 @@ func (m *V1Intent) contextValidateCreateAuthenticatorsIntent(ctx context.Context
 func (m *V1Intent) contextValidateCreateAuthenticatorsIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAuthenticatorsIntentV2 != nil {
-
-		if swag.IsZero(m.CreateAuthenticatorsIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreateAuthenticatorsIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createAuthenticatorsIntentV2")
@@ -1803,11 +1823,6 @@ func (m *V1Intent) contextValidateCreateAuthenticatorsIntentV2(ctx context.Conte
 func (m *V1Intent) contextValidateCreateInvitationsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateInvitationsIntent != nil {
-
-		if swag.IsZero(m.CreateInvitationsIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateInvitationsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createInvitationsIntent")
@@ -1824,7 +1839,6 @@ func (m *V1Intent) contextValidateCreateInvitationsIntent(ctx context.Context, f
 func (m *V1Intent) contextValidateCreateOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateOrganizationIntent != nil {
-
 		if err := m.CreateOrganizationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createOrganizationIntent")
@@ -1841,11 +1855,6 @@ func (m *V1Intent) contextValidateCreateOrganizationIntent(ctx context.Context, 
 func (m *V1Intent) contextValidateCreateOrganizationIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateOrganizationIntentV2 != nil {
-
-		if swag.IsZero(m.CreateOrganizationIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreateOrganizationIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createOrganizationIntentV2")
@@ -1862,11 +1871,6 @@ func (m *V1Intent) contextValidateCreateOrganizationIntentV2(ctx context.Context
 func (m *V1Intent) contextValidateCreatePolicyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePolicyIntent != nil {
-
-		if swag.IsZero(m.CreatePolicyIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreatePolicyIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPolicyIntent")
@@ -1883,11 +1887,6 @@ func (m *V1Intent) contextValidateCreatePolicyIntent(ctx context.Context, format
 func (m *V1Intent) contextValidateCreatePolicyIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePolicyIntentV2 != nil {
-
-		if swag.IsZero(m.CreatePolicyIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreatePolicyIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPolicyIntentV2")
@@ -1904,11 +1903,6 @@ func (m *V1Intent) contextValidateCreatePolicyIntentV2(ctx context.Context, form
 func (m *V1Intent) contextValidateCreatePolicyIntentV3(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePolicyIntentV3 != nil {
-
-		if swag.IsZero(m.CreatePolicyIntentV3) { // not required
-			return nil
-		}
-
 		if err := m.CreatePolicyIntentV3.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPolicyIntentV3")
@@ -1925,11 +1919,6 @@ func (m *V1Intent) contextValidateCreatePolicyIntentV3(ctx context.Context, form
 func (m *V1Intent) contextValidateCreatePrivateKeyTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeyTagIntent != nil {
-
-		if swag.IsZero(m.CreatePrivateKeyTagIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreatePrivateKeyTagIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeyTagIntent")
@@ -1946,11 +1935,6 @@ func (m *V1Intent) contextValidateCreatePrivateKeyTagIntent(ctx context.Context,
 func (m *V1Intent) contextValidateCreatePrivateKeysIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeysIntent != nil {
-
-		if swag.IsZero(m.CreatePrivateKeysIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreatePrivateKeysIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeysIntent")
@@ -1967,11 +1951,6 @@ func (m *V1Intent) contextValidateCreatePrivateKeysIntent(ctx context.Context, f
 func (m *V1Intent) contextValidateCreatePrivateKeysIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeysIntentV2 != nil {
-
-		if swag.IsZero(m.CreatePrivateKeysIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreatePrivateKeysIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeysIntentV2")
@@ -1988,11 +1967,6 @@ func (m *V1Intent) contextValidateCreatePrivateKeysIntentV2(ctx context.Context,
 func (m *V1Intent) contextValidateCreateSubOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationIntent != nil {
-
-		if swag.IsZero(m.CreateSubOrganizationIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateSubOrganizationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationIntent")
@@ -2009,11 +1983,6 @@ func (m *V1Intent) contextValidateCreateSubOrganizationIntent(ctx context.Contex
 func (m *V1Intent) contextValidateCreateSubOrganizationIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationIntentV2 != nil {
-
-		if swag.IsZero(m.CreateSubOrganizationIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreateSubOrganizationIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationIntentV2")
@@ -2030,11 +1999,6 @@ func (m *V1Intent) contextValidateCreateSubOrganizationIntentV2(ctx context.Cont
 func (m *V1Intent) contextValidateCreateSubOrganizationIntentV3(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationIntentV3 != nil {
-
-		if swag.IsZero(m.CreateSubOrganizationIntentV3) { // not required
-			return nil
-		}
-
 		if err := m.CreateSubOrganizationIntentV3.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationIntentV3")
@@ -2048,14 +2012,25 @@ func (m *V1Intent) contextValidateCreateSubOrganizationIntentV3(ctx context.Cont
 	return nil
 }
 
+func (m *V1Intent) contextValidateCreateSubOrganizationIntentV4(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV4 != nil {
+		if err := m.CreateSubOrganizationIntentV4.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV4")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV4")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateCreateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagIntent != nil {
-
-		if swag.IsZero(m.CreateUserTagIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateUserTagIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createUserTagIntent")
@@ -2072,11 +2047,6 @@ func (m *V1Intent) contextValidateCreateUserTagIntent(ctx context.Context, forma
 func (m *V1Intent) contextValidateCreateUsersIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUsersIntent != nil {
-
-		if swag.IsZero(m.CreateUsersIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateUsersIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createUsersIntent")
@@ -2093,11 +2063,6 @@ func (m *V1Intent) contextValidateCreateUsersIntent(ctx context.Context, formats
 func (m *V1Intent) contextValidateCreateUsersIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUsersIntentV2 != nil {
-
-		if swag.IsZero(m.CreateUsersIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.CreateUsersIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createUsersIntentV2")
@@ -2114,11 +2079,6 @@ func (m *V1Intent) contextValidateCreateUsersIntentV2(ctx context.Context, forma
 func (m *V1Intent) contextValidateCreateWalletAccountsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateWalletAccountsIntent != nil {
-
-		if swag.IsZero(m.CreateWalletAccountsIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateWalletAccountsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createWalletAccountsIntent")
@@ -2135,11 +2095,6 @@ func (m *V1Intent) contextValidateCreateWalletAccountsIntent(ctx context.Context
 func (m *V1Intent) contextValidateCreateWalletIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateWalletIntent != nil {
-
-		if swag.IsZero(m.CreateWalletIntent) { // not required
-			return nil
-		}
-
 		if err := m.CreateWalletIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createWalletIntent")
@@ -2156,11 +2111,6 @@ func (m *V1Intent) contextValidateCreateWalletIntent(ctx context.Context, format
 func (m *V1Intent) contextValidateDeleteAPIKeysIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteAPIKeysIntent != nil {
-
-		if swag.IsZero(m.DeleteAPIKeysIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteAPIKeysIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteApiKeysIntent")
@@ -2177,11 +2127,6 @@ func (m *V1Intent) contextValidateDeleteAPIKeysIntent(ctx context.Context, forma
 func (m *V1Intent) contextValidateDeleteAuthenticatorsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteAuthenticatorsIntent != nil {
-
-		if swag.IsZero(m.DeleteAuthenticatorsIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteAuthenticatorsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteAuthenticatorsIntent")
@@ -2198,11 +2143,6 @@ func (m *V1Intent) contextValidateDeleteAuthenticatorsIntent(ctx context.Context
 func (m *V1Intent) contextValidateDeleteInvitationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteInvitationIntent != nil {
-
-		if swag.IsZero(m.DeleteInvitationIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteInvitationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteInvitationIntent")
@@ -2219,11 +2159,6 @@ func (m *V1Intent) contextValidateDeleteInvitationIntent(ctx context.Context, fo
 func (m *V1Intent) contextValidateDeleteOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteOrganizationIntent != nil {
-
-		if swag.IsZero(m.DeleteOrganizationIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteOrganizationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteOrganizationIntent")
@@ -2240,11 +2175,6 @@ func (m *V1Intent) contextValidateDeleteOrganizationIntent(ctx context.Context, 
 func (m *V1Intent) contextValidateDeletePaymentMethodIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePaymentMethodIntent != nil {
-
-		if swag.IsZero(m.DeletePaymentMethodIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeletePaymentMethodIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePaymentMethodIntent")
@@ -2261,11 +2191,6 @@ func (m *V1Intent) contextValidateDeletePaymentMethodIntent(ctx context.Context,
 func (m *V1Intent) contextValidateDeletePolicyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePolicyIntent != nil {
-
-		if swag.IsZero(m.DeletePolicyIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeletePolicyIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePolicyIntent")
@@ -2282,11 +2207,6 @@ func (m *V1Intent) contextValidateDeletePolicyIntent(ctx context.Context, format
 func (m *V1Intent) contextValidateDeletePrivateKeyTagsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePrivateKeyTagsIntent != nil {
-
-		if swag.IsZero(m.DeletePrivateKeyTagsIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeletePrivateKeyTagsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePrivateKeyTagsIntent")
@@ -2303,11 +2223,6 @@ func (m *V1Intent) contextValidateDeletePrivateKeyTagsIntent(ctx context.Context
 func (m *V1Intent) contextValidateDeleteUserTagsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUserTagsIntent != nil {
-
-		if swag.IsZero(m.DeleteUserTagsIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteUserTagsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteUserTagsIntent")
@@ -2324,11 +2239,6 @@ func (m *V1Intent) contextValidateDeleteUserTagsIntent(ctx context.Context, form
 func (m *V1Intent) contextValidateDeleteUsersIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUsersIntent != nil {
-
-		if swag.IsZero(m.DeleteUsersIntent) { // not required
-			return nil
-		}
-
 		if err := m.DeleteUsersIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteUsersIntent")
@@ -2345,11 +2255,6 @@ func (m *V1Intent) contextValidateDeleteUsersIntent(ctx context.Context, formats
 func (m *V1Intent) contextValidateDisablePrivateKeyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DisablePrivateKeyIntent != nil {
-
-		if swag.IsZero(m.DisablePrivateKeyIntent) { // not required
-			return nil
-		}
-
 		if err := m.DisablePrivateKeyIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("disablePrivateKeyIntent")
@@ -2366,11 +2271,6 @@ func (m *V1Intent) contextValidateDisablePrivateKeyIntent(ctx context.Context, f
 func (m *V1Intent) contextValidateExportPrivateKeyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ExportPrivateKeyIntent != nil {
-
-		if swag.IsZero(m.ExportPrivateKeyIntent) { // not required
-			return nil
-		}
-
 		if err := m.ExportPrivateKeyIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("exportPrivateKeyIntent")
@@ -2384,14 +2284,25 @@ func (m *V1Intent) contextValidateExportPrivateKeyIntent(ctx context.Context, fo
 	return nil
 }
 
+func (m *V1Intent) contextValidateExportWalletIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExportWalletIntent != nil {
+		if err := m.ExportWalletIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *V1Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryIntent != nil {
-
-		if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
-			return nil
-		}
-
 		if err := m.InitUserEmailRecoveryIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("initUserEmailRecoveryIntent")
@@ -2408,11 +2319,6 @@ func (m *V1Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Contex
 func (m *V1Intent) contextValidateRecoverUserIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RecoverUserIntent != nil {
-
-		if swag.IsZero(m.RecoverUserIntent) { // not required
-			return nil
-		}
-
 		if err := m.RecoverUserIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("recoverUserIntent")
@@ -2429,11 +2335,6 @@ func (m *V1Intent) contextValidateRecoverUserIntent(ctx context.Context, formats
 func (m *V1Intent) contextValidateRejectActivityIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RejectActivityIntent != nil {
-
-		if swag.IsZero(m.RejectActivityIntent) { // not required
-			return nil
-		}
-
 		if err := m.RejectActivityIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rejectActivityIntent")
@@ -2450,11 +2351,6 @@ func (m *V1Intent) contextValidateRejectActivityIntent(ctx context.Context, form
 func (m *V1Intent) contextValidateRemoveOrganizationFeatureIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RemoveOrganizationFeatureIntent != nil {
-
-		if swag.IsZero(m.RemoveOrganizationFeatureIntent) { // not required
-			return nil
-		}
-
 		if err := m.RemoveOrganizationFeatureIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("removeOrganizationFeatureIntent")
@@ -2471,11 +2367,6 @@ func (m *V1Intent) contextValidateRemoveOrganizationFeatureIntent(ctx context.Co
 func (m *V1Intent) contextValidateSetOrganizationFeatureIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SetOrganizationFeatureIntent != nil {
-
-		if swag.IsZero(m.SetOrganizationFeatureIntent) { // not required
-			return nil
-		}
-
 		if err := m.SetOrganizationFeatureIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("setOrganizationFeatureIntent")
@@ -2492,11 +2383,6 @@ func (m *V1Intent) contextValidateSetOrganizationFeatureIntent(ctx context.Conte
 func (m *V1Intent) contextValidateSetPaymentMethodIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SetPaymentMethodIntent != nil {
-
-		if swag.IsZero(m.SetPaymentMethodIntent) { // not required
-			return nil
-		}
-
 		if err := m.SetPaymentMethodIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("setPaymentMethodIntent")
@@ -2513,11 +2399,6 @@ func (m *V1Intent) contextValidateSetPaymentMethodIntent(ctx context.Context, fo
 func (m *V1Intent) contextValidateSetPaymentMethodIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SetPaymentMethodIntentV2 != nil {
-
-		if swag.IsZero(m.SetPaymentMethodIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.SetPaymentMethodIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("setPaymentMethodIntentV2")
@@ -2534,11 +2415,6 @@ func (m *V1Intent) contextValidateSetPaymentMethodIntentV2(ctx context.Context, 
 func (m *V1Intent) contextValidateSignRawPayloadIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignRawPayloadIntent != nil {
-
-		if swag.IsZero(m.SignRawPayloadIntent) { // not required
-			return nil
-		}
-
 		if err := m.SignRawPayloadIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signRawPayloadIntent")
@@ -2555,11 +2431,6 @@ func (m *V1Intent) contextValidateSignRawPayloadIntent(ctx context.Context, form
 func (m *V1Intent) contextValidateSignRawPayloadIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignRawPayloadIntentV2 != nil {
-
-		if swag.IsZero(m.SignRawPayloadIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.SignRawPayloadIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signRawPayloadIntentV2")
@@ -2576,11 +2447,6 @@ func (m *V1Intent) contextValidateSignRawPayloadIntentV2(ctx context.Context, fo
 func (m *V1Intent) contextValidateSignTransactionIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignTransactionIntent != nil {
-
-		if swag.IsZero(m.SignTransactionIntent) { // not required
-			return nil
-		}
-
 		if err := m.SignTransactionIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signTransactionIntent")
@@ -2597,11 +2463,6 @@ func (m *V1Intent) contextValidateSignTransactionIntent(ctx context.Context, for
 func (m *V1Intent) contextValidateSignTransactionIntentV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignTransactionIntentV2 != nil {
-
-		if swag.IsZero(m.SignTransactionIntentV2) { // not required
-			return nil
-		}
-
 		if err := m.SignTransactionIntentV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signTransactionIntentV2")
@@ -2618,11 +2479,6 @@ func (m *V1Intent) contextValidateSignTransactionIntentV2(ctx context.Context, f
 func (m *V1Intent) contextValidateUpdateAllowedOriginsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateAllowedOriginsIntent != nil {
-
-		if swag.IsZero(m.UpdateAllowedOriginsIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdateAllowedOriginsIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateAllowedOriginsIntent")
@@ -2639,11 +2495,6 @@ func (m *V1Intent) contextValidateUpdateAllowedOriginsIntent(ctx context.Context
 func (m *V1Intent) contextValidateUpdatePolicyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePolicyIntent != nil {
-
-		if swag.IsZero(m.UpdatePolicyIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdatePolicyIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatePolicyIntent")
@@ -2660,11 +2511,6 @@ func (m *V1Intent) contextValidateUpdatePolicyIntent(ctx context.Context, format
 func (m *V1Intent) contextValidateUpdatePrivateKeyTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePrivateKeyTagIntent != nil {
-
-		if swag.IsZero(m.UpdatePrivateKeyTagIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdatePrivateKeyTagIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatePrivateKeyTagIntent")
@@ -2681,11 +2527,6 @@ func (m *V1Intent) contextValidateUpdatePrivateKeyTagIntent(ctx context.Context,
 func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateRootQuorumIntent != nil {
-
-		if swag.IsZero(m.UpdateRootQuorumIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdateRootQuorumIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateRootQuorumIntent")
@@ -2702,11 +2543,6 @@ func (m *V1Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, fo
 func (m *V1Intent) contextValidateUpdateUserIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateUserIntent != nil {
-
-		if swag.IsZero(m.UpdateUserIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdateUserIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateUserIntent")
@@ -2723,11 +2559,6 @@ func (m *V1Intent) contextValidateUpdateUserIntent(ctx context.Context, formats 
 func (m *V1Intent) contextValidateUpdateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateUserTagIntent != nil {
-
-		if swag.IsZero(m.UpdateUserTagIntent) { // not required
-			return nil
-		}
-
 		if err := m.UpdateUserTagIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateUserTagIntent")

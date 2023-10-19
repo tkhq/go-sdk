@@ -26,7 +26,7 @@ type V1SignTransactionRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *V1SignTransactionIntent `json:"parameters"`
+	Parameters *V1SignTransactionIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type V1SignTransactionRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_SIGN_TRANSACTION]
+	// Enum: [ACTIVITY_TYPE_SIGN_TRANSACTION_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1SignTransactionRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_SIGN_TRANSACTION"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_SIGN_TRANSACTION_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1SignTransactionRequestTypeACTIVITYTYPESIGNTRANSACTION captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION"
-	V1SignTransactionRequestTypeACTIVITYTYPESIGNTRANSACTION string = "ACTIVITY_TYPE_SIGN_TRANSACTION"
+	// V1SignTransactionRequestTypeACTIVITYTYPESIGNTRANSACTIONV2 captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
+	V1SignTransactionRequestTypeACTIVITYTYPESIGNTRANSACTIONV2 string = "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
 )
 
 // prop value enum
@@ -159,7 +159,6 @@ func (m *V1SignTransactionRequest) ContextValidate(ctx context.Context, formats 
 func (m *V1SignTransactionRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
-
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("parameters")

@@ -75,10 +75,6 @@ func (m *Immutableactivityv1Selector) ContextValidate(ctx context.Context, forma
 
 func (m *Immutableactivityv1Selector) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Operator) { // not required
-		return nil
-	}
-
 	if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("operator")
