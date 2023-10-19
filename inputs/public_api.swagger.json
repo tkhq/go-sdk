@@ -2845,7 +2845,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"]
         },
         "timestampMs": {
           "type": "string",

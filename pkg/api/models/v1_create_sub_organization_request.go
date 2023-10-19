@@ -34,7 +34,7 @@ type V1CreateSubOrganizationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3]
+	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1CreateSubOrganizationRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV3 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
-	V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV3 string = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+	// V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV4 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
+	V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV4 string = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
 )
 
 // prop value enum
