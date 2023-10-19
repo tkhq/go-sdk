@@ -8,9 +8,6 @@
   },
   "tags": [
     {
-      "name": "PublicApiService"
-    },
-    {
       "name": "Organizations",
       "description": "An Organization is the highest level of hierarchy in Turnkey. It can contain many Users, Private Keys, and Policies managed by a Root Quorum. The Root Quorum consists of a set of Users with a consensus threshold. This consensus threshold must be reached by Quorum members in order for any actions to take place.\n\nSee [Root Quorum](../managing-users/root-quorum) for more information"
     },
@@ -23,8 +20,16 @@
       "description": "Policies allow for deep customization of the security of your Organization. They can be used to grant permissions or restrict usage of Users and Private Keys. The Policy Engine analyzes all of your Policies on each request to determine whether an Activity is allowed.\n\nSee [Policy Overview](../managing-policies/overview) for more information"
     },
     {
+      "name": "Wallets",
+      "description": "Wallets contain collections of deterministically generated cryptographic public / private key pairs that share a common seed. Turnkey securely holds the common seed, but only you can access it. In most cases, Wallets should be preferred over Private Keys since they can be represented by a mnemonic phrase, used across a variety of cryptographic curves, and can derive many addresses."
+    },
+    {
+      "name": "Signatures",
+      "description": "Signatures are used to validate the authenticity and integrity of a digital message. Signatures are a fundamental building block in blockchains. Turnkey makes it easy to produce signatures by allowing you to sign with an address. If Turnkey doesn't yet support an address format you need, you can generate and sign with the public key instead by using the address format `ADDRESS_FORMAT_COMPRESSED`."
+    },
+    {
       "name": "Private Keys",
-      "description": "Private Keys are cryptographic public / private key pairs that can be used for cryptocurrency needs or more generalized encryption. Think of Private Keys as your own programmable wallet. Turnkey securely holds all Private Key materials for you, but only you can access them."
+      "description": "Private Keys are cryptographic public / private key pairs that can be used for cryptocurrency needs or more generalized encryption. Turnkey securely holds all Private Key materials for you, but only you can access them."
     },
     {
       "name": "Private Key Tags",
@@ -56,9 +61,15 @@
     }
   ],
   "host": "api.turnkey.com",
-  "schemes": ["https"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/public/v1/query/get_activity": {
       "post": {
@@ -89,7 +100,9 @@
             }
           }
         ],
-        "tags": ["Activities"]
+        "tags": [
+          "Activities"
+        ]
       }
     },
     "/public/v1/query/get_authenticator": {
@@ -121,7 +134,9 @@
             }
           }
         ],
-        "tags": ["Authenticators"]
+        "tags": [
+          "Authenticators"
+        ]
       }
     },
     "/public/v1/query/get_authenticators": {
@@ -153,39 +168,9 @@
             }
           }
         ],
-        "tags": ["Authenticators"]
-      }
-    },
-    "/public/v1/query/get_organization": {
-      "post": {
-        "summary": "Get Organization",
-        "description": "Get details about an Organization",
-        "operationId": "PublicApiService_GetOrganization",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetOrganizationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GetOrganizationRequest"
-            }
-          }
-        ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Authenticators"
+        ]
       }
     },
     "/public/v1/query/get_policy": {
@@ -217,7 +202,9 @@
             }
           }
         ],
-        "tags": ["Policies"]
+        "tags": [
+          "Policies"
+        ]
       }
     },
     "/public/v1/query/get_private_key": {
@@ -249,7 +236,9 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Private Keys"
+        ]
       }
     },
     "/public/v1/query/get_user": {
@@ -281,7 +270,9 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/public/v1/query/list_activities": {
@@ -313,7 +304,9 @@
             }
           }
         ],
-        "tags": ["Activities"]
+        "tags": [
+          "Activities"
+        ]
       }
     },
     "/public/v1/query/list_policies": {
@@ -345,7 +338,9 @@
             }
           }
         ],
-        "tags": ["Policies"]
+        "tags": [
+          "Policies"
+        ]
       }
     },
     "/public/v1/query/list_private_keys": {
@@ -377,7 +372,9 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Private Keys"
+        ]
       }
     },
     "/public/v1/query/list_users": {
@@ -409,7 +406,9 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/public/v1/query/whoami": {
@@ -441,7 +440,9 @@
             }
           }
         ],
-        "tags": ["Who am I?"]
+        "tags": [
+          "Who am I?"
+        ]
       }
     },
     "/public/v1/submit/approve_activity": {
@@ -473,7 +474,9 @@
             }
           }
         ],
-        "tags": ["Consensus"]
+        "tags": [
+          "Consensus"
+        ]
       }
     },
     "/public/v1/submit/create_api_keys": {
@@ -505,39 +508,9 @@
             }
           }
         ],
-        "tags": ["API Keys"]
-      }
-    },
-    "/public/v1/submit/create_api_only_users": {
-      "post": {
-        "summary": "Create API-only Users",
-        "description": "Create API-only Users in an existing Organization",
-        "operationId": "PublicApiService_CreateApiOnlyUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ActivityResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateApiOnlyUsersRequest"
-            }
-          }
-        ],
-        "tags": ["Users"]
+        "tags": [
+          "API Keys"
+        ]
       }
     },
     "/public/v1/submit/create_authenticators": {
@@ -569,7 +542,9 @@
             }
           }
         ],
-        "tags": ["Authenticators"]
+        "tags": [
+          "Authenticators"
+        ]
       }
     },
     "/public/v1/submit/create_invitations": {
@@ -601,7 +576,9 @@
             }
           }
         ],
-        "tags": ["Invitations"]
+        "tags": [
+          "Invitations"
+        ]
       }
     },
     "/public/v1/submit/create_policy": {
@@ -633,7 +610,9 @@
             }
           }
         ],
-        "tags": ["Policies"]
+        "tags": [
+          "Policies"
+        ]
       }
     },
     "/public/v1/submit/create_private_key_tag": {
@@ -665,7 +644,9 @@
             }
           }
         ],
-        "tags": ["Private Key Tags"]
+        "tags": [
+          "Private Key Tags"
+        ]
       }
     },
     "/public/v1/submit/create_private_keys": {
@@ -697,7 +678,9 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Private Keys"
+        ]
       }
     },
     "/public/v1/submit/create_sub_organization": {
@@ -729,7 +712,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Organizations"
+        ]
       }
     },
     "/public/v1/submit/create_user_tag": {
@@ -761,7 +746,9 @@
             }
           }
         ],
-        "tags": ["User Tags"]
+        "tags": [
+          "User Tags"
+        ]
       }
     },
     "/public/v1/submit/create_users": {
@@ -793,13 +780,15 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/public/v1/submit/create_wallet": {
       "post": {
         "summary": "Create Wallet",
-        "description": "Create a Wallet",
+        "description": "Create a Wallet and derive addresses",
         "operationId": "PublicApiService_CreateWallet",
         "responses": {
           "200": {
@@ -825,13 +814,15 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": [
+          "Wallets"
+        ]
       }
     },
     "/public/v1/submit/create_wallet_accounts": {
       "post": {
-        "summary": "Create Wallet accounts",
-        "description": "Create Wallet accounts",
+        "summary": "Create Wallet Accounts",
+        "description": "Derive additional addresses using an existing wallet",
         "operationId": "PublicApiService_CreateWalletAccounts",
         "responses": {
           "200": {
@@ -857,7 +848,9 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": [
+          "Wallets"
+        ]
       }
     },
     "/public/v1/submit/delete_api_keys": {
@@ -889,7 +882,9 @@
             }
           }
         ],
-        "tags": ["API Keys"]
+        "tags": [
+          "API Keys"
+        ]
       }
     },
     "/public/v1/submit/delete_authenticators": {
@@ -921,10 +916,12 @@
             }
           }
         ],
-        "tags": ["Authenticators"]
+        "tags": [
+          "Authenticators"
+        ]
       }
     },
-    "/public/v1/submit/delete_invitations": {
+    "/public/v1/submit/delete_invitation": {
       "post": {
         "summary": "Delete Invitation",
         "description": "Delete an existing Invitation",
@@ -953,7 +950,9 @@
             }
           }
         ],
-        "tags": ["Invitations"]
+        "tags": [
+          "Invitations"
+        ]
       }
     },
     "/public/v1/submit/delete_policy": {
@@ -985,7 +984,9 @@
             }
           }
         ],
-        "tags": ["Policies"]
+        "tags": [
+          "Policies"
+        ]
       }
     },
     "/public/v1/submit/export_private_key": {
@@ -1017,7 +1018,9 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Private Keys"
+        ]
       }
     },
     "/public/v1/submit/export_wallet": {
@@ -1049,13 +1052,15 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": [
+          "Wallets"
+        ]
       }
     },
     "/public/v1/submit/init_user_email_recovery": {
       "post": {
-        "summary": "Init Recovery",
-        "description": "Initializes a new recovery",
+        "summary": "Init Email Recovery",
+        "description": "Initializes a new email recovery",
         "operationId": "PublicApiService_InitUserEmailRecovery",
         "responses": {
           "200": {
@@ -1081,7 +1086,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "User Recovery"
+        ]
       }
     },
     "/public/v1/submit/recover_user": {
@@ -1113,7 +1120,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "User Recovery"
+        ]
       }
     },
     "/public/v1/submit/reject_activity": {
@@ -1145,7 +1154,9 @@
             }
           }
         ],
-        "tags": ["Consensus"]
+        "tags": [
+          "Consensus"
+        ]
       }
     },
     "/public/v1/submit/remove_organization_feature": {
@@ -1177,7 +1188,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Features"
+        ]
       }
     },
     "/public/v1/submit/set_organization_feature": {
@@ -1209,13 +1222,15 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Features"
+        ]
       }
     },
     "/public/v1/submit/sign_raw_payload": {
       "post": {
         "summary": "Sign Raw Payload",
-        "description": "Sign a raw payload with a Private Key",
+        "description": "Sign a raw payload",
         "operationId": "PublicApiService_SignRawPayload",
         "responses": {
           "200": {
@@ -1241,13 +1256,15 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Signatures"
+        ]
       }
     },
     "/public/v1/submit/sign_transaction": {
       "post": {
         "summary": "Sign Transaction",
-        "description": "Sign a transaction with a Private Key",
+        "description": "Sign a transaction",
         "operationId": "PublicApiService_SignTransaction",
         "responses": {
           "200": {
@@ -1273,7 +1290,9 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": [
+          "Signatures"
+        ]
       }
     },
     "/public/v1/submit/update_allowed_origins": {
@@ -1305,7 +1324,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Features"
+        ]
       }
     },
     "/public/v1/submit/update_policy": {
@@ -1337,7 +1358,9 @@
             }
           }
         ],
-        "tags": ["Policies"]
+        "tags": [
+          "Policies"
+        ]
       }
     },
     "/public/v1/submit/update_private_key_tag": {
@@ -1369,7 +1392,9 @@
             }
           }
         ],
-        "tags": ["Private Key Tags"]
+        "tags": [
+          "Private Key Tags"
+        ]
       }
     },
     "/public/v1/submit/update_root_quorum": {
@@ -1401,7 +1426,9 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": [
+          "Organizations"
+        ]
       }
     },
     "/public/v1/submit/update_user": {
@@ -1433,7 +1460,9 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/public/v1/submit/update_user_tag": {
@@ -1465,57 +1494,20 @@
             }
           }
         ],
-        "tags": ["User Tags"]
-      }
-    },
-    "/tkhq/api/v1/noop-codegen-anchor": {
-      "post": {
-        "operationId": "PublicApiService_NOOPCodegenAnchor",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1NOOPCodegenAnchorResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": ["PublicApiService"]
+        "tags": [
+          "User Tags"
+        ]
       }
     }
   },
   "definitions": {
-    "datav1Tag": {
-      "type": "object",
-      "properties": {
-        "tagId": {
-          "type": "string",
-          "description": "Unique identifier for a given Tag."
-        },
-        "tagName": {
-          "type": "string",
-          "description": "Human-readable name for a Tag."
-        },
-        "tagType": {
-          "$ref": "#/definitions/v1TagType"
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        }
-      },
-      "required": ["tagId", "tagName", "tagType", "createdAt", "updatedAt"]
-    },
     "externaldatav1AccessType": {
       "type": "string",
-      "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
+      "enum": [
+        "ACCESS_TYPE_WEB",
+        "ACCESS_TYPE_API",
+        "ACCESS_TYPE_ALL"
+      ]
     },
     "externaldatav1Address": {
       "type": "object",
@@ -1557,7 +1549,10 @@
           "$ref": "#/definitions/externaldatav1CredentialType"
         }
       },
-      "required": ["publicKey", "type"]
+      "required": [
+        "publicKey",
+        "type"
+      ]
     },
     "externaldatav1CredentialType": {
       "type": "string",
@@ -1569,11 +1564,17 @@
     },
     "externaldatav1Curve": {
       "type": "string",
-      "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
+      "enum": [
+        "CURVE_SECP256K1",
+        "CURVE_ED25519"
+      ]
     },
     "externaldatav1Effect": {
       "type": "string",
-      "enum": ["EFFECT_ALLOW", "EFFECT_DENY"]
+      "enum": [
+        "EFFECT_ALLOW",
+        "EFFECT_DENY"
+      ]
     },
     "externaldatav1Operator": {
       "type": "string",
@@ -1590,24 +1591,6 @@
         "OPERATOR_CONTAINS_ONE",
         "OPERATOR_CONTAINS_ALL"
       ]
-    },
-    "externaldatav1Quorum": {
-      "type": "object",
-      "properties": {
-        "threshold": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of unique approvals required to meet quorum."
-        },
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Unique identifiers of quorum set members."
-        }
-      },
-      "required": ["threshold", "userIds"]
     },
     "externaldatav1Selector": {
       "type": "object",
@@ -1628,7 +1611,11 @@
           "description": "The specific parameter from the subject being referenced, like a specific user ID."
         }
       },
-      "required": ["subject", "operator", "targets"]
+      "required": [
+        "subject",
+        "operator",
+        "targets"
+      ]
     },
     "externaldatav1Timestamp": {
       "type": "object",
@@ -1640,11 +1627,18 @@
           "type": "string"
         }
       },
-      "required": ["seconds", "nanos"]
+      "required": [
+        "seconds",
+        "nanos"
+      ]
     },
     "immutableactivityv1AccessType": {
       "type": "string",
-      "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
+      "enum": [
+        "ACCESS_TYPE_WEB",
+        "ACCESS_TYPE_API",
+        "ACCESS_TYPE_ALL"
+      ]
     },
     "immutableactivityv1Address": {
       "type": "object",
@@ -1659,7 +1653,10 @@
     },
     "immutableactivityv1Effect": {
       "type": "string",
-      "enum": ["EFFECT_ALLOW", "EFFECT_DENY"]
+      "enum": [
+        "EFFECT_ALLOW",
+        "EFFECT_DENY"
+      ]
     },
     "immutableactivityv1HashFunction": {
       "type": "string",
@@ -1688,7 +1685,10 @@
     },
     "immutableactivityv1PayloadEncoding": {
       "type": "string",
-      "enum": ["PAYLOAD_ENCODING_HEXADECIMAL", "PAYLOAD_ENCODING_TEXT_UTF8"]
+      "enum": [
+        "PAYLOAD_ENCODING_HEXADECIMAL",
+        "PAYLOAD_ENCODING_TEXT_UTF8"
+      ]
     },
     "immutableactivityv1Selector": {
       "type": "object",
@@ -1716,7 +1716,10 @@
     },
     "immutablecommonv1Curve": {
       "type": "string",
-      "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
+      "enum": [
+        "CURVE_SECP256K1",
+        "CURVE_ED25519"
+      ]
     },
     "immutablewebauthnv1AuthenticatorTransport": {
       "type": "string",
@@ -1772,7 +1775,11 @@
           "description": "WebAuthN hardware devices that can be used to log in to the Turnkey web app."
         }
       },
-      "required": ["invitationId", "userId", "authenticator"]
+      "required": [
+        "invitationId",
+        "userId",
+        "authenticator"
+      ]
     },
     "v1AcceptInvitationIntentV2": {
       "type": "object",
@@ -1790,7 +1797,11 @@
           "description": "WebAuthN hardware devices that can be used to log in to the Turnkey web app."
         }
       },
-      "required": ["invitationId", "userId", "authenticator"]
+      "required": [
+        "invitationId",
+        "userId",
+        "authenticator"
+      ]
     },
     "v1AcceptInvitationResult": {
       "type": "object",
@@ -1804,7 +1815,10 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["invitationId", "userId"]
+      "required": [
+        "invitationId",
+        "userId"
+      ]
     },
     "v1ActivateBillingTierIntent": {
       "type": "object",
@@ -1814,7 +1828,9 @@
           "description": "The product that the customer wants to subscribe to."
         }
       },
-      "required": ["productId"]
+      "required": [
+        "productId"
+      ]
     },
     "v1ActivateBillingTierResult": {
       "type": "object",
@@ -1824,7 +1840,9 @@
           "description": "The id of the product being subscribed to."
         }
       },
-      "required": ["productId"]
+      "required": [
+        "productId"
+      ]
     },
     "v1Activity": {
       "type": "object",
@@ -1901,7 +1919,9 @@
           "description": "An action that can that can be taken within the Turnkey infrastructure."
         }
       },
-      "required": ["activity"]
+      "required": [
+        "activity"
+      ]
     },
     "v1ActivityStatus": {
       "type": "string",
@@ -2016,7 +2036,10 @@
           "description": "The public component of a cryptographic key pair used to sign messages and transactions."
         }
       },
-      "required": ["apiKeyName", "publicKey"]
+      "required": [
+        "apiKeyName",
+        "publicKey"
+      ]
     },
     "v1ApiOnlyUserParams": {
       "type": "object",
@@ -2045,7 +2068,11 @@
           "description": "A list of API Key parameters."
         }
       },
-      "required": ["userName", "userTags", "apiKeys"]
+      "required": [
+        "userName",
+        "userTags",
+        "apiKeys"
+      ]
     },
     "v1ApproveActivityIntent": {
       "type": "object",
@@ -2055,14 +2082,18 @@
           "description": "An artifact verifying a User's action."
         }
       },
-      "required": ["fingerprint"]
+      "required": [
+        "fingerprint"
+      ]
     },
     "v1ApproveActivityRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_APPROVE_ACTIVITY"]
+          "enum": [
+            "ACTIVITY_TYPE_APPROVE_ACTIVITY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2076,7 +2107,12 @@
           "$ref": "#/definitions/v1ApproveActivityIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1Attestation": {
       "type": "object",
@@ -2182,11 +2218,17 @@
         },
         "authenticatorAttachment": {
           "type": "string",
-          "enum": ["cross-platform", "platform"],
+          "enum": [
+            "cross-platform",
+            "platform"
+          ],
           "x-nullable": true
         }
       },
-      "required": ["clientDataJson", "attestationObject"]
+      "required": [
+        "clientDataJson",
+        "attestationObject"
+      ]
     },
     "v1AuthenticatorParams": {
       "type": "object",
@@ -2207,7 +2249,12 @@
           "description": "Challenge presented for authentication purposes."
         }
       },
-      "required": ["authenticatorName", "userId", "attestation", "challenge"]
+      "required": [
+        "authenticatorName",
+        "userId",
+        "attestation",
+        "challenge"
+      ]
     },
     "v1AuthenticatorParamsV2": {
       "type": "object",
@@ -2225,7 +2272,11 @@
           "description": "The attestation that proves custody of the authenticator and provides metadata about it."
         }
       },
-      "required": ["authenticatorName", "challenge", "attestation"]
+      "required": [
+        "authenticatorName",
+        "challenge",
+        "attestation"
+      ]
     },
     "v1CreateApiKeysIntent": {
       "type": "object",
@@ -2243,14 +2294,19 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["apiKeys", "userId"]
+      "required": [
+        "apiKeys",
+        "userId"
+      ]
     },
     "v1CreateApiKeysRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_API_KEYS"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_API_KEYS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2264,7 +2320,12 @@
           "$ref": "#/definitions/v1CreateApiKeysIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateApiKeysResult": {
       "type": "object",
@@ -2277,7 +2338,9 @@
           "description": "A list of API Key IDs."
         }
       },
-      "required": ["apiKeyIds"]
+      "required": [
+        "apiKeyIds"
+      ]
     },
     "v1CreateApiOnlyUsersIntent": {
       "type": "object",
@@ -2291,28 +2354,9 @@
           "description": "A list of API-only Users to create."
         }
       },
-      "required": ["apiOnlyUsers"]
-    },
-    "v1CreateApiOnlyUsersRequest": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_API_ONLY_USERS"]
-        },
-        "timestampMs": {
-          "type": "string",
-          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
-        },
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        },
-        "parameters": {
-          "$ref": "#/definitions/v1CreateApiOnlyUsersIntent"
-        }
-      },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "apiOnlyUsers"
+      ]
     },
     "v1CreateApiOnlyUsersResult": {
       "type": "object",
@@ -2325,7 +2369,9 @@
           "description": "A list of API-only User IDs."
         }
       },
-      "required": ["userIds"]
+      "required": [
+        "userIds"
+      ]
     },
     "v1CreateAuthenticatorsIntent": {
       "type": "object",
@@ -2343,7 +2389,10 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["authenticators", "userId"]
+      "required": [
+        "authenticators",
+        "userId"
+      ]
     },
     "v1CreateAuthenticatorsIntentV2": {
       "type": "object",
@@ -2361,14 +2410,19 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["authenticators", "userId"]
+      "required": [
+        "authenticators",
+        "userId"
+      ]
     },
     "v1CreateAuthenticatorsRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2382,7 +2436,12 @@
           "$ref": "#/definitions/v1CreateAuthenticatorsIntentV2"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateAuthenticatorsResult": {
       "type": "object",
@@ -2395,7 +2454,9 @@
           "description": "A list of Authenticator IDs."
         }
       },
-      "required": ["authenticatorIds"]
+      "required": [
+        "authenticatorIds"
+      ]
     },
     "v1CreateInvitationsIntent": {
       "type": "object",
@@ -2409,14 +2470,18 @@
           "description": "A list of Invitations."
         }
       },
-      "required": ["invitations"]
+      "required": [
+        "invitations"
+      ]
     },
     "v1CreateInvitationsRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_INVITATIONS"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_INVITATIONS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2430,7 +2495,12 @@
           "$ref": "#/definitions/v1CreateInvitationsIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateInvitationsResult": {
       "type": "object",
@@ -2443,7 +2513,9 @@
           "description": "A list of Invitation IDs"
         }
       },
-      "required": ["invitationIds"]
+      "required": [
+        "invitationIds"
+      ]
     },
     "v1CreateOrganizationIntent": {
       "type": "object",
@@ -2465,7 +2537,11 @@
           "description": "Unique identifier for the root user object."
         }
       },
-      "required": ["organizationName", "rootEmail", "rootAuthenticator"]
+      "required": [
+        "organizationName",
+        "rootEmail",
+        "rootAuthenticator"
+      ]
     },
     "v1CreateOrganizationIntentV2": {
       "type": "object",
@@ -2487,7 +2563,11 @@
           "description": "Unique identifier for the root user object."
         }
       },
-      "required": ["organizationName", "rootEmail", "rootAuthenticator"]
+      "required": [
+        "organizationName",
+        "rootEmail",
+        "rootAuthenticator"
+      ]
     },
     "v1CreateOrganizationResult": {
       "type": "object",
@@ -2497,7 +2577,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1CreatePolicyIntent": {
       "type": "object",
@@ -2522,7 +2604,11 @@
           "type": "string"
         }
       },
-      "required": ["policyName", "selectors", "effect"]
+      "required": [
+        "policyName",
+        "selectors",
+        "effect"
+      ]
     },
     "v1CreatePolicyIntentV2": {
       "type": "object",
@@ -2547,7 +2633,11 @@
           "type": "string"
         }
       },
-      "required": ["policyName", "selectors", "effect"]
+      "required": [
+        "policyName",
+        "selectors",
+        "effect"
+      ]
     },
     "v1CreatePolicyIntentV3": {
       "type": "object",
@@ -2572,14 +2662,19 @@
           "type": "string"
         }
       },
-      "required": ["policyName", "effect"]
+      "required": [
+        "policyName",
+        "effect"
+      ]
     },
     "v1CreatePolicyRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_POLICY_V3"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_POLICY_V3"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2593,7 +2688,12 @@
           "$ref": "#/definitions/v1CreatePolicyIntentV3"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreatePolicyResult": {
       "type": "object",
@@ -2603,7 +2703,9 @@
           "description": "Unique identifier for a given Policy."
         }
       },
-      "required": ["policyId"]
+      "required": [
+        "policyId"
+      ]
     },
     "v1CreatePrivateKeyTagIntent": {
       "type": "object",
@@ -2620,14 +2722,19 @@
           "description": "A list of Private Key IDs."
         }
       },
-      "required": ["privateKeyTagName", "privateKeyIds"]
+      "required": [
+        "privateKeyTagName",
+        "privateKeyIds"
+      ]
     },
     "v1CreatePrivateKeyTagRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2641,7 +2748,12 @@
           "$ref": "#/definitions/v1CreatePrivateKeyTagIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreatePrivateKeyTagResult": {
       "type": "object",
@@ -2658,7 +2770,10 @@
           "description": "A list of Private Key IDs."
         }
       },
-      "required": ["privateKeyTagId", "privateKeyIds"]
+      "required": [
+        "privateKeyTagId",
+        "privateKeyIds"
+      ]
     },
     "v1CreatePrivateKeysIntent": {
       "type": "object",
@@ -2672,7 +2787,9 @@
           "description": "A list of Private Keys."
         }
       },
-      "required": ["privateKeys"]
+      "required": [
+        "privateKeys"
+      ]
     },
     "v1CreatePrivateKeysIntentV2": {
       "type": "object",
@@ -2686,14 +2803,18 @@
           "description": "A list of Private Keys."
         }
       },
-      "required": ["privateKeys"]
+      "required": [
+        "privateKeys"
+      ]
     },
     "v1CreatePrivateKeysRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2707,7 +2828,12 @@
           "$ref": "#/definitions/v1CreatePrivateKeysIntentV2"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreatePrivateKeysResult": {
       "type": "object",
@@ -2720,7 +2846,9 @@
           "description": "A list of Private Key IDs."
         }
       },
-      "required": ["privateKeyIds"]
+      "required": [
+        "privateKeyIds"
+      ]
     },
     "v1CreatePrivateKeysResultV2": {
       "type": "object",
@@ -2734,7 +2862,9 @@
           "description": "A list of Private Key IDs and addresses."
         }
       },
-      "required": ["privateKeys"]
+      "required": [
+        "privateKeys"
+      ]
     },
     "v1CreateSubOrganizationIntent": {
       "type": "object",
@@ -2748,7 +2878,10 @@
           "description": "Root User authenticator for this new sub-organization"
         }
       },
-      "required": ["name", "rootAuthenticator"]
+      "required": [
+        "name",
+        "rootAuthenticator"
+      ]
     },
     "v1CreateSubOrganizationIntentV2": {
       "type": "object",
@@ -2771,7 +2904,11 @@
           "description": "The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users"
         }
       },
-      "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
+      "required": [
+        "subOrganizationName",
+        "rootUsers",
+        "rootQuorumThreshold"
+      ]
     },
     "v1CreateSubOrganizationIntentV3": {
       "type": "object",
@@ -2838,14 +2975,20 @@
           "description": "Disable email recovery for the sub-organization"
         }
       },
-      "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
+      "required": [
+        "subOrganizationName",
+        "rootUsers",
+        "rootQuorumThreshold"
+      ]
     },
     "v1CreateSubOrganizationRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2859,7 +3002,12 @@
           "$ref": "#/definitions/v1CreateSubOrganizationIntentV4"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateSubOrganizationResult": {
       "type": "object",
@@ -2868,7 +3016,9 @@
           "type": "string"
         }
       },
-      "required": ["subOrganizationId"]
+      "required": [
+        "subOrganizationId"
+      ]
     },
     "v1CreateSubOrganizationResultV3": {
       "type": "object",
@@ -2885,7 +3035,10 @@
           "description": "A list of Private Key IDs and addresses."
         }
       },
-      "required": ["subOrganizationId", "privateKeys"]
+      "required": [
+        "subOrganizationId",
+        "privateKeys"
+      ]
     },
     "v1CreateSubOrganizationResultV4": {
       "type": "object",
@@ -2897,7 +3050,9 @@
           "$ref": "#/definitions/v1WalletResult"
         }
       },
-      "required": ["subOrganizationId"]
+      "required": [
+        "subOrganizationId"
+      ]
     },
     "v1CreateUserTagIntent": {
       "type": "object",
@@ -2914,14 +3069,19 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userTagName", "userIds"]
+      "required": [
+        "userTagName",
+        "userIds"
+      ]
     },
     "v1CreateUserTagRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_USER_TAG"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_USER_TAG"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -2935,7 +3095,12 @@
           "$ref": "#/definitions/v1CreateUserTagIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateUserTagResult": {
       "type": "object",
@@ -2952,7 +3117,10 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userTagId", "userIds"]
+      "required": [
+        "userTagId",
+        "userIds"
+      ]
     },
     "v1CreateUsersIntent": {
       "type": "object",
@@ -2966,7 +3134,9 @@
           "description": "A list of Users."
         }
       },
-      "required": ["users"]
+      "required": [
+        "users"
+      ]
     },
     "v1CreateUsersIntentV2": {
       "type": "object",
@@ -2980,14 +3150,18 @@
           "description": "A list of Users."
         }
       },
-      "required": ["users"]
+      "required": [
+        "users"
+      ]
     },
     "v1CreateUsersRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_USERS_V2"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_USERS_V2"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3001,7 +3175,12 @@
           "$ref": "#/definitions/v1CreateUsersIntentV2"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateUsersResult": {
       "type": "object",
@@ -3014,7 +3193,9 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userIds"]
+      "required": [
+        "userIds"
+      ]
     },
     "v1CreateWalletAccountsIntent": {
       "type": "object",
@@ -3032,14 +3213,19 @@
           "description": "A list of wallet Accounts."
         }
       },
-      "required": ["walletId", "accounts"]
+      "required": [
+        "walletId",
+        "accounts"
+      ]
     },
     "v1CreateWalletAccountsRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3053,7 +3239,12 @@
           "$ref": "#/definitions/v1CreateWalletAccountsIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateWalletAccountsResult": {
       "type": "object",
@@ -3066,7 +3257,9 @@
           "description": "A list of derived addresses."
         }
       },
-      "required": ["addresses"]
+      "required": [
+        "addresses"
+      ]
     },
     "v1CreateWalletIntent": {
       "type": "object",
@@ -3084,14 +3277,19 @@
           "description": "A list of wallet Accounts."
         }
       },
-      "required": ["walletName", "accounts"]
+      "required": [
+        "walletName",
+        "accounts"
+      ]
     },
     "v1CreateWalletRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_WALLET"]
+          "enum": [
+            "ACTIVITY_TYPE_CREATE_WALLET"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3105,7 +3303,12 @@
           "$ref": "#/definitions/v1CreateWalletIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1CreateWalletResult": {
       "type": "object",
@@ -3122,7 +3325,10 @@
           "description": "A list of account addresses."
         }
       },
-      "required": ["walletId", "addresses"]
+      "required": [
+        "walletId",
+        "addresses"
+      ]
     },
     "v1CredPropsAuthenticationExtensionsClientOutputs": {
       "type": "object",
@@ -3131,7 +3337,9 @@
           "type": "boolean"
         }
       },
-      "required": ["rk"]
+      "required": [
+        "rk"
+      ]
     },
     "v1DeleteApiKeysIntent": {
       "type": "object",
@@ -3148,14 +3356,19 @@
           "description": "A list of API Key IDs."
         }
       },
-      "required": ["userId", "apiKeyIds"]
+      "required": [
+        "userId",
+        "apiKeyIds"
+      ]
     },
     "v1DeleteApiKeysRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_DELETE_API_KEYS"]
+          "enum": [
+            "ACTIVITY_TYPE_DELETE_API_KEYS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3169,7 +3382,12 @@
           "$ref": "#/definitions/v1DeleteApiKeysIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1DeleteApiKeysResult": {
       "type": "object",
@@ -3182,7 +3400,9 @@
           "description": "A list of API Key IDs."
         }
       },
-      "required": ["apiKeyIds"]
+      "required": [
+        "apiKeyIds"
+      ]
     },
     "v1DeleteAuthenticatorsIntent": {
       "type": "object",
@@ -3199,14 +3419,19 @@
           "description": "A list of Authenticator IDs."
         }
       },
-      "required": ["userId", "authenticatorIds"]
+      "required": [
+        "userId",
+        "authenticatorIds"
+      ]
     },
     "v1DeleteAuthenticatorsRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_DELETE_AUTHENTICATORS"]
+          "enum": [
+            "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3220,7 +3445,12 @@
           "$ref": "#/definitions/v1DeleteAuthenticatorsIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1DeleteAuthenticatorsResult": {
       "type": "object",
@@ -3233,7 +3463,9 @@
           "description": "Unique identifier for a given Authenticator."
         }
       },
-      "required": ["authenticatorIds"]
+      "required": [
+        "authenticatorIds"
+      ]
     },
     "v1DeleteInvitationIntent": {
       "type": "object",
@@ -3243,14 +3475,18 @@
           "description": "Unique identifier for a given Invitation object."
         }
       },
-      "required": ["invitationId"]
+      "required": [
+        "invitationId"
+      ]
     },
     "v1DeleteInvitationRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_DELETE_INVITATION"]
+          "enum": [
+            "ACTIVITY_TYPE_DELETE_INVITATION"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3264,7 +3500,12 @@
           "$ref": "#/definitions/v1DeleteInvitationIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1DeleteInvitationResult": {
       "type": "object",
@@ -3274,7 +3515,9 @@
           "description": "Unique identifier for a given Invitation."
         }
       },
-      "required": ["invitationId"]
+      "required": [
+        "invitationId"
+      ]
     },
     "v1DeleteOrganizationIntent": {
       "type": "object",
@@ -3284,7 +3527,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1DeleteOrganizationResult": {
       "type": "object",
@@ -3294,7 +3539,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1DeletePaymentMethodIntent": {
       "type": "object",
@@ -3304,7 +3551,9 @@
           "description": "The payment method that the customer wants to remove."
         }
       },
-      "required": ["paymentMethodId"]
+      "required": [
+        "paymentMethodId"
+      ]
     },
     "v1DeletePaymentMethodResult": {
       "type": "object",
@@ -3314,7 +3563,9 @@
           "description": "The payment method that was removed."
         }
       },
-      "required": ["paymentMethodId"]
+      "required": [
+        "paymentMethodId"
+      ]
     },
     "v1DeletePolicyIntent": {
       "type": "object",
@@ -3324,14 +3575,18 @@
           "description": "Unique identifier for a given Policy."
         }
       },
-      "required": ["policyId"]
+      "required": [
+        "policyId"
+      ]
     },
     "v1DeletePolicyRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_DELETE_POLICY"]
+          "enum": [
+            "ACTIVITY_TYPE_DELETE_POLICY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3345,7 +3600,12 @@
           "$ref": "#/definitions/v1DeletePolicyIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1DeletePolicyResult": {
       "type": "object",
@@ -3355,7 +3615,9 @@
           "description": "Unique identifier for a given Policy."
         }
       },
-      "required": ["policyId"]
+      "required": [
+        "policyId"
+      ]
     },
     "v1DeletePrivateKeyTagsIntent": {
       "type": "object",
@@ -3368,7 +3630,9 @@
           "description": "A list of Private Key Tag IDs."
         }
       },
-      "required": ["privateKeyTagIds"]
+      "required": [
+        "privateKeyTagIds"
+      ]
     },
     "v1DeletePrivateKeyTagsResult": {
       "type": "object",
@@ -3388,7 +3652,10 @@
           "description": "A list of Private Key IDs."
         }
       },
-      "required": ["privateKeyTagIds", "privateKeyIds"]
+      "required": [
+        "privateKeyTagIds",
+        "privateKeyIds"
+      ]
     },
     "v1DeleteUserTagsIntent": {
       "type": "object",
@@ -3401,7 +3668,9 @@
           "description": "A list of User Tag IDs."
         }
       },
-      "required": ["userTagIds"]
+      "required": [
+        "userTagIds"
+      ]
     },
     "v1DeleteUserTagsResult": {
       "type": "object",
@@ -3421,7 +3690,10 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userTagIds", "userIds"]
+      "required": [
+        "userTagIds",
+        "userIds"
+      ]
     },
     "v1DeleteUsersIntent": {
       "type": "object",
@@ -3434,7 +3706,9 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userIds"]
+      "required": [
+        "userIds"
+      ]
     },
     "v1DeleteUsersResult": {
       "type": "object",
@@ -3447,7 +3721,9 @@
           "description": "A list of User IDs."
         }
       },
-      "required": ["userIds"]
+      "required": [
+        "userIds"
+      ]
     },
     "v1DisablePrivateKeyIntent": {
       "type": "object",
@@ -3457,7 +3733,9 @@
           "description": "Unique identifier for a given Private Key."
         }
       },
-      "required": ["privateKeyId"]
+      "required": [
+        "privateKeyId"
+      ]
     },
     "v1DisablePrivateKeyResult": {
       "type": "object",
@@ -3467,7 +3745,9 @@
           "description": "Unique identifier for a given Private Key."
         }
       },
-      "required": ["privateKeyId"]
+      "required": [
+        "privateKeyId"
+      ]
     },
     "v1ExportPrivateKeyIntent": {
       "type": "object",
@@ -3481,14 +3761,19 @@
           "description": "Client-side public key generated by the user, to which the export bundle will be encrypted."
         }
       },
-      "required": ["privateKeyId", "targetPublicKey"]
+      "required": [
+        "privateKeyId",
+        "targetPublicKey"
+      ]
     },
     "v1ExportPrivateKeyRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"]
+          "enum": [
+            "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3502,7 +3787,12 @@
           "$ref": "#/definitions/v1ExportPrivateKeyIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1ExportPrivateKeyResult": {
       "type": "object",
@@ -3516,7 +3806,10 @@
           "description": "Export bundle containing a private key encrypted to the client's target public key."
         }
       },
-      "required": ["privateKeyId", "exportBundle"]
+      "required": [
+        "privateKeyId",
+        "exportBundle"
+      ]
     },
     "v1ExportWalletIntent": {
       "type": "object",
@@ -3534,14 +3827,19 @@
           "description": "The language of the mnemonic to export. Defaults to English."
         }
       },
-      "required": ["walletId", "targetPublicKey"]
+      "required": [
+        "walletId",
+        "targetPublicKey"
+      ]
     },
     "v1ExportWalletRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_EXPORT_WALLET"]
+          "enum": [
+            "ACTIVITY_TYPE_EXPORT_WALLET"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3555,7 +3853,12 @@
           "$ref": "#/definitions/v1ExportWalletIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1ExportWalletResult": {
       "type": "object",
@@ -3569,7 +3872,10 @@
           "description": "Export bundle containing a wallet mnemonic + optional newline passphrase encrypted by the client's target public key."
         }
       },
-      "required": ["walletId", "exportBundle"]
+      "required": [
+        "walletId",
+        "exportBundle"
+      ]
     },
     "v1Feature": {
       "type": "object",
@@ -3584,7 +3890,9 @@
     },
     "v1FeatureName": {
       "type": "string",
-      "enum": ["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"]
+      "enum": [
+        "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
+      ]
     },
     "v1GetActivitiesRequest": {
       "type": "object",
@@ -3612,7 +3920,9 @@
           "description": "Array of Activity Types filtering which Activities will be listed in the response."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1GetActivitiesResponse": {
       "type": "object",
@@ -3626,7 +3936,9 @@
           "description": "A list of Activities."
         }
       },
-      "required": ["activities"]
+      "required": [
+        "activities"
+      ]
     },
     "v1GetActivityRequest": {
       "type": "object",
@@ -3640,7 +3952,10 @@
           "description": "Unique identifier for a given Activity object."
         }
       },
-      "required": ["organizationId", "activityId"]
+      "required": [
+        "organizationId",
+        "activityId"
+      ]
     },
     "v1GetAuthenticatorRequest": {
       "type": "object",
@@ -3654,7 +3969,10 @@
           "description": "Unique identifier for a given Authenticator."
         }
       },
-      "required": ["organizationId", "authenticatorId"]
+      "required": [
+        "organizationId",
+        "authenticatorId"
+      ]
     },
     "v1GetAuthenticatorResponse": {
       "type": "object",
@@ -3664,7 +3982,9 @@
           "description": "An authenticator."
         }
       },
-      "required": ["authenticator"]
+      "required": [
+        "authenticator"
+      ]
     },
     "v1GetAuthenticatorsRequest": {
       "type": "object",
@@ -3678,7 +3998,10 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["organizationId", "userId"]
+      "required": [
+        "organizationId",
+        "userId"
+      ]
     },
     "v1GetAuthenticatorsResponse": {
       "type": "object",
@@ -3692,27 +4015,9 @@
           "description": "A list of authenticators."
         }
       },
-      "required": ["authenticators"]
-    },
-    "v1GetOrganizationRequest": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        }
-      },
-      "required": ["organizationId"]
-    },
-    "v1GetOrganizationResponse": {
-      "type": "object",
-      "properties": {
-        "organizationData": {
-          "$ref": "#/definitions/v1OrganizationData",
-          "description": "Object representing the full current and deleted / disabled collection of Users, Policies, Private Keys, and Invitations attributable to a particular Organization."
-        }
-      },
-      "required": ["organizationData"]
+      "required": [
+        "authenticators"
+      ]
     },
     "v1GetPoliciesRequest": {
       "type": "object",
@@ -3722,7 +4027,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1GetPoliciesResponse": {
       "type": "object",
@@ -3736,7 +4043,9 @@
           "description": "A list of Policies."
         }
       },
-      "required": ["policies"]
+      "required": [
+        "policies"
+      ]
     },
     "v1GetPolicyRequest": {
       "type": "object",
@@ -3750,7 +4059,10 @@
           "description": "Unique identifier for a given Policy."
         }
       },
-      "required": ["organizationId", "policyId"]
+      "required": [
+        "organizationId",
+        "policyId"
+      ]
     },
     "v1GetPolicyResponse": {
       "type": "object",
@@ -3760,7 +4072,9 @@
           "description": "Object that codifies rules defining the actions that are permissible within an Organization."
         }
       },
-      "required": ["policy"]
+      "required": [
+        "policy"
+      ]
     },
     "v1GetPrivateKeyRequest": {
       "type": "object",
@@ -3774,7 +4088,10 @@
           "description": "Unique identifier for a given Private Key."
         }
       },
-      "required": ["organizationId", "privateKeyId"]
+      "required": [
+        "organizationId",
+        "privateKeyId"
+      ]
     },
     "v1GetPrivateKeyResponse": {
       "type": "object",
@@ -3784,7 +4101,9 @@
           "description": "Cryptographic public/private key pair that can be used for cryptocurrency needs or more generalized encryption."
         }
       },
-      "required": ["privateKey"]
+      "required": [
+        "privateKey"
+      ]
     },
     "v1GetPrivateKeysRequest": {
       "type": "object",
@@ -3794,7 +4113,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1GetPrivateKeysResponse": {
       "type": "object",
@@ -3808,7 +4129,9 @@
           "description": "A list of Private Keys."
         }
       },
-      "required": ["privateKeys"]
+      "required": [
+        "privateKeys"
+      ]
     },
     "v1GetUserRequest": {
       "type": "object",
@@ -3822,7 +4145,10 @@
           "description": "Unique identifier for a given User."
         }
       },
-      "required": ["organizationId", "userId"]
+      "required": [
+        "organizationId",
+        "userId"
+      ]
     },
     "v1GetUserResponse": {
       "type": "object",
@@ -3832,7 +4158,9 @@
           "description": "Web and/or API user within your Organization."
         }
       },
-      "required": ["user"]
+      "required": [
+        "user"
+      ]
     },
     "v1GetUsersRequest": {
       "type": "object",
@@ -3842,7 +4170,9 @@
           "description": "Unique identifier for a given Organization."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1GetUsersResponse": {
       "type": "object",
@@ -3856,7 +4186,9 @@
           "description": "A list of Users."
         }
       },
-      "required": ["users"]
+      "required": [
+        "users"
+      ]
     },
     "v1GetWhoamiRequest": {
       "type": "object",
@@ -3866,7 +4198,9 @@
           "description": "Unique identifier for a given Organization. If the request is being made by a WebAuthN user and their Sub-Organization ID is unknown, this can be the Parent Organization ID; using the Sub-Organization ID when possible is preferred due to performance reasons."
         }
       },
-      "required": ["organizationId"]
+      "required": [
+        "organizationId"
+      ]
     },
     "v1GetWhoamiResponse": {
       "type": "object",
@@ -3888,7 +4222,12 @@
           "description": "Human-readable name for a User."
         }
       },
-      "required": ["organizationId", "organizationName", "userId", "username"]
+      "required": [
+        "organizationId",
+        "organizationName",
+        "userId",
+        "username"
+      ]
     },
     "v1InitUserEmailRecoveryIntent": {
       "type": "object",
@@ -3902,14 +4241,19 @@
           "description": "Client-side public key generated by the user, to which the recovery bundle will be encrypted."
         }
       },
-      "required": ["email", "targetPublicKey"]
+      "required": [
+        "email",
+        "targetPublicKey"
+      ]
     },
     "v1InitUserEmailRecoveryRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"]
+          "enum": [
+            "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -3923,7 +4267,12 @@
           "$ref": "#/definitions/v1InitUserEmailRecoveryIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1InitUserEmailRecoveryResult": {
       "type": "object",
@@ -3933,7 +4282,9 @@
           "description": "Unique identifier for the user being recovered."
         }
       },
-      "required": ["userId"]
+      "required": [
+        "userId"
+      ]
     },
     "v1Intent": {
       "type": "object",
@@ -4104,59 +4455,8 @@
           "$ref": "#/definitions/v1CreateSubOrganizationIntentV4"
         }
       },
-      "required": ["createOrganizationIntent"]
-    },
-    "v1Invitation": {
-      "type": "object",
-      "properties": {
-        "invitationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Invitation object."
-        },
-        "receiverUserName": {
-          "type": "string",
-          "description": "The name of the intended Invitation recipient."
-        },
-        "receiverEmail": {
-          "type": "string",
-          "description": "The email address of the intended Invitation recipient."
-        },
-        "receiverUserTags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of tags assigned to the Invitation recipient."
-        },
-        "accessType": {
-          "$ref": "#/definitions/externaldatav1AccessType",
-          "description": "The User's permissible access method(s)."
-        },
-        "status": {
-          "$ref": "#/definitions/v1InvitationStatus",
-          "description": "The current processing status of a specified Invitation."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "senderUserId": {
-          "type": "string",
-          "description": "Unique identifier for the Sender of an Invitation."
-        }
-      },
       "required": [
-        "invitationId",
-        "receiverUserName",
-        "receiverEmail",
-        "receiverUserTags",
-        "accessType",
-        "status",
-        "createdAt",
-        "updatedAt",
-        "senderUserId"
+        "createOrganizationIntent"
       ]
     },
     "v1InvitationParams": {
@@ -4194,14 +4494,6 @@
         "senderUserId"
       ]
     },
-    "v1InvitationStatus": {
-      "type": "string",
-      "enum": [
-        "INVITATION_STATUS_CREATED",
-        "INVITATION_STATUS_ACCEPTED",
-        "INVITATION_STATUS_REVOKED"
-      ]
-    },
     "v1MnemonicLanguage": {
       "type": "string",
       "enum": [
@@ -4215,91 +4507,6 @@
         "MNEMONIC_LANGUAGE_KOREAN",
         "MNEMONIC_LANGUAGE_SPANISH"
       ]
-    },
-    "v1NOOPCodegenAnchorResponse": {
-      "type": "object",
-      "properties": {
-        "stamp": {
-          "$ref": "#/definitions/v1WebAuthnStamp"
-        }
-      },
-      "required": ["stamp"]
-    },
-    "v1OrganizationData": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1User"
-          }
-        },
-        "policies": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Policy"
-          }
-        },
-        "privateKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PrivateKey"
-          }
-        },
-        "invitations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Invitation"
-          }
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/datav1Tag"
-          }
-        },
-        "disabledPrivateKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PrivateKey"
-          }
-        },
-        "rootQuorum": {
-          "$ref": "#/definitions/externaldatav1Quorum"
-        },
-        "allowedOrigins": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "features": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Feature"
-          }
-        },
-        "wallets": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Wallet"
-          }
-        }
-      }
     },
     "v1Pagination": {
       "type": "object",
@@ -4320,7 +4527,9 @@
     },
     "v1PathFormat": {
       "type": "string",
-      "enum": ["PATH_FORMAT_BIP32"]
+      "enum": [
+        "PATH_FORMAT_BIP32"
+      ]
     },
     "v1Policy": {
       "type": "object",
@@ -4489,14 +4698,19 @@
         },
         "type": {
           "type": "string",
-          "enum": ["public-key"]
+          "enum": [
+            "public-key"
+          ]
         },
         "rawId": {
           "type": "string"
         },
         "authenticatorAttachment": {
           "type": "string",
-          "enum": ["cross-platform", "platform"],
+          "enum": [
+            "cross-platform",
+            "platform"
+          ],
           "x-nullable": true
         },
         "response": {
@@ -4506,7 +4720,13 @@
           "$ref": "#/definitions/v1SimpleClientExtensionResults"
         }
       },
-      "required": ["id", "type", "rawId", "response", "clientExtensionResults"]
+      "required": [
+        "id",
+        "type",
+        "rawId",
+        "response",
+        "clientExtensionResults"
+      ]
     },
     "v1RecoverUserIntent": {
       "type": "object",
@@ -4520,14 +4740,19 @@
           "description": "Unique identifier for the user performing recovery."
         }
       },
-      "required": ["authenticator", "userId"]
+      "required": [
+        "authenticator",
+        "userId"
+      ]
     },
     "v1RecoverUserRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_RECOVER_USER"]
+          "enum": [
+            "ACTIVITY_TYPE_RECOVER_USER"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -4541,7 +4766,12 @@
           "$ref": "#/definitions/v1RecoverUserIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1RecoverUserResult": {
       "type": "object",
@@ -4554,7 +4784,9 @@
           "description": "ID of the authenticator created."
         }
       },
-      "required": ["authenticatorId"]
+      "required": [
+        "authenticatorId"
+      ]
     },
     "v1RejectActivityIntent": {
       "type": "object",
@@ -4564,14 +4796,18 @@
           "description": "An artifact verifying a User's action."
         }
       },
-      "required": ["fingerprint"]
+      "required": [
+        "fingerprint"
+      ]
     },
     "v1RejectActivityRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_REJECT_ACTIVITY"]
+          "enum": [
+            "ACTIVITY_TYPE_REJECT_ACTIVITY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -4585,7 +4821,12 @@
           "$ref": "#/definitions/v1RejectActivityIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1RemoveOrganizationFeatureIntent": {
       "type": "object",
@@ -4595,14 +4836,18 @@
           "description": "Name of the feature to remove"
         }
       },
-      "required": ["name"]
+      "required": [
+        "name"
+      ]
     },
     "v1RemoveOrganizationFeatureRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"]
+          "enum": [
+            "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -4616,7 +4861,12 @@
           "$ref": "#/definitions/v1RemoveOrganizationFeatureIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1RemoveOrganizationFeatureResult": {
       "type": "object",
@@ -4630,7 +4880,9 @@
           "description": "Resulting list of organization features."
         }
       },
-      "required": ["features"]
+      "required": [
+        "features"
+      ]
     },
     "v1Result": {
       "type": "object",
@@ -4794,7 +5046,11 @@
           "description": "A list of Authenticator parameters."
         }
       },
-      "required": ["userName", "apiKeys", "authenticators"]
+      "required": [
+        "userName",
+        "apiKeys",
+        "authenticators"
+      ]
     },
     "v1SelectorV2": {
       "type": "object",
@@ -4825,14 +5081,19 @@
           "description": "Optional value for the feature. Will override existing values if feature is already set."
         }
       },
-      "required": ["name", "value"]
+      "required": [
+        "name",
+        "value"
+      ]
     },
     "v1SetOrganizationFeatureRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"]
+          "enum": [
+            "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -4846,7 +5107,12 @@
           "$ref": "#/definitions/v1SetOrganizationFeatureIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1SetOrganizationFeatureResult": {
       "type": "object",
@@ -4860,7 +5126,9 @@
           "description": "Resulting list of organization features."
         }
       },
-      "required": ["features"]
+      "required": [
+        "features"
+      ]
     },
     "v1SetPaymentMethodIntent": {
       "type": "object",
@@ -4915,7 +5183,11 @@
           "description": "The name associated with the credit card."
         }
       },
-      "required": ["paymentMethodId", "cardHolderEmail", "cardHolderName"]
+      "required": [
+        "paymentMethodId",
+        "cardHolderEmail",
+        "cardHolderName"
+      ]
     },
     "v1SetPaymentMethodResult": {
       "type": "object",
@@ -4933,7 +5205,11 @@
           "description": "The email address associated with the payment method."
         }
       },
-      "required": ["lastFour", "cardHolderName", "cardHolderEmail"]
+      "required": [
+        "lastFour",
+        "cardHolderName",
+        "cardHolderEmail"
+      ]
     },
     "v1SignRawPayloadIntent": {
       "type": "object",
@@ -4955,14 +5231,19 @@
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
         }
       },
-      "required": ["privateKeyId", "payload", "encoding", "hashFunction"]
+      "required": [
+        "privateKeyId",
+        "payload",
+        "encoding",
+        "hashFunction"
+      ]
     },
     "v1SignRawPayloadIntentV2": {
       "type": "object",
       "properties": {
         "signWith": {
           "type": "string",
-          "description": "The Private Key identifier or address."
+          "description": "A Wallet account address, Private Key address, or Private Key identifier."
         },
         "payload": {
           "type": "string",
@@ -4977,14 +5258,21 @@
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
         }
       },
-      "required": ["signWith", "payload", "encoding", "hashFunction"]
+      "required": [
+        "signWith",
+        "payload",
+        "encoding",
+        "hashFunction"
+      ]
     },
     "v1SignRawPayloadRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"]
+          "enum": [
+            "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -4998,7 +5286,12 @@
           "$ref": "#/definitions/v1SignRawPayloadIntentV2"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1SignRawPayloadResult": {
       "type": "object",
@@ -5016,7 +5309,11 @@
           "description": "Component of an ECSDA signature."
         }
       },
-      "required": ["r", "s", "v"]
+      "required": [
+        "r",
+        "s",
+        "v"
+      ]
     },
     "v1SignTransactionIntent": {
       "type": "object",
@@ -5033,14 +5330,18 @@
           "$ref": "#/definitions/v1TransactionType"
         }
       },
-      "required": ["privateKeyId", "unsignedTransaction", "type"]
+      "required": [
+        "privateKeyId",
+        "unsignedTransaction",
+        "type"
+      ]
     },
     "v1SignTransactionIntentV2": {
       "type": "object",
       "properties": {
         "signWith": {
           "type": "string",
-          "description": "The Private Key identifier or address."
+          "description": "A Wallet account address, Private Key address, or Private Key identifier."
         },
         "unsignedTransaction": {
           "type": "string",
@@ -5050,14 +5351,20 @@
           "$ref": "#/definitions/v1TransactionType"
         }
       },
-      "required": ["signWith", "unsignedTransaction", "type"]
+      "required": [
+        "signWith",
+        "unsignedTransaction",
+        "type"
+      ]
     },
     "v1SignTransactionRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_SIGN_TRANSACTION_V2"]
+          "enum": [
+            "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5071,7 +5378,12 @@
           "$ref": "#/definitions/v1SignTransactionIntentV2"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1SignTransactionResult": {
       "type": "object",
@@ -5080,7 +5392,9 @@
           "type": "string"
         }
       },
-      "required": ["signedTransaction"]
+      "required": [
+        "signedTransaction"
+      ]
     },
     "v1SimpleClientExtensionResults": {
       "type": "object",
@@ -5096,13 +5410,11 @@
         }
       }
     },
-    "v1TagType": {
-      "type": "string",
-      "enum": ["TAG_TYPE_USER", "TAG_TYPE_PRIVATE_KEY"]
-    },
     "v1TransactionType": {
       "type": "string",
-      "enum": ["TRANSACTION_TYPE_ETHEREUM"]
+      "enum": [
+        "TRANSACTION_TYPE_ETHEREUM"
+      ]
     },
     "v1UpdateAllowedOriginsIntent": {
       "type": "object",
@@ -5115,14 +5427,18 @@
           "description": "Additional origins requests are allowed from besides Turnkey origins"
         }
       },
-      "required": ["allowedOrigins"]
+      "required": [
+        "allowedOrigins"
+      ]
     },
     "v1UpdateAllowedOriginsRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5136,7 +5452,12 @@
           "$ref": "#/definitions/v1UpdateAllowedOriginsIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdateAllowedOriginsResult": {
       "type": "object"
@@ -5169,14 +5490,18 @@
           "description": "Accompanying notes for a Policy (optional)."
         }
       },
-      "required": ["policyId"]
+      "required": [
+        "policyId"
+      ]
     },
     "v1UpdatePolicyRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_POLICY"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_POLICY"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5190,7 +5515,12 @@
           "$ref": "#/definitions/v1UpdatePolicyIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdatePolicyResult": {
       "type": "object",
@@ -5200,7 +5530,9 @@
           "description": "Unique identifier for a given Policy."
         }
       },
-      "required": ["policyId"]
+      "required": [
+        "policyId"
+      ]
     },
     "v1UpdatePrivateKeyTagIntent": {
       "type": "object",
@@ -5228,14 +5560,20 @@
           "description": "A list of Private Key IDs to remove this tag from."
         }
       },
-      "required": ["privateKeyTagId", "addPrivateKeyIds", "removePrivateKeyIds"]
+      "required": [
+        "privateKeyTagId",
+        "addPrivateKeyIds",
+        "removePrivateKeyIds"
+      ]
     },
     "v1UpdatePrivateKeyTagRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5249,7 +5587,12 @@
           "$ref": "#/definitions/v1UpdatePrivateKeyTagIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdatePrivateKeyTagResult": {
       "type": "object",
@@ -5259,7 +5602,9 @@
           "description": "Unique identifier for a given Private Key Tag."
         }
       },
-      "required": ["privateKeyTagId"]
+      "required": [
+        "privateKeyTagId"
+      ]
     },
     "v1UpdateRootQuorumIntent": {
       "type": "object",
@@ -5277,14 +5622,19 @@
           "description": "The unique identifiers of users who comprise the quorum set."
         }
       },
-      "required": ["threshold", "userIds"]
+      "required": [
+        "threshold",
+        "userIds"
+      ]
     },
     "v1UpdateRootQuorumRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5298,7 +5648,12 @@
           "$ref": "#/definitions/v1UpdateRootQuorumIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdateRootQuorumResult": {
       "type": "object"
@@ -5326,14 +5681,18 @@
           "description": "An updated list of User Tags to apply to this User."
         }
       },
-      "required": ["userId"]
+      "required": [
+        "userId"
+      ]
     },
     "v1UpdateUserRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_USER"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_USER"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5347,7 +5706,12 @@
           "$ref": "#/definitions/v1UpdateUserIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdateUserResult": {
       "type": "object",
@@ -5357,7 +5721,9 @@
           "description": "A User ID."
         }
       },
-      "required": ["userId"]
+      "required": [
+        "userId"
+      ]
     },
     "v1UpdateUserTagIntent": {
       "type": "object",
@@ -5385,14 +5751,20 @@
           "description": "A list of User IDs to remove this tag from."
         }
       },
-      "required": ["userTagId", "addUserIds", "removeUserIds"]
+      "required": [
+        "userTagId",
+        "addUserIds",
+        "removeUserIds"
+      ]
     },
     "v1UpdateUserTagRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_USER_TAG"]
+          "enum": [
+            "ACTIVITY_TYPE_UPDATE_USER_TAG"
+          ]
         },
         "timestampMs": {
           "type": "string",
@@ -5406,7 +5778,12 @@
           "$ref": "#/definitions/v1UpdateUserTagIntent"
         }
       },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
+      "required": [
+        "type",
+        "timestampMs",
+        "organizationId",
+        "parameters"
+      ]
     },
     "v1UpdateUserTagResult": {
       "type": "object",
@@ -5416,7 +5793,9 @@
           "description": "Unique identifier for a given User Tag."
         }
       },
-      "required": ["userTagId"]
+      "required": [
+        "userTagId"
+      ]
     },
     "v1User": {
       "type": "object",
@@ -5593,7 +5972,10 @@
         },
         "selection": {
           "type": "string",
-          "enum": ["VOTE_SELECTION_APPROVED", "VOTE_SELECTION_REJECTED"]
+          "enum": [
+            "VOTE_SELECTION_APPROVED",
+            "VOTE_SELECTION_REJECTED"
+          ]
         },
         "message": {
           "type": "string",
@@ -5628,36 +6010,6 @@
         "createdAt"
       ]
     },
-    "v1Wallet": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "Unique identifier for a given Wallet."
-        },
-        "walletName": {
-          "type": "string",
-          "description": "Human-readable name for a Wallet."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "exported": {
-          "type": "boolean",
-          "description": "True when a given Wallet is exported, false otherwise."
-        }
-      },
-      "required": [
-        "walletId",
-        "walletName",
-        "createdAt",
-        "updatedAt",
-        "exported"
-      ]
-    },
     "v1WalletAccountParams": {
       "type": "object",
       "properties": {
@@ -5678,7 +6030,12 @@
           "description": "Address format used to generate a wallet Acccount."
         }
       },
-      "required": ["curve", "pathFormat", "path", "addressFormat"]
+      "required": [
+        "curve",
+        "pathFormat",
+        "path",
+        "addressFormat"
+      ]
     },
     "v1WalletParams": {
       "type": "object",
@@ -5696,7 +6053,10 @@
           "description": "A list of wallet Accounts."
         }
       },
-      "required": ["walletName", "accounts"]
+      "required": [
+        "walletName",
+        "accounts"
+      ]
     },
     "v1WalletResult": {
       "type": "object",
@@ -5712,33 +6072,9 @@
           "description": "A list of account addresses."
         }
       },
-      "required": ["walletId", "addresses"]
-    },
-    "v1WebAuthnStamp": {
-      "type": "object",
-      "properties": {
-        "credentialId": {
-          "type": "string",
-          "description": "A base64 url encoded Unique identifier for a given credential."
-        },
-        "clientDataJson": {
-          "type": "string",
-          "description": "A base64 encoded payload containing metadata about the signing context and the challenge."
-        },
-        "authenticatorData": {
-          "type": "string",
-          "description": "A base64 encoded payload containing metadata about the authenticator."
-        },
-        "signature": {
-          "type": "string",
-          "description": "The base64 url encoded signature bytes contained within the WebAuthn assertion response."
-        }
-      },
       "required": [
-        "credentialId",
-        "clientDataJson",
-        "authenticatorData",
-        "signature"
+        "walletId",
+        "addresses"
       ]
     }
   },
@@ -5765,19 +6101,44 @@
   "x-tagGroups": [
     {
       "name": "ORGANIZATIONS",
-      "tags": ["Organizations", "Invitations", "Policies"]
+      "tags": [
+        "Organizations",
+        "Invitations",
+        "Policies",
+        "Features"
+      ]
     },
     {
       "name": "PRIVATE KEYS",
-      "tags": ["Private Keys", "Private Key Tags"]
+      "tags": [
+        "Wallets",
+        "Signatures",
+        "Private Keys",
+        "Private Key Tags"
+      ]
     },
     {
       "name": "USERS",
-      "tags": ["Users", "User Tags", "Authenticators", "API Keys", "Who am I?"]
+      "tags": [
+        "Users",
+        "User Tags",
+        "User Recovery"
+      ]
+    },
+    {
+      "name": "CREDENTIALS",
+      "tags": [
+        "Authenticators",
+        "API Keys",
+        "Who am I?"
+      ]
     },
     {
       "name": "ACTIVITIES",
-      "tags": ["Activities", "Consensus"]
+      "tags": [
+        "Activities",
+        "Consensus"
+      ]
     }
   ]
 }

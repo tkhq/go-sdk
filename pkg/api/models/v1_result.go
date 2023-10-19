@@ -1278,6 +1278,11 @@ func (m *V1Result) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *V1Result) contextValidateAcceptInvitationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AcceptInvitationResult != nil {
+
+		if swag.IsZero(m.AcceptInvitationResult) { // not required
+			return nil
+		}
+
 		if err := m.AcceptInvitationResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("acceptInvitationResult")
@@ -1294,6 +1299,11 @@ func (m *V1Result) contextValidateAcceptInvitationResult(ctx context.Context, fo
 func (m *V1Result) contextValidateActivateBillingTierResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ActivateBillingTierResult != nil {
+
+		if swag.IsZero(m.ActivateBillingTierResult) { // not required
+			return nil
+		}
+
 		if err := m.ActivateBillingTierResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("activateBillingTierResult")
@@ -1310,6 +1320,11 @@ func (m *V1Result) contextValidateActivateBillingTierResult(ctx context.Context,
 func (m *V1Result) contextValidateCreateAPIKeysResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAPIKeysResult != nil {
+
+		if swag.IsZero(m.CreateAPIKeysResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateAPIKeysResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createApiKeysResult")
@@ -1326,6 +1341,11 @@ func (m *V1Result) contextValidateCreateAPIKeysResult(ctx context.Context, forma
 func (m *V1Result) contextValidateCreateAPIOnlyUsersResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAPIOnlyUsersResult != nil {
+
+		if swag.IsZero(m.CreateAPIOnlyUsersResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateAPIOnlyUsersResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createApiOnlyUsersResult")
@@ -1342,6 +1362,11 @@ func (m *V1Result) contextValidateCreateAPIOnlyUsersResult(ctx context.Context, 
 func (m *V1Result) contextValidateCreateAuthenticatorsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAuthenticatorsResult != nil {
+
+		if swag.IsZero(m.CreateAuthenticatorsResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateAuthenticatorsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createAuthenticatorsResult")
@@ -1358,6 +1383,11 @@ func (m *V1Result) contextValidateCreateAuthenticatorsResult(ctx context.Context
 func (m *V1Result) contextValidateCreateInvitationsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateInvitationsResult != nil {
+
+		if swag.IsZero(m.CreateInvitationsResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateInvitationsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createInvitationsResult")
@@ -1374,6 +1404,11 @@ func (m *V1Result) contextValidateCreateInvitationsResult(ctx context.Context, f
 func (m *V1Result) contextValidateCreateOrganizationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateOrganizationResult != nil {
+
+		if swag.IsZero(m.CreateOrganizationResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateOrganizationResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createOrganizationResult")
@@ -1390,6 +1425,11 @@ func (m *V1Result) contextValidateCreateOrganizationResult(ctx context.Context, 
 func (m *V1Result) contextValidateCreatePolicyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePolicyResult != nil {
+
+		if swag.IsZero(m.CreatePolicyResult) { // not required
+			return nil
+		}
+
 		if err := m.CreatePolicyResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPolicyResult")
@@ -1406,6 +1446,11 @@ func (m *V1Result) contextValidateCreatePolicyResult(ctx context.Context, format
 func (m *V1Result) contextValidateCreatePrivateKeyTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeyTagResult != nil {
+
+		if swag.IsZero(m.CreatePrivateKeyTagResult) { // not required
+			return nil
+		}
+
 		if err := m.CreatePrivateKeyTagResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeyTagResult")
@@ -1422,6 +1467,11 @@ func (m *V1Result) contextValidateCreatePrivateKeyTagResult(ctx context.Context,
 func (m *V1Result) contextValidateCreatePrivateKeysResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeysResult != nil {
+
+		if swag.IsZero(m.CreatePrivateKeysResult) { // not required
+			return nil
+		}
+
 		if err := m.CreatePrivateKeysResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeysResult")
@@ -1438,6 +1488,11 @@ func (m *V1Result) contextValidateCreatePrivateKeysResult(ctx context.Context, f
 func (m *V1Result) contextValidateCreatePrivateKeysResultV2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatePrivateKeysResultV2 != nil {
+
+		if swag.IsZero(m.CreatePrivateKeysResultV2) { // not required
+			return nil
+		}
+
 		if err := m.CreatePrivateKeysResultV2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createPrivateKeysResultV2")
@@ -1454,6 +1509,11 @@ func (m *V1Result) contextValidateCreatePrivateKeysResultV2(ctx context.Context,
 func (m *V1Result) contextValidateCreateSubOrganizationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationResult != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateSubOrganizationResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationResult")
@@ -1470,6 +1530,11 @@ func (m *V1Result) contextValidateCreateSubOrganizationResult(ctx context.Contex
 func (m *V1Result) contextValidateCreateSubOrganizationResultV3(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationResultV3 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationResultV3) { // not required
+			return nil
+		}
+
 		if err := m.CreateSubOrganizationResultV3.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationResultV3")
@@ -1486,6 +1551,11 @@ func (m *V1Result) contextValidateCreateSubOrganizationResultV3(ctx context.Cont
 func (m *V1Result) contextValidateCreateSubOrganizationResultV4(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationResultV4 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationResultV4) { // not required
+			return nil
+		}
+
 		if err := m.CreateSubOrganizationResultV4.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createSubOrganizationResultV4")
@@ -1502,6 +1572,11 @@ func (m *V1Result) contextValidateCreateSubOrganizationResultV4(ctx context.Cont
 func (m *V1Result) contextValidateCreateUserTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagResult != nil {
+
+		if swag.IsZero(m.CreateUserTagResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateUserTagResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createUserTagResult")
@@ -1518,6 +1593,11 @@ func (m *V1Result) contextValidateCreateUserTagResult(ctx context.Context, forma
 func (m *V1Result) contextValidateCreateUsersResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUsersResult != nil {
+
+		if swag.IsZero(m.CreateUsersResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateUsersResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createUsersResult")
@@ -1534,6 +1614,11 @@ func (m *V1Result) contextValidateCreateUsersResult(ctx context.Context, formats
 func (m *V1Result) contextValidateCreateWalletAccountsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateWalletAccountsResult != nil {
+
+		if swag.IsZero(m.CreateWalletAccountsResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateWalletAccountsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createWalletAccountsResult")
@@ -1550,6 +1635,11 @@ func (m *V1Result) contextValidateCreateWalletAccountsResult(ctx context.Context
 func (m *V1Result) contextValidateCreateWalletResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateWalletResult != nil {
+
+		if swag.IsZero(m.CreateWalletResult) { // not required
+			return nil
+		}
+
 		if err := m.CreateWalletResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createWalletResult")
@@ -1566,6 +1656,11 @@ func (m *V1Result) contextValidateCreateWalletResult(ctx context.Context, format
 func (m *V1Result) contextValidateDeleteAPIKeysResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteAPIKeysResult != nil {
+
+		if swag.IsZero(m.DeleteAPIKeysResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteAPIKeysResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteApiKeysResult")
@@ -1582,6 +1677,11 @@ func (m *V1Result) contextValidateDeleteAPIKeysResult(ctx context.Context, forma
 func (m *V1Result) contextValidateDeleteAuthenticatorsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteAuthenticatorsResult != nil {
+
+		if swag.IsZero(m.DeleteAuthenticatorsResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteAuthenticatorsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteAuthenticatorsResult")
@@ -1598,6 +1698,11 @@ func (m *V1Result) contextValidateDeleteAuthenticatorsResult(ctx context.Context
 func (m *V1Result) contextValidateDeleteInvitationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteInvitationResult != nil {
+
+		if swag.IsZero(m.DeleteInvitationResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteInvitationResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteInvitationResult")
@@ -1614,6 +1719,11 @@ func (m *V1Result) contextValidateDeleteInvitationResult(ctx context.Context, fo
 func (m *V1Result) contextValidateDeleteOrganizationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteOrganizationResult != nil {
+
+		if swag.IsZero(m.DeleteOrganizationResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteOrganizationResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteOrganizationResult")
@@ -1630,6 +1740,11 @@ func (m *V1Result) contextValidateDeleteOrganizationResult(ctx context.Context, 
 func (m *V1Result) contextValidateDeletePaymentMethodResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePaymentMethodResult != nil {
+
+		if swag.IsZero(m.DeletePaymentMethodResult) { // not required
+			return nil
+		}
+
 		if err := m.DeletePaymentMethodResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePaymentMethodResult")
@@ -1646,6 +1761,11 @@ func (m *V1Result) contextValidateDeletePaymentMethodResult(ctx context.Context,
 func (m *V1Result) contextValidateDeletePolicyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePolicyResult != nil {
+
+		if swag.IsZero(m.DeletePolicyResult) { // not required
+			return nil
+		}
+
 		if err := m.DeletePolicyResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePolicyResult")
@@ -1662,6 +1782,11 @@ func (m *V1Result) contextValidateDeletePolicyResult(ctx context.Context, format
 func (m *V1Result) contextValidateDeletePrivateKeyTagsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeletePrivateKeyTagsResult != nil {
+
+		if swag.IsZero(m.DeletePrivateKeyTagsResult) { // not required
+			return nil
+		}
+
 		if err := m.DeletePrivateKeyTagsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deletePrivateKeyTagsResult")
@@ -1678,6 +1803,11 @@ func (m *V1Result) contextValidateDeletePrivateKeyTagsResult(ctx context.Context
 func (m *V1Result) contextValidateDeleteUserTagsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUserTagsResult != nil {
+
+		if swag.IsZero(m.DeleteUserTagsResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteUserTagsResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteUserTagsResult")
@@ -1694,6 +1824,11 @@ func (m *V1Result) contextValidateDeleteUserTagsResult(ctx context.Context, form
 func (m *V1Result) contextValidateDeleteUsersResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUsersResult != nil {
+
+		if swag.IsZero(m.DeleteUsersResult) { // not required
+			return nil
+		}
+
 		if err := m.DeleteUsersResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deleteUsersResult")
@@ -1710,6 +1845,11 @@ func (m *V1Result) contextValidateDeleteUsersResult(ctx context.Context, formats
 func (m *V1Result) contextValidateDisablePrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DisablePrivateKeyResult != nil {
+
+		if swag.IsZero(m.DisablePrivateKeyResult) { // not required
+			return nil
+		}
+
 		if err := m.DisablePrivateKeyResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("disablePrivateKeyResult")
@@ -1726,6 +1866,11 @@ func (m *V1Result) contextValidateDisablePrivateKeyResult(ctx context.Context, f
 func (m *V1Result) contextValidateExportPrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ExportPrivateKeyResult != nil {
+
+		if swag.IsZero(m.ExportPrivateKeyResult) { // not required
+			return nil
+		}
+
 		if err := m.ExportPrivateKeyResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("exportPrivateKeyResult")
@@ -1742,6 +1887,11 @@ func (m *V1Result) contextValidateExportPrivateKeyResult(ctx context.Context, fo
 func (m *V1Result) contextValidateExportWalletResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ExportWalletResult != nil {
+
+		if swag.IsZero(m.ExportWalletResult) { // not required
+			return nil
+		}
+
 		if err := m.ExportWalletResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("exportWalletResult")
@@ -1758,6 +1908,11 @@ func (m *V1Result) contextValidateExportWalletResult(ctx context.Context, format
 func (m *V1Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryResult != nil {
+
+		if swag.IsZero(m.InitUserEmailRecoveryResult) { // not required
+			return nil
+		}
+
 		if err := m.InitUserEmailRecoveryResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("initUserEmailRecoveryResult")
@@ -1774,6 +1929,11 @@ func (m *V1Result) contextValidateInitUserEmailRecoveryResult(ctx context.Contex
 func (m *V1Result) contextValidateRecoverUserResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RecoverUserResult != nil {
+
+		if swag.IsZero(m.RecoverUserResult) { // not required
+			return nil
+		}
+
 		if err := m.RecoverUserResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("recoverUserResult")
@@ -1790,6 +1950,11 @@ func (m *V1Result) contextValidateRecoverUserResult(ctx context.Context, formats
 func (m *V1Result) contextValidateRemoveOrganizationFeatureResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RemoveOrganizationFeatureResult != nil {
+
+		if swag.IsZero(m.RemoveOrganizationFeatureResult) { // not required
+			return nil
+		}
+
 		if err := m.RemoveOrganizationFeatureResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("removeOrganizationFeatureResult")
@@ -1806,6 +1971,11 @@ func (m *V1Result) contextValidateRemoveOrganizationFeatureResult(ctx context.Co
 func (m *V1Result) contextValidateSetOrganizationFeatureResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SetOrganizationFeatureResult != nil {
+
+		if swag.IsZero(m.SetOrganizationFeatureResult) { // not required
+			return nil
+		}
+
 		if err := m.SetOrganizationFeatureResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("setOrganizationFeatureResult")
@@ -1822,6 +1992,11 @@ func (m *V1Result) contextValidateSetOrganizationFeatureResult(ctx context.Conte
 func (m *V1Result) contextValidateSetPaymentMethodResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SetPaymentMethodResult != nil {
+
+		if swag.IsZero(m.SetPaymentMethodResult) { // not required
+			return nil
+		}
+
 		if err := m.SetPaymentMethodResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("setPaymentMethodResult")
@@ -1838,6 +2013,11 @@ func (m *V1Result) contextValidateSetPaymentMethodResult(ctx context.Context, fo
 func (m *V1Result) contextValidateSignRawPayloadResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignRawPayloadResult != nil {
+
+		if swag.IsZero(m.SignRawPayloadResult) { // not required
+			return nil
+		}
+
 		if err := m.SignRawPayloadResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signRawPayloadResult")
@@ -1854,6 +2034,11 @@ func (m *V1Result) contextValidateSignRawPayloadResult(ctx context.Context, form
 func (m *V1Result) contextValidateSignTransactionResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SignTransactionResult != nil {
+
+		if swag.IsZero(m.SignTransactionResult) { // not required
+			return nil
+		}
+
 		if err := m.SignTransactionResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("signTransactionResult")
@@ -1870,6 +2055,11 @@ func (m *V1Result) contextValidateSignTransactionResult(ctx context.Context, for
 func (m *V1Result) contextValidateUpdatePolicyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePolicyResult != nil {
+
+		if swag.IsZero(m.UpdatePolicyResult) { // not required
+			return nil
+		}
+
 		if err := m.UpdatePolicyResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatePolicyResult")
@@ -1886,6 +2076,11 @@ func (m *V1Result) contextValidateUpdatePolicyResult(ctx context.Context, format
 func (m *V1Result) contextValidateUpdatePrivateKeyTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePrivateKeyTagResult != nil {
+
+		if swag.IsZero(m.UpdatePrivateKeyTagResult) { // not required
+			return nil
+		}
+
 		if err := m.UpdatePrivateKeyTagResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatePrivateKeyTagResult")
@@ -1902,6 +2097,11 @@ func (m *V1Result) contextValidateUpdatePrivateKeyTagResult(ctx context.Context,
 func (m *V1Result) contextValidateUpdateUserResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateUserResult != nil {
+
+		if swag.IsZero(m.UpdateUserResult) { // not required
+			return nil
+		}
+
 		if err := m.UpdateUserResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateUserResult")
@@ -1918,6 +2118,11 @@ func (m *V1Result) contextValidateUpdateUserResult(ctx context.Context, formats 
 func (m *V1Result) contextValidateUpdateUserTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateUserTagResult != nil {
+
+		if swag.IsZero(m.UpdateUserTagResult) { // not required
+			return nil
+		}
+
 		if err := m.UpdateUserTagResult.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updateUserTagResult")

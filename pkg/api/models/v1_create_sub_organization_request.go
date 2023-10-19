@@ -34,7 +34,7 @@ type V1CreateSubOrganizationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4]
+	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var v1CreateSubOrganizationRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV4 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
-	V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV4 string = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
+	// V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV3 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+	V1CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV3 string = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
 )
 
 // prop value enum
@@ -159,6 +159,7 @@ func (m *V1CreateSubOrganizationRequest) ContextValidate(ctx context.Context, fo
 func (m *V1CreateSubOrganizationRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
+
 		if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("parameters")
