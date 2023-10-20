@@ -270,6 +270,11 @@ func (m *V1PrivateKey) contextValidateAddresses(ctx context.Context, formats str
 	for i := 0; i < len(m.Addresses); i++ {
 
 		if m.Addresses[i] != nil {
+
+			if swag.IsZero(m.Addresses[i]) { // not required
+				return nil
+			}
+
 			if err := m.Addresses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("addresses" + "." + strconv.Itoa(i))
@@ -288,6 +293,7 @@ func (m *V1PrivateKey) contextValidateAddresses(ctx context.Context, formats str
 func (m *V1PrivateKey) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -304,6 +310,7 @@ func (m *V1PrivateKey) contextValidateCreatedAt(ctx context.Context, formats str
 func (m *V1PrivateKey) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
+
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")
@@ -320,6 +327,7 @@ func (m *V1PrivateKey) contextValidateCurve(ctx context.Context, formats strfmt.
 func (m *V1PrivateKey) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

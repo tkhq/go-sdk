@@ -23,8 +23,16 @@
       "description": "Policies allow for deep customization of the security of your Organization. They can be used to grant permissions or restrict usage of Users and Private Keys. The Policy Engine analyzes all of your Policies on each request to determine whether an Activity is allowed.\n\nSee [Policy Overview](../managing-policies/overview) for more information"
     },
     {
+      "name": "Wallets",
+      "description": "Wallets contain collections of deterministically generated cryptographic public / private key pairs that share a common seed. Turnkey securely holds the common seed, but only you can access it. In most cases, Wallets should be preferred over Private Keys since they can be represented by a mnemonic phrase, used across a variety of cryptographic curves, and can derive many addresses."
+    },
+    {
+      "name": "Signatures",
+      "description": "Signatures are used to validate the authenticity and integrity of a digital message. Signatures are a fundamental building block in blockchains. Turnkey makes it easy to produce signatures by allowing you to sign with an address. If Turnkey doesn't yet support an address format you need, you can generate and sign with the public key instead by using the address format `ADDRESS_FORMAT_COMPRESSED`."
+    },
+    {
       "name": "Private Keys",
-      "description": "Private Keys are cryptographic public / private key pairs that can be used for cryptocurrency needs or more generalized encryption. Think of Private Keys as your own programmable wallet. Turnkey securely holds all Private Key materials for you, but only you can access them."
+      "description": "Private Keys are cryptographic public / private key pairs that can be used for cryptocurrency needs or more generalized encryption. Turnkey securely holds all Private Key materials for you, but only you can access them."
     },
     {
       "name": "Private Key Tags",
@@ -799,7 +807,7 @@
     "/public/v1/submit/create_wallet": {
       "post": {
         "summary": "Create Wallet",
-        "description": "Create a Wallet",
+        "description": "Create a Wallet and derive addresses",
         "operationId": "PublicApiService_CreateWallet",
         "responses": {
           "200": {
@@ -825,13 +833,13 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/submit/create_wallet_accounts": {
       "post": {
-        "summary": "Create Wallet accounts",
-        "description": "Create Wallet accounts",
+        "summary": "Create Wallet Accounts",
+        "description": "Derive additional addresses using an existing wallet",
         "operationId": "PublicApiService_CreateWalletAccounts",
         "responses": {
           "200": {
@@ -857,7 +865,7 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/submit/delete_api_keys": {
@@ -924,7 +932,7 @@
         "tags": ["Authenticators"]
       }
     },
-    "/public/v1/submit/delete_invitations": {
+    "/public/v1/submit/delete_invitation": {
       "post": {
         "summary": "Delete Invitation",
         "description": "Delete an existing Invitation",
@@ -1049,13 +1057,13 @@
             }
           }
         ],
-        "tags": ["PublicApiService"]
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/submit/init_user_email_recovery": {
       "post": {
-        "summary": "Init Recovery",
-        "description": "Initializes a new recovery",
+        "summary": "Init Email Recovery",
+        "description": "Initializes a new email recovery",
         "operationId": "PublicApiService_InitUserEmailRecovery",
         "responses": {
           "200": {
@@ -1081,7 +1089,7 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": ["User Recovery"]
       }
     },
     "/public/v1/submit/recover_user": {
@@ -1113,7 +1121,7 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": ["User Recovery"]
       }
     },
     "/public/v1/submit/reject_activity": {
@@ -1177,7 +1185,7 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": ["Features"]
       }
     },
     "/public/v1/submit/set_organization_feature": {
@@ -1209,13 +1217,13 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": ["Features"]
       }
     },
     "/public/v1/submit/sign_raw_payload": {
       "post": {
         "summary": "Sign Raw Payload",
-        "description": "Sign a raw payload with a Private Key",
+        "description": "Sign a raw payload",
         "operationId": "PublicApiService_SignRawPayload",
         "responses": {
           "200": {
@@ -1241,13 +1249,13 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": ["Signatures"]
       }
     },
     "/public/v1/submit/sign_transaction": {
       "post": {
         "summary": "Sign Transaction",
-        "description": "Sign a transaction with a Private Key",
+        "description": "Sign a transaction",
         "operationId": "PublicApiService_SignTransaction",
         "responses": {
           "200": {
@@ -1273,7 +1281,7 @@
             }
           }
         ],
-        "tags": ["Private Keys"]
+        "tags": ["Signatures"]
       }
     },
     "/public/v1/submit/update_allowed_origins": {
@@ -1305,7 +1313,7 @@
             }
           }
         ],
-        "tags": ["Organizations"]
+        "tags": ["Features"]
       }
     },
     "/public/v1/submit/update_policy": {
@@ -4962,7 +4970,7 @@
       "properties": {
         "signWith": {
           "type": "string",
-          "description": "The Private Key identifier or address."
+          "description": "A Wallet account address, Private Key address, or Private Key identifier."
         },
         "payload": {
           "type": "string",
@@ -5040,7 +5048,7 @@
       "properties": {
         "signWith": {
           "type": "string",
-          "description": "The Private Key identifier or address."
+          "description": "A Wallet account address, Private Key address, or Private Key identifier."
         },
         "unsignedTransaction": {
           "type": "string",
@@ -5765,15 +5773,19 @@
   "x-tagGroups": [
     {
       "name": "ORGANIZATIONS",
-      "tags": ["Organizations", "Invitations", "Policies"]
+      "tags": ["Organizations", "Invitations", "Policies", "Features"]
     },
     {
       "name": "PRIVATE KEYS",
-      "tags": ["Private Keys", "Private Key Tags"]
+      "tags": ["Wallets", "Signatures", "Private Keys", "Private Key Tags"]
     },
     {
       "name": "USERS",
-      "tags": ["Users", "User Tags", "Authenticators", "API Keys", "Who am I?"]
+      "tags": ["Users", "User Tags", "User Recovery"]
+    },
+    {
+      "name": "CREDENTIALS",
+      "tags": ["Authenticators", "API Keys", "Who am I?"]
     },
     {
       "name": "ACTIVITIES",

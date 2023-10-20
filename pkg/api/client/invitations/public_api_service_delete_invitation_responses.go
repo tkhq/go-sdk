@@ -86,11 +86,11 @@ func (o *PublicAPIServiceDeleteInvitationOK) Code() int {
 }
 
 func (o *PublicAPIServiceDeleteInvitationOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_invitations][%d] publicApiServiceDeleteInvitationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_invitation][%d] publicApiServiceDeleteInvitationOK  %+v", 200, o.Payload)
 }
 
 func (o *PublicAPIServiceDeleteInvitationOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_invitations][%d] publicApiServiceDeleteInvitationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_invitation][%d] publicApiServiceDeleteInvitationOK  %+v", 200, o.Payload)
 }
 
 func (o *PublicAPIServiceDeleteInvitationOK) GetPayload() *models.V1ActivityResponse {
@@ -158,11 +158,11 @@ func (o *PublicAPIServiceDeleteInvitationDefault) Code() int {
 }
 
 func (o *PublicAPIServiceDeleteInvitationDefault) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_invitations][%d] PublicApiService_DeleteInvitation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_invitation][%d] PublicApiService_DeleteInvitation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PublicAPIServiceDeleteInvitationDefault) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_invitations][%d] PublicApiService_DeleteInvitation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_invitation][%d] PublicApiService_DeleteInvitation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PublicAPIServiceDeleteInvitationDefault) GetPayload() *models.RPCStatus {
