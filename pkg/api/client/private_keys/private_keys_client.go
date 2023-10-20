@@ -36,10 +36,6 @@ type ClientService interface {
 
 	PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeysOK, error)
 
-	PublicAPIServiceSignRawPayload(params *PublicAPIServiceSignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignRawPayloadOK, error)
-
-	PublicAPIServiceSignTransaction(params *PublicAPIServiceSignTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignTransactionOK, error)
-
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -200,86 +196,6 @@ func (a *Client) PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPriva
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PublicAPIServiceGetPrivateKeysDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceSignRawPayload signs raw payload
-
-Sign a raw payload with a Private Key
-*/
-func (a *Client) PublicAPIServiceSignRawPayload(params *PublicAPIServiceSignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignRawPayloadOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceSignRawPayloadParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_SignRawPayload",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/sign_raw_payload",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceSignRawPayloadReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceSignRawPayloadOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceSignRawPayloadDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceSignTransaction signs transaction
-
-Sign a transaction with a Private Key
-*/
-func (a *Client) PublicAPIServiceSignTransaction(params *PublicAPIServiceSignTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSignTransactionOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceSignTransactionParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_SignTransaction",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/sign_transaction",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceSignTransactionReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceSignTransactionOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceSignTransactionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

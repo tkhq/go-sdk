@@ -147,6 +147,7 @@ func (m *V1InvitationParams) ContextValidate(ctx context.Context, formats strfmt
 func (m *V1InvitationParams) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AccessType != nil {
+
 		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("accessType")

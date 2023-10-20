@@ -158,6 +158,7 @@ func (m *V1Wallet) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *V1Wallet) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -174,6 +175,7 @@ func (m *V1Wallet) contextValidateCreatedAt(ctx context.Context, formats strfmt.
 func (m *V1Wallet) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

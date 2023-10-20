@@ -152,6 +152,11 @@ func (m *V1CreateSubOrganizationIntentV4) contextValidateRootUsers(ctx context.C
 	for i := 0; i < len(m.RootUsers); i++ {
 
 		if m.RootUsers[i] != nil {
+
+			if swag.IsZero(m.RootUsers[i]) { // not required
+				return nil
+			}
+
 			if err := m.RootUsers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("rootUsers" + "." + strconv.Itoa(i))
@@ -170,6 +175,11 @@ func (m *V1CreateSubOrganizationIntentV4) contextValidateRootUsers(ctx context.C
 func (m *V1CreateSubOrganizationIntentV4) contextValidateWallet(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Wallet != nil {
+
+		if swag.IsZero(m.Wallet) { // not required
+			return nil
+		}
+
 		if err := m.Wallet.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wallet")
