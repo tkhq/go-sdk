@@ -75,6 +75,7 @@ func (m *V1NOOPCodegenAnchorResponse) ContextValidate(ctx context.Context, forma
 func (m *V1NOOPCodegenAnchorResponse) contextValidateStamp(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Stamp != nil {
+
 		if err := m.Stamp.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("stamp")

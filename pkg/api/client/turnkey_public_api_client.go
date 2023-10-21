@@ -14,14 +14,18 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/api_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/authenticators"
 	"github.com/tkhq/go-sdk/pkg/api/client/consensus"
+	"github.com/tkhq/go-sdk/pkg/api/client/features"
 	"github.com/tkhq/go-sdk/pkg/api/client/invitations"
 	"github.com/tkhq/go-sdk/pkg/api/client/organizations"
 	"github.com/tkhq/go-sdk/pkg/api/client/policies"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_key_tags"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/public_api_service"
+	"github.com/tkhq/go-sdk/pkg/api/client/signatures"
+	"github.com/tkhq/go-sdk/pkg/api/client/user_recovery"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_tags"
 	"github.com/tkhq/go-sdk/pkg/api/client/users"
+	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 	"github.com/tkhq/go-sdk/pkg/api/client/who_am_i"
 )
 
@@ -71,14 +75,18 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyPub
 	cli.APIKeys = api_keys.New(transport, formats)
 	cli.Authenticators = authenticators.New(transport, formats)
 	cli.Consensus = consensus.New(transport, formats)
+	cli.Features = features.New(transport, formats)
 	cli.Invitations = invitations.New(transport, formats)
 	cli.Organizations = organizations.New(transport, formats)
 	cli.Policies = policies.New(transport, formats)
 	cli.PrivateKeyTags = private_key_tags.New(transport, formats)
 	cli.PrivateKeys = private_keys.New(transport, formats)
 	cli.PublicAPIService = public_api_service.New(transport, formats)
+	cli.Signatures = signatures.New(transport, formats)
+	cli.UserRecovery = user_recovery.New(transport, formats)
 	cli.UserTags = user_tags.New(transport, formats)
 	cli.Users = users.New(transport, formats)
+	cli.Wallets = wallets.New(transport, formats)
 	cli.WhoAmi = who_am_i.New(transport, formats)
 	return cli
 }
@@ -132,6 +140,8 @@ type TurnkeyPublicAPI struct {
 
 	Consensus consensus.ClientService
 
+	Features features.ClientService
+
 	Invitations invitations.ClientService
 
 	Organizations organizations.ClientService
@@ -144,9 +154,15 @@ type TurnkeyPublicAPI struct {
 
 	PublicAPIService public_api_service.ClientService
 
+	Signatures signatures.ClientService
+
+	UserRecovery user_recovery.ClientService
+
 	UserTags user_tags.ClientService
 
 	Users users.ClientService
+
+	Wallets wallets.ClientService
 
 	WhoAmi who_am_i.ClientService
 
@@ -160,13 +176,17 @@ func (c *TurnkeyPublicAPI) SetTransport(transport runtime.ClientTransport) {
 	c.APIKeys.SetTransport(transport)
 	c.Authenticators.SetTransport(transport)
 	c.Consensus.SetTransport(transport)
+	c.Features.SetTransport(transport)
 	c.Invitations.SetTransport(transport)
 	c.Organizations.SetTransport(transport)
 	c.Policies.SetTransport(transport)
 	c.PrivateKeyTags.SetTransport(transport)
 	c.PrivateKeys.SetTransport(transport)
 	c.PublicAPIService.SetTransport(transport)
+	c.Signatures.SetTransport(transport)
+	c.UserRecovery.SetTransport(transport)
 	c.UserTags.SetTransport(transport)
 	c.Users.SetTransport(transport)
+	c.Wallets.SetTransport(transport)
 	c.WhoAmi.SetTransport(transport)
 }

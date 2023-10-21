@@ -88,7 +88,7 @@ func (a *Client) PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDelete
 	op := &runtime.ClientOperation{
 		ID:                 "PublicApiService_DeleteInvitation",
 		Method:             "POST",
-		PathPattern:        "/public/v1/submit/delete_invitations",
+		PathPattern:        "/public/v1/submit/delete_invitation",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
