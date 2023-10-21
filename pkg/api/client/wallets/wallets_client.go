@@ -6,6 +6,8 @@ package wallets
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,34 +30,34 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateWallet(params *PublicAPIServiceCreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletOK, error)
+	CreateWallet(params *CreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletOK, error)
 
-	PublicAPIServiceCreateWalletAccounts(params *PublicAPIServiceCreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletAccountsOK, error)
+	CreateWalletAccounts(params *CreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletAccountsOK, error)
 
-	PublicAPIServiceExportWallet(params *PublicAPIServiceExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportWalletOK, error)
+	ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateWallet creates wallet
+CreateWallet creates wallet
 
 Create a Wallet and derive addresses
 */
-func (a *Client) PublicAPIServiceCreateWallet(params *PublicAPIServiceCreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletOK, error) {
+func (a *Client) CreateWallet(params *CreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateWalletParams()
+		params = NewCreateWalletParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateWallet",
+		ID:                 "CreateWallet",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_wallet",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateWalletReader{formats: a.formats},
+		Reader:             &CreateWalletReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -68,34 +70,35 @@ func (a *Client) PublicAPIServiceCreateWallet(params *PublicAPIServiceCreateWall
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateWalletOK)
+	success, ok := result.(*CreateWalletOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateWalletDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceCreateWalletAccounts creates wallet accounts
+CreateWalletAccounts creates wallet accounts
 
 Derive additional addresses using an existing wallet
 */
-func (a *Client) PublicAPIServiceCreateWalletAccounts(params *PublicAPIServiceCreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateWalletAccountsOK, error) {
+func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletAccountsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateWalletAccountsParams()
+		params = NewCreateWalletAccountsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateWalletAccounts",
+		ID:                 "CreateWalletAccounts",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_wallet_accounts",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateWalletAccountsReader{formats: a.formats},
+		Reader:             &CreateWalletAccountsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -108,34 +111,35 @@ func (a *Client) PublicAPIServiceCreateWalletAccounts(params *PublicAPIServiceCr
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateWalletAccountsOK)
+	success, ok := result.(*CreateWalletAccountsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateWalletAccountsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateWalletAccounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceExportWallet exports wallet
+ExportWallet exports wallet
 
 Exports a Wallet
 */
-func (a *Client) PublicAPIServiceExportWallet(params *PublicAPIServiceExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportWalletOK, error) {
+func (a *Client) ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceExportWalletParams()
+		params = NewExportWalletParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_ExportWallet",
+		ID:                 "ExportWallet",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/export_wallet",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceExportWalletReader{formats: a.formats},
+		Reader:             &ExportWalletReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -148,13 +152,14 @@ func (a *Client) PublicAPIServiceExportWallet(params *PublicAPIServiceExportWall
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceExportWalletOK)
+	success, ok := result.(*ExportWalletOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceExportWalletDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ExportWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

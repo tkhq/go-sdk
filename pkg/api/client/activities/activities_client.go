@@ -6,6 +6,8 @@ package activities
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,32 +30,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceGetActivities(params *PublicAPIServiceGetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivitiesOK, error)
+	GetActivities(params *GetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivitiesOK, error)
 
-	PublicAPIServiceGetActivity(params *PublicAPIServiceGetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivityOK, error)
+	GetActivity(params *GetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivityOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceGetActivities lists activities
+GetActivities lists activities
 
 List all Activities within an Organization
 */
-func (a *Client) PublicAPIServiceGetActivities(params *PublicAPIServiceGetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivitiesOK, error) {
+func (a *Client) GetActivities(params *GetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivitiesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetActivitiesParams()
+		params = NewGetActivitiesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetActivities",
+		ID:                 "GetActivities",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/list_activities",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetActivitiesReader{formats: a.formats},
+		Reader:             &GetActivitiesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -66,34 +68,35 @@ func (a *Client) PublicAPIServiceGetActivities(params *PublicAPIServiceGetActivi
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetActivitiesOK)
+	success, ok := result.(*GetActivitiesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetActivitiesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetActivities: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetActivity gets activity
+GetActivity gets activity
 
 Get details about an Activity
 */
-func (a *Client) PublicAPIServiceGetActivity(params *PublicAPIServiceGetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetActivityOK, error) {
+func (a *Client) GetActivity(params *GetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivityOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetActivityParams()
+		params = NewGetActivityParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetActivity",
+		ID:                 "GetActivity",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_activity",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetActivityReader{formats: a.formats},
+		Reader:             &GetActivityReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -106,13 +109,14 @@ func (a *Client) PublicAPIServiceGetActivity(params *PublicAPIServiceGetActivity
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetActivityOK)
+	success, ok := result.(*GetActivityOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetActivityDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetActivity: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

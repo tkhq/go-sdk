@@ -6,6 +6,8 @@ package policies
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,38 +30,38 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreatePolicy(params *PublicAPIServiceCreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePolicyOK, error)
+	CreatePolicy(params *CreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyOK, error)
 
-	PublicAPIServiceDeletePolicy(params *PublicAPIServiceDeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeletePolicyOK, error)
+	DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error)
 
-	PublicAPIServiceGetPolicies(params *PublicAPIServiceGetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPoliciesOK, error)
+	GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPoliciesOK, error)
 
-	PublicAPIServiceGetPolicy(params *PublicAPIServiceGetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPolicyOK, error)
+	GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyOK, error)
 
-	PublicAPIServiceUpdatePolicy(params *PublicAPIServiceUpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePolicyOK, error)
+	UpdatePolicy(params *UpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePolicyOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreatePolicy creates policy
+CreatePolicy creates policy
 
 Create a new Policy
 */
-func (a *Client) PublicAPIServiceCreatePolicy(params *PublicAPIServiceCreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePolicyOK, error) {
+func (a *Client) CreatePolicy(params *CreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreatePolicyParams()
+		params = NewCreatePolicyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreatePolicy",
+		ID:                 "CreatePolicy",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_policy",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreatePolicyReader{formats: a.formats},
+		Reader:             &CreatePolicyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -72,34 +74,35 @@ func (a *Client) PublicAPIServiceCreatePolicy(params *PublicAPIServiceCreatePoli
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreatePolicyOK)
+	success, ok := result.(*CreatePolicyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreatePolicyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreatePolicy: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceDeletePolicy deletes policy
+DeletePolicy deletes policy
 
 Delete an existing Policy
 */
-func (a *Client) PublicAPIServiceDeletePolicy(params *PublicAPIServiceDeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeletePolicyOK, error) {
+func (a *Client) DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceDeletePolicyParams()
+		params = NewDeletePolicyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_DeletePolicy",
+		ID:                 "DeletePolicy",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/delete_policy",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceDeletePolicyReader{formats: a.formats},
+		Reader:             &DeletePolicyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -112,34 +115,35 @@ func (a *Client) PublicAPIServiceDeletePolicy(params *PublicAPIServiceDeletePoli
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceDeletePolicyOK)
+	success, ok := result.(*DeletePolicyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceDeletePolicyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeletePolicy: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetPolicies lists policies
+GetPolicies lists policies
 
 List all Policies within an Organization
 */
-func (a *Client) PublicAPIServiceGetPolicies(params *PublicAPIServiceGetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPoliciesOK, error) {
+func (a *Client) GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPoliciesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetPoliciesParams()
+		params = NewGetPoliciesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetPolicies",
+		ID:                 "GetPolicies",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/list_policies",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetPoliciesReader{formats: a.formats},
+		Reader:             &GetPoliciesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -152,34 +156,35 @@ func (a *Client) PublicAPIServiceGetPolicies(params *PublicAPIServiceGetPolicies
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetPoliciesOK)
+	success, ok := result.(*GetPoliciesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetPoliciesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetPolicy gets policy
+GetPolicy gets policy
 
 Get details about a Policy
 */
-func (a *Client) PublicAPIServiceGetPolicy(params *PublicAPIServiceGetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPolicyOK, error) {
+func (a *Client) GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetPolicyParams()
+		params = NewGetPolicyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetPolicy",
+		ID:                 "GetPolicy",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_policy",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetPolicyReader{formats: a.formats},
+		Reader:             &GetPolicyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -192,34 +197,35 @@ func (a *Client) PublicAPIServiceGetPolicy(params *PublicAPIServiceGetPolicyPara
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetPolicyOK)
+	success, ok := result.(*GetPolicyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetPolicyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPolicy: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceUpdatePolicy updates policy
+UpdatePolicy updates policy
 
 Update an existing Policy
 */
-func (a *Client) PublicAPIServiceUpdatePolicy(params *PublicAPIServiceUpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePolicyOK, error) {
+func (a *Client) UpdatePolicy(params *UpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePolicyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdatePolicyParams()
+		params = NewUpdatePolicyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdatePolicy",
+		ID:                 "UpdatePolicy",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_policy",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdatePolicyReader{formats: a.formats},
+		Reader:             &UpdatePolicyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -232,13 +238,14 @@ func (a *Client) PublicAPIServiceUpdatePolicy(params *PublicAPIServiceUpdatePoli
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdatePolicyOK)
+	success, ok := result.(*UpdatePolicyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdatePolicyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdatePolicy: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

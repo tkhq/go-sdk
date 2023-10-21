@@ -6,6 +6,8 @@ package private_key_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,32 +30,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreatePrivateKeyTag(params *PublicAPIServiceCreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeyTagOK, error)
+	CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeyTagOK, error)
 
-	PublicAPIServiceUpdatePrivateKeyTag(params *PublicAPIServiceUpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePrivateKeyTagOK, error)
+	UpdatePrivateKeyTag(params *UpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePrivateKeyTagOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreatePrivateKeyTag creates private key tag
+CreatePrivateKeyTag creates private key tag
 
 Create a private key tag and add it to private keys.
 */
-func (a *Client) PublicAPIServiceCreatePrivateKeyTag(params *PublicAPIServiceCreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeyTagOK, error) {
+func (a *Client) CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeyTagOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreatePrivateKeyTagParams()
+		params = NewCreatePrivateKeyTagParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreatePrivateKeyTag",
+		ID:                 "CreatePrivateKeyTag",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_private_key_tag",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreatePrivateKeyTagReader{formats: a.formats},
+		Reader:             &CreatePrivateKeyTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -66,34 +68,35 @@ func (a *Client) PublicAPIServiceCreatePrivateKeyTag(params *PublicAPIServiceCre
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreatePrivateKeyTagOK)
+	success, ok := result.(*CreatePrivateKeyTagOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreatePrivateKeyTagDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreatePrivateKeyTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceUpdatePrivateKeyTag updates private key tag
+UpdatePrivateKeyTag updates private key tag
 
 Update human-readable name or associated private keys. Note that this activity is atomic: all of the updates will succeed at once, or all of them will fail.
 */
-func (a *Client) PublicAPIServiceUpdatePrivateKeyTag(params *PublicAPIServiceUpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdatePrivateKeyTagOK, error) {
+func (a *Client) UpdatePrivateKeyTag(params *UpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePrivateKeyTagOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdatePrivateKeyTagParams()
+		params = NewUpdatePrivateKeyTagParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdatePrivateKeyTag",
+		ID:                 "UpdatePrivateKeyTag",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_private_key_tag",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdatePrivateKeyTagReader{formats: a.formats},
+		Reader:             &UpdatePrivateKeyTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -106,13 +109,14 @@ func (a *Client) PublicAPIServiceUpdatePrivateKeyTag(params *PublicAPIServiceUpd
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdatePrivateKeyTagOK)
+	success, ok := result.(*UpdatePrivateKeyTagOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdatePrivateKeyTagDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdatePrivateKeyTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/who_am_i"
+	"github.com/tkhq/go-sdk/pkg/api/client/sessions"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 )
 
@@ -17,11 +17,11 @@ func main() {
 		log.Fatal("failed to create new SDK client:", err)
 	}
 
-	p := who_am_i.NewPublicAPIServiceGetWhoamiParams().WithBody(&models.V1GetWhoamiRequest{
+	p := sessions.NewGetWhoamiParams().WithBody(&models.GetWhoamiRequest{
 		OrganizationID: client.DefaultOrganization(),
 	})
 
-	resp, err := client.V0().WhoAmi.PublicAPIServiceGetWhoami(p, client.Authenticator)
+	resp, err := client.V0().Sessions.GetWhoami(p, client.Authenticator)
 	if err != nil {
 		log.Fatal("failed to make WhoAmI request:", err)
 	}

@@ -6,6 +6,8 @@ package features
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,34 +30,34 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServiceRemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRemoveOrganizationFeatureOK, error)
+	RemoveOrganizationFeature(params *RemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveOrganizationFeatureOK, error)
 
-	PublicAPIServiceSetOrganizationFeature(params *PublicAPIServiceSetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSetOrganizationFeatureOK, error)
+	SetOrganizationFeature(params *SetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SetOrganizationFeatureOK, error)
 
-	PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateAllowedOriginsOK, error)
+	UpdateAllowedOrigins(params *UpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateAllowedOriginsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceRemoveOrganizationFeature removes organization feature
+RemoveOrganizationFeature removes organization feature
 
 Removes an organization feature
 */
-func (a *Client) PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServiceRemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceRemoveOrganizationFeatureOK, error) {
+func (a *Client) RemoveOrganizationFeature(params *RemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveOrganizationFeatureOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceRemoveOrganizationFeatureParams()
+		params = NewRemoveOrganizationFeatureParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_RemoveOrganizationFeature",
+		ID:                 "RemoveOrganizationFeature",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/remove_organization_feature",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceRemoveOrganizationFeatureReader{formats: a.formats},
+		Reader:             &RemoveOrganizationFeatureReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -68,34 +70,35 @@ func (a *Client) PublicAPIServiceRemoveOrganizationFeature(params *PublicAPIServ
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceRemoveOrganizationFeatureOK)
+	success, ok := result.(*RemoveOrganizationFeatureOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceRemoveOrganizationFeatureDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for RemoveOrganizationFeature: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceSetOrganizationFeature sets organization feature
+SetOrganizationFeature sets organization feature
 
 Sets an organization feature
 */
-func (a *Client) PublicAPIServiceSetOrganizationFeature(params *PublicAPIServiceSetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceSetOrganizationFeatureOK, error) {
+func (a *Client) SetOrganizationFeature(params *SetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SetOrganizationFeatureOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceSetOrganizationFeatureParams()
+		params = NewSetOrganizationFeatureParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_SetOrganizationFeature",
+		ID:                 "SetOrganizationFeature",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/set_organization_feature",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceSetOrganizationFeatureReader{formats: a.formats},
+		Reader:             &SetOrganizationFeatureReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -108,34 +111,35 @@ func (a *Client) PublicAPIServiceSetOrganizationFeature(params *PublicAPIService
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceSetOrganizationFeatureOK)
+	success, ok := result.(*SetOrganizationFeatureOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceSetOrganizationFeatureDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for SetOrganizationFeature: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceUpdateAllowedOrigins updates allowable origins
+UpdateAllowedOrigins updates allowable origins
 
 Update the allowable origins for credentials and requests
 */
-func (a *Client) PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateAllowedOriginsOK, error) {
+func (a *Client) UpdateAllowedOrigins(params *UpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateAllowedOriginsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdateAllowedOriginsParams()
+		params = NewUpdateAllowedOriginsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdateAllowedOrigins",
+		ID:                 "UpdateAllowedOrigins",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_allowed_origins",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdateAllowedOriginsReader{formats: a.formats},
+		Reader:             &UpdateAllowedOriginsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -148,13 +152,14 @@ func (a *Client) PublicAPIServiceUpdateAllowedOrigins(params *PublicAPIServiceUp
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdateAllowedOriginsOK)
+	success, ok := result.(*UpdateAllowedOriginsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdateAllowedOriginsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateAllowedOrigins: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

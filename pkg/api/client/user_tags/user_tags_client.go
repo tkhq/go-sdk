@@ -6,6 +6,8 @@ package user_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,32 +30,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateUserTag(params *PublicAPIServiceCreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUserTagOK, error)
+	CreateUserTag(params *CreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserTagOK, error)
 
-	PublicAPIServiceUpdateUserTag(params *PublicAPIServiceUpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateUserTagOK, error)
+	UpdateUserTag(params *UpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserTagOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateUserTag creates user tag
+CreateUserTag creates user tag
 
 Create a user tag and add it to users.
 */
-func (a *Client) PublicAPIServiceCreateUserTag(params *PublicAPIServiceCreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUserTagOK, error) {
+func (a *Client) CreateUserTag(params *CreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserTagOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateUserTagParams()
+		params = NewCreateUserTagParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateUserTag",
+		ID:                 "CreateUserTag",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_user_tag",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateUserTagReader{formats: a.formats},
+		Reader:             &CreateUserTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -66,34 +68,35 @@ func (a *Client) PublicAPIServiceCreateUserTag(params *PublicAPIServiceCreateUse
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateUserTagOK)
+	success, ok := result.(*CreateUserTagOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateUserTagDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateUserTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceUpdateUserTag updates user tag
+UpdateUserTag updates user tag
 
 Update human-readable name or associated users. Note that this activity is atomic: all of the updates will succeed at once, or all of them will fail.
 */
-func (a *Client) PublicAPIServiceUpdateUserTag(params *PublicAPIServiceUpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateUserTagOK, error) {
+func (a *Client) UpdateUserTag(params *UpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserTagOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdateUserTagParams()
+		params = NewUpdateUserTagParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdateUserTag",
+		ID:                 "UpdateUserTag",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_user_tag",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdateUserTagReader{formats: a.formats},
+		Reader:             &UpdateUserTagReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -106,13 +109,14 @@ func (a *Client) PublicAPIServiceUpdateUserTag(params *PublicAPIServiceUpdateUse
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdateUserTagOK)
+	success, ok := result.(*UpdateUserTagOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdateUserTagDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateUserTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client
