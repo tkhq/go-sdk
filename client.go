@@ -27,14 +27,14 @@ func New(keyname string) (*Client, error) {
 
 // NewHTTPClient returns a new base HTTP API client.
 // Most users will call New() instead.
-func NewHTTPClient(formats strfmt.Registry) *client.TurnkeyPublicAPI {
+func NewHTTPClient(formats strfmt.Registry) *client.TurnkeyAPI {
 	return client.NewHTTPClient(formats)
 }
 
 // Client provides a handle by which to interact with the Turnkey API.
 type Client struct {
 	// Client is the base HTTP API Client.
-	Client *client.TurnkeyPublicAPI
+	Client *client.TurnkeyAPI
 
 	// Authenticator provides a client option authentication provider which should be attached to every API request as a clientOption.
 	Authenticator *Authenticator
@@ -54,7 +54,7 @@ func (c *Client) DefaultOrganization() *string {
 
 // V0 returns the raw initial Turnkey API client.
 // WARNING: this is a temporary API which requires a bit more work to use than the one which will be eventually offered.
-func (c *Client) V0() *client.TurnkeyPublicAPI {
+func (c *Client) V0() *client.TurnkeyAPI {
 	return c.Client
 }
 

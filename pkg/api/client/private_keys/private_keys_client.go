@@ -6,6 +6,8 @@ package private_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,36 +30,36 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreatePrivateKeys(params *PublicAPIServiceCreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeysOK, error)
+	CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeysOK, error)
 
-	PublicAPIServiceExportPrivateKey(params *PublicAPIServiceExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportPrivateKeyOK, error)
+	ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportPrivateKeyOK, error)
 
-	PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyOK, error)
+	GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeyOK, error)
 
-	PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeysOK, error)
+	GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeysOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreatePrivateKeys creates private keys
+CreatePrivateKeys creates private keys
 
 Create new Private Keys
 */
-func (a *Client) PublicAPIServiceCreatePrivateKeys(params *PublicAPIServiceCreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreatePrivateKeysOK, error) {
+func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeysOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreatePrivateKeysParams()
+		params = NewCreatePrivateKeysParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreatePrivateKeys",
+		ID:                 "CreatePrivateKeys",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_private_keys",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreatePrivateKeysReader{formats: a.formats},
+		Reader:             &CreatePrivateKeysReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -70,34 +72,35 @@ func (a *Client) PublicAPIServiceCreatePrivateKeys(params *PublicAPIServiceCreat
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreatePrivateKeysOK)
+	success, ok := result.(*CreatePrivateKeysOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreatePrivateKeysDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreatePrivateKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceExportPrivateKey exports private key
+ExportPrivateKey exports private key
 
 Exports a Private Key
 */
-func (a *Client) PublicAPIServiceExportPrivateKey(params *PublicAPIServiceExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceExportPrivateKeyOK, error) {
+func (a *Client) ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportPrivateKeyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceExportPrivateKeyParams()
+		params = NewExportPrivateKeyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_ExportPrivateKey",
+		ID:                 "ExportPrivateKey",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/export_private_key",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceExportPrivateKeyReader{formats: a.formats},
+		Reader:             &ExportPrivateKeyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -110,34 +113,35 @@ func (a *Client) PublicAPIServiceExportPrivateKey(params *PublicAPIServiceExport
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceExportPrivateKeyOK)
+	success, ok := result.(*ExportPrivateKeyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceExportPrivateKeyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ExportPrivateKey: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetPrivateKey gets private key
+GetPrivateKey gets private key
 
 Get details about a Private Key
 */
-func (a *Client) PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeyOK, error) {
+func (a *Client) GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetPrivateKeyParams()
+		params = NewGetPrivateKeyParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetPrivateKey",
+		ID:                 "GetPrivateKey",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_private_key",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetPrivateKeyReader{formats: a.formats},
+		Reader:             &GetPrivateKeyReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -150,34 +154,35 @@ func (a *Client) PublicAPIServiceGetPrivateKey(params *PublicAPIServiceGetPrivat
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetPrivateKeyOK)
+	success, ok := result.(*GetPrivateKeyOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetPrivateKeyDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPrivateKey: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetPrivateKeys lists private keys
+GetPrivateKeys lists private keys
 
 List all Private Keys within an Organization
 */
-func (a *Client) PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetPrivateKeysOK, error) {
+func (a *Client) GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeysOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetPrivateKeysParams()
+		params = NewGetPrivateKeysParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetPrivateKeys",
+		ID:                 "GetPrivateKeys",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/list_private_keys",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetPrivateKeysReader{formats: a.formats},
+		Reader:             &GetPrivateKeysReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -190,13 +195,14 @@ func (a *Client) PublicAPIServiceGetPrivateKeys(params *PublicAPIServiceGetPriva
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetPrivateKeysOK)
+	success, ok := result.(*GetPrivateKeysOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetPrivateKeysDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPrivateKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

@@ -6,6 +6,8 @@ package authenticators
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,36 +30,36 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateAuthenticators(params *PublicAPIServiceCreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAuthenticatorsOK, error)
+	CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateAuthenticatorsOK, error)
 
-	PublicAPIServiceDeleteAuthenticators(params *PublicAPIServiceDeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteAuthenticatorsOK, error)
+	DeleteAuthenticators(params *DeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAuthenticatorsOK, error)
 
-	PublicAPIServiceGetAuthenticator(params *PublicAPIServiceGetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorOK, error)
+	GetAuthenticator(params *GetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorOK, error)
 
-	PublicAPIServiceGetAuthenticators(params *PublicAPIServiceGetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorsOK, error)
+	GetAuthenticators(params *GetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateAuthenticators creates authenticators
+CreateAuthenticators creates authenticators
 
 Create Authenticators to authenticate requests to Turnkey
 */
-func (a *Client) PublicAPIServiceCreateAuthenticators(params *PublicAPIServiceCreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAuthenticatorsOK, error) {
+func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateAuthenticatorsParams()
+		params = NewCreateAuthenticatorsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateAuthenticators",
+		ID:                 "CreateAuthenticators",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_authenticators",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateAuthenticatorsReader{formats: a.formats},
+		Reader:             &CreateAuthenticatorsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -70,34 +72,35 @@ func (a *Client) PublicAPIServiceCreateAuthenticators(params *PublicAPIServiceCr
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateAuthenticatorsOK)
+	success, ok := result.(*CreateAuthenticatorsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateAuthenticatorsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateAuthenticators: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceDeleteAuthenticators deletes authenticators
+DeleteAuthenticators deletes authenticators
 
 Remove authenticators from a User
 */
-func (a *Client) PublicAPIServiceDeleteAuthenticators(params *PublicAPIServiceDeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteAuthenticatorsOK, error) {
+func (a *Client) DeleteAuthenticators(params *DeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceDeleteAuthenticatorsParams()
+		params = NewDeleteAuthenticatorsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_DeleteAuthenticators",
+		ID:                 "DeleteAuthenticators",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/delete_authenticators",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceDeleteAuthenticatorsReader{formats: a.formats},
+		Reader:             &DeleteAuthenticatorsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -110,34 +113,35 @@ func (a *Client) PublicAPIServiceDeleteAuthenticators(params *PublicAPIServiceDe
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceDeleteAuthenticatorsOK)
+	success, ok := result.(*DeleteAuthenticatorsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceDeleteAuthenticatorsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteAuthenticators: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetAuthenticator gets authenticator
+GetAuthenticator gets authenticator
 
 Get details about an authenticator
 */
-func (a *Client) PublicAPIServiceGetAuthenticator(params *PublicAPIServiceGetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorOK, error) {
+func (a *Client) GetAuthenticator(params *GetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetAuthenticatorParams()
+		params = NewGetAuthenticatorParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetAuthenticator",
+		ID:                 "GetAuthenticator",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_authenticator",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetAuthenticatorReader{formats: a.formats},
+		Reader:             &GetAuthenticatorReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -150,34 +154,35 @@ func (a *Client) PublicAPIServiceGetAuthenticator(params *PublicAPIServiceGetAut
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetAuthenticatorOK)
+	success, ok := result.(*GetAuthenticatorOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetAuthenticatorDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetAuthenticator: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetAuthenticators gets authenticators
+GetAuthenticators gets authenticators
 
 Get details about authenticators for a user
 */
-func (a *Client) PublicAPIServiceGetAuthenticators(params *PublicAPIServiceGetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetAuthenticatorsOK, error) {
+func (a *Client) GetAuthenticators(params *GetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetAuthenticatorsParams()
+		params = NewGetAuthenticatorsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetAuthenticators",
+		ID:                 "GetAuthenticators",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_authenticators",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetAuthenticatorsReader{formats: a.formats},
+		Reader:             &GetAuthenticatorsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -190,13 +195,14 @@ func (a *Client) PublicAPIServiceGetAuthenticators(params *PublicAPIServiceGetAu
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetAuthenticatorsOK)
+	success, ok := result.(*GetAuthenticatorsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetAuthenticatorsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetAuthenticators: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

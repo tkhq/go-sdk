@@ -6,6 +6,8 @@ package organizations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,34 +30,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateSubOrganization(params *PublicAPIServiceCreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateSubOrganizationOK, error)
+	CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error)
 
-	PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetOrganizationOK, error)
-
-	PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateRootQuorumOK, error)
+	UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateSubOrganization creates sub organization
+CreateSubOrganization creates sub organization
 
 Create a new Sub-Organization
 */
-func (a *Client) PublicAPIServiceCreateSubOrganization(params *PublicAPIServiceCreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateSubOrganizationOK, error) {
+func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateSubOrganizationParams()
+		params = NewCreateSubOrganizationParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateSubOrganization",
+		ID:                 "CreateSubOrganization",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_sub_organization",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateSubOrganizationReader{formats: a.formats},
+		Reader:             &CreateSubOrganizationReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -68,74 +68,35 @@ func (a *Client) PublicAPIServiceCreateSubOrganization(params *PublicAPIServiceC
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateSubOrganizationOK)
+	success, ok := result.(*CreateSubOrganizationOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateSubOrganizationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateSubOrganization: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetOrganization gets organization
-
-Get details about an Organization
-*/
-func (a *Client) PublicAPIServiceGetOrganization(params *PublicAPIServiceGetOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetOrganizationOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceGetOrganizationParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetOrganization",
-		Method:             "POST",
-		PathPattern:        "/public/v1/query/get_organization",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceGetOrganizationReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceGetOrganizationOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetOrganizationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceUpdateRootQuorum updates root quorum
+UpdateRootQuorum updates root quorum
 
 Set the threshold and members of the root quorum. This must be approved by the current root quorum.
 */
-func (a *Client) PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateRootQuorumOK, error) {
+func (a *Client) UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdateRootQuorumParams()
+		params = NewUpdateRootQuorumParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdateRootQuorum",
+		ID:                 "UpdateRootQuorum",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_root_quorum",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdateRootQuorumReader{formats: a.formats},
+		Reader:             &UpdateRootQuorumReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -148,13 +109,14 @@ func (a *Client) PublicAPIServiceUpdateRootQuorum(params *PublicAPIServiceUpdate
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdateRootQuorumOK)
+	success, ok := result.(*UpdateRootQuorumOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdateRootQuorumDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateRootQuorum: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

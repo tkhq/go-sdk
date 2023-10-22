@@ -6,6 +6,8 @@ package invitations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,32 +30,32 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateInvitations(params *PublicAPIServiceCreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateInvitationsOK, error)
+	CreateInvitations(params *CreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvitationsOK, error)
 
-	PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteInvitationOK, error)
+	DeleteInvitation(params *DeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvitationOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateInvitations creates invitations
+CreateInvitations creates invitations
 
 Create Invitations to join an existing Organization
 */
-func (a *Client) PublicAPIServiceCreateInvitations(params *PublicAPIServiceCreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateInvitationsOK, error) {
+func (a *Client) CreateInvitations(params *CreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvitationsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateInvitationsParams()
+		params = NewCreateInvitationsParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateInvitations",
+		ID:                 "CreateInvitations",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_invitations",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateInvitationsReader{formats: a.formats},
+		Reader:             &CreateInvitationsReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -66,34 +68,35 @@ func (a *Client) PublicAPIServiceCreateInvitations(params *PublicAPIServiceCreat
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateInvitationsOK)
+	success, ok := result.(*CreateInvitationsOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateInvitationsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateInvitations: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceDeleteInvitation deletes invitation
+DeleteInvitation deletes invitation
 
 Delete an existing Invitation
 */
-func (a *Client) PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceDeleteInvitationOK, error) {
+func (a *Client) DeleteInvitation(params *DeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvitationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceDeleteInvitationParams()
+		params = NewDeleteInvitationParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_DeleteInvitation",
+		ID:                 "DeleteInvitation",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/delete_invitation",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceDeleteInvitationReader{formats: a.formats},
+		Reader:             &DeleteInvitationReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -106,13 +109,14 @@ func (a *Client) PublicAPIServiceDeleteInvitation(params *PublicAPIServiceDelete
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceDeleteInvitationOK)
+	success, ok := result.(*DeleteInvitationOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceDeleteInvitationDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteInvitation: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client

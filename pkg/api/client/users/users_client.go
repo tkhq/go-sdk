@@ -6,6 +6,8 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"fmt"
+
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 )
@@ -28,78 +30,36 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	PublicAPIServiceCreateAPIOnlyUsers(params *PublicAPIServiceCreateAPIOnlyUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAPIOnlyUsersOK, error)
+	CreateUsers(params *CreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUsersOK, error)
 
-	PublicAPIServiceCreateUsers(params *PublicAPIServiceCreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUsersOK, error)
+	GetUser(params *GetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUserOK, error)
 
-	PublicAPIServiceGetUser(params *PublicAPIServiceGetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetUserOK, error)
+	GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUsersOK, error)
 
-	PublicAPIServiceGetUsers(params *PublicAPIServiceGetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetUsersOK, error)
-
-	PublicAPIServiceUpdateUser(params *PublicAPIServiceUpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateUserOK, error)
+	UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-PublicAPIServiceCreateAPIOnlyUsers creates API only users
-
-Create API-only Users in an existing Organization
-*/
-func (a *Client) PublicAPIServiceCreateAPIOnlyUsers(params *PublicAPIServiceCreateAPIOnlyUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateAPIOnlyUsersOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewPublicAPIServiceCreateAPIOnlyUsersParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateApiOnlyUsers",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/create_api_only_users",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &PublicAPIServiceCreateAPIOnlyUsersReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*PublicAPIServiceCreateAPIOnlyUsersOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateAPIOnlyUsersDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-PublicAPIServiceCreateUsers creates users
+CreateUsers creates users
 
 Create Users in an existing Organization
 */
-func (a *Client) PublicAPIServiceCreateUsers(params *PublicAPIServiceCreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceCreateUsersOK, error) {
+func (a *Client) CreateUsers(params *CreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceCreateUsersParams()
+		params = NewCreateUsersParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_CreateUsers",
+		ID:                 "CreateUsers",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/create_users",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceCreateUsersReader{formats: a.formats},
+		Reader:             &CreateUsersReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -112,34 +72,35 @@ func (a *Client) PublicAPIServiceCreateUsers(params *PublicAPIServiceCreateUsers
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceCreateUsersOK)
+	success, ok := result.(*CreateUsersOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceCreateUsersDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateUsers: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetUser gets user
+GetUser gets user
 
 Get details about a User
 */
-func (a *Client) PublicAPIServiceGetUser(params *PublicAPIServiceGetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetUserOK, error) {
+func (a *Client) GetUser(params *GetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetUserParams()
+		params = NewGetUserParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetUser",
+		ID:                 "GetUser",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/get_user",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetUserReader{formats: a.formats},
+		Reader:             &GetUserReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -152,34 +113,35 @@ func (a *Client) PublicAPIServiceGetUser(params *PublicAPIServiceGetUserParams, 
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetUserOK)
+	success, ok := result.(*GetUserOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetUserDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetUser: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceGetUsers lists users
+GetUsers lists users
 
 List all Users within an Organization
 */
-func (a *Client) PublicAPIServiceGetUsers(params *PublicAPIServiceGetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceGetUsersOK, error) {
+func (a *Client) GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUsersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceGetUsersParams()
+		params = NewGetUsersParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_GetUsers",
+		ID:                 "GetUsers",
 		Method:             "POST",
 		PathPattern:        "/public/v1/query/list_users",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceGetUsersReader{formats: a.formats},
+		Reader:             &GetUsersReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -192,34 +154,35 @@ func (a *Client) PublicAPIServiceGetUsers(params *PublicAPIServiceGetUsersParams
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceGetUsersOK)
+	success, ok := result.(*GetUsersOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceGetUsersDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetUsers: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
-PublicAPIServiceUpdateUser updates user
+UpdateUser updates user
 
 Update a User in an existing Organization
 */
-func (a *Client) PublicAPIServiceUpdateUser(params *PublicAPIServiceUpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublicAPIServiceUpdateUserOK, error) {
+func (a *Client) UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewPublicAPIServiceUpdateUserParams()
+		params = NewUpdateUserParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "PublicApiService_UpdateUser",
+		ID:                 "UpdateUser",
 		Method:             "POST",
 		PathPattern:        "/public/v1/submit/update_user",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &PublicAPIServiceUpdateUserReader{formats: a.formats},
+		Reader:             &UpdateUserReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -232,13 +195,14 @@ func (a *Client) PublicAPIServiceUpdateUser(params *PublicAPIServiceUpdateUserPa
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*PublicAPIServiceUpdateUserOK)
+	success, ok := result.(*UpdateUserOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*PublicAPIServiceUpdateUserDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateUser: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 // SetTransport changes the transport on the client
