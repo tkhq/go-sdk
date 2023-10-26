@@ -109,7 +109,6 @@ func (m *AuthenticatorParamsV2) ContextValidate(ctx context.Context, formats str
 func (m *AuthenticatorParamsV2) contextValidateAttestation(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Attestation != nil {
-
 		if err := m.Attestation.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("attestation")

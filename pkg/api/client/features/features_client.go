@@ -122,9 +122,9 @@ func (a *Client) SetOrganizationFeature(params *SetOrganizationFeatureParams, au
 }
 
 /*
-UpdateAllowedOrigins updates allowable origins
+UpdateAllowedOrigins updates allowed origins
 
-Update the allowable origins for credentials and requests
+Update the origins WebAuthN credentials are allowed to sign requests from. Setting this on a Parent-Organization applies to all Sub-Organizations.
 */
 func (a *Client) UpdateAllowedOrigins(params *UpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateAllowedOriginsOK, error) {
 	// TODO: Validate the params before sending

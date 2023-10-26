@@ -75,7 +75,6 @@ func (m *ActivityResponse) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *ActivityResponse) contextValidateActivity(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Activity != nil {
-
 		if err := m.Activity.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("activity")

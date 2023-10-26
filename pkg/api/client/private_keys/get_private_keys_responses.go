@@ -30,7 +30,7 @@ func (o *GetPrivateKeysReader) ReadResponse(response runtime.ClientResponse, con
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/query/list_private_keys] GetPrivateKeys", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 

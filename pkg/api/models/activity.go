@@ -368,7 +368,6 @@ func (m *Activity) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *Activity) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
-
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -385,7 +384,6 @@ func (m *Activity) contextValidateCreatedAt(ctx context.Context, formats strfmt.
 func (m *Activity) contextValidateIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Intent != nil {
-
 		if err := m.Intent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("intent")
@@ -402,7 +400,6 @@ func (m *Activity) contextValidateIntent(ctx context.Context, formats strfmt.Reg
 func (m *Activity) contextValidateResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Result != nil {
-
 		if err := m.Result.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("result")
@@ -419,7 +416,6 @@ func (m *Activity) contextValidateResult(ctx context.Context, formats strfmt.Reg
 func (m *Activity) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
-
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")
@@ -436,7 +432,6 @@ func (m *Activity) contextValidateStatus(ctx context.Context, formats strfmt.Reg
 func (m *Activity) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Type != nil {
-
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("type")
@@ -453,7 +448,6 @@ func (m *Activity) contextValidateType(ctx context.Context, formats strfmt.Regis
 func (m *Activity) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
-
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")
@@ -472,11 +466,6 @@ func (m *Activity) contextValidateVotes(ctx context.Context, formats strfmt.Regi
 	for i := 0; i < len(m.Votes); i++ {
 
 		if m.Votes[i] != nil {
-
-			if swag.IsZero(m.Votes[i]) { // not required
-				return nil
-			}
-
 			if err := m.Votes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("votes" + "." + strconv.Itoa(i))

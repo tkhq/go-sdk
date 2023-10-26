@@ -279,7 +279,6 @@ func (m *Vote) ContextValidate(ctx context.Context, formats strfmt.Registry) err
 func (m *Vote) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
-
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -296,7 +295,6 @@ func (m *Vote) contextValidateCreatedAt(ctx context.Context, formats strfmt.Regi
 func (m *Vote) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.User != nil {
-
 		if err := m.User.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("user")

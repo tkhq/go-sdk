@@ -168,7 +168,6 @@ func (m *WalletAccountParams) ContextValidate(ctx context.Context, formats strfm
 func (m *WalletAccountParams) contextValidateAddressFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AddressFormat != nil {
-
 		if err := m.AddressFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("addressFormat")
@@ -185,7 +184,6 @@ func (m *WalletAccountParams) contextValidateAddressFormat(ctx context.Context, 
 func (m *WalletAccountParams) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
-
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")
@@ -202,7 +200,6 @@ func (m *WalletAccountParams) contextValidateCurve(ctx context.Context, formats 
 func (m *WalletAccountParams) contextValidatePathFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PathFormat != nil {
-
 		if err := m.PathFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("pathFormat")

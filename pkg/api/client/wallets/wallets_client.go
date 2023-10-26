@@ -36,6 +36,12 @@ type ClientService interface {
 
 	ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error)
 
+	GetWallet(params *GetWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletOK, error)
+
+	GetWalletAccounts(params *GetWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountsOK, error)
+
+	GetWallets(params *GetWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -159,6 +165,129 @@ func (a *Client) ExportWallet(params *ExportWalletParams, authInfo runtime.Clien
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for ExportWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetWallet gets wallet
+
+Get details about a Wallet
+*/
+func (a *Client) GetWallet(params *GetWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetWalletParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetWallet",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_wallet",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetWalletReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetWalletOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetWalletAccounts lists wallets accounts
+
+List all Accounts wirhin a Wallet
+*/
+func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetWalletAccountsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetWalletAccounts",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_wallet_accounts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetWalletAccountsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetWalletAccountsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetWalletAccounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetWallets lists wallets
+
+List all Wallets within an Organization
+*/
+func (a *Client) GetWallets(params *GetWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetWalletsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetWallets",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_wallets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetWalletsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetWalletsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetWallets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

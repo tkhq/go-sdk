@@ -119,11 +119,6 @@ func (m *CreateSubOrganizationIntentV2) contextValidateRootUsers(ctx context.Con
 	for i := 0; i < len(m.RootUsers); i++ {
 
 		if m.RootUsers[i] != nil {
-
-			if swag.IsZero(m.RootUsers[i]) { // not required
-				return nil
-			}
-
 			if err := m.RootUsers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("rootUsers" + "." + strconv.Itoa(i))
