@@ -144,11 +144,6 @@ func (m *RootUserParams) contextValidateAPIKeys(ctx context.Context, formats str
 	for i := 0; i < len(m.APIKeys); i++ {
 
 		if m.APIKeys[i] != nil {
-
-			if swag.IsZero(m.APIKeys[i]) { // not required
-				return nil
-			}
-
 			if err := m.APIKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("apiKeys" + "." + strconv.Itoa(i))
@@ -169,11 +164,6 @@ func (m *RootUserParams) contextValidateAuthenticators(ctx context.Context, form
 	for i := 0; i < len(m.Authenticators); i++ {
 
 		if m.Authenticators[i] != nil {
-
-			if swag.IsZero(m.Authenticators[i]) { // not required
-				return nil
-			}
-
 			if err := m.Authenticators[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("authenticators" + "." + strconv.Itoa(i))

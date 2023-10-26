@@ -162,10 +162,6 @@ func (m *AuthenticatorAttestationResponse) contextValidateTransports(ctx context
 
 	for i := 0; i < len(m.Transports); i++ {
 
-		if swag.IsZero(m.Transports[i]) { // not required
-			return nil
-		}
-
 		if err := m.Transports[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("transports" + "." + strconv.Itoa(i))
