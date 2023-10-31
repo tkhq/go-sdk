@@ -22,7 +22,7 @@ type DataV1Address struct {
 	Address string `json:"address,omitempty"`
 
 	// format
-	Format DataV1AddressFormat `json:"format,omitempty"`
+	Format AddressFormat `json:"format,omitempty"`
 }
 
 // Validate validates this data v1 address

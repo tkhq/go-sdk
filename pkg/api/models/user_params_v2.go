@@ -22,7 +22,7 @@ type UserParamsV2 struct {
 
 	// The User's permissible access method(s).
 	// Required: true
-	AccessType *ActivityV1AccessType `json:"accessType"`
+	AccessType *AccessType `json:"accessType"`
 
 	// A list of API Key parameters.
 	// Required: true

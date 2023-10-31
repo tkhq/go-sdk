@@ -34,7 +34,7 @@ type Attestation struct {
 
 	// The type of authenticator transports.
 	// Required: true
-	Transports []WebauthnV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 }
 
 // Validate validates this attestation

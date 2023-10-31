@@ -19,7 +19,7 @@ import (
 type SelectorV2 struct {
 
 	// operator
-	Operator ActivityV1Operator `json:"operator,omitempty"`
+	Operator Operator `json:"operator,omitempty"`
 
 	// subject
 	Subject string `json:"subject,omitempty"`

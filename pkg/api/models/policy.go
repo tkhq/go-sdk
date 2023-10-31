@@ -7,7 +7,6 @@ package models
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -34,7 +33,7 @@ type Policy struct {
 
 	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
-	Effect *DataV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// Human-readable notes added by a User to describe a particular policy.
 	// Required: true
@@ -47,10 +46,6 @@ type Policy struct {
 	// Human-readable name for a Policy.
 	// Required: true
 	PolicyName *string `json:"policyName"`
-
-	// A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details.
-	// Required: true
-	Selectors []*DataV1Selector `json:"selectors"`
 
 	// updated at
 	// Required: true
@@ -86,10 +81,6 @@ func (m *Policy) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePolicyName(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSelectors(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -192,33 +183,6 @@ func (m *Policy) validatePolicyName(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Policy) validateSelectors(formats strfmt.Registry) error {
-
-	if err := validate.Required("selectors", "body", m.Selectors); err != nil {
-		return err
-	}
-
-	for i := 0; i < len(m.Selectors); i++ {
-		if swag.IsZero(m.Selectors[i]) { // not required
-			continue
-		}
-
-		if m.Selectors[i] != nil {
-			if err := m.Selectors[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("selectors" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("selectors" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
 func (m *Policy) validateUpdatedAt(formats strfmt.Registry) error {
 
 	if err := validate.Required("updatedAt", "body", m.UpdatedAt); err != nil {
@@ -248,10 +212,6 @@ func (m *Policy) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEffect(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateSelectors(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -294,31 +254,6 @@ func (m *Policy) contextValidateEffect(ctx context.Context, formats strfmt.Regis
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *Policy) contextValidateSelectors(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Selectors); i++ {
-
-		if m.Selectors[i] != nil {
-
-			if swag.IsZero(m.Selectors[i]) { // not required
-				return nil
-			}
-
-			if err := m.Selectors[i].ContextValidate(ctx, formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("selectors" + "." + strconv.Itoa(i))
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("selectors" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
 	}
 
 	return nil

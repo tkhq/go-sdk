@@ -26,7 +26,7 @@ type UpdatePolicyIntent struct {
 	PolicyConsensus string `json:"policyConsensus,omitempty"`
 
 	// The instruction to DENY or ALLOW an activity (optional).
-	PolicyEffect ActivityV1Effect `json:"policyEffect,omitempty"`
+	PolicyEffect Effect `json:"policyEffect,omitempty"`
 
 	// Unique identifier for a given Policy.
 	// Required: true

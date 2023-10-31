@@ -27,7 +27,7 @@ type CreatePolicyIntentV3 struct {
 
 	// The instruction to DENY or ALLOW an activity.
 	// Required: true
-	Effect *ActivityV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`

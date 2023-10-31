@@ -21,11 +21,11 @@ type WalletAccountParams struct {
 
 	// Address format used to generate a wallet Acccount.
 	// Required: true
-	AddressFormat *CommonV1AddressFormat `json:"addressFormat"`
+	AddressFormat *AddressFormat `json:"addressFormat"`
 
 	// Cryptographic curve used to generate a wallet Account.
 	// Required: true
-	Curve *CommonV1Curve `json:"curve"`
+	Curve *Curve `json:"curve"`
 
 	// Path used to generate a wallet Account.
 	// Required: true

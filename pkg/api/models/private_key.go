@@ -30,7 +30,7 @@ type PrivateKey struct {
 
 	// Cryptographic Curve used to generate a given Private Key.
 	// Required: true
-	Curve *DataV1Curve `json:"curve"`
+	Curve *Curve `json:"curve"`
 
 	// True when a given Private Key is exported, false otherwise.
 	// Required: true

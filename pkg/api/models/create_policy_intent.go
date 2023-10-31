@@ -22,7 +22,7 @@ type CreatePolicyIntent struct {
 
 	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
-	Effect *ActivityV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
@@ -33,7 +33,7 @@ type CreatePolicyIntent struct {
 
 	// A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details.
 	// Required: true
-	Selectors []*ActivityV1Selector `json:"selectors"`
+	Selectors []*Selector `json:"selectors"`
 }
 
 // Validate validates this create policy intent

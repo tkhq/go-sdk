@@ -14,82 +14,82 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// DataV1Operator data v1 operator
+// Operator operator
 //
-// swagger:model data.v1.Operator
-type DataV1Operator string
+// swagger:model Operator
+type Operator string
 
-func NewDataV1Operator(value DataV1Operator) *DataV1Operator {
+func NewOperator(value Operator) *Operator {
 	return &value
 }
 
-// Pointer returns a pointer to a freshly-allocated DataV1Operator.
-func (m DataV1Operator) Pointer() *DataV1Operator {
+// Pointer returns a pointer to a freshly-allocated Operator.
+func (m Operator) Pointer() *Operator {
 	return &m
 }
 
 const (
 
 	// OperatorEqual captures enum value "OPERATOR_EQUAL"
-	OperatorEqual DataV1Operator = "OPERATOR_EQUAL"
+	OperatorEqual Operator = "OPERATOR_EQUAL"
 
 	// OperatorMoreThan captures enum value "OPERATOR_MORE_THAN"
-	OperatorMoreThan DataV1Operator = "OPERATOR_MORE_THAN"
+	OperatorMoreThan Operator = "OPERATOR_MORE_THAN"
 
 	// OperatorMoreThanOrEqual captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
-	OperatorMoreThanOrEqual DataV1Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
+	OperatorMoreThanOrEqual Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
 
 	// OperatorLessThan captures enum value "OPERATOR_LESS_THAN"
-	OperatorLessThan DataV1Operator = "OPERATOR_LESS_THAN"
+	OperatorLessThan Operator = "OPERATOR_LESS_THAN"
 
 	// OperatorLessThanOrEqual captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
-	OperatorLessThanOrEqual DataV1Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
+	OperatorLessThanOrEqual Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
 
 	// OperatorContains captures enum value "OPERATOR_CONTAINS"
-	OperatorContains DataV1Operator = "OPERATOR_CONTAINS"
+	OperatorContains Operator = "OPERATOR_CONTAINS"
 
 	// OperatorNotEqual captures enum value "OPERATOR_NOT_EQUAL"
-	OperatorNotEqual DataV1Operator = "OPERATOR_NOT_EQUAL"
+	OperatorNotEqual Operator = "OPERATOR_NOT_EQUAL"
 
 	// OperatorIn captures enum value "OPERATOR_IN"
-	OperatorIn DataV1Operator = "OPERATOR_IN"
+	OperatorIn Operator = "OPERATOR_IN"
 
 	// OperatorNotIn captures enum value "OPERATOR_NOT_IN"
-	OperatorNotIn DataV1Operator = "OPERATOR_NOT_IN"
+	OperatorNotIn Operator = "OPERATOR_NOT_IN"
 
 	// OperatorContainsOne captures enum value "OPERATOR_CONTAINS_ONE"
-	OperatorContainsOne DataV1Operator = "OPERATOR_CONTAINS_ONE"
+	OperatorContainsOne Operator = "OPERATOR_CONTAINS_ONE"
 
 	// OperatorContainsAll captures enum value "OPERATOR_CONTAINS_ALL"
-	OperatorContainsAll DataV1Operator = "OPERATOR_CONTAINS_ALL"
+	OperatorContainsAll Operator = "OPERATOR_CONTAINS_ALL"
 )
 
 // for schema
-var DataV1OperatorEnum []DataV1Operator
+var OperatorEnum []Operator
 
 func init() {
-	var res []DataV1Operator
+	var res []Operator
 	if err := json.Unmarshal([]byte(`["OPERATOR_EQUAL","OPERATOR_MORE_THAN","OPERATOR_MORE_THAN_OR_EQUAL","OPERATOR_LESS_THAN","OPERATOR_LESS_THAN_OR_EQUAL","OPERATOR_CONTAINS","OPERATOR_NOT_EQUAL","OPERATOR_IN","OPERATOR_NOT_IN","OPERATOR_CONTAINS_ONE","OPERATOR_CONTAINS_ALL"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		DataV1OperatorEnum = append(DataV1OperatorEnum, v)
+		OperatorEnum = append(OperatorEnum, v)
 	}
 }
 
-func (m DataV1Operator) validateDataV1OperatorEnum(path, location string, value DataV1Operator) error {
-	if err := validate.EnumCase(path, location, value, DataV1OperatorEnum, true); err != nil {
+func (m Operator) validateOperatorEnum(path, location string, value Operator) error {
+	if err := validate.EnumCase(path, location, value, OperatorEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-// Validate validates this data v1 operator
-func (m DataV1Operator) Validate(formats strfmt.Registry) error {
+// Validate validates this operator
+func (m Operator) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	// value enum
-	if err := m.validateDataV1OperatorEnum("", "body", m); err != nil {
+	if err := m.validateOperatorEnum("", "body", m); err != nil {
 		return err
 	}
 
@@ -99,7 +99,7 @@ func (m DataV1Operator) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this data v1 operator based on context it is used
-func (m DataV1Operator) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this operator based on context it is used
+func (m Operator) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

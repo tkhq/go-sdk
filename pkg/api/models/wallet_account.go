@@ -25,7 +25,7 @@ type WalletAccount struct {
 
 	// Address format used to generate the Acccount.
 	// Required: true
-	AddressFormat *CommonV1AddressFormat `json:"addressFormat"`
+	AddressFormat *AddressFormat `json:"addressFormat"`
 
 	// created at
 	// Required: true
@@ -33,7 +33,7 @@ type WalletAccount struct {
 
 	// Cryptographic curve used to generate the Account.
 	// Required: true
-	Curve *CommonV1Curve `json:"curve"`
+	Curve *Curve `json:"curve"`
 
 	// The Organization the Account belongs to.
 	// Required: true

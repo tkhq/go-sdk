@@ -34,7 +34,7 @@ type AuthenticatorAttestationResponse struct {
 	ClientDataJSON *string `json:"clientDataJson"`
 
 	// transports
-	Transports []WebauthnV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 }
 
 // Validate validates this authenticator attestation response

@@ -30,10 +30,10 @@ func main() {
 		TimestampMs:    &timestampString,
 		Parameters: &models.SignTransactionIntentV2{
 			SignWith:            &privateKeyID,
-			Type:                models.TransactionTypeTRANSACTIONTYPEETHEREUM.Pointer(),
+			Type:                models.TransactionTypeEthereum.Pointer(),
 			UnsignedTransaction: &unsignedTransaction,
 		},
-		Type: (*string)(models.ActivityTypeACTIVITYTYPESIGNTRANSACTION.Pointer()),
+		Type: (*string)(models.ActivityTypeSignTransaction.Pointer()),
 	})
 
 	signResp, err := client.V0().Signers.SignTransaction(pkParams, client.Authenticator)

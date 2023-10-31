@@ -54,7 +54,7 @@ type Authenticator struct {
 
 	// Types of transports that may be used by an Authenticator (e.g., USB, NFC, BLE).
 	// Required: true
-	Transports []DataV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 
 	// updated at
 	// Required: true

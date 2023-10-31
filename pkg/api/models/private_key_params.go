@@ -22,11 +22,11 @@ type PrivateKeyParams struct {
 
 	// Cryptocurrency-specific formats for a derived address (e.g., Ethereum).
 	// Required: true
-	AddressFormats []CommonV1AddressFormat `json:"addressFormats"`
+	AddressFormats []AddressFormat `json:"addressFormats"`
 
 	// Cryptographic Curve used to generate a given Private Key.
 	// Required: true
-	Curve *CommonV1Curve `json:"curve"`
+	Curve *Curve `json:"curve"`
 
 	// Human-readable name for a Private Key.
 	// Required: true

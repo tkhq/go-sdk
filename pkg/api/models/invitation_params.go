@@ -21,7 +21,7 @@ type InvitationParams struct {
 
 	// The User's permissible access method(s).
 	// Required: true
-	AccessType *ActivityV1AccessType `json:"accessType"`
+	AccessType *AccessType `json:"accessType"`
 
 	// The email address of the intended Invitation recipient.
 	// Required: true

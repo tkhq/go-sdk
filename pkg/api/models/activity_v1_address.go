@@ -22,7 +22,7 @@ type ActivityV1Address struct {
 	Address string `json:"address,omitempty"`
 
 	// format
-	Format CommonV1AddressFormat `json:"format,omitempty"`
+	Format AddressFormat `json:"format,omitempty"`
 }
 
 // Validate validates this activity v1 address

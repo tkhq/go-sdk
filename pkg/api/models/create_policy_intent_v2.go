@@ -22,7 +22,7 @@ type CreatePolicyIntentV2 struct {
 
 	// Whether to ALLOW or DENY requests that match the condition and consensus requirements.
 	// Required: true
-	Effect *ActivityV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
