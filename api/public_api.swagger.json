@@ -5218,6 +5218,14 @@
         }
       }
     },
+    "data.v1.CredentialType": {
+      "type": "string",
+      "enum": [
+        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
+        "CREDENTIAL_TYPE_API_KEY_P256",
+        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+      ]
+    },
     "external.data.v1.Credential": {
       "type": "object",
       "properties": {
@@ -5226,18 +5234,10 @@
           "description": "The public component of a cryptographic key pair used to sign messages and transactions."
         },
         "type": {
-          "$ref": "#/definitions/external.data.v1.CredentialType"
+          "$ref": "#/definitions/data.v1.CredentialType"
         }
       },
       "required": ["publicKey", "type"]
-    },
-    "external.data.v1.CredentialType": {
-      "type": "string",
-      "enum": [
-        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
-        "CREDENTIAL_TYPE_API_KEY_P256",
-        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
-      ]
     },
     "external.data.v1.Timestamp": {
       "type": "object",
