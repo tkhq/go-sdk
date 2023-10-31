@@ -30,15 +30,15 @@ func (m DataV1Curve) Pointer() *DataV1Curve {
 
 const (
 
-	// DataV1CurveCURVESECP256K1 captures enum value "CURVE_SECP256K1"
-	DataV1CurveCURVESECP256K1 DataV1Curve = "CURVE_SECP256K1"
+	// CurveSecp256k1 captures enum value "CURVE_SECP256K1"
+	CurveSecp256k1 DataV1Curve = "CURVE_SECP256K1"
 
-	// DataV1CurveCURVEED25519 captures enum value "CURVE_ED25519"
-	DataV1CurveCURVEED25519 DataV1Curve = "CURVE_ED25519"
+	// CurveEd25519 captures enum value "CURVE_ED25519"
+	CurveEd25519 DataV1Curve = "CURVE_ED25519"
 )
 
 // for schema
-var dataV1CurveEnum []interface{}
+var DataV1CurveEnum []DataV1Curve
 
 func init() {
 	var res []DataV1Curve
@@ -46,12 +46,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		dataV1CurveEnum = append(dataV1CurveEnum, v)
+		DataV1CurveEnum = append(DataV1CurveEnum, v)
 	}
 }
 
 func (m DataV1Curve) validateDataV1CurveEnum(path, location string, value DataV1Curve) error {
-	if err := validate.EnumCase(path, location, value, dataV1CurveEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, DataV1CurveEnum, true); err != nil {
 		return err
 	}
 	return nil

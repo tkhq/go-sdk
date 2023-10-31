@@ -30,27 +30,27 @@ func (m ActivityStatus) Pointer() *ActivityStatus {
 
 const (
 
-	// ActivityStatusACTIVITYSTATUSCREATED captures enum value "ACTIVITY_STATUS_CREATED"
-	ActivityStatusACTIVITYSTATUSCREATED ActivityStatus = "ACTIVITY_STATUS_CREATED"
+	// ActivityStatusCreated captures enum value "ACTIVITY_STATUS_CREATED"
+	ActivityStatusCreated ActivityStatus = "ACTIVITY_STATUS_CREATED"
 
-	// ActivityStatusACTIVITYSTATUSPENDING captures enum value "ACTIVITY_STATUS_PENDING"
-	ActivityStatusACTIVITYSTATUSPENDING ActivityStatus = "ACTIVITY_STATUS_PENDING"
+	// ActivityStatusPending captures enum value "ACTIVITY_STATUS_PENDING"
+	ActivityStatusPending ActivityStatus = "ACTIVITY_STATUS_PENDING"
 
-	// ActivityStatusACTIVITYSTATUSCOMPLETED captures enum value "ACTIVITY_STATUS_COMPLETED"
-	ActivityStatusACTIVITYSTATUSCOMPLETED ActivityStatus = "ACTIVITY_STATUS_COMPLETED"
+	// ActivityStatusCompleted captures enum value "ACTIVITY_STATUS_COMPLETED"
+	ActivityStatusCompleted ActivityStatus = "ACTIVITY_STATUS_COMPLETED"
 
-	// ActivityStatusACTIVITYSTATUSFAILED captures enum value "ACTIVITY_STATUS_FAILED"
-	ActivityStatusACTIVITYSTATUSFAILED ActivityStatus = "ACTIVITY_STATUS_FAILED"
+	// ActivityStatusFailed captures enum value "ACTIVITY_STATUS_FAILED"
+	ActivityStatusFailed ActivityStatus = "ACTIVITY_STATUS_FAILED"
 
-	// ActivityStatusACTIVITYSTATUSCONSENSUSNEEDED captures enum value "ACTIVITY_STATUS_CONSENSUS_NEEDED"
-	ActivityStatusACTIVITYSTATUSCONSENSUSNEEDED ActivityStatus = "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+	// ActivityStatusConsensusNeeded captures enum value "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+	ActivityStatusConsensusNeeded ActivityStatus = "ACTIVITY_STATUS_CONSENSUS_NEEDED"
 
-	// ActivityStatusACTIVITYSTATUSREJECTED captures enum value "ACTIVITY_STATUS_REJECTED"
-	ActivityStatusACTIVITYSTATUSREJECTED ActivityStatus = "ACTIVITY_STATUS_REJECTED"
+	// ActivityStatusRejected captures enum value "ACTIVITY_STATUS_REJECTED"
+	ActivityStatusRejected ActivityStatus = "ACTIVITY_STATUS_REJECTED"
 )
 
 // for schema
-var activityStatusEnum []interface{}
+var ActivityStatusEnum []ActivityStatus
 
 func init() {
 	var res []ActivityStatus
@@ -58,12 +58,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityStatusEnum = append(activityStatusEnum, v)
+		ActivityStatusEnum = append(ActivityStatusEnum, v)
 	}
 }
 
 func (m ActivityStatus) validateActivityStatusEnum(path, location string, value ActivityStatus) error {
-	if err := validate.EnumCase(path, location, value, activityStatusEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityStatusEnum, true); err != nil {
 		return err
 	}
 	return nil

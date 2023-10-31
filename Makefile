@@ -11,7 +11,7 @@ test:
 .PHONY: generate
 generate: clean
 	mkdir -p pkg/api
-	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI
+	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
 	go mod tidy
 
 .PHONY: clean

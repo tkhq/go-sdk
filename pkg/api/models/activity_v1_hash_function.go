@@ -30,21 +30,21 @@ func (m ActivityV1HashFunction) Pointer() *ActivityV1HashFunction {
 
 const (
 
-	// ActivityV1HashFunctionHASHFUNCTIONNOOP captures enum value "HASH_FUNCTION_NO_OP"
-	ActivityV1HashFunctionHASHFUNCTIONNOOP ActivityV1HashFunction = "HASH_FUNCTION_NO_OP"
+	// HashFunctionNoOp captures enum value "HASH_FUNCTION_NO_OP"
+	HashFunctionNoOp ActivityV1HashFunction = "HASH_FUNCTION_NO_OP"
 
-	// ActivityV1HashFunctionHASHFUNCTIONSHA256 captures enum value "HASH_FUNCTION_SHA256"
-	ActivityV1HashFunctionHASHFUNCTIONSHA256 ActivityV1HashFunction = "HASH_FUNCTION_SHA256"
+	// HashFunctionSha256 captures enum value "HASH_FUNCTION_SHA256"
+	HashFunctionSha256 ActivityV1HashFunction = "HASH_FUNCTION_SHA256"
 
-	// ActivityV1HashFunctionHASHFUNCTIONKECCAK256 captures enum value "HASH_FUNCTION_KECCAK256"
-	ActivityV1HashFunctionHASHFUNCTIONKECCAK256 ActivityV1HashFunction = "HASH_FUNCTION_KECCAK256"
+	// HashFunctionKeccak256 captures enum value "HASH_FUNCTION_KECCAK256"
+	HashFunctionKeccak256 ActivityV1HashFunction = "HASH_FUNCTION_KECCAK256"
 
-	// ActivityV1HashFunctionHASHFUNCTIONNOTAPPLICABLE captures enum value "HASH_FUNCTION_NOT_APPLICABLE"
-	ActivityV1HashFunctionHASHFUNCTIONNOTAPPLICABLE ActivityV1HashFunction = "HASH_FUNCTION_NOT_APPLICABLE"
+	// HashFunctionNotApplicable captures enum value "HASH_FUNCTION_NOT_APPLICABLE"
+	HashFunctionNotApplicable ActivityV1HashFunction = "HASH_FUNCTION_NOT_APPLICABLE"
 )
 
 // for schema
-var activityV1HashFunctionEnum []interface{}
+var ActivityV1HashFunctionEnum []ActivityV1HashFunction
 
 func init() {
 	var res []ActivityV1HashFunction
@@ -52,12 +52,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityV1HashFunctionEnum = append(activityV1HashFunctionEnum, v)
+		ActivityV1HashFunctionEnum = append(ActivityV1HashFunctionEnum, v)
 	}
 }
 
 func (m ActivityV1HashFunction) validateActivityV1HashFunctionEnum(path, location string, value ActivityV1HashFunction) error {
-	if err := validate.EnumCase(path, location, value, activityV1HashFunctionEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityV1HashFunctionEnum, true); err != nil {
 		return err
 	}
 	return nil

@@ -30,42 +30,42 @@ func (m ActivityV1Operator) Pointer() *ActivityV1Operator {
 
 const (
 
-	// ActivityV1OperatorOPERATOREQUAL captures enum value "OPERATOR_EQUAL"
-	ActivityV1OperatorOPERATOREQUAL ActivityV1Operator = "OPERATOR_EQUAL"
+	// OperatorEqual captures enum value "OPERATOR_EQUAL"
+	OperatorEqual ActivityV1Operator = "OPERATOR_EQUAL"
 
-	// ActivityV1OperatorOPERATORMORETHAN captures enum value "OPERATOR_MORE_THAN"
-	ActivityV1OperatorOPERATORMORETHAN ActivityV1Operator = "OPERATOR_MORE_THAN"
+	// OperatorMoreThan captures enum value "OPERATOR_MORE_THAN"
+	OperatorMoreThan ActivityV1Operator = "OPERATOR_MORE_THAN"
 
-	// ActivityV1OperatorOPERATORMORETHANOREQUAL captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
-	ActivityV1OperatorOPERATORMORETHANOREQUAL ActivityV1Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
+	// OperatorMoreThanOrEqual captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
+	OperatorMoreThanOrEqual ActivityV1Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
 
-	// ActivityV1OperatorOPERATORLESSTHAN captures enum value "OPERATOR_LESS_THAN"
-	ActivityV1OperatorOPERATORLESSTHAN ActivityV1Operator = "OPERATOR_LESS_THAN"
+	// OperatorLessThan captures enum value "OPERATOR_LESS_THAN"
+	OperatorLessThan ActivityV1Operator = "OPERATOR_LESS_THAN"
 
-	// ActivityV1OperatorOPERATORLESSTHANOREQUAL captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
-	ActivityV1OperatorOPERATORLESSTHANOREQUAL ActivityV1Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
+	// OperatorLessThanOrEqual captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
+	OperatorLessThanOrEqual ActivityV1Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
 
-	// ActivityV1OperatorOPERATORCONTAINS captures enum value "OPERATOR_CONTAINS"
-	ActivityV1OperatorOPERATORCONTAINS ActivityV1Operator = "OPERATOR_CONTAINS"
+	// OperatorContains captures enum value "OPERATOR_CONTAINS"
+	OperatorContains ActivityV1Operator = "OPERATOR_CONTAINS"
 
-	// ActivityV1OperatorOPERATORNOTEQUAL captures enum value "OPERATOR_NOT_EQUAL"
-	ActivityV1OperatorOPERATORNOTEQUAL ActivityV1Operator = "OPERATOR_NOT_EQUAL"
+	// OperatorNotEqual captures enum value "OPERATOR_NOT_EQUAL"
+	OperatorNotEqual ActivityV1Operator = "OPERATOR_NOT_EQUAL"
 
-	// ActivityV1OperatorOPERATORIN captures enum value "OPERATOR_IN"
-	ActivityV1OperatorOPERATORIN ActivityV1Operator = "OPERATOR_IN"
+	// OperatorIn captures enum value "OPERATOR_IN"
+	OperatorIn ActivityV1Operator = "OPERATOR_IN"
 
-	// ActivityV1OperatorOPERATORNOTIN captures enum value "OPERATOR_NOT_IN"
-	ActivityV1OperatorOPERATORNOTIN ActivityV1Operator = "OPERATOR_NOT_IN"
+	// OperatorNotIn captures enum value "OPERATOR_NOT_IN"
+	OperatorNotIn ActivityV1Operator = "OPERATOR_NOT_IN"
 
-	// ActivityV1OperatorOPERATORCONTAINSONE captures enum value "OPERATOR_CONTAINS_ONE"
-	ActivityV1OperatorOPERATORCONTAINSONE ActivityV1Operator = "OPERATOR_CONTAINS_ONE"
+	// OperatorContainsOne captures enum value "OPERATOR_CONTAINS_ONE"
+	OperatorContainsOne ActivityV1Operator = "OPERATOR_CONTAINS_ONE"
 
-	// ActivityV1OperatorOPERATORCONTAINSALL captures enum value "OPERATOR_CONTAINS_ALL"
-	ActivityV1OperatorOPERATORCONTAINSALL ActivityV1Operator = "OPERATOR_CONTAINS_ALL"
+	// OperatorContainsAll captures enum value "OPERATOR_CONTAINS_ALL"
+	OperatorContainsAll ActivityV1Operator = "OPERATOR_CONTAINS_ALL"
 )
 
 // for schema
-var activityV1OperatorEnum []interface{}
+var ActivityV1OperatorEnum []ActivityV1Operator
 
 func init() {
 	var res []ActivityV1Operator
@@ -73,12 +73,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityV1OperatorEnum = append(activityV1OperatorEnum, v)
+		ActivityV1OperatorEnum = append(ActivityV1OperatorEnum, v)
 	}
 }
 
 func (m ActivityV1Operator) validateActivityV1OperatorEnum(path, location string, value ActivityV1Operator) error {
-	if err := validate.EnumCase(path, location, value, activityV1OperatorEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityV1OperatorEnum, true); err != nil {
 		return err
 	}
 	return nil

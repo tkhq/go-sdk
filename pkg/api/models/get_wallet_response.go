@@ -75,6 +75,7 @@ func (m *GetWalletResponse) ContextValidate(ctx context.Context, formats strfmt.
 func (m *GetWalletResponse) contextValidateWallet(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Wallet != nil {
+
 		if err := m.Wallet.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wallet")

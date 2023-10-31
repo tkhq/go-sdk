@@ -30,15 +30,15 @@ func (m ActivityV1Effect) Pointer() *ActivityV1Effect {
 
 const (
 
-	// ActivityV1EffectEFFECTALLOW captures enum value "EFFECT_ALLOW"
-	ActivityV1EffectEFFECTALLOW ActivityV1Effect = "EFFECT_ALLOW"
+	// EffectAllow captures enum value "EFFECT_ALLOW"
+	EffectAllow ActivityV1Effect = "EFFECT_ALLOW"
 
-	// ActivityV1EffectEFFECTDENY captures enum value "EFFECT_DENY"
-	ActivityV1EffectEFFECTDENY ActivityV1Effect = "EFFECT_DENY"
+	// EffectDeny captures enum value "EFFECT_DENY"
+	EffectDeny ActivityV1Effect = "EFFECT_DENY"
 )
 
 // for schema
-var activityV1EffectEnum []interface{}
+var ActivityV1EffectEnum []ActivityV1Effect
 
 func init() {
 	var res []ActivityV1Effect
@@ -46,12 +46,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityV1EffectEnum = append(activityV1EffectEnum, v)
+		ActivityV1EffectEnum = append(ActivityV1EffectEnum, v)
 	}
 }
 
 func (m ActivityV1Effect) validateActivityV1EffectEnum(path, location string, value ActivityV1Effect) error {
-	if err := validate.EnumCase(path, location, value, activityV1EffectEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityV1EffectEnum, true); err != nil {
 		return err
 	}
 	return nil

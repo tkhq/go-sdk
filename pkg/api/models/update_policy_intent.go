@@ -99,6 +99,10 @@ func (m *UpdatePolicyIntent) ContextValidate(ctx context.Context, formats strfmt
 
 func (m *UpdatePolicyIntent) contextValidatePolicyEffect(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.PolicyEffect) { // not required
+		return nil
+	}
+
 	if err := m.PolicyEffect.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("policyEffect")

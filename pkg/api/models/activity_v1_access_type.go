@@ -30,18 +30,18 @@ func (m ActivityV1AccessType) Pointer() *ActivityV1AccessType {
 
 const (
 
-	// ActivityV1AccessTypeACCESSTYPEWEB captures enum value "ACCESS_TYPE_WEB"
-	ActivityV1AccessTypeACCESSTYPEWEB ActivityV1AccessType = "ACCESS_TYPE_WEB"
+	// AccessTypeWeb captures enum value "ACCESS_TYPE_WEB"
+	AccessTypeWeb ActivityV1AccessType = "ACCESS_TYPE_WEB"
 
-	// ActivityV1AccessTypeACCESSTYPEAPI captures enum value "ACCESS_TYPE_API"
-	ActivityV1AccessTypeACCESSTYPEAPI ActivityV1AccessType = "ACCESS_TYPE_API"
+	// AccessTypeAPI captures enum value "ACCESS_TYPE_API"
+	AccessTypeAPI ActivityV1AccessType = "ACCESS_TYPE_API"
 
-	// ActivityV1AccessTypeACCESSTYPEALL captures enum value "ACCESS_TYPE_ALL"
-	ActivityV1AccessTypeACCESSTYPEALL ActivityV1AccessType = "ACCESS_TYPE_ALL"
+	// AccessTypeAll captures enum value "ACCESS_TYPE_ALL"
+	AccessTypeAll ActivityV1AccessType = "ACCESS_TYPE_ALL"
 )
 
 // for schema
-var activityV1AccessTypeEnum []interface{}
+var ActivityV1AccessTypeEnum []ActivityV1AccessType
 
 func init() {
 	var res []ActivityV1AccessType
@@ -49,12 +49,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityV1AccessTypeEnum = append(activityV1AccessTypeEnum, v)
+		ActivityV1AccessTypeEnum = append(ActivityV1AccessTypeEnum, v)
 	}
 }
 
 func (m ActivityV1AccessType) validateActivityV1AccessTypeEnum(path, location string, value ActivityV1AccessType) error {
-	if err := validate.EnumCase(path, location, value, activityV1AccessTypeEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityV1AccessTypeEnum, true); err != nil {
 		return err
 	}
 	return nil

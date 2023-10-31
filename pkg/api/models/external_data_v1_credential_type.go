@@ -30,18 +30,18 @@ func (m ExternalDataV1CredentialType) Pointer() *ExternalDataV1CredentialType {
 
 const (
 
-	// ExternalDataV1CredentialTypeCREDENTIALTYPEWEBAUTHNAUTHENTICATOR captures enum value "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR"
-	ExternalDataV1CredentialTypeCREDENTIALTYPEWEBAUTHNAUTHENTICATOR ExternalDataV1CredentialType = "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR"
+	// CredentialTypeWebauthnAuthenticator captures enum value "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR"
+	CredentialTypeWebauthnAuthenticator ExternalDataV1CredentialType = "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR"
 
-	// ExternalDataV1CredentialTypeCREDENTIALTYPEAPIKEYP256 captures enum value "CREDENTIAL_TYPE_API_KEY_P256"
-	ExternalDataV1CredentialTypeCREDENTIALTYPEAPIKEYP256 ExternalDataV1CredentialType = "CREDENTIAL_TYPE_API_KEY_P256"
+	// CredentialTypeAPIKeyP256 captures enum value "CREDENTIAL_TYPE_API_KEY_P256"
+	CredentialTypeAPIKeyP256 ExternalDataV1CredentialType = "CREDENTIAL_TYPE_API_KEY_P256"
 
-	// ExternalDataV1CredentialTypeCREDENTIALTYPERECOVERUSERKEYP256 captures enum value "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
-	ExternalDataV1CredentialTypeCREDENTIALTYPERECOVERUSERKEYP256 ExternalDataV1CredentialType = "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+	// CredentialTypeRecoverUserKeyP256 captures enum value "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+	CredentialTypeRecoverUserKeyP256 ExternalDataV1CredentialType = "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
 )
 
 // for schema
-var externalDataV1CredentialTypeEnum []interface{}
+var ExternalDataV1CredentialTypeEnum []ExternalDataV1CredentialType
 
 func init() {
 	var res []ExternalDataV1CredentialType
@@ -49,12 +49,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		externalDataV1CredentialTypeEnum = append(externalDataV1CredentialTypeEnum, v)
+		ExternalDataV1CredentialTypeEnum = append(ExternalDataV1CredentialTypeEnum, v)
 	}
 }
 
 func (m ExternalDataV1CredentialType) validateExternalDataV1CredentialTypeEnum(path, location string, value ExternalDataV1CredentialType) error {
-	if err := validate.EnumCase(path, location, value, externalDataV1CredentialTypeEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ExternalDataV1CredentialTypeEnum, true); err != nil {
 		return err
 	}
 	return nil

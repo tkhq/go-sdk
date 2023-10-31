@@ -105,6 +105,7 @@ func (m *CreatePolicyIntentV3) ContextValidate(ctx context.Context, formats strf
 func (m *CreatePolicyIntentV3) contextValidateEffect(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Effect != nil {
+
 		if err := m.Effect.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("effect")

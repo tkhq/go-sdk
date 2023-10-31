@@ -85,6 +85,11 @@ func (m *CreatePrivateKeysIntent) contextValidatePrivateKeys(ctx context.Context
 	for i := 0; i < len(m.PrivateKeys); i++ {
 
 		if m.PrivateKeys[i] != nil {
+
+			if swag.IsZero(m.PrivateKeys[i]) { // not required
+				return nil
+			}
+
 			if err := m.PrivateKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("privateKeys" + "." + strconv.Itoa(i))

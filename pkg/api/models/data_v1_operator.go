@@ -30,42 +30,42 @@ func (m DataV1Operator) Pointer() *DataV1Operator {
 
 const (
 
-	// DataV1OperatorOPERATOREQUAL captures enum value "OPERATOR_EQUAL"
-	DataV1OperatorOPERATOREQUAL DataV1Operator = "OPERATOR_EQUAL"
+	// OperatorEqual captures enum value "OPERATOR_EQUAL"
+	OperatorEqual DataV1Operator = "OPERATOR_EQUAL"
 
-	// DataV1OperatorOPERATORMORETHAN captures enum value "OPERATOR_MORE_THAN"
-	DataV1OperatorOPERATORMORETHAN DataV1Operator = "OPERATOR_MORE_THAN"
+	// OperatorMoreThan captures enum value "OPERATOR_MORE_THAN"
+	OperatorMoreThan DataV1Operator = "OPERATOR_MORE_THAN"
 
-	// DataV1OperatorOPERATORMORETHANOREQUAL captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
-	DataV1OperatorOPERATORMORETHANOREQUAL DataV1Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
+	// OperatorMoreThanOrEqual captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
+	OperatorMoreThanOrEqual DataV1Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
 
-	// DataV1OperatorOPERATORLESSTHAN captures enum value "OPERATOR_LESS_THAN"
-	DataV1OperatorOPERATORLESSTHAN DataV1Operator = "OPERATOR_LESS_THAN"
+	// OperatorLessThan captures enum value "OPERATOR_LESS_THAN"
+	OperatorLessThan DataV1Operator = "OPERATOR_LESS_THAN"
 
-	// DataV1OperatorOPERATORLESSTHANOREQUAL captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
-	DataV1OperatorOPERATORLESSTHANOREQUAL DataV1Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
+	// OperatorLessThanOrEqual captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
+	OperatorLessThanOrEqual DataV1Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
 
-	// DataV1OperatorOPERATORCONTAINS captures enum value "OPERATOR_CONTAINS"
-	DataV1OperatorOPERATORCONTAINS DataV1Operator = "OPERATOR_CONTAINS"
+	// OperatorContains captures enum value "OPERATOR_CONTAINS"
+	OperatorContains DataV1Operator = "OPERATOR_CONTAINS"
 
-	// DataV1OperatorOPERATORNOTEQUAL captures enum value "OPERATOR_NOT_EQUAL"
-	DataV1OperatorOPERATORNOTEQUAL DataV1Operator = "OPERATOR_NOT_EQUAL"
+	// OperatorNotEqual captures enum value "OPERATOR_NOT_EQUAL"
+	OperatorNotEqual DataV1Operator = "OPERATOR_NOT_EQUAL"
 
-	// DataV1OperatorOPERATORIN captures enum value "OPERATOR_IN"
-	DataV1OperatorOPERATORIN DataV1Operator = "OPERATOR_IN"
+	// OperatorIn captures enum value "OPERATOR_IN"
+	OperatorIn DataV1Operator = "OPERATOR_IN"
 
-	// DataV1OperatorOPERATORNOTIN captures enum value "OPERATOR_NOT_IN"
-	DataV1OperatorOPERATORNOTIN DataV1Operator = "OPERATOR_NOT_IN"
+	// OperatorNotIn captures enum value "OPERATOR_NOT_IN"
+	OperatorNotIn DataV1Operator = "OPERATOR_NOT_IN"
 
-	// DataV1OperatorOPERATORCONTAINSONE captures enum value "OPERATOR_CONTAINS_ONE"
-	DataV1OperatorOPERATORCONTAINSONE DataV1Operator = "OPERATOR_CONTAINS_ONE"
+	// OperatorContainsOne captures enum value "OPERATOR_CONTAINS_ONE"
+	OperatorContainsOne DataV1Operator = "OPERATOR_CONTAINS_ONE"
 
-	// DataV1OperatorOPERATORCONTAINSALL captures enum value "OPERATOR_CONTAINS_ALL"
-	DataV1OperatorOPERATORCONTAINSALL DataV1Operator = "OPERATOR_CONTAINS_ALL"
+	// OperatorContainsAll captures enum value "OPERATOR_CONTAINS_ALL"
+	OperatorContainsAll DataV1Operator = "OPERATOR_CONTAINS_ALL"
 )
 
 // for schema
-var dataV1OperatorEnum []interface{}
+var DataV1OperatorEnum []DataV1Operator
 
 func init() {
 	var res []DataV1Operator
@@ -73,12 +73,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		dataV1OperatorEnum = append(dataV1OperatorEnum, v)
+		DataV1OperatorEnum = append(DataV1OperatorEnum, v)
 	}
 }
 
 func (m DataV1Operator) validateDataV1OperatorEnum(path, location string, value DataV1Operator) error {
-	if err := validate.EnumCase(path, location, value, dataV1OperatorEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, DataV1OperatorEnum, true); err != nil {
 		return err
 	}
 	return nil

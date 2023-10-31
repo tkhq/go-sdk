@@ -30,174 +30,174 @@ func (m ActivityType) Pointer() *ActivityType {
 
 const (
 
-	// ActivityTypeACTIVITYTYPECREATEAPIKEYS captures enum value "ACTIVITY_TYPE_CREATE_API_KEYS"
-	ActivityTypeACTIVITYTYPECREATEAPIKEYS ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS"
+	// ActivityTypeCreateAPIKeys captures enum value "ACTIVITY_TYPE_CREATE_API_KEYS"
+	ActivityTypeCreateAPIKeys ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS"
 
-	// ActivityTypeACTIVITYTYPECREATEUSERS captures enum value "ACTIVITY_TYPE_CREATE_USERS"
-	ActivityTypeACTIVITYTYPECREATEUSERS ActivityType = "ACTIVITY_TYPE_CREATE_USERS"
+	// ActivityTypeCreateUsers captures enum value "ACTIVITY_TYPE_CREATE_USERS"
+	ActivityTypeCreateUsers ActivityType = "ACTIVITY_TYPE_CREATE_USERS"
 
-	// ActivityTypeACTIVITYTYPECREATEPRIVATEKEYS captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
-	ActivityTypeACTIVITYTYPECREATEPRIVATEKEYS ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
+	// ActivityTypeCreatePrivateKeys captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
+	ActivityTypeCreatePrivateKeys ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
 
-	// ActivityTypeACTIVITYTYPESIGNRAWPAYLOAD captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
-	ActivityTypeACTIVITYTYPESIGNRAWPAYLOAD ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
+	// ActivityTypeSignRawPayload captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
+	ActivityTypeSignRawPayload ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
 
-	// ActivityTypeACTIVITYTYPECREATEINVITATIONS captures enum value "ACTIVITY_TYPE_CREATE_INVITATIONS"
-	ActivityTypeACTIVITYTYPECREATEINVITATIONS ActivityType = "ACTIVITY_TYPE_CREATE_INVITATIONS"
+	// ActivityTypeCreateInvitations captures enum value "ACTIVITY_TYPE_CREATE_INVITATIONS"
+	ActivityTypeCreateInvitations ActivityType = "ACTIVITY_TYPE_CREATE_INVITATIONS"
 
-	// ActivityTypeACTIVITYTYPEACCEPTINVITATION captures enum value "ACTIVITY_TYPE_ACCEPT_INVITATION"
-	ActivityTypeACTIVITYTYPEACCEPTINVITATION ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION"
+	// ActivityTypeAcceptInvitation captures enum value "ACTIVITY_TYPE_ACCEPT_INVITATION"
+	ActivityTypeAcceptInvitation ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION"
 
-	// ActivityTypeACTIVITYTYPECREATEPOLICY captures enum value "ACTIVITY_TYPE_CREATE_POLICY"
-	ActivityTypeACTIVITYTYPECREATEPOLICY ActivityType = "ACTIVITY_TYPE_CREATE_POLICY"
+	// ActivityTypeCreatePolicy captures enum value "ACTIVITY_TYPE_CREATE_POLICY"
+	ActivityTypeCreatePolicy ActivityType = "ACTIVITY_TYPE_CREATE_POLICY"
 
-	// ActivityTypeACTIVITYTYPEDISABLEPRIVATEKEY captures enum value "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
-	ActivityTypeACTIVITYTYPEDISABLEPRIVATEKEY ActivityType = "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
+	// ActivityTypeDisablePrivateKey captures enum value "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
+	ActivityTypeDisablePrivateKey ActivityType = "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
 
-	// ActivityTypeACTIVITYTYPEDELETEUSERS captures enum value "ACTIVITY_TYPE_DELETE_USERS"
-	ActivityTypeACTIVITYTYPEDELETEUSERS ActivityType = "ACTIVITY_TYPE_DELETE_USERS"
+	// ActivityTypeDeleteUsers captures enum value "ACTIVITY_TYPE_DELETE_USERS"
+	ActivityTypeDeleteUsers ActivityType = "ACTIVITY_TYPE_DELETE_USERS"
 
-	// ActivityTypeACTIVITYTYPEDELETEAPIKEYS captures enum value "ACTIVITY_TYPE_DELETE_API_KEYS"
-	ActivityTypeACTIVITYTYPEDELETEAPIKEYS ActivityType = "ACTIVITY_TYPE_DELETE_API_KEYS"
+	// ActivityTypeDeleteAPIKeys captures enum value "ACTIVITY_TYPE_DELETE_API_KEYS"
+	ActivityTypeDeleteAPIKeys ActivityType = "ACTIVITY_TYPE_DELETE_API_KEYS"
 
-	// ActivityTypeACTIVITYTYPEDELETEINVITATION captures enum value "ACTIVITY_TYPE_DELETE_INVITATION"
-	ActivityTypeACTIVITYTYPEDELETEINVITATION ActivityType = "ACTIVITY_TYPE_DELETE_INVITATION"
+	// ActivityTypeDeleteInvitation captures enum value "ACTIVITY_TYPE_DELETE_INVITATION"
+	ActivityTypeDeleteInvitation ActivityType = "ACTIVITY_TYPE_DELETE_INVITATION"
 
-	// ActivityTypeACTIVITYTYPEDELETEORGANIZATION captures enum value "ACTIVITY_TYPE_DELETE_ORGANIZATION"
-	ActivityTypeACTIVITYTYPEDELETEORGANIZATION ActivityType = "ACTIVITY_TYPE_DELETE_ORGANIZATION"
+	// ActivityTypeDeleteOrganization captures enum value "ACTIVITY_TYPE_DELETE_ORGANIZATION"
+	ActivityTypeDeleteOrganization ActivityType = "ACTIVITY_TYPE_DELETE_ORGANIZATION"
 
-	// ActivityTypeACTIVITYTYPEDELETEPOLICY captures enum value "ACTIVITY_TYPE_DELETE_POLICY"
-	ActivityTypeACTIVITYTYPEDELETEPOLICY ActivityType = "ACTIVITY_TYPE_DELETE_POLICY"
+	// ActivityTypeDeletePolicy captures enum value "ACTIVITY_TYPE_DELETE_POLICY"
+	ActivityTypeDeletePolicy ActivityType = "ACTIVITY_TYPE_DELETE_POLICY"
 
-	// ActivityTypeACTIVITYTYPECREATEUSERTAG captures enum value "ACTIVITY_TYPE_CREATE_USER_TAG"
-	ActivityTypeACTIVITYTYPECREATEUSERTAG ActivityType = "ACTIVITY_TYPE_CREATE_USER_TAG"
+	// ActivityTypeCreateUserTag captures enum value "ACTIVITY_TYPE_CREATE_USER_TAG"
+	ActivityTypeCreateUserTag ActivityType = "ACTIVITY_TYPE_CREATE_USER_TAG"
 
-	// ActivityTypeACTIVITYTYPEDELETEUSERTAGS captures enum value "ACTIVITY_TYPE_DELETE_USER_TAGS"
-	ActivityTypeACTIVITYTYPEDELETEUSERTAGS ActivityType = "ACTIVITY_TYPE_DELETE_USER_TAGS"
+	// ActivityTypeDeleteUserTags captures enum value "ACTIVITY_TYPE_DELETE_USER_TAGS"
+	ActivityTypeDeleteUserTags ActivityType = "ACTIVITY_TYPE_DELETE_USER_TAGS"
 
-	// ActivityTypeACTIVITYTYPECREATEORGANIZATION captures enum value "ACTIVITY_TYPE_CREATE_ORGANIZATION"
-	ActivityTypeACTIVITYTYPECREATEORGANIZATION ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION"
+	// ActivityTypeCreateOrganization captures enum value "ACTIVITY_TYPE_CREATE_ORGANIZATION"
+	ActivityTypeCreateOrganization ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION"
 
-	// ActivityTypeACTIVITYTYPESIGNTRANSACTION captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION"
-	ActivityTypeACTIVITYTYPESIGNTRANSACTION ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION"
+	// ActivityTypeSignTransaction captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION"
+	ActivityTypeSignTransaction ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION"
 
-	// ActivityTypeACTIVITYTYPEAPPROVEACTIVITY captures enum value "ACTIVITY_TYPE_APPROVE_ACTIVITY"
-	ActivityTypeACTIVITYTYPEAPPROVEACTIVITY ActivityType = "ACTIVITY_TYPE_APPROVE_ACTIVITY"
+	// ActivityTypeApproveActivity captures enum value "ACTIVITY_TYPE_APPROVE_ACTIVITY"
+	ActivityTypeApproveActivity ActivityType = "ACTIVITY_TYPE_APPROVE_ACTIVITY"
 
-	// ActivityTypeACTIVITYTYPEREJECTACTIVITY captures enum value "ACTIVITY_TYPE_REJECT_ACTIVITY"
-	ActivityTypeACTIVITYTYPEREJECTACTIVITY ActivityType = "ACTIVITY_TYPE_REJECT_ACTIVITY"
+	// ActivityTypeRejectActivity captures enum value "ACTIVITY_TYPE_REJECT_ACTIVITY"
+	ActivityTypeRejectActivity ActivityType = "ACTIVITY_TYPE_REJECT_ACTIVITY"
 
-	// ActivityTypeACTIVITYTYPEDELETEAUTHENTICATORS captures enum value "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
-	ActivityTypeACTIVITYTYPEDELETEAUTHENTICATORS ActivityType = "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
+	// ActivityTypeDeleteAuthenticators captures enum value "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
+	ActivityTypeDeleteAuthenticators ActivityType = "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
 
-	// ActivityTypeACTIVITYTYPECREATEAUTHENTICATORS captures enum value "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
-	ActivityTypeACTIVITYTYPECREATEAUTHENTICATORS ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
+	// ActivityTypeCreateAuthenticators captures enum value "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
+	ActivityTypeCreateAuthenticators ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
 
-	// ActivityTypeACTIVITYTYPECREATEPRIVATEKEYTAG captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
-	ActivityTypeACTIVITYTYPECREATEPRIVATEKEYTAG ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
+	// ActivityTypeCreatePrivateKeyTag captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
+	ActivityTypeCreatePrivateKeyTag ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
 
-	// ActivityTypeACTIVITYTYPEDELETEPRIVATEKEYTAGS captures enum value "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
-	ActivityTypeACTIVITYTYPEDELETEPRIVATEKEYTAGS ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
+	// ActivityTypeDeletePrivateKeyTags captures enum value "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
+	ActivityTypeDeletePrivateKeyTags ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
 
-	// ActivityTypeACTIVITYTYPESETPAYMENTMETHOD captures enum value "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
-	ActivityTypeACTIVITYTYPESETPAYMENTMETHOD ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
+	// ActivityTypeSetPaymentMethod captures enum value "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
+	ActivityTypeSetPaymentMethod ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
 
-	// ActivityTypeACTIVITYTYPEACTIVATEBILLINGTIER captures enum value "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
-	ActivityTypeACTIVITYTYPEACTIVATEBILLINGTIER ActivityType = "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
+	// ActivityTypeActivateBillingTier captures enum value "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
+	ActivityTypeActivateBillingTier ActivityType = "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
 
-	// ActivityTypeACTIVITYTYPEDELETEPAYMENTMETHOD captures enum value "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
-	ActivityTypeACTIVITYTYPEDELETEPAYMENTMETHOD ActivityType = "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
+	// ActivityTypeDeletePaymentMethod captures enum value "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
+	ActivityTypeDeletePaymentMethod ActivityType = "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
 
-	// ActivityTypeACTIVITYTYPECREATEPOLICYV2 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V2"
-	ActivityTypeACTIVITYTYPECREATEPOLICYV2 ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V2"
+	// ActivityTypeCreatePolicyV2 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V2"
+	ActivityTypeCreatePolicyV2 ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V2"
 
-	// ActivityTypeACTIVITYTYPECREATEPOLICYV3 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V3"
-	ActivityTypeACTIVITYTYPECREATEPOLICYV3 ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V3"
+	// ActivityTypeCreatePolicyV3 captures enum value "ACTIVITY_TYPE_CREATE_POLICY_V3"
+	ActivityTypeCreatePolicyV3 ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V3"
 
-	// ActivityTypeACTIVITYTYPECREATEAPIONLYUSERS captures enum value "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
-	ActivityTypeACTIVITYTYPECREATEAPIONLYUSERS ActivityType = "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
+	// ActivityTypeCreateAPIOnlyUsers captures enum value "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
+	ActivityTypeCreateAPIOnlyUsers ActivityType = "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
 
-	// ActivityTypeACTIVITYTYPEUPDATEROOTQUORUM captures enum value "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
-	ActivityTypeACTIVITYTYPEUPDATEROOTQUORUM ActivityType = "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
+	// ActivityTypeUpdateRootQuorum captures enum value "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
+	ActivityTypeUpdateRootQuorum ActivityType = "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
 
-	// ActivityTypeACTIVITYTYPEUPDATEUSERTAG captures enum value "ACTIVITY_TYPE_UPDATE_USER_TAG"
-	ActivityTypeACTIVITYTYPEUPDATEUSERTAG ActivityType = "ACTIVITY_TYPE_UPDATE_USER_TAG"
+	// ActivityTypeUpdateUserTag captures enum value "ACTIVITY_TYPE_UPDATE_USER_TAG"
+	ActivityTypeUpdateUserTag ActivityType = "ACTIVITY_TYPE_UPDATE_USER_TAG"
 
-	// ActivityTypeACTIVITYTYPEUPDATEPRIVATEKEYTAG captures enum value "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
-	ActivityTypeACTIVITYTYPEUPDATEPRIVATEKEYTAG ActivityType = "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
+	// ActivityTypeUpdatePrivateKeyTag captures enum value "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
+	ActivityTypeUpdatePrivateKeyTag ActivityType = "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
 
-	// ActivityTypeACTIVITYTYPECREATEAUTHENTICATORSV2 captures enum value "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
-	ActivityTypeACTIVITYTYPECREATEAUTHENTICATORSV2 ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
+	// ActivityTypeCreateAuthenticatorsV2 captures enum value "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
+	ActivityTypeCreateAuthenticatorsV2 ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
 
-	// ActivityTypeACTIVITYTYPECREATEORGANIZATIONV2 captures enum value "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
-	ActivityTypeACTIVITYTYPECREATEORGANIZATIONV2 ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
+	// ActivityTypeCreateOrganizationV2 captures enum value "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
+	ActivityTypeCreateOrganizationV2 ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
 
-	// ActivityTypeACTIVITYTYPECREATEUSERSV2 captures enum value "ACTIVITY_TYPE_CREATE_USERS_V2"
-	ActivityTypeACTIVITYTYPECREATEUSERSV2 ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V2"
+	// ActivityTypeCreateUsersV2 captures enum value "ACTIVITY_TYPE_CREATE_USERS_V2"
+	ActivityTypeCreateUsersV2 ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V2"
 
-	// ActivityTypeACTIVITYTYPEACCEPTINVITATIONV2 captures enum value "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
-	ActivityTypeACTIVITYTYPEACCEPTINVITATIONV2 ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
+	// ActivityTypeAcceptInvitationV2 captures enum value "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
+	ActivityTypeAcceptInvitationV2 ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
 
-	// ActivityTypeACTIVITYTYPECREATESUBORGANIZATION captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
-	ActivityTypeACTIVITYTYPECREATESUBORGANIZATION ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
+	// ActivityTypeCreateSubOrganization captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
+	ActivityTypeCreateSubOrganization ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
 
-	// ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV2 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
-	ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV2 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
+	// ActivityTypeCreateSubOrganizationV2 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
+	ActivityTypeCreateSubOrganizationV2 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
 
-	// ActivityTypeACTIVITYTYPEUPDATEALLOWEDORIGINS captures enum value "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
-	ActivityTypeACTIVITYTYPEUPDATEALLOWEDORIGINS ActivityType = "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
+	// ActivityTypeUpdateAllowedOrigins captures enum value "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
+	ActivityTypeUpdateAllowedOrigins ActivityType = "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
 
-	// ActivityTypeACTIVITYTYPECREATEPRIVATEKEYSV2 captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
-	ActivityTypeACTIVITYTYPECREATEPRIVATEKEYSV2 ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
+	// ActivityTypeCreatePrivateKeysV2 captures enum value "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
+	ActivityTypeCreatePrivateKeysV2 ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
 
-	// ActivityTypeACTIVITYTYPEUPDATEUSER captures enum value "ACTIVITY_TYPE_UPDATE_USER"
-	ActivityTypeACTIVITYTYPEUPDATEUSER ActivityType = "ACTIVITY_TYPE_UPDATE_USER"
+	// ActivityTypeUpdateUser captures enum value "ACTIVITY_TYPE_UPDATE_USER"
+	ActivityTypeUpdateUser ActivityType = "ACTIVITY_TYPE_UPDATE_USER"
 
-	// ActivityTypeACTIVITYTYPEUPDATEPOLICY captures enum value "ACTIVITY_TYPE_UPDATE_POLICY"
-	ActivityTypeACTIVITYTYPEUPDATEPOLICY ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY"
+	// ActivityTypeUpdatePolicy captures enum value "ACTIVITY_TYPE_UPDATE_POLICY"
+	ActivityTypeUpdatePolicy ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY"
 
-	// ActivityTypeACTIVITYTYPESETPAYMENTMETHODV2 captures enum value "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
-	ActivityTypeACTIVITYTYPESETPAYMENTMETHODV2 ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
+	// ActivityTypeSetPaymentMethodV2 captures enum value "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
+	ActivityTypeSetPaymentMethodV2 ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
 
-	// ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV3 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
-	ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV3 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+	// ActivityTypeCreateSubOrganizationV3 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+	ActivityTypeCreateSubOrganizationV3 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
 
-	// ActivityTypeACTIVITYTYPECREATEWALLET captures enum value "ACTIVITY_TYPE_CREATE_WALLET"
-	ActivityTypeACTIVITYTYPECREATEWALLET ActivityType = "ACTIVITY_TYPE_CREATE_WALLET"
+	// ActivityTypeCreateWallet captures enum value "ACTIVITY_TYPE_CREATE_WALLET"
+	ActivityTypeCreateWallet ActivityType = "ACTIVITY_TYPE_CREATE_WALLET"
 
-	// ActivityTypeACTIVITYTYPECREATEWALLETACCOUNTS captures enum value "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
-	ActivityTypeACTIVITYTYPECREATEWALLETACCOUNTS ActivityType = "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
+	// ActivityTypeCreateWalletAccounts captures enum value "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
+	ActivityTypeCreateWalletAccounts ActivityType = "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
 
-	// ActivityTypeACTIVITYTYPEINITUSEREMAILRECOVERY captures enum value "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
-	ActivityTypeACTIVITYTYPEINITUSEREMAILRECOVERY ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
+	// ActivityTypeInitUserEmailRecovery captures enum value "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
+	ActivityTypeInitUserEmailRecovery ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
 
-	// ActivityTypeACTIVITYTYPERECOVERUSER captures enum value "ACTIVITY_TYPE_RECOVER_USER"
-	ActivityTypeACTIVITYTYPERECOVERUSER ActivityType = "ACTIVITY_TYPE_RECOVER_USER"
+	// ActivityTypeRecoverUser captures enum value "ACTIVITY_TYPE_RECOVER_USER"
+	ActivityTypeRecoverUser ActivityType = "ACTIVITY_TYPE_RECOVER_USER"
 
-	// ActivityTypeACTIVITYTYPESETORGANIZATIONFEATURE captures enum value "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
-	ActivityTypeACTIVITYTYPESETORGANIZATIONFEATURE ActivityType = "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
+	// ActivityTypeSetOrganizationFeature captures enum value "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
+	ActivityTypeSetOrganizationFeature ActivityType = "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
 
-	// ActivityTypeACTIVITYTYPEREMOVEORGANIZATIONFEATURE captures enum value "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
-	ActivityTypeACTIVITYTYPEREMOVEORGANIZATIONFEATURE ActivityType = "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
+	// ActivityTypeRemoveOrganizationFeature captures enum value "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
+	ActivityTypeRemoveOrganizationFeature ActivityType = "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
 
-	// ActivityTypeACTIVITYTYPESIGNRAWPAYLOADV2 captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
-	ActivityTypeACTIVITYTYPESIGNRAWPAYLOADV2 ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
+	// ActivityTypeSignRawPayloadV2 captures enum value "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
+	ActivityTypeSignRawPayloadV2 ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
 
-	// ActivityTypeACTIVITYTYPESIGNTRANSACTIONV2 captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
-	ActivityTypeACTIVITYTYPESIGNTRANSACTIONV2 ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
+	// ActivityTypeSignTransactionV2 captures enum value "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
+	ActivityTypeSignTransactionV2 ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
 
-	// ActivityTypeACTIVITYTYPEEXPORTPRIVATEKEY captures enum value "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
-	ActivityTypeACTIVITYTYPEEXPORTPRIVATEKEY ActivityType = "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
+	// ActivityTypeExportPrivateKey captures enum value "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
+	ActivityTypeExportPrivateKey ActivityType = "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
 
-	// ActivityTypeACTIVITYTYPEEXPORTWALLET captures enum value "ACTIVITY_TYPE_EXPORT_WALLET"
-	ActivityTypeACTIVITYTYPEEXPORTWALLET ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET"
+	// ActivityTypeExportWallet captures enum value "ACTIVITY_TYPE_EXPORT_WALLET"
+	ActivityTypeExportWallet ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET"
 
-	// ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV4 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
-	ActivityTypeACTIVITYTYPECREATESUBORGANIZATIONV4 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
+	// ActivityTypeCreateSubOrganizationV4 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
+	ActivityTypeCreateSubOrganizationV4 ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
 )
 
 // for schema
-var activityTypeEnum []interface{}
+var ActivityTypeEnum []ActivityType
 
 func init() {
 	var res []ActivityType
@@ -205,12 +205,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityTypeEnum = append(activityTypeEnum, v)
+		ActivityTypeEnum = append(ActivityTypeEnum, v)
 	}
 }
 
 func (m ActivityType) validateActivityTypeEnum(path, location string, value ActivityType) error {
-	if err := validate.EnumCase(path, location, value, activityTypeEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityTypeEnum, true); err != nil {
 		return err
 	}
 	return nil

@@ -30,18 +30,18 @@ func (m ExternalDataV1AccessType) Pointer() *ExternalDataV1AccessType {
 
 const (
 
-	// ExternalDataV1AccessTypeACCESSTYPEWEB captures enum value "ACCESS_TYPE_WEB"
-	ExternalDataV1AccessTypeACCESSTYPEWEB ExternalDataV1AccessType = "ACCESS_TYPE_WEB"
+	// AccessTypeWeb captures enum value "ACCESS_TYPE_WEB"
+	AccessTypeWeb ExternalDataV1AccessType = "ACCESS_TYPE_WEB"
 
-	// ExternalDataV1AccessTypeACCESSTYPEAPI captures enum value "ACCESS_TYPE_API"
-	ExternalDataV1AccessTypeACCESSTYPEAPI ExternalDataV1AccessType = "ACCESS_TYPE_API"
+	// AccessTypeAPI captures enum value "ACCESS_TYPE_API"
+	AccessTypeAPI ExternalDataV1AccessType = "ACCESS_TYPE_API"
 
-	// ExternalDataV1AccessTypeACCESSTYPEALL captures enum value "ACCESS_TYPE_ALL"
-	ExternalDataV1AccessTypeACCESSTYPEALL ExternalDataV1AccessType = "ACCESS_TYPE_ALL"
+	// AccessTypeAll captures enum value "ACCESS_TYPE_ALL"
+	AccessTypeAll ExternalDataV1AccessType = "ACCESS_TYPE_ALL"
 )
 
 // for schema
-var externalDataV1AccessTypeEnum []interface{}
+var ExternalDataV1AccessTypeEnum []ExternalDataV1AccessType
 
 func init() {
 	var res []ExternalDataV1AccessType
@@ -49,12 +49,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		externalDataV1AccessTypeEnum = append(externalDataV1AccessTypeEnum, v)
+		ExternalDataV1AccessTypeEnum = append(ExternalDataV1AccessTypeEnum, v)
 	}
 }
 
 func (m ExternalDataV1AccessType) validateExternalDataV1AccessTypeEnum(path, location string, value ExternalDataV1AccessType) error {
-	if err := validate.EnumCase(path, location, value, externalDataV1AccessTypeEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ExternalDataV1AccessTypeEnum, true); err != nil {
 		return err
 	}
 	return nil

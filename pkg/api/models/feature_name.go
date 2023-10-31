@@ -30,12 +30,12 @@ func (m FeatureName) Pointer() *FeatureName {
 
 const (
 
-	// FeatureNameFEATURENAMEROOTUSEREMAILRECOVERY captures enum value "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
-	FeatureNameFEATURENAMEROOTUSEREMAILRECOVERY FeatureName = "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
+	// FeatureNameRootUserEmailRecovery captures enum value "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
+	FeatureNameRootUserEmailRecovery FeatureName = "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
 )
 
 // for schema
-var featureNameEnum []interface{}
+var FeatureNameEnum []FeatureName
 
 func init() {
 	var res []FeatureName
@@ -43,12 +43,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		featureNameEnum = append(featureNameEnum, v)
+		FeatureNameEnum = append(FeatureNameEnum, v)
 	}
 }
 
 func (m FeatureName) validateFeatureNameEnum(path, location string, value FeatureName) error {
-	if err := validate.EnumCase(path, location, value, featureNameEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, FeatureNameEnum, true); err != nil {
 		return err
 	}
 	return nil

@@ -112,6 +112,7 @@ func (m *CreateOrganizationIntentV2) ContextValidate(ctx context.Context, format
 func (m *CreateOrganizationIntentV2) contextValidateRootAuthenticator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RootAuthenticator != nil {
+
 		if err := m.RootAuthenticator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rootAuthenticator")

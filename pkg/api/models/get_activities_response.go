@@ -85,6 +85,11 @@ func (m *GetActivitiesResponse) contextValidateActivities(ctx context.Context, f
 	for i := 0; i < len(m.Activities); i++ {
 
 		if m.Activities[i] != nil {
+
+			if swag.IsZero(m.Activities[i]) { // not required
+				return nil
+			}
+
 			if err := m.Activities[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("activities" + "." + strconv.Itoa(i))

@@ -30,18 +30,18 @@ func (m DataV1AddressFormat) Pointer() *DataV1AddressFormat {
 
 const (
 
-	// DataV1AddressFormatADDRESSFORMATUNCOMPRESSED captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
-	DataV1AddressFormatADDRESSFORMATUNCOMPRESSED DataV1AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
+	// AddressFormatUncompressed captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
+	AddressFormatUncompressed DataV1AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
 
-	// DataV1AddressFormatADDRESSFORMATCOMPRESSED captures enum value "ADDRESS_FORMAT_COMPRESSED"
-	DataV1AddressFormatADDRESSFORMATCOMPRESSED DataV1AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
+	// AddressFormatCompressed captures enum value "ADDRESS_FORMAT_COMPRESSED"
+	AddressFormatCompressed DataV1AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
 
-	// DataV1AddressFormatADDRESSFORMATETHEREUM captures enum value "ADDRESS_FORMAT_ETHEREUM"
-	DataV1AddressFormatADDRESSFORMATETHEREUM DataV1AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
+	// AddressFormatEthereum captures enum value "ADDRESS_FORMAT_ETHEREUM"
+	AddressFormatEthereum DataV1AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
 )
 
 // for schema
-var dataV1AddressFormatEnum []interface{}
+var DataV1AddressFormatEnum []DataV1AddressFormat
 
 func init() {
 	var res []DataV1AddressFormat
@@ -49,12 +49,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		dataV1AddressFormatEnum = append(dataV1AddressFormatEnum, v)
+		DataV1AddressFormatEnum = append(DataV1AddressFormatEnum, v)
 	}
 }
 
 func (m DataV1AddressFormat) validateDataV1AddressFormatEnum(path, location string, value DataV1AddressFormat) error {
-	if err := validate.EnumCase(path, location, value, dataV1AddressFormatEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, DataV1AddressFormatEnum, true); err != nil {
 		return err
 	}
 	return nil

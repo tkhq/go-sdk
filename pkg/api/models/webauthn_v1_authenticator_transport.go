@@ -30,24 +30,24 @@ func (m WebauthnV1AuthenticatorTransport) Pointer() *WebauthnV1AuthenticatorTran
 
 const (
 
-	// WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTBLE captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
-	WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTBLE WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
+	// AuthenticatorTransportBle captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
+	AuthenticatorTransportBle WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
 
-	// WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTINTERNAL captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
-	WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTINTERNAL WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	// AuthenticatorTransportInternal captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	AuthenticatorTransportInternal WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
 
-	// WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTNFC captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
-	WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTNFC WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
+	// AuthenticatorTransportNfc captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
+	AuthenticatorTransportNfc WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
 
-	// WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTUSB captures enum value "AUTHENTICATOR_TRANSPORT_USB"
-	WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTUSB WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
+	// AuthenticatorTransportUsb captures enum value "AUTHENTICATOR_TRANSPORT_USB"
+	AuthenticatorTransportUsb WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
 
-	// WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTHYBRID captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
-	WebauthnV1AuthenticatorTransportAUTHENTICATORTRANSPORTHYBRID WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
+	// AuthenticatorTransportHybrid captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
+	AuthenticatorTransportHybrid WebauthnV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
 )
 
 // for schema
-var webauthnV1AuthenticatorTransportEnum []interface{}
+var WebauthnV1AuthenticatorTransportEnum []WebauthnV1AuthenticatorTransport
 
 func init() {
 	var res []WebauthnV1AuthenticatorTransport
@@ -55,12 +55,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		webauthnV1AuthenticatorTransportEnum = append(webauthnV1AuthenticatorTransportEnum, v)
+		WebauthnV1AuthenticatorTransportEnum = append(WebauthnV1AuthenticatorTransportEnum, v)
 	}
 }
 
 func (m WebauthnV1AuthenticatorTransport) validateWebauthnV1AuthenticatorTransportEnum(path, location string, value WebauthnV1AuthenticatorTransport) error {
-	if err := validate.EnumCase(path, location, value, webauthnV1AuthenticatorTransportEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, WebauthnV1AuthenticatorTransportEnum, true); err != nil {
 		return err
 	}
 	return nil

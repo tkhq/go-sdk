@@ -30,36 +30,36 @@ func (m MnemonicLanguage) Pointer() *MnemonicLanguage {
 
 const (
 
-	// MnemonicLanguageMNEMONICLANGUAGEENGLISH captures enum value "MNEMONIC_LANGUAGE_ENGLISH"
-	MnemonicLanguageMNEMONICLANGUAGEENGLISH MnemonicLanguage = "MNEMONIC_LANGUAGE_ENGLISH"
+	// MnemonicLanguageEnglish captures enum value "MNEMONIC_LANGUAGE_ENGLISH"
+	MnemonicLanguageEnglish MnemonicLanguage = "MNEMONIC_LANGUAGE_ENGLISH"
 
-	// MnemonicLanguageMNEMONICLANGUAGESIMPLIFIEDCHINESE captures enum value "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
-	MnemonicLanguageMNEMONICLANGUAGESIMPLIFIEDCHINESE MnemonicLanguage = "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
+	// MnemonicLanguageSimplifiedChinese captures enum value "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
+	MnemonicLanguageSimplifiedChinese MnemonicLanguage = "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
 
-	// MnemonicLanguageMNEMONICLANGUAGETRADITIONALCHINESE captures enum value "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
-	MnemonicLanguageMNEMONICLANGUAGETRADITIONALCHINESE MnemonicLanguage = "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
+	// MnemonicLanguageTraditionalChinese captures enum value "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
+	MnemonicLanguageTraditionalChinese MnemonicLanguage = "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
 
-	// MnemonicLanguageMNEMONICLANGUAGECZECH captures enum value "MNEMONIC_LANGUAGE_CZECH"
-	MnemonicLanguageMNEMONICLANGUAGECZECH MnemonicLanguage = "MNEMONIC_LANGUAGE_CZECH"
+	// MnemonicLanguageCzech captures enum value "MNEMONIC_LANGUAGE_CZECH"
+	MnemonicLanguageCzech MnemonicLanguage = "MNEMONIC_LANGUAGE_CZECH"
 
-	// MnemonicLanguageMNEMONICLANGUAGEFRENCH captures enum value "MNEMONIC_LANGUAGE_FRENCH"
-	MnemonicLanguageMNEMONICLANGUAGEFRENCH MnemonicLanguage = "MNEMONIC_LANGUAGE_FRENCH"
+	// MnemonicLanguageFrench captures enum value "MNEMONIC_LANGUAGE_FRENCH"
+	MnemonicLanguageFrench MnemonicLanguage = "MNEMONIC_LANGUAGE_FRENCH"
 
-	// MnemonicLanguageMNEMONICLANGUAGEITALIAN captures enum value "MNEMONIC_LANGUAGE_ITALIAN"
-	MnemonicLanguageMNEMONICLANGUAGEITALIAN MnemonicLanguage = "MNEMONIC_LANGUAGE_ITALIAN"
+	// MnemonicLanguageItalian captures enum value "MNEMONIC_LANGUAGE_ITALIAN"
+	MnemonicLanguageItalian MnemonicLanguage = "MNEMONIC_LANGUAGE_ITALIAN"
 
-	// MnemonicLanguageMNEMONICLANGUAGEJAPANESE captures enum value "MNEMONIC_LANGUAGE_JAPANESE"
-	MnemonicLanguageMNEMONICLANGUAGEJAPANESE MnemonicLanguage = "MNEMONIC_LANGUAGE_JAPANESE"
+	// MnemonicLanguageJapanese captures enum value "MNEMONIC_LANGUAGE_JAPANESE"
+	MnemonicLanguageJapanese MnemonicLanguage = "MNEMONIC_LANGUAGE_JAPANESE"
 
-	// MnemonicLanguageMNEMONICLANGUAGEKOREAN captures enum value "MNEMONIC_LANGUAGE_KOREAN"
-	MnemonicLanguageMNEMONICLANGUAGEKOREAN MnemonicLanguage = "MNEMONIC_LANGUAGE_KOREAN"
+	// MnemonicLanguageKorean captures enum value "MNEMONIC_LANGUAGE_KOREAN"
+	MnemonicLanguageKorean MnemonicLanguage = "MNEMONIC_LANGUAGE_KOREAN"
 
-	// MnemonicLanguageMNEMONICLANGUAGESPANISH captures enum value "MNEMONIC_LANGUAGE_SPANISH"
-	MnemonicLanguageMNEMONICLANGUAGESPANISH MnemonicLanguage = "MNEMONIC_LANGUAGE_SPANISH"
+	// MnemonicLanguageSpanish captures enum value "MNEMONIC_LANGUAGE_SPANISH"
+	MnemonicLanguageSpanish MnemonicLanguage = "MNEMONIC_LANGUAGE_SPANISH"
 )
 
 // for schema
-var mnemonicLanguageEnum []interface{}
+var MnemonicLanguageEnum []MnemonicLanguage
 
 func init() {
 	var res []MnemonicLanguage
@@ -67,12 +67,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		mnemonicLanguageEnum = append(mnemonicLanguageEnum, v)
+		MnemonicLanguageEnum = append(MnemonicLanguageEnum, v)
 	}
 }
 
 func (m MnemonicLanguage) validateMnemonicLanguageEnum(path, location string, value MnemonicLanguage) error {
-	if err := validate.EnumCase(path, location, value, mnemonicLanguageEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, MnemonicLanguageEnum, true); err != nil {
 		return err
 	}
 	return nil

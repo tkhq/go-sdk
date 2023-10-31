@@ -30,24 +30,24 @@ func (m DataV1AuthenticatorTransport) Pointer() *DataV1AuthenticatorTransport {
 
 const (
 
-	// DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTBLE captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
-	DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTBLE DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
+	// AuthenticatorTransportBle captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
+	AuthenticatorTransportBle DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
 
-	// DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTINTERNAL captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
-	DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTINTERNAL DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	// AuthenticatorTransportInternal captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	AuthenticatorTransportInternal DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
 
-	// DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTNFC captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
-	DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTNFC DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
+	// AuthenticatorTransportNfc captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
+	AuthenticatorTransportNfc DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
 
-	// DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTUSB captures enum value "AUTHENTICATOR_TRANSPORT_USB"
-	DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTUSB DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
+	// AuthenticatorTransportUsb captures enum value "AUTHENTICATOR_TRANSPORT_USB"
+	AuthenticatorTransportUsb DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
 
-	// DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTHYBRID captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
-	DataV1AuthenticatorTransportAUTHENTICATORTRANSPORTHYBRID DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
+	// AuthenticatorTransportHybrid captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
+	AuthenticatorTransportHybrid DataV1AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
 )
 
 // for schema
-var dataV1AuthenticatorTransportEnum []interface{}
+var DataV1AuthenticatorTransportEnum []DataV1AuthenticatorTransport
 
 func init() {
 	var res []DataV1AuthenticatorTransport
@@ -55,12 +55,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		dataV1AuthenticatorTransportEnum = append(dataV1AuthenticatorTransportEnum, v)
+		DataV1AuthenticatorTransportEnum = append(DataV1AuthenticatorTransportEnum, v)
 	}
 }
 
 func (m DataV1AuthenticatorTransport) validateDataV1AuthenticatorTransportEnum(path, location string, value DataV1AuthenticatorTransport) error {
-	if err := validate.EnumCase(path, location, value, dataV1AuthenticatorTransportEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, DataV1AuthenticatorTransportEnum, true); err != nil {
 		return err
 	}
 	return nil

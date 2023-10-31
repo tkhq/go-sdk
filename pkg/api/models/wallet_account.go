@@ -283,6 +283,7 @@ func (m *WalletAccount) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *WalletAccount) contextValidateAddressFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AddressFormat != nil {
+
 		if err := m.AddressFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("addressFormat")
@@ -299,6 +300,7 @@ func (m *WalletAccount) contextValidateAddressFormat(ctx context.Context, format
 func (m *WalletAccount) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -315,6 +317,7 @@ func (m *WalletAccount) contextValidateCreatedAt(ctx context.Context, formats st
 func (m *WalletAccount) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
+
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")
@@ -331,6 +334,7 @@ func (m *WalletAccount) contextValidateCurve(ctx context.Context, formats strfmt
 func (m *WalletAccount) contextValidatePathFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PathFormat != nil {
+
 		if err := m.PathFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("pathFormat")
@@ -347,6 +351,7 @@ func (m *WalletAccount) contextValidatePathFormat(ctx context.Context, formats s
 func (m *WalletAccount) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

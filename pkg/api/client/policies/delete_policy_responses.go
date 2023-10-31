@@ -30,7 +30,7 @@ func (o *DeletePolicyReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
+		return nil, runtime.NewAPIError("[POST /public/v1/submit/delete_policy] DeletePolicy", response, response.Code())
 	}
 }
 

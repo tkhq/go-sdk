@@ -30,24 +30,24 @@ func (m CommonV1AddressFormat) Pointer() *CommonV1AddressFormat {
 
 const (
 
-	// CommonV1AddressFormatADDRESSFORMATUNCOMPRESSED captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
-	CommonV1AddressFormatADDRESSFORMATUNCOMPRESSED CommonV1AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
+	// AddressFormatUncompressed captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
+	AddressFormatUncompressed CommonV1AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
 
-	// CommonV1AddressFormatADDRESSFORMATCOMPRESSED captures enum value "ADDRESS_FORMAT_COMPRESSED"
-	CommonV1AddressFormatADDRESSFORMATCOMPRESSED CommonV1AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
+	// AddressFormatCompressed captures enum value "ADDRESS_FORMAT_COMPRESSED"
+	AddressFormatCompressed CommonV1AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
 
-	// CommonV1AddressFormatADDRESSFORMATETHEREUM captures enum value "ADDRESS_FORMAT_ETHEREUM"
-	CommonV1AddressFormatADDRESSFORMATETHEREUM CommonV1AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
+	// AddressFormatEthereum captures enum value "ADDRESS_FORMAT_ETHEREUM"
+	AddressFormatEthereum CommonV1AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
 
-	// CommonV1AddressFormatADDRESSFORMATSOLANA captures enum value "ADDRESS_FORMAT_SOLANA"
-	CommonV1AddressFormatADDRESSFORMATSOLANA CommonV1AddressFormat = "ADDRESS_FORMAT_SOLANA"
+	// AddressFormatSolana captures enum value "ADDRESS_FORMAT_SOLANA"
+	AddressFormatSolana CommonV1AddressFormat = "ADDRESS_FORMAT_SOLANA"
 
-	// CommonV1AddressFormatADDRESSFORMATCOSMOS captures enum value "ADDRESS_FORMAT_COSMOS"
-	CommonV1AddressFormatADDRESSFORMATCOSMOS CommonV1AddressFormat = "ADDRESS_FORMAT_COSMOS"
+	// AddressFormatCosmos captures enum value "ADDRESS_FORMAT_COSMOS"
+	AddressFormatCosmos CommonV1AddressFormat = "ADDRESS_FORMAT_COSMOS"
 )
 
 // for schema
-var commonV1AddressFormatEnum []interface{}
+var CommonV1AddressFormatEnum []CommonV1AddressFormat
 
 func init() {
 	var res []CommonV1AddressFormat
@@ -55,12 +55,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		commonV1AddressFormatEnum = append(commonV1AddressFormatEnum, v)
+		CommonV1AddressFormatEnum = append(CommonV1AddressFormatEnum, v)
 	}
 }
 
 func (m CommonV1AddressFormat) validateCommonV1AddressFormatEnum(path, location string, value CommonV1AddressFormat) error {
-	if err := validate.EnumCase(path, location, value, commonV1AddressFormatEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, CommonV1AddressFormatEnum, true); err != nil {
 		return err
 	}
 	return nil

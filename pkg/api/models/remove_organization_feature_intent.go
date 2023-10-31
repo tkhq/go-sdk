@@ -79,6 +79,7 @@ func (m *RemoveOrganizationFeatureIntent) ContextValidate(ctx context.Context, f
 func (m *RemoveOrganizationFeatureIntent) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Name != nil {
+
 		if err := m.Name.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("name")

@@ -85,6 +85,11 @@ func (m *SetOrganizationFeatureResult) contextValidateFeatures(ctx context.Conte
 	for i := 0; i < len(m.Features); i++ {
 
 		if m.Features[i] != nil {
+
+			if swag.IsZero(m.Features[i]) { // not required
+				return nil
+			}
+
 			if err := m.Features[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("features" + "." + strconv.Itoa(i))

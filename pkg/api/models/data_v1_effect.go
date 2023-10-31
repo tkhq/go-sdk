@@ -30,15 +30,15 @@ func (m DataV1Effect) Pointer() *DataV1Effect {
 
 const (
 
-	// DataV1EffectEFFECTALLOW captures enum value "EFFECT_ALLOW"
-	DataV1EffectEFFECTALLOW DataV1Effect = "EFFECT_ALLOW"
+	// EffectAllow captures enum value "EFFECT_ALLOW"
+	EffectAllow DataV1Effect = "EFFECT_ALLOW"
 
-	// DataV1EffectEFFECTDENY captures enum value "EFFECT_DENY"
-	DataV1EffectEFFECTDENY DataV1Effect = "EFFECT_DENY"
+	// EffectDeny captures enum value "EFFECT_DENY"
+	EffectDeny DataV1Effect = "EFFECT_DENY"
 )
 
 // for schema
-var dataV1EffectEnum []interface{}
+var DataV1EffectEnum []DataV1Effect
 
 func init() {
 	var res []DataV1Effect
@@ -46,12 +46,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		dataV1EffectEnum = append(dataV1EffectEnum, v)
+		DataV1EffectEnum = append(DataV1EffectEnum, v)
 	}
 }
 
 func (m DataV1Effect) validateDataV1EffectEnum(path, location string, value DataV1Effect) error {
-	if err := validate.EnumCase(path, location, value, dataV1EffectEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, DataV1EffectEnum, true); err != nil {
 		return err
 	}
 	return nil

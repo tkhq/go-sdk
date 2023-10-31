@@ -72,6 +72,10 @@ func (m *DataV1Address) ContextValidate(ctx context.Context, formats strfmt.Regi
 
 func (m *DataV1Address) contextValidateFormat(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Format) { // not required
+		return nil
+	}
+
 	if err := m.Format.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("format")

@@ -113,6 +113,7 @@ func (m *DataV1Selector) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *DataV1Selector) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Operator != nil {
+
 		if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("operator")

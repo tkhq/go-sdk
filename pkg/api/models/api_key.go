@@ -173,6 +173,7 @@ func (m *APIKey) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 func (m *APIKey) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -189,6 +190,7 @@ func (m *APIKey) contextValidateCreatedAt(ctx context.Context, formats strfmt.Re
 func (m *APIKey) contextValidateCredential(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credential != nil {
+
 		if err := m.Credential.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credential")
@@ -205,6 +207,7 @@ func (m *APIKey) contextValidateCredential(ctx context.Context, formats strfmt.R
 func (m *APIKey) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")
