@@ -2617,6 +2617,14 @@
       },
       "required": ["rk"]
     },
+    "CredentialType": {
+      "type": "string",
+      "enum": [
+        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
+        "CREDENTIAL_TYPE_API_KEY_P256",
+        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+      ]
+    },
     "Curve": {
       "type": "string",
       "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
@@ -5218,14 +5226,6 @@
         }
       }
     },
-    "data.v1.CredentialType": {
-      "type": "string",
-      "enum": [
-        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
-        "CREDENTIAL_TYPE_API_KEY_P256",
-        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
-      ]
-    },
     "external.data.v1.Credential": {
       "type": "object",
       "properties": {
@@ -5234,7 +5234,7 @@
           "description": "The public component of a cryptographic key pair used to sign messages and transactions."
         },
         "type": {
-          "$ref": "#/definitions/data.v1.CredentialType"
+          "$ref": "#/definitions/CredentialType"
         }
       },
       "required": ["publicKey", "type"]

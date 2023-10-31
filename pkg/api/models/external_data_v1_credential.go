@@ -25,7 +25,7 @@ type ExternalDataV1Credential struct {
 
 	// type
 	// Required: true
-	Type *DataV1CredentialType `json:"type"`
+	Type *CredentialType `json:"type"`
 }
 
 // Validate validates this external data v1 credential
