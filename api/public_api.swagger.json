@@ -1287,6 +1287,10 @@
       },
       "required": ["invitationId", "userId"]
     },
+    "AccessType": {
+      "type": "string",
+      "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
+    },
     "ActivateBillingTierIntent": {
       "type": "object",
       "properties": {
@@ -1455,6 +1459,16 @@
         "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
       ]
     },
+    "AddressFormat": {
+      "type": "string",
+      "enum": [
+        "ADDRESS_FORMAT_UNCOMPRESSED",
+        "ADDRESS_FORMAT_COMPRESSED",
+        "ADDRESS_FORMAT_ETHEREUM",
+        "ADDRESS_FORMAT_SOLANA",
+        "ADDRESS_FORMAT_COSMOS"
+      ]
+    },
     "ApiKey": {
       "type": "object",
       "properties": {
@@ -1577,7 +1591,7 @@
         "transports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/webauthn.v1.AuthenticatorTransport"
+            "$ref": "#/definitions/AuthenticatorTransport"
           },
           "description": "The type of authenticator transports."
         }
@@ -1595,7 +1609,7 @@
         "transports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/data.v1.AuthenticatorTransport"
+            "$ref": "#/definitions/AuthenticatorTransport"
           },
           "description": "Types of transports that may be used by an Authenticator (e.g., USB, NFC, BLE)."
         },
@@ -1658,7 +1672,7 @@
         "transports": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/webauthn.v1.AuthenticatorTransport"
+            "$ref": "#/definitions/AuthenticatorTransport"
           }
         },
         "authenticatorAttachment": {
@@ -1707,6 +1721,16 @@
         }
       },
       "required": ["authenticatorName", "challenge", "attestation"]
+    },
+    "AuthenticatorTransport": {
+      "type": "string",
+      "enum": [
+        "AUTHENTICATOR_TRANSPORT_BLE",
+        "AUTHENTICATOR_TRANSPORT_INTERNAL",
+        "AUTHENTICATOR_TRANSPORT_NFC",
+        "AUTHENTICATOR_TRANSPORT_USB",
+        "AUTHENTICATOR_TRANSPORT_HYBRID"
+      ]
     },
     "CreateApiKeysIntent": {
       "type": "object",
@@ -1970,12 +1994,12 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/activity.v1.Selector"
+            "$ref": "#/definitions/Selector"
           },
           "description": "A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details."
         },
         "effect": {
-          "$ref": "#/definitions/activity.v1.Effect",
+          "$ref": "#/definitions/Effect",
           "description": "The instruction to DENY or ALLOW a particular activity following policy selector(s)."
         },
         "notes": {
@@ -2000,7 +2024,7 @@
           "description": "A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details."
         },
         "effect": {
-          "$ref": "#/definitions/activity.v1.Effect",
+          "$ref": "#/definitions/Effect",
           "description": "Whether to ALLOW or DENY requests that match the condition and consensus requirements."
         },
         "notes": {
@@ -2017,7 +2041,7 @@
           "description": "Human-readable name for a Policy."
         },
         "effect": {
-          "$ref": "#/definitions/activity.v1.Effect",
+          "$ref": "#/definitions/Effect",
           "description": "The instruction to DENY or ALLOW an activity."
         },
         "condition": {
@@ -2593,6 +2617,18 @@
       },
       "required": ["rk"]
     },
+    "CredentialType": {
+      "type": "string",
+      "enum": [
+        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
+        "CREDENTIAL_TYPE_API_KEY_P256",
+        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+      ]
+    },
+    "Curve": {
+      "type": "string",
+      "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
+    },
     "DeleteApiKeysIntent": {
       "type": "object",
       "properties": {
@@ -2928,6 +2964,10 @@
         }
       },
       "required": ["privateKeyId"]
+    },
+    "Effect": {
+      "type": "string",
+      "enum": ["EFFECT_ALLOW", "EFFECT_DENY"]
     },
     "ExportPrivateKeyIntent": {
       "type": "object",
@@ -3641,7 +3681,7 @@
           "description": "A list of tags assigned to the Invitation recipient."
         },
         "accessType": {
-          "$ref": "#/definitions/activity.v1.AccessType",
+          "$ref": "#/definitions/AccessType",
           "description": "The User's permissible access method(s)."
         },
         "senderUserId": {
@@ -3669,6 +3709,22 @@
         "MNEMONIC_LANGUAGE_JAPANESE",
         "MNEMONIC_LANGUAGE_KOREAN",
         "MNEMONIC_LANGUAGE_SPANISH"
+      ]
+    },
+    "Operator": {
+      "type": "string",
+      "enum": [
+        "OPERATOR_EQUAL",
+        "OPERATOR_MORE_THAN",
+        "OPERATOR_MORE_THAN_OR_EQUAL",
+        "OPERATOR_LESS_THAN",
+        "OPERATOR_LESS_THAN_OR_EQUAL",
+        "OPERATOR_CONTAINS",
+        "OPERATOR_NOT_EQUAL",
+        "OPERATOR_IN",
+        "OPERATOR_NOT_IN",
+        "OPERATOR_CONTAINS_ONE",
+        "OPERATOR_CONTAINS_ALL"
       ]
     },
     "Pagination": {
@@ -3704,16 +3760,8 @@
           "description": "Human-readable name for a Policy."
         },
         "effect": {
-          "$ref": "#/definitions/data.v1.Effect",
+          "$ref": "#/definitions/Effect",
           "description": "The instruction to DENY or ALLOW a particular activity following policy selector(s)."
-        },
-        "selectors": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/data.v1.Selector"
-          },
-          "description": "A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details."
         },
         "createdAt": {
           "$ref": "#/definitions/external.data.v1.Timestamp"
@@ -3738,7 +3786,6 @@
         "policyId",
         "policyName",
         "effect",
-        "selectors",
         "createdAt",
         "updatedAt",
         "notes",
@@ -3762,7 +3809,7 @@
           "description": "Human-readable name for a Private Key."
         },
         "curve": {
-          "$ref": "#/definitions/data.v1.Curve",
+          "$ref": "#/definitions/Curve",
           "description": "Cryptographic Curve used to generate a given Private Key."
         },
         "addresses": {
@@ -3811,7 +3858,7 @@
           "description": "Human-readable name for a Private Key."
         },
         "curve": {
-          "$ref": "#/definitions/common.v1.Curve",
+          "$ref": "#/definitions/Curve",
           "description": "Cryptographic Curve used to generate a given Private Key."
         },
         "privateKeyTags": {
@@ -3824,7 +3871,7 @@
         "addressFormats": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/common.v1.AddressFormat"
+            "$ref": "#/definitions/AddressFormat"
           },
           "description": "Cryptocurrency-specific formats for a derived address (e.g., Ethereum)."
         }
@@ -4166,6 +4213,20 @@
       },
       "required": ["userName", "apiKeys", "authenticators"]
     },
+    "Selector": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/definitions/Operator"
+        },
+        "target": {
+          "type": "string"
+        }
+      }
+    },
     "SelectorV2": {
       "type": "object",
       "properties": {
@@ -4173,7 +4234,7 @@
           "type": "string"
         },
         "operator": {
-          "$ref": "#/definitions/activity.v1.Operator"
+          "$ref": "#/definitions/Operator"
         },
         "targets": {
           "type": "array",
@@ -4519,7 +4580,7 @@
           "description": "Human-readable name for a Policy."
         },
         "policyEffect": {
-          "$ref": "#/definitions/activity.v1.Effect",
+          "$ref": "#/definitions/Effect",
           "description": "The instruction to DENY or ALLOW an activity (optional)."
         },
         "policyCondition": {
@@ -4800,7 +4861,7 @@
           "description": "The user's email address."
         },
         "accessType": {
-          "$ref": "#/definitions/external.data.v1.AccessType",
+          "$ref": "#/definitions/AccessType",
           "description": "The User's permissible access method(s)."
         },
         "authenticators": {
@@ -4856,7 +4917,7 @@
           "description": "The user's email address."
         },
         "accessType": {
-          "$ref": "#/definitions/activity.v1.AccessType",
+          "$ref": "#/definitions/AccessType",
           "description": "The User's permissible access method(s)."
         },
         "apiKeys": {
@@ -4903,7 +4964,7 @@
           "description": "The user's email address."
         },
         "accessType": {
-          "$ref": "#/definitions/activity.v1.AccessType",
+          "$ref": "#/definitions/AccessType",
           "description": "The User's permissible access method(s)."
         },
         "apiKeys": {
@@ -5036,7 +5097,7 @@
           "description": "The Wallet the Account was derived from."
         },
         "curve": {
-          "$ref": "#/definitions/common.v1.Curve",
+          "$ref": "#/definitions/Curve",
           "description": "Cryptographic curve used to generate the Account."
         },
         "pathFormat": {
@@ -5048,7 +5109,7 @@
           "description": "Path used to generate the Account."
         },
         "addressFormat": {
-          "$ref": "#/definitions/common.v1.AddressFormat",
+          "$ref": "#/definitions/AddressFormat",
           "description": "Address format used to generate the Acccount."
         },
         "address": {
@@ -5078,7 +5139,7 @@
       "type": "object",
       "properties": {
         "curve": {
-          "$ref": "#/definitions/common.v1.Curve",
+          "$ref": "#/definitions/Curve",
           "description": "Cryptographic curve used to generate a wallet Account."
         },
         "pathFormat": {
@@ -5090,7 +5151,7 @@
           "description": "Path used to generate a wallet Account."
         },
         "addressFormat": {
-          "$ref": "#/definitions/common.v1.AddressFormat",
+          "$ref": "#/definitions/AddressFormat",
           "description": "Address format used to generate a wallet Acccount."
         }
       },
@@ -5130,24 +5191,16 @@
       },
       "required": ["walletId", "addresses"]
     },
-    "activity.v1.AccessType": {
-      "type": "string",
-      "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
-    },
     "activity.v1.Address": {
       "type": "object",
       "properties": {
         "format": {
-          "$ref": "#/definitions/common.v1.AddressFormat"
+          "$ref": "#/definitions/AddressFormat"
         },
         "address": {
           "type": "string"
         }
       }
-    },
-    "activity.v1.Effect": {
-      "type": "string",
-      "enum": ["EFFECT_ALLOW", "EFFECT_DENY"]
     },
     "activity.v1.HashFunction": {
       "type": "string",
@@ -5158,131 +5211,20 @@
         "HASH_FUNCTION_NOT_APPLICABLE"
       ]
     },
-    "activity.v1.Operator": {
-      "type": "string",
-      "enum": [
-        "OPERATOR_EQUAL",
-        "OPERATOR_MORE_THAN",
-        "OPERATOR_MORE_THAN_OR_EQUAL",
-        "OPERATOR_LESS_THAN",
-        "OPERATOR_LESS_THAN_OR_EQUAL",
-        "OPERATOR_CONTAINS",
-        "OPERATOR_NOT_EQUAL",
-        "OPERATOR_IN",
-        "OPERATOR_NOT_IN",
-        "OPERATOR_CONTAINS_ONE",
-        "OPERATOR_CONTAINS_ALL"
-      ]
-    },
     "activity.v1.PayloadEncoding": {
       "type": "string",
       "enum": ["PAYLOAD_ENCODING_HEXADECIMAL", "PAYLOAD_ENCODING_TEXT_UTF8"]
-    },
-    "activity.v1.Selector": {
-      "type": "object",
-      "properties": {
-        "subject": {
-          "type": "string"
-        },
-        "operator": {
-          "$ref": "#/definitions/activity.v1.Operator"
-        },
-        "target": {
-          "type": "string"
-        }
-      }
-    },
-    "common.v1.AddressFormat": {
-      "type": "string",
-      "enum": [
-        "ADDRESS_FORMAT_UNCOMPRESSED",
-        "ADDRESS_FORMAT_COMPRESSED",
-        "ADDRESS_FORMAT_ETHEREUM",
-        "ADDRESS_FORMAT_SOLANA",
-        "ADDRESS_FORMAT_COSMOS"
-      ]
-    },
-    "common.v1.Curve": {
-      "type": "string",
-      "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
     },
     "data.v1.Address": {
       "type": "object",
       "properties": {
         "format": {
-          "$ref": "#/definitions/data.v1.AddressFormat"
+          "$ref": "#/definitions/AddressFormat"
         },
         "address": {
           "type": "string"
         }
       }
-    },
-    "data.v1.AddressFormat": {
-      "type": "string",
-      "enum": [
-        "ADDRESS_FORMAT_UNCOMPRESSED",
-        "ADDRESS_FORMAT_COMPRESSED",
-        "ADDRESS_FORMAT_ETHEREUM"
-      ]
-    },
-    "data.v1.AuthenticatorTransport": {
-      "type": "string",
-      "enum": [
-        "AUTHENTICATOR_TRANSPORT_BLE",
-        "AUTHENTICATOR_TRANSPORT_INTERNAL",
-        "AUTHENTICATOR_TRANSPORT_NFC",
-        "AUTHENTICATOR_TRANSPORT_USB",
-        "AUTHENTICATOR_TRANSPORT_HYBRID"
-      ]
-    },
-    "data.v1.Curve": {
-      "type": "string",
-      "enum": ["CURVE_SECP256K1", "CURVE_ED25519"]
-    },
-    "data.v1.Effect": {
-      "type": "string",
-      "enum": ["EFFECT_ALLOW", "EFFECT_DENY"]
-    },
-    "data.v1.Operator": {
-      "type": "string",
-      "enum": [
-        "OPERATOR_EQUAL",
-        "OPERATOR_MORE_THAN",
-        "OPERATOR_MORE_THAN_OR_EQUAL",
-        "OPERATOR_LESS_THAN",
-        "OPERATOR_LESS_THAN_OR_EQUAL",
-        "OPERATOR_CONTAINS",
-        "OPERATOR_NOT_EQUAL",
-        "OPERATOR_IN",
-        "OPERATOR_NOT_IN",
-        "OPERATOR_CONTAINS_ONE",
-        "OPERATOR_CONTAINS_ALL"
-      ]
-    },
-    "data.v1.Selector": {
-      "type": "object",
-      "properties": {
-        "subject": {
-          "type": "string",
-          "description": "The resource being referenced within a policy (e.g., user.tags or activities.type)."
-        },
-        "operator": {
-          "$ref": "#/definitions/data.v1.Operator",
-          "description": "Logical operators like OPERATOR_CONTAINS or OPERATOR_EQUAL."
-        },
-        "targets": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The specific parameter from the subject being referenced, like a specific user ID."
-        }
-      },
-      "required": ["subject", "operator", "targets"]
-    },
-    "external.data.v1.AccessType": {
-      "type": "string",
-      "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
     },
     "external.data.v1.Credential": {
       "type": "object",
@@ -5292,18 +5234,10 @@
           "description": "The public component of a cryptographic key pair used to sign messages and transactions."
         },
         "type": {
-          "$ref": "#/definitions/external.data.v1.CredentialType"
+          "$ref": "#/definitions/CredentialType"
         }
       },
       "required": ["publicKey", "type"]
-    },
-    "external.data.v1.CredentialType": {
-      "type": "string",
-      "enum": [
-        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
-        "CREDENTIAL_TYPE_API_KEY_P256",
-        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
-      ]
     },
     "external.data.v1.Timestamp": {
       "type": "object",
@@ -5316,16 +5250,6 @@
         }
       },
       "required": ["seconds", "nanos"]
-    },
-    "webauthn.v1.AuthenticatorTransport": {
-      "type": "string",
-      "enum": [
-        "AUTHENTICATOR_TRANSPORT_BLE",
-        "AUTHENTICATOR_TRANSPORT_INTERNAL",
-        "AUTHENTICATOR_TRANSPORT_NFC",
-        "AUTHENTICATOR_TRANSPORT_USB",
-        "AUTHENTICATOR_TRANSPORT_HYBRID"
-      ]
     }
   },
   "securityDefinitions": {

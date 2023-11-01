@@ -21,7 +21,7 @@ type InvitationParams struct {
 
 	// The User's permissible access method(s).
 	// Required: true
-	AccessType *ActivityV1AccessType `json:"accessType"`
+	AccessType *AccessType `json:"accessType"`
 
 	// The email address of the intended Invitation recipient.
 	// Required: true
@@ -147,6 +147,7 @@ func (m *InvitationParams) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *InvitationParams) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AccessType != nil {
+
 		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("accessType")

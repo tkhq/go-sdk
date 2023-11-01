@@ -102,6 +102,11 @@ func (m *WalletParams) contextValidateAccounts(ctx context.Context, formats strf
 	for i := 0; i < len(m.Accounts); i++ {
 
 		if m.Accounts[i] != nil {
+
+			if swag.IsZero(m.Accounts[i]) { // not required
+				return nil
+			}
+
 			if err := m.Accounts[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("accounts" + "." + strconv.Itoa(i))

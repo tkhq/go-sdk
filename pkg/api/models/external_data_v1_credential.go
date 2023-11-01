@@ -25,7 +25,7 @@ type ExternalDataV1Credential struct {
 
 	// type
 	// Required: true
-	Type *ExternalDataV1CredentialType `json:"type"`
+	Type *CredentialType `json:"type"`
 }
 
 // Validate validates this external data v1 credential
@@ -96,6 +96,7 @@ func (m *ExternalDataV1Credential) ContextValidate(ctx context.Context, formats 
 func (m *ExternalDataV1Credential) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Type != nil {
+
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("type")

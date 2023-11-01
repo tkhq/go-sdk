@@ -22,7 +22,7 @@ type ActivityV1Address struct {
 	Address string `json:"address,omitempty"`
 
 	// format
-	Format CommonV1AddressFormat `json:"format,omitempty"`
+	Format AddressFormat `json:"format,omitempty"`
 }
 
 // Validate validates this activity v1 address
@@ -71,6 +71,10 @@ func (m *ActivityV1Address) ContextValidate(ctx context.Context, formats strfmt.
 }
 
 func (m *ActivityV1Address) contextValidateFormat(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Format) { // not required
+		return nil
+	}
 
 	if err := m.Format.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

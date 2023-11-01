@@ -21,11 +21,11 @@ type WalletAccountParams struct {
 
 	// Address format used to generate a wallet Acccount.
 	// Required: true
-	AddressFormat *CommonV1AddressFormat `json:"addressFormat"`
+	AddressFormat *AddressFormat `json:"addressFormat"`
 
 	// Cryptographic curve used to generate a wallet Account.
 	// Required: true
-	Curve *CommonV1Curve `json:"curve"`
+	Curve *Curve `json:"curve"`
 
 	// Path used to generate a wallet Account.
 	// Required: true
@@ -168,6 +168,7 @@ func (m *WalletAccountParams) ContextValidate(ctx context.Context, formats strfm
 func (m *WalletAccountParams) contextValidateAddressFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AddressFormat != nil {
+
 		if err := m.AddressFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("addressFormat")
@@ -184,6 +185,7 @@ func (m *WalletAccountParams) contextValidateAddressFormat(ctx context.Context, 
 func (m *WalletAccountParams) contextValidateCurve(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Curve != nil {
+
 		if err := m.Curve.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("curve")
@@ -200,6 +202,7 @@ func (m *WalletAccountParams) contextValidateCurve(ctx context.Context, formats 
 func (m *WalletAccountParams) contextValidatePathFormat(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PathFormat != nil {
+
 		if err := m.PathFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("pathFormat")

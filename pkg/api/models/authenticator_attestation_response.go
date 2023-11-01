@@ -34,7 +34,7 @@ type AuthenticatorAttestationResponse struct {
 	ClientDataJSON *string `json:"clientDataJson"`
 
 	// transports
-	Transports []WebauthnV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 }
 
 // Validate validates this authenticator attestation response
@@ -161,6 +161,10 @@ func (m *AuthenticatorAttestationResponse) ContextValidate(ctx context.Context, 
 func (m *AuthenticatorAttestationResponse) contextValidateTransports(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Transports); i++ {
+
+		if swag.IsZero(m.Transports[i]) { // not required
+			return nil
+		}
 
 		if err := m.Transports[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

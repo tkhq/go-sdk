@@ -30,15 +30,15 @@ func (m ActivityV1PayloadEncoding) Pointer() *ActivityV1PayloadEncoding {
 
 const (
 
-	// ActivityV1PayloadEncodingPAYLOADENCODINGHEXADECIMAL captures enum value "PAYLOAD_ENCODING_HEXADECIMAL"
-	ActivityV1PayloadEncodingPAYLOADENCODINGHEXADECIMAL ActivityV1PayloadEncoding = "PAYLOAD_ENCODING_HEXADECIMAL"
+	// PayloadEncodingHexadecimal captures enum value "PAYLOAD_ENCODING_HEXADECIMAL"
+	PayloadEncodingHexadecimal ActivityV1PayloadEncoding = "PAYLOAD_ENCODING_HEXADECIMAL"
 
-	// ActivityV1PayloadEncodingPAYLOADENCODINGTEXTUTF8 captures enum value "PAYLOAD_ENCODING_TEXT_UTF8"
-	ActivityV1PayloadEncodingPAYLOADENCODINGTEXTUTF8 ActivityV1PayloadEncoding = "PAYLOAD_ENCODING_TEXT_UTF8"
+	// PayloadEncodingTextUTF8 captures enum value "PAYLOAD_ENCODING_TEXT_UTF8"
+	PayloadEncodingTextUTF8 ActivityV1PayloadEncoding = "PAYLOAD_ENCODING_TEXT_UTF8"
 )
 
 // for schema
-var activityV1PayloadEncodingEnum []interface{}
+var ActivityV1PayloadEncodingEnum []ActivityV1PayloadEncoding
 
 func init() {
 	var res []ActivityV1PayloadEncoding
@@ -46,12 +46,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		activityV1PayloadEncodingEnum = append(activityV1PayloadEncodingEnum, v)
+		ActivityV1PayloadEncodingEnum = append(ActivityV1PayloadEncodingEnum, v)
 	}
 }
 
 func (m ActivityV1PayloadEncoding) validateActivityV1PayloadEncodingEnum(path, location string, value ActivityV1PayloadEncoding) error {
-	if err := validate.EnumCase(path, location, value, activityV1PayloadEncodingEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, ActivityV1PayloadEncodingEnum, true); err != nil {
 		return err
 	}
 	return nil

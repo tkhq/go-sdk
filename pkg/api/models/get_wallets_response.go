@@ -85,6 +85,11 @@ func (m *GetWalletsResponse) contextValidateWallets(ctx context.Context, formats
 	for i := 0; i < len(m.Wallets); i++ {
 
 		if m.Wallets[i] != nil {
+
+			if swag.IsZero(m.Wallets[i]) { // not required
+				return nil
+			}
+
 			if err := m.Wallets[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("wallets" + "." + strconv.Itoa(i))

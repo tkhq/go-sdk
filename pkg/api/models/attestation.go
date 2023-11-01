@@ -34,7 +34,7 @@ type Attestation struct {
 
 	// The type of authenticator transports.
 	// Required: true
-	Transports []WebauthnV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 }
 
 // Validate validates this attestation
@@ -129,6 +129,10 @@ func (m *Attestation) ContextValidate(ctx context.Context, formats strfmt.Regist
 func (m *Attestation) contextValidateTransports(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Transports); i++ {
+
+		if swag.IsZero(m.Transports[i]) { // not required
+			return nil
+		}
 
 		if err := m.Transports[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

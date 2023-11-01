@@ -22,7 +22,7 @@ type UserParamsV2 struct {
 
 	// The User's permissible access method(s).
 	// Required: true
-	AccessType *ActivityV1AccessType `json:"accessType"`
+	AccessType *AccessType `json:"accessType"`
 
 	// A list of API Key parameters.
 	// Required: true
@@ -195,6 +195,7 @@ func (m *UserParamsV2) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *UserParamsV2) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AccessType != nil {
+
 		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("accessType")
@@ -213,6 +214,11 @@ func (m *UserParamsV2) contextValidateAPIKeys(ctx context.Context, formats strfm
 	for i := 0; i < len(m.APIKeys); i++ {
 
 		if m.APIKeys[i] != nil {
+
+			if swag.IsZero(m.APIKeys[i]) { // not required
+				return nil
+			}
+
 			if err := m.APIKeys[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("apiKeys" + "." + strconv.Itoa(i))
@@ -233,6 +239,11 @@ func (m *UserParamsV2) contextValidateAuthenticators(ctx context.Context, format
 	for i := 0; i < len(m.Authenticators); i++ {
 
 		if m.Authenticators[i] != nil {
+
+			if swag.IsZero(m.Authenticators[i]) { // not required
+				return nil
+			}
+
 			if err := m.Authenticators[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("authenticators" + "." + strconv.Itoa(i))

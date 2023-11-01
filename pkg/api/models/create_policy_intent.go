@@ -22,7 +22,7 @@ type CreatePolicyIntent struct {
 
 	// The instruction to DENY or ALLOW a particular activity following policy selector(s).
 	// Required: true
-	Effect *ActivityV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
@@ -33,7 +33,7 @@ type CreatePolicyIntent struct {
 
 	// A list of simple functions each including a subject, target and boolean. See Policy Engine Language section for additional details.
 	// Required: true
-	Selectors []*ActivityV1Selector `json:"selectors"`
+	Selectors []*Selector `json:"selectors"`
 }
 
 // Validate validates this create policy intent
@@ -139,6 +139,7 @@ func (m *CreatePolicyIntent) ContextValidate(ctx context.Context, formats strfmt
 func (m *CreatePolicyIntent) contextValidateEffect(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Effect != nil {
+
 		if err := m.Effect.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("effect")
@@ -157,6 +158,11 @@ func (m *CreatePolicyIntent) contextValidateSelectors(ctx context.Context, forma
 	for i := 0; i < len(m.Selectors); i++ {
 
 		if m.Selectors[i] != nil {
+
+			if swag.IsZero(m.Selectors[i]) { // not required
+				return nil
+			}
+
 			if err := m.Selectors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("selectors" + "." + strconv.Itoa(i))

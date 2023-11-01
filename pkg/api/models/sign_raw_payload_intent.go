@@ -149,6 +149,7 @@ func (m *SignRawPayloadIntent) ContextValidate(ctx context.Context, formats strf
 func (m *SignRawPayloadIntent) contextValidateEncoding(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Encoding != nil {
+
 		if err := m.Encoding.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("encoding")
@@ -165,6 +166,7 @@ func (m *SignRawPayloadIntent) contextValidateEncoding(ctx context.Context, form
 func (m *SignRawPayloadIntent) contextValidateHashFunction(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HashFunction != nil {
+
 		if err := m.HashFunction.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hashFunction")

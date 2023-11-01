@@ -13,13 +13,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ActivityV1Selector activity v1 selector
+// Selector selector
 //
-// swagger:model activity.v1.Selector
-type ActivityV1Selector struct {
+// swagger:model Selector
+type Selector struct {
 
 	// operator
-	Operator ActivityV1Operator `json:"operator,omitempty"`
+	Operator Operator `json:"operator,omitempty"`
 
 	// subject
 	Subject string `json:"subject,omitempty"`
@@ -28,8 +28,8 @@ type ActivityV1Selector struct {
 	Target string `json:"target,omitempty"`
 }
 
-// Validate validates this activity v1 selector
-func (m *ActivityV1Selector) Validate(formats strfmt.Registry) error {
+// Validate validates this selector
+func (m *Selector) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOperator(formats); err != nil {
@@ -42,7 +42,7 @@ func (m *ActivityV1Selector) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ActivityV1Selector) validateOperator(formats strfmt.Registry) error {
+func (m *Selector) validateOperator(formats strfmt.Registry) error {
 	if swag.IsZero(m.Operator) { // not required
 		return nil
 	}
@@ -59,8 +59,8 @@ func (m *ActivityV1Selector) validateOperator(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this activity v1 selector based on the context it is used
-func (m *ActivityV1Selector) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this selector based on the context it is used
+func (m *Selector) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOperator(ctx, formats); err != nil {
@@ -73,7 +73,11 @@ func (m *ActivityV1Selector) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *ActivityV1Selector) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+func (m *Selector) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Operator) { // not required
+		return nil
+	}
 
 	if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -88,7 +92,7 @@ func (m *ActivityV1Selector) contextValidateOperator(ctx context.Context, format
 }
 
 // MarshalBinary interface implementation
-func (m *ActivityV1Selector) MarshalBinary() ([]byte, error) {
+func (m *Selector) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -96,8 +100,8 @@ func (m *ActivityV1Selector) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ActivityV1Selector) UnmarshalBinary(b []byte) error {
-	var res ActivityV1Selector
+func (m *Selector) UnmarshalBinary(b []byte) error {
+	var res Selector
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

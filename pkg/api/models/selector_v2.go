@@ -19,7 +19,7 @@ import (
 type SelectorV2 struct {
 
 	// operator
-	Operator ActivityV1Operator `json:"operator,omitempty"`
+	Operator Operator `json:"operator,omitempty"`
 
 	// subject
 	Subject string `json:"subject,omitempty"`
@@ -74,6 +74,10 @@ func (m *SelectorV2) ContextValidate(ctx context.Context, formats strfmt.Registr
 }
 
 func (m *SelectorV2) contextValidateOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Operator) { // not required
+		return nil
+	}
 
 	if err := m.Operator.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

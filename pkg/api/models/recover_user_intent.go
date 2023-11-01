@@ -92,6 +92,7 @@ func (m *RecoverUserIntent) ContextValidate(ctx context.Context, formats strfmt.
 func (m *RecoverUserIntent) contextValidateAuthenticator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Authenticator != nil {
+
 		if err := m.Authenticator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("authenticator")

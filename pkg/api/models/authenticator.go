@@ -54,7 +54,7 @@ type Authenticator struct {
 
 	// Types of transports that may be used by an Authenticator (e.g., USB, NFC, BLE).
 	// Required: true
-	Transports []DataV1AuthenticatorTransport `json:"transports"`
+	Transports []AuthenticatorTransport `json:"transports"`
 
 	// updated at
 	// Required: true
@@ -276,6 +276,7 @@ func (m *Authenticator) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *Authenticator) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
+
 		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("createdAt")
@@ -292,6 +293,7 @@ func (m *Authenticator) contextValidateCreatedAt(ctx context.Context, formats st
 func (m *Authenticator) contextValidateCredential(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credential != nil {
+
 		if err := m.Credential.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credential")
@@ -308,6 +310,10 @@ func (m *Authenticator) contextValidateCredential(ctx context.Context, formats s
 func (m *Authenticator) contextValidateTransports(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Transports); i++ {
+
+		if swag.IsZero(m.Transports[i]) { // not required
+			return nil
+		}
 
 		if err := m.Transports[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -326,6 +332,7 @@ func (m *Authenticator) contextValidateTransports(ctx context.Context, formats s
 func (m *Authenticator) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
+
 		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updatedAt")

@@ -27,7 +27,7 @@ type CreatePolicyIntentV3 struct {
 
 	// The instruction to DENY or ALLOW an activity.
 	// Required: true
-	Effect *ActivityV1Effect `json:"effect"`
+	Effect *Effect `json:"effect"`
 
 	// notes
 	Notes string `json:"notes,omitempty"`
@@ -105,6 +105,7 @@ func (m *CreatePolicyIntentV3) ContextValidate(ctx context.Context, formats strf
 func (m *CreatePolicyIntentV3) contextValidateEffect(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Effect != nil {
+
 		if err := m.Effect.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("effect")

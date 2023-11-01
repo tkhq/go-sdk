@@ -30,12 +30,12 @@ func (m TransactionType) Pointer() *TransactionType {
 
 const (
 
-	// TransactionTypeTRANSACTIONTYPEETHEREUM captures enum value "TRANSACTION_TYPE_ETHEREUM"
-	TransactionTypeTRANSACTIONTYPEETHEREUM TransactionType = "TRANSACTION_TYPE_ETHEREUM"
+	// TransactionTypeEthereum captures enum value "TRANSACTION_TYPE_ETHEREUM"
+	TransactionTypeEthereum TransactionType = "TRANSACTION_TYPE_ETHEREUM"
 )
 
 // for schema
-var transactionTypeEnum []interface{}
+var TransactionTypeEnum []TransactionType
 
 func init() {
 	var res []TransactionType
@@ -43,12 +43,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		transactionTypeEnum = append(transactionTypeEnum, v)
+		TransactionTypeEnum = append(TransactionTypeEnum, v)
 	}
 }
 
 func (m TransactionType) validateTransactionTypeEnum(path, location string, value TransactionType) error {
-	if err := validate.EnumCase(path, location, value, transactionTypeEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, TransactionTypeEnum, true); err != nil {
 		return err
 	}
 	return nil

@@ -85,6 +85,11 @@ func (m *CreateAPIOnlyUsersIntent) contextValidateAPIOnlyUsers(ctx context.Conte
 	for i := 0; i < len(m.APIOnlyUsers); i++ {
 
 		if m.APIOnlyUsers[i] != nil {
+
+			if swag.IsZero(m.APIOnlyUsers[i]) { // not required
+				return nil
+			}
+
 			if err := m.APIOnlyUsers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("apiOnlyUsers" + "." + strconv.Itoa(i))

@@ -75,6 +75,7 @@ func (m *GetPrivateKeyResponse) ContextValidate(ctx context.Context, formats str
 func (m *GetPrivateKeyResponse) contextValidatePrivateKey(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PrivateKey != nil {
+
 		if err := m.PrivateKey.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("privateKey")

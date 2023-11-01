@@ -30,12 +30,12 @@ func (m PathFormat) Pointer() *PathFormat {
 
 const (
 
-	// PathFormatPATHFORMATBIP32 captures enum value "PATH_FORMAT_BIP32"
-	PathFormatPATHFORMATBIP32 PathFormat = "PATH_FORMAT_BIP32"
+	// PathFormatBip32 captures enum value "PATH_FORMAT_BIP32"
+	PathFormatBip32 PathFormat = "PATH_FORMAT_BIP32"
 )
 
 // for schema
-var pathFormatEnum []interface{}
+var PathFormatEnum []PathFormat
 
 func init() {
 	var res []PathFormat
@@ -43,12 +43,12 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		pathFormatEnum = append(pathFormatEnum, v)
+		PathFormatEnum = append(PathFormatEnum, v)
 	}
 }
 
 func (m PathFormat) validatePathFormatEnum(path, location string, value PathFormat) error {
-	if err := validate.EnumCase(path, location, value, pathFormatEnum, true); err != nil {
+	if err := validate.EnumCase(path, location, value, PathFormatEnum, true); err != nil {
 		return err
 	}
 	return nil

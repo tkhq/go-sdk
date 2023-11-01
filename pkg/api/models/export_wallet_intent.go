@@ -104,6 +104,10 @@ func (m *ExportWalletIntent) ContextValidate(ctx context.Context, formats strfmt
 
 func (m *ExportWalletIntent) contextValidateLanguage(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Language) { // not required
+		return nil
+	}
+
 	if err := m.Language.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("language")

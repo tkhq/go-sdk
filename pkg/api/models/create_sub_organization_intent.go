@@ -92,6 +92,7 @@ func (m *CreateSubOrganizationIntent) ContextValidate(ctx context.Context, forma
 func (m *CreateSubOrganizationIntent) contextValidateRootAuthenticator(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RootAuthenticator != nil {
+
 		if err := m.RootAuthenticator.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rootAuthenticator")

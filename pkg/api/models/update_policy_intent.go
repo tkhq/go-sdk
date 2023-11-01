@@ -26,7 +26,7 @@ type UpdatePolicyIntent struct {
 	PolicyConsensus string `json:"policyConsensus,omitempty"`
 
 	// The instruction to DENY or ALLOW an activity (optional).
-	PolicyEffect ActivityV1Effect `json:"policyEffect,omitempty"`
+	PolicyEffect Effect `json:"policyEffect,omitempty"`
 
 	// Unique identifier for a given Policy.
 	// Required: true
@@ -98,6 +98,10 @@ func (m *UpdatePolicyIntent) ContextValidate(ctx context.Context, formats strfmt
 }
 
 func (m *UpdatePolicyIntent) contextValidatePolicyEffect(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.PolicyEffect) { // not required
+		return nil
+	}
 
 	if err := m.PolicyEffect.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
