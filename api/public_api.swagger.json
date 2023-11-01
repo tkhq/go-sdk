@@ -3446,6 +3446,15 @@
       },
       "required": ["organizationId", "organizationName", "userId", "username"]
     },
+    "HashFunction": {
+      "type": "string",
+      "enum": [
+        "HASH_FUNCTION_NO_OP",
+        "HASH_FUNCTION_SHA256",
+        "HASH_FUNCTION_KECCAK256",
+        "HASH_FUNCTION_NOT_APPLICABLE"
+      ]
+    },
     "InitUserEmailRecoveryIntent": {
       "type": "object",
       "properties": {
@@ -3747,6 +3756,10 @@
     "PathFormat": {
       "type": "string",
       "enum": ["PATH_FORMAT_BIP32"]
+    },
+    "PayloadEncoding": {
+      "type": "string",
+      "enum": ["PAYLOAD_ENCODING_HEXADECIMAL", "PAYLOAD_ENCODING_TEXT_UTF8"]
     },
     "Policy": {
       "type": "object",
@@ -4378,11 +4391,11 @@
           "description": "Raw unsigned payload to be signed."
         },
         "encoding": {
-          "$ref": "#/definitions/activity.v1.PayloadEncoding",
+          "$ref": "#/definitions/PayloadEncoding",
           "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
         },
         "hashFunction": {
-          "$ref": "#/definitions/activity.v1.HashFunction",
+          "$ref": "#/definitions/HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
         }
       },
@@ -4400,11 +4413,11 @@
           "description": "Raw unsigned payload to be signed."
         },
         "encoding": {
-          "$ref": "#/definitions/activity.v1.PayloadEncoding",
+          "$ref": "#/definitions/PayloadEncoding",
           "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
         },
         "hashFunction": {
-          "$ref": "#/definitions/activity.v1.HashFunction",
+          "$ref": "#/definitions/HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
         }
       },
@@ -5201,19 +5214,6 @@
           "type": "string"
         }
       }
-    },
-    "activity.v1.HashFunction": {
-      "type": "string",
-      "enum": [
-        "HASH_FUNCTION_NO_OP",
-        "HASH_FUNCTION_SHA256",
-        "HASH_FUNCTION_KECCAK256",
-        "HASH_FUNCTION_NOT_APPLICABLE"
-      ]
-    },
-    "activity.v1.PayloadEncoding": {
-      "type": "string",
-      "enum": ["PAYLOAD_ENCODING_HEXADECIMAL", "PAYLOAD_ENCODING_TEXT_UTF8"]
     },
     "data.v1.Address": {
       "type": "object",

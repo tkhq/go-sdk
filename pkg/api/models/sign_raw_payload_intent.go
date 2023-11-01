@@ -21,11 +21,11 @@ type SignRawPayloadIntent struct {
 
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	// Required: true
-	Encoding *ActivityV1PayloadEncoding `json:"encoding"`
+	Encoding *PayloadEncoding `json:"encoding"`
 
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	// Required: true
-	HashFunction *ActivityV1HashFunction `json:"hashFunction"`
+	HashFunction *HashFunction `json:"hashFunction"`
 
 	// Raw unsigned payload to be signed.
 	// Required: true
