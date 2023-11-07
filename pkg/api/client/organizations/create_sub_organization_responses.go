@@ -30,7 +30,7 @@ func (o *CreateSubOrganizationReader) ReadResponse(response runtime.ClientRespon
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/create_sub_organization] CreateSubOrganization", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *CreateSubOrganizationOK) IsServerError() bool {
 // IsCode returns true when this create sub organization o k response a status code equal to that given
 func (o *CreateSubOrganizationOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the create sub organization o k response
-func (o *CreateSubOrganizationOK) Code() int {
-	return 200
 }
 
 func (o *CreateSubOrganizationOK) Error() string {

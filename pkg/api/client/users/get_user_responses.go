@@ -30,7 +30,7 @@ func (o *GetUserReader) ReadResponse(response runtime.ClientResponse, consumer r
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/query/get_user] GetUser", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *GetUserOK) IsServerError() bool {
 // IsCode returns true when this get user o k response a status code equal to that given
 func (o *GetUserOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the get user o k response
-func (o *GetUserOK) Code() int {
-	return 200
 }
 
 func (o *GetUserOK) Error() string {

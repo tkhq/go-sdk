@@ -30,7 +30,7 @@ func (o *SignTransactionReader) ReadResponse(response runtime.ClientResponse, co
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/sign_transaction] SignTransaction", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *SignTransactionOK) IsServerError() bool {
 // IsCode returns true when this sign transaction o k response a status code equal to that given
 func (o *SignTransactionOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the sign transaction o k response
-func (o *SignTransactionOK) Code() int {
-	return 200
 }
 
 func (o *SignTransactionOK) Error() string {

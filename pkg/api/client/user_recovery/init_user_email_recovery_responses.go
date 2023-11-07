@@ -30,7 +30,7 @@ func (o *InitUserEmailRecoveryReader) ReadResponse(response runtime.ClientRespon
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/init_user_email_recovery] InitUserEmailRecovery", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *InitUserEmailRecoveryOK) IsServerError() bool {
 // IsCode returns true when this init user email recovery o k response a status code equal to that given
 func (o *InitUserEmailRecoveryOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the init user email recovery o k response
-func (o *InitUserEmailRecoveryOK) Code() int {
-	return 200
 }
 
 func (o *InitUserEmailRecoveryOK) Error() string {

@@ -30,7 +30,7 @@ func (o *DeletePolicyReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/delete_policy] DeletePolicy", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *DeletePolicyOK) IsServerError() bool {
 // IsCode returns true when this delete policy o k response a status code equal to that given
 func (o *DeletePolicyOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the delete policy o k response
-func (o *DeletePolicyOK) Code() int {
-	return 200
 }
 
 func (o *DeletePolicyOK) Error() string {

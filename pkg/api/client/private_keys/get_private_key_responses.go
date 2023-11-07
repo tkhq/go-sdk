@@ -30,7 +30,7 @@ func (o *GetPrivateKeyReader) ReadResponse(response runtime.ClientResponse, cons
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/query/get_private_key] GetPrivateKey", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *GetPrivateKeyOK) IsServerError() bool {
 // IsCode returns true when this get private key o k response a status code equal to that given
 func (o *GetPrivateKeyOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the get private key o k response
-func (o *GetPrivateKeyOK) Code() int {
-	return 200
 }
 
 func (o *GetPrivateKeyOK) Error() string {

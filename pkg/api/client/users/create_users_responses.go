@@ -30,7 +30,7 @@ func (o *CreateUsersReader) ReadResponse(response runtime.ClientResponse, consum
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/create_users] CreateUsers", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *CreateUsersOK) IsServerError() bool {
 // IsCode returns true when this create users o k response a status code equal to that given
 func (o *CreateUsersOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the create users o k response
-func (o *CreateUsersOK) Code() int {
-	return 200
 }
 
 func (o *CreateUsersOK) Error() string {

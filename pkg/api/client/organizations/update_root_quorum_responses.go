@@ -30,7 +30,7 @@ func (o *UpdateRootQuorumReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/update_root_quorum] UpdateRootQuorum", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *UpdateRootQuorumOK) IsServerError() bool {
 // IsCode returns true when this update root quorum o k response a status code equal to that given
 func (o *UpdateRootQuorumOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the update root quorum o k response
-func (o *UpdateRootQuorumOK) Code() int {
-	return 200
 }
 
 func (o *UpdateRootQuorumOK) Error() string {

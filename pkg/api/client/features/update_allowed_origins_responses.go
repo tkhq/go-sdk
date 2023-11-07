@@ -30,7 +30,7 @@ func (o *UpdateAllowedOriginsReader) ReadResponse(response runtime.ClientRespons
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/update_allowed_origins] UpdateAllowedOrigins", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *UpdateAllowedOriginsOK) IsServerError() bool {
 // IsCode returns true when this update allowed origins o k response a status code equal to that given
 func (o *UpdateAllowedOriginsOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the update allowed origins o k response
-func (o *UpdateAllowedOriginsOK) Code() int {
-	return 200
 }
 
 func (o *UpdateAllowedOriginsOK) Error() string {

@@ -30,7 +30,7 @@ func (o *RemoveOrganizationFeatureReader) ReadResponse(response runtime.ClientRe
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/remove_organization_feature] RemoveOrganizationFeature", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *RemoveOrganizationFeatureOK) IsServerError() bool {
 // IsCode returns true when this remove organization feature o k response a status code equal to that given
 func (o *RemoveOrganizationFeatureOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the remove organization feature o k response
-func (o *RemoveOrganizationFeatureOK) Code() int {
-	return 200
 }
 
 func (o *RemoveOrganizationFeatureOK) Error() string {

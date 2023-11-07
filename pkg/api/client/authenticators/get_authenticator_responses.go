@@ -30,7 +30,7 @@ func (o *GetAuthenticatorReader) ReadResponse(response runtime.ClientResponse, c
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/query/get_authenticator] GetAuthenticator", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *GetAuthenticatorOK) IsServerError() bool {
 // IsCode returns true when this get authenticator o k response a status code equal to that given
 func (o *GetAuthenticatorOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the get authenticator o k response
-func (o *GetAuthenticatorOK) Code() int {
-	return 200
 }
 
 func (o *GetAuthenticatorOK) Error() string {

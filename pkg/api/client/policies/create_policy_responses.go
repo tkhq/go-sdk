@@ -30,7 +30,7 @@ func (o *CreatePolicyReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/create_policy] CreatePolicy", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *CreatePolicyOK) IsServerError() bool {
 // IsCode returns true when this create policy o k response a status code equal to that given
 func (o *CreatePolicyOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the create policy o k response
-func (o *CreatePolicyOK) Code() int {
-	return 200
 }
 
 func (o *CreatePolicyOK) Error() string {

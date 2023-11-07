@@ -30,7 +30,7 @@ func (o *CreatePrivateKeyTagReader) ReadResponse(response runtime.ClientResponse
 		}
 		return result, nil
 	default:
-		return nil, runtime.NewAPIError("[POST /public/v1/submit/create_private_key_tag] CreatePrivateKeyTag", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -71,11 +71,6 @@ func (o *CreatePrivateKeyTagOK) IsServerError() bool {
 // IsCode returns true when this create private key tag o k response a status code equal to that given
 func (o *CreatePrivateKeyTagOK) IsCode(code int) bool {
 	return code == 200
-}
-
-// Code gets the status code for the create private key tag o k response
-func (o *CreatePrivateKeyTagOK) Code() int {
-	return 200
 }
 
 func (o *CreatePrivateKeyTagOK) Error() string {
