@@ -34,8 +34,6 @@ type ClientService interface {
 
 	SetOrganizationFeature(params *SetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SetOrganizationFeatureOK, error)
 
-	UpdateAllowedOrigins(params *UpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateAllowedOriginsOK, error)
-
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -118,47 +116,6 @@ func (a *Client) SetOrganizationFeature(params *SetOrganizationFeatureParams, au
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for SetOrganizationFeature: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-UpdateAllowedOrigins updates allowed origins
-
-Update the origins WebAuthN credentials are allowed to sign requests from. Setting this on a Parent-Organization applies to all Sub-Organizations.
-*/
-func (a *Client) UpdateAllowedOrigins(params *UpdateAllowedOriginsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateAllowedOriginsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateAllowedOriginsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "UpdateAllowedOrigins",
-		Method:             "POST",
-		PathPattern:        "/public/v1/submit/update_allowed_origins",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &UpdateAllowedOriginsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateAllowedOriginsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateAllowedOrigins: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
