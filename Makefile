@@ -1,3 +1,5 @@
+SWAGGER_VERSION := $(shell swagger version 2>/dev/null)
+
 all: generate
 
 .PHONY: build
@@ -9,7 +11,7 @@ test:
 	go test -v ./...
 
 .PHONY: generate
-generate: clean
+generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
 	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
 	go mod tidy
@@ -17,3 +19,5 @@ generate: clean
 .PHONY: clean
 clean:
 	rm -rf pkg/api
+
+you-need-to-install-go-swagger-check-readme: ; @which swagger > /dev/null
