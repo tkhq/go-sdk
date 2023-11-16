@@ -299,6 +299,32 @@
         "tags": ["Policies"]
       }
     },
+    "/public/v1/query/list_private_key_tags": {
+      "post": {
+        "summary": "List Private Key Tags",
+        "description": "List all Private Key Tags within an Organization",
+        "operationId": "ListPrivateKeyTags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListPrivateKeyTagsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ListPrivateKeyTagsRequest"
+            }
+          }
+        ],
+        "tags": ["Private Key Tags"]
+      }
+    },
     "/public/v1/query/list_private_keys": {
       "post": {
         "summary": "List Private Keys",
@@ -323,6 +349,32 @@
           }
         ],
         "tags": ["Private Keys"]
+      }
+    },
+    "/public/v1/query/list_user_tags": {
+      "post": {
+        "summary": "List User Tags",
+        "description": "List all User Tags within an Organization",
+        "operationId": "ListUserTags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListUserTagsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ListUserTagsRequest"
+            }
+          }
+        ],
+        "tags": ["User Tags"]
       }
     },
     "/public/v1/query/list_users": {
@@ -1077,32 +1129,6 @@
           }
         ],
         "tags": ["Signers"]
-      }
-    },
-    "/public/v1/submit/update_allowed_origins": {
-      "post": {
-        "summary": "Update Allowed Origins",
-        "description": "Update the origins WebAuthN credentials are allowed to sign requests from. Setting this on a Parent-Organization applies to all Sub-Organizations.",
-        "operationId": "UpdateAllowedOrigins",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ActivityResponse"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UpdateAllowedOriginsRequest"
-            }
-          }
-        ],
-        "tags": ["Features"]
       }
     },
     "/public/v1/submit/update_policy": {
@@ -3084,7 +3110,10 @@
     },
     "FeatureName": {
       "type": "string",
-      "enum": ["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"]
+      "enum": [
+        "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY",
+        "FEATURE_NAME_WEBAUTHN_ORIGINS"
+      ]
     },
     "GetActivitiesRequest": {
       "type": "object",
@@ -3705,6 +3734,54 @@
         "accessType",
         "senderUserId"
       ]
+    },
+    "ListPrivateKeyTagsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "ListPrivateKeyTagsResponse": {
+      "type": "object",
+      "properties": {
+        "privateKeyTags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1.Tag"
+          },
+          "description": "A list of Private Key Tags"
+        }
+      },
+      "required": ["privateKeyTags"]
+    },
+    "ListUserTagsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "ListUserTagsResponse": {
+      "type": "object",
+      "properties": {
+        "userTags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1.Tag"
+          },
+          "description": "A list of User Tags"
+        }
+      },
+      "required": ["userTags"]
     },
     "MnemonicLanguage": {
       "type": "string",
@@ -4540,6 +4617,10 @@
         }
       }
     },
+    "TagType": {
+      "type": "string",
+      "enum": ["TAG_TYPE_USER", "TAG_TYPE_PRIVATE_KEY"]
+    },
     "TransactionType": {
       "type": "string",
       "enum": ["TRANSACTION_TYPE_ETHEREUM"]
@@ -4556,27 +4637,6 @@
         }
       },
       "required": ["allowedOrigins"]
-    },
-    "UpdateAllowedOriginsRequest": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"]
-        },
-        "timestampMs": {
-          "type": "string",
-          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
-        },
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        },
-        "parameters": {
-          "$ref": "#/definitions/UpdateAllowedOriginsIntent"
-        }
-      },
-      "required": ["type", "timestampMs", "organizationId", "parameters"]
     },
     "UpdateAllowedOriginsResult": {
       "type": "object"
@@ -4873,10 +4933,6 @@
           "type": "string",
           "description": "The user's email address."
         },
-        "accessType": {
-          "$ref": "#/definitions/AccessType",
-          "description": "The User's permissible access method(s)."
-        },
         "authenticators": {
           "type": "array",
           "items": {
@@ -4910,7 +4966,6 @@
       "required": [
         "userId",
         "userName",
-        "accessType",
         "authenticators",
         "apiKeys",
         "userTags",
@@ -4976,10 +5031,6 @@
           "type": "string",
           "description": "The user's email address."
         },
-        "accessType": {
-          "$ref": "#/definitions/AccessType",
-          "description": "The User's permissible access method(s)."
-        },
         "apiKeys": {
           "type": "array",
           "items": {
@@ -5004,13 +5055,7 @@
           "description": "A list of User Tag IDs."
         }
       },
-      "required": [
-        "userName",
-        "accessType",
-        "apiKeys",
-        "authenticators",
-        "userTags"
-      ]
+      "required": ["userName", "apiKeys", "authenticators", "userTags"]
     },
     "Vote": {
       "type": "object",
@@ -5250,6 +5295,29 @@
         }
       },
       "required": ["seconds", "nanos"]
+    },
+    "v1.Tag": {
+      "type": "object",
+      "properties": {
+        "tagId": {
+          "type": "string",
+          "description": "Unique identifier for a given Tag."
+        },
+        "tagName": {
+          "type": "string",
+          "description": "Human-readable name for a Tag."
+        },
+        "tagType": {
+          "$ref": "#/definitions/TagType"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        }
+      },
+      "required": ["tagId", "tagName", "tagType", "createdAt", "updatedAt"]
     }
   },
   "securityDefinitions": {

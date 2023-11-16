@@ -20,10 +20,6 @@ import (
 // swagger:model UserParamsV2
 type UserParamsV2 struct {
 
-	// The User's permissible access method(s).
-	// Required: true
-	AccessType *AccessType `json:"accessType"`
-
 	// A list of API Key parameters.
 	// Required: true
 	APIKeys []*APIKeyParams `json:"apiKeys"`
@@ -48,10 +44,6 @@ type UserParamsV2 struct {
 func (m *UserParamsV2) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateAccessType(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateAPIKeys(formats); err != nil {
 		res = append(res, err)
 	}
@@ -71,30 +63,6 @@ func (m *UserParamsV2) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *UserParamsV2) validateAccessType(formats strfmt.Registry) error {
-
-	if err := validate.Required("accessType", "body", m.AccessType); err != nil {
-		return err
-	}
-
-	if err := validate.Required("accessType", "body", m.AccessType); err != nil {
-		return err
-	}
-
-	if m.AccessType != nil {
-		if err := m.AccessType.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("accessType")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("accessType")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -174,10 +142,6 @@ func (m *UserParamsV2) validateUserTags(formats strfmt.Registry) error {
 func (m *UserParamsV2) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateAccessType(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateAPIKeys(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -189,23 +153,6 @@ func (m *UserParamsV2) ContextValidate(ctx context.Context, formats strfmt.Regis
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *UserParamsV2) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.AccessType != nil {
-
-		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("accessType")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("accessType")
-			}
-			return err
-		}
-	}
-
 	return nil
 }
 

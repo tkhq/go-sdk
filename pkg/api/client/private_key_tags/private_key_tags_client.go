@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeyTagOK, error)
 
+	ListPrivateKeyTags(params *ListPrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrivateKeyTagsOK, error)
+
 	UpdatePrivateKeyTag(params *UpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePrivateKeyTagOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -75,6 +77,47 @@ func (a *Client) CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreatePrivateKeyTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListPrivateKeyTags lists private key tags
+
+List all Private Key Tags within an Organization
+*/
+func (a *Client) ListPrivateKeyTags(params *ListPrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrivateKeyTagsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListPrivateKeyTagsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListPrivateKeyTags",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_private_key_tags",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListPrivateKeyTagsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListPrivateKeyTagsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ListPrivateKeyTags: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
