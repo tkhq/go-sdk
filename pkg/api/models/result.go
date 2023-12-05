@@ -102,6 +102,9 @@ type Result struct {
 	// disable private key result
 	DisablePrivateKeyResult *DisablePrivateKeyResult `json:"disablePrivateKeyResult,omitempty"`
 
+	// email auth result
+	EmailAuthResult *EmailAuthResult `json:"emailAuthResult,omitempty"`
+
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
 
@@ -261,6 +264,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDisablePrivateKeyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmailAuthResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -854,6 +861,25 @@ func (m *Result) validateDisablePrivateKeyResult(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *Result) validateEmailAuthResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmailAuthResult) { // not required
+		return nil
+	}
+
+	if m.EmailAuthResult != nil {
+		if err := m.EmailAuthResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateExportPrivateKeyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyResult) { // not required
 		return nil
@@ -1214,6 +1240,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDisablePrivateKeyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmailAuthResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1855,6 +1885,27 @@ func (m *Result) contextValidateDisablePrivateKeyResult(ctx context.Context, for
 				return ve.ValidateName("disablePrivateKeyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("disablePrivateKeyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateEmailAuthResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailAuthResult != nil {
+
+		if swag.IsZero(m.EmailAuthResult) { // not required
+			return nil
+		}
+
+		if err := m.EmailAuthResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthResult")
 			}
 			return err
 		}

@@ -128,6 +128,9 @@ type Intent struct {
 	// disable private key intent
 	DisablePrivateKeyIntent *DisablePrivateKeyIntent `json:"disablePrivateKeyIntent,omitempty"`
 
+	// email auth intent
+	EmailAuthIntent *EmailAuthIntent `json:"emailAuthIntent,omitempty"`
+
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
 
@@ -331,6 +334,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDisablePrivateKeyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmailAuthIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1101,6 +1108,25 @@ func (m *Intent) validateDisablePrivateKeyIntent(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *Intent) validateEmailAuthIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmailAuthIntent) { // not required
+		return nil
+	}
+
+	if m.EmailAuthIntent != nil {
+		if err := m.EmailAuthIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateExportPrivateKeyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyIntent) { // not required
 		return nil
@@ -1607,6 +1633,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDisablePrivateKeyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmailAuthIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2436,6 +2466,27 @@ func (m *Intent) contextValidateDisablePrivateKeyIntent(ctx context.Context, for
 				return ve.ValidateName("disablePrivateKeyIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("disablePrivateKeyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateEmailAuthIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailAuthIntent != nil {
+
+		if swag.IsZero(m.EmailAuthIntent) { // not required
+			return nil
+		}
+
+		if err := m.EmailAuthIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntent")
 			}
 			return err
 		}
