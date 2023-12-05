@@ -23,6 +23,9 @@ type APIKeyParams struct {
 	// Required: true
 	APIKeyName *string `json:"apiKeyName"`
 
+	// Optional window (in seconds) indicating how long the API Key should last.
+	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+
 	// The public component of a cryptographic key pair used to sign messages and transactions.
 	// Required: true
 	PublicKey *string `json:"publicKey"`

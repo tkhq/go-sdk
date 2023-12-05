@@ -14,6 +14,7 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/api_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/authenticators"
 	"github.com/tkhq/go-sdk/pkg/api/client/consensus"
+	"github.com/tkhq/go-sdk/pkg/api/client/email_auth"
 	"github.com/tkhq/go-sdk/pkg/api/client/features"
 	"github.com/tkhq/go-sdk/pkg/api/client/invitations"
 	"github.com/tkhq/go-sdk/pkg/api/client/organizations"
@@ -74,6 +75,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyAPI
 	cli.APIKeys = api_keys.New(transport, formats)
 	cli.Authenticators = authenticators.New(transport, formats)
 	cli.Consensus = consensus.New(transport, formats)
+	cli.EmailAuth = email_auth.New(transport, formats)
 	cli.Features = features.New(transport, formats)
 	cli.Invitations = invitations.New(transport, formats)
 	cli.Organizations = organizations.New(transport, formats)
@@ -138,6 +140,8 @@ type TurnkeyAPI struct {
 
 	Consensus consensus.ClientService
 
+	EmailAuth email_auth.ClientService
+
 	Features features.ClientService
 
 	Invitations invitations.ClientService
@@ -172,6 +176,7 @@ func (c *TurnkeyAPI) SetTransport(transport runtime.ClientTransport) {
 	c.APIKeys.SetTransport(transport)
 	c.Authenticators.SetTransport(transport)
 	c.Consensus.SetTransport(transport)
+	c.EmailAuth.SetTransport(transport)
 	c.Features.SetTransport(transport)
 	c.Invitations.SetTransport(transport)
 	c.Organizations.SetTransport(transport)

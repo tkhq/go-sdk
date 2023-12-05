@@ -20,6 +20,9 @@ import (
 // swagger:model CreateSubOrganizationIntentV4
 type CreateSubOrganizationIntentV4 struct {
 
+	// Disable email auth for the sub-organization
+	DisableEmailAuth bool `json:"disableEmailAuth,omitempty"`
+
 	// Disable email recovery for the sub-organization
 	DisableEmailRecovery bool `json:"disableEmailRecovery,omitempty"`
 
