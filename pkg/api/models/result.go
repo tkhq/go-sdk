@@ -108,6 +108,9 @@ type Result struct {
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
 
+	// export wallet account result
+	ExportWalletAccountResult *ExportWalletAccountResult `json:"exportWalletAccountResult,omitempty"`
+
 	// export wallet result
 	ExportWalletResult *ExportWalletResult `json:"exportWalletResult,omitempty"`
 
@@ -272,6 +275,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExportPrivateKeyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExportWalletAccountResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -899,6 +906,25 @@ func (m *Result) validateExportPrivateKeyResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateExportWalletAccountResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExportWalletAccountResult) { // not required
+		return nil
+	}
+
+	if m.ExportWalletAccountResult != nil {
+		if err := m.ExportWalletAccountResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletAccountResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletAccountResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateExportWalletResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportWalletResult) { // not required
 		return nil
@@ -1248,6 +1274,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateExportPrivateKeyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExportWalletAccountResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1927,6 +1957,27 @@ func (m *Result) contextValidateExportPrivateKeyResult(ctx context.Context, form
 				return ve.ValidateName("exportPrivateKeyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("exportPrivateKeyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateExportWalletAccountResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExportWalletAccountResult != nil {
+
+		if swag.IsZero(m.ExportWalletAccountResult) { // not required
+			return nil
+		}
+
+		if err := m.ExportWalletAccountResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletAccountResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletAccountResult")
 			}
 			return err
 		}

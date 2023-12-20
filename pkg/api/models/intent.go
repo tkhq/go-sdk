@@ -134,6 +134,9 @@ type Intent struct {
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
 
+	// export wallet account intent
+	ExportWalletAccountIntent *ExportWalletAccountIntent `json:"exportWalletAccountIntent,omitempty"`
+
 	// export wallet intent
 	ExportWalletIntent *ExportWalletIntent `json:"exportWalletIntent,omitempty"`
 
@@ -342,6 +345,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExportPrivateKeyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateExportWalletAccountIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1146,6 +1153,25 @@ func (m *Intent) validateExportPrivateKeyIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateExportWalletAccountIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExportWalletAccountIntent) { // not required
+		return nil
+	}
+
+	if m.ExportWalletAccountIntent != nil {
+		if err := m.ExportWalletAccountIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletAccountIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletAccountIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateExportWalletIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportWalletIntent) { // not required
 		return nil
@@ -1641,6 +1667,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateExportPrivateKeyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExportWalletAccountIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2508,6 +2538,27 @@ func (m *Intent) contextValidateExportPrivateKeyIntent(ctx context.Context, form
 				return ve.ValidateName("exportPrivateKeyIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("exportPrivateKeyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateExportWalletAccountIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExportWalletAccountIntent != nil {
+
+		if swag.IsZero(m.ExportWalletAccountIntent) { // not required
+			return nil
+		}
+
+		if err := m.ExportWalletAccountIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exportWalletAccountIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("exportWalletAccountIntent")
 			}
 			return err
 		}

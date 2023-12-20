@@ -34,6 +34,10 @@ type ClientService interface {
 
 	DeleteAPIKeys(params *DeleteAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAPIKeysOK, error)
 
+	GetAPIKey(params *GetAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeyOK, error)
+
+	GetAPIKeys(params *GetAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeysOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -116,6 +120,88 @@ func (a *Client) DeleteAPIKeys(params *DeleteAPIKeysParams, authInfo runtime.Cli
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for DeleteApiKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetAPIKey gets API key
+
+Get details about an API key
+*/
+func (a *Client) GetAPIKey(params *GetAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetAPIKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetApiKey",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_api_key",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetAPIKeyReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetAPIKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetApiKey: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetAPIKeys gets API key
+
+Get details about API keys for a user
+*/
+func (a *Client) GetAPIKeys(params *GetAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeysOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetAPIKeysParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetApiKeys",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_api_keys",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetAPIKeysReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetAPIKeysOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetApiKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
