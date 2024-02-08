@@ -25,7 +25,7 @@ type CreateWalletIntent struct {
 	Accounts []*WalletAccountParams `json:"accounts"`
 
 	// Length of mnemonic to generate the Wallet seed. Defaults to 12. Accepted values: 12, 15, 18, 21, 24.
-	MnemonicLength string `json:"mnemonicLength,omitempty"`
+	MnemonicLength int32 `json:"mnemonicLength,omitempty"`
 
 	// Human-readable name for a Wallet.
 	// Required: true
