@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/signers"
+	"github.com/tkhq/go-sdk/pkg/api/client/signing"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 )
 
@@ -25,7 +25,7 @@ func main() {
 	var privateKeyID string
 	var unsignedTransaction string // no 0x prefix necessary
 
-	pkParams := signers.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{
+	pkParams := signing.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{
 		OrganizationID: client.DefaultOrganization(),
 		TimestampMs:    &timestampString,
 		Parameters: &models.SignTransactionIntentV2{
@@ -36,7 +36,7 @@ func main() {
 		Type: (*string)(models.ActivityTypeSignTransaction.Pointer()),
 	})
 
-	signResp, err := client.V0().Signers.SignTransaction(pkParams, client.Authenticator)
+	signResp, err := client.V0().Signing.SignTransaction(pkParams, client.Authenticator)
 	if err != nil {
 		log.Fatal("failed to make PrivateKeys SignTransaction request:", err)
 	}

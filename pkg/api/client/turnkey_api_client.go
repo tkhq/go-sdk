@@ -21,7 +21,7 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/private_key_tags"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_keys"
 	"github.com/tkhq/go-sdk/pkg/api/client/sessions"
-	"github.com/tkhq/go-sdk/pkg/api/client/signers"
+	"github.com/tkhq/go-sdk/pkg/api/client/signing"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_auth"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_recovery"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_tags"
@@ -82,7 +82,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyAPI
 	cli.PrivateKeyTags = private_key_tags.New(transport, formats)
 	cli.PrivateKeys = private_keys.New(transport, formats)
 	cli.Sessions = sessions.New(transport, formats)
-	cli.Signers = signers.New(transport, formats)
+	cli.Signing = signing.New(transport, formats)
 	cli.UserAuth = user_auth.New(transport, formats)
 	cli.UserRecovery = user_recovery.New(transport, formats)
 	cli.UserTags = user_tags.New(transport, formats)
@@ -154,7 +154,7 @@ type TurnkeyAPI struct {
 
 	Sessions sessions.ClientService
 
-	Signers signers.ClientService
+	Signing signing.ClientService
 
 	UserAuth user_auth.ClientService
 
@@ -183,7 +183,7 @@ func (c *TurnkeyAPI) SetTransport(transport runtime.ClientTransport) {
 	c.PrivateKeyTags.SetTransport(transport)
 	c.PrivateKeys.SetTransport(transport)
 	c.Sessions.SetTransport(transport)
-	c.Signers.SetTransport(transport)
+	c.Signing.SetTransport(transport)
 	c.UserAuth.SetTransport(transport)
 	c.UserRecovery.SetTransport(transport)
 	c.UserTags.SetTransport(transport)
