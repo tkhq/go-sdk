@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeyTagOK, error)
 
+	DeletePrivateKeyTags(params *DeletePrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeyTagsOK, error)
+
 	ListPrivateKeyTags(params *ListPrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrivateKeyTagsOK, error)
 
 	UpdatePrivateKeyTag(params *UpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePrivateKeyTagOK, error)
@@ -77,6 +79,47 @@ func (a *Client) CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreatePrivateKeyTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeletePrivateKeyTags deletes private key tags
+
+Delete Private Key Tags within an Organization
+*/
+func (a *Client) DeletePrivateKeyTags(params *DeletePrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeyTagsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeletePrivateKeyTagsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeletePrivateKeyTags",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_private_key_tags",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePrivateKeyTagsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeletePrivateKeyTagsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeletePrivateKeyTags: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

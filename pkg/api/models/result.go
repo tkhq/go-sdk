@@ -114,6 +114,12 @@ type Result struct {
 	// export wallet result
 	ExportWalletResult *ExportWalletResult `json:"exportWalletResult,omitempty"`
 
+	// import wallet result
+	ImportWalletResult *ImportWalletResult `json:"importWalletResult,omitempty"`
+
+	// init import wallet result
+	InitImportWalletResult *InitImportWalletResult `json:"initImportWalletResult,omitempty"`
+
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
 
@@ -283,6 +289,14 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExportWalletResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImportWalletResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitImportWalletResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -944,6 +958,44 @@ func (m *Result) validateExportWalletResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateImportWalletResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.ImportWalletResult) { // not required
+		return nil
+	}
+
+	if m.ImportWalletResult != nil {
+		if err := m.ImportWalletResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateInitImportWalletResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitImportWalletResult) { // not required
+		return nil
+	}
+
+	if m.InitImportWalletResult != nil {
+		if err := m.InitImportWalletResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryResult) { // not required
 		return nil
@@ -1282,6 +1334,14 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateExportWalletResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImportWalletResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitImportWalletResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1999,6 +2059,48 @@ func (m *Result) contextValidateExportWalletResult(ctx context.Context, formats 
 				return ve.ValidateName("exportWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("exportWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateImportWalletResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ImportWalletResult != nil {
+
+		if swag.IsZero(m.ImportWalletResult) { // not required
+			return nil
+		}
+
+		if err := m.ImportWalletResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateInitImportWalletResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitImportWalletResult != nil {
+
+		if swag.IsZero(m.InitImportWalletResult) { // not required
+			return nil
+		}
+
+		if err := m.InitImportWalletResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportWalletResult")
 			}
 			return err
 		}

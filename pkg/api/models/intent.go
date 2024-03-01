@@ -140,6 +140,12 @@ type Intent struct {
 	// export wallet intent
 	ExportWalletIntent *ExportWalletIntent `json:"exportWalletIntent,omitempty"`
 
+	// import wallet intent
+	ImportWalletIntent *ImportWalletIntent `json:"importWalletIntent,omitempty"`
+
+	// init import wallet intent
+	InitImportWalletIntent *InitImportWalletIntent `json:"initImportWalletIntent,omitempty"`
+
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
 
@@ -353,6 +359,14 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExportWalletIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImportWalletIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitImportWalletIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1191,6 +1205,44 @@ func (m *Intent) validateExportWalletIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateImportWalletIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.ImportWalletIntent) { // not required
+		return nil
+	}
+
+	if m.ImportWalletIntent != nil {
+		if err := m.ImportWalletIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateInitImportWalletIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitImportWalletIntent) { // not required
+		return nil
+	}
+
+	if m.InitImportWalletIntent != nil {
+		if err := m.InitImportWalletIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
 		return nil
@@ -1675,6 +1727,14 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateExportWalletIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImportWalletIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitImportWalletIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2580,6 +2640,48 @@ func (m *Intent) contextValidateExportWalletIntent(ctx context.Context, formats 
 				return ve.ValidateName("exportWalletIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("exportWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateImportWalletIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ImportWalletIntent != nil {
+
+		if swag.IsZero(m.ImportWalletIntent) { // not required
+			return nil
+		}
+
+		if err := m.ImportWalletIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateInitImportWalletIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitImportWalletIntent != nil {
+
+		if swag.IsZero(m.InitImportWalletIntent) { // not required
+			return nil
+		}
+
+		if err := m.InitImportWalletIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportWalletIntent")
 			}
 			return err
 		}

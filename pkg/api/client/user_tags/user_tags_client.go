@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateUserTag(params *CreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserTagOK, error)
 
+	DeleteUserTags(params *DeleteUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserTagsOK, error)
+
 	ListUserTags(params *ListUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListUserTagsOK, error)
 
 	UpdateUserTag(params *UpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserTagOK, error)
@@ -77,6 +79,47 @@ func (a *Client) CreateUserTag(params *CreateUserTagParams, authInfo runtime.Cli
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateUserTag: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteUserTags deletes user tags
+
+Delete User Tags within an Organization
+*/
+func (a *Client) DeleteUserTags(params *DeleteUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserTagsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteUserTagsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteUserTags",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_user_tags",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteUserTagsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteUserTagsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteUserTags: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
