@@ -27,6 +27,10 @@ type Wallet struct {
 	// Required: true
 	Exported *bool `json:"exported"`
 
+	// True when a given Wallet is imported, false otherwise.
+	// Required: true
+	Imported *bool `json:"imported"`
+
 	// updated at
 	// Required: true
 	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
@@ -49,6 +53,10 @@ func (m *Wallet) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExported(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImported(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,6 +101,15 @@ func (m *Wallet) validateCreatedAt(formats strfmt.Registry) error {
 func (m *Wallet) validateExported(formats strfmt.Registry) error {
 
 	if err := validate.Required("exported", "body", m.Exported); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Wallet) validateImported(formats strfmt.Registry) error {
+
+	if err := validate.Required("imported", "body", m.Imported); err != nil {
 		return err
 	}
 

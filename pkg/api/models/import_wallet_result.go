@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CreateWalletResult create wallet result
+// ImportWalletResult import wallet result
 //
-// swagger:model CreateWalletResult
-type CreateWalletResult struct {
+// swagger:model ImportWalletResult
+type ImportWalletResult struct {
 
 	// A list of account addresses.
 	// Required: true
@@ -28,8 +28,8 @@ type CreateWalletResult struct {
 	WalletID *string `json:"walletId"`
 }
 
-// Validate validates this create wallet result
-func (m *CreateWalletResult) Validate(formats strfmt.Registry) error {
+// Validate validates this import wallet result
+func (m *ImportWalletResult) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAddresses(formats); err != nil {
@@ -46,7 +46,7 @@ func (m *CreateWalletResult) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CreateWalletResult) validateAddresses(formats strfmt.Registry) error {
+func (m *ImportWalletResult) validateAddresses(formats strfmt.Registry) error {
 
 	if err := validate.Required("addresses", "body", m.Addresses); err != nil {
 		return err
@@ -55,7 +55,7 @@ func (m *CreateWalletResult) validateAddresses(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CreateWalletResult) validateWalletID(formats strfmt.Registry) error {
+func (m *ImportWalletResult) validateWalletID(formats strfmt.Registry) error {
 
 	if err := validate.Required("walletId", "body", m.WalletID); err != nil {
 		return err
@@ -64,13 +64,13 @@ func (m *CreateWalletResult) validateWalletID(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this create wallet result based on context it is used
-func (m *CreateWalletResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this import wallet result based on context it is used
+func (m *ImportWalletResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *CreateWalletResult) MarshalBinary() ([]byte, error) {
+func (m *ImportWalletResult) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -78,8 +78,8 @@ func (m *CreateWalletResult) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CreateWalletResult) UnmarshalBinary(b []byte) error {
-	var res CreateWalletResult
+func (m *ImportWalletResult) UnmarshalBinary(b []byte) error {
+	var res ImportWalletResult
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

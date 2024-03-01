@@ -44,6 +44,9 @@ const (
 
 	// AddressFormatCosmos captures enum value "ADDRESS_FORMAT_COSMOS"
 	AddressFormatCosmos AddressFormat = "ADDRESS_FORMAT_COSMOS"
+
+	// AddressFormatTron captures enum value "ADDRESS_FORMAT_TRON"
+	AddressFormatTron AddressFormat = "ADDRESS_FORMAT_TRON"
 )
 
 // for schema
@@ -51,7 +54,7 @@ var AddressFormatEnum []AddressFormat
 
 func init() {
 	var res []AddressFormat
-	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM","ADDRESS_FORMAT_SOLANA","ADDRESS_FORMAT_COSMOS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM","ADDRESS_FORMAT_SOLANA","ADDRESS_FORMAT_COSMOS","ADDRESS_FORMAT_TRON"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
