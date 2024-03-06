@@ -6,11 +6,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/tkhq/go-sdk/pkg/apikey"
 )
@@ -33,7 +33,7 @@ func Test_FromTkPrivateKey(t *testing.T) {
 	// 	NIST CURVE: P-256
 	privateKeyFromOpenSSL := "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c"
 	apiKey, err := apikey.FromTurnkeyPrivateKey(privateKeyFromOpenSSL)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	// This value was computed based on an openssl-generated PEM file:
 	//   $ openssl ec -in docs/fixtures/private_key.pem -pubout -conv_form compressed -outform der | tail -c 33 | xxd -p -c 33
@@ -48,32 +48,32 @@ func Test_Sign(t *testing.T) {
 	tkPrivateKey := "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c"
 
 	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	var stamp *apikey.APIStamp
 
-	assert.Nil(t, json.Unmarshal(testStamp, &stamp))
+	require.NoError(t, json.Unmarshal(testStamp, &stamp))
 
-	assert.Equal(t, stamp.PublicKey, "02f739f8c77b32f4d5f13265861febd76e7a9c61a1140d296b8c16302508870316")
-	assert.Equal(t, stamp.Scheme, "SIGNATURE_SCHEME_TK_API_P256")
+	assert.Equal(t, "02f739f8c77b32f4d5f13265861febd76e7a9c61a1140d296b8c16302508870316", stamp.PublicKey)
+	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_P256", stamp.Scheme)
 
 	sigBytes, err := hex.DecodeString(stamp.Signature)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	// Verify the soundness of the hash:
 	//   $ echo -n 'hello' | shasum -a256
 	//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
 	msgHash := sha256.Sum256([]byte("hello"))
-	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", fmt.Sprintf("%x", msgHash))
+	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
 
 	// Finally, check the signature itself
 	verifiedSig := ecdsa.VerifyASN1(publicKey, msgHash[:], sigBytes)
@@ -83,9 +83,9 @@ func Test_Sign(t *testing.T) {
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
 	for i := 0; i < 1000; i++ {
 		apiKey, err := apikey.New(uuid.NewString())
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
-		assert.Equal(t, 66, len(apiKey.TkPublicKey), "attempt %d: expected 66 characters for public key %s", i, apiKey.TkPublicKey)
-		assert.Equal(t, 64, len(apiKey.TkPrivateKey), "attempt %d: expected 64 characters for private key %s", i, apiKey.TkPrivateKey)
+		assert.Len(t, apiKey.TkPublicKey, 66, "attempt %d: expected 66 characters for public key %s", i, apiKey.TkPublicKey)
+		assert.Len(t, apiKey.TkPrivateKey, 64, "attempt %d: expected 64 characters for private key %s", i, apiKey.TkPrivateKey)
 	}
 }
