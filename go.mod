@@ -1,6 +1,6 @@
 module github.com/tkhq/go-sdk
 
-go 1.20
+go 1.21
 
 require (
 	github.com/go-openapi/errors v0.20.4
