@@ -2,13 +2,13 @@
 package util
 
 import (
-	"fmt"
+	"strconv"
 	"time"
 )
 
 // RequestTimestamp returns a timestamp formatted for inclusion in a request.
 func RequestTimestamp() *string {
-	ts := fmt.Sprintf("%d", time.Now().UnixMilli())
+	ts := strconv.FormatInt(time.Now().UnixMilli(), 10)
 
 	return &ts
 }
