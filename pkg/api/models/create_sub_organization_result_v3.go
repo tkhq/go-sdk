@@ -24,6 +24,9 @@ type CreateSubOrganizationResultV3 struct {
 	// Required: true
 	PrivateKeys []*PrivateKeyResult `json:"privateKeys"`
 
+	// root user ids
+	RootUserIds []string `json:"rootUserIds"`
+
 	// sub organization Id
 	// Required: true
 	SubOrganizationID *string `json:"subOrganizationId"`

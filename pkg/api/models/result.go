@@ -114,8 +114,14 @@ type Result struct {
 	// export wallet result
 	ExportWalletResult *ExportWalletResult `json:"exportWalletResult,omitempty"`
 
+	// import private key result
+	ImportPrivateKeyResult *ImportPrivateKeyResult `json:"importPrivateKeyResult,omitempty"`
+
 	// import wallet result
 	ImportWalletResult *ImportWalletResult `json:"importWalletResult,omitempty"`
+
+	// init import private key result
+	InitImportPrivateKeyResult *InitImportPrivateKeyResult `json:"initImportPrivateKeyResult,omitempty"`
 
 	// init import wallet result
 	InitImportWalletResult *InitImportWalletResult `json:"initImportWalletResult,omitempty"`
@@ -292,7 +298,15 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateImportPrivateKeyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateImportWalletResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitImportPrivateKeyResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -958,6 +972,25 @@ func (m *Result) validateExportWalletResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateImportPrivateKeyResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.ImportPrivateKeyResult) { // not required
+		return nil
+	}
+
+	if m.ImportPrivateKeyResult != nil {
+		if err := m.ImportPrivateKeyResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importPrivateKeyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importPrivateKeyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateImportWalletResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ImportWalletResult) { // not required
 		return nil
@@ -969,6 +1002,25 @@ func (m *Result) validateImportWalletResult(formats strfmt.Registry) error {
 				return ve.ValidateName("importWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("importWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateInitImportPrivateKeyResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitImportPrivateKeyResult) { // not required
+		return nil
+	}
+
+	if m.InitImportPrivateKeyResult != nil {
+		if err := m.InitImportPrivateKeyResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportPrivateKeyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportPrivateKeyResult")
 			}
 			return err
 		}
@@ -1337,7 +1389,15 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateImportPrivateKeyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateImportWalletResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitImportPrivateKeyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2067,6 +2127,27 @@ func (m *Result) contextValidateExportWalletResult(ctx context.Context, formats 
 	return nil
 }
 
+func (m *Result) contextValidateImportPrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ImportPrivateKeyResult != nil {
+
+		if swag.IsZero(m.ImportPrivateKeyResult) { // not required
+			return nil
+		}
+
+		if err := m.ImportPrivateKeyResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importPrivateKeyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importPrivateKeyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateImportWalletResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ImportWalletResult != nil {
@@ -2080,6 +2161,27 @@ func (m *Result) contextValidateImportWalletResult(ctx context.Context, formats 
 				return ve.ValidateName("importWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("importWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateInitImportPrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitImportPrivateKeyResult != nil {
+
+		if swag.IsZero(m.InitImportPrivateKeyResult) { // not required
+			return nil
+		}
+
+		if err := m.InitImportPrivateKeyResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportPrivateKeyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportPrivateKeyResult")
 			}
 			return err
 		}
