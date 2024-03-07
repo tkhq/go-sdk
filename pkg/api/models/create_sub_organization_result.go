@@ -19,6 +19,9 @@ import (
 // swagger:model CreateSubOrganizationResult
 type CreateSubOrganizationResult struct {
 
+	// root user ids
+	RootUserIds []string `json:"rootUserIds"`
+
 	// sub organization Id
 	// Required: true
 	SubOrganizationID *string `json:"subOrganizationId"`

@@ -38,6 +38,10 @@ type ClientService interface {
 
 	GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeysOK, error)
 
+	ImportPrivateKey(params *ImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportPrivateKeyOK, error)
+
+	InitImportPrivateKey(params *InitImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportPrivateKeyOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -202,6 +206,88 @@ func (a *Client) GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.C
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetPrivateKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ImportPrivateKey imports private key
+
+Imports a private key
+*/
+func (a *Client) ImportPrivateKey(params *ImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportPrivateKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewImportPrivateKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ImportPrivateKey",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/import_private_key",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ImportPrivateKeyReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ImportPrivateKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ImportPrivateKey: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+InitImportPrivateKey inits import private key
+
+Initializes a new private key import
+*/
+func (a *Client) InitImportPrivateKey(params *InitImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportPrivateKeyOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewInitImportPrivateKeyParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "InitImportPrivateKey",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/init_import_private_key",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &InitImportPrivateKeyReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*InitImportPrivateKeyOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for InitImportPrivateKey: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -403,6 +403,32 @@
         "tags": ["Private Keys"]
       }
     },
+    "/public/v1/query/list_suborgs": {
+      "post": {
+        "summary": "Get Suborgs",
+        "description": "Get all suborg IDs associated given a parent org ID and an optional filter.",
+        "operationId": "GetSubOrgIds",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSubOrgIdsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetSubOrgIdsRequest"
+            }
+          }
+        ],
+        "tags": ["Organizations"]
+      }
+    },
     "/public/v1/query/list_user_tags": {
       "post": {
         "summary": "List User Tags",
@@ -1131,6 +1157,32 @@
         "tags": ["Wallets"]
       }
     },
+    "/public/v1/submit/import_private_key": {
+      "post": {
+        "summary": "Import Private Key",
+        "description": "Imports a private key",
+        "operationId": "ImportPrivateKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ImportPrivateKeyRequest"
+            }
+          }
+        ],
+        "tags": ["Private Keys"]
+      }
+    },
     "/public/v1/submit/import_wallet": {
       "post": {
         "summary": "Import Wallet",
@@ -1155,6 +1207,32 @@
           }
         ],
         "tags": ["Wallets"]
+      }
+    },
+    "/public/v1/submit/init_import_private_key": {
+      "post": {
+        "summary": "Init Import Private Key",
+        "description": "Initializes a new private key import",
+        "operationId": "InitImportPrivateKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InitImportPrivateKeyRequest"
+            }
+          }
+        ],
+        "tags": ["Private Keys"]
       }
     },
     "/public/v1/submit/init_import_wallet": {
@@ -1720,7 +1798,9 @@
         "ACTIVITY_TYPE_EMAIL_AUTH",
         "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
         "ACTIVITY_TYPE_INIT_IMPORT_WALLET",
-        "ACTIVITY_TYPE_IMPORT_WALLET"
+        "ACTIVITY_TYPE_IMPORT_WALLET",
+        "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY",
+        "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY"
       ]
     },
     "AddressFormat": {
@@ -2628,6 +2708,12 @@
       "properties": {
         "subOrganizationId": {
           "type": "string"
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": ["subOrganizationId"]
@@ -2645,6 +2731,12 @@
             "$ref": "#/definitions/PrivateKeyResult"
           },
           "description": "A list of Private Key IDs and addresses."
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": ["subOrganizationId", "privateKeys"]
@@ -2657,6 +2749,12 @@
         },
         "wallet": {
           "$ref": "#/definitions/WalletResult"
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": ["subOrganizationId"]
@@ -3336,7 +3434,7 @@
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
-          "description": "Optional parameters for customizing emails. If not provided, use defaults."
+          "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         }
       },
       "required": ["email", "targetPublicKey"]
@@ -3569,7 +3667,8 @@
         "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY",
         "FEATURE_NAME_WEBAUTHN_ORIGINS",
         "FEATURE_NAME_EMAIL_AUTH",
-        "FEATURE_NAME_EMAIL_RECOVERY"
+        "FEATURE_NAME_EMAIL_RECOVERY",
+        "FEATURE_NAME_WEBHOOK"
       ]
     },
     "GetActivitiesRequest": {
@@ -3828,6 +3927,37 @@
       },
       "required": ["privateKeys"]
     },
+    "GetSubOrgIdsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for the parent Organization. This is used to find sub-organizations within it."
+        },
+        "filterType": {
+          "type": "string",
+          "description": "Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL' or 'PUBLIC_KEY'"
+        },
+        "filterValue": {
+          "type": "string",
+          "description": "The value of the filter to apply for the specified type. For example, a specific email or name string."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "GetSubOrgIdsResponse": {
+      "type": "object",
+      "properties": {
+        "organizationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for the matching sub-organizations."
+        }
+      },
+      "required": ["organizationIds"]
+    },
     "GetUserRequest": {
       "type": "object",
       "properties": {
@@ -3993,6 +4123,80 @@
         "HASH_FUNCTION_NOT_APPLICABLE"
       ]
     },
+    "ImportPrivateKeyIntent": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the User importing a Private Key."
+        },
+        "privateKeyName": {
+          "type": "string",
+          "description": "Human-readable name for a Private Key."
+        },
+        "encryptedBundle": {
+          "type": "string",
+          "description": "Bundle containing a raw private key encrypted to the enclave's target public key."
+        },
+        "curve": {
+          "$ref": "#/definitions/Curve",
+          "description": "Cryptographic Curve used to generate a given Private Key."
+        },
+        "addressFormats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AddressFormat"
+          },
+          "description": "Cryptocurrency-specific formats for a derived address (e.g., Ethereum)."
+        }
+      },
+      "required": [
+        "userId",
+        "privateKeyName",
+        "encryptedBundle",
+        "curve",
+        "addressFormats"
+      ]
+    },
+    "ImportPrivateKeyRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_IMPORT_PRIVATE_KEY"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/ImportPrivateKeyIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "ImportPrivateKeyResult": {
+      "type": "object",
+      "properties": {
+        "privateKeyId": {
+          "type": "string",
+          "description": "Unique identifier for a Private Key."
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/activity.v1.Address"
+          },
+          "description": "A list of addresses."
+        }
+      },
+      "required": ["privateKeyId", "addresses"]
+    },
     "ImportWalletIntent": {
       "type": "object",
       "properties": {
@@ -4057,6 +4261,47 @@
       },
       "required": ["walletId", "addresses"]
     },
+    "InitImportPrivateKeyIntent": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the User importing a Private Key."
+        }
+      },
+      "required": ["userId"]
+    },
+    "InitImportPrivateKeyRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/InitImportPrivateKeyIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "InitImportPrivateKeyResult": {
+      "type": "object",
+      "properties": {
+        "importBundle": {
+          "type": "string",
+          "description": "Import bundle containing a public key and signature to use for importing client data."
+        }
+      },
+      "required": ["importBundle"]
+    },
     "InitImportWalletIntent": {
       "type": "object",
       "properties": {
@@ -4112,6 +4357,10 @@
         "expirationSeconds": {
           "type": "string",
           "description": "Expiration window (in seconds) indicating how long the recovery credential is valid. If not provided, a default of 15 minutes will be used."
+        },
+        "emailCustomization": {
+          "$ref": "#/definitions/EmailCustomizationParams",
+          "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         }
       },
       "required": ["email", "targetPublicKey"]
@@ -4326,6 +4575,12 @@
         },
         "importWalletIntent": {
           "$ref": "#/definitions/ImportWalletIntent"
+        },
+        "initImportPrivateKeyIntent": {
+          "$ref": "#/definitions/InitImportPrivateKeyIntent"
+        },
+        "importPrivateKeyIntent": {
+          "$ref": "#/definitions/ImportPrivateKeyIntent"
         }
       },
       "required": ["createOrganizationIntent"]
@@ -4556,6 +4811,10 @@
         "exported": {
           "type": "boolean",
           "description": "True when a given Private Key is exported, false otherwise."
+        },
+        "imported": {
+          "type": "boolean",
+          "description": "True when a given Private Key is imported, false otherwise."
         }
       },
       "required": [
@@ -4567,7 +4826,8 @@
         "privateKeyTags",
         "createdAt",
         "updatedAt",
-        "exported"
+        "exported",
+        "imported"
       ]
     },
     "PrivateKeyParams": {
@@ -4912,6 +5172,12 @@
         },
         "importWalletResult": {
           "$ref": "#/definitions/ImportWalletResult"
+        },
+        "initImportPrivateKeyResult": {
+          "$ref": "#/definitions/InitImportPrivateKeyResult"
+        },
+        "importPrivateKeyResult": {
+          "$ref": "#/definitions/ImportPrivateKeyResult"
         }
       }
     },

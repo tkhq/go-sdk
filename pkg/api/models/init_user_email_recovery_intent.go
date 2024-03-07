@@ -23,6 +23,9 @@ type InitUserEmailRecoveryIntent struct {
 	// Required: true
 	Email *string `json:"email"`
 
+	// Optional parameters for customizing emails. If not provided, the default email will be used.
+	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
+
 	// Expiration window (in seconds) indicating how long the recovery credential is valid. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
@@ -36,6 +39,10 @@ func (m *InitUserEmailRecoveryIntent) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmailCustomization(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,6 +65,25 @@ func (m *InitUserEmailRecoveryIntent) validateEmail(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *InitUserEmailRecoveryIntent) validateEmailCustomization(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmailCustomization) { // not required
+		return nil
+	}
+
+	if m.EmailCustomization != nil {
+		if err := m.EmailCustomization.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailCustomization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailCustomization")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *InitUserEmailRecoveryIntent) validateTargetPublicKey(formats strfmt.Registry) error {
 
 	if err := validate.Required("targetPublicKey", "body", m.TargetPublicKey); err != nil {
@@ -67,8 +93,38 @@ func (m *InitUserEmailRecoveryIntent) validateTargetPublicKey(formats strfmt.Reg
 	return nil
 }
 
-// ContextValidate validates this init user email recovery intent based on context it is used
+// ContextValidate validate this init user email recovery intent based on the context it is used
 func (m *InitUserEmailRecoveryIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEmailCustomization(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *InitUserEmailRecoveryIntent) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailCustomization != nil {
+
+		if swag.IsZero(m.EmailCustomization) { // not required
+			return nil
+		}
+
+		if err := m.EmailCustomization.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailCustomization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailCustomization")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

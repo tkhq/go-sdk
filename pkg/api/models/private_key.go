@@ -36,6 +36,10 @@ type PrivateKey struct {
 	// Required: true
 	Exported *bool `json:"exported"`
 
+	// True when a given Private Key is imported, false otherwise.
+	// Required: true
+	Imported *bool `json:"imported"`
+
 	// Unique identifier for a given Private Key.
 	// Required: true
 	PrivateKeyID *string `json:"privateKeyId"`
@@ -74,6 +78,10 @@ func (m *PrivateKey) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExported(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImported(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -177,6 +185,15 @@ func (m *PrivateKey) validateCurve(formats strfmt.Registry) error {
 func (m *PrivateKey) validateExported(formats strfmt.Registry) error {
 
 	if err := validate.Required("exported", "body", m.Exported); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *PrivateKey) validateImported(formats strfmt.Registry) error {
+
+	if err := validate.Required("imported", "body", m.Imported); err != nil {
 		return err
 	}
 

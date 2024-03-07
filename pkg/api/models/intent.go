@@ -140,8 +140,14 @@ type Intent struct {
 	// export wallet intent
 	ExportWalletIntent *ExportWalletIntent `json:"exportWalletIntent,omitempty"`
 
+	// import private key intent
+	ImportPrivateKeyIntent *ImportPrivateKeyIntent `json:"importPrivateKeyIntent,omitempty"`
+
 	// import wallet intent
 	ImportWalletIntent *ImportWalletIntent `json:"importWalletIntent,omitempty"`
+
+	// init import private key intent
+	InitImportPrivateKeyIntent *InitImportPrivateKeyIntent `json:"initImportPrivateKeyIntent,omitempty"`
 
 	// init import wallet intent
 	InitImportWalletIntent *InitImportWalletIntent `json:"initImportWalletIntent,omitempty"`
@@ -362,7 +368,15 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateImportPrivateKeyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateImportWalletIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitImportPrivateKeyIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1205,6 +1219,25 @@ func (m *Intent) validateExportWalletIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateImportPrivateKeyIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.ImportPrivateKeyIntent) { // not required
+		return nil
+	}
+
+	if m.ImportPrivateKeyIntent != nil {
+		if err := m.ImportPrivateKeyIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importPrivateKeyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importPrivateKeyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateImportWalletIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.ImportWalletIntent) { // not required
 		return nil
@@ -1216,6 +1249,25 @@ func (m *Intent) validateImportWalletIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("importWalletIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("importWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateInitImportPrivateKeyIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitImportPrivateKeyIntent) { // not required
+		return nil
+	}
+
+	if m.InitImportPrivateKeyIntent != nil {
+		if err := m.InitImportPrivateKeyIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportPrivateKeyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportPrivateKeyIntent")
 			}
 			return err
 		}
@@ -1730,7 +1782,15 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateImportPrivateKeyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateImportWalletIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitImportPrivateKeyIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2648,6 +2708,27 @@ func (m *Intent) contextValidateExportWalletIntent(ctx context.Context, formats 
 	return nil
 }
 
+func (m *Intent) contextValidateImportPrivateKeyIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ImportPrivateKeyIntent != nil {
+
+		if swag.IsZero(m.ImportPrivateKeyIntent) { // not required
+			return nil
+		}
+
+		if err := m.ImportPrivateKeyIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("importPrivateKeyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("importPrivateKeyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateImportWalletIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ImportWalletIntent != nil {
@@ -2661,6 +2742,27 @@ func (m *Intent) contextValidateImportWalletIntent(ctx context.Context, formats 
 				return ve.ValidateName("importWalletIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("importWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateInitImportPrivateKeyIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitImportPrivateKeyIntent != nil {
+
+		if swag.IsZero(m.InitImportPrivateKeyIntent) { // not required
+			return nil
+		}
+
+		if err := m.InitImportPrivateKeyIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initImportPrivateKeyIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initImportPrivateKeyIntent")
 			}
 			return err
 		}
