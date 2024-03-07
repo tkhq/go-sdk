@@ -1,6 +1,6 @@
 module github.com/tkhq/go-sdk/pkg/enclave_encrypt
 
-go 1.20
+go 1.19
 
 require (
 	github.com/cloudflare/circl v1.3.7
