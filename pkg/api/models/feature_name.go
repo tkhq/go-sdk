@@ -41,6 +41,9 @@ const (
 
 	// FeatureNameEmailRecovery captures enum value "FEATURE_NAME_EMAIL_RECOVERY"
 	FeatureNameEmailRecovery FeatureName = "FEATURE_NAME_EMAIL_RECOVERY"
+
+	// FeatureNameWebhook captures enum value "FEATURE_NAME_WEBHOOK"
+	FeatureNameWebhook FeatureName = "FEATURE_NAME_WEBHOOK"
 )
 
 // for schema
@@ -48,7 +51,7 @@ var FeatureNameEnum []FeatureName
 
 func init() {
 	var res []FeatureName
-	if err := json.Unmarshal([]byte(`["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY","FEATURE_NAME_WEBAUTHN_ORIGINS","FEATURE_NAME_EMAIL_AUTH","FEATURE_NAME_EMAIL_RECOVERY"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY","FEATURE_NAME_WEBAUTHN_ORIGINS","FEATURE_NAME_EMAIL_AUTH","FEATURE_NAME_EMAIL_RECOVERY","FEATURE_NAME_WEBHOOK"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
