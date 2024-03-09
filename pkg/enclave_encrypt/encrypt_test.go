@@ -15,6 +15,8 @@ import (
 	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
 )
 
+const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
+
 func randomSignature(key *ecdsa.PrivateKey) []byte {
 	signature, err := enclave_encrypt.P256Sign(key, []byte("random"))
 	if err != nil {
@@ -139,7 +141,6 @@ func TestClientToServerE2eExistingTargetKey(t *testing.T) {
 	assert.Nil(t, err)
 	serverRecv := server.IntoEnclaveServerRecv()
 
-	const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
 	client, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&authKey.PublicKey, &targetPrivate)
@@ -228,7 +229,6 @@ func TestServerToClientE2eExistingTargetKey(t *testing.T) {
 	clientTarget, err := client.TargetPublic()
 	assert.Nil(t, err)
 
-	const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
 	server, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(authKey, &targetPrivate)
