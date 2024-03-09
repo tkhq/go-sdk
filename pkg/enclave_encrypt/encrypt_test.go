@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/btcsuite/btcutil/base58"
+	"github.com/cloudflare/circl/hpke"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
@@ -128,6 +129,43 @@ func TestClientToServerE2e(t *testing.T) {
 	)
 }
 
+func TestClientToServerE2eExistingTargetKey(t *testing.T) {
+	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	assert.Nil(t, err)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey)
+	assert.Nil(t, err)
+
+	serverTarget, err := server.PublishTarget()
+	assert.Nil(t, err)
+	serverRecv := server.IntoEnclaveServerRecv()
+
+	const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
+	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	assert.Nil(t, err)
+	client, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&authKey.PublicKey, &targetPrivate)
+	assert.Nil(t, err)
+	clientCiphertext, err := client.Encrypt([]byte("test message"), *serverTarget)
+	assert.Nil(t, err)
+
+	bytes, err := json.Marshal(clientCiphertext)
+	assert.Nil(t, err)
+	clientCipherTextUnmarshal := enclave_encrypt.ClientSendMsg{}
+
+	err = json.Unmarshal(bytes, &clientCipherTextUnmarshal)
+	assert.Nil(t, err)
+
+	plaintext, err := serverRecv.Decrypt(
+		clientCipherTextUnmarshal,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(
+		t,
+		plaintext,
+		[]byte("test message"),
+	)
+}
+
 func TestClientToServerRejectBadServerTargetSignature(t *testing.T) {
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
@@ -161,6 +199,39 @@ func TestServerToClientE2e(t *testing.T) {
 	assert.Nil(t, err)
 
 	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey)
+	assert.Nil(t, err)
+	serverCiphertext, err := server.Encrypt(clientTarget, []byte("test message"))
+	assert.Nil(t, err)
+
+	bytes, err := json.Marshal(serverCiphertext)
+	assert.Nil(t, err)
+	var serverCiphertextUnmarshal enclave_encrypt.ServerSendMsg
+	err = json.Unmarshal(bytes, &serverCiphertextUnmarshal)
+	assert.Nil(t, err)
+
+	plaintext, err := client.Decrypt(serverCiphertextUnmarshal)
+	assert.Nil(t, err)
+	assert.Equal(
+		t,
+		plaintext,
+		[]byte("test message"),
+	)
+}
+
+func TestServerToClientE2eExistingTargetKey(t *testing.T) {
+	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	assert.Nil(t, err)
+
+	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
+	assert.Nil(t, err)
+
+	clientTarget, err := client.TargetPublic()
+	assert.Nil(t, err)
+
+	const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
+	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	assert.Nil(t, err)
+	server, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(authKey, &targetPrivate)
 	assert.Nil(t, err)
 	serverCiphertext, err := server.Encrypt(clientTarget, []byte("test message"))
 	assert.Nil(t, err)

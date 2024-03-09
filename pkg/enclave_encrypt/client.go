@@ -32,6 +32,14 @@ func NewEnclaveEncryptClient(enclaveAuthKey *ecdsa.PublicKey) (*EnclaveEncryptCl
 	}, nil
 }
 
+// Create a client from the quorum public key and target key pair.
+func NewEnclaveEncryptClientFromTargetKey(enclaveAuthKey *ecdsa.PublicKey, targetPrivateKey *kem.PrivateKey) (*EnclaveEncryptClient, error) {
+	return &EnclaveEncryptClient{
+		enclaveAuthKey,
+		*targetPrivateKey,
+	}, nil
+}
+
 // Encrypt some plaintext to the given server target key.
 func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msg ServerTargetMsg) (*ClientSendMsg, error) {
 	if !P256Verify(c.enclaveAuthKey, *msg.TargetPublic, *msg.TargetPublicSignature) {

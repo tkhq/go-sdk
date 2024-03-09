@@ -31,6 +31,14 @@ func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey) (EnclaveEncryptSe
 	}, nil
 }
 
+// Create a server from the enclave quorum public key and the target key.
+func NewEnclaveEncryptServerFromTargetKey(enclaveAuthKey *ecdsa.PrivateKey, targetPrivateKey *kem.PrivateKey) (EnclaveEncryptServer, error) {
+	return EnclaveEncryptServer{
+		enclaveAuthKey,
+		*targetPrivateKey,
+	}, nil
+}
+
 // Encrypt `plaintext` to the `clientTarget` key.
 func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*ServerSendMsg, error) {
 	clientTargetKem, err := KemId.Scheme().UnmarshalBinaryPublicKey(clientTarget[:])
