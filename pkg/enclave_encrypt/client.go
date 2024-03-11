@@ -66,7 +66,7 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msg ServerTargetMsg) (*C
 	}, nil
 }
 
-// Decrypt a message from the server.
+// Decrypt a message from the server. This is used in private key and wallet export flows.
 func (c *EnclaveEncryptClient) Decrypt(msg ServerSendMsg) (plaintext []byte, err error) {
 	if !P256Verify(c.enclaveAuthKey, *msg.EncappedPublic, *msg.EncappedPublicSignature) {
 		return nil, errors.New("invalid enclave auth key signature")
@@ -84,7 +84,7 @@ func (c *EnclaveEncryptClient) TargetPublic() ([]byte, error) {
 	return c.targetPrivate.Public().MarshalBinary()
 }
 
-// Decrypt a message from the server.
+// Decrypt a base58-encoded payload from the server. This is used in email authentication and email recovery flows.
 func (c *EnclaveEncryptClient) AuthDecrypt(payload string) (plaintext []byte, err error) {
 	payloadBytes := base58.Decode(payload)
 	err = ValidateChecksum(payloadBytes)
