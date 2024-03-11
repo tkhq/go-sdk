@@ -5,25 +5,26 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
 // MacOSX has $HOME set by default.
 func TestGetKeyDirPathMacOSX(t *testing.T) {
-	assert.Nil(t, os.Setenv("HOME", "/home/dir"))
+	require.NoError(t, os.Setenv("HOME", "/home/dir"))
 
 	defer func() {
-		assert.Nil(t, os.Unsetenv("HOME"))
+		require.NoError(t, os.Unsetenv("HOME"))
 	}()
 
 	// Need to unset this explicitly: the test runner has this set by default!
 	originalValue := os.Getenv("XDG_CONFIG_HOME")
 
-	assert.Nil(t, os.Unsetenv("XDG_CONFIG_HOME"))
+	require.NoError(t, os.Unsetenv("XDG_CONFIG_HOME"))
 
 	defer func() {
-		assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", originalValue))
+		require.NoError(t, os.Setenv("XDG_CONFIG_HOME", originalValue))
 	}()
 
 	dir := local.DefaultKeysDir()
@@ -33,16 +34,16 @@ func TestGetKeyDirPathMacOSX(t *testing.T) {
 // On UNIX, we expect XDG_CONFIG_HOME to be set.
 // If it's not set, we're back to a MacOSX-like system.
 func TestGetKeyDirPathUnix(t *testing.T) {
-	assert.Nil(t, os.Setenv("XDG_CONFIG_HOME", "/special/dir"))
+	require.NoError(t, os.Setenv("XDG_CONFIG_HOME", "/special/dir"))
 
 	defer func() {
-		assert.Nil(t, os.Unsetenv("XDG_CONFIG_HOME"))
+		require.NoError(t, os.Unsetenv("XDG_CONFIG_HOME"))
 	}()
 
-	assert.Nil(t, os.Setenv("HOME", "/home/dir"))
+	require.NoError(t, os.Setenv("HOME", "/home/dir"))
 
 	defer func() {
-		assert.Nil(t, os.Unsetenv("HOME"))
+		require.NoError(t, os.Unsetenv("HOME"))
 	}()
 
 	dir := local.DefaultKeysDir()
@@ -53,15 +54,15 @@ func TestGetKeyDirPathUnix(t *testing.T) {
 // If not we should get an error.
 func TestGetKeyDirPathOverride(t *testing.T) {
 	tmpDir, err := os.MkdirTemp(os.TempDir(), "keys")
-	assert.Nil(t, err)
+	require.NoError(t, err)
 
 	defer func() {
-		assert.Nil(t, os.RemoveAll(tmpDir))
+		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
 	s := local.New()
 
-	assert.NotNil(t, s.SetKeysDirectory("/does/not/exist"))
+	require.Error(t, s.SetKeysDirectory("/does/not/exist"))
 
-	assert.Nil(t, s.SetKeysDirectory(tmpDir))
+	require.NoError(t, s.SetKeysDirectory(tmpDir))
 }
