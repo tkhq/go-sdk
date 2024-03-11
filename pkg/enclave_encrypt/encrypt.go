@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	// Consult the rust implementations README for how these should be configured.
-	// See [here](../../../rust/enclave_encrypt/README.md#hpke-configuration)
+	// Consult the implementations README for how these should be configured.
+	// See [here](./README.md#hpke-configuration)
 	KemId           hpke.KEM  = hpke.KEM_P256_HKDF_SHA256
 	KdfId           hpke.KDF  = hpke.KDF_HKDF_SHA256
 	AeadId          hpke.AEAD = hpke.AEAD_AES256GCM
