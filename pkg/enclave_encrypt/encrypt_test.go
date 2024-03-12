@@ -143,7 +143,7 @@ func TestClientToServerE2eExistingTargetKey(t *testing.T) {
 
 	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
-	client, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&authKey.PublicKey, &targetPrivate)
+	client, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&authKey.PublicKey, targetPrivate)
 	assert.Nil(t, err)
 	clientCiphertext, err := client.Encrypt([]byte("test message"), *serverTarget)
 	assert.Nil(t, err)

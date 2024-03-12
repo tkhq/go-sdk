@@ -33,10 +33,10 @@ func NewEnclaveEncryptClient(enclaveAuthKey *ecdsa.PublicKey) (*EnclaveEncryptCl
 }
 
 // Create a client from the quorum public key and target key pair.
-func NewEnclaveEncryptClientFromTargetKey(enclaveAuthKey *ecdsa.PublicKey, targetPrivateKey *kem.PrivateKey) (*EnclaveEncryptClient, error) {
+func NewEnclaveEncryptClientFromTargetKey(enclaveAuthKey *ecdsa.PublicKey, targetPrivateKey kem.PrivateKey) (*EnclaveEncryptClient, error) {
 	return &EnclaveEncryptClient{
 		enclaveAuthKey,
-		*targetPrivateKey,
+		targetPrivateKey,
 	}, nil
 }
 
