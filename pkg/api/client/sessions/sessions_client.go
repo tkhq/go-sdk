@@ -38,7 +38,7 @@ type ClientService interface {
 /*
 GetWhoami whos am i
 
-Get basic information about your current API or WebAuthN user and their organization. Affords Sub-Organization look ups via Parent Organization for WebAuthN users.
+Get basic information about your current API or WebAuthN user and their organization. Affords Sub-Organization look ups via Parent Organization for WebAuthN or API key users.
 */
 func (a *Client) GetWhoami(params *GetWhoamiParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWhoamiOK, error) {
 	// TODO: Validate the params before sending

@@ -23,6 +23,9 @@ type GetWalletAccountsRequest struct {
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
+	// Parameters used for cursor-based pagination.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+
 	// Unique identifier for a given Wallet.
 	// Required: true
 	WalletID *string `json:"walletId"`
@@ -33,6 +36,10 @@ func (m *GetWalletAccountsRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePaginationOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,6 +62,25 @@ func (m *GetWalletAccountsRequest) validateOrganizationID(formats strfmt.Registr
 	return nil
 }
 
+func (m *GetWalletAccountsRequest) validatePaginationOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.PaginationOptions) { // not required
+		return nil
+	}
+
+	if m.PaginationOptions != nil {
+		if err := m.PaginationOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *GetWalletAccountsRequest) validateWalletID(formats strfmt.Registry) error {
 
 	if err := validate.Required("walletId", "body", m.WalletID); err != nil {
@@ -64,8 +90,38 @@ func (m *GetWalletAccountsRequest) validateWalletID(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validates this get wallet accounts request based on context it is used
+// ContextValidate validate this get wallet accounts request based on the context it is used
 func (m *GetWalletAccountsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePaginationOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GetWalletAccountsRequest) contextValidatePaginationOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PaginationOptions != nil {
+
+		if swag.IsZero(m.PaginationOptions) { // not required
+			return nil
+		}
+
+		if err := m.PaginationOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
