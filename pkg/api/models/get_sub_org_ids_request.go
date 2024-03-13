@@ -28,6 +28,9 @@ type GetSubOrgIdsRequest struct {
 	// Unique identifier for the parent Organization. This is used to find sub-organizations within it.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
+
+	// Parameters used for cursor-based pagination.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
 }
 
 // Validate validates this get sub org ids request
@@ -35,6 +38,10 @@ func (m *GetSubOrgIdsRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePaginationOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -53,8 +60,57 @@ func (m *GetSubOrgIdsRequest) validateOrganizationID(formats strfmt.Registry) er
 	return nil
 }
 
-// ContextValidate validates this get sub org ids request based on context it is used
+func (m *GetSubOrgIdsRequest) validatePaginationOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.PaginationOptions) { // not required
+		return nil
+	}
+
+	if m.PaginationOptions != nil {
+		if err := m.PaginationOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this get sub org ids request based on the context it is used
 func (m *GetSubOrgIdsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePaginationOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GetSubOrgIdsRequest) contextValidatePaginationOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PaginationOptions != nil {
+
+		if swag.IsZero(m.PaginationOptions) { // not required
+			return nil
+		}
+
+		if err := m.PaginationOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("paginationOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("paginationOptions")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
