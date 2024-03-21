@@ -53,6 +53,9 @@ type Intent struct {
 	// create organization intent v2
 	CreateOrganizationIntentV2 *CreateOrganizationIntentV2 `json:"createOrganizationIntentV2,omitempty"`
 
+	// create policies intent
+	CreatePoliciesIntent *CreatePoliciesIntent `json:"createPoliciesIntent,omitempty"`
+
 	// create policy intent
 	CreatePolicyIntent *CreatePolicyIntent `json:"createPolicyIntent,omitempty"`
 
@@ -179,6 +182,9 @@ type Intent struct {
 	// sign raw payload intent v2
 	SignRawPayloadIntentV2 *SignRawPayloadIntentV2 `json:"signRawPayloadIntentV2,omitempty"`
 
+	// sign raw payloads intent
+	SignRawPayloadsIntent *SignRawPayloadsIntent `json:"signRawPayloadsIntent,omitempty"`
+
 	// sign transaction intent
 	SignTransactionIntent *SignTransactionIntent `json:"signTransactionIntent,omitempty"`
 
@@ -249,6 +255,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateOrganizationIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatePoliciesIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -417,6 +427,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSignRawPayloadIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSignRawPayloadsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -660,6 +674,25 @@ func (m *Intent) validateCreateOrganizationIntentV2(formats strfmt.Registry) err
 				return ve.ValidateName("createOrganizationIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreatePoliciesIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatePoliciesIntent) { // not required
+		return nil
+	}
+
+	if m.CreatePoliciesIntent != nil {
+		if err := m.CreatePoliciesIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPoliciesIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPoliciesIntent")
 			}
 			return err
 		}
@@ -1466,6 +1499,25 @@ func (m *Intent) validateSignRawPayloadIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateSignRawPayloadsIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.SignRawPayloadsIntent) { // not required
+		return nil
+	}
+
+	if m.SignRawPayloadsIntent != nil {
+		if err := m.SignRawPayloadsIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("signRawPayloadsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("signRawPayloadsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateSignTransactionIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.SignTransactionIntent) { // not required
 		return nil
@@ -1666,6 +1718,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreatePoliciesIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreatePolicyIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1831,6 +1887,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateSignRawPayloadIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSignRawPayloadsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2091,6 +2151,27 @@ func (m *Intent) contextValidateCreateOrganizationIntentV2(ctx context.Context, 
 				return ve.ValidateName("createOrganizationIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreatePoliciesIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatePoliciesIntent != nil {
+
+		if swag.IsZero(m.CreatePoliciesIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreatePoliciesIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPoliciesIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPoliciesIntent")
 			}
 			return err
 		}
@@ -2973,6 +3054,27 @@ func (m *Intent) contextValidateSignRawPayloadIntentV2(ctx context.Context, form
 				return ve.ValidateName("signRawPayloadIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("signRawPayloadIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateSignRawPayloadsIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SignRawPayloadsIntent != nil {
+
+		if swag.IsZero(m.SignRawPayloadsIntent) { // not required
+			return nil
+		}
+
+		if err := m.SignRawPayloadsIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("signRawPayloadsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("signRawPayloadsIntent")
 			}
 			return err
 		}

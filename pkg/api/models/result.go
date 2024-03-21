@@ -39,6 +39,9 @@ type Result struct {
 	// create organization result
 	CreateOrganizationResult *CreateOrganizationResult `json:"createOrganizationResult,omitempty"`
 
+	// create policies result
+	CreatePoliciesResult *CreatePoliciesResult `json:"createPoliciesResult,omitempty"`
+
 	// create policy result
 	CreatePolicyResult *CreatePolicyResult `json:"createPolicyResult,omitempty"`
 
@@ -144,6 +147,9 @@ type Result struct {
 	// sign raw payload result
 	SignRawPayloadResult *SignRawPayloadResult `json:"signRawPayloadResult,omitempty"`
 
+	// sign raw payloads result
+	SignRawPayloadsResult *SignRawPayloadsResult `json:"signRawPayloadsResult,omitempty"`
+
 	// sign transaction result
 	SignTransactionResult *SignTransactionResult `json:"signTransactionResult,omitempty"`
 
@@ -195,6 +201,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateOrganizationResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatePoliciesResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -335,6 +345,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSignRawPayloadResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSignRawPayloadsResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -489,6 +503,25 @@ func (m *Result) validateCreateOrganizationResult(formats strfmt.Registry) error
 				return ve.ValidateName("createOrganizationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreatePoliciesResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreatePoliciesResult) { // not required
+		return nil
+	}
+
+	if m.CreatePoliciesResult != nil {
+		if err := m.CreatePoliciesResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPoliciesResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPoliciesResult")
 			}
 			return err
 		}
@@ -1162,6 +1195,25 @@ func (m *Result) validateSignRawPayloadResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateSignRawPayloadsResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.SignRawPayloadsResult) { // not required
+		return nil
+	}
+
+	if m.SignRawPayloadsResult != nil {
+		if err := m.SignRawPayloadsResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("signRawPayloadsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("signRawPayloadsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateSignTransactionResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.SignTransactionResult) { // not required
 		return nil
@@ -1286,6 +1338,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateCreateOrganizationResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatePoliciesResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1426,6 +1482,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateSignRawPayloadResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSignRawPayloadsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1594,6 +1654,27 @@ func (m *Result) contextValidateCreateOrganizationResult(ctx context.Context, fo
 				return ve.ValidateName("createOrganizationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createOrganizationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreatePoliciesResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatePoliciesResult != nil {
+
+		if swag.IsZero(m.CreatePoliciesResult) { // not required
+			return nil
+		}
+
+		if err := m.CreatePoliciesResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createPoliciesResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createPoliciesResult")
 			}
 			return err
 		}
@@ -2329,6 +2410,27 @@ func (m *Result) contextValidateSignRawPayloadResult(ctx context.Context, format
 				return ve.ValidateName("signRawPayloadResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("signRawPayloadResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateSignRawPayloadsResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SignRawPayloadsResult != nil {
+
+		if swag.IsZero(m.SignRawPayloadsResult) { // not required
+			return nil
+		}
+
+		if err := m.SignRawPayloadsResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("signRawPayloadsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("signRawPayloadsResult")
 			}
 			return err
 		}

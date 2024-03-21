@@ -35,10 +35,6 @@ type WalletAccount struct {
 	// Required: true
 	Curve *Curve `json:"curve"`
 
-	// True when a given Account is exported, false otherwise.
-	// Required: true
-	Exported *bool `json:"exported"`
-
 	// The Organization the Account belongs to.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
@@ -77,10 +73,6 @@ func (m *WalletAccount) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCurve(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateExported(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -182,15 +174,6 @@ func (m *WalletAccount) validateCurve(formats strfmt.Registry) error {
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *WalletAccount) validateExported(formats strfmt.Registry) error {
-
-	if err := validate.Required("exported", "body", m.Exported); err != nil {
-		return err
 	}
 
 	return nil

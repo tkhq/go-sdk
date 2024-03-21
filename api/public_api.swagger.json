@@ -663,6 +663,32 @@
         "tags": ["Invitations"]
       }
     },
+    "/public/v1/submit/create_policies": {
+      "post": {
+        "summary": "Create Policies",
+        "description": "Create new Policies",
+        "operationId": "CreatePolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePoliciesRequest"
+            }
+          }
+        ],
+        "tags": ["Policies"]
+      }
+    },
     "/public/v1/submit/create_policy": {
       "post": {
         "summary": "Create Policy",
@@ -1417,6 +1443,32 @@
         "tags": ["Signing"]
       }
     },
+    "/public/v1/submit/sign_raw_payloads": {
+      "post": {
+        "summary": "Sign Raw Payloads",
+        "description": "Sign multiple raw payloads with the same signing parameters",
+        "operationId": "SignRawPayloads",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignRawPayloadsRequest"
+            }
+          }
+        ],
+        "tags": ["Signing"]
+      }
+    },
     "/public/v1/submit/sign_transaction": {
       "post": {
         "summary": "Sign Transaction",
@@ -1800,7 +1852,9 @@
         "ACTIVITY_TYPE_INIT_IMPORT_WALLET",
         "ACTIVITY_TYPE_IMPORT_WALLET",
         "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY",
-        "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY"
+        "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY",
+        "ACTIVITY_TYPE_CREATE_POLICIES",
+        "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS"
       ]
     },
     "AddressFormat": {
@@ -2336,6 +2390,54 @@
         }
       },
       "required": ["organizationId"]
+    },
+    "CreatePoliciesIntent": {
+      "type": "object",
+      "properties": {
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/CreatePolicyIntentV3"
+          },
+          "description": "An array of policy intents to be created."
+        }
+      },
+      "required": ["policies"]
+    },
+    "CreatePoliciesRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_CREATE_POLICIES"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/CreatePoliciesIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "CreatePoliciesResult": {
+      "type": "object",
+      "properties": {
+        "policyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of unique identifiers for the created policies."
+        }
+      },
+      "required": ["policyIds"]
     },
     "CreatePolicyIntent": {
       "type": "object",
@@ -3483,7 +3585,7 @@
         },
         "logoUrl": {
           "type": "string",
-          "description": "A URL pointing to a logo. Note this logo will be resized to fit into 340px x 124px."
+          "description": "A URL pointing to a logo in PNG format. Note this logo will be resized to fit into 340px x 124px."
         },
         "magicLinkTemplate": {
           "type": "string",
@@ -4589,6 +4691,12 @@
         },
         "importPrivateKeyIntent": {
           "$ref": "#/definitions/ImportPrivateKeyIntent"
+        },
+        "createPoliciesIntent": {
+          "$ref": "#/definitions/CreatePoliciesIntent"
+        },
+        "signRawPayloadsIntent": {
+          "$ref": "#/definitions/SignRawPayloadsIntent"
         }
       },
       "required": ["createOrganizationIntent"]
@@ -5186,6 +5294,12 @@
         },
         "importPrivateKeyResult": {
           "$ref": "#/definitions/ImportPrivateKeyResult"
+        },
+        "createPoliciesResult": {
+          "$ref": "#/definitions/CreatePoliciesResult"
+        },
+        "signRawPayloadsResult": {
+          "$ref": "#/definitions/SignRawPayloadsResult"
         }
       }
     },
@@ -5454,6 +5568,64 @@
         }
       },
       "required": ["r", "s", "v"]
+    },
+    "SignRawPayloadsIntent": {
+      "type": "object",
+      "properties": {
+        "signWith": {
+          "type": "string",
+          "description": "A Wallet account address, Private Key address, or Private Key identifier."
+        },
+        "payloads": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of raw unsigned payloads to be signed."
+        },
+        "encoding": {
+          "$ref": "#/definitions/PayloadEncoding",
+          "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
+        },
+        "hashFunction": {
+          "$ref": "#/definitions/HashFunction",
+          "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
+        }
+      },
+      "required": ["signWith", "payloads", "encoding", "hashFunction"]
+    },
+    "SignRawPayloadsRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_SIGN_RAW_PAYLOADS"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/SignRawPayloadsIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "SignRawPayloadsResult": {
+      "type": "object",
+      "properties": {
+        "signatures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/SignRawPayloadResult"
+          }
+        }
+      }
     },
     "SignTransactionIntent": {
       "type": "object",
@@ -6100,10 +6272,6 @@
         },
         "updatedAt": {
           "$ref": "#/definitions/external.data.v1.Timestamp"
-        },
-        "exported": {
-          "type": "boolean",
-          "description": "True when a given Account is exported, false otherwise."
         }
       },
       "required": [
@@ -6115,8 +6283,7 @@
         "addressFormat",
         "address",
         "createdAt",
-        "updatedAt",
-        "exported"
+        "updatedAt"
       ]
     },
     "WalletAccountParams": {

@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	SignRawPayload(params *SignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadOK, error)
 
+	SignRawPayloads(params *SignRawPayloadsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadsOK, error)
+
 	SignTransaction(params *SignTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignTransactionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -75,6 +77,47 @@ func (a *Client) SignRawPayload(params *SignRawPayloadParams, authInfo runtime.C
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for SignRawPayload: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+SignRawPayloads signs raw payloads
+
+Sign multiple raw payloads with the same signing parameters
+*/
+func (a *Client) SignRawPayloads(params *SignRawPayloadsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSignRawPayloadsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "SignRawPayloads",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/sign_raw_payloads",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SignRawPayloadsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SignRawPayloadsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for SignRawPayloads: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
