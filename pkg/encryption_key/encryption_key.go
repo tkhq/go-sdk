@@ -1,12 +1,9 @@
 package encryption_key
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"os"
 
 	"github.com/cloudflare/circl/hpke"
@@ -17,7 +14,7 @@ import (
 
 const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 
-// Metadata stores non-secret metadata about the API key.
+// Metadata stores non-secret metadata about the Encryption key.
 type Metadata struct {
 	Name         string `json:"name"`
 	Organization string `json:"organization"`
@@ -25,7 +22,7 @@ type Metadata struct {
 	PublicKey    string `json:"public_key"`
 }
 
-// Key defines a structure in which to hold both serialized and ecdh-lib-friendly versions of a Turnkey API keypair.
+// Key defines a structure in which to hold both serialized and ecdh-lib-friendly versions of a Turnkey Encryption keypair.
 type Key struct {
 	Metadata
 
@@ -75,27 +72,16 @@ func New(userID string, organizationID string) (*Key, error) {
 	return encryptionKey, nil
 }
 
-// EncodePrivateKey encodes an ECDSA private key into the Turnkey format.
+// EncodePrivateKey encodes a KEM private key into the Turnkey format.
 // For now, "Turnkey format" = raw DER form.
 func EncodePrivateKey(privateKey *kem.PrivateKey) string {
 	return fmt.Sprintf("%064x", privateKey)
 }
 
-// EncodePublicKey encodes an ECDSA public key into the Turnkey format.
-// For now, "Turnkey format" = standard compressed form for ECDSA keys.
-func EncodePublicKey(publicKey *ecdsa.PublicKey) string {
-	// ANSI X9.62 point encoding
-	var prefix string
-	if publicKey.Y.Bit(0) == 0 {
-		// Even Y
-		prefix = "02"
-	} else {
-		// Odd Y
-		prefix = "03"
-	}
-
-	// Encode the public key X coordinate as 64 hexadecimal characters, padded with zeroes as necessary
-	return fmt.Sprintf("%s%064x", prefix, publicKey.X)
+// EncodePublicKey encodes a KEM public key into the Turnkey format.
+// For now, "Turnkey format" = raw DER form.
+func EncodePublicKey(publicKey *kem.PublicKey) string {
+	return fmt.Sprintf("%064x", publicKey)
 }
 
 // FromKemPrivateKey takes a HPKE KEM keypair and forms a Turnkey encryption key from it.
@@ -108,10 +94,10 @@ func FromKemPrivateKey(privateKey kem.PrivateKey) (*Key, error) {
 	publicKey := privateKey.Public()
 
 	return &Key{
-		// TkPrivateKey: EncodePrivateKey(privateKey),
-		// TkPublicKey:  EncodePublicKey(publicKey),
-		publicKey:  &publicKey,
-		privateKey: &privateKey,
+		TkPrivateKey: EncodePrivateKey(&privateKey),
+		TkPublicKey:  EncodePublicKey(&publicKey),
+		publicKey:    &publicKey,
+		privateKey:   &privateKey,
 	}, nil
 }
 
@@ -122,45 +108,18 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 		return nil, err
 	}
 
-	dValue := new(big.Int).SetBytes(bytes)
-
-	publicKey := new(ecdsa.PublicKey)
-	privateKey := ecdsa.PrivateKey{
-		PublicKey: *publicKey,
-		D:         dValue,
+	privateKey, err := KemId.Scheme().UnmarshalBinaryPrivateKey(bytes)
+	if err != nil {
+		return nil, err
 	}
 
-	// Derive the public key
-	privateKey.PublicKey.Curve = elliptic.P256()
-	privateKey.PublicKey.X, privateKey.PublicKey.Y = privateKey.PublicKey.Curve.ScalarBaseMult(privateKey.D.Bytes())
+	encryptionKey, err := FromKemPrivateKey(privateKey)
+	if err != nil {
+		return nil, err
+	}
 
-	// encryptionKey, err := FromKemPrivateKey(&privateKey)
-	// if err != nil {
-	return nil, err
-	// }
-
-	// return encryptionKey, nil
+	return encryptionKey, nil
 }
-
-// DecodeTurnkeyPublicKey takes a Turnkey-encoded public key and creates an ECDSA public key.
-// func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
-// 	bytes, err := hex.DecodeString(encodedPublicKey)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	if len(bytes) != 33 {
-// 		return nil, fmt.Errorf("expected a 33-bytes-long public key (compressed). Got %d bytes", len(bytes))
-// 	}
-
-// 	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), bytes)
-
-// 	return &kem.PublicKey{
-// 		Curve: elliptic.P256(),
-// 		X:     x,
-// 		Y:     y,
-// 	}, nil
-// }
 
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
