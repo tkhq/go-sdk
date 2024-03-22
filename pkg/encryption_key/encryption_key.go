@@ -176,13 +176,13 @@ func (k Key) SerializeMetadata() ([]byte, error) {
 	return json.Marshal(k.Metadata)
 }
 
-func (k Key) LoadMetadata(fn string) (*Metadata, error) {
+func (k Key) LoadMetadata(fn string) (*common.IMetadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to open metadata file")
 	}
 
-	md := new(Metadata)
+	md := new(common.IMetadata)
 
 	if err := json.NewDecoder(f).Decode(md); err != nil {
 		return nil, errors.Wrap(err, "failed to decode metadata file")
