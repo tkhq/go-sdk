@@ -199,23 +199,26 @@ func (s *Store[T]) Store(name string, keypair common.IKey) error {
 // Load implements store.Store.
 func (s *Store[T]) Load(name string) (*T, error) {
 	keyBytes, keyPath, err := s.loadKeyBytes(name)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to load key bytes %q", name)
+	}
 
 	kf := store.KeyFactory[T]{}
 	key, err := kf.FromTurnkeyPrivateKey(string(keyBytes))
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to recover API key from private key file %q", keyPath)
+		return nil, errors.Wrapf(err, "failed to recover key from private key file %q", keyPath)
 	}
 
-	// if ok, _ := checkFileExists(s.MetadataFile(name)); ok { //nolint: errcheck
-	// 	metadata, err := key.LoadMetadata(s.MetadataFile(name))
-	// 	if err != nil {
-	// 		return nil, errors.Wrapf(err, "failed to load key metadata from metadata file %q", s.MetadataFile(name))
-	// 	}
+	if ok, _ := checkFileExists(s.MetadataFile(name)); ok { //nolint: errcheck
+		metadata, err := key.LoadMetadata(s.MetadataFile(name))
+		if err != nil {
+			return nil, errors.Wrapf(err, "failed to load key metadata from metadata file %q", s.MetadataFile(name))
+		}
 
-	// 	if err := key.MergeMetadata(metadata); err != nil {
-	// 		return nil, errors.Wrap(err, "failed to merge key metadata with key")
-	// 	}
-	// }
+		if err := key.MergeMetadata(metadata); err != nil {
+			return nil, errors.Wrap(err, "failed to merge key metadata with key")
+		}
+	}
 
 	return &key, nil
 }
