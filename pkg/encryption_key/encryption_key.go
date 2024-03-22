@@ -38,7 +38,7 @@ type Key struct {
 }
 
 // MergeMetadata merges the given metadata with the api key.
-func (k *Key) MergeMetadata(imd *common.IMetadata) error {
+func (k Key) MergeMetadata(imd *common.IMetadata) error {
 	md, ok := (*imd).(Metadata)
 	if !ok {
 		return errors.New("metadata type mismatch")
