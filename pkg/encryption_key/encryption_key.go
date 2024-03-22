@@ -121,6 +121,21 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 	return encryptionKey, nil
 }
 
+// DecodeTurnkeyPublicKey takes a Turnkey-encoded public key and creates a KEM public key.
+func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
+	bytes, err := hex.DecodeString(encodedPublicKey)
+	if err != nil {
+		return nil, err
+	}
+
+	publicKey, err := KemId.Scheme().UnmarshalBinaryPublicKey(bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return &publicKey, nil
+}
+
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
 }
