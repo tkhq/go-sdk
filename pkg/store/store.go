@@ -11,9 +11,9 @@ import (
 )
 
 // Store provides an interface in which API or Encryption keys may be stored and retrieved.
-type Store interface {
+type Store[T common.IKey] interface {
 	// Load pulls a key from the store.
-	Load(name string) (common.IKey, error)
+	Load(name string) (T, error)
 
 	// Store saves the key to the store.
 	Store(name string, key common.IKey) error
