@@ -162,15 +162,15 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 // 	}, nil
 // }
 
-func (k *Key) GetPublicKey() string {
+func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
 }
 
-func (k *Key) GetPrivateKey() string {
+func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
-func (k *Key) SerializeMetadata() ([]byte, error) {
+func (k Key) SerializeMetadata() ([]byte, error) {
 	// Implement serialization logic here.
 	// This is an example:
 	return json.Marshal(k.Metadata)
