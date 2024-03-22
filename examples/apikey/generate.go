@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/store"
+	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
 var (
@@ -31,11 +31,11 @@ func main() {
 		log.Fatalln("failed to generate API key:", err)
 	}
 
-	if err = store.Default.Store(keyName, key); err != nil {
+	if err = local.New[apikey.Key]().Store(keyName, key); err != nil {
 		log.Fatalln("failed to store new API key:", err)
 	}
 
-	if key, err = store.Default.Load(keyName); err != nil {
+	if key, err = local.New[apikey.Key]().Load(keyName); err != nil {
 		log.Fatalln("failed to load new API key:", err)
 	}
 

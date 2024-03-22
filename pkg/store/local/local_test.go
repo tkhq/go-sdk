@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/tkhq/go-sdk/pkg/apikey"
 	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
@@ -60,7 +61,7 @@ func TestGetKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New()
+	s := local.New[apikey.Key]()
 
 	require.Error(t, s.SetKeysDirectory("/does/not/exist"))
 

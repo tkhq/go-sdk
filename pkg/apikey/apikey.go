@@ -10,17 +10,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"github.com/tkhq/go-sdk/pkg/common"
 )
 
 // Metadata stores non-secret metadata about the API key.
 type Metadata struct {
 	Name          string   `json:"name"`
 	Organizations []string `json:"organizations"`
-
-	PublicKey string `json:"public_key"`
+	PublicKey     string   `json:"public_key"`
 }
 
 // Key defines a structure in which to hold both serialized and ecdsa-lib-friendly versions of a Turnkey API keypair.
@@ -36,7 +37,12 @@ type Key struct {
 }
 
 // MergeMetadata merges the given metadata with the api key.
-func (k *Key) MergeMetadata(md *Metadata) error {
+func (k Key) MergeMetadata(imd *common.IMetadata) error {
+	md, ok := (*imd).(Metadata)
+	if !ok {
+		return errors.New("metadata type mismatch")
+	}
+
 	if k.TkPublicKey != md.PublicKey {
 		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
 	}
@@ -198,4 +204,33 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 	}
 
 	return base64.RawURLEncoding.EncodeToString(jsonStamp), nil
+}
+
+func (k Key) GetPublicKey() string {
+	return k.TkPublicKey
+}
+
+func (k Key) GetPrivateKey() string {
+	return k.TkPrivateKey
+}
+
+func (k Key) SerializeMetadata() ([]byte, error) {
+	// Implement serialization logic here.
+	// This is an example:
+	return json.Marshal(k.Metadata)
+}
+
+func (k Key) LoadMetadata(fn string) (*common.IMetadata, error) {
+	f, err := os.Open(fn)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to open metadata file")
+	}
+
+	md := new(common.IMetadata)
+
+	if err := json.NewDecoder(f).Decode(md); err != nil {
+		return nil, errors.Wrap(err, "failed to decode metadata file")
+	}
+
+	return md, nil
 }
