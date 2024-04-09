@@ -4,6 +4,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/sha256"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -41,13 +42,72 @@ func NewEnclaveEncryptClientFromTargetKey(enclaveAuthKey *ecdsa.PublicKey, targe
 }
 
 // Encrypt some plaintext to the given server target key.
-func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msg ServerTargetMsg) (*ClientSendMsg, error) {
-	if !P256Verify(c.enclaveAuthKey, *msg.TargetPublic, *msg.TargetPublicSignature) {
-		return nil, errors.New("invalid enclave auth key signature")
-	}
-	targetPublic, err := KemId.Scheme().UnmarshalBinaryPublicKey((*msg.TargetPublic)[:])
-	if err != nil {
+func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organizationId string, userId *string) (*ClientSendMsg, error) {
+	var targetPublic kem.PublicKey
+
+	var msg ServerMsg
+	if err := json.Unmarshal(msgBytes, &msg); err != nil {
 		return nil, err
+	}
+
+	switch {
+	case *msg.Version == DataVersion:
+		var msgV1 ServerTargetMsgV1
+		if err := json.Unmarshal(msgBytes, &msgV1); err != nil {
+			return nil, err
+		}
+
+		if msgV1.EnclaveQuorumPublic == nil {
+			return nil, errors.New("missing enclave quorum public key")
+		}
+		enclaveQuorumPublic, err := ToEcdsaPublic(msgV1.EnclaveQuorumPublic)
+		if err != nil {
+			return nil, err
+		}
+		if !enclaveQuorumPublic.Equal(c.enclaveAuthKey) {
+			return nil, errors.New("enclave quorum public keys from client and message do not match")
+		}
+
+		msgDataBytes, err := json.Marshal(msgV1.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		// Verify enclave signature
+		if !P256Verify(enclaveQuorumPublic, msgDataBytes, msgV1.DataSignature) {
+			return nil, errors.New("invalid enclave auth key signature")
+		}
+
+		// Validate that the expected fields are the same
+		if msgV1.Data.OrganizationId != organizationId {
+			return nil, errors.New("organization id does not match expected value")
+		}
+
+		if userId != nil && (msgV1.Data.UserId == nil || *msgV1.Data.UserId != *userId) {
+			return nil, errors.New("user id does not match expected value")
+		}
+
+		targetPublic, err = KemId.Scheme().UnmarshalBinaryPublicKey((msgV1.Data.TargetPublic)[:])
+		if err != nil {
+			return nil, err
+		}
+	case msg.Version == nil:
+		var msgV0 ServerTargetMsgV0
+		if err := json.Unmarshal(msgBytes, &msgV0); err != nil {
+			return nil, err
+		}
+
+		if !P256Verify(c.enclaveAuthKey, msgV0.TargetPublic, msgV0.TargetPublicSignature) {
+			return nil, errors.New("invalid enclave auth key signature")
+		}
+
+		var err error
+		targetPublic, err = KemId.Scheme().UnmarshalBinaryPublicKey((msgV0.TargetPublic)[:])
+		if err != nil {
+			return nil, err
+		}
+	default:
+		return nil, fmt.Errorf("invalid data version: %v", msg.Version)
 	}
 
 	ciphertext, encappedPublic, err := encrypt(
@@ -67,15 +127,74 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msg ServerTargetMsg) (*C
 }
 
 // Decrypt a message from the server. This is used in private key and wallet export flows.
-func (c *EnclaveEncryptClient) Decrypt(msg ServerSendMsg) (plaintext []byte, err error) {
-	if !P256Verify(c.enclaveAuthKey, *msg.EncappedPublic, *msg.EncappedPublicSignature) {
-		return nil, errors.New("invalid enclave auth key signature")
+func (c *EnclaveEncryptClient) Decrypt(msgBytes Bytes, organizationId string, userId *string) (plaintext []byte, err error) {
+	var encappedPublic Bytes
+	var ciphertext Bytes
+
+	var msg ServerMsg
+	if err := json.Unmarshal(msgBytes, &msg); err != nil {
+		return nil, err
+	}
+
+	switch {
+	case *msg.Version == DataVersion:
+		var msgV1 ServerSendMsgV1
+		if err := json.Unmarshal(msgBytes, &msgV1); err != nil {
+			return nil, err
+		}
+
+		if msgV1.EnclaveQuorumPublic == nil {
+			return nil, errors.New("missing enclave quorum public key")
+		}
+		enclaveQuorumPublic, err := ToEcdsaPublic(msgV1.EnclaveQuorumPublic)
+		if err != nil {
+			return nil, err
+		}
+		if !enclaveQuorumPublic.Equal(c.enclaveAuthKey) {
+			return nil, errors.New("enclave quorum public keys from client and message do not match")
+		}
+
+		msgDataBytes, err := json.Marshal(msgV1.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		// Verify enclave signature
+		if !P256Verify(enclaveQuorumPublic, msgDataBytes, msgV1.DataSignature) {
+			return nil, errors.New("invalid enclave auth key signature")
+		}
+
+		// Validate that the expected fields are the same
+		if msgV1.Data.OrganizationId != organizationId {
+			return nil, errors.New("organization id does not match expected value")
+		}
+
+		if userId != nil && (msgV1.Data.UserId == nil || *msgV1.Data.UserId != *userId) {
+			return nil, errors.New("user id does not match expected value")
+		}
+
+		encappedPublic = msgV1.Data.EncappedPublic
+		ciphertext = msgV1.Data.Ciphertext
+	case msg.Version == nil:
+		var msgV0 ServerSendMsgV0
+		if err := json.Unmarshal(msgBytes, &msgV0); err != nil {
+			return nil, err
+		}
+
+		if !P256Verify(c.enclaveAuthKey, *msgV0.EncappedPublic, *msgV0.EncappedPublicSignature) {
+			return nil, errors.New("invalid enclave auth key signature")
+		}
+
+		encappedPublic = *msgV0.EncappedPublic
+		ciphertext = *msgV0.Ciphertext
+	default:
+		return nil, fmt.Errorf("invalid data version: %v", msg.Version)
 	}
 
 	return decrypt(
-		*msg.EncappedPublic,
+		encappedPublic,
 		c.targetPrivate,
-		*msg.Ciphertext,
+		ciphertext,
 	)
 }
 
