@@ -3,6 +3,7 @@ package enclave_encrypt
 import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	"encoding/json"
 
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/cloudflare/circl/kem"
@@ -11,6 +12,8 @@ import (
 type EnclaveEncryptServer struct {
 	enclaveAuthKey *ecdsa.PrivateKey
 	targetPrivate  kem.PrivateKey
+	organizationId string
+	userId         *string
 }
 
 type EnclaveEncryptServerRecv struct {
@@ -19,7 +22,7 @@ type EnclaveEncryptServerRecv struct {
 
 // This should be the quorum signing secret derived from the quorum
 // master seed.
-func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey) (EnclaveEncryptServer, error) {
+func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
 	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	if err != nil {
 		return EnclaveEncryptServer{}, err
@@ -28,19 +31,23 @@ func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey) (EnclaveEncryptSe
 	return EnclaveEncryptServer{
 		enclaveAuthKey,
 		targetPrivate,
+		organizationId,
+		userId,
 	}, nil
 }
 
 // Create a server from the enclave quorum public key and the target key.
-func NewEnclaveEncryptServerFromTargetKey(enclaveAuthKey *ecdsa.PrivateKey, targetPrivateKey *kem.PrivateKey) (EnclaveEncryptServer, error) {
+func NewEnclaveEncryptServerFromTargetKey(enclaveAuthKey *ecdsa.PrivateKey, targetPrivateKey *kem.PrivateKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
 	return EnclaveEncryptServer{
 		enclaveAuthKey,
 		*targetPrivateKey,
+		organizationId,
+		userId,
 	}, nil
 }
 
 // Encrypt `plaintext` to the `clientTarget` key.
-func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*ServerSendMsg, error) {
+func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*ServerSendMsgV1, error) {
 	clientTargetKem, err := KemId.Scheme().UnmarshalBinaryPublicKey(clientTarget[:])
 	if err != nil {
 		return nil, err
@@ -52,40 +59,71 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 	if err != nil {
 		return nil, err
 	}
+	data := ServerSendData{
+		EncappedPublic: Bytes(encappedPublic),
+		Ciphertext:     Bytes(ciphertext),
+		OrganizationId: s.organizationId,
+		UserId:         s.userId,
+	}
 
-	encappedPublicSignature, err := P256Sign(s.enclaveAuthKey, encappedPublic)
+	dataBytes, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
+	dataSignature, err := P256Sign(s.enclaveAuthKey, dataBytes)
+	if err != nil {
+		return nil, err
+	}
+	dataSig := Bytes(dataSignature)
 
-	encSig := Bytes(encappedPublicSignature)
-	enc := Bytes(encappedPublic)
-	ciph := Bytes(ciphertext)
-	return &ServerSendMsg{
-		EncappedPublic:          &enc,
-		EncappedPublicSignature: &encSig,
-		Ciphertext:              &ciph,
+	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
+	// FIXME: `elliptic.Marshal` is deprecated,
+	// nolint:staticcheck
+	enclaveQuorumPublicBytes := elliptic.Marshal(elliptic.P256(), enclaveQuorumPublic.X, enclaveQuorumPublic.Y)
+	eqp := Bytes(enclaveQuorumPublicBytes)
+
+	return &ServerSendMsgV1{
+		Version:             DataVersion,
+		Data:                data,
+		DataSignature:       dataSig,
+		EnclaveQuorumPublic: eqp,
 	}, nil
 }
 
 // Return the servers encryption target key and a signature over it from
 // the quorum key.
-func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsg, error) {
+func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 	targetPublic, err := s.targetPrivate.Public().MarshalBinary()
 	if err != nil {
 		return nil, err
 	}
-	t := Bytes(targetPublic)
+	data := ServerTargetData{
+		TargetPublic:   Bytes(targetPublic),
+		OrganizationId: s.organizationId,
+		UserId:         s.userId,
+	}
 
-	targetPublicSignature, err := P256Sign(s.enclaveAuthKey, targetPublic)
+	dataBytes, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
-	tSig := Bytes(targetPublicSignature)
+	dataSignature, err := P256Sign(s.enclaveAuthKey, dataBytes)
+	if err != nil {
+		return nil, err
+	}
+	dataSig := Bytes(dataSignature)
 
-	return &ServerTargetMsg{
-		TargetPublic:          &t,
-		TargetPublicSignature: &tSig,
+	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
+	// FIXME: `elliptic.Marshal` is deprecated,
+	// nolint:staticcheck
+	enclaveQuorumPublicBytes := elliptic.Marshal(elliptic.P256(), enclaveQuorumPublic.X, enclaveQuorumPublic.Y)
+	eqp := Bytes(enclaveQuorumPublicBytes)
+
+	return &ServerTargetMsgV1{
+		Version:             DataVersion,
+		Data:                data,
+		DataSignature:       dataSig,
+		EnclaveQuorumPublic: eqp,
 	}, nil
 }
 

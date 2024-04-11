@@ -2,28 +2,32 @@ package enclave_encrypt
 
 import (
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
+	"math/big"
 
 	"github.com/cloudflare/circl/hpke"
 	"github.com/cloudflare/circl/kem"
 )
 
 const (
-	// Consult the implementations README for how these should be configured.
-	// See [here](./README.md#hpke-configuration)
+	// Consult the rust implementations README for how these should be configured.
+	// See [here](../../../rust/enclave_encrypt/README.md#hpke-configuration)
 	KemId           hpke.KEM  = hpke.KEM_P256_HKDF_SHA256
 	KdfId           hpke.KDF  = hpke.KDF_HKDF_SHA256
 	AeadId          hpke.AEAD = hpke.AEAD_AES256GCM
 	TurnkeyHpkeInfo string    = "turnkey_hpke"
+	DataVersion     string    = "v1.0.0"
 )
 
 type Bytes []byte
 
-func (bytes *Bytes) MarshalJSON() ([]byte, error) {
-	return json.Marshal(hex.EncodeToString(*bytes))
+func (bytes Bytes) MarshalJSON() ([]byte, error) {
+	return json.Marshal(hex.EncodeToString(bytes))
 }
 
 func (bytes *Bytes) UnmarshalJSON(data []byte) error {
@@ -42,9 +46,14 @@ func (bytes *Bytes) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type ServerMsg struct {
+	// Version of the data.
+	Version *string `json:"version,omitempty"`
+}
+
 // Message from the server with encapsulated key, quorum key signature over
 // encapsulated key and ciphertext.
-type ServerSendMsg struct {
+type ServerSendMsgV0 struct {
 	// Encapsulation key used to generate the ciphertext.
 	EncappedPublic *Bytes `json:"encappedPublic,omitempty"`
 	// Quorum key signature over the encapsulation key.
@@ -53,13 +62,63 @@ type ServerSendMsg struct {
 	Ciphertext *Bytes `json:"ciphertext,omitempty"`
 }
 
-// Message from the server with a encryption target key  and a quorum key
+// Message from the server with data, the data's version, enclave quorum key, and the enclave
+// quorum key signature over the data.
+type ServerSendMsgV1 struct {
+	// Version of the data.
+	Version string `json:"version"`
+	// Data sent by the enclave.
+	Data ServerSendData `json:"data"`
+	// Enclave quorum key signature over the data.
+	DataSignature Bytes `json:"dataSignature"`
+	// Enclave quorum key public key.
+	EnclaveQuorumPublic Bytes `json:"enclaveQuorumPublic"`
+}
+
+// Data object from the server with the encapsulated public key, ciphertext,
+// organization ID, and an optional user ID field.
+type ServerSendData struct {
+	// Encapsulation key used to generate the ciphertext.
+	EncappedPublic Bytes `json:"encappedPublic"`
+	// Ciphertext from the server.
+	Ciphertext Bytes `json:"ciphertext"`
+	// Organization making the request.
+	OrganizationId string `json:"organizationId"`
+	// User making the request.
+	UserId *string `json:"userId,omitempty"`
+}
+
+// Message from the server with a encryption target key and a quorum key
 // signature over it.
-type ServerTargetMsg struct {
+type ServerTargetMsgV0 struct {
 	// Target public key for client to encrypt to.
-	TargetPublic *Bytes `json:"targetPublic,omitempty"`
+	TargetPublic Bytes `json:"targetPublic"`
 	// Signature over the servers public target key.
-	TargetPublicSignature *Bytes `json:"targetPublicSignature,omitempty"`
+	TargetPublicSignature Bytes `json:"targetPublicSignature"`
+}
+
+// / Message from the server with data, the data's version, enclave quorum key, and the enclave
+// / quorum key signature over the data.
+type ServerTargetMsgV1 struct {
+	// Version of the data.
+	Version string `json:"version"`
+	// Data sent by the enclave.
+	Data ServerTargetData `json:"data"`
+	// Enclave quorum key signature over the data.
+	DataSignature Bytes `json:"dataSignature"`
+	// Enclave quorum key public key.
+	EnclaveQuorumPublic Bytes `json:"enclaveQuorumPublic"`
+}
+
+// Data object from the server with the target public key, organization ID,
+// and an optional user ID field.
+type ServerTargetData struct {
+	// Target public key for client to encrypt to.
+	TargetPublic Bytes `json:"targetPublic"`
+	// Organization making the request.
+	OrganizationId string `json:"organizationId"`
+	// User making the request.
+	UserId *string `json:"userId,omitempty"`
 }
 
 // Message from the client with encapsulated key and ciphertext.
@@ -83,6 +142,31 @@ func P256Sign(privateKey *ecdsa.PrivateKey, msg []byte) ([]byte, error) {
 func P256Verify(publicKey *ecdsa.PublicKey, msg []byte, signature []byte) bool {
 	hash := sha256.Sum256(msg)
 	return ecdsa.VerifyASN1(publicKey, hash[:], signature)
+}
+
+// Takes a byte slice and returns a ECDSA public key
+func ToEcdsaPublic(publicBytes []byte) (*ecdsa.PublicKey, error) {
+	// init curve instance
+	curve := elliptic.P256()
+
+	// curve's bitsize converted to length in bytes
+	byteLen := (curve.Params().BitSize + 7) / 8
+
+	// ensure the public key bytes have the correct length
+	if len(publicBytes) != 1+2*byteLen {
+		return nil, errors.New("invalid enclave auth key length")
+	}
+
+	// extract X and Y coordinates from the public key bytes
+	// ignore first byte (prefix)
+	x := new(big.Int).SetBytes(publicBytes[1 : 1+byteLen])
+	y := new(big.Int).SetBytes(publicBytes[1+byteLen:])
+
+	return &ecdsa.PublicKey{
+		Curve: curve,
+		X:     x,
+		Y:     y,
+	}, nil
 }
 
 func encrypt(
