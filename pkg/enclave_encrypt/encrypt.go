@@ -76,7 +76,7 @@ type ServerSendMsgV1 struct {
 }
 
 // Data object from the server with the encapsulated public key, ciphertext,
-// organization ID, and an optional user ID field.
+// and organization ID.
 type ServerSendData struct {
 	// Encapsulation key used to generate the ciphertext.
 	EncappedPublic Bytes `json:"encappedPublic"`
@@ -84,8 +84,6 @@ type ServerSendData struct {
 	Ciphertext Bytes `json:"ciphertext"`
 	// Organization making the request.
 	OrganizationId string `json:"organizationId"`
-	// User making the request.
-	UserId *string `json:"userId,omitempty"`
 }
 
 // Message from the server with a encryption target key and a quorum key
@@ -118,7 +116,7 @@ type ServerTargetData struct {
 	// Organization making the request.
 	OrganizationId string `json:"organizationId"`
 	// User making the request.
-	UserId *string `json:"userId,omitempty"`
+	UserId string `json:"userId"`
 }
 
 // Message from the client with encapsulated key and ciphertext.
@@ -189,6 +187,7 @@ func encrypt(
 	if err != nil {
 		return nil, nil, err
 	}
+
 	ciphertext, err = sealer.Seal(plaintext, aad)
 	if err != nil {
 		return nil, nil, err
@@ -218,6 +217,7 @@ func decrypt(
 	if err != nil {
 		return nil, err
 	}
+
 	plaintext, err = opener.Open(ciphertext, aad)
 
 	return plaintext, err
