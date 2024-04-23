@@ -52,6 +52,7 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 	if err != nil {
 		return nil, err
 	}
+
 	ciphertext, encappedPublic, err := encrypt(
 		&clientTargetKem,
 		plaintext,
@@ -59,21 +60,23 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 	if err != nil {
 		return nil, err
 	}
+
 	data := ServerSendData{
 		EncappedPublic: Bytes(encappedPublic),
 		Ciphertext:     Bytes(ciphertext),
 		OrganizationId: s.organizationId,
-		UserId:         s.userId,
 	}
 
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
+
 	dataSignature, err := P256Sign(s.enclaveAuthKey, dataBytes)
 	if err != nil {
 		return nil, err
 	}
+
 	dataSig := Bytes(dataSignature)
 
 	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
@@ -97,20 +100,23 @@ func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	data := ServerTargetData{
 		TargetPublic:   Bytes(targetPublic),
 		OrganizationId: s.organizationId,
-		UserId:         s.userId,
+		UserId:         *s.userId,
 	}
 
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
+
 	dataSignature, err := P256Sign(s.enclaveAuthKey, dataBytes)
 	if err != nil {
 		return nil, err
 	}
+
 	dataSig := Bytes(dataSignature)
 
 	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
@@ -140,6 +146,7 @@ func (s *EnclaveEncryptServer) AuthEncrypt(clientTarget []byte, plaintext []byte
 	if err != nil {
 		return "", err
 	}
+
 	ciphertext, encappedPublic, err := encrypt(
 		&clientTargetKem,
 		plaintext,

@@ -22,6 +22,7 @@ func randomSignature(key *ecdsa.PrivateKey) []byte {
 	if err != nil {
 		panic(err)
 	}
+
 	return signature
 }
 
@@ -111,24 +112,27 @@ func TestHexSerializationWorks(t *testing.T) {
 
 func TestClientToServerE2e(t *testing.T) {
 	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, &userId)
 	assert.Nil(t, err)
 
 	serverTarget, err := server.PublishTarget()
 	assert.Nil(t, err)
 	serverTargetBytes, err := json.Marshal(serverTarget)
 	assert.Nil(t, err)
+
 	serverRecv := server.IntoEnclaveServerRecv()
 
 	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
 	assert.Nil(t, err)
-	clientCiphertext, err := client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, nil)
+	clientCiphertext, err := client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, userId)
 	assert.Nil(t, err)
 
 	bytes, err := json.Marshal(clientCiphertext)
 	assert.Nil(t, err)
+
 	clientCipherTextUnmarshal := enclave_encrypt.ClientSendMsg{}
 
 	err = json.Unmarshal(bytes, &clientCipherTextUnmarshal)
@@ -148,26 +152,29 @@ func TestClientToServerE2e(t *testing.T) {
 
 func TestClientToServerE2eExistingTargetKey(t *testing.T) {
 	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, &userId)
 	assert.Nil(t, err)
 
 	serverTarget, err := server.PublishTarget()
 	assert.Nil(t, err)
 	serverTargetBytes, err := json.Marshal(serverTarget)
 	assert.Nil(t, err)
+
 	serverRecv := server.IntoEnclaveServerRecv()
 
 	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
 	client, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&authKey.PublicKey, targetPrivate)
 	assert.Nil(t, err)
-	clientCiphertext, err := client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, nil)
+	clientCiphertext, err := client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, userId)
 	assert.Nil(t, err)
 
 	bytes, err := json.Marshal(clientCiphertext)
 	assert.Nil(t, err)
+
 	clientCipherTextUnmarshal := enclave_encrypt.ClientSendMsg{}
 
 	err = json.Unmarshal(bytes, &clientCipherTextUnmarshal)
@@ -187,21 +194,24 @@ func TestClientToServerE2eExistingTargetKey(t *testing.T) {
 
 func TestClientToServerRejectBadServerTargetSignature(t *testing.T) {
 	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, &userId)
 	assert.Nil(t, err)
 
 	serverTarget, err := server.PublishTarget()
+	assert.Nil(t, err)
+
 	sig := enclave_encrypt.Bytes(randomSignature(authKey))
 	serverTarget.DataSignature = sig
-	assert.Nil(t, err)
+
 	serverTargetBytes, err := json.Marshal(serverTarget)
 	assert.Nil(t, err)
 
 	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
 	assert.Nil(t, err)
-	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, nil)
+	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, userId)
 	assert.Equal(
 		t,
 		"invalid enclave auth key signature",
@@ -211,9 +221,10 @@ func TestClientToServerRejectBadServerTargetSignature(t *testing.T) {
 
 func TestClientToServerRejectBadOrganizationId(t *testing.T) {
 	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, "a9ee173c-e089-46a0-8cbc-c0d87a125b07", nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, "a9ee173c-e089-46a0-8cbc-c0d87a125b07", &userId)
 	assert.Nil(t, err)
 
 	serverTarget, err := server.PublishTarget()
@@ -223,7 +234,7 @@ func TestClientToServerRejectBadOrganizationId(t *testing.T) {
 
 	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
 	assert.Nil(t, err)
-	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, nil)
+	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, userId)
 	assert.Equal(
 		t,
 		"organization id does not match expected value",
@@ -233,9 +244,10 @@ func TestClientToServerRejectBadOrganizationId(t *testing.T) {
 
 func TestClientToServerRejectMissingUserId(t *testing.T) {
 	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
 	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, &userId)
 	assert.Nil(t, err)
 
 	serverTarget, err := server.PublishTarget()
@@ -245,8 +257,9 @@ func TestClientToServerRejectMissingUserId(t *testing.T) {
 
 	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
 	assert.Nil(t, err)
-	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
-	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, &userId)
+
+	userId = "fccd371a-a417-447e-89d0-5af8501cd8d9"
+	_, err = client.Encrypt([]byte("test message"), serverTargetBytes, organizationId, userId)
 	assert.Equal(
 		t,
 		"user id does not match expected value",
@@ -272,7 +285,7 @@ func TestServerToClientE2e(t *testing.T) {
 
 	bytes, err := json.Marshal(serverCiphertext)
 	assert.Nil(t, err)
-	plaintext, err := client.Decrypt(bytes, organizationId, nil)
+	plaintext, err := client.Decrypt(bytes, organizationId)
 	assert.Nil(t, err)
 	assert.Equal(
 		t,
@@ -301,7 +314,7 @@ func TestServerToClientE2eExistingTargetKey(t *testing.T) {
 
 	bytes, err := json.Marshal(serverCiphertext)
 	assert.Nil(t, err)
-	plaintext, err := client.Decrypt(bytes, organizationId, nil)
+	plaintext, err := client.Decrypt(bytes, organizationId)
 	assert.Nil(t, err)
 	assert.Equal(
 		t,
@@ -331,7 +344,7 @@ func TestServerToClientRejectBadEncappedPublicSignature(t *testing.T) {
 
 	serverSendtBytes, err := json.Marshal(serverCiphertext)
 	assert.Nil(t, err)
-	_, err = client.Decrypt(serverSendtBytes, organizationId, nil)
+	_, err = client.Decrypt(serverSendtBytes, organizationId)
 	assert.Equal(
 		t,
 		"invalid enclave auth key signature",
@@ -357,37 +370,10 @@ func TestServerToClientRejectBadOrganizationId(t *testing.T) {
 
 	bytes, err := json.Marshal(serverCiphertext)
 	assert.Nil(t, err)
-	_, err = client.Decrypt(bytes, organizationId, nil)
+	_, err = client.Decrypt(bytes, organizationId)
 	assert.Equal(
 		t,
 		"organization id does not match expected value",
-		err.Error(),
-	)
-}
-
-func TestServerToClientRejectMissingUserId(t *testing.T) {
-	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
-	authKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	assert.Nil(t, err)
-
-	client, err := enclave_encrypt.NewEnclaveEncryptClient(&authKey.PublicKey)
-	assert.Nil(t, err)
-
-	clientTarget, err := client.TargetPublic()
-	assert.Nil(t, err)
-
-	server, err := enclave_encrypt.NewEnclaveEncryptServer(authKey, organizationId, nil)
-	assert.Nil(t, err)
-	serverCiphertext, err := server.Encrypt(clientTarget, []byte("test message"))
-	assert.Nil(t, err)
-
-	bytes, err := json.Marshal(serverCiphertext)
-	assert.Nil(t, err)
-	userId := "4eb08a82-00ee-4f29-b076-fca769209725"
-	_, err = client.Decrypt(bytes, organizationId, &userId)
-	assert.Equal(
-		t,
-		"user id does not match expected value",
 		err.Error(),
 	)
 }

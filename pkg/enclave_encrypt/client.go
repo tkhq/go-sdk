@@ -42,7 +42,7 @@ func NewEnclaveEncryptClientFromTargetKey(enclaveAuthKey *ecdsa.PublicKey, targe
 }
 
 // Encrypt some plaintext to the given server target key.
-func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organizationId string, userId *string) (*ClientSendMsg, error) {
+func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organizationId string, userId string) (*ClientSendMsg, error) {
 	var targetPublic kem.PublicKey
 
 	var msg ServerMsg
@@ -60,10 +60,12 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organiza
 		if msgV1.EnclaveQuorumPublic == nil {
 			return nil, errors.New("missing enclave quorum public key")
 		}
+
 		enclaveQuorumPublic, err := ToEcdsaPublic(msgV1.EnclaveQuorumPublic)
 		if err != nil {
 			return nil, err
 		}
+
 		if !enclaveQuorumPublic.Equal(c.enclaveAuthKey) {
 			return nil, errors.New("enclave quorum public keys from client and message do not match")
 		}
@@ -83,7 +85,7 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organiza
 			return nil, errors.New("organization id does not match expected value")
 		}
 
-		if userId != nil && (msgV1.Data.UserId == nil || *msgV1.Data.UserId != *userId) {
+		if msgV1.Data.UserId != userId {
 			return nil, errors.New("user id does not match expected value")
 		}
 
@@ -102,6 +104,7 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organiza
 		}
 
 		var err error
+
 		targetPublic, err = KemId.Scheme().UnmarshalBinaryPublicKey((msgV0.TargetPublic)[:])
 		if err != nil {
 			return nil, err
@@ -120,6 +123,7 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organiza
 
 	enc := Bytes(encappedPublic)
 	ciph := Bytes(ciphertext)
+
 	return &ClientSendMsg{
 		EncappedPublic: &enc,
 		Ciphertext:     &ciph,
@@ -127,8 +131,9 @@ func (c *EnclaveEncryptClient) Encrypt(plaintext Bytes, msgBytes Bytes, organiza
 }
 
 // Decrypt a message from the server. This is used in private key and wallet export flows.
-func (c *EnclaveEncryptClient) Decrypt(msgBytes Bytes, organizationId string, userId *string) (plaintext []byte, err error) {
+func (c *EnclaveEncryptClient) Decrypt(msgBytes Bytes, organizationId string) (plaintext []byte, err error) {
 	var encappedPublic Bytes
+
 	var ciphertext Bytes
 
 	var msg ServerMsg
@@ -146,10 +151,12 @@ func (c *EnclaveEncryptClient) Decrypt(msgBytes Bytes, organizationId string, us
 		if msgV1.EnclaveQuorumPublic == nil {
 			return nil, errors.New("missing enclave quorum public key")
 		}
+
 		enclaveQuorumPublic, err := ToEcdsaPublic(msgV1.EnclaveQuorumPublic)
 		if err != nil {
 			return nil, err
 		}
+
 		if !enclaveQuorumPublic.Equal(c.enclaveAuthKey) {
 			return nil, errors.New("enclave quorum public keys from client and message do not match")
 		}
@@ -167,10 +174,6 @@ func (c *EnclaveEncryptClient) Decrypt(msgBytes Bytes, organizationId string, us
 		// Validate that the expected fields are the same
 		if msgV1.Data.OrganizationId != organizationId {
 			return nil, errors.New("organization id does not match expected value")
-		}
-
-		if userId != nil && (msgV1.Data.UserId == nil || *msgV1.Data.UserId != *userId) {
-			return nil, errors.New("user id does not match expected value")
 		}
 
 		encappedPublic = msgV1.Data.EncappedPublic
@@ -206,16 +209,17 @@ func (c *EnclaveEncryptClient) TargetPublic() ([]byte, error) {
 // Decrypt a base58-encoded payload from the server. This is used in email authentication and email recovery flows.
 func (c *EnclaveEncryptClient) AuthDecrypt(payload string) (plaintext []byte, err error) {
 	payloadBytes := base58.Decode(payload)
-	err = ValidateChecksum(payloadBytes)
-	if err != nil {
+
+	if err = ValidateChecksum(payloadBytes); err != nil {
 		return nil, err
 	}
+
 	// Trim the checksum
 	payloadBytes = payloadBytes[:len(payloadBytes)-4]
-
 	if len(payloadBytes) < 33 {
 		return nil, errors.New("payload is less then 33 bytes, the length of the expected public key")
 	}
+
 	compressedKey := payloadBytes[0:33]
 	ciphertext := payloadBytes[33:]
 
@@ -237,10 +241,12 @@ func ValidateChecksum(payload []byte) error {
 	if len(payload) < 5 {
 		return fmt.Errorf("payload length is < 5 (length: %d)", len(payload))
 	}
+
 	expected := checksum(payload[:len(payload)-4])
 	if !reflect.DeepEqual(expected[:], payload[len(payload)-4:]) {
 		return fmt.Errorf("checksum mismatch for payload %02x: %v (computed) != %v (last four bytes)", payload, expected, payload[len(payload)-4:])
 	}
+
 	return nil
 }
 
@@ -250,6 +256,8 @@ func ValidateChecksum(payload []byte) error {
 func checksum(payload []byte) (checkSum [4]byte) {
 	h := sha256.Sum256(payload)
 	h2 := sha256.Sum256(h[:])
+
 	copy(checkSum[:], h2[:4])
+
 	return checkSum
 }
