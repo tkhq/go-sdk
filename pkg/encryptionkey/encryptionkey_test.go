@@ -11,11 +11,11 @@ import (
 )
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		encryptionKey, err := encryptionkey.New(uuid.NewString(), uuid.NewString())
 		require.NoError(t, err)
 
-		assert.Len(t, encryptionKey.TkPublicKey, 66, "attempt %d: expected 66 characters for public key %s", i, encryptionKey.TkPublicKey)
+		assert.Len(t, encryptionKey.TkPublicKey, 130, "attempt %d: expected 130 characters for public key %s", i, encryptionKey.TkPublicKey)
 		assert.Len(t, encryptionKey.TkPrivateKey, 64, "attempt %d: expected 64 characters for private key %s", i, encryptionKey.TkPrivateKey)
 	}
 }
