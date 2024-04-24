@@ -141,13 +141,8 @@ func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
-func (k Key) SerializeMetadata() (string, error) {
-	jsonBytes, err := json.Marshal(k.Metadata)
-	if err != nil {
-		return "", err
-	}
-
-	return string(jsonBytes), nil
+func (k Key) GetMetadata() Metadata {
+	return k.Metadata
 }
 
 func (k Key) LoadMetadata(fn string) (*Metadata, error) {
