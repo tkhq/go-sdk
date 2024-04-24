@@ -1,12 +1,12 @@
 package common
 
 // IKey defines an interface for API keys and Encryption keys.
-type IKey interface {
+type IKey[M IMetadata] interface {
 	GetPublicKey() string
 	GetPrivateKey() string
 	SerializeMetadata() ([]byte, error)
-	LoadMetadata(string) (*IMetadata, error)
-	MergeMetadata(md *IMetadata) error
+	LoadMetadata(string) (*M, error)
+	MergeMetadata(M) error
 }
 
 type IMetadata interface {

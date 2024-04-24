@@ -11,14 +11,14 @@ import (
 
 // Store implements a VOLATILE RAM-based keystore.
 // This should only be used for testing.
-type Store[T common.IKey] struct {
+type Store[T common.IKey[M], M common.IMetadata] struct {
 	s map[string]*T
 
 	mu sync.Mutex
 }
 
 // Load implements store.Store.
-func (s *Store[T]) Load(name string) (*T, error) {
+func (s *Store[T, M]) Load(name string) (*T, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -35,7 +35,7 @@ func (s *Store[T]) Load(name string) (*T, error) {
 }
 
 // Store implements store.Store.
-func (s *Store[T]) Store(name string, key *T) error {
+func (s *Store[T, M]) Store(name string, key *T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

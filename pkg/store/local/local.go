@@ -28,7 +28,7 @@ const (
 )
 
 // Store defines an api key Store using the local filesystem.
-type Store[T common.IKey] struct {
+type Store[T common.IKey[M], M common.IMetadata] struct {
 	// DefaultKeyName is the name of the key to use when none is specified.
 	// Normally, this is simply "default".
 	DefaultKeyName string
@@ -40,15 +40,15 @@ type Store[T common.IKey] struct {
 
 // New provides a new local API key store.
 // keyDirectory is optional, and if it is the empty string, the system default will be used.
-func New[T common.IKey]() *Store[T] {
-	return &Store[T]{
+func New[T common.IKey[M], M common.IMetadata]() *Store[T, M] {
+	return &Store[T, M]{
 		DefaultKeyName: DefaultKeyName,
 		KeyDirectory:   DefaultKeysDir(),
 	}
 }
 
 // PublicKeyFile returns the filename for the public key of the given name.
-func (s *Store[T]) PublicKeyFile(name string) string {
+func (s *Store[T, M]) PublicKeyFile(name string) string {
 	if name == "" {
 		name = DefaultKeyName
 	}
@@ -57,7 +57,7 @@ func (s *Store[T]) PublicKeyFile(name string) string {
 }
 
 // PrivateKeyFile returns the filename for the private key of the given name.
-func (s *Store[T]) PrivateKeyFile(name string) string {
+func (s *Store[T, M]) PrivateKeyFile(name string) string {
 	if name == "" {
 		name = DefaultKeyName
 	}
@@ -66,7 +66,7 @@ func (s *Store[T]) PrivateKeyFile(name string) string {
 }
 
 // MetadataFile returns the filename for the metadata of the given key name.
-func (s *Store[T]) MetadataFile(name string) string {
+func (s *Store[T, M]) MetadataFile(name string) string {
 	return path.Join(s.KeyDirectory, fmt.Sprintf("%s.%s", name, metadataExtension))
 }
 
@@ -94,7 +94,7 @@ func DeprecatedDefaultKeysDir() string {
 	return keysDir
 }
 
-// DefaultKeysDir returns the default directory for key storage for the user's system.
+// DefaultKeysDir returns the default directory for API key storage for the user's system.
 func DefaultKeysDir() string {
 	var cfgDir string
 
@@ -132,7 +132,7 @@ func DefaultKeysDir() string {
 }
 
 // SetKeysDirectory sets the clifs root directory, ensuring its existence and writability.
-func (s *Store[T]) SetKeysDirectory(keysPath string) (err error) {
+func (s *Store[T, M]) SetKeysDirectory(keysPath string) (err error) {
 	if keysPath == "" || keysPath == DefaultKeysDir() {
 		keysPath = DefaultKeysDir()
 
@@ -157,7 +157,7 @@ func (s *Store[T]) SetKeysDirectory(keysPath string) (err error) {
 }
 
 // Store implements store.Store.
-func (s *Store[T]) Store(name string, keypair common.IKey) error {
+func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 	if name == "" {
 		name = s.DefaultKeyName
 	}
@@ -197,13 +197,13 @@ func (s *Store[T]) Store(name string, keypair common.IKey) error {
 }
 
 // Load implements store.Store.
-func (s *Store[T]) Load(name string) (*T, error) {
+func (s *Store[T, M]) Load(name string) (*T, error) {
 	keyBytes, keyPath, err := s.loadKeyBytes(name)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to load key bytes %q", name)
 	}
 
-	kf := store.KeyFactory[T]{}
+	kf := store.KeyFactory[T, M]{}
 	key, err := kf.FromTurnkeyPrivateKey(string(keyBytes))
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to recover key from private key file %q", keyPath)
@@ -215,7 +215,7 @@ func (s *Store[T]) Load(name string) (*T, error) {
 			return nil, errors.Wrapf(err, "failed to load key metadata from metadata file %q", s.MetadataFile(name))
 		}
 
-		if err := key.MergeMetadata(metadata); err != nil {
+		if err := key.MergeMetadata(*metadata); err != nil {
 			return nil, errors.Wrap(err, "failed to merge key metadata with key")
 		}
 	}
@@ -223,7 +223,7 @@ func (s *Store[T]) Load(name string) (*T, error) {
 	return &key, nil
 }
 
-func (s *Store[T]) loadKeyBytes(name string) ([]byte, string, error) {
+func (s *Store[T, M]) loadKeyBytes(name string) ([]byte, string, error) {
 	if name == "" {
 		name = s.DefaultKeyName
 	}

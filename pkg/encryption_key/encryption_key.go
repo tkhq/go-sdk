@@ -9,7 +9,6 @@ import (
 	"github.com/cloudflare/circl/hpke"
 	"github.com/cloudflare/circl/kem"
 	"github.com/pkg/errors"
-	"github.com/tkhq/go-sdk/pkg/common"
 )
 
 const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
@@ -32,25 +31,6 @@ type Key struct {
 	// Underlying KEM keypair
 	privateKey *kem.PrivateKey
 	publicKey  *kem.PublicKey
-}
-
-// MergeMetadata merges the given metadata with the api key.
-func (k Key) MergeMetadata(imd *common.IMetadata) error {
-	md, ok := (*imd).(Metadata)
-	if !ok {
-		return errors.New("metadata type mismatch")
-	}
-
-	if k.TkPublicKey != md.PublicKey {
-		return errors.Errorf("metadata public key %q does not match encryption key public key %q", md.PublicKey, k.TkPublicKey)
-	}
-
-	k.Metadata.Name = md.Name
-	k.Metadata.Organization = md.Organization
-	k.Metadata.PublicKey = md.PublicKey
-	k.Metadata.User = md.User
-
-	return nil
 }
 
 // New generates a new Turnkey encryption key.
@@ -150,17 +130,31 @@ func (k Key) SerializeMetadata() ([]byte, error) {
 	return json.Marshal(k.Metadata)
 }
 
-func (k Key) LoadMetadata(fn string) (*common.IMetadata, error) {
+func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to open metadata file")
 	}
 
-	md := new(common.IMetadata)
+	md := new(Metadata)
 
 	if err := json.NewDecoder(f).Decode(md); err != nil {
 		return nil, errors.Wrap(err, "failed to decode metadata file")
 	}
 
 	return md, nil
+}
+
+// MergeMetadata merges the given metadata with the api key.
+func (k Key) MergeMetadata(md Metadata) error {
+	if k.TkPublicKey != md.PublicKey {
+		return errors.Errorf("metadata public key %q does not match encryption key public key %q", md.PublicKey, k.TkPublicKey)
+	}
+
+	k.Metadata.Name = md.Name
+	k.Metadata.Organization = md.Organization
+	k.Metadata.PublicKey = md.PublicKey
+	k.Metadata.User = md.User
+
+	return nil
 }

@@ -11,7 +11,7 @@ import (
 )
 
 func TestStore(t *testing.T) {
-	s := new(ram.Store[apikey.Key])
+	s := new(ram.Store[apikey.Key, apikey.Metadata])
 
 	key, err := apikey.New("2a7e29e2-9e92-48c2-98bf-c849c1159bc7")
 	require.NoError(t, err)

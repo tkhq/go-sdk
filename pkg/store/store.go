@@ -11,18 +11,18 @@ import (
 )
 
 // Store provides an interface in which API or Encryption keys may be stored and retrieved.
-type Store[T common.IKey] interface {
+type Store[T common.IKey[M], M common.IMetadata] interface {
 	// Load pulls a key from the store.
 	Load(name string) (*T, error)
 
 	// Store saves the key to the store.
-	Store(name string, key common.IKey) error
+	Store(name string, key common.IKey[M]) error
 }
 
 // KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function
-type KeyFactory[T common.IKey] struct{}
+type KeyFactory[T common.IKey[M], M common.IMetadata] struct{}
 
-func (kf KeyFactory[T]) FromTurnkeyPrivateKey(data string) (T, error) {
+func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	var instance T
 
 	// Determine type T and call the corresponding FromTurnkeyPrivateKey function

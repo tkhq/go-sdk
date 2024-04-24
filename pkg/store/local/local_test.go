@@ -61,7 +61,7 @@ func TestGetKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New[apikey.Key]()
+	s := local.New[apikey.Key, apikey.Metadata]()
 
 	require.Error(t, s.SetKeysDirectory("/does/not/exist"))
 

@@ -14,7 +14,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"github.com/tkhq/go-sdk/pkg/common"
 )
 
 // Metadata stores non-secret metadata about the API key.
@@ -34,24 +33,6 @@ type Key struct {
 	// Underlying ECDSA keypair
 	privateKey *ecdsa.PrivateKey
 	publicKey  *ecdsa.PublicKey
-}
-
-// MergeMetadata merges the given metadata with the api key.
-func (k Key) MergeMetadata(imd *common.IMetadata) error {
-	md, ok := (*imd).(Metadata)
-	if !ok {
-		return errors.New("metadata type mismatch")
-	}
-
-	if k.TkPublicKey != md.PublicKey {
-		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
-	}
-
-	k.Metadata.Name = md.Name
-	k.Metadata.Organizations = md.Organizations
-	k.Metadata.PublicKey = md.PublicKey
-
-	return nil
 }
 
 // TurnkeyAPISignatureScheme is the signature scheme to use for the API request signature.
@@ -220,17 +201,30 @@ func (k Key) SerializeMetadata() ([]byte, error) {
 	return json.Marshal(k.Metadata)
 }
 
-func (k Key) LoadMetadata(fn string) (*common.IMetadata, error) {
+func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to open metadata file")
 	}
 
-	md := new(common.IMetadata)
+	md := new(Metadata)
 
 	if err := json.NewDecoder(f).Decode(md); err != nil {
 		return nil, errors.Wrap(err, "failed to decode metadata file")
 	}
 
 	return md, nil
+}
+
+// MergeMetadata merges the given metadata with the api key.
+func (k Key) MergeMetadata(md Metadata) error {
+	if k.TkPublicKey != md.PublicKey {
+		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
+	}
+
+	k.Metadata.Name = md.Name
+	k.Metadata.Organizations = md.Organizations
+	k.Metadata.PublicKey = md.PublicKey
+
+	return nil
 }
