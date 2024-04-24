@@ -1,4 +1,4 @@
-package encryption_key_test
+package encryptionkey_test
 
 import (
 	"testing"
@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tkhq/go-sdk/pkg/encryption_key"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 )
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
 	for i := 0; i < 1000; i++ {
-		encryptionKey, err := encryption_key.New(uuid.NewString(), uuid.NewString())
+		encryptionKey, err := encryptionkey.New(uuid.NewString(), uuid.NewString())
 		require.NoError(t, err)
 
 		assert.Len(t, encryptionKey.TkPublicKey, 66, "attempt %d: expected 66 characters for public key %s", i, encryptionKey.TkPublicKey)

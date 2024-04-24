@@ -199,6 +199,7 @@ func (s *Store[T, M]) Load(name string) (*T, error) {
 	}
 
 	kf := store.KeyFactory[T, M]{}
+
 	key, err := kf.FromTurnkeyPrivateKey(string(keyBytes))
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to recover key from private key file %q", keyPath)

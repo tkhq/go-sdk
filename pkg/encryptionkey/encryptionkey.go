@@ -1,5 +1,5 @@
-// Package encryption_key
-package encryption_key
+// Package encryptionkey manages encryption keys for users
+package encryptionkey
 
 import (
 	"encoding/hex"
@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// KemID for HPKE protocol.
 const KemID hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 
 // Metadata stores non-secret metadata about the Encryption key.
@@ -100,10 +101,12 @@ func FromKemPrivateKey(privateKey kem.PrivateKey) (*Key, error) {
 	}
 
 	publicKey := privateKey.Public()
+
 	tkPrivateKey, err := EncodePrivateKey(privateKey)
 	if err != nil {
 		return nil, err
 	}
+
 	tkPublicKey, err := EncodePublicKey(publicKey)
 	if err != nil {
 		return nil, err
@@ -148,6 +151,7 @@ func DecodeTurnkeyPrivateKey(encodedPrivateKey string) (*kem.PrivateKey, error) 
 	if err != nil {
 		return nil, err
 	}
+
 	return &privateKey, nil
 }
 
@@ -166,22 +170,22 @@ func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
 	return &publicKey, nil
 }
 
-// GetPublicKey gets the key's public key
+// GetPublicKey gets the key's public key.
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
 }
 
-// GetPrivateKey gets the key's private key
+// GetPrivateKey gets the key's private key.
 func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
-// GetMetadata gets the key's metadata
+// GetMetadata gets the key's metadata.
 func (k Key) GetMetadata() Metadata {
 	return k.Metadata
 }
 
-// LoadMetadata loads a JSON metadata file
+// LoadMetadata loads a JSON metadata file.
 func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {

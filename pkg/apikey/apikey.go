@@ -1,4 +1,4 @@
-// API keys
+// Package apikey manages Turnkey API keys for organizations
 package apikey
 
 import (
@@ -188,22 +188,22 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 	return base64.RawURLEncoding.EncodeToString(jsonStamp), nil
 }
 
-// GetPublicKey gets the key's public key
+// GetPublicKey gets the key's public key.
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
 }
 
-// GetPrivateKey gets the key's private key
+// GetPrivateKey gets the key's private key.
 func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
-// GetMetadata gets the key's metadata
+// GetMetadata gets the key's metadata.
 func (k Key) GetMetadata() Metadata {
 	return k.Metadata
 }
 
-// LoadMetadata loads a JSON metadata file
+// LoadMetadata loads a JSON metadata file.
 func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {

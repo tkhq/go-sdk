@@ -6,9 +6,9 @@ type IKey[M IMetadata] interface {
 	GetPublicKey() string
 	GetPrivateKey() string
 	GetMetadata() M
-	LoadMetadata(string) (*M, error)
-	MergeMetadata(M) error
+	LoadMetadata(s string) (*M, error)
+	MergeMetadata(m M) error
 }
 
-type IMetadata interface {
-}
+// IMetadata defines an interface for the metadata on keys.
+type IMetadata interface{}

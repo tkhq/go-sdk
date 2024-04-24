@@ -5,9 +5,10 @@ import (
 	"reflect"
 
 	"github.com/pkg/errors"
+
 	"github.com/tkhq/go-sdk/pkg/apikey"
 	"github.com/tkhq/go-sdk/pkg/common"
-	"github.com/tkhq/go-sdk/pkg/encryption_key"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 )
 
 // Store provides an interface in which API or Encryption keys may be stored and retrieved.
@@ -19,10 +20,10 @@ type Store[T common.IKey[M], M common.IMetadata] interface {
 	Store(name string, key common.IKey[M]) error
 }
 
-// KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function
+// KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function.
 type KeyFactory[T common.IKey[M], M common.IMetadata] struct{}
 
-// FromTurnkeyPrivateKey
+// FromTurnkeyPrivateKey converts a Turnkey-encoded private key string to a key.
 func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	var instance T
 
@@ -40,8 +41,8 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 		// Since T is an interface, we need to return the concrete type that implements T.
 		// The conversion to T happens automatically if the concrete type satisfies T.
 		return *(interface{}(key).(*T)), nil
-	} else if typeOfT == reflect.TypeOf(encryption_key.Key{}) {
-		key, err := encryption_key.FromTurnkeyPrivateKey(data)
+	} else if typeOfT == reflect.TypeOf(encryptionkey.Key{}) {
+		key, err := encryptionkey.FromTurnkeyPrivateKey(data)
 		if err != nil {
 			return instance, err
 		}
