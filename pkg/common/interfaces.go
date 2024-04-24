@@ -4,7 +4,7 @@ package common
 type IKey[M IMetadata] interface {
 	GetPublicKey() string
 	GetPrivateKey() string
-	SerializeMetadata() ([]byte, error)
+	SerializeMetadata() (string, error)
 	LoadMetadata(string) (*M, error)
 	MergeMetadata(M) error
 }

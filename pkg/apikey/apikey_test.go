@@ -89,11 +89,3 @@ func Test_EncodedKeySizeIsFixed(t *testing.T) {
 		assert.Len(t, apiKey.TkPrivateKey, 64, "attempt %d: expected 64 characters for private key %s", i, apiKey.TkPrivateKey)
 	}
 }
-
-func Test_Load(t *testing.T) {
-
-}
-
-func Test_LoadAndMergeMetadata(t *testing.T) {
-
-}

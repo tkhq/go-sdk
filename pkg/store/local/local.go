@@ -184,13 +184,13 @@ func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 		return errors.Wrap(err, "failed to store private key to file")
 	}
 
-	metadataBytes, err := keypair.SerializeMetadata()
+	metadataJson, err := keypair.SerializeMetadata()
 	if err != nil {
 		return errors.Wrap(err, "failed to serialize metadata")
 	}
 
-	if err = createMetadataFile(s.MetadataFile(name), metadataBytes, 0o0600); err != nil {
-		return errors.Wrap(err, "failed to store api key metadata")
+	if err = createMetadataFile(s.MetadataFile(name), metadataJson, 0o0600); err != nil {
+		return errors.Wrap(err, "failed to store key metadata")
 	}
 
 	return nil
@@ -257,7 +257,7 @@ func createKeyFile(path string, content string, mode fs.FileMode) error {
 	return os.WriteFile(path, []byte(content), mode)
 }
 
-func createMetadataFile(path string, metadata []byte, mode fs.FileMode) error {
+func createMetadataFile(path string, metadata string, mode fs.FileMode) error {
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
 	if err != nil {
 		return errors.Wrap(err, "failed to create metadata file")

@@ -195,10 +195,13 @@ func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
-func (k Key) SerializeMetadata() ([]byte, error) {
-	// Implement serialization logic here.
-	// This is an example:
-	return json.Marshal(k.Metadata)
+func (k Key) SerializeMetadata() (string, error) {
+	jsonBytes, err := json.Marshal(k.Metadata)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
 }
 
 func (k Key) LoadMetadata(fn string) (*Metadata, error) {
