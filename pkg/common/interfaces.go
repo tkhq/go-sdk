@@ -1,3 +1,4 @@
+// Key and key metadata interfaces
 package common
 
 // IKey defines an interface for API keys and Encryption keys.

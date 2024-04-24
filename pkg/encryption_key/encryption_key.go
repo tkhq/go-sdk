@@ -136,7 +136,7 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 	return encryptionKey, nil
 }
 
-// FromTurnkeyPrivateKey takes a Turnkey-encoded private key and creates a KEM private key.
+// DecodeTurnkeyPrivateKey takes a Turnkey-encoded private key and creates a KEM private key.
 func DecodeTurnkeyPrivateKey(encodedPrivateKey string) (*kem.PrivateKey, error) {
 	bytes, err := hex.DecodeString(encodedPrivateKey)
 	if err != nil {
@@ -165,18 +165,22 @@ func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
 	return &publicKey, nil
 }
 
+// GetPublicKey gets the key's public key
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey
 }
 
+// GetPrivateKey gets the key's private key
 func (k Key) GetPrivateKey() string {
 	return k.TkPrivateKey
 }
 
+// GetMetadata gets the key's metadata
 func (k Key) GetMetadata() Metadata {
 	return k.Metadata
 }
 
+// LoadMetadata loads a JSON metadata file
 func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 	f, err := os.Open(fn)
 	if err != nil {
