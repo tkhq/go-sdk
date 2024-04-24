@@ -22,6 +22,7 @@ type Store[T common.IKey[M], M common.IMetadata] interface {
 // KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function
 type KeyFactory[T common.IKey[M], M common.IMetadata] struct{}
 
+// FromTurnkeyPrivateKey
 func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	var instance T
 

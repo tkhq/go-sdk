@@ -1,3 +1,4 @@
+// Package encryption_key
 package encryption_key
 
 import (
@@ -12,7 +13,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const KemId hpke.KEM = hpke.KEM_P256_HKDF_SHA256
+const KemID hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 
 // Metadata stores non-secret metadata about the Encryption key.
 type Metadata struct {
@@ -52,7 +53,7 @@ func New(userID string, organizationID string) (*Key, error) {
 		return nil, fmt.Errorf("failed to parse organization ID")
 	}
 
-	_, privateKey, err := KemId.Scheme().GenerateKeyPair()
+	_, privateKey, err := KemID.Scheme().GenerateKeyPair()
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +124,7 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 		return nil, err
 	}
 
-	privateKey, err := KemId.Scheme().UnmarshalBinaryPrivateKey(bytes)
+	privateKey, err := KemID.Scheme().UnmarshalBinaryPrivateKey(bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +144,7 @@ func DecodeTurnkeyPrivateKey(encodedPrivateKey string) (*kem.PrivateKey, error) 
 		return nil, err
 	}
 
-	privateKey, err := KemId.Scheme().UnmarshalBinaryPrivateKey(bytes)
+	privateKey, err := KemID.Scheme().UnmarshalBinaryPrivateKey(bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +158,7 @@ func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
 		return nil, err
 	}
 
-	publicKey, err := KemId.Scheme().UnmarshalBinaryPublicKey(bytes)
+	publicKey, err := KemID.Scheme().UnmarshalBinaryPublicKey(bytes)
 	if err != nil {
 		return nil, err
 	}
