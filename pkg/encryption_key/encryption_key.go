@@ -71,14 +71,24 @@ func New(userID string, organizationID string) (*Key, error) {
 
 // EncodePrivateKey encodes a KEM private key into the Turnkey format.
 // For now, "Turnkey format" = raw DER form.
-func EncodePrivateKey(privateKey *kem.PrivateKey) string {
-	return fmt.Sprintf("%064x", privateKey)
+func EncodePrivateKey(privateKey kem.PrivateKey) (string, error) {
+	privateKeyBytes, err := privateKey.MarshalBinary()
+	if err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(privateKeyBytes), nil
 }
 
 // EncodePublicKey encodes a KEM public key into the Turnkey format.
 // For now, "Turnkey format" = raw DER form.
-func EncodePublicKey(publicKey *kem.PublicKey) string {
-	return fmt.Sprintf("%064x", publicKey)
+func EncodePublicKey(publicKey kem.PublicKey) (string, error) {
+	publicKeyBytes, err := publicKey.MarshalBinary()
+	if err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(publicKeyBytes), nil
 }
 
 // FromKemPrivateKey takes a HPKE KEM keypair and forms a Turnkey encryption key from it.
@@ -89,10 +99,18 @@ func FromKemPrivateKey(privateKey kem.PrivateKey) (*Key, error) {
 	}
 
 	publicKey := privateKey.Public()
+	tkPrivateKey, err := EncodePrivateKey(privateKey)
+	if err != nil {
+		return nil, err
+	}
+	tkPublicKey, err := EncodePublicKey(publicKey)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Key{
-		TkPrivateKey: EncodePrivateKey(&privateKey),
-		TkPublicKey:  EncodePublicKey(&publicKey),
+		TkPrivateKey: tkPrivateKey,
+		TkPublicKey:  tkPublicKey,
 		publicKey:    &publicKey,
 		privateKey:   &privateKey,
 	}, nil
