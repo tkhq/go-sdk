@@ -1,3 +1,4 @@
+// Package apikey manages Turnkey API keys for organizations
 package apikey
 
 import (
@@ -10,6 +11,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -19,8 +21,7 @@ import (
 type Metadata struct {
 	Name          string   `json:"name"`
 	Organizations []string `json:"organizations"`
-
-	PublicKey string `json:"public_key"`
+	PublicKey     string   `json:"public_key"`
 }
 
 // Key defines a structure in which to hold both serialized and ecdsa-lib-friendly versions of a Turnkey API keypair.
@@ -33,19 +34,6 @@ type Key struct {
 	// Underlying ECDSA keypair
 	privateKey *ecdsa.PrivateKey
 	publicKey  *ecdsa.PublicKey
-}
-
-// MergeMetadata merges the given metadata with the api key.
-func (k *Key) MergeMetadata(md *Metadata) error {
-	if k.TkPublicKey != md.PublicKey {
-		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
-	}
-
-	k.Metadata.Name = md.Name
-	k.Metadata.Organizations = md.Organizations
-	k.Metadata.PublicKey = md.PublicKey
-
-	return nil
 }
 
 // TurnkeyAPISignatureScheme is the signature scheme to use for the API request signature.
@@ -198,4 +186,48 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 	}
 
 	return base64.RawURLEncoding.EncodeToString(jsonStamp), nil
+}
+
+// GetPublicKey gets the key's public key.
+func (k Key) GetPublicKey() string {
+	return k.TkPublicKey
+}
+
+// GetPrivateKey gets the key's private key.
+func (k Key) GetPrivateKey() string {
+	return k.TkPrivateKey
+}
+
+// GetMetadata gets the key's metadata.
+func (k Key) GetMetadata() Metadata {
+	return k.Metadata
+}
+
+// LoadMetadata loads a JSON metadata file.
+func (k Key) LoadMetadata(fn string) (*Metadata, error) {
+	f, err := os.Open(fn)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to open metadata file")
+	}
+
+	md := new(Metadata)
+
+	if err := json.NewDecoder(f).Decode(md); err != nil {
+		return nil, errors.Wrap(err, "failed to decode metadata file")
+	}
+
+	return md, nil
+}
+
+// MergeMetadata merges the given metadata with the api key.
+func (k Key) MergeMetadata(md Metadata) error {
+	if k.TkPublicKey != md.PublicKey {
+		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
+	}
+
+	k.Metadata.Name = md.Name
+	k.Metadata.Organizations = md.Organizations
+	k.Metadata.PublicKey = md.PublicKey
+
+	return nil
 }

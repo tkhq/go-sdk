@@ -6,19 +6,19 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/common"
 )
 
 // Store implements a VOLATILE RAM-based keystore.
 // This should only be used for testing.
-type Store struct {
-	s map[string]*apikey.Key
+type Store[T common.IKey[M], M common.IMetadata] struct {
+	s map[string]*T
 
 	mu sync.Mutex
 }
 
 // Load implements store.Store.
-func (s *Store) Load(name string) (*apikey.Key, error) {
+func (s *Store[T, M]) Load(name string) (*T, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -35,12 +35,12 @@ func (s *Store) Load(name string) (*apikey.Key, error) {
 }
 
 // Store implements store.Store.
-func (s *Store) Store(name string, key *apikey.Key) error {
+func (s *Store[T, M]) Store(name string, key *T) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
 	if s.s == nil {
-		s.s = make(map[string]*apikey.Key)
+		s.s = make(map[string]*T)
 	}
 
 	s.s[name] = key

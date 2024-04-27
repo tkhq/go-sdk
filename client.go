@@ -8,12 +8,12 @@ import (
 
 	"github.com/tkhq/go-sdk/pkg/api/client"
 	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/store"
+	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
 // New returns a new API Client with the given API key name from the default keystore.
 func New(keyname string) (*Client, error) {
-	apiKey, err := store.Default.Load(keyname)
+	apiKey, err := local.New[apikey.Key, apikey.Metadata]().Load(keyname)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to load API key")
 	}

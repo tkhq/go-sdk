@@ -12,7 +12,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/common"
+	"github.com/tkhq/go-sdk/pkg/store"
 )
 
 const (
@@ -27,7 +28,7 @@ const (
 )
 
 // Store defines an api key Store using the local filesystem.
-type Store struct {
+type Store[T common.IKey[M], M common.IMetadata] struct {
 	// DefaultKeyName is the name of the key to use when none is specified.
 	// Normally, this is simply "default".
 	DefaultKeyName string
@@ -39,15 +40,15 @@ type Store struct {
 
 // New provides a new local API key store.
 // keyDirectory is optional, and if it is the empty string, the system default will be used.
-func New() *Store {
-	return &Store{
+func New[T common.IKey[M], M common.IMetadata]() *Store[T, M] {
+	return &Store[T, M]{
 		DefaultKeyName: DefaultKeyName,
 		KeyDirectory:   DefaultKeysDir(),
 	}
 }
 
 // PublicKeyFile returns the filename for the public key of the given name.
-func (s *Store) PublicKeyFile(name string) string {
+func (s *Store[T, M]) PublicKeyFile(name string) string {
 	if name == "" {
 		name = DefaultKeyName
 	}
@@ -56,7 +57,7 @@ func (s *Store) PublicKeyFile(name string) string {
 }
 
 // PrivateKeyFile returns the filename for the private key of the given name.
-func (s *Store) PrivateKeyFile(name string) string {
+func (s *Store[T, M]) PrivateKeyFile(name string) string {
 	if name == "" {
 		name = DefaultKeyName
 	}
@@ -65,7 +66,7 @@ func (s *Store) PrivateKeyFile(name string) string {
 }
 
 // MetadataFile returns the filename for the metadata of the given key name.
-func (s *Store) MetadataFile(name string) string {
+func (s *Store[T, M]) MetadataFile(name string) string {
 	return path.Join(s.KeyDirectory, fmt.Sprintf("%s.%s", name, metadataExtension))
 }
 
@@ -93,7 +94,7 @@ func DeprecatedDefaultKeysDir() string {
 	return keysDir
 }
 
-// DefaultKeysDir returns the default directory for key storage for the user's system.
+// DefaultKeysDir returns the default directory for API key storage for the user's system.
 func DefaultKeysDir() string {
 	var cfgDir string
 
@@ -131,7 +132,7 @@ func DefaultKeysDir() string {
 }
 
 // SetKeysDirectory sets the clifs root directory, ensuring its existence and writability.
-func (s *Store) SetKeysDirectory(keysPath string) (err error) {
+func (s *Store[T, M]) SetKeysDirectory(keysPath string) (err error) {
 	if keysPath == "" || keysPath == DefaultKeysDir() {
 		keysPath = DefaultKeysDir()
 
@@ -156,7 +157,7 @@ func (s *Store) SetKeysDirectory(keysPath string) (err error) {
 }
 
 // Store implements store.Store.
-func (s *Store) Store(name string, keypair *apikey.Key) error {
+func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 	if name == "" {
 		name = s.DefaultKeyName
 	}
@@ -175,23 +176,50 @@ func (s *Store) Store(name string, keypair *apikey.Key) error {
 		return errors.Errorf("a keypair named %q already exists; exiting", name)
 	}
 
-	if err = createKeyFile(s.PublicKeyFile(name), keypair.TkPublicKey, 0o0644); err != nil {
+	if err = createKeyFile(s.PublicKeyFile(name), keypair.GetPublicKey(), 0o0644); err != nil {
 		return errors.Wrap(err, "failed to store public key to file")
 	}
 
-	if err = createKeyFile(s.PrivateKeyFile(name), keypair.TkPrivateKey, 0o0600); err != nil {
+	if err = createKeyFile(s.PrivateKeyFile(name), keypair.GetPrivateKey(), 0o0600); err != nil {
 		return errors.Wrap(err, "failed to store private key to file")
 	}
 
-	if err = createMetadataFile(s.MetadataFile(name), keypair, 0o0600); err != nil {
-		return errors.Wrap(err, "failed to store api key metadata")
+	if err = s.createMetadataFile(s.MetadataFile(name), keypair.GetMetadata(), 0o0600); err != nil {
+		return errors.Wrap(err, "failed to store key metadata")
 	}
 
 	return nil
 }
 
 // Load implements store.Store.
-func (s *Store) Load(name string) (*apikey.Key, error) {
+func (s *Store[T, M]) Load(name string) (*T, error) {
+	keyBytes, keyPath, err := s.loadKeyBytes(name)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to load key bytes %q", name)
+	}
+
+	kf := store.KeyFactory[T, M]{}
+
+	key, err := kf.FromTurnkeyPrivateKey(string(keyBytes))
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to recover key from private key file %q", keyPath)
+	}
+
+	if ok, _ := checkFileExists(s.MetadataFile(name)); ok { //nolint: errcheck
+		metadata, err := key.LoadMetadata(s.MetadataFile(name))
+		if err != nil {
+			return nil, errors.Wrapf(err, "failed to load key metadata from metadata file %q", s.MetadataFile(name))
+		}
+
+		if err := key.MergeMetadata(*metadata); err != nil {
+			return nil, errors.Wrap(err, "failed to merge key metadata with key")
+		}
+	}
+
+	return &key, nil
+}
+
+func (s *Store[T, M]) loadKeyBytes(name string) ([]byte, string, error) {
 	if name == "" {
 		name = s.DefaultKeyName
 	}
@@ -208,55 +236,24 @@ func (s *Store) Load(name string) (*apikey.Key, error) {
 
 			exists, _ = checkFileExists(keyPath) //nolint: errcheck
 			if !exists {
-				return nil, errors.Errorf("failed to load key %q", name)
+				return nil, keyPath, errors.Errorf("failed to load key %q", name)
 			}
 		}
 	}
 
 	bytes, err := os.ReadFile(keyPath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read from %q", keyPath)
+		return nil, keyPath, errors.Wrapf(err, "failed to read from %q", keyPath)
 	}
 
-	apiKey, err := apikey.FromTurnkeyPrivateKey(string(bytes))
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to recover API key from private key file %q", keyPath)
-	}
-
-	if ok, _ := checkFileExists(s.MetadataFile(name)); ok { //nolint: errcheck
-		metadata, err := loadMetadata(s.MetadataFile(name))
-		if err != nil {
-			return nil, errors.Wrapf(err, "failed to load key metadata from metadata file %q", s.MetadataFile(name))
-		}
-
-		if err := apiKey.MergeMetadata(metadata); err != nil {
-			return nil, errors.Wrap(err, "failed to merge key metadata with key")
-		}
-	}
-
-	return apiKey, nil
-}
-
-func loadMetadata(fn string) (*apikey.Metadata, error) {
-	f, err := os.Open(fn)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to open metadata file")
-	}
-
-	md := new(apikey.Metadata)
-
-	if err := json.NewDecoder(f).Decode(md); err != nil {
-		return nil, errors.Wrap(err, "failed to decode metadata file")
-	}
-
-	return md, nil
+	return bytes, keyPath, err
 }
 
 func createKeyFile(path string, content string, mode fs.FileMode) error {
 	return os.WriteFile(path, []byte(content), mode)
 }
 
-func createMetadataFile(path string, key *apikey.Key, mode fs.FileMode) error {
+func (s *Store[T, M]) createMetadataFile(path string, metadata M, mode fs.FileMode) error {
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
 	if err != nil {
 		return errors.Wrap(err, "failed to create metadata file")
@@ -264,7 +261,7 @@ func createMetadataFile(path string, key *apikey.Key, mode fs.FileMode) error {
 
 	defer f.Close() //nolint: errcheck
 
-	return json.NewEncoder(f).Encode(key)
+	return json.NewEncoder(f).Encode(metadata)
 }
 
 func checkFolderExists(path string) (bool, error) {
