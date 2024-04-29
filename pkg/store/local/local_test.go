@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
@@ -28,8 +29,8 @@ func TestGetKeyDirPathMacOSX(t *testing.T) {
 		require.NoError(t, os.Setenv("XDG_CONFIG_HOME", originalValue))
 	}()
 
-	dir := local.DefaultKeysDir()
-	assert.Equal(t, "/home/dir/.config/turnkey/keys", dir)
+	assert.Equal(t, "/home/dir/.config/turnkey/keys", local.DefaultAPIKeysDir())
+	assert.Equal(t, "/home/dir/.config/turnkey/encryption-keys", local.DefaultEncryptionKeysDir())
 }
 
 // On UNIX, we expect XDG_CONFIG_HOME to be set.
@@ -47,13 +48,13 @@ func TestGetKeyDirPathUnix(t *testing.T) {
 		require.NoError(t, os.Unsetenv("HOME"))
 	}()
 
-	dir := local.DefaultKeysDir()
-	assert.Equal(t, "/special/dir/turnkey/keys", dir)
+	assert.Equal(t, "/special/dir/turnkey/keys", local.DefaultAPIKeysDir())
+	assert.Equal(t, "/special/dir/turnkey/encryption-keys", local.DefaultEncryptionKeysDir())
 }
 
 // If calling with a path, we should get this back if the path exists.
 // If not we should get an error.
-func TestGetKeyDirPathOverride(t *testing.T) {
+func TestGetAPIKeyDirPathOverride(t *testing.T) {
 	tmpDir, err := os.MkdirTemp(os.TempDir(), "keys")
 	require.NoError(t, err)
 
@@ -63,7 +64,24 @@ func TestGetKeyDirPathOverride(t *testing.T) {
 
 	s := local.New[apikey.Key, apikey.Metadata]()
 
-	require.Error(t, s.SetKeysDirectory("/does/not/exist"))
+	require.Error(t, s.SetAPIKeysDirectory("/does/not/exist"))
 
-	require.NoError(t, s.SetKeysDirectory(tmpDir))
+	require.NoError(t, s.SetAPIKeysDirectory(tmpDir))
+}
+
+// If calling with a path, we should get this back if the path exists.
+// If not we should get an error.
+func TestGetEncryptionKeyDirPathOverride(t *testing.T) {
+	tmpDir, err := os.MkdirTemp(os.TempDir(), "encryption-keys")
+	require.NoError(t, err)
+
+	defer func() {
+		require.NoError(t, os.RemoveAll(tmpDir))
+	}()
+
+	s := local.New[encryptionkey.Key, encryptionkey.Metadata]()
+
+	require.Error(t, s.SetEncryptionKeysDirectory("/does/not/exist"))
+
+	require.NoError(t, s.SetEncryptionKeysDirectory(tmpDir))
 }

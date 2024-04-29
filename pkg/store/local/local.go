@@ -20,11 +20,12 @@ const (
 	// DefaultKeyName is the name of the default API key.
 	DefaultKeyName = "default"
 
-	turnkeyDirectoryName = "turnkey"
-	keysDirectoryName    = "keys"
-	publicKeyExtension   = "public"
-	privateKeyExtension  = "private"
-	metadataExtension    = "meta"
+	turnkeyDirectoryName        = "turnkey"
+	apiKeysDirectoryName        = "keys"
+	encryptionKeysDirectoryName = "encryption-keys"
+	publicKeyExtension          = "public"
+	privateKeyExtension         = "private"
+	metadataExtension           = "meta"
 )
 
 // Store defines an api key Store using the local filesystem.
@@ -43,7 +44,7 @@ type Store[T common.IKey[M], M common.IMetadata] struct {
 func New[T common.IKey[M], M common.IMetadata]() *Store[T, M] {
 	return &Store[T, M]{
 		DefaultKeyName: DefaultKeyName,
-		KeyDirectory:   DefaultKeysDir(),
+		KeyDirectory:   DefaultAPIKeysDir(),
 	}
 }
 
@@ -70,10 +71,10 @@ func (s *Store[T, M]) MetadataFile(name string) string {
 	return path.Join(s.KeyDirectory, fmt.Sprintf("%s.%s", name, metadataExtension))
 }
 
-// DeprecatedDefaultKeysDir checks the deprecated location on macOS;
+// DeprecatedDefaultAPIKeysDir checks the deprecated location of API keys on macOS;
 // returns the full path if it exists on disk.
 // `~/Library/Application Support/turnkey/keys/`.
-func DeprecatedDefaultKeysDir() string {
+func DeprecatedDefaultAPIKeysDir() string {
 	if runtime.GOOS != "darwin" {
 		return ""
 	}
@@ -83,7 +84,7 @@ func DeprecatedDefaultKeysDir() string {
 		return ""
 	}
 
-	keysDir := path.Join(cfgDir, turnkeyDirectoryName, keysDirectoryName)
+	keysDir := path.Join(cfgDir, turnkeyDirectoryName, apiKeysDirectoryName)
 
 	exists, _ := checkFolderExists(keysDir) //nolint: errcheck
 
@@ -94,8 +95,17 @@ func DeprecatedDefaultKeysDir() string {
 	return keysDir
 }
 
-// DefaultKeysDir returns the default directory for API key storage for the user's system.
-func DefaultKeysDir() string {
+// DefaultAPIKeysDir returns the default directory for API key storage for the user's system.
+func DefaultAPIKeysDir() string {
+	return path.Join(getConfigDir(), turnkeyDirectoryName, apiKeysDirectoryName)
+}
+
+// DefaultEncryptionKeysDir returns the default directory for encryption key storage for the user's system.
+func DefaultEncryptionKeysDir() string {
+	return path.Join(getConfigDir(), turnkeyDirectoryName, encryptionKeysDirectoryName)
+}
+
+func getConfigDir() string {
 	var cfgDir string
 
 	shouldUseHomeDir := false
@@ -122,23 +132,23 @@ func DefaultKeysDir() string {
 	if shouldUseHomeDir {
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
-			cfgDir = "."
-		} else {
-			cfgDir = path.Join(homeDir, ".config")
+			return "."
 		}
+
+		return path.Join(homeDir, ".config")
 	}
 
-	return path.Join(cfgDir, turnkeyDirectoryName, keysDirectoryName)
+	return cfgDir
 }
 
-// SetKeysDirectory sets the clifs root directory, ensuring its existence and writability.
-func (s *Store[T, M]) SetKeysDirectory(keysPath string) (err error) {
-	if keysPath == "" || keysPath == DefaultKeysDir() {
-		keysPath = DefaultKeysDir()
+// SetAPIKeysDirectory sets the clifs root directory, ensuring its existence and writability.
+func (s *Store[T, M]) SetAPIKeysDirectory(keysPath string) (err error) {
+	if keysPath == "" || keysPath == DefaultAPIKeysDir() {
+		keysPath = DefaultAPIKeysDir()
 
 		// NB: we only attempt to create the default directory; never a user-supplied one.
 		if err = os.MkdirAll(keysPath, os.ModePerm); err != nil {
-			return errors.Wrapf(err, "failed to create key store location %q", keysPath)
+			return errors.Wrapf(err, "failed to create API key store location %q", keysPath)
 		}
 	}
 
@@ -148,7 +158,32 @@ func (s *Store[T, M]) SetKeysDirectory(keysPath string) (err error) {
 	}
 
 	if !stat.IsDir() {
-		return errors.Errorf("keys directory %q is not a directory", keysPath)
+		return errors.Errorf("API keys directory %q is not a directory", keysPath)
+	}
+
+	s.KeyDirectory = keysPath
+
+	return nil
+}
+
+// SetEncryptionKeysDirectory sets the clifs root directory, ensuring its existence and writability.
+func (s *Store[T, M]) SetEncryptionKeysDirectory(keysPath string) (err error) {
+	if keysPath == "" || keysPath == DefaultEncryptionKeysDir() {
+		keysPath = DefaultEncryptionKeysDir()
+
+		// NB: we only attempt to create the default directory; never a user-supplied one.
+		if err = os.MkdirAll(keysPath, os.ModePerm); err != nil {
+			return errors.Wrapf(err, "failed to create encryption key store location %q", keysPath)
+		}
+	}
+
+	stat, err := os.Stat(keysPath)
+	if err != nil {
+		return err
+	}
+
+	if !stat.IsDir() {
+		return errors.Errorf("Encryption keys directory %q is not a directory", keysPath)
 	}
 
 	s.KeyDirectory = keysPath
