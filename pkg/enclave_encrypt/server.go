@@ -11,6 +11,7 @@ import (
 
 type EnclaveEncryptServer struct {
 	enclaveAuthKey *ecdsa.PrivateKey
+	// TODO: this should not be `kem.PrivateKey`. The encrypting server only needs the target public key!
 	targetPrivate  kem.PrivateKey
 	organizationId string
 	userId         *string

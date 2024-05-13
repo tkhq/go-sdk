@@ -466,3 +466,58 @@ func TestValidateChecksum(t *testing.T) {
 		enclave_encrypt.ValidateChecksum(base58.Decode("dang")).Error(),
 	)
 }
+
+func TestWalletExportWithV1BundlesEndToEnd(t *testing.T) {
+	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+
+	// Generate a new key pair for our enclave
+	enclaveKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	assert.Nil(t, err)
+
+	// Generate a new key pair for our client
+	_, iframeKey, err := KemId.Scheme().GenerateKeyPair()
+	assert.Nil(t, err)
+
+	// Generate the client used by the enclave to encrypt data
+	// (referencing the iframe target key)
+	enclave, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(enclaveKey, &iframeKey, organizationId, nil)
+	assert.Nil(t, err)
+
+	// Generate the client used by the enclave to encrypt data
+	// (referencing the iframe target key)
+	iframe, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&enclaveKey.PublicKey, iframeKey)
+	assert.Nil(t, err)
+
+	iframeTargetPublic, err := iframe.TargetPublic()
+	assert.Nil(t, err)
+
+	bundleStruct, err := enclave.Encrypt(iframeTargetPublic, []byte("whatever mnemonic phrase goes here"))
+	assert.Nil(t, err)
+
+	bundleJson, err := json.Marshal(bundleStruct)
+	assert.Nil(t, err)
+
+	// Verify that we have a JSON-encoded bundle
+	var parsedBundle map[string]interface{}
+	err = json.Unmarshal(bundleJson, &parsedBundle)
+	assert.Nil(t, err)
+
+	// Bundle version should be 1.0.0
+	assert.Equal(t, "v1.0.0", parsedBundle["version"])
+
+	// "enclaveQuorumPublic" should be our enclave public key
+	expectedPublicKey := []byte{}
+	expectedPublicKey = append(expectedPublicKey, []byte("\x04")...)
+	expectedPublicKey = append(expectedPublicKey, enclaveKey.PublicKey.X.Bytes()...)
+	expectedPublicKey = append(expectedPublicKey, enclaveKey.PublicKey.Y.Bytes()...)
+	assert.Equal(t, hex.EncodeToString(expectedPublicKey), parsedBundle["enclaveQuorumPublic"])
+
+	// "dataSignature" and "data" fields should not be empty
+	assert.NotEmpty(t, parsedBundle["data"])
+	assert.NotEmpty(t, parsedBundle["dataSignature"])
+
+	// Assert we can decrypt the bundle and we get the same thing back
+	plaintext, err := iframe.Decrypt(bundleJson, organizationId)
+	assert.Nil(t, err)
+	assert.Equal(t, plaintext, []byte("whatever mnemonic phrase goes here"))
+}

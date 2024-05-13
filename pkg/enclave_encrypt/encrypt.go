@@ -206,12 +206,12 @@ func decrypt(
 
 	receiver, err := suite.NewReceiver(receiverPrivate, []byte(TurnkeyHpkeInfo))
 	if err != nil {
-		return nil, fmt.Errorf("bad receiver private key")
+		return nil, fmt.Errorf("bad receiver private key: %s", err.Error())
 	}
 
 	opener, err := receiver.Setup(encappedPublic)
 	if err != nil {
-		return nil, fmt.Errorf("bad encapsulated public key")
+		return nil, fmt.Errorf("bad encapsulated public key: %s", err.Error())
 	}
 
 	aad, err := additionalAssociatedData(receiverPrivate.Public(), encappedPublic)
