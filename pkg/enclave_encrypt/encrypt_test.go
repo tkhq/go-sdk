@@ -403,6 +403,58 @@ func TestEmailRecoveryServerToClientE2e(t *testing.T) {
 	)
 }
 
+// This test is here to prove that bundles are deterministic: given the same bundle and the same receiver private key,
+// decrypting a bundle should always yield the same result.
+// It is also a nice demonstration of the internals of our flow. Below we do not go through the abstractions we've built.
+// This makes this test a good guide for anyone who wants to implement email auth bundle decryption in other languages.
+func TestDeterministicDecryptEmailBundle(t *testing.T) {
+	// Value grabbed from running "TestEmailRecoveryServerToClientE2e" with:
+	//    _, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	//    b, _ := targetPrivate.MarshalBinary()
+	//    fmt.Printf("generated key: %02x\n", b)
+	privateKeyBytes, err := hex.DecodeString("6727b16dbe8e137c5755b839b2b2a96adae1187eaf7f08bc9938afe5ed8a8a6e")
+	assert.Nil(t, err)
+	receiverPrivate, err := KemId.Scheme().UnmarshalBinaryPrivateKey(privateKeyBytes)
+	assert.Nil(t, err)
+
+	suite := hpke.NewSuite(KemId, enclave_encrypt.KdfId, enclave_encrypt.AeadId)
+	receiver, err := suite.NewReceiver(receiverPrivate, []byte(enclave_encrypt.TurnkeyHpkeInfo))
+	assert.Nil(t, err)
+
+	// Value captured from "TestEmailRecoveryServerToClientE2e"
+	payload := "BrcAL1P9Hb77ojs4MUG8svAnrHG717xwdoSnFWsTpA5XbbuoHPUtaZuRrUW8ZQGo11Z7Y5orfTUb7rr2mELPP8y5"
+	payloadBytes := base58.Decode(payload)
+	assert.Nil(t, enclave_encrypt.ValidateChecksum(payloadBytes))
+
+	// Trim the checksum now that we've validated it
+	payloadBytes = payloadBytes[:len(payloadBytes)-4]
+
+	// Get the sender public key from the payload
+	compressedKey := payloadBytes[0:33]
+	ciphertext := payloadBytes[33:]
+	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), compressedKey)
+	// nolint:staticcheck
+	encappedPublic := elliptic.Marshal(elliptic.P256(), x, y)
+
+	opener, err := receiver.Setup(encappedPublic)
+	assert.Nil(t, err)
+
+	receiverPublicBytes, err := receiverPrivate.Public().MarshalBinary()
+	assert.Nil(t, err)
+
+	aad := []byte{}
+	aad = append(aad, encappedPublic...)
+	aad = append(aad, receiverPublicBytes...)
+
+	plaintext, err := opener.Open(ciphertext, aad)
+	assert.Nil(t, err)
+	assert.Equal(
+		t,
+		[]byte("test message"),
+		plaintext,
+	)
+}
+
 func TestValidateChecksum(t *testing.T) {
 	assert.Nil(t, enclave_encrypt.ValidateChecksum(base58.Decode("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")))
 	assert.Equal(t,
@@ -413,4 +465,59 @@ func TestValidateChecksum(t *testing.T) {
 		"payload length is < 5 (length: 3)",
 		enclave_encrypt.ValidateChecksum(base58.Decode("dang")).Error(),
 	)
+}
+
+func TestWalletExportWithV1BundlesEndToEnd(t *testing.T) {
+	organizationId := "f412ea93-998b-45a5-9df8-d2797c7f1a67"
+
+	// Generate a new key pair for our enclave
+	enclaveKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	assert.Nil(t, err)
+
+	// Generate a new key pair for our client
+	_, iframeKey, err := KemId.Scheme().GenerateKeyPair()
+	assert.Nil(t, err)
+
+	// Generate the client used by the enclave to encrypt data
+	// (referencing the iframe target key)
+	enclave, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(enclaveKey, &iframeKey, organizationId, nil)
+	assert.Nil(t, err)
+
+	// Generate the client used by the enclave to encrypt data
+	// (referencing the iframe target key)
+	iframe, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&enclaveKey.PublicKey, iframeKey)
+	assert.Nil(t, err)
+
+	iframeTargetPublic, err := iframe.TargetPublic()
+	assert.Nil(t, err)
+
+	bundleStruct, err := enclave.Encrypt(iframeTargetPublic, []byte("whatever mnemonic phrase goes here"))
+	assert.Nil(t, err)
+
+	bundleJson, err := json.Marshal(bundleStruct)
+	assert.Nil(t, err)
+
+	// Verify that we have a JSON-encoded bundle
+	var parsedBundle map[string]interface{}
+	err = json.Unmarshal(bundleJson, &parsedBundle)
+	assert.Nil(t, err)
+
+	// Bundle version should be 1.0.0
+	assert.Equal(t, "v1.0.0", parsedBundle["version"])
+
+	// "enclaveQuorumPublic" should be our enclave public key
+	expectedPublicKey := []byte{}
+	expectedPublicKey = append(expectedPublicKey, []byte("\x04")...)
+	expectedPublicKey = append(expectedPublicKey, enclaveKey.PublicKey.X.Bytes()...)
+	expectedPublicKey = append(expectedPublicKey, enclaveKey.PublicKey.Y.Bytes()...)
+	assert.Equal(t, hex.EncodeToString(expectedPublicKey), parsedBundle["enclaveQuorumPublic"])
+
+	// "dataSignature" and "data" fields should not be empty
+	assert.NotEmpty(t, parsedBundle["data"])
+	assert.NotEmpty(t, parsedBundle["dataSignature"])
+
+	// Assert we can decrypt the bundle and we get the same thing back
+	plaintext, err := iframe.Decrypt(bundleJson, organizationId)
+	assert.Nil(t, err)
+	assert.Equal(t, plaintext, []byte("whatever mnemonic phrase goes here"))
 }

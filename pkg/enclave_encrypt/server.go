@@ -11,6 +11,7 @@ import (
 
 type EnclaveEncryptServer struct {
 	enclaveAuthKey *ecdsa.PrivateKey
+	// TODO: this should not be `kem.PrivateKey`. The encrypting server only needs the target public key!
 	targetPrivate  kem.PrivateKey
 	organizationId string
 	userId         *string
@@ -87,7 +88,7 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 
 	return &ServerSendMsgV1{
 		Version:             DataVersion,
-		Data:                data,
+		Data:                dataBytes,
 		DataSignature:       dataSig,
 		EnclaveQuorumPublic: eqp,
 	}, nil
@@ -127,7 +128,7 @@ func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 
 	return &ServerTargetMsgV1{
 		Version:             DataVersion,
-		Data:                data,
+		Data:                dataBytes,
 		DataSignature:       dataSig,
 		EnclaveQuorumPublic: eqp,
 	}, nil
