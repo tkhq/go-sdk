@@ -87,7 +87,7 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 
 	return &ServerSendMsgV1{
 		Version:             DataVersion,
-		Data:                data,
+		Data:                dataBytes,
 		DataSignature:       dataSig,
 		EnclaveQuorumPublic: eqp,
 	}, nil
@@ -127,7 +127,7 @@ func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 
 	return &ServerTargetMsgV1{
 		Version:             DataVersion,
-		Data:                data,
+		Data:                dataBytes,
 		DataSignature:       dataSig,
 		EnclaveQuorumPublic: eqp,
 	}, nil

@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"math/big"
 
 	"github.com/cloudflare/circl/hpke"
@@ -67,8 +68,8 @@ type ServerSendMsgV0 struct {
 type ServerSendMsgV1 struct {
 	// Version of the data.
 	Version string `json:"version"`
-	// Data sent by the enclave.
-	Data ServerSendData `json:"data"`
+	// Data sent by the enclave
+	Data Bytes `json:"data"`
 	// Enclave quorum key signature over the data.
 	DataSignature Bytes `json:"dataSignature"`
 	// Enclave quorum key public key.
@@ -95,13 +96,13 @@ type ServerTargetMsgV0 struct {
 	TargetPublicSignature Bytes `json:"targetPublicSignature"`
 }
 
-// / Message from the server with data, the data's version, enclave quorum key, and the enclave
-// / quorum key signature over the data.
+// Message from the server with data, the data's version, enclave quorum key, and the enclave
+// quorum key signature over the data.
 type ServerTargetMsgV1 struct {
 	// Version of the data.
 	Version string `json:"version"`
-	// Data sent by the enclave.
-	Data ServerTargetData `json:"data"`
+	// Data sent and signed by the enclave.
+	Data Bytes `json:"data"`
 	// Enclave quorum key signature over the data.
 	DataSignature Bytes `json:"dataSignature"`
 	// Enclave quorum key public key.
@@ -205,12 +206,12 @@ func decrypt(
 
 	receiver, err := suite.NewReceiver(receiverPrivate, []byte(TurnkeyHpkeInfo))
 	if err != nil {
-		return []byte{}, nil
+		return nil, fmt.Errorf("bad receiver private key")
 	}
 
 	opener, err := receiver.Setup(encappedPublic)
 	if err != nil {
-		return []byte{}, nil
+		return nil, fmt.Errorf("bad encapsulated public key")
 	}
 
 	aad, err := additionalAssociatedData(receiverPrivate.Public(), encappedPublic)

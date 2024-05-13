@@ -403,6 +403,58 @@ func TestEmailRecoveryServerToClientE2e(t *testing.T) {
 	)
 }
 
+// This test is here to prove that bundles are deterministic: given the same bundle and the same receiver private key,
+// decrypting a bundle should always yield the same result.
+// It is also a nice demonstration of the internals of our flow. Below we do not go through the abstractions we've built.
+// This makes this test a good guide for anyone who wants to implement email auth bundle decryption in other languages.
+func TestDeterministicDecryptEmailBundle(t *testing.T) {
+	// Value grabbed from running "TestEmailRecoveryServerToClientE2e" with:
+	//    _, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	//    b, _ := targetPrivate.MarshalBinary()
+	//    fmt.Printf("generated key: %02x\n", b)
+	privateKeyBytes, err := hex.DecodeString("6727b16dbe8e137c5755b839b2b2a96adae1187eaf7f08bc9938afe5ed8a8a6e")
+	assert.Nil(t, err)
+	receiverPrivate, err := KemId.Scheme().UnmarshalBinaryPrivateKey(privateKeyBytes)
+	assert.Nil(t, err)
+
+	suite := hpke.NewSuite(KemId, enclave_encrypt.KdfId, enclave_encrypt.AeadId)
+	receiver, err := suite.NewReceiver(receiverPrivate, []byte(enclave_encrypt.TurnkeyHpkeInfo))
+	assert.Nil(t, err)
+
+	// Value captured from "TestEmailRecoveryServerToClientE2e"
+	payload := "BrcAL1P9Hb77ojs4MUG8svAnrHG717xwdoSnFWsTpA5XbbuoHPUtaZuRrUW8ZQGo11Z7Y5orfTUb7rr2mELPP8y5"
+	payloadBytes := base58.Decode(payload)
+	assert.Nil(t, enclave_encrypt.ValidateChecksum(payloadBytes))
+
+	// Trim the checksum now that we've validated it
+	payloadBytes = payloadBytes[:len(payloadBytes)-4]
+
+	// Get the sender public key from the payload
+	compressedKey := payloadBytes[0:33]
+	ciphertext := payloadBytes[33:]
+	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), compressedKey)
+	// nolint:staticcheck
+	encappedPublic := elliptic.Marshal(elliptic.P256(), x, y)
+
+	opener, err := receiver.Setup(encappedPublic)
+	assert.Nil(t, err)
+
+	receiverPublicBytes, err := receiverPrivate.Public().MarshalBinary()
+	assert.Nil(t, err)
+
+	aad := []byte{}
+	aad = append(aad, encappedPublic...)
+	aad = append(aad, receiverPublicBytes...)
+
+	plaintext, err := opener.Open(ciphertext, aad)
+	assert.Nil(t, err)
+	assert.Equal(
+		t,
+		[]byte("test message"),
+		plaintext,
+	)
+}
+
 func TestValidateChecksum(t *testing.T) {
 	assert.Nil(t, enclave_encrypt.ValidateChecksum(base58.Decode("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")))
 	assert.Equal(t,
