@@ -767,6 +767,32 @@
         "tags": ["Private Keys"]
       }
     },
+    "/public/v1/submit/create_read_only_session": {
+      "post": {
+        "summary": "Create Read Only Session",
+        "description": "Create a read only session for a user (valid for 1 hour)",
+        "operationId": "CreateReadOnlySession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateReadOnlySessionRequest"
+            }
+          }
+        ],
+        "tags": ["Sessions"]
+      }
+    },
     "/public/v1/submit/create_sub_organization": {
       "post": {
         "summary": "Create Sub-Organization",
@@ -1751,6 +1777,10 @@
         },
         "updatedAt": {
           "$ref": "#/definitions/external.data.v1.Timestamp"
+        },
+        "failure": {
+          "$ref": "#/definitions/Status",
+          "description": "Failure reason of the intended action."
         }
       },
       "required": [
@@ -1854,7 +1884,8 @@
         "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY",
         "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY",
         "ACTIVITY_TYPE_CREATE_POLICIES",
-        "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS"
+        "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS",
+        "ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION"
       ]
     },
     "AddressFormat": {
@@ -1867,6 +1898,15 @@
         "ADDRESS_FORMAT_COSMOS",
         "ADDRESS_FORMAT_TRON"
       ]
+    },
+    "Any": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
     },
     "ApiKey": {
       "type": "object",
@@ -2675,6 +2715,68 @@
         }
       },
       "required": ["privateKeys"]
+    },
+    "CreateReadOnlySessionIntent": {
+      "type": "object"
+    },
+    "CreateReadOnlySessionRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/CreateReadOnlySessionIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "CreateReadOnlySessionResult": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization. If the request is being made by a user and their Sub-Organization ID is unknown, this can be the Parent Organization ID. However, using the Sub-Organization ID is preferred due to performance reasons."
+        },
+        "organizationName": {
+          "type": "string",
+          "description": "Human-readable name for an Organization."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for a given User."
+        },
+        "username": {
+          "type": "string",
+          "description": "Human-readable name for a User."
+        },
+        "session": {
+          "type": "string",
+          "description": "String representing a read only session"
+        },
+        "sessionExpiry": {
+          "type": "string",
+          "format": "uint64",
+          "description": "UTC timestamp in seconds representing the expiry time for the read only session."
+        }
+      },
+      "required": [
+        "organizationId",
+        "organizationName",
+        "userId",
+        "username",
+        "session",
+        "sessionExpiry"
+      ]
     },
     "CreateSubOrganizationIntent": {
       "type": "object",
@@ -4697,9 +4799,11 @@
         },
         "signRawPayloadsIntent": {
           "$ref": "#/definitions/SignRawPayloadsIntent"
+        },
+        "createReadOnlySessionIntent": {
+          "$ref": "#/definitions/CreateReadOnlySessionIntent"
         }
-      },
-      "required": ["createOrganizationIntent"]
+      }
     },
     "InvitationParams": {
       "type": "object",
@@ -5300,6 +5404,9 @@
         },
         "signRawPayloadsResult": {
           "$ref": "#/definitions/SignRawPayloadsResult"
+        },
+        "createReadOnlySessionResult": {
+          "$ref": "#/definitions/CreateReadOnlySessionResult"
         }
       }
     },
@@ -5702,6 +5809,25 @@
         },
         "credProps": {
           "$ref": "#/definitions/CredPropsAuthenticationExtensionsClientOutputs"
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Any"
+          }
         }
       }
     },
