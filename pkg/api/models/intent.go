@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // Intent intent
@@ -47,8 +46,7 @@ type Intent struct {
 	CreateInvitationsIntent *CreateInvitationsIntent `json:"createInvitationsIntent,omitempty"`
 
 	// create organization intent
-	// Required: true
-	CreateOrganizationIntent *CreateOrganizationIntent `json:"createOrganizationIntent"`
+	CreateOrganizationIntent *CreateOrganizationIntent `json:"createOrganizationIntent,omitempty"`
 
 	// create organization intent v2
 	CreateOrganizationIntentV2 *CreateOrganizationIntentV2 `json:"createOrganizationIntentV2,omitempty"`
@@ -73,6 +71,9 @@ type Intent struct {
 
 	// create private keys intent v2
 	CreatePrivateKeysIntentV2 *CreatePrivateKeysIntentV2 `json:"createPrivateKeysIntentV2,omitempty"`
+
+	// create read only session intent
+	CreateReadOnlySessionIntent CreateReadOnlySessionIntent `json:"createReadOnlySessionIntent,omitempty"`
 
 	// create sub organization intent
 	CreateSubOrganizationIntent *CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
@@ -644,9 +645,8 @@ func (m *Intent) validateCreateInvitationsIntent(formats strfmt.Registry) error 
 }
 
 func (m *Intent) validateCreateOrganizationIntent(formats strfmt.Registry) error {
-
-	if err := validate.Required("createOrganizationIntent", "body", m.CreateOrganizationIntent); err != nil {
-		return err
+	if swag.IsZero(m.CreateOrganizationIntent) { // not required
+		return nil
 	}
 
 	if m.CreateOrganizationIntent != nil {
@@ -2124,6 +2124,10 @@ func (m *Intent) contextValidateCreateInvitationsIntent(ctx context.Context, for
 func (m *Intent) contextValidateCreateOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateOrganizationIntent != nil {
+
+		if swag.IsZero(m.CreateOrganizationIntent) { // not required
+			return nil
+		}
 
 		if err := m.CreateOrganizationIntent.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

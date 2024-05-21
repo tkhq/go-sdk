@@ -32,6 +32,9 @@ type Activity struct {
 	// Required: true
 	CreatedAt *ExternalDataV1Timestamp `json:"createdAt"`
 
+	// Failure reason of the intended action.
+	Failure *Status `json:"failure,omitempty"`
+
 	// An artifact verifying a User's action.
 	// Required: true
 	Fingerprint *string `json:"fingerprint"`
@@ -82,6 +85,10 @@ func (m *Activity) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFailure(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -157,6 +164,25 @@ func (m *Activity) validateCreatedAt(formats strfmt.Registry) error {
 				return ve.ValidateName("createdAt")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createdAt")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Activity) validateFailure(formats strfmt.Registry) error {
+	if swag.IsZero(m.Failure) { // not required
+		return nil
+	}
+
+	if m.Failure != nil {
+		if err := m.Failure.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("failure")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("failure")
 			}
 			return err
 		}
@@ -335,6 +361,10 @@ func (m *Activity) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateFailure(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -374,6 +404,27 @@ func (m *Activity) contextValidateCreatedAt(ctx context.Context, formats strfmt.
 				return ve.ValidateName("createdAt")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createdAt")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Activity) contextValidateFailure(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Failure != nil {
+
+		if swag.IsZero(m.Failure) { // not required
+			return nil
+		}
+
+		if err := m.Failure.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("failure")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("failure")
 			}
 			return err
 		}

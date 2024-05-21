@@ -54,6 +54,9 @@ type Result struct {
 	// create private keys result v2
 	CreatePrivateKeysResultV2 *CreatePrivateKeysResultV2 `json:"createPrivateKeysResultV2,omitempty"`
 
+	// create read only session result
+	CreateReadOnlySessionResult *CreateReadOnlySessionResult `json:"createReadOnlySessionResult,omitempty"`
+
 	// create sub organization result
 	CreateSubOrganizationResult *CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
 
@@ -221,6 +224,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatePrivateKeysResultV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateReadOnlySessionResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -598,6 +605,25 @@ func (m *Result) validateCreatePrivateKeysResultV2(formats strfmt.Registry) erro
 				return ve.ValidateName("createPrivateKeysResultV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysResultV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateReadOnlySessionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadOnlySessionResult) { // not required
+		return nil
+	}
+
+	if m.CreateReadOnlySessionResult != nil {
+		if err := m.CreateReadOnlySessionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadOnlySessionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadOnlySessionResult")
 			}
 			return err
 		}
@@ -1361,6 +1387,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateReadOnlySessionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1759,6 +1789,27 @@ func (m *Result) contextValidateCreatePrivateKeysResultV2(ctx context.Context, f
 				return ve.ValidateName("createPrivateKeysResultV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysResultV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateReadOnlySessionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadOnlySessionResult != nil {
+
+		if swag.IsZero(m.CreateReadOnlySessionResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadOnlySessionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadOnlySessionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadOnlySessionResult")
 			}
 			return err
 		}
