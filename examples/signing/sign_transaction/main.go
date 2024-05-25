@@ -22,14 +22,14 @@ func main() {
 	timestamp := time.Now().UnixMilli()
 	timestampString := strconv.FormatInt(timestamp, 10)
 
-	var sighWith string            // can be either a private key ID or a wallet account address
+	var signWith string            // can be either a private key ID or a wallet account address
 	var unsignedTransaction string // no 0x prefix necessary
 
 	pkParams := signing.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{
 		OrganizationID: client.DefaultOrganization(),
 		TimestampMs:    &timestampString,
 		Parameters: &models.SignTransactionIntentV2{
-			SignWith:            &sighWith,
+			SignWith:            &signWith,
 			Type:                models.TransactionTypeEthereum.Pointer(),
 			UnsignedTransaction: &unsignedTransaction,
 		},
