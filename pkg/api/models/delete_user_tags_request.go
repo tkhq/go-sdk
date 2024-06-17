@@ -34,7 +34,7 @@ type DeleteUserTagsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_DELETE_USER_TAGS]
+	// Enum: ["ACTIVITY_TYPE_DELETE_USER_TAGS"]
 	Type *string `json:"type"`
 }
 

@@ -6,6 +6,7 @@ package authenticators
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *GetAuthenticatorOK) Code() int {
 }
 
 func (o *GetAuthenticatorOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_authenticator][%d] getAuthenticatorOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_authenticator][%d] getAuthenticatorOK %s", 200, payload)
 }
 
 func (o *GetAuthenticatorOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_authenticator][%d] getAuthenticatorOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_authenticator][%d] getAuthenticatorOK %s", 200, payload)
 }
 
 func (o *GetAuthenticatorOK) GetPayload() *models.GetAuthenticatorResponse {

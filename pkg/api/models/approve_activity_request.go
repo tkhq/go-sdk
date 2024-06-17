@@ -34,7 +34,7 @@ type ApproveActivityRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_APPROVE_ACTIVITY]
+	// Enum: ["ACTIVITY_TYPE_APPROVE_ACTIVITY"]
 	Type *string `json:"type"`
 }
 

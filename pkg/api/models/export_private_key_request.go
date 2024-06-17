@@ -34,7 +34,7 @@ type ExportPrivateKeyRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_EXPORT_PRIVATE_KEY]
+	// Enum: ["ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"]
 	Type *string `json:"type"`
 }
 

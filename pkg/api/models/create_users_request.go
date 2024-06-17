@@ -34,7 +34,7 @@ type CreateUsersRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_USERS_V2]
+	// Enum: ["ACTIVITY_TYPE_CREATE_USERS_V2"]
 	Type *string `json:"type"`
 }
 

@@ -32,6 +32,10 @@ type User struct {
 	// Required: true
 	CreatedAt *ExternalDataV1Timestamp `json:"createdAt"`
 
+	// A list of Oauth Providers.
+	// Required: true
+	OauthProviders []*OauthProvider `json:"oauthProviders"`
+
 	// updated at
 	// Required: true
 	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
@@ -65,6 +69,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauthProviders(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -164,6 +172,33 @@ func (m *User) validateCreatedAt(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *User) validateOauthProviders(formats strfmt.Registry) error {
+
+	if err := validate.Required("oauthProviders", "body", m.OauthProviders); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.OauthProviders); i++ {
+		if swag.IsZero(m.OauthProviders[i]) { // not required
+			continue
+		}
+
+		if m.OauthProviders[i] != nil {
+			if err := m.OauthProviders[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *User) validateUpdatedAt(formats strfmt.Registry) error {
 
 	if err := validate.Required("updatedAt", "body", m.UpdatedAt); err != nil {
@@ -224,6 +259,10 @@ func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) err
 	}
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauthProviders(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -299,6 +338,31 @@ func (m *User) contextValidateCreatedAt(ctx context.Context, formats strfmt.Regi
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *User) contextValidateOauthProviders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.OauthProviders); i++ {
+
+		if m.OauthProviders[i] != nil {
+
+			if swag.IsZero(m.OauthProviders[i]) { // not required
+				return nil
+			}
+
+			if err := m.OauthProviders[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

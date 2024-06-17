@@ -34,7 +34,7 @@ type DeleteAPIKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_DELETE_API_KEYS]
+	// Enum: ["ACTIVITY_TYPE_DELETE_API_KEYS"]
 	Type *string `json:"type"`
 }
 

@@ -6,6 +6,7 @@ package organizations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *GetSubOrgIdsOK) Code() int {
 }
 
 func (o *GetSubOrgIdsOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_suborgs][%d] getSubOrgIdsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_suborgs][%d] getSubOrgIdsOK %s", 200, payload)
 }
 
 func (o *GetSubOrgIdsOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_suborgs][%d] getSubOrgIdsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_suborgs][%d] getSubOrgIdsOK %s", 200, payload)
 }
 
 func (o *GetSubOrgIdsOK) GetPayload() *models.GetSubOrgIdsResponse {

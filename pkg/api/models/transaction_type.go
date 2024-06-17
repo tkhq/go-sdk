@@ -30,8 +30,8 @@ func (m TransactionType) Pointer() *TransactionType {
 
 const (
 
-	// TransactionTypeEthereum captures enum value "TRANSACTION_TYPE_ETHEREUM"
-	TransactionTypeEthereum TransactionType = "TRANSACTION_TYPE_ETHEREUM"
+	// TRANSACTIONTYPEETHEREUM captures enum value "TRANSACTION_TYPE_ETHEREUM"
+	TRANSACTIONTYPEETHEREUM TransactionType = "TRANSACTION_TYPE_ETHEREUM"
 )
 
 // for schema

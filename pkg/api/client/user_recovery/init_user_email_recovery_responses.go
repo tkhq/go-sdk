@@ -6,6 +6,7 @@ package user_recovery
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *InitUserEmailRecoveryOK) Code() int {
 }
 
 func (o *InitUserEmailRecoveryOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/init_user_email_recovery][%d] initUserEmailRecoveryOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/init_user_email_recovery][%d] initUserEmailRecoveryOK %s", 200, payload)
 }
 
 func (o *InitUserEmailRecoveryOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/init_user_email_recovery][%d] initUserEmailRecoveryOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/init_user_email_recovery][%d] initUserEmailRecoveryOK %s", 200, payload)
 }
 
 func (o *InitUserEmailRecoveryOK) GetPayload() *models.ActivityResponse {

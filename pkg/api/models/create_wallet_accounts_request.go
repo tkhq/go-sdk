@@ -34,7 +34,7 @@ type CreateWalletAccountsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS]
+	// Enum: ["ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"]
 	Type *string `json:"type"`
 }
 

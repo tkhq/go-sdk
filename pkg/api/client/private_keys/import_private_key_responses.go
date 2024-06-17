@@ -6,6 +6,7 @@ package private_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *ImportPrivateKeyOK) Code() int {
 }
 
 func (o *ImportPrivateKeyOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/import_private_key][%d] importPrivateKeyOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/import_private_key][%d] importPrivateKeyOK %s", 200, payload)
 }
 
 func (o *ImportPrivateKeyOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/import_private_key][%d] importPrivateKeyOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/import_private_key][%d] importPrivateKeyOK %s", 200, payload)
 }
 
 func (o *ImportPrivateKeyOK) GetPayload() *models.ActivityResponse {

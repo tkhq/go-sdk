@@ -6,6 +6,7 @@ package user_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *ListUserTagsOK) Code() int {
 }
 
 func (o *ListUserTagsOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_user_tags][%d] listUserTagsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_user_tags][%d] listUserTagsOK %s", 200, payload)
 }
 
 func (o *ListUserTagsOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_user_tags][%d] listUserTagsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_user_tags][%d] listUserTagsOK %s", 200, payload)
 }
 
 func (o *ListUserTagsOK) GetPayload() *models.ListUserTagsResponse {

@@ -30,14 +30,14 @@ func (m AccessType) Pointer() *AccessType {
 
 const (
 
-	// AccessTypeWeb captures enum value "ACCESS_TYPE_WEB"
-	AccessTypeWeb AccessType = "ACCESS_TYPE_WEB"
+	// ACCESSTYPEWEB captures enum value "ACCESS_TYPE_WEB"
+	ACCESSTYPEWEB AccessType = "ACCESS_TYPE_WEB"
 
-	// AccessTypeAPI captures enum value "ACCESS_TYPE_API"
-	AccessTypeAPI AccessType = "ACCESS_TYPE_API"
+	// ACCESSTYPEAPI captures enum value "ACCESS_TYPE_API"
+	ACCESSTYPEAPI AccessType = "ACCESS_TYPE_API"
 
-	// AccessTypeAll captures enum value "ACCESS_TYPE_ALL"
-	AccessTypeAll AccessType = "ACCESS_TYPE_ALL"
+	// ACCESSTYPEALL captures enum value "ACCESS_TYPE_ALL"
+	ACCESSTYPEALL AccessType = "ACCESS_TYPE_ALL"
 )
 
 // for schema

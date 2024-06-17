@@ -6,6 +6,7 @@ package private_key_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *UpdatePrivateKeyTagOK) Code() int {
 }
 
 func (o *UpdatePrivateKeyTagOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] updatePrivateKeyTagOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] updatePrivateKeyTagOK %s", 200, payload)
 }
 
 func (o *UpdatePrivateKeyTagOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] updatePrivateKeyTagOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/update_private_key_tag][%d] updatePrivateKeyTagOK %s", 200, payload)
 }
 
 func (o *UpdatePrivateKeyTagOK) GetPayload() *models.ActivityResponse {

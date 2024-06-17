@@ -6,6 +6,7 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *GetUsersOK) Code() int {
 }
 
 func (o *GetUsersOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_users][%d] getUsersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_users][%d] getUsersOK %s", 200, payload)
 }
 
 func (o *GetUsersOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/list_users][%d] getUsersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_users][%d] getUsersOK %s", 200, payload)
 }
 
 func (o *GetUsersOK) GetPayload() *models.GetUsersResponse {

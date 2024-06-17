@@ -34,7 +34,7 @@ type InitUserEmailRecoveryRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY]
+	// Enum: ["ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"]
 	Type *string `json:"type"`
 }
 

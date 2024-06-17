@@ -34,7 +34,7 @@ type CreateAPIKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_API_KEYS]
+	// Enum: ["ACTIVITY_TYPE_CREATE_API_KEYS"]
 	Type *string `json:"type"`
 }
 

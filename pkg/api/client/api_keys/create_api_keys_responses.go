@@ -6,6 +6,7 @@ package api_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *CreateAPIKeysOK) Code() int {
 }
 
 func (o *CreateAPIKeysOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] createApiKeysOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] createApiKeysOK %s", 200, payload)
 }
 
 func (o *CreateAPIKeysOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] createApiKeysOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_api_keys][%d] createApiKeysOK %s", 200, payload)
 }
 
 func (o *CreateAPIKeysOK) GetPayload() *models.ActivityResponse {

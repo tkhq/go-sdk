@@ -30,23 +30,23 @@ func (m ActivityStatus) Pointer() *ActivityStatus {
 
 const (
 
-	// ActivityStatusCreated captures enum value "ACTIVITY_STATUS_CREATED"
-	ActivityStatusCreated ActivityStatus = "ACTIVITY_STATUS_CREATED"
+	// ACTIVITYSTATUSCREATED captures enum value "ACTIVITY_STATUS_CREATED"
+	ACTIVITYSTATUSCREATED ActivityStatus = "ACTIVITY_STATUS_CREATED"
 
-	// ActivityStatusPending captures enum value "ACTIVITY_STATUS_PENDING"
-	ActivityStatusPending ActivityStatus = "ACTIVITY_STATUS_PENDING"
+	// ACTIVITYSTATUSPENDING captures enum value "ACTIVITY_STATUS_PENDING"
+	ACTIVITYSTATUSPENDING ActivityStatus = "ACTIVITY_STATUS_PENDING"
 
-	// ActivityStatusCompleted captures enum value "ACTIVITY_STATUS_COMPLETED"
-	ActivityStatusCompleted ActivityStatus = "ACTIVITY_STATUS_COMPLETED"
+	// ACTIVITYSTATUSCOMPLETED captures enum value "ACTIVITY_STATUS_COMPLETED"
+	ACTIVITYSTATUSCOMPLETED ActivityStatus = "ACTIVITY_STATUS_COMPLETED"
 
-	// ActivityStatusFailed captures enum value "ACTIVITY_STATUS_FAILED"
-	ActivityStatusFailed ActivityStatus = "ACTIVITY_STATUS_FAILED"
+	// ACTIVITYSTATUSFAILED captures enum value "ACTIVITY_STATUS_FAILED"
+	ACTIVITYSTATUSFAILED ActivityStatus = "ACTIVITY_STATUS_FAILED"
 
-	// ActivityStatusConsensusNeeded captures enum value "ACTIVITY_STATUS_CONSENSUS_NEEDED"
-	ActivityStatusConsensusNeeded ActivityStatus = "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+	// ACTIVITYSTATUSCONSENSUSNEEDED captures enum value "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+	ACTIVITYSTATUSCONSENSUSNEEDED ActivityStatus = "ACTIVITY_STATUS_CONSENSUS_NEEDED"
 
-	// ActivityStatusRejected captures enum value "ACTIVITY_STATUS_REJECTED"
-	ActivityStatusRejected ActivityStatus = "ACTIVITY_STATUS_REJECTED"
+	// ACTIVITYSTATUSREJECTED captures enum value "ACTIVITY_STATUS_REJECTED"
+	ACTIVITYSTATUSREJECTED ActivityStatus = "ACTIVITY_STATUS_REJECTED"
 )
 
 // for schema

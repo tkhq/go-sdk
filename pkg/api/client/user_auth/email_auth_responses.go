@@ -6,6 +6,7 @@ package user_auth
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *EmailAuthOK) Code() int {
 }
 
 func (o *EmailAuthOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/email_auth][%d] emailAuthOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/email_auth][%d] emailAuthOK %s", 200, payload)
 }
 
 func (o *EmailAuthOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/email_auth][%d] emailAuthOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/email_auth][%d] emailAuthOK %s", 200, payload)
 }
 
 func (o *EmailAuthOK) GetPayload() *models.ActivityResponse {
