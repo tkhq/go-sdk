@@ -34,7 +34,7 @@ type CreateSubOrganizationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5"]
+	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5]
 	Type *string `json:"type"`
 }
 

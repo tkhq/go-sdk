@@ -30,11 +30,11 @@ func (m Curve) Pointer() *Curve {
 
 const (
 
-	// CURVESECP256K1 captures enum value "CURVE_SECP256K1"
-	CURVESECP256K1 Curve = "CURVE_SECP256K1"
+	// CurveSecp256k1 captures enum value "CURVE_SECP256K1"
+	CurveSecp256k1 Curve = "CURVE_SECP256K1"
 
-	// CURVEED25519 captures enum value "CURVE_ED25519"
-	CURVEED25519 Curve = "CURVE_ED25519"
+	// CurveEd25519 captures enum value "CURVE_ED25519"
+	CurveEd25519 Curve = "CURVE_ED25519"
 )
 
 // for schema

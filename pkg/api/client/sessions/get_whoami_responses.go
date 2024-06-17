@@ -6,7 +6,6 @@ package sessions
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *GetWhoamiOK) Code() int {
 }
 
 func (o *GetWhoamiOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] getWhoamiOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] getWhoamiOK  %+v", 200, o.Payload)
 }
 
 func (o *GetWhoamiOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] getWhoamiOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/whoami][%d] getWhoamiOK  %+v", 200, o.Payload)
 }
 
 func (o *GetWhoamiOK) GetPayload() *models.GetWhoamiResponse {

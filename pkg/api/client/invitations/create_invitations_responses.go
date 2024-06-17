@@ -6,7 +6,6 @@ package invitations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *CreateInvitationsOK) Code() int {
 }
 
 func (o *CreateInvitationsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] createInvitationsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] createInvitationsOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateInvitationsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] createInvitationsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_invitations][%d] createInvitationsOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateInvitationsOK) GetPayload() *models.ActivityResponse {

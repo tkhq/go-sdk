@@ -34,7 +34,7 @@ type InitImportWalletRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_INIT_IMPORT_WALLET"]
+	// Enum: [ACTIVITY_TYPE_INIT_IMPORT_WALLET]
 	Type *string `json:"type"`
 }
 

@@ -6,7 +6,6 @@ package features
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *SetOrganizationFeatureOK) Code() int {
 }
 
 func (o *SetOrganizationFeatureOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/set_organization_feature][%d] setOrganizationFeatureOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/set_organization_feature][%d] setOrganizationFeatureOK  %+v", 200, o.Payload)
 }
 
 func (o *SetOrganizationFeatureOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/set_organization_feature][%d] setOrganizationFeatureOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/set_organization_feature][%d] setOrganizationFeatureOK  %+v", 200, o.Payload)
 }
 
 func (o *SetOrganizationFeatureOK) GetPayload() *models.ActivityResponse {

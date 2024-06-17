@@ -30,17 +30,17 @@ func (m HashFunction) Pointer() *HashFunction {
 
 const (
 
-	// HASHFUNCTIONNOOP captures enum value "HASH_FUNCTION_NO_OP"
-	HASHFUNCTIONNOOP HashFunction = "HASH_FUNCTION_NO_OP"
+	// HashFunctionNoOp captures enum value "HASH_FUNCTION_NO_OP"
+	HashFunctionNoOp HashFunction = "HASH_FUNCTION_NO_OP"
 
-	// HASHFUNCTIONSHA256 captures enum value "HASH_FUNCTION_SHA256"
-	HASHFUNCTIONSHA256 HashFunction = "HASH_FUNCTION_SHA256"
+	// HashFunctionSha256 captures enum value "HASH_FUNCTION_SHA256"
+	HashFunctionSha256 HashFunction = "HASH_FUNCTION_SHA256"
 
-	// HASHFUNCTIONKECCAK256 captures enum value "HASH_FUNCTION_KECCAK256"
-	HASHFUNCTIONKECCAK256 HashFunction = "HASH_FUNCTION_KECCAK256"
+	// HashFunctionKeccak256 captures enum value "HASH_FUNCTION_KECCAK256"
+	HashFunctionKeccak256 HashFunction = "HASH_FUNCTION_KECCAK256"
 
-	// HASHFUNCTIONNOTAPPLICABLE captures enum value "HASH_FUNCTION_NOT_APPLICABLE"
-	HASHFUNCTIONNOTAPPLICABLE HashFunction = "HASH_FUNCTION_NOT_APPLICABLE"
+	// HashFunctionNotApplicable captures enum value "HASH_FUNCTION_NOT_APPLICABLE"
+	HashFunctionNotApplicable HashFunction = "HASH_FUNCTION_NOT_APPLICABLE"
 )
 
 // for schema

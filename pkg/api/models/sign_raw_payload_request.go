@@ -34,7 +34,7 @@ type SignRawPayloadRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"]
+	// Enum: [ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2]
 	Type *string `json:"type"`
 }
 

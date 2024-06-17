@@ -34,7 +34,7 @@ type UpdatePolicyRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_UPDATE_POLICY"]
+	// Enum: [ACTIVITY_TYPE_UPDATE_POLICY]
 	Type *string `json:"type"`
 }
 

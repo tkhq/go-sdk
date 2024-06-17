@@ -34,7 +34,7 @@ type CreatePrivateKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"]
+	// Enum: [ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2]
 	Type *string `json:"type"`
 }
 

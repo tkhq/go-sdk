@@ -34,7 +34,7 @@ type UpdateRootQuorumRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"]
+	// Enum: [ACTIVITY_TYPE_UPDATE_ROOT_QUORUM]
 	Type *string `json:"type"`
 }
 

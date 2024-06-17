@@ -6,7 +6,6 @@ package policies
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *GetPolicyOK) Code() int {
 }
 
 func (o *GetPolicyOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/get_policy][%d] getPolicyOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_policy][%d] getPolicyOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/get_policy][%d] getPolicyOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_policy][%d] getPolicyOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyOK) GetPayload() *models.GetPolicyResponse {

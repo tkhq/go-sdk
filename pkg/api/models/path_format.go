@@ -30,8 +30,8 @@ func (m PathFormat) Pointer() *PathFormat {
 
 const (
 
-	// PATHFORMATBIP32 captures enum value "PATH_FORMAT_BIP32"
-	PATHFORMATBIP32 PathFormat = "PATH_FORMAT_BIP32"
+	// PathFormatBip32 captures enum value "PATH_FORMAT_BIP32"
+	PathFormatBip32 PathFormat = "PATH_FORMAT_BIP32"
 )
 
 // for schema

@@ -34,7 +34,7 @@ type DeleteAuthenticatorsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_DELETE_AUTHENTICATORS"]
+	// Enum: [ACTIVITY_TYPE_DELETE_AUTHENTICATORS]
 	Type *string `json:"type"`
 }
 

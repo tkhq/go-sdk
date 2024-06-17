@@ -34,7 +34,7 @@ type DeleteInvitationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_DELETE_INVITATION"]
+	// Enum: [ACTIVITY_TYPE_DELETE_INVITATION]
 	Type *string `json:"type"`
 }
 

@@ -30,32 +30,32 @@ func (m MnemonicLanguage) Pointer() *MnemonicLanguage {
 
 const (
 
-	// MNEMONICLANGUAGEENGLISH captures enum value "MNEMONIC_LANGUAGE_ENGLISH"
-	MNEMONICLANGUAGEENGLISH MnemonicLanguage = "MNEMONIC_LANGUAGE_ENGLISH"
+	// MnemonicLanguageEnglish captures enum value "MNEMONIC_LANGUAGE_ENGLISH"
+	MnemonicLanguageEnglish MnemonicLanguage = "MNEMONIC_LANGUAGE_ENGLISH"
 
-	// MNEMONICLANGUAGESIMPLIFIEDCHINESE captures enum value "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
-	MNEMONICLANGUAGESIMPLIFIEDCHINESE MnemonicLanguage = "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
+	// MnemonicLanguageSimplifiedChinese captures enum value "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
+	MnemonicLanguageSimplifiedChinese MnemonicLanguage = "MNEMONIC_LANGUAGE_SIMPLIFIED_CHINESE"
 
-	// MNEMONICLANGUAGETRADITIONALCHINESE captures enum value "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
-	MNEMONICLANGUAGETRADITIONALCHINESE MnemonicLanguage = "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
+	// MnemonicLanguageTraditionalChinese captures enum value "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
+	MnemonicLanguageTraditionalChinese MnemonicLanguage = "MNEMONIC_LANGUAGE_TRADITIONAL_CHINESE"
 
-	// MNEMONICLANGUAGECZECH captures enum value "MNEMONIC_LANGUAGE_CZECH"
-	MNEMONICLANGUAGECZECH MnemonicLanguage = "MNEMONIC_LANGUAGE_CZECH"
+	// MnemonicLanguageCzech captures enum value "MNEMONIC_LANGUAGE_CZECH"
+	MnemonicLanguageCzech MnemonicLanguage = "MNEMONIC_LANGUAGE_CZECH"
 
-	// MNEMONICLANGUAGEFRENCH captures enum value "MNEMONIC_LANGUAGE_FRENCH"
-	MNEMONICLANGUAGEFRENCH MnemonicLanguage = "MNEMONIC_LANGUAGE_FRENCH"
+	// MnemonicLanguageFrench captures enum value "MNEMONIC_LANGUAGE_FRENCH"
+	MnemonicLanguageFrench MnemonicLanguage = "MNEMONIC_LANGUAGE_FRENCH"
 
-	// MNEMONICLANGUAGEITALIAN captures enum value "MNEMONIC_LANGUAGE_ITALIAN"
-	MNEMONICLANGUAGEITALIAN MnemonicLanguage = "MNEMONIC_LANGUAGE_ITALIAN"
+	// MnemonicLanguageItalian captures enum value "MNEMONIC_LANGUAGE_ITALIAN"
+	MnemonicLanguageItalian MnemonicLanguage = "MNEMONIC_LANGUAGE_ITALIAN"
 
-	// MNEMONICLANGUAGEJAPANESE captures enum value "MNEMONIC_LANGUAGE_JAPANESE"
-	MNEMONICLANGUAGEJAPANESE MnemonicLanguage = "MNEMONIC_LANGUAGE_JAPANESE"
+	// MnemonicLanguageJapanese captures enum value "MNEMONIC_LANGUAGE_JAPANESE"
+	MnemonicLanguageJapanese MnemonicLanguage = "MNEMONIC_LANGUAGE_JAPANESE"
 
-	// MNEMONICLANGUAGEKOREAN captures enum value "MNEMONIC_LANGUAGE_KOREAN"
-	MNEMONICLANGUAGEKOREAN MnemonicLanguage = "MNEMONIC_LANGUAGE_KOREAN"
+	// MnemonicLanguageKorean captures enum value "MNEMONIC_LANGUAGE_KOREAN"
+	MnemonicLanguageKorean MnemonicLanguage = "MNEMONIC_LANGUAGE_KOREAN"
 
-	// MNEMONICLANGUAGESPANISH captures enum value "MNEMONIC_LANGUAGE_SPANISH"
-	MNEMONICLANGUAGESPANISH MnemonicLanguage = "MNEMONIC_LANGUAGE_SPANISH"
+	// MnemonicLanguageSpanish captures enum value "MNEMONIC_LANGUAGE_SPANISH"
+	MnemonicLanguageSpanish MnemonicLanguage = "MNEMONIC_LANGUAGE_SPANISH"
 )
 
 // for schema

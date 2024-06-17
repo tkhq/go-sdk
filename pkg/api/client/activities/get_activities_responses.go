@@ -6,7 +6,6 @@ package activities
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *GetActivitiesOK) Code() int {
 }
 
 func (o *GetActivitiesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/list_activities][%d] getActivitiesOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_activities][%d] getActivitiesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetActivitiesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/query/list_activities][%d] getActivitiesOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/query/list_activities][%d] getActivitiesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetActivitiesOK) GetPayload() *models.GetActivitiesResponse {

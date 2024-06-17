@@ -6,7 +6,6 @@ package authenticators
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *DeleteAuthenticatorsOK) Code() int {
 }
 
 func (o *DeleteAuthenticatorsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_authenticators][%d] deleteAuthenticatorsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_authenticators][%d] deleteAuthenticatorsOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteAuthenticatorsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_authenticators][%d] deleteAuthenticatorsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_authenticators][%d] deleteAuthenticatorsOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteAuthenticatorsOK) GetPayload() *models.ActivityResponse {

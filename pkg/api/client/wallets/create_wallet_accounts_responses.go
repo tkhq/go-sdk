@@ -6,7 +6,6 @@ package wallets
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *CreateWalletAccountsOK) Code() int {
 }
 
 func (o *CreateWalletAccountsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_wallet_accounts][%d] createWalletAccountsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_wallet_accounts][%d] createWalletAccountsOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateWalletAccountsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_wallet_accounts][%d] createWalletAccountsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_wallet_accounts][%d] createWalletAccountsOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateWalletAccountsOK) GetPayload() *models.ActivityResponse {

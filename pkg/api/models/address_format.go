@@ -30,23 +30,23 @@ func (m AddressFormat) Pointer() *AddressFormat {
 
 const (
 
-	// ADDRESSFORMATUNCOMPRESSED captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
-	ADDRESSFORMATUNCOMPRESSED AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
+	// AddressFormatUncompressed captures enum value "ADDRESS_FORMAT_UNCOMPRESSED"
+	AddressFormatUncompressed AddressFormat = "ADDRESS_FORMAT_UNCOMPRESSED"
 
-	// ADDRESSFORMATCOMPRESSED captures enum value "ADDRESS_FORMAT_COMPRESSED"
-	ADDRESSFORMATCOMPRESSED AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
+	// AddressFormatCompressed captures enum value "ADDRESS_FORMAT_COMPRESSED"
+	AddressFormatCompressed AddressFormat = "ADDRESS_FORMAT_COMPRESSED"
 
-	// ADDRESSFORMATETHEREUM captures enum value "ADDRESS_FORMAT_ETHEREUM"
-	ADDRESSFORMATETHEREUM AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
+	// AddressFormatEthereum captures enum value "ADDRESS_FORMAT_ETHEREUM"
+	AddressFormatEthereum AddressFormat = "ADDRESS_FORMAT_ETHEREUM"
 
-	// ADDRESSFORMATSOLANA captures enum value "ADDRESS_FORMAT_SOLANA"
-	ADDRESSFORMATSOLANA AddressFormat = "ADDRESS_FORMAT_SOLANA"
+	// AddressFormatSolana captures enum value "ADDRESS_FORMAT_SOLANA"
+	AddressFormatSolana AddressFormat = "ADDRESS_FORMAT_SOLANA"
 
-	// ADDRESSFORMATCOSMOS captures enum value "ADDRESS_FORMAT_COSMOS"
-	ADDRESSFORMATCOSMOS AddressFormat = "ADDRESS_FORMAT_COSMOS"
+	// AddressFormatCosmos captures enum value "ADDRESS_FORMAT_COSMOS"
+	AddressFormatCosmos AddressFormat = "ADDRESS_FORMAT_COSMOS"
 
-	// ADDRESSFORMATTRON captures enum value "ADDRESS_FORMAT_TRON"
-	ADDRESSFORMATTRON AddressFormat = "ADDRESS_FORMAT_TRON"
+	// AddressFormatTron captures enum value "ADDRESS_FORMAT_TRON"
+	AddressFormatTron AddressFormat = "ADDRESS_FORMAT_TRON"
 )
 
 // for schema

@@ -6,7 +6,6 @@ package private_key_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *DeletePrivateKeyTagsOK) Code() int {
 }
 
 func (o *DeletePrivateKeyTagsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_private_key_tags][%d] deletePrivateKeyTagsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_private_key_tags][%d] deletePrivateKeyTagsOK  %+v", 200, o.Payload)
 }
 
 func (o *DeletePrivateKeyTagsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_private_key_tags][%d] deletePrivateKeyTagsOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_private_key_tags][%d] deletePrivateKeyTagsOK  %+v", 200, o.Payload)
 }
 
 func (o *DeletePrivateKeyTagsOK) GetPayload() *models.ActivityResponse {
