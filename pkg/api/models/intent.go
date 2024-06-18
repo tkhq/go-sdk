@@ -45,6 +45,9 @@ type Intent struct {
 	// create invitations intent
 	CreateInvitationsIntent *CreateInvitationsIntent `json:"createInvitationsIntent,omitempty"`
 
+	// create oauth providers intent
+	CreateOauthProvidersIntent *CreateOauthProvidersIntent `json:"createOauthProvidersIntent,omitempty"`
+
 	// create organization intent
 	CreateOrganizationIntent *CreateOrganizationIntent `json:"createOrganizationIntent,omitempty"`
 
@@ -87,6 +90,9 @@ type Intent struct {
 	// create sub organization intent v4
 	CreateSubOrganizationIntentV4 *CreateSubOrganizationIntentV4 `json:"createSubOrganizationIntentV4,omitempty"`
 
+	// create sub organization intent v5
+	CreateSubOrganizationIntentV5 *CreateSubOrganizationIntentV5 `json:"createSubOrganizationIntentV5,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
@@ -110,6 +116,9 @@ type Intent struct {
 
 	// delete invitation intent
 	DeleteInvitationIntent *DeleteInvitationIntent `json:"deleteInvitationIntent,omitempty"`
+
+	// delete oauth providers intent
+	DeleteOauthProvidersIntent *DeleteOauthProvidersIntent `json:"deleteOauthProvidersIntent,omitempty"`
 
 	// delete organization intent
 	DeleteOrganizationIntent *DeleteOrganizationIntent `json:"deleteOrganizationIntent,omitempty"`
@@ -158,6 +167,9 @@ type Intent struct {
 
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
+
+	// oauth intent
+	OauthIntent *OauthIntent `json:"oauthIntent,omitempty"`
 
 	// recover user intent
 	RecoverUserIntent *RecoverUserIntent `json:"recoverUserIntent,omitempty"`
@@ -251,6 +263,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateOauthProvidersIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateOrganizationIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -303,6 +319,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSubOrganizationIntentV5(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -332,6 +352,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeleteInvitationIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteOauthProvidersIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -396,6 +420,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauthIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -636,6 +664,25 @@ func (m *Intent) validateCreateInvitationsIntent(formats strfmt.Registry) error 
 				return ve.ValidateName("createInvitationsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateOauthProvidersIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateOauthProvidersIntent) { // not required
+		return nil
+	}
+
+	if m.CreateOauthProvidersIntent != nil {
+		if err := m.CreateOauthProvidersIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauthProvidersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauthProvidersIntent")
 			}
 			return err
 		}
@@ -891,6 +938,25 @@ func (m *Intent) validateCreateSubOrganizationIntentV4(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Intent) validateCreateSubOrganizationIntentV5(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV5) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV5 != nil {
+		if err := m.CreateSubOrganizationIntentV5.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateUserTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateUserTagIntent) { // not required
 		return nil
@@ -1035,6 +1101,25 @@ func (m *Intent) validateDeleteInvitationIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("deleteInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeleteOauthProvidersIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteOauthProvidersIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteOauthProvidersIntent != nil {
+		if err := m.DeleteOauthProvidersIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauthProvidersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauthProvidersIntent")
 			}
 			return err
 		}
@@ -1339,6 +1424,25 @@ func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) er
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateOauthIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.OauthIntent) { // not required
+		return nil
+	}
+
+	if m.OauthIntent != nil {
+		if err := m.OauthIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthIntent")
 			}
 			return err
 		}
@@ -1710,6 +1814,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateOauthProvidersIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1762,6 +1870,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationIntentV5(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1791,6 +1903,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeleteInvitationIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteOauthProvidersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1855,6 +1971,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauthIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2113,6 +2233,27 @@ func (m *Intent) contextValidateCreateInvitationsIntent(ctx context.Context, for
 				return ve.ValidateName("createInvitationsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateOauthProvidersIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateOauthProvidersIntent != nil {
+
+		if swag.IsZero(m.CreateOauthProvidersIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateOauthProvidersIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauthProvidersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauthProvidersIntent")
 			}
 			return err
 		}
@@ -2394,6 +2535,27 @@ func (m *Intent) contextValidateCreateSubOrganizationIntentV4(ctx context.Contex
 	return nil
 }
 
+func (m *Intent) contextValidateCreateSubOrganizationIntentV5(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV5 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationIntentV5) { // not required
+			return nil
+		}
+
+		if err := m.CreateSubOrganizationIntentV5.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagIntent != nil {
@@ -2554,6 +2716,27 @@ func (m *Intent) contextValidateDeleteInvitationIntent(ctx context.Context, form
 				return ve.ValidateName("deleteInvitationIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteInvitationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteOauthProvidersIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteOauthProvidersIntent != nil {
+
+		if swag.IsZero(m.DeleteOauthProvidersIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteOauthProvidersIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauthProvidersIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauthProvidersIntent")
 			}
 			return err
 		}
@@ -2890,6 +3073,27 @@ func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context,
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateOauthIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OauthIntent != nil {
+
+		if swag.IsZero(m.OauthIntent) { // not required
+			return nil
+		}
+
+		if err := m.OauthIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthIntent")
 			}
 			return err
 		}

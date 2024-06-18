@@ -36,6 +36,9 @@ type Result struct {
 	// create invitations result
 	CreateInvitationsResult *CreateInvitationsResult `json:"createInvitationsResult,omitempty"`
 
+	// create oauth providers result
+	CreateOauthProvidersResult *CreateOauthProvidersResult `json:"createOauthProvidersResult,omitempty"`
+
 	// create organization result
 	CreateOrganizationResult *CreateOrganizationResult `json:"createOrganizationResult,omitempty"`
 
@@ -66,6 +69,9 @@ type Result struct {
 	// create sub organization result v4
 	CreateSubOrganizationResultV4 *CreateSubOrganizationResultV4 `json:"createSubOrganizationResultV4,omitempty"`
 
+	// create sub organization result v5
+	CreateSubOrganizationResultV5 *CreateSubOrganizationResultV5 `json:"createSubOrganizationResultV5,omitempty"`
+
 	// create user tag result
 	CreateUserTagResult *CreateUserTagResult `json:"createUserTagResult,omitempty"`
 
@@ -86,6 +92,9 @@ type Result struct {
 
 	// delete invitation result
 	DeleteInvitationResult *DeleteInvitationResult `json:"deleteInvitationResult,omitempty"`
+
+	// delete oauth providers result
+	DeleteOauthProvidersResult *DeleteOauthProvidersResult `json:"deleteOauthProvidersResult,omitempty"`
 
 	// delete organization result
 	DeleteOrganizationResult *DeleteOrganizationResult `json:"deleteOrganizationResult,omitempty"`
@@ -134,6 +143,9 @@ type Result struct {
 
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
+
+	// oauth result
+	OauthResult *OauthResult `json:"oauthResult,omitempty"`
 
 	// recover user result
 	RecoverUserResult *RecoverUserResult `json:"recoverUserResult,omitempty"`
@@ -203,6 +215,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateOauthProvidersResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateOrganizationResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -243,6 +259,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSubOrganizationResultV5(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -268,6 +288,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeleteInvitationResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteOauthProvidersResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -332,6 +356,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInitUserEmailRecoveryResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauthResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -491,6 +519,25 @@ func (m *Result) validateCreateInvitationsResult(formats strfmt.Registry) error 
 				return ve.ValidateName("createInvitationsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateOauthProvidersResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateOauthProvidersResult) { // not required
+		return nil
+	}
+
+	if m.CreateOauthProvidersResult != nil {
+		if err := m.CreateOauthProvidersResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauthProvidersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauthProvidersResult")
 			}
 			return err
 		}
@@ -689,6 +736,25 @@ func (m *Result) validateCreateSubOrganizationResultV4(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Result) validateCreateSubOrganizationResultV5(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationResultV5) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationResultV5 != nil {
+		if err := m.CreateSubOrganizationResultV5.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationResultV5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationResultV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateCreateUserTagResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateUserTagResult) { // not required
 		return nil
@@ -814,6 +880,25 @@ func (m *Result) validateDeleteInvitationResult(formats strfmt.Registry) error {
 				return ve.ValidateName("deleteInvitationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteInvitationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateDeleteOauthProvidersResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteOauthProvidersResult) { // not required
+		return nil
+	}
+
+	if m.DeleteOauthProvidersResult != nil {
+		if err := m.DeleteOauthProvidersResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauthProvidersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauthProvidersResult")
 			}
 			return err
 		}
@@ -1126,6 +1211,25 @@ func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Result) validateOauthResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.OauthResult) { // not required
+		return nil
+	}
+
+	if m.OauthResult != nil {
+		if err := m.OauthResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateRecoverUserResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.RecoverUserResult) { // not required
 		return nil
@@ -1363,6 +1467,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateOauthProvidersResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1403,6 +1511,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationResultV5(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1428,6 +1540,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeleteInvitationResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteOauthProvidersResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1492,6 +1608,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateInitUserEmailRecoveryResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauthResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1663,6 +1783,27 @@ func (m *Result) contextValidateCreateInvitationsResult(ctx context.Context, for
 				return ve.ValidateName("createInvitationsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateOauthProvidersResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateOauthProvidersResult != nil {
+
+		if swag.IsZero(m.CreateOauthProvidersResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateOauthProvidersResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauthProvidersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauthProvidersResult")
 			}
 			return err
 		}
@@ -1881,6 +2022,27 @@ func (m *Result) contextValidateCreateSubOrganizationResultV4(ctx context.Contex
 	return nil
 }
 
+func (m *Result) contextValidateCreateSubOrganizationResultV5(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationResultV5 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationResultV5) { // not required
+			return nil
+		}
+
+		if err := m.CreateSubOrganizationResultV5.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationResultV5")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationResultV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateCreateUserTagResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagResult != nil {
@@ -2020,6 +2182,27 @@ func (m *Result) contextValidateDeleteInvitationResult(ctx context.Context, form
 				return ve.ValidateName("deleteInvitationResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteInvitationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateDeleteOauthProvidersResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteOauthProvidersResult != nil {
+
+		if swag.IsZero(m.DeleteOauthProvidersResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteOauthProvidersResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauthProvidersResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauthProvidersResult")
 			}
 			return err
 		}
@@ -2356,6 +2539,27 @@ func (m *Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context,
 				return ve.ValidateName("initUserEmailRecoveryResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateOauthResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OauthResult != nil {
+
+		if swag.IsZero(m.OauthResult) { // not required
+			return nil
+		}
+
+		if err := m.OauthResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthResult")
 			}
 			return err
 		}
