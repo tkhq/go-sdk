@@ -170,6 +170,11 @@ func DecodeTurnkeyPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
 	return &publicKey, nil
 }
 
+// GetCurve returns the curve used
+func (k Key) GetCurve() string {
+	return ""
+}
+
 // GetPublicKey gets the key's public key.
 func (k Key) GetPublicKey() string {
 	return k.TkPublicKey

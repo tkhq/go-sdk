@@ -26,7 +26,7 @@ type CreateAPIKeysRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *CreateAPIKeysIntent `json:"parameters"`
+	Parameters *CreateAPIKeysIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type CreateAPIKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_API_KEYS]
+	// Enum: [ACTIVITY_TYPE_CREATE_API_KEYS_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var createApiKeysRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_API_KEYS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_API_KEYS_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYS captures enum value "ACTIVITY_TYPE_CREATE_API_KEYS"
-	CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYS string = "ACTIVITY_TYPE_CREATE_API_KEYS"
+	// CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYSV2 captures enum value "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
+	CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYSV2 string = "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
 )
 
 // prop value enum

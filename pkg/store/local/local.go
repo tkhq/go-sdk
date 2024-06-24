@@ -215,7 +215,11 @@ func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 		return errors.Wrap(err, "failed to store public key to file")
 	}
 
-	if err = createKeyFile(s.PrivateKeyFile(name), keypair.GetPrivateKey(), 0o0600); err != nil {
+	privateKeyData := keypair.GetPrivateKey()
+	if curve := keypair.GetCurve(); curve != "" {
+		privateKeyData = fmt.Sprintf("%s:%s", privateKeyData, curve)
+	}
+	if err = createKeyFile(s.PrivateKeyFile(name), privateKeyData, 0o0600); err != nil {
 		return errors.Wrap(err, "failed to store private key to file")
 	}
 

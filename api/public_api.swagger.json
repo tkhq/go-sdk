@@ -1993,7 +1993,8 @@
         "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
         "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
         "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5",
-        "ACTIVITY_TYPE_OAUTH"
+        "ACTIVITY_TYPE_OAUTH",
+        "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
       ]
     },
     "AddressFormat": {
@@ -2051,6 +2052,10 @@
         "updatedAt"
       ]
     },
+    "ApiKeyCurve": {
+      "type": "string",
+      "enum": ["API_KEY_CURVE_P256", "API_KEY_CURVE_SECP256K1"]
+    },
     "ApiKeyParams": {
       "type": "object",
       "properties": {
@@ -2068,6 +2073,28 @@
         }
       },
       "required": ["apiKeyName", "publicKey"]
+    },
+    "ApiKeyParamsV2": {
+      "type": "object",
+      "properties": {
+        "apiKeyName": {
+          "type": "string",
+          "description": "Human-readable name for an API Key."
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "The public component of a cryptographic key pair used to sign messages and transactions."
+        },
+        "curveType": {
+          "$ref": "#/definitions/ApiKeyCurve",
+          "description": "The curve type to be used for processing API key signatures."
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Optional window (in seconds) indicating how long the API Key should last."
+        }
+      },
+      "required": ["apiKeyName", "publicKey", "curveType"]
     },
     "ApiOnlyUserParams": {
       "type": "object",
@@ -2306,12 +2333,30 @@
       },
       "required": ["apiKeys", "userId"]
     },
+    "CreateApiKeysIntentV2": {
+      "type": "object",
+      "properties": {
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ApiKeyParamsV2"
+          },
+          "description": "A list of API Keys."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for a given User."
+        }
+      },
+      "required": ["apiKeys", "userId"]
+    },
     "CreateApiKeysRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_API_KEYS"]
+          "enum": ["ACTIVITY_TYPE_CREATE_API_KEYS_V2"]
         },
         "timestampMs": {
           "type": "string",
@@ -2322,7 +2367,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/CreateApiKeysIntent"
+          "$ref": "#/definitions/CreateApiKeysIntentV2"
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3420,7 +3465,8 @@
       "enum": [
         "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
         "CREDENTIAL_TYPE_API_KEY_P256",
-        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256"
+        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256",
+        "CREDENTIAL_TYPE_API_KEY_SECP256K1"
       ]
     },
     "Curve": {
@@ -5106,6 +5152,9 @@
         },
         "oauthIntent": {
           "$ref": "#/definitions/OauthIntent"
+        },
+        "createApiKeysIntentV2": {
+          "$ref": "#/definitions/CreateApiKeysIntentV2"
         }
       }
     },

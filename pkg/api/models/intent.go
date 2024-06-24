@@ -33,6 +33,9 @@ type Intent struct {
 	// create Api keys intent
 	CreateAPIKeysIntent *CreateAPIKeysIntent `json:"createApiKeysIntent,omitempty"`
 
+	// create Api keys intent v2
+	CreateAPIKeysIntentV2 *CreateAPIKeysIntentV2 `json:"createApiKeysIntentV2,omitempty"`
+
 	// create Api only users intent
 	CreateAPIOnlyUsersIntent *CreateAPIOnlyUsersIntent `json:"createApiOnlyUsersIntent,omitempty"`
 
@@ -244,6 +247,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateAPIKeysIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateAPIKeysIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -588,6 +595,25 @@ func (m *Intent) validateCreateAPIKeysIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateAPIKeysIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateAPIKeysIntentV2 != nil {
+		if err := m.CreateAPIKeysIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
 			}
 			return err
 		}
@@ -1798,6 +1824,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateAPIKeysIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateAPIOnlyUsersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2149,6 +2179,27 @@ func (m *Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, formats
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateAPIKeysIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAPIKeysIntentV2 != nil {
+
+		if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.CreateAPIKeysIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
 			}
 			return err
 		}

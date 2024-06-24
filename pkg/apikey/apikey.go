@@ -12,9 +12,19 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"strings"
 
+	dcrec "github.com/decred/dcrd/dcrec/secp256k1/v4"
+	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+)
+
+type signatureScheme string
+
+const (
+	SchemeP256      = signatureScheme("SIGNATURE_SCHEME_TK_API_P256")
+	SchemeSECP256K1 = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1")
 )
 
 // Metadata stores non-secret metadata about the API key.
@@ -22,6 +32,7 @@ type Metadata struct {
 	Name          string   `json:"name"`
 	Organizations []string `json:"organizations"`
 	PublicKey     string   `json:"public_key"`
+	Scheme        string   `json:"scheme"`
 }
 
 // Key defines a structure in which to hold both serialized and ecdsa-lib-friendly versions of a Turnkey API keypair.
@@ -31,13 +42,12 @@ type Key struct {
 	TkPrivateKey string `json:"-"` // do not store the private key in the metadata file
 	TkPublicKey  string `json:"public_key"`
 
+	scheme signatureScheme
+
 	// Underlying ECDSA keypair
 	privateKey *ecdsa.PrivateKey
 	publicKey  *ecdsa.PublicKey
 }
-
-// TurnkeyAPISignatureScheme is the signature scheme to use for the API request signature.
-const TurnkeyAPISignatureScheme = "SIGNATURE_SCHEME_TK_API_P256"
 
 // APIStamp defines the stamp format used to authenticate payloads to the API.
 type APIStamp struct {
@@ -48,11 +58,11 @@ type APIStamp struct {
 	Signature string `json:"signature"`
 
 	// Signature scheme. Must be set to "SIGNATURE_SCHEME_TK_API_P256"
-	Scheme string `json:"scheme"`
+	Scheme signatureScheme `json:"scheme"`
 }
 
 // New generates a new Turnkey API key.
-func New(organizationID string) (*Key, error) {
+func New(organizationID string, scheme signatureScheme) (*Key, error) {
 	if organizationID == "" {
 		return nil, fmt.Errorf("please supply a valid Organization UUID")
 	}
@@ -61,18 +71,34 @@ func New(organizationID string) (*Key, error) {
 		return nil, fmt.Errorf("failed to parse organization ID")
 	}
 
-	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	var curve elliptic.Curve
+
+	switch scheme {
+	case SchemeP256:
+		curve = elliptic.P256()
+	case SchemeSECP256K1:
+		curve = secp256k1.S256()
+	default:
+		// should be unreachable since scheme type is non-exported with discreet options
+		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
+	}
+
+	privateKey, err := ecdsa.GenerateKey(curve, rand.Reader)
 	if err != nil {
 		return nil, err
 	}
 
-	apiKey, err := FromECDSAPrivateKey(privateKey)
+	apiKey, err := FromECDSAPrivateKey(privateKey, scheme)
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Printf("tk pub %s, pub %s\n", apiKey.TkPublicKey, apiKey.PublicKey)
 
 	apiKey.Metadata.Organizations = append(apiKey.Metadata.Organizations, organizationID)
 	apiKey.Metadata.PublicKey = apiKey.PublicKey
+	apiKey.Metadata.Scheme = string(scheme)
+	apiKey.scheme = scheme
 
 	return apiKey, nil
 }
@@ -102,7 +128,7 @@ func EncodePublicKey(publicKey *ecdsa.PublicKey) string {
 
 // FromECDSAPrivateKey takes an ECDSA keypair and forms a Turnkey API key from it.
 // Assumes that privateKey.PublicKey has already been derived.
-func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey) (*Key, error) {
+func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey, scheme signatureScheme) (*Key, error) {
 	if privateKey == nil || privateKey.PublicKey.X == nil {
 		return nil, errors.New("empty key")
 	}
@@ -114,11 +140,12 @@ func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey) (*Key, error) {
 		TkPublicKey:  EncodePublicKey(publicKey),
 		publicKey:    publicKey,
 		privateKey:   privateKey,
+		scheme:       scheme,
 	}, nil
 }
 
 // FromTurnkeyPrivateKey takes a Turnkey-encoded private key, derives a public key from it, and then returns the corresponding Turnkey API key.
-func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
+func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*Key, error) {
 	bytes, err := hex.DecodeString(encodedPrivateKey)
 	if err != nil {
 		return nil, err
@@ -132,11 +159,23 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 		D:         dValue,
 	}
 
+	var curve elliptic.Curve
+
 	// Derive the public key
-	privateKey.PublicKey.Curve = elliptic.P256()
+	switch scheme {
+	case SchemeP256:
+		curve = elliptic.P256()
+	case SchemeSECP256K1:
+		curve = secp256k1.S256()
+	default:
+		// should be unreachable since scheme type is non-exported with discreet options
+		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
+	}
+
+	privateKey.PublicKey.Curve = curve
 	privateKey.PublicKey.X, privateKey.PublicKey.Y = privateKey.PublicKey.Curve.ScalarBaseMult(privateKey.D.Bytes())
 
-	apiKey, err := FromECDSAPrivateKey(&privateKey)
+	apiKey, err := FromECDSAPrivateKey(&privateKey, scheme)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +184,9 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string) (*Key, error) {
 }
 
 // DecodeTurnkeyPublicKey takes a Turnkey-encoded public key and creates an ECDSA public key.
-func DecodeTurnkeyPublicKey(encodedPublicKey string) (*ecdsa.PublicKey, error) {
+func DecodeTurnkeyPublicKey(encodedPublicKey string, scheme signatureScheme) (*ecdsa.PublicKey, error) {
+	fmt.Printf("scheme in decode public key %s\n", scheme)
+
 	bytes, err := hex.DecodeString(encodedPublicKey)
 	if err != nil {
 		return nil, err
@@ -155,10 +196,32 @@ func DecodeTurnkeyPublicKey(encodedPublicKey string) (*ecdsa.PublicKey, error) {
 		return nil, fmt.Errorf("expected a 33-bytes-long public key (compressed). Got %d bytes", len(bytes))
 	}
 
-	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), bytes)
+	var x, y *big.Int
+
+	var curve elliptic.Curve
+
+	// Derive the public key
+	switch scheme {
+	case SchemeP256:
+		curve = elliptic.P256()
+		x, y = elliptic.UnmarshalCompressed(curve, bytes)
+	case SchemeSECP256K1:
+		curve = secp256k1.S256()
+
+		pubkey, err := dcrec.ParsePubKey(bytes)
+		if err != nil {
+			return nil, fmt.Errorf("cannot parse bytes into secp256k1 public key")
+		}
+
+		x = pubkey.X()
+		y = pubkey.Y()
+	default:
+		// should be unreachable since scheme type is non-exported with discreet options
+		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
+	}
 
 	return &ecdsa.PublicKey{
-		Curve: elliptic.P256(),
+		Curve: curve,
 		X:     x,
 		Y:     y,
 	}, nil
@@ -177,7 +240,7 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 	stamp := APIStamp{
 		PublicKey: apiKey.TkPublicKey,
 		Signature: hex.EncodeToString(sigBytes),
-		Scheme:    TurnkeyAPISignatureScheme,
+		Scheme:    apiKey.scheme,
 	}
 
 	jsonStamp, err := json.Marshal(stamp)
@@ -201,6 +264,16 @@ func (k Key) GetPrivateKey() string {
 // GetMetadata gets the key's metadata.
 func (k Key) GetMetadata() Metadata {
 	return k.Metadata
+}
+
+// GetCurve returns the curve used
+func (k Key) GetCurve() string {
+	switch k.scheme {
+	case SchemeSECP256K1:
+		return "secp256k1"
+	default:
+	}
+	return "p256"
 }
 
 // LoadMetadata loads a JSON metadata file.
@@ -228,6 +301,26 @@ func (k Key) MergeMetadata(md Metadata) error {
 	k.Metadata.Name = md.Name
 	k.Metadata.Organizations = md.Organizations
 	k.Metadata.PublicKey = md.PublicKey
+	k.Metadata.Scheme = md.Scheme
 
 	return nil
+}
+
+func ExtractCurveTypeFromSuffixedPrivateKey(data string) (string, signatureScheme, error) {
+	symbolMap := map[string]signatureScheme{
+		"p256":      SchemeP256,
+		"secp256k1": SchemeSECP256K1,
+	}
+
+	pieces := strings.Split(data, ":")
+
+	if len(pieces) == 1 {
+		return pieces[0], SchemeP256, nil
+	}
+
+	if scheme, ok := symbolMap[pieces[1]]; ok {
+		return pieces[0], scheme, nil
+	}
+
+	return "", signatureScheme(""), errors.New("improperly formatted raw key string")
 }

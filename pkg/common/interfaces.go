@@ -5,6 +5,7 @@ package common
 type IKey[M IMetadata] interface {
 	GetPublicKey() string
 	GetPrivateKey() string
+	GetCurve() string
 	GetMetadata() M
 	LoadMetadata(s string) (*M, error)
 	MergeMetadata(m M) error
