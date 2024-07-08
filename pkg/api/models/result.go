@@ -60,6 +60,9 @@ type Result struct {
 	// create read only session result
 	CreateReadOnlySessionResult *CreateReadOnlySessionResult `json:"createReadOnlySessionResult,omitempty"`
 
+	// create read write session result
+	CreateReadWriteSessionResult *CreateReadWriteSessionResult `json:"createReadWriteSessionResult,omitempty"`
+
 	// create sub organization result
 	CreateSubOrganizationResult *CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
 
@@ -244,6 +247,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateReadOnlySessionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateReadWriteSessionResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -671,6 +678,25 @@ func (m *Result) validateCreateReadOnlySessionResult(formats strfmt.Registry) er
 				return ve.ValidateName("createReadOnlySessionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadOnlySessionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateReadWriteSessionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadWriteSessionResult) { // not required
+		return nil
+	}
+
+	if m.CreateReadWriteSessionResult != nil {
+		if err := m.CreateReadWriteSessionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionResult")
 			}
 			return err
 		}
@@ -1499,6 +1525,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateReadWriteSessionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1951,6 +1981,27 @@ func (m *Result) contextValidateCreateReadOnlySessionResult(ctx context.Context,
 				return ve.ValidateName("createReadOnlySessionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadOnlySessionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateReadWriteSessionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadWriteSessionResult != nil {
+
+		if swag.IsZero(m.CreateReadWriteSessionResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadWriteSessionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionResult")
 			}
 			return err
 		}
