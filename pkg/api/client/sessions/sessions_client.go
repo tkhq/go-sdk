@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateReadOnlySession(params *CreateReadOnlySessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateReadOnlySessionOK, error)
 
+	CreateReadWriteSession(params *CreateReadWriteSessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateReadWriteSessionOK, error)
+
 	GetWhoami(params *GetWhoamiParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWhoamiOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -75,6 +77,47 @@ func (a *Client) CreateReadOnlySession(params *CreateReadOnlySessionParams, auth
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateReadOnlySession: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+CreateReadWriteSession creates read write session
+
+Create a read write session for a user
+*/
+func (a *Client) CreateReadWriteSession(params *CreateReadWriteSessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateReadWriteSessionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateReadWriteSessionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateReadWriteSession",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_read_write_session",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateReadWriteSessionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateReadWriteSessionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateReadWriteSession: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

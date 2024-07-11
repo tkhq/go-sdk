@@ -33,6 +33,9 @@ type Intent struct {
 	// create Api keys intent
 	CreateAPIKeysIntent *CreateAPIKeysIntent `json:"createApiKeysIntent,omitempty"`
 
+	// create Api keys intent v2
+	CreateAPIKeysIntentV2 *CreateAPIKeysIntentV2 `json:"createApiKeysIntentV2,omitempty"`
+
 	// create Api only users intent
 	CreateAPIOnlyUsersIntent *CreateAPIOnlyUsersIntent `json:"createApiOnlyUsersIntent,omitempty"`
 
@@ -77,6 +80,9 @@ type Intent struct {
 
 	// create read only session intent
 	CreateReadOnlySessionIntent CreateReadOnlySessionIntent `json:"createReadOnlySessionIntent,omitempty"`
+
+	// create read write session intent
+	CreateReadWriteSessionIntent *CreateReadWriteSessionIntent `json:"createReadWriteSessionIntent,omitempty"`
 
 	// create sub organization intent
 	CreateSubOrganizationIntent *CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
@@ -247,6 +253,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateAPIKeysIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateAPIOnlyUsersIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -300,6 +310,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatePrivateKeysIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateReadWriteSessionIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -596,6 +610,25 @@ func (m *Intent) validateCreateAPIKeysIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateCreateAPIKeysIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateAPIKeysIntentV2 != nil {
+		if err := m.CreateAPIKeysIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateAPIOnlyUsersIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateAPIOnlyUsersIntent) { // not required
 		return nil
@@ -854,6 +887,25 @@ func (m *Intent) validateCreatePrivateKeysIntentV2(formats strfmt.Registry) erro
 				return ve.ValidateName("createPrivateKeysIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateReadWriteSessionIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadWriteSessionIntent) { // not required
+		return nil
+	}
+
+	if m.CreateReadWriteSessionIntent != nil {
+		if err := m.CreateReadWriteSessionIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntent")
 			}
 			return err
 		}
@@ -1798,6 +1850,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateAPIKeysIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateAPIOnlyUsersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1851,6 +1907,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateCreatePrivateKeysIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateReadWriteSessionIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2157,6 +2217,27 @@ func (m *Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, formats
 	return nil
 }
 
+func (m *Intent) contextValidateCreateAPIKeysIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAPIKeysIntentV2 != nil {
+
+		if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.CreateAPIKeysIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateAPIOnlyUsersIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateAPIOnlyUsersIntent != nil {
@@ -2443,6 +2524,27 @@ func (m *Intent) contextValidateCreatePrivateKeysIntentV2(ctx context.Context, f
 				return ve.ValidateName("createPrivateKeysIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createPrivateKeysIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateReadWriteSessionIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadWriteSessionIntent != nil {
+
+		if swag.IsZero(m.CreateReadWriteSessionIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadWriteSessionIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntent")
 			}
 			return err
 		}

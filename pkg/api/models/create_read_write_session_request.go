@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CreateAPIKeysRequest create Api keys request
+// CreateReadWriteSessionRequest create read write session request
 //
-// swagger:model CreateApiKeysRequest
-type CreateAPIKeysRequest struct {
+// swagger:model CreateReadWriteSessionRequest
+type CreateReadWriteSessionRequest struct {
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +26,7 @@ type CreateAPIKeysRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *CreateAPIKeysIntentV2 `json:"parameters"`
+	Parameters *CreateReadWriteSessionIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +34,12 @@ type CreateAPIKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_API_KEYS_V2]
+	// Enum: [ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION]
 	Type *string `json:"type"`
 }
 
-// Validate validates this create Api keys request
-func (m *CreateAPIKeysRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this create read write session request
+func (m *CreateReadWriteSessionRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *CreateAPIKeysRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CreateAPIKeysRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *CreateReadWriteSessionRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *CreateAPIKeysRequest) validateOrganizationID(formats strfmt.Registry) e
 	return nil
 }
 
-func (m *CreateAPIKeysRequest) validateParameters(formats strfmt.Registry) error {
+func (m *CreateReadWriteSessionRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +93,7 @@ func (m *CreateAPIKeysRequest) validateParameters(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *CreateAPIKeysRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *CreateReadWriteSessionRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +102,33 @@ func (m *CreateAPIKeysRequest) validateTimestampMs(formats strfmt.Registry) erro
 	return nil
 }
 
-var createApiKeysRequestTypeTypePropEnum []interface{}
+var createReadWriteSessionRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_API_KEYS_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		createApiKeysRequestTypeTypePropEnum = append(createApiKeysRequestTypeTypePropEnum, v)
+		createReadWriteSessionRequestTypeTypePropEnum = append(createReadWriteSessionRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYSV2 captures enum value "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
-	CreateAPIKeysRequestTypeACTIVITYTYPECREATEAPIKEYSV2 string = "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
+	// CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSION captures enum value "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
+	CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSION string = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
 )
 
 // prop value enum
-func (m *CreateAPIKeysRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, createApiKeysRequestTypeTypePropEnum, true); err != nil {
+func (m *CreateReadWriteSessionRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, createReadWriteSessionRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *CreateAPIKeysRequest) validateType(formats strfmt.Registry) error {
+func (m *CreateReadWriteSessionRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +142,8 @@ func (m *CreateAPIKeysRequest) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this create Api keys request based on the context it is used
-func (m *CreateAPIKeysRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this create read write session request based on the context it is used
+func (m *CreateReadWriteSessionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +156,7 @@ func (m *CreateAPIKeysRequest) ContextValidate(ctx context.Context, formats strf
 	return nil
 }
 
-func (m *CreateAPIKeysRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *CreateReadWriteSessionRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 
@@ -174,7 +174,7 @@ func (m *CreateAPIKeysRequest) contextValidateParameters(ctx context.Context, fo
 }
 
 // MarshalBinary interface implementation
-func (m *CreateAPIKeysRequest) MarshalBinary() ([]byte, error) {
+func (m *CreateReadWriteSessionRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -182,8 +182,8 @@ func (m *CreateAPIKeysRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CreateAPIKeysRequest) UnmarshalBinary(b []byte) error {
-	var res CreateAPIKeysRequest
+func (m *CreateReadWriteSessionRequest) UnmarshalBinary(b []byte) error {
+	var res CreateReadWriteSessionRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
