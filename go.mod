@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/cloudflare/circl v1.3.7
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1
 	github.com/ethereum/go-ethereum v1.14.5
 	github.com/go-openapi/errors v0.20.4
 	github.com/go-openapi/runtime v0.26.0

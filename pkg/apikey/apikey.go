@@ -20,13 +20,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type signatureScheme string
-
-const (
-	SchemeP256      = signatureScheme("SIGNATURE_SCHEME_TK_API_P256")
-	SchemeSECP256K1 = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1")
-)
-
 // Metadata stores non-secret metadata about the API key.
 type Metadata struct {
 	Name          string   `json:"name"`
