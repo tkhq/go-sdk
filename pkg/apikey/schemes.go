@@ -11,6 +11,7 @@ const (
 	SchemeUnsupported = signatureScheme("")
 	SchemeP256        = signatureScheme("SIGNATURE_SCHEME_TK_API_P256")
 	SchemeSECP256K1   = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1")
+	SchemeED25519     = signatureScheme("SIGNATURE_SCHEME_TK_API_ED25519")
 )
 
 func CurveToScheme(curve Curve) signatureScheme {
