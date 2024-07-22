@@ -118,13 +118,14 @@ func Test_Sign_SECP256K1(t *testing.T) {
 }
 
 func Test_Sign_ED25519(t *testing.T) {
-	tkPrivateKey := "4a75145aaa0a0ebdd6f8dea28410b8749cabe7355b5ff8e924ecf4197b6f4d872b19840560a4af14976d1ae70f5c04199d2c99385eac7be462d33b64610140d5"
-	tkPubKey := "2b19840560a4af14976d1ae70f5c04199d2c99385eac7be462d33b64610140d5"
+	tkPrivateKey := "3514c6f83c8fb2facfd1947d6332d8f38512dd945f3cb87b9b6ea3b877b564388ba00e7ee515fc82b53d525802d3769d66a0e1cc8b9927b6ca854d1a1e7d3211"
+	tkPubKey := "8ba00e7ee515fc82b53d525802d3769d66a0e1cc8b9927b6ca854d1a1e7d3211"
+	msg := "MESSAGE"
 
 	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeED25519)
 	require.NoError(t, err)
 
-	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
+	stampHeader, err := apikey.Stamp([]byte(msg), apiKey)
 	require.NoError(t, err)
 
 	testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
@@ -145,15 +146,13 @@ func Test_Sign_ED25519(t *testing.T) {
 
 	pubKey := ed25519.PublicKey(pubKeyBytes)
 
-	// Verify the soundness of the hash:
-	//   $ echo -n 'hello' | shasum -a256
-	//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
-	msgHash := sha256.Sum256([]byte("hello"))
-	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
-
 	// Finally, check the signature itself
-	verifiedSig := ed25519.Verify(pubKey, msgHash[:], sigBytes)
+	verifiedSig := ed25519.Verify(pubKey, []byte(msg), sigBytes)
 	assert.True(t, verifiedSig)
+
+	// Also check it manually against expected result
+	expected := "fb8d09d2fa817ac0f99c99c3a65a2a8ea2a4c9b95008c22b4ba79a7d0227ed65f832234491a588f827fa33dbdda5bb47537be0166729d0f9f4d1f20d8e61b405"
+	assert.Equal(t, expected, hex.EncodeToString(sigBytes))
 }
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {

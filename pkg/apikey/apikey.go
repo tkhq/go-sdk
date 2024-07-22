@@ -299,7 +299,7 @@ func Stamp(message []byte, apiKey *Key) (out string, err error) {
 			return "", err
 		}
 	case SchemeED25519:
-		signature = signED25519(hash[:], *apiKey.ed25519PrivKey)
+		signature = signED25519(message, *apiKey.ed25519PrivKey)
 	default:
 		return "", fmt.Errorf("unsupported signature scheme: %s", apiKey.scheme)
 	}
