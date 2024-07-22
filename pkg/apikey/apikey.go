@@ -4,7 +4,6 @@ package apikey
 import (
 	"crypto/ecdsa"
 	"crypto/ed25519"
-	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -117,18 +116,16 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*K
 // Stamp generates a signing stamp for the given message with the given API key.
 // The resulting stamp should be added as the "X-Stamp" header of an API request.
 func Stamp(message []byte, apiKey *Key) (out string, err error) {
-	hash := sha256.Sum256(message)
-
 	var signature string
 
 	switch apiKey.scheme {
 	case SchemeP256:
-		signature, err = signECDSA(hash[:], apiKey.ecdsaPrivKey)
+		signature, err = signECDSA(message, apiKey.ecdsaPrivKey)
 		if err != nil {
 			return "", err
 		}
 	case SchemeSECP256K1:
-		signature, err = signECDSA(hash[:], apiKey.ecdsaPrivKey)
+		signature, err = signECDSA(message, apiKey.ecdsaPrivKey)
 		if err != nil {
 			return "", err
 		}

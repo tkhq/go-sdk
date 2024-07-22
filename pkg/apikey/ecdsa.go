@@ -4,6 +4,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"math/big"
@@ -156,8 +157,10 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	return apiKey, nil
 }
 
-func signECDSA(hash []byte, privKey *ecdsa.PrivateKey) (string, error) {
-	sigBytes, err := ecdsa.SignASN1(rand.Reader, privKey, hash)
+func signECDSA(message []byte, privKey *ecdsa.PrivateKey) (string, error) {
+	hash := sha256.Sum256(message)
+
+	sigBytes, err := ecdsa.SignASN1(rand.Reader, privKey, hash[:])
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate signature")
 	}

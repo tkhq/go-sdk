@@ -54,6 +54,6 @@ func fromTurnkeyED25519Key(encodedPrivateKey string) (*Key, error) {
 	return FromED25519PrivateKey(ed25519.PrivateKey(privateKeyBytes))
 }
 
-func signED25519(hash []byte, privKey ed25519.PrivateKey) string {
-	return hex.EncodeToString(ed25519.Sign(privKey, hash))
+func signED25519(message []byte, privKey ed25519.PrivateKey) string {
+	return hex.EncodeToString(ed25519.Sign(privKey, message))
 }
