@@ -67,7 +67,7 @@ func Test_Sign_P256(t *testing.T) {
 	sigBytes, err := hex.DecodeString(stamp.Signature)
 	require.NoError(t, err)
 
-	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey, apikey.SchemeP256)
+	publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.SchemeP256)
 	require.NoError(t, err)
 
 	// Verify the soundness of the hash:
@@ -103,7 +103,7 @@ func Test_Sign_SECP256K1(t *testing.T) {
 	sigBytes, err := hex.DecodeString(stamp.Signature)
 	require.NoError(t, err)
 
-	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey, apikey.SchemeSECP256K1)
+	publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.SchemeSECP256K1)
 	require.NoError(t, err)
 
 	// Verify the soundness of the hash:
