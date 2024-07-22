@@ -47,7 +47,8 @@ type APIStamp struct {
 	// Signature is the P-256 signature bytes, hex-encoded
 	Signature string `json:"signature"`
 
-	// Signature scheme. Must be set to "SIGNATURE_SCHEME_TK_API_P256"
+	// Signature scheme. Can be set to "SIGNATURE_SCHEME_TK_API_P256", "SIGNATURE_SCHEME_TK_API_SECP256K1",
+	// or "SIGNATURE_SCHEME_TK_API_ED25519"
 	Scheme signatureScheme `json:"scheme"`
 }
 
