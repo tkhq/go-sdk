@@ -220,7 +220,7 @@ func (k Key) LoadMetadata(fn string) (*Metadata, error) {
 }
 
 // MergeMetadata merges the given metadata with the api key.
-func (k Key) MergeMetadata(md Metadata) error {
+func (k *Key) MergeMetadata(md Metadata) error {
 	if k.TkPublicKey != md.PublicKey {
 		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
 	}

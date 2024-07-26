@@ -14,7 +14,7 @@ import (
 // Store provides an interface in which API or Encryption keys may be stored and retrieved.
 type Store[T common.IKey[M], M common.IMetadata] interface {
 	// Load pulls a key from the store.
-	Load(name string) (*T, error)
+	Load(name string) (T, error)
 
 	// Store saves the key to the store.
 	Store(name string, key common.IKey[M]) error
@@ -40,14 +40,14 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 		}
 		// Since T is an interface, we need to return the concrete type that implements T.
 		// The conversion to T happens automatically if the concrete type satisfies T.
-		return *(interface{}(key).(*T)), nil
+		return (interface{}(key).(T)), nil
 	} else if typeOfT == reflect.TypeOf(encryptionkey.Key{}) {
 		key, err := encryptionkey.FromTurnkeyPrivateKey(data)
 		if err != nil {
 			return instance, err
 		}
 		// Same automatic conversion to T applies here.
-		return *(interface{}(key).(*T)), nil
+		return (interface{}(key).(T)), nil
 	}
 
 	return instance, errors.Errorf("unsupported key type: %v", reflect.TypeOf(instance))

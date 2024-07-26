@@ -31,11 +31,11 @@ func main() {
 		log.Fatalln("failed to generate API key:", err)
 	}
 
-	if err = local.New[apikey.Key, apikey.Metadata]().Store(keyName, key); err != nil {
+	if err = local.New[*apikey.Key, apikey.Metadata]().Store(keyName, key); err != nil {
 		log.Fatalln("failed to store new API key:", err)
 	}
 
-	if key, err = local.New[apikey.Key, apikey.Metadata]().Load(keyName); err != nil {
+	if key, err = local.New[*apikey.Key, apikey.Metadata]().Load(keyName); err != nil {
 		log.Fatalln("failed to load new API key:", err)
 	}
 
