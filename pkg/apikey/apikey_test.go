@@ -89,3 +89,16 @@ func Test_EncodedKeySizeIsFixed(t *testing.T) {
 		assert.Len(t, apiKey.TkPrivateKey, 64, "attempt %d: expected 64 characters for private key %s", i, apiKey.TkPrivateKey)
 	}
 }
+
+func Test_MetadataMergeWorks(t *testing.T) {
+	k, err := apikey.New(uuid.NewString())
+	require.NoError(t, err)
+	assert.Equal(t, "", k.GetMetadata().Name)
+
+	err = k.MergeMetadata(apikey.Metadata{
+		Name:      "Custom Name",
+		PublicKey: k.TkPublicKey,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "Custom Name", k.GetMetadata().Name)
+}

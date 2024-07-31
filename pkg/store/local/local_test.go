@@ -62,7 +62,7 @@ func TestGetAPIKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New[apikey.Key, apikey.Metadata]()
+	s := local.New[*apikey.Key, apikey.Metadata]()
 
 	require.Error(t, s.SetAPIKeysDirectory("/does/not/exist"))
 
@@ -79,7 +79,7 @@ func TestGetEncryptionKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New[encryptionkey.Key, encryptionkey.Metadata]()
+	s := local.New[*encryptionkey.Key, encryptionkey.Metadata]()
 
 	require.Error(t, s.SetEncryptionKeysDirectory("/does/not/exist"))
 
