@@ -19,3 +19,16 @@ func Test_EncodedKeySizeIsFixed(t *testing.T) {
 		assert.Len(t, encryptionKey.TkPrivateKey, 64, "attempt %d: expected 64 characters for private key %s", i, encryptionKey.TkPrivateKey)
 	}
 }
+
+func Test_MetadataMergeWorks(t *testing.T) {
+	k, err := encryptionkey.New(uuid.NewString(), uuid.NewString())
+	assert.Nil(t, err)
+	assert.Equal(t, "", k.GetMetadata().Name)
+
+	err = k.MergeMetadata(encryptionkey.Metadata{
+		Name:      "Custom Name",
+		PublicKey: k.TkPublicKey,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, "Custom Name", k.GetMetadata().Name)
+}
