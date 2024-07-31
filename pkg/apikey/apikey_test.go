@@ -92,13 +92,13 @@ func Test_EncodedKeySizeIsFixed(t *testing.T) {
 
 func Test_MetadataMergeWorks(t *testing.T) {
 	k, err := apikey.New(uuid.NewString())
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, "", k.GetMetadata().Name)
 
 	err = k.MergeMetadata(apikey.Metadata{
 		Name:      "Custom Name",
 		PublicKey: k.TkPublicKey,
 	})
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, "Custom Name", k.GetMetadata().Name)
 }
