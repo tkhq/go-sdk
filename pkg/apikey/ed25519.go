@@ -26,7 +26,7 @@ func FromED25519PrivateKey(privateKey ed25519.PrivateKey) (*Key, error) {
 	}, nil
 }
 
-// newED25519Key generates a new random ed25519 key pair
+// newED25519Key generates a new random ed25519 key pair.
 func newED25519Key() (*Key, error) {
 	_, privKey, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
@@ -37,7 +37,7 @@ func newED25519Key() (*Key, error) {
 }
 
 // fromTurnkeyED25519Key extracts an ed25519 private key from a TK-encoded string and uses it to form
-// a Turnkey API key
+// a Turnkey API key.
 func fromTurnkeyED25519Key(encodedPrivateKey string) (*Key, error) {
 	// Decode the hex string to bytes
 	privateKeyBytes, err := hex.DecodeString(encodedPrivateKey)

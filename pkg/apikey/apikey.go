@@ -63,6 +63,7 @@ func New(organizationID string, scheme signatureScheme) (*Key, error) {
 	}
 
 	var apiKey *Key
+
 	var err error
 
 	// generate key pair data
@@ -165,16 +166,19 @@ func (k Key) GetMetadata() Metadata {
 	return k.Metadata
 }
 
-// GetCurve returns the curve used; defaults to p256 for backwards compatibilty with keys
-// created before there were multiple supported types
+// GetCurve returns the curve used; defaults to p256 for backwards compatibility with keys
+// created before there were multiple supported types.
 func (k Key) GetCurve() string {
 	switch k.scheme {
 	case SchemeSECP256K1:
 		return string(CurveSecp256k1)
 	case SchemeED25519:
 		return string(CurveEd25519)
+	case SchemeP256:
+		return string(CurveP256)
 	default:
 	}
+
 	return string(CurveP256)
 }
 

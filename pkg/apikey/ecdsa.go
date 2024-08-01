@@ -97,7 +97,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 	}, nil
 }
 
-// newECDSAKey creates a new ECDSA private key
+// newECDSAKey creates a new ECDSA private key.
 func newECDSAKey(scheme signatureScheme) (*Key, error) {
 	var curve elliptic.Curve
 
@@ -119,6 +119,7 @@ func newECDSAKey(scheme signatureScheme) (*Key, error) {
 	return FromECDSAPrivateKey(privateKey, scheme)
 }
 
+// fromTurnkeyECDSAKey instantiates an ApiKey struct using a tk-encoded ECDSA key and scheme.
 func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key, error) {
 	bytes, err := hex.DecodeString(encodedPrivateKey)
 	if err != nil {
@@ -157,6 +158,7 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	return apiKey, nil
 }
 
+// signECDSA signs a message using an ecdsa private key.
 func signECDSA(message []byte, privKey *ecdsa.PrivateKey) (string, error) {
 	hash := sha256.Sum256(message)
 
