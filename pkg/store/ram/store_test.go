@@ -14,7 +14,7 @@ import (
 func TestApiKeyStore(t *testing.T) {
 	s := new(ram.Store[*apikey.Key, apikey.Metadata])
 
-	key, err := apikey.New("2a7e29e2-9e92-48c2-98bf-c849c1159bc7")
+	key, err := apikey.New("2a7e29e2-9e92-48c2-98bf-c849c1159bc7", apikey.SchemeP256)
 	require.NoError(t, err)
 	assert.NotNil(t, key)
 
