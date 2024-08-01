@@ -59,8 +59,7 @@ func main() {
 The following assumes you have Go 1.20 installed locally:
 1. Install [go-swagger](https://goswagger.io/install.html):
 ```
-brew tap go-swagger/go-swagger
-brew install go-swagger
+go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.5
 ```
 2. Update the swagger file in `api/` with a new one
 3. Run `make generate`
