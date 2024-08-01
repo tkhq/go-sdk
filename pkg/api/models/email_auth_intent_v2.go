@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// EmailAuthIntent email auth intent
+// EmailAuthIntentV2 email auth intent v2
 //
-// swagger:model EmailAuthIntent
-type EmailAuthIntent struct {
+// swagger:model EmailAuthIntentV2
+type EmailAuthIntentV2 struct {
 
 	// Optional human-readable name for an API Key. If none provided, default to Email Auth - <Timestamp>
 	APIKeyName string `json:"apiKeyName,omitempty"`
@@ -40,8 +40,8 @@ type EmailAuthIntent struct {
 	TargetPublicKey *string `json:"targetPublicKey"`
 }
 
-// Validate validates this email auth intent
-func (m *EmailAuthIntent) Validate(formats strfmt.Registry) error {
+// Validate validates this email auth intent v2
+func (m *EmailAuthIntentV2) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
@@ -62,7 +62,7 @@ func (m *EmailAuthIntent) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EmailAuthIntent) validateEmail(formats strfmt.Registry) error {
+func (m *EmailAuthIntentV2) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
 		return err
@@ -71,7 +71,7 @@ func (m *EmailAuthIntent) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EmailAuthIntent) validateEmailCustomization(formats strfmt.Registry) error {
+func (m *EmailAuthIntentV2) validateEmailCustomization(formats strfmt.Registry) error {
 	if swag.IsZero(m.EmailCustomization) { // not required
 		return nil
 	}
@@ -90,7 +90,7 @@ func (m *EmailAuthIntent) validateEmailCustomization(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *EmailAuthIntent) validateTargetPublicKey(formats strfmt.Registry) error {
+func (m *EmailAuthIntentV2) validateTargetPublicKey(formats strfmt.Registry) error {
 
 	if err := validate.Required("targetPublicKey", "body", m.TargetPublicKey); err != nil {
 		return err
@@ -99,8 +99,8 @@ func (m *EmailAuthIntent) validateTargetPublicKey(formats strfmt.Registry) error
 	return nil
 }
 
-// ContextValidate validate this email auth intent based on the context it is used
-func (m *EmailAuthIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this email auth intent v2 based on the context it is used
+func (m *EmailAuthIntentV2) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateEmailCustomization(ctx, formats); err != nil {
@@ -113,7 +113,7 @@ func (m *EmailAuthIntent) ContextValidate(ctx context.Context, formats strfmt.Re
 	return nil
 }
 
-func (m *EmailAuthIntent) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
+func (m *EmailAuthIntentV2) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EmailCustomization != nil {
 
@@ -135,7 +135,7 @@ func (m *EmailAuthIntent) contextValidateEmailCustomization(ctx context.Context,
 }
 
 // MarshalBinary interface implementation
-func (m *EmailAuthIntent) MarshalBinary() ([]byte, error) {
+func (m *EmailAuthIntentV2) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -143,8 +143,8 @@ func (m *EmailAuthIntent) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EmailAuthIntent) UnmarshalBinary(b []byte) error {
-	var res EmailAuthIntent
+func (m *EmailAuthIntentV2) UnmarshalBinary(b []byte) error {
+	var res EmailAuthIntentV2
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
