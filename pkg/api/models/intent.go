@@ -33,6 +33,9 @@ type Intent struct {
 	// create Api keys intent
 	CreateAPIKeysIntent *CreateAPIKeysIntent `json:"createApiKeysIntent,omitempty"`
 
+	// create Api keys intent v2
+	CreateAPIKeysIntentV2 *CreateAPIKeysIntentV2 `json:"createApiKeysIntentV2,omitempty"`
+
 	// create Api only users intent
 	CreateAPIOnlyUsersIntent *CreateAPIOnlyUsersIntent `json:"createApiOnlyUsersIntent,omitempty"`
 
@@ -78,6 +81,9 @@ type Intent struct {
 	// create read only session intent
 	CreateReadOnlySessionIntent CreateReadOnlySessionIntent `json:"createReadOnlySessionIntent,omitempty"`
 
+	// create read write session intent
+	CreateReadWriteSessionIntent *CreateReadWriteSessionIntent `json:"createReadWriteSessionIntent,omitempty"`
+
 	// create sub organization intent
 	CreateSubOrganizationIntent *CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
 
@@ -92,6 +98,9 @@ type Intent struct {
 
 	// create sub organization intent v5
 	CreateSubOrganizationIntentV5 *CreateSubOrganizationIntentV5 `json:"createSubOrganizationIntentV5,omitempty"`
+
+	// create sub organization intent v6
+	CreateSubOrganizationIntentV6 *CreateSubOrganizationIntentV6 `json:"createSubOrganizationIntentV6,omitempty"`
 
 	// create user tag intent
 	CreateUserTagIntent *CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
@@ -143,6 +152,9 @@ type Intent struct {
 
 	// email auth intent
 	EmailAuthIntent *EmailAuthIntent `json:"emailAuthIntent,omitempty"`
+
+	// email auth intent v2
+	EmailAuthIntentV2 *EmailAuthIntentV2 `json:"emailAuthIntentV2,omitempty"`
 
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
@@ -247,6 +259,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateAPIKeysIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateAPIOnlyUsersIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -303,6 +319,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateReadWriteSessionIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateSubOrganizationIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -320,6 +340,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateSubOrganizationIntentV5(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateSubOrganizationIntentV6(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -388,6 +412,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEmailAuthIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmailAuthIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -588,6 +616,25 @@ func (m *Intent) validateCreateAPIKeysIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateAPIKeysIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateAPIKeysIntentV2 != nil {
+		if err := m.CreateAPIKeysIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
 			}
 			return err
 		}
@@ -862,6 +909,25 @@ func (m *Intent) validateCreatePrivateKeysIntentV2(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *Intent) validateCreateReadWriteSessionIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadWriteSessionIntent) { // not required
+		return nil
+	}
+
+	if m.CreateReadWriteSessionIntent != nil {
+		if err := m.CreateReadWriteSessionIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateSubOrganizationIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateSubOrganizationIntent) { // not required
 		return nil
@@ -949,6 +1015,25 @@ func (m *Intent) validateCreateSubOrganizationIntentV5(formats strfmt.Registry) 
 				return ve.ValidateName("createSubOrganizationIntentV5")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateSubOrganizationIntentV6(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV6) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV6 != nil {
+		if err := m.CreateSubOrganizationIntentV6.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV6")
 			}
 			return err
 		}
@@ -1272,6 +1357,25 @@ func (m *Intent) validateEmailAuthIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("emailAuthIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailAuthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateEmailAuthIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmailAuthIntentV2) { // not required
+		return nil
+	}
+
+	if m.EmailAuthIntentV2 != nil {
+		if err := m.EmailAuthIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntentV2")
 			}
 			return err
 		}
@@ -1798,6 +1902,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateAPIKeysIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateAPIOnlyUsersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1854,6 +1962,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateReadWriteSessionIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1871,6 +1983,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateCreateSubOrganizationIntentV5(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateSubOrganizationIntentV6(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1939,6 +2055,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEmailAuthIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmailAuthIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2149,6 +2269,27 @@ func (m *Intent) contextValidateCreateAPIKeysIntent(ctx context.Context, formats
 				return ve.ValidateName("createApiKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createApiKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateAPIKeysIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateAPIKeysIntentV2 != nil {
+
+		if swag.IsZero(m.CreateAPIKeysIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.CreateAPIKeysIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createApiKeysIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createApiKeysIntentV2")
 			}
 			return err
 		}
@@ -2451,6 +2592,27 @@ func (m *Intent) contextValidateCreatePrivateKeysIntentV2(ctx context.Context, f
 	return nil
 }
 
+func (m *Intent) contextValidateCreateReadWriteSessionIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadWriteSessionIntent != nil {
+
+		if swag.IsZero(m.CreateReadWriteSessionIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadWriteSessionIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateSubOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationIntent != nil {
@@ -2548,6 +2710,27 @@ func (m *Intent) contextValidateCreateSubOrganizationIntentV5(ctx context.Contex
 				return ve.ValidateName("createSubOrganizationIntentV5")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateSubOrganizationIntentV6(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV6 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationIntentV6) { // not required
+			return nil
+		}
+
+		if err := m.CreateSubOrganizationIntentV6.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV6")
 			}
 			return err
 		}
@@ -2905,6 +3088,27 @@ func (m *Intent) contextValidateEmailAuthIntent(ctx context.Context, formats str
 				return ve.ValidateName("emailAuthIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailAuthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateEmailAuthIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailAuthIntentV2 != nil {
+
+		if swag.IsZero(m.EmailAuthIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.EmailAuthIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntentV2")
 			}
 			return err
 		}

@@ -2045,7 +2045,11 @@
         "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
         "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
         "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5",
-        "ACTIVITY_TYPE_OAUTH"
+        "ACTIVITY_TYPE_OAUTH",
+        "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
+        "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
+        "ACTIVITY_TYPE_EMAIL_AUTH_V2",
+        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
       ]
     },
     "AddressFormat": {
@@ -5411,6 +5415,18 @@
         },
         "oauthIntent": {
           "$ref": "#/definitions/OauthIntent"
+        },
+        "createApiKeysIntentV2": {
+          "$ref": "#/definitions/CreateApiKeysIntentV2"
+        },
+        "createReadWriteSessionIntent": {
+          "$ref": "#/definitions/CreateReadWriteSessionIntent"
+        },
+        "emailAuthIntentV2": {
+          "$ref": "#/definitions/EmailAuthIntentV2"
+        },
+        "createSubOrganizationIntentV6": {
+          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
         }
       }
     },
