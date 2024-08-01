@@ -45,76 +45,64 @@ func Test_FromTkPrivateKey(t *testing.T) {
 	assert.Equal(t, expectedPublicKey, apiKey.TkPublicKey)
 }
 
-func Test_Sign_P256(t *testing.T) {
-	tkPrivateKey := "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c"
+func Test_Sign_ECDSA(t *testing.T) {
+	type testCase struct {
+		name         string
+		tkPrivateKey string
+		tkPublicKey  string
+		curve        apikey.Curve
+	}
 
-	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeP256)
-	require.NoError(t, err)
+	testCases := []testCase{
+		{
+			name:         "p256",
+			tkPrivateKey: "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c",
+			tkPublicKey:  "02f739f8c77b32f4d5f13265861febd76e7a9c61a1140d296b8c16302508870316",
+			curve:        apikey.CurveP256,
+		},
+		{
+			name:         "secp256k1",
+			tkPrivateKey: "1e0d32856eb059ee6c9d7871ac1c0755b7ecca4b6302263448da30d10c91c50d",
+			tkPublicKey:  "032f1d146fc0de39f093bcb9f0b9ce667030c2b8a3ad0c3022cfae2c6a7a21d28a",
+			curve:        apikey.CurveSecp256k1,
+		},
+	}
 
-	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
-	require.NoError(t, err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(tt *testing.T) {
+			apiKey, err := apikey.FromTurnkeyPrivateKey(tc.tkPrivateKey, apikey.CurveToScheme(tc.curve))
+			require.NoError(tt, err)
 
-	testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
-	require.NoError(t, err)
+			stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
+			require.NoError(tt, err)
 
-	var stamp *apikey.APIStamp
+			testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
+			require.NoError(tt, err)
 
-	require.NoError(t, json.Unmarshal(testStamp, &stamp))
+			var stamp *apikey.APIStamp
 
-	assert.Equal(t, "02f739f8c77b32f4d5f13265861febd76e7a9c61a1140d296b8c16302508870316", stamp.PublicKey)
-	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_P256", string(stamp.Scheme))
+			require.NoError(tt, json.Unmarshal(testStamp, &stamp))
 
-	sigBytes, err := hex.DecodeString(stamp.Signature)
-	require.NoError(t, err)
+			assert.Equal(tt, tc.tkPublicKey, stamp.PublicKey)
+			assert.Equal(tt, apikey.CurveToScheme(tc.curve), stamp.Scheme)
 
-	publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.SchemeP256)
-	require.NoError(t, err)
+			sigBytes, err := hex.DecodeString(stamp.Signature)
+			require.NoError(tt, err)
 
-	// Verify the soundness of the hash:
-	//   $ echo -n 'hello' | shasum -a256
-	//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
-	msgHash := sha256.Sum256([]byte("hello"))
-	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
+			publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.CurveToScheme(tc.curve))
+			require.NoError(tt, err)
 
-	// Finally, check the signature itself
-	verifiedSig := ecdsa.VerifyASN1(publicKey, msgHash[:], sigBytes)
-	assert.True(t, verifiedSig)
-}
+			// Verify the soundness of the hash:
+			//   $ echo -n 'hello' | shasum -a256
+			//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
+			msgHash := sha256.Sum256([]byte("hello"))
+			assert.Equal(tt, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
 
-func Test_Sign_SECP256K1(t *testing.T) {
-	tkPrivateKey := "1e0d32856eb059ee6c9d7871ac1c0755b7ecca4b6302263448da30d10c91c50d"
-
-	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeSECP256K1)
-	require.NoError(t, err)
-
-	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
-	require.NoError(t, err)
-
-	testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
-	require.NoError(t, err)
-
-	var stamp *apikey.APIStamp
-
-	require.NoError(t, json.Unmarshal(testStamp, &stamp))
-
-	assert.Equal(t, "032f1d146fc0de39f093bcb9f0b9ce667030c2b8a3ad0c3022cfae2c6a7a21d28a", stamp.PublicKey)
-	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_SECP256K1", string(stamp.Scheme))
-
-	sigBytes, err := hex.DecodeString(stamp.Signature)
-	require.NoError(t, err)
-
-	publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.SchemeSECP256K1)
-	require.NoError(t, err)
-
-	// Verify the soundness of the hash:
-	//   $ echo -n 'hello' | shasum -a256
-	//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
-	msgHash := sha256.Sum256([]byte("hello"))
-	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
-
-	// Finally, check the signature itself
-	verifiedSig := ecdsa.VerifyASN1(publicKey, msgHash[:], sigBytes)
-	assert.True(t, verifiedSig)
+			// Finally, check the signature itself
+			verifiedSig := ecdsa.VerifyASN1(publicKey, msgHash[:], sigBytes)
+			assert.True(tt, verifiedSig)
+		})
+	}
 }
 
 func Test_Sign_ED25519(t *testing.T) {
