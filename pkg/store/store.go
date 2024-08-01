@@ -34,7 +34,12 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	}
 
 	if typeOfT == reflect.TypeOf(apikey.Key{}) {
-		key, err := apikey.FromTurnkeyPrivateKey(data)
+		keyWithoutSuffix, scheme, err := apikey.ExtractCurveTypeFromSuffixedPrivateKey(data)
+		if err != nil {
+			return instance, err
+		}
+
+		key, err := apikey.FromTurnkeyPrivateKey(keyWithoutSuffix, scheme)
 		if err != nil {
 			return instance, err
 		}

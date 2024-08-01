@@ -32,7 +32,7 @@ func Test_FromTkPrivateKey(t *testing.T) {
 	// 	ASN1 OID: prime256v1
 	// 	NIST CURVE: P-256
 	privateKeyFromOpenSSL := "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c"
-	apiKey, err := apikey.FromTurnkeyPrivateKey(privateKeyFromOpenSSL)
+	apiKey, err := apikey.FromTurnkeyPrivateKey(privateKeyFromOpenSSL, apikey.SchemeP256)
 	require.NoError(t, err)
 
 	// This value was computed based on an openssl-generated PEM file:
@@ -44,10 +44,10 @@ func Test_FromTkPrivateKey(t *testing.T) {
 	assert.Equal(t, expectedPublicKey, apiKey.TkPublicKey)
 }
 
-func Test_Sign(t *testing.T) {
+func Test_Sign_P256(t *testing.T) {
 	tkPrivateKey := "487f361ddfd73440e707f4daa6775b376859e8a3c9f29b3bb694a12927c0213c"
 
-	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey)
+	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeP256)
 	require.NoError(t, err)
 
 	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
@@ -61,12 +61,48 @@ func Test_Sign(t *testing.T) {
 	require.NoError(t, json.Unmarshal(testStamp, &stamp))
 
 	assert.Equal(t, "02f739f8c77b32f4d5f13265861febd76e7a9c61a1140d296b8c16302508870316", stamp.PublicKey)
-	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_P256", stamp.Scheme)
+	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_P256", string(stamp.Scheme))
 
 	sigBytes, err := hex.DecodeString(stamp.Signature)
 	require.NoError(t, err)
 
-	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey)
+	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey, apikey.SchemeP256)
+	require.NoError(t, err)
+
+	// Verify the soundness of the hash:
+	//   $ echo -n 'hello' | shasum -a256
+	//   2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824  -
+	msgHash := sha256.Sum256([]byte("hello"))
+	assert.Equal(t, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hex.EncodeToString(msgHash[:]))
+
+	// Finally, check the signature itself
+	verifiedSig := ecdsa.VerifyASN1(publicKey, msgHash[:], sigBytes)
+	assert.True(t, verifiedSig)
+}
+
+func Test_Sign_SECP256K1(t *testing.T) {
+	tkPrivateKey := "1e0d32856eb059ee6c9d7871ac1c0755b7ecca4b6302263448da30d10c91c50d"
+
+	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeSECP256K1)
+	require.NoError(t, err)
+
+	stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
+	require.NoError(t, err)
+
+	testStamp, err := base64.RawURLEncoding.DecodeString(stampHeader)
+	require.NoError(t, err)
+
+	var stamp *apikey.APIStamp
+
+	require.NoError(t, json.Unmarshal(testStamp, &stamp))
+
+	assert.Equal(t, "032f1d146fc0de39f093bcb9f0b9ce667030c2b8a3ad0c3022cfae2c6a7a21d28a", stamp.PublicKey)
+	assert.Equal(t, "SIGNATURE_SCHEME_TK_API_SECP256K1", string(stamp.Scheme))
+
+	sigBytes, err := hex.DecodeString(stamp.Signature)
+	require.NoError(t, err)
+
+	publicKey, err := apikey.DecodeTurnkeyPublicKey(stamp.PublicKey, apikey.SchemeSECP256K1)
 	require.NoError(t, err)
 
 	// Verify the soundness of the hash:
@@ -82,7 +118,7 @@ func Test_Sign(t *testing.T) {
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
 	for i := 0; i < 1000; i++ {
-		apiKey, err := apikey.New(uuid.NewString())
+		apiKey, err := apikey.New(uuid.NewString(), apikey.SchemeP256)
 		require.NoError(t, err)
 
 		assert.Len(t, apiKey.TkPublicKey, 66, "attempt %d: expected 66 characters for public key %s", i, apiKey.TkPublicKey)
