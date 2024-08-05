@@ -41,6 +41,12 @@ const (
 
 	// CredentialTypeAPIKeySecp256k1 captures enum value "CREDENTIAL_TYPE_API_KEY_SECP256K1"
 	CredentialTypeAPIKeySecp256k1 CredentialType = "CREDENTIAL_TYPE_API_KEY_SECP256K1"
+
+	// CredentialTypeEmailAuthKeyP256 captures enum value "CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256"
+	CredentialTypeEmailAuthKeyP256 CredentialType = "CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256"
+
+	// CredentialTypeAPIKeyEd25519 captures enum value "CREDENTIAL_TYPE_API_KEY_ED25519"
+	CredentialTypeAPIKeyEd25519 CredentialType = "CREDENTIAL_TYPE_API_KEY_ED25519"
 )
 
 // for schema
@@ -48,7 +54,7 @@ var CredentialTypeEnum []CredentialType
 
 func init() {
 	var res []CredentialType
-	if err := json.Unmarshal([]byte(`["CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR","CREDENTIAL_TYPE_API_KEY_P256","CREDENTIAL_TYPE_RECOVER_USER_KEY_P256","CREDENTIAL_TYPE_API_KEY_SECP256K1"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR","CREDENTIAL_TYPE_API_KEY_P256","CREDENTIAL_TYPE_RECOVER_USER_KEY_P256","CREDENTIAL_TYPE_API_KEY_SECP256K1","CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256","CREDENTIAL_TYPE_API_KEY_ED25519"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
