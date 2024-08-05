@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error)
 
+	GetOrganizationConfigs(params *GetOrganizationConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrganizationConfigsOK, error)
+
 	GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSubOrgIdsOK, error)
 
 	UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error)
@@ -77,6 +79,47 @@ func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, auth
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateSubOrganization: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetOrganizationConfigs gets configs
+
+Get quorum settings and features for an organization
+*/
+func (a *Client) GetOrganizationConfigs(params *GetOrganizationConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrganizationConfigsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetOrganizationConfigsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetOrganizationConfigs",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_organization_configs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetOrganizationConfigsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetOrganizationConfigsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetOrganizationConfigs: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

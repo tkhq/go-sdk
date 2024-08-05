@@ -35,6 +35,9 @@ const (
 
 	// APIKeyCurveSecp256k1 captures enum value "API_KEY_CURVE_SECP256K1"
 	APIKeyCurveSecp256k1 APIKeyCurve = "API_KEY_CURVE_SECP256K1"
+
+	// APIKeyCurveEd25519 captures enum value "API_KEY_CURVE_ED25519"
+	APIKeyCurveEd25519 APIKeyCurve = "API_KEY_CURVE_ED25519"
 )
 
 // for schema
@@ -42,7 +45,7 @@ var APIKeyCurveEnum []APIKeyCurve
 
 func init() {
 	var res []APIKeyCurve
-	if err := json.Unmarshal([]byte(`["API_KEY_CURVE_P256","API_KEY_CURVE_SECP256K1"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["API_KEY_CURVE_P256","API_KEY_CURVE_SECP256K1","API_KEY_CURVE_ED25519"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
