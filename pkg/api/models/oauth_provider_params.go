@@ -19,10 +19,6 @@ import (
 // swagger:model OauthProviderParams
 type OauthProviderParams struct {
 
-	// The URL at which to fetch the OIDC token signers
-	// Required: true
-	JwksURI *string `json:"jwksUri"`
-
 	// Base64 encoded OIDC token
 	// Required: true
 	OidcToken *string `json:"oidcToken"`
@@ -36,10 +32,6 @@ type OauthProviderParams struct {
 func (m *OauthProviderParams) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateJwksURI(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateOidcToken(formats); err != nil {
 		res = append(res, err)
 	}
@@ -51,15 +43,6 @@ func (m *OauthProviderParams) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *OauthProviderParams) validateJwksURI(formats strfmt.Registry) error {
-
-	if err := validate.Required("jwksUri", "body", m.JwksURI); err != nil {
-		return err
-	}
-
 	return nil
 }
 

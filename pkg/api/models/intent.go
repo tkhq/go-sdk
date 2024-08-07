@@ -99,6 +99,9 @@ type Intent struct {
 	// create sub organization intent v5
 	CreateSubOrganizationIntentV5 *CreateSubOrganizationIntentV5 `json:"createSubOrganizationIntentV5,omitempty"`
 
+	// create sub organization intent v6
+	CreateSubOrganizationIntentV6 *CreateSubOrganizationIntentV6 `json:"createSubOrganizationIntentV6,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
@@ -337,6 +340,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateSubOrganizationIntentV5(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateSubOrganizationIntentV6(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1008,6 +1015,25 @@ func (m *Intent) validateCreateSubOrganizationIntentV5(formats strfmt.Registry) 
 				return ve.ValidateName("createSubOrganizationIntentV5")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateSubOrganizationIntentV6(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV6) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV6 != nil {
+		if err := m.CreateSubOrganizationIntentV6.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV6")
 			}
 			return err
 		}
@@ -1960,6 +1986,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationIntentV6(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2680,6 +2710,27 @@ func (m *Intent) contextValidateCreateSubOrganizationIntentV5(ctx context.Contex
 				return ve.ValidateName("createSubOrganizationIntentV5")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV5")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateSubOrganizationIntentV6(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV6 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationIntentV6) { // not required
+			return nil
+		}
+
+		if err := m.CreateSubOrganizationIntentV6.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV6")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV6")
 			}
 			return err
 		}

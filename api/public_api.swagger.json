@@ -2048,7 +2048,8 @@
         "ACTIVITY_TYPE_OAUTH",
         "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
         "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
-        "ACTIVITY_TYPE_EMAIL_AUTH_V2"
+        "ACTIVITY_TYPE_EMAIL_AUTH_V2",
+        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
       ]
     },
     "AddressFormat": {
@@ -3279,12 +3280,47 @@
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
     },
+    "CreateSubOrganizationIntentV6": {
+      "type": "object",
+      "properties": {
+        "subOrganizationName": {
+          "type": "string",
+          "description": "Name for this sub-organization"
+        },
+        "rootUsers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/RootUserParamsV3"
+          },
+          "description": "Root users to create within this sub-organization"
+        },
+        "rootQuorumThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletParams",
+          "description": "The wallet to create for the sub-organization"
+        },
+        "disableEmailRecovery": {
+          "type": "boolean",
+          "description": "Disable email recovery for the sub-organization"
+        },
+        "disableEmailAuth": {
+          "type": "boolean",
+          "description": "Disable email auth for the sub-organization"
+        }
+      },
+      "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
+    },
     "CreateSubOrganizationRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"]
         },
         "timestampMs": {
           "type": "string",
@@ -3295,7 +3331,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/CreateSubOrganizationIntentV5"
+          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3357,6 +3393,24 @@
       "required": ["subOrganizationId"]
     },
     "CreateSubOrganizationResultV5": {
+      "type": "object",
+      "properties": {
+        "subOrganizationId": {
+          "type": "string"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletResult"
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["subOrganizationId"]
+    },
+    "CreateSubOrganizationResultV6": {
       "type": "object",
       "properties": {
         "subOrganizationId": {
@@ -5370,6 +5424,9 @@
         },
         "emailAuthIntentV2": {
           "$ref": "#/definitions/EmailAuthIntentV2"
+        },
+        "createSubOrganizationIntentV6": {
+          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
         }
       }
     },
@@ -5503,9 +5560,9 @@
           "type": "string",
           "description": "Human-readable name to identify a Provider."
         },
-        "jwksUri": {
+        "issuer": {
           "type": "string",
-          "description": "The URL at which to fetch the OIDC token signers"
+          "description": "The issuer of the token, typically a URL indicating the authentication server, e.g https://accounts.google.com"
         },
         "audience": {
           "type": "string",
@@ -5525,7 +5582,7 @@
       "required": [
         "providerId",
         "providerName",
-        "jwksUri",
+        "issuer",
         "audience",
         "subject",
         "createdAt",
@@ -5539,16 +5596,12 @@
           "type": "string",
           "description": "Human-readable name to identify a Provider."
         },
-        "jwksUri": {
-          "type": "string",
-          "description": "The URL at which to fetch the OIDC token signers"
-        },
         "oidcToken": {
           "type": "string",
           "description": "Base64 encoded OIDC token"
         }
       },
-      "required": ["providerName", "jwksUri", "oidcToken"]
+      "required": ["providerName", "oidcToken"]
     },
     "OauthRequest": {
       "type": "object",
@@ -6109,6 +6162,9 @@
         },
         "createReadWriteSessionResult": {
           "$ref": "#/definitions/CreateReadWriteSessionResult"
+        },
+        "createSubOrganizationResultV6": {
+          "$ref": "#/definitions/CreateSubOrganizationResultV6"
         }
       }
     },
@@ -6158,6 +6214,44 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/ApiKeyParams"
+          },
+          "description": "A list of API Key parameters."
+        },
+        "authenticators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AuthenticatorParamsV2"
+          },
+          "description": "A list of Authenticator parameters."
+        },
+        "oauthProviders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/OauthProviderParams"
+          },
+          "description": "A list of Oauth providers."
+        }
+      },
+      "required": ["userName", "apiKeys", "authenticators", "oauthProviders"]
+    },
+    "RootUserParamsV3": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "Human-readable name for a User."
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "The user's email address."
+        },
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ApiKeyParamsV2"
           },
           "description": "A list of API Key parameters."
         },
