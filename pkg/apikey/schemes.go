@@ -29,6 +29,8 @@ const (
 	SchemeSECP256K1 = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1")
 	// SchemeED25519 is the API enum value for ed25519 curve.
 	SchemeED25519 = signatureScheme("SIGNATURE_SCHEME_TK_API_ED25519")
+
+	defaultSignatureScheme = SchemeP256
 )
 
 // CurveToScheme takes a Curve and returns its associated signatureScheme.

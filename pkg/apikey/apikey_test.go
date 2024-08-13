@@ -145,7 +145,7 @@ func Test_Sign_ED25519(t *testing.T) {
 
 func Test_EncodedKeySizeIsFixed(t *testing.T) {
 	for i := 0; i < 1000; i++ {
-		apiKey, err := apikey.New(uuid.NewString(), apikey.SchemeP256)
+		apiKey, err := apikey.New(uuid.NewString(), apikey.WithScheme(apikey.SchemeP256))
 		require.NoError(t, err)
 
 		assert.Len(t, apiKey.TkPublicKey, 66, "attempt %d: expected 66 characters for public key %s", i, apiKey.TkPublicKey)
@@ -154,7 +154,7 @@ func Test_EncodedKeySizeIsFixed(t *testing.T) {
 }
 
 func Test_MetadataMergeWorks(t *testing.T) {
-	k, err := apikey.New(uuid.NewString(), apikey.SchemeP256)
+	k, err := apikey.New(uuid.NewString(), apikey.WithScheme(apikey.SchemeP256))
 	require.NoError(t, err)
 	assert.Equal(t, "", k.GetMetadata().Name)
 

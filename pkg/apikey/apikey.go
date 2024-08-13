@@ -48,7 +48,7 @@ type APIStamp struct {
 }
 
 // New generates a new Turnkey API key.
-func New(organizationID string, scheme signatureScheme) (*Key, error) {
+func New(organizationID string, opts ...optionFunc) (*Key, error) {
 	if organizationID == "" {
 		return nil, fmt.Errorf("please supply a valid Organization UUID")
 	}
@@ -57,19 +57,25 @@ func New(organizationID string, scheme signatureScheme) (*Key, error) {
 		return nil, fmt.Errorf("failed to parse organization ID")
 	}
 
-	var apiKey *Key
+	apiKey := &Key{
+		scheme: defaultSignatureScheme,
+	}
+
+	for _, opt := range opts {
+		opt(apiKey)
+	}
 
 	var err error
 
 	// generate key pair data
-	switch scheme {
+	switch apiKey.scheme {
 	case SchemeP256:
-		apiKey, err = newECDSAKey(scheme)
+		apiKey, err = newECDSAKey(apiKey.scheme)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate p256 key pair: %s", err)
 		}
 	case SchemeSECP256K1:
-		apiKey, err = newECDSAKey(scheme)
+		apiKey, err = newECDSAKey(apiKey.scheme)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate secp256k1 key pair: %s", err)
 		}
@@ -79,14 +85,13 @@ func New(organizationID string, scheme signatureScheme) (*Key, error) {
 			return nil, fmt.Errorf("failed to generate ed25519 key pair: %s", err)
 		}
 	default:
-		return nil, fmt.Errorf("unsupported signature scheme: %s", scheme)
+		return nil, fmt.Errorf("unsupported signature scheme: %s", apiKey.scheme)
 	}
 
 	// supply metadata
 	apiKey.Metadata.Organizations = append(apiKey.Metadata.Organizations, organizationID)
 	apiKey.Metadata.PublicKey = apiKey.PublicKey
-	apiKey.Metadata.Scheme = string(scheme)
-	apiKey.scheme = scheme
+	apiKey.Metadata.Scheme = string(apiKey.scheme)
 
 	return apiKey, nil
 }
