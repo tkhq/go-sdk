@@ -27,9 +27,9 @@ type OauthProvider struct {
 	// Required: true
 	CreatedAt *ExternalDataV1Timestamp `json:"createdAt"`
 
-	// The URL at which to fetch the OIDC token signers
+	// The issuer of the token, typically a URL indicating the authentication server, e.g https://accounts.google.com
 	// Required: true
-	JwksURI *string `json:"jwksUri"`
+	Issuer *string `json:"issuer"`
 
 	// Unique identifier for an OAuth Provider
 	// Required: true
@@ -60,7 +60,7 @@ func (m *OauthProvider) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateJwksURI(formats); err != nil {
+	if err := m.validateIssuer(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -115,9 +115,9 @@ func (m *OauthProvider) validateCreatedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *OauthProvider) validateJwksURI(formats strfmt.Registry) error {
+func (m *OauthProvider) validateIssuer(formats strfmt.Registry) error {
 
-	if err := validate.Required("jwksUri", "body", m.JwksURI); err != nil {
+	if err := validate.Required("issuer", "body", m.Issuer); err != nil {
 		return err
 	}
 

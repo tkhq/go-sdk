@@ -26,7 +26,7 @@ type EmailAuthRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *EmailAuthIntent `json:"parameters"`
+	Parameters *EmailAuthIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type EmailAuthRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_EMAIL_AUTH]
+	// Enum: [ACTIVITY_TYPE_EMAIL_AUTH_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var emailAuthRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_EMAIL_AUTH"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_EMAIL_AUTH_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// EmailAuthRequestTypeACTIVITYTYPEEMAILAUTH captures enum value "ACTIVITY_TYPE_EMAIL_AUTH"
-	EmailAuthRequestTypeACTIVITYTYPEEMAILAUTH string = "ACTIVITY_TYPE_EMAIL_AUTH"
+	// EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV2 captures enum value "ACTIVITY_TYPE_EMAIL_AUTH_V2"
+	EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV2 string = "ACTIVITY_TYPE_EMAIL_AUTH_V2"
 )
 
 // prop value enum
