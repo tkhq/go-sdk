@@ -10,6 +10,10 @@ build:
 test:
 	go test -v ./...
 
+.PHONY: lint
+lint:
+	golangci-lint run --out-format=github-actions ./...
+
 .PHONY: generate
 generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
