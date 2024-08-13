@@ -10,6 +10,15 @@ import (
 	"github.com/pkg/errors"
 )
 
+type ed25519Key struct {
+	privKey *ed25519.PrivateKey
+	pubKey  *ed25519.PublicKey
+}
+
+func (k *ed25519Key) sign(msg []byte) (string, error) {
+	return hex.EncodeToString(ed25519.Sign(*k.privKey, msg)), nil
+}
+
 // FromED25519PrivateKey takes an ED25519 keypair and forms a Turnkey API key from it.
 func FromED25519PrivateKey(privateKey ed25519.PrivateKey) (*Key, error) {
 	publicKey, ok := privateKey.Public().(ed25519.PublicKey)
@@ -17,12 +26,16 @@ func FromED25519PrivateKey(privateKey ed25519.PrivateKey) (*Key, error) {
 		return nil, errors.New("malformed ed25519 key pair (type assertion failed)")
 	}
 
+	uk := ed25519Key{
+		pubKey:  &publicKey,
+		privKey: &privateKey,
+	}
+
 	return &Key{
-		TkPrivateKey:   hex.EncodeToString(privateKey),
-		TkPublicKey:    hex.EncodeToString(publicKey),
-		ed25519PubKey:  &publicKey,
-		ed25519PrivKey: &privateKey,
-		scheme:         SchemeED25519,
+		TkPrivateKey:  hex.EncodeToString(privateKey),
+		TkPublicKey:   hex.EncodeToString(publicKey),
+		underlyingKey: &uk,
+		scheme:        SchemeED25519,
 	}, nil
 }
 
@@ -52,8 +65,4 @@ func fromTurnkeyED25519Key(encodedPrivateKey string) (*Key, error) {
 
 	// Convert the byte slice to ed25519.PrivateKey and encapsulate in TK struct
 	return FromED25519PrivateKey(ed25519.PrivateKey(privateKeyBytes))
-}
-
-func signED25519(message []byte, privKey ed25519.PrivateKey) string {
-	return hex.EncodeToString(ed25519.Sign(privKey, message))
 }

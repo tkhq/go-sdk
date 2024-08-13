@@ -2,8 +2,6 @@
 package apikey
 
 import (
-	"crypto/ecdsa"
-	"crypto/ed25519"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -28,15 +26,12 @@ type Key struct {
 	TkPrivateKey string `json:"-"` // do not store the private key in the metadata file
 	TkPublicKey  string `json:"public_key"`
 
-	scheme signatureScheme
+	scheme        signatureScheme
+	underlyingKey underlyingKey
+}
 
-	// Underlying ECDSA keypair (if applicable)
-	ecdsaPrivKey *ecdsa.PrivateKey
-	ecdsaPubKey  *ecdsa.PublicKey
-
-	// Underlying ED25519 keypair (if applicable)
-	ed25519PrivKey *ed25519.PrivateKey
-	ed25519PubKey  *ed25519.PublicKey
+type underlyingKey interface {
+	sign(message []byte) (string, error)
 }
 
 // APIStamp defines the stamp format used to authenticate payloads to the API.
@@ -118,23 +113,9 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*K
 // Stamp generates a signing stamp for the given message with the given API key.
 // The resulting stamp should be added as the "X-Stamp" header of an API request.
 func Stamp(message []byte, apiKey *Key) (out string, err error) {
-	var signature string
-
-	switch apiKey.scheme {
-	case SchemeP256:
-		signature, err = signECDSA(message, apiKey.ecdsaPrivKey)
-		if err != nil {
-			return "", err
-		}
-	case SchemeSECP256K1:
-		signature, err = signECDSA(message, apiKey.ecdsaPrivKey)
-		if err != nil {
-			return "", err
-		}
-	case SchemeED25519:
-		signature = signED25519(message, *apiKey.ed25519PrivKey)
-	default:
-		return "", fmt.Errorf("unsupported signature scheme: %s", apiKey.scheme)
+	signature, err := apiKey.underlyingKey.sign(message)
+	if err != nil {
+		return "", err
 	}
 
 	stamp := APIStamp{

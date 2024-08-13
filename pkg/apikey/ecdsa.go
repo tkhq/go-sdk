@@ -14,6 +14,22 @@ import (
 	"github.com/pkg/errors"
 )
 
+type ecdsaKey struct {
+	privKey *ecdsa.PrivateKey
+	pubKey  *ecdsa.PublicKey
+}
+
+func (k *ecdsaKey) sign(msg []byte) (string, error) {
+	hash := sha256.Sum256(msg)
+
+	sigBytes, err := ecdsa.SignASN1(rand.Reader, k.privKey, hash[:])
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate signature")
+	}
+
+	return hex.EncodeToString(sigBytes), nil
+}
+
 // EncodePrivateECDSAKey encodes an ECDSA private key into the Turnkey format.
 // For now, "Turnkey format" = raw DER form.
 func EncodePrivateECDSAKey(privateKey *ecdsa.PrivateKey) string {
@@ -46,12 +62,16 @@ func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey, scheme signatureScheme) (
 
 	publicKey := &privateKey.PublicKey
 
+	uk := ecdsaKey{
+		pubKey:  publicKey,
+		privKey: privateKey,
+	}
+
 	return &Key{
-		TkPrivateKey: EncodePrivateECDSAKey(privateKey),
-		TkPublicKey:  EncodePublicECDSAKey(publicKey),
-		ecdsaPubKey:  publicKey,
-		ecdsaPrivKey: privateKey,
-		scheme:       scheme,
+		TkPrivateKey:  EncodePrivateECDSAKey(privateKey),
+		TkPublicKey:   EncodePublicECDSAKey(publicKey),
+		underlyingKey: &uk,
+		scheme:        scheme,
 	}, nil
 }
 
@@ -156,16 +176,4 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	}
 
 	return apiKey, nil
-}
-
-// signECDSA signs a message using an ecdsa private key.
-func signECDSA(message []byte, privKey *ecdsa.PrivateKey) (string, error) {
-	hash := sha256.Sum256(message)
-
-	sigBytes, err := ecdsa.SignASN1(rand.Reader, privKey, hash[:])
-	if err != nil {
-		return "", errors.Wrap(err, "failed to generate signature")
-	}
-
-	return hex.EncodeToString(sigBytes), nil
 }
