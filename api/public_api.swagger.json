@@ -221,6 +221,32 @@
         "tags": ["Users"]
       }
     },
+    "/public/v1/query/get_organization_configs": {
+      "post": {
+        "summary": "Get Configs",
+        "description": "Get quorum settings and features for an organization",
+        "operationId": "GetOrganizationConfigs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetOrganizationConfigsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetOrganizationConfigsRequest"
+            }
+          }
+        ],
+        "tags": ["Organizations"]
+      }
+    },
     "/public/v1/query/get_policy": {
       "post": {
         "summary": "Get Policy",
@@ -2021,7 +2047,9 @@
         "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5",
         "ACTIVITY_TYPE_OAUTH",
         "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
-        "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
+        "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
+        "ACTIVITY_TYPE_EMAIL_AUTH_V2",
+        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
       ]
     },
     "AddressFormat": {
@@ -2081,7 +2109,11 @@
     },
     "ApiKeyCurve": {
       "type": "string",
-      "enum": ["API_KEY_CURVE_P256", "API_KEY_CURVE_SECP256K1"]
+      "enum": [
+        "API_KEY_CURVE_P256",
+        "API_KEY_CURVE_SECP256K1",
+        "API_KEY_CURVE_ED25519"
+      ]
     },
     "ApiKeyParams": {
       "type": "object",
@@ -2341,6 +2373,21 @@
         "AUTHENTICATOR_TRANSPORT_USB",
         "AUTHENTICATOR_TRANSPORT_HYBRID"
       ]
+    },
+    "Config": {
+      "type": "object",
+      "properties": {
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Feature"
+          }
+        },
+        "quorum": {
+          "$ref": "#/definitions/external.data.v1.Quorum"
+        }
+      }
     },
     "CreateApiKeysIntent": {
       "type": "object",
@@ -3233,12 +3280,47 @@
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
     },
+    "CreateSubOrganizationIntentV6": {
+      "type": "object",
+      "properties": {
+        "subOrganizationName": {
+          "type": "string",
+          "description": "Name for this sub-organization"
+        },
+        "rootUsers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/RootUserParamsV3"
+          },
+          "description": "Root users to create within this sub-organization"
+        },
+        "rootQuorumThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletParams",
+          "description": "The wallet to create for the sub-organization"
+        },
+        "disableEmailRecovery": {
+          "type": "boolean",
+          "description": "Disable email recovery for the sub-organization"
+        },
+        "disableEmailAuth": {
+          "type": "boolean",
+          "description": "Disable email auth for the sub-organization"
+        }
+      },
+      "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
+    },
     "CreateSubOrganizationRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"]
         },
         "timestampMs": {
           "type": "string",
@@ -3249,7 +3331,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/CreateSubOrganizationIntentV5"
+          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3311,6 +3393,24 @@
       "required": ["subOrganizationId"]
     },
     "CreateSubOrganizationResultV5": {
+      "type": "object",
+      "properties": {
+        "subOrganizationId": {
+          "type": "string"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletResult"
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["subOrganizationId"]
+    },
+    "CreateSubOrganizationResultV6": {
       "type": "object",
       "properties": {
         "subOrganizationId": {
@@ -3573,7 +3673,9 @@
         "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
         "CREDENTIAL_TYPE_API_KEY_P256",
         "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256",
-        "CREDENTIAL_TYPE_API_KEY_SECP256K1"
+        "CREDENTIAL_TYPE_API_KEY_SECP256K1",
+        "CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256",
+        "CREDENTIAL_TYPE_API_KEY_ED25519"
       ]
     },
     "Curve": {
@@ -4056,6 +4158,40 @@
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated Email Auth API keys"
+        }
+      },
+      "required": ["email", "targetPublicKey"]
+    },
+    "EmailAuthIntentV2": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email of the authenticating user."
+        },
+        "targetPublicKey": {
+          "type": "string",
+          "description": "Client-side public key generated by the user, to which the email auth bundle (credentials) will be encrypted."
+        },
+        "apiKeyName": {
+          "type": "string",
+          "description": "Optional human-readable name for an API Key. If none provided, default to Email Auth - \u003cTimestamp\u003e"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+        },
+        "emailCustomization": {
+          "$ref": "#/definitions/EmailCustomizationParams",
+          "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated Email Auth API keys"
         }
       },
       "required": ["email", "targetPublicKey"]
@@ -4065,7 +4201,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_EMAIL_AUTH"]
+          "enum": ["ACTIVITY_TYPE_EMAIL_AUTH_V2"]
         },
         "timestampMs": {
           "type": "string",
@@ -4076,7 +4212,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/EmailAuthIntent"
+          "$ref": "#/definitions/EmailAuthIntentV2"
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4479,6 +4615,26 @@
         }
       },
       "required": ["oauthProviders"]
+    },
+    "GetOrganizationConfigsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "GetOrganizationConfigsResponse": {
+      "type": "object",
+      "properties": {
+        "configs": {
+          "$ref": "#/definitions/Config",
+          "description": "Organization configs including quorum settings and organization features"
+        }
+      },
+      "required": ["configs"]
     },
     "GetPoliciesRequest": {
       "type": "object",
@@ -5265,6 +5421,12 @@
         },
         "createReadWriteSessionIntent": {
           "$ref": "#/definitions/CreateReadWriteSessionIntent"
+        },
+        "emailAuthIntentV2": {
+          "$ref": "#/definitions/EmailAuthIntentV2"
+        },
+        "createSubOrganizationIntentV6": {
+          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
         }
       }
     },
@@ -5398,9 +5560,9 @@
           "type": "string",
           "description": "Human-readable name to identify a Provider."
         },
-        "jwksUri": {
+        "issuer": {
           "type": "string",
-          "description": "The URL at which to fetch the OIDC token signers"
+          "description": "The issuer of the token, typically a URL indicating the authentication server, e.g https://accounts.google.com"
         },
         "audience": {
           "type": "string",
@@ -5420,7 +5582,7 @@
       "required": [
         "providerId",
         "providerName",
-        "jwksUri",
+        "issuer",
         "audience",
         "subject",
         "createdAt",
@@ -5434,16 +5596,12 @@
           "type": "string",
           "description": "Human-readable name to identify a Provider."
         },
-        "jwksUri": {
-          "type": "string",
-          "description": "The URL at which to fetch the OIDC token signers"
-        },
         "oidcToken": {
           "type": "string",
           "description": "Base64 encoded OIDC token"
         }
       },
-      "required": ["providerName", "jwksUri", "oidcToken"]
+      "required": ["providerName", "oidcToken"]
     },
     "OauthRequest": {
       "type": "object",
@@ -6004,6 +6162,9 @@
         },
         "createReadWriteSessionResult": {
           "$ref": "#/definitions/CreateReadWriteSessionResult"
+        },
+        "createSubOrganizationResultV6": {
+          "$ref": "#/definitions/CreateSubOrganizationResultV6"
         }
       }
     },
@@ -6053,6 +6214,44 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/ApiKeyParams"
+          },
+          "description": "A list of API Key parameters."
+        },
+        "authenticators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AuthenticatorParamsV2"
+          },
+          "description": "A list of Authenticator parameters."
+        },
+        "oauthProviders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/OauthProviderParams"
+          },
+          "description": "A list of Oauth providers."
+        }
+      },
+      "required": ["userName", "apiKeys", "authenticators", "oauthProviders"]
+    },
+    "RootUserParamsV3": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "Human-readable name for a User."
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "The user's email address."
+        },
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ApiKeyParamsV2"
           },
           "description": "A list of API Key parameters."
         },
@@ -7151,6 +7350,24 @@
         }
       },
       "required": ["publicKey", "type"]
+    },
+    "external.data.v1.Quorum": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Count of unique approvals required to meet quorum."
+        },
+        "userIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of quorum set members."
+        }
+      },
+      "required": ["threshold", "userIds"]
     },
     "external.data.v1.Timestamp": {
       "type": "object",
