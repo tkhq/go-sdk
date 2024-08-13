@@ -26,7 +26,7 @@ func main() {
 		log.Fatalln("organization ID must be set")
 	}
 
-	key, err := apikey.New(organizationID, apikey.WithScheme(apikey.SchemeP256))
+	key, err := apikey.New(organizationID)
 	if err != nil {
 		log.Fatalln("failed to generate API key:", err)
 	}

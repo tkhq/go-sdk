@@ -70,7 +70,7 @@ func Test_Sign_ECDSA(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(tt *testing.T) {
-			apiKey, err := apikey.FromTurnkeyPrivateKey(tc.tkPrivateKey, apikey.CurveToScheme(tc.curve))
+			apiKey, err := apikey.FromTurnkeyPrivateKey(tc.tkPrivateKey, tc.curve.ToScheme())
 			require.NoError(tt, err)
 
 			stampHeader, err := apikey.Stamp([]byte("hello"), apiKey)
@@ -84,12 +84,12 @@ func Test_Sign_ECDSA(t *testing.T) {
 			require.NoError(tt, json.Unmarshal(testStamp, &stamp))
 
 			assert.Equal(tt, tc.tkPublicKey, stamp.PublicKey)
-			assert.Equal(tt, apikey.CurveToScheme(tc.curve), stamp.Scheme)
+			assert.Equal(tt, tc.curve.ToScheme(), stamp.Scheme)
 
 			sigBytes, err := hex.DecodeString(stamp.Signature)
 			require.NoError(tt, err)
 
-			publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, apikey.CurveToScheme(tc.curve))
+			publicKey, err := apikey.DecodeTurnkeyPublicECDSAKey(stamp.PublicKey, tc.curve.ToScheme())
 			require.NoError(tt, err)
 
 			// Verify the soundness of the hash:

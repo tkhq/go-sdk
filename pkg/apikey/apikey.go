@@ -98,10 +98,6 @@ func New(organizationID string, opts ...optionFunc) (*Key, error) {
 
 // FromTurnkeyPrivateKey takes a Turnkey-encoded private key, derives a public key from it, and then returns the corresponding Turnkey API key.
 func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*Key, error) {
-	if scheme == SchemeED25519 {
-		return fromTurnkeyED25519Key(encodedPrivateKey)
-	}
-
 	switch scheme {
 	case SchemeP256:
 		return fromTurnkeyECDSAKey(encodedPrivateKey, scheme)
@@ -110,9 +106,8 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*K
 	case SchemeED25519:
 		return fromTurnkeyED25519Key(encodedPrivateKey)
 	default:
+		return nil, errors.New("unsupported signature scheme")
 	}
-
-	return nil, errors.New("unsupported signature scheme")
 }
 
 // Stamp generates a signing stamp for the given message with the given API key.
@@ -163,9 +158,8 @@ func (k Key) GetCurve() string {
 	case SchemeP256:
 		return string(CurveP256)
 	default:
+		return string(CurveP256)
 	}
-
-	return string(CurveP256)
 }
 
 // LoadMetadata loads a JSON metadata file.

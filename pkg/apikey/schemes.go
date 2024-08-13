@@ -33,15 +33,15 @@ const (
 	defaultSignatureScheme = SchemeP256
 )
 
-// CurveToScheme takes a Curve and returns its associated signatureScheme.
-func CurveToScheme(curve Curve) signatureScheme {
+// ToScheme returns a Curve's associated signatureScheme.
+func (c Curve) ToScheme() signatureScheme {
 	symbolMap := map[Curve]signatureScheme{
 		CurveP256:      SchemeP256,
 		CurveSecp256k1: SchemeSECP256K1,
 		CurveEd25519:   SchemeED25519,
 	}
 
-	scheme, ok := symbolMap[curve]
+	scheme, ok := symbolMap[c]
 	if ok {
 		return scheme
 	}
@@ -58,7 +58,7 @@ func ExtractSignatureSchemeFromSuffixedPrivateKey(data string) (string, signatur
 		return pieces[0], SchemeP256, nil
 	}
 
-	scheme := CurveToScheme(Curve(pieces[1]))
+	scheme := Curve(pieces[1]).ToScheme()
 	if scheme == SchemeUnsupported {
 		return "", SchemeUnsupported, errors.New("improperly formatted raw key string or unsupported scheme")
 	}
