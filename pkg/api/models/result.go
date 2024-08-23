@@ -114,11 +114,17 @@ type Result struct {
 	// delete private key tags result
 	DeletePrivateKeyTagsResult *DeletePrivateKeyTagsResult `json:"deletePrivateKeyTagsResult,omitempty"`
 
+	// delete private keys result
+	DeletePrivateKeysResult *DeletePrivateKeysResult `json:"deletePrivateKeysResult,omitempty"`
+
 	// delete user tags result
 	DeleteUserTagsResult *DeleteUserTagsResult `json:"deleteUserTagsResult,omitempty"`
 
 	// delete users result
 	DeleteUsersResult *DeleteUsersResult `json:"deleteUsersResult,omitempty"`
+
+	// delete wallets result
+	DeleteWalletsResult *DeleteWalletsResult `json:"deleteWalletsResult,omitempty"`
 
 	// disable private key result
 	DisablePrivateKeyResult *DisablePrivateKeyResult `json:"disablePrivateKeyResult,omitempty"`
@@ -325,11 +331,19 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeletePrivateKeysResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteUserTagsResult(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateDeleteUsersResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteWalletsResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1035,6 +1049,25 @@ func (m *Result) validateDeletePrivateKeyTagsResult(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *Result) validateDeletePrivateKeysResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePrivateKeysResult) { // not required
+		return nil
+	}
+
+	if m.DeletePrivateKeysResult != nil {
+		if err := m.DeletePrivateKeysResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePrivateKeysResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateDeleteUserTagsResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteUserTagsResult) { // not required
 		return nil
@@ -1065,6 +1098,25 @@ func (m *Result) validateDeleteUsersResult(formats strfmt.Registry) error {
 				return ve.ValidateName("deleteUsersResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateDeleteWalletsResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteWalletsResult) { // not required
+		return nil
+	}
+
+	if m.DeleteWalletsResult != nil {
+		if err := m.DeleteWalletsResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletsResult")
 			}
 			return err
 		}
@@ -1623,11 +1675,19 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeletePrivateKeysResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteUserTagsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateDeleteUsersResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteWalletsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2397,6 +2457,27 @@ func (m *Result) contextValidateDeletePrivateKeyTagsResult(ctx context.Context, 
 	return nil
 }
 
+func (m *Result) contextValidateDeletePrivateKeysResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePrivateKeysResult != nil {
+
+		if swag.IsZero(m.DeletePrivateKeysResult) { // not required
+			return nil
+		}
+
+		if err := m.DeletePrivateKeysResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePrivateKeysResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateDeleteUserTagsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUserTagsResult != nil {
@@ -2431,6 +2512,27 @@ func (m *Result) contextValidateDeleteUsersResult(ctx context.Context, formats s
 				return ve.ValidateName("deleteUsersResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateDeleteWalletsResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteWalletsResult != nil {
+
+		if swag.IsZero(m.DeleteWalletsResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteWalletsResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletsResult")
 			}
 			return err
 		}

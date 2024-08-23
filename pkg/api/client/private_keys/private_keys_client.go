@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeysOK, error)
 
+	DeletePrivateKeys(params *DeletePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeysOK, error)
+
 	ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportPrivateKeyOK, error)
 
 	GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeyOK, error)
@@ -83,6 +85,47 @@ func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo run
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreatePrivateKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeletePrivateKeys deletes organization private keys
+
+Deletes private keys for an organization
+*/
+func (a *Client) DeletePrivateKeys(params *DeletePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeysOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeletePrivateKeysParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeletePrivateKeys",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_private_keys",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePrivateKeysReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeletePrivateKeysOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeletePrivateKeys: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
