@@ -141,11 +141,17 @@ type Intent struct {
 	// delete private key tags intent
 	DeletePrivateKeyTagsIntent *DeletePrivateKeyTagsIntent `json:"deletePrivateKeyTagsIntent,omitempty"`
 
+	// delete private keys intent
+	DeletePrivateKeysIntent *DeletePrivateKeysIntent `json:"deletePrivateKeysIntent,omitempty"`
+
 	// delete user tags intent
 	DeleteUserTagsIntent *DeleteUserTagsIntent `json:"deleteUserTagsIntent,omitempty"`
 
 	// delete users intent
 	DeleteUsersIntent *DeleteUsersIntent `json:"deleteUsersIntent,omitempty"`
+
+	// delete wallets intent
+	DeleteWalletsIntent *DeleteWalletsIntent `json:"deleteWalletsIntent,omitempty"`
 
 	// disable private key intent
 	DisablePrivateKeyIntent *DisablePrivateKeyIntent `json:"disablePrivateKeyIntent,omitempty"`
@@ -399,11 +405,19 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeletePrivateKeysIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteUserTagsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateDeleteUsersIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteWalletsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1289,6 +1303,25 @@ func (m *Intent) validateDeletePrivateKeyTagsIntent(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *Intent) validateDeletePrivateKeysIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePrivateKeysIntent) { // not required
+		return nil
+	}
+
+	if m.DeletePrivateKeysIntent != nil {
+		if err := m.DeletePrivateKeysIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePrivateKeysIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateDeleteUserTagsIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteUserTagsIntent) { // not required
 		return nil
@@ -1319,6 +1352,25 @@ func (m *Intent) validateDeleteUsersIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("deleteUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeleteWalletsIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteWalletsIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteWalletsIntent != nil {
+		if err := m.DeleteWalletsIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletsIntent")
 			}
 			return err
 		}
@@ -2042,11 +2094,19 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeletePrivateKeysIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteUserTagsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateDeleteUsersIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteWalletsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3012,6 +3072,27 @@ func (m *Intent) contextValidateDeletePrivateKeyTagsIntent(ctx context.Context, 
 	return nil
 }
 
+func (m *Intent) contextValidateDeletePrivateKeysIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePrivateKeysIntent != nil {
+
+		if swag.IsZero(m.DeletePrivateKeysIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeletePrivateKeysIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePrivateKeysIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateDeleteUserTagsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteUserTagsIntent != nil {
@@ -3046,6 +3127,27 @@ func (m *Intent) contextValidateDeleteUsersIntent(ctx context.Context, formats s
 				return ve.ValidateName("deleteUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteWalletsIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteWalletsIntent != nil {
+
+		if swag.IsZero(m.DeleteWalletsIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteWalletsIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletsIntent")
 			}
 			return err
 		}

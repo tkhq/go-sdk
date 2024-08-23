@@ -1183,6 +1183,32 @@
         "tags": ["Private Key Tags"]
       }
     },
+    "/public/v1/submit/delete_private_keys": {
+      "post": {
+        "summary": "Delete organization private keys",
+        "description": "Deletes private keys for an organization",
+        "operationId": "DeletePrivateKeys",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeletePrivateKeysRequest"
+            }
+          }
+        ],
+        "tags": ["Private Keys"]
+      }
+    },
     "/public/v1/submit/delete_user_tags": {
       "post": {
         "summary": "Delete User Tags",
@@ -1233,6 +1259,32 @@
           }
         ],
         "tags": ["Users"]
+      }
+    },
+    "/public/v1/submit/delete_wallets": {
+      "post": {
+        "summary": "Delete organization wallets",
+        "description": "Deletes wallets for an organization",
+        "operationId": "DeleteWallets",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteWalletsRequest"
+            }
+          }
+        ],
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/submit/email_auth": {
@@ -2049,7 +2101,9 @@
         "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
         "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
         "ACTIVITY_TYPE_EMAIL_AUTH_V2",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
+        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6",
+        "ACTIVITY_TYPE_DELETE_PRIVATE_KEYS",
+        "ACTIVITY_TYPE_DELETE_WALLETS"
       ]
     },
     "AddressFormat": {
@@ -4011,6 +4065,57 @@
       },
       "required": ["privateKeyTagIds", "privateKeyIds"]
     },
+    "DeletePrivateKeysIntent": {
+      "type": "object",
+      "properties": {
+        "privateKeyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for private keys within an organization"
+        },
+        "deleteWithoutExport": {
+          "type": "boolean",
+          "description": "Optional parameter for deleting the private keys, even if any have not been previously exported. If they have been exported, this field is ignored."
+        }
+      },
+      "required": ["privateKeyIds"]
+    },
+    "DeletePrivateKeysRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_DELETE_PRIVATE_KEYS"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/DeletePrivateKeysIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "DeletePrivateKeysResult": {
+      "type": "object",
+      "properties": {
+        "privateKeyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of private key unique identifiers that were removed"
+        }
+      },
+      "required": ["privateKeyIds"]
+    },
     "DeleteUserTagsIntent": {
       "type": "object",
       "properties": {
@@ -4111,6 +4216,57 @@
         }
       },
       "required": ["userIds"]
+    },
+    "DeleteWalletsIntent": {
+      "type": "object",
+      "properties": {
+        "walletIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for wallets within an organization"
+        },
+        "deleteWithoutExport": {
+          "type": "boolean",
+          "description": "Optional parameter for deleting the wallets, even if any have not been previously exported. If they have been exported, this field is ignored."
+        }
+      },
+      "required": ["walletIds"]
+    },
+    "DeleteWalletsRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_DELETE_WALLETS"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/DeleteWalletsIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "DeleteWalletsResult": {
+      "type": "object",
+      "properties": {
+        "walletIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of wallet unique identifiers that were removed"
+        }
+      },
+      "required": ["walletIds"]
     },
     "DisablePrivateKeyIntent": {
       "type": "object",
@@ -5427,6 +5583,12 @@
         },
         "createSubOrganizationIntentV6": {
           "$ref": "#/definitions/CreateSubOrganizationIntentV6"
+        },
+        "deletePrivateKeysIntent": {
+          "$ref": "#/definitions/DeletePrivateKeysIntent"
+        },
+        "deleteWalletsIntent": {
+          "$ref": "#/definitions/DeleteWalletsIntent"
         }
       }
     },
@@ -6165,6 +6327,12 @@
         },
         "createSubOrganizationResultV6": {
           "$ref": "#/definitions/CreateSubOrganizationResultV6"
+        },
+        "deletePrivateKeysResult": {
+          "$ref": "#/definitions/DeletePrivateKeysResult"
+        },
+        "deleteWalletsResult": {
+          "$ref": "#/definitions/DeleteWalletsResult"
         }
       }
     },
