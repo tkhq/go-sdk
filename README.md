@@ -16,6 +16,8 @@ The easiest way to manage your API keys is with the [Turnkey CLI](https://github
 ### Example
 
 ```go
+package main
+
 import (
 	"fmt"
 	"log"
