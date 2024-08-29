@@ -84,6 +84,9 @@ type Intent struct {
 	// create read write session intent
 	CreateReadWriteSessionIntent *CreateReadWriteSessionIntent `json:"createReadWriteSessionIntent,omitempty"`
 
+	// create read write session intent v2
+	CreateReadWriteSessionIntentV2 *CreateReadWriteSessionIntentV2 `json:"createReadWriteSessionIntentV2,omitempty"`
+
 	// create sub organization intent
 	CreateSubOrganizationIntent *CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
 
@@ -326,6 +329,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateReadWriteSessionIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateReadWriteSessionIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -934,6 +941,25 @@ func (m *Intent) validateCreateReadWriteSessionIntent(formats strfmt.Registry) e
 				return ve.ValidateName("createReadWriteSessionIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadWriteSessionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateReadWriteSessionIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadWriteSessionIntentV2) { // not required
+		return nil
+	}
+
+	if m.CreateReadWriteSessionIntentV2 != nil {
+		if err := m.CreateReadWriteSessionIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntentV2")
 			}
 			return err
 		}
@@ -2018,6 +2044,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateReadWriteSessionIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2665,6 +2695,27 @@ func (m *Intent) contextValidateCreateReadWriteSessionIntent(ctx context.Context
 				return ve.ValidateName("createReadWriteSessionIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadWriteSessionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateReadWriteSessionIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadWriteSessionIntentV2 != nil {
+
+		if swag.IsZero(m.CreateReadWriteSessionIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadWriteSessionIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionIntentV2")
 			}
 			return err
 		}

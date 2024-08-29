@@ -63,6 +63,9 @@ type Result struct {
 	// create read write session result
 	CreateReadWriteSessionResult *CreateReadWriteSessionResult `json:"createReadWriteSessionResult,omitempty"`
 
+	// create read write session result v2
+	CreateReadWriteSessionResultV2 *CreateReadWriteSessionResultV2 `json:"createReadWriteSessionResultV2,omitempty"`
+
 	// create sub organization result
 	CreateSubOrganizationResult *CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
 
@@ -260,6 +263,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateReadWriteSessionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateReadWriteSessionResultV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -718,6 +725,25 @@ func (m *Result) validateCreateReadWriteSessionResult(formats strfmt.Registry) e
 				return ve.ValidateName("createReadWriteSessionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadWriteSessionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateReadWriteSessionResultV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateReadWriteSessionResultV2) { // not required
+		return nil
+	}
+
+	if m.CreateReadWriteSessionResultV2 != nil {
+		if err := m.CreateReadWriteSessionResultV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionResultV2")
 			}
 			return err
 		}
@@ -1607,6 +1633,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateReadWriteSessionResultV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2092,6 +2122,27 @@ func (m *Result) contextValidateCreateReadWriteSessionResult(ctx context.Context
 				return ve.ValidateName("createReadWriteSessionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createReadWriteSessionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateReadWriteSessionResultV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReadWriteSessionResultV2 != nil {
+
+		if swag.IsZero(m.CreateReadWriteSessionResultV2) { // not required
+			return nil
+		}
+
+		if err := m.CreateReadWriteSessionResultV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createReadWriteSessionResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createReadWriteSessionResultV2")
 			}
 			return err
 		}

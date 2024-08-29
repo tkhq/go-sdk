@@ -26,7 +26,7 @@ type CreateReadWriteSessionRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *CreateReadWriteSessionIntent `json:"parameters"`
+	Parameters *CreateReadWriteSessionIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type CreateReadWriteSessionRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION]
+	// Enum: [ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var createReadWriteSessionRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSION captures enum value "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
-	CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSION string = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
+	// CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSIONV2 captures enum value "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2"
+	CreateReadWriteSessionRequestTypeACTIVITYTYPECREATEREADWRITESESSIONV2 string = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2"
 )
 
 // prop value enum
