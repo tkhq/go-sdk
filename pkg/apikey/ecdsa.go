@@ -10,7 +10,6 @@ import (
 	"math/big"
 
 	dcrec "github.com/decred/dcrd/dcrec/secp256k1/v4"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/pkg/errors"
 )
 
@@ -96,7 +95,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 		curve = elliptic.P256()
 		x, y = elliptic.UnmarshalCompressed(curve, bytes)
 	case SchemeSECP256K1:
-		curve = secp256k1.S256()
+		curve = dcrec.S256()
 
 		pubkey, err := dcrec.ParsePubKey(bytes)
 		if err != nil {
@@ -125,7 +124,7 @@ func newECDSAKey(scheme signatureScheme) (*Key, error) {
 	case SchemeP256:
 		curve = elliptic.P256()
 	case SchemeSECP256K1:
-		curve = secp256k1.S256()
+		curve = dcrec.S256()
 	default:
 		// should be unreachable since scheme type is non-exported with discreet options
 		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
@@ -161,7 +160,7 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	case SchemeP256:
 		curve = elliptic.P256()
 	case SchemeSECP256K1:
-		curve = secp256k1.S256()
+		curve = dcrec.S256()
 	default:
 		// should be unreachable since scheme type is non-exported with discreet options
 		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
