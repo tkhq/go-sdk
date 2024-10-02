@@ -120,6 +120,9 @@ type Result struct {
 	// delete private keys result
 	DeletePrivateKeysResult *DeletePrivateKeysResult `json:"deletePrivateKeysResult,omitempty"`
 
+	// delete sub organization result
+	DeleteSubOrganizationResult *DeleteSubOrganizationResult `json:"deleteSubOrganizationResult,omitempty"`
+
 	// delete user tags result
 	DeleteUserTagsResult *DeleteUserTagsResult `json:"deleteUserTagsResult,omitempty"`
 
@@ -339,6 +342,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePrivateKeysResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteSubOrganizationResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1094,6 +1101,25 @@ func (m *Result) validateDeletePrivateKeysResult(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *Result) validateDeleteSubOrganizationResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteSubOrganizationResult) { // not required
+		return nil
+	}
+
+	if m.DeleteSubOrganizationResult != nil {
+		if err := m.DeleteSubOrganizationResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSubOrganizationResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSubOrganizationResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateDeleteUserTagsResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteUserTagsResult) { // not required
 		return nil
@@ -1706,6 +1732,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePrivateKeysResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2521,6 +2551,27 @@ func (m *Result) contextValidateDeletePrivateKeysResult(ctx context.Context, for
 				return ve.ValidateName("deletePrivateKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateDeleteSubOrganizationResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteSubOrganizationResult != nil {
+
+		if swag.IsZero(m.DeleteSubOrganizationResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteSubOrganizationResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSubOrganizationResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSubOrganizationResult")
 			}
 			return err
 		}

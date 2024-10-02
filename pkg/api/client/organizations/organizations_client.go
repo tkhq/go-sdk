@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error)
 
+	DeleteSubOrganization(params *DeleteSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSubOrganizationOK, error)
+
 	GetOrganizationConfigs(params *GetOrganizationConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrganizationConfigsOK, error)
 
 	GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSubOrgIdsOK, error)
@@ -79,6 +81,47 @@ func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, auth
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateSubOrganization: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteSubOrganization deletes sub organization
+
+Deletes a sub organization
+*/
+func (a *Client) DeleteSubOrganization(params *DeleteSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSubOrganizationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSubOrganizationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSubOrganization",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_sub_organization",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteSubOrganizationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSubOrganizationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteSubOrganization: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

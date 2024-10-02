@@ -136,7 +136,7 @@ func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authIn
 }
 
 /*
-DeleteWallets deletes organization wallets
+DeleteWallets deletes wallets
 
 Deletes wallets for an organization
 */

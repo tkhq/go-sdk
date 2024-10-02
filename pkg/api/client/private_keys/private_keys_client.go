@@ -89,7 +89,7 @@ func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo run
 }
 
 /*
-DeletePrivateKeys deletes organization private keys
+DeletePrivateKeys deletes private keys
 
 Deletes private keys for an organization
 */
