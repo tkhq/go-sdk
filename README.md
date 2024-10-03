@@ -64,6 +64,8 @@ go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.5
 2. Update the swagger file in `api/` with a new one
 3. Run `make generate`
 
+Note: depending on how you downloaded, your `go-swagger` may be located in a few locations such as `/Users/<your username>/go/bin/swagger` or `/opt/homebrew/bin/swagger`. If both are present, we would recommend using the former, for better version granularity
+
 ### Custom Templates
 While custom templates should be avoided where possible, sometimes it's worth the extra maintenance burden to provide a more streamlined UX. To use a custom template, copy the original template from the [go-swagger repo](https://github.com/go-swagger/go-swagger) to the `templates` directory
 

@@ -47,6 +47,72 @@ const (
 
 	// AddressFormatTron captures enum value "ADDRESS_FORMAT_TRON"
 	AddressFormatTron AddressFormat = "ADDRESS_FORMAT_TRON"
+
+	// AddressFormatSui captures enum value "ADDRESS_FORMAT_SUI"
+	AddressFormatSui AddressFormat = "ADDRESS_FORMAT_SUI"
+
+	// AddressFormatAptos captures enum value "ADDRESS_FORMAT_APTOS"
+	AddressFormatAptos AddressFormat = "ADDRESS_FORMAT_APTOS"
+
+	// AddressFormatBitcoinMainnetP2pkh captures enum value "ADDRESS_FORMAT_BITCOIN_MAINNET_P2PKH"
+	AddressFormatBitcoinMainnetP2pkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_MAINNET_P2PKH"
+
+	// AddressFormatBitcoinMainnetP2sh captures enum value "ADDRESS_FORMAT_BITCOIN_MAINNET_P2SH"
+	AddressFormatBitcoinMainnetP2sh AddressFormat = "ADDRESS_FORMAT_BITCOIN_MAINNET_P2SH"
+
+	// AddressFormatBitcoinMainnetP2wpkh captures enum value "ADDRESS_FORMAT_BITCOIN_MAINNET_P2WPKH"
+	AddressFormatBitcoinMainnetP2wpkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_MAINNET_P2WPKH"
+
+	// AddressFormatBitcoinMainnetP2wsh captures enum value "ADDRESS_FORMAT_BITCOIN_MAINNET_P2WSH"
+	AddressFormatBitcoinMainnetP2wsh AddressFormat = "ADDRESS_FORMAT_BITCOIN_MAINNET_P2WSH"
+
+	// AddressFormatBitcoinMainnetP2tr captures enum value "ADDRESS_FORMAT_BITCOIN_MAINNET_P2TR"
+	AddressFormatBitcoinMainnetP2tr AddressFormat = "ADDRESS_FORMAT_BITCOIN_MAINNET_P2TR"
+
+	// AddressFormatBitcoinTestnetP2pkh captures enum value "ADDRESS_FORMAT_BITCOIN_TESTNET_P2PKH"
+	AddressFormatBitcoinTestnetP2pkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_TESTNET_P2PKH"
+
+	// AddressFormatBitcoinTestnetP2sh captures enum value "ADDRESS_FORMAT_BITCOIN_TESTNET_P2SH"
+	AddressFormatBitcoinTestnetP2sh AddressFormat = "ADDRESS_FORMAT_BITCOIN_TESTNET_P2SH"
+
+	// AddressFormatBitcoinTestnetP2wpkh captures enum value "ADDRESS_FORMAT_BITCOIN_TESTNET_P2WPKH"
+	AddressFormatBitcoinTestnetP2wpkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_TESTNET_P2WPKH"
+
+	// AddressFormatBitcoinTestnetP2wsh captures enum value "ADDRESS_FORMAT_BITCOIN_TESTNET_P2WSH"
+	AddressFormatBitcoinTestnetP2wsh AddressFormat = "ADDRESS_FORMAT_BITCOIN_TESTNET_P2WSH"
+
+	// AddressFormatBitcoinTestnetP2tr captures enum value "ADDRESS_FORMAT_BITCOIN_TESTNET_P2TR"
+	AddressFormatBitcoinTestnetP2tr AddressFormat = "ADDRESS_FORMAT_BITCOIN_TESTNET_P2TR"
+
+	// AddressFormatBitcoinSignetP2pkh captures enum value "ADDRESS_FORMAT_BITCOIN_SIGNET_P2PKH"
+	AddressFormatBitcoinSignetP2pkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_SIGNET_P2PKH"
+
+	// AddressFormatBitcoinSignetP2sh captures enum value "ADDRESS_FORMAT_BITCOIN_SIGNET_P2SH"
+	AddressFormatBitcoinSignetP2sh AddressFormat = "ADDRESS_FORMAT_BITCOIN_SIGNET_P2SH"
+
+	// AddressFormatBitcoinSignetP2wpkh captures enum value "ADDRESS_FORMAT_BITCOIN_SIGNET_P2WPKH"
+	AddressFormatBitcoinSignetP2wpkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_SIGNET_P2WPKH"
+
+	// AddressFormatBitcoinSignetP2wsh captures enum value "ADDRESS_FORMAT_BITCOIN_SIGNET_P2WSH"
+	AddressFormatBitcoinSignetP2wsh AddressFormat = "ADDRESS_FORMAT_BITCOIN_SIGNET_P2WSH"
+
+	// AddressFormatBitcoinSignetP2tr captures enum value "ADDRESS_FORMAT_BITCOIN_SIGNET_P2TR"
+	AddressFormatBitcoinSignetP2tr AddressFormat = "ADDRESS_FORMAT_BITCOIN_SIGNET_P2TR"
+
+	// AddressFormatBitcoinRegtestP2pkh captures enum value "ADDRESS_FORMAT_BITCOIN_REGTEST_P2PKH"
+	AddressFormatBitcoinRegtestP2pkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_REGTEST_P2PKH"
+
+	// AddressFormatBitcoinRegtestP2sh captures enum value "ADDRESS_FORMAT_BITCOIN_REGTEST_P2SH"
+	AddressFormatBitcoinRegtestP2sh AddressFormat = "ADDRESS_FORMAT_BITCOIN_REGTEST_P2SH"
+
+	// AddressFormatBitcoinRegtestP2wpkh captures enum value "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WPKH"
+	AddressFormatBitcoinRegtestP2wpkh AddressFormat = "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WPKH"
+
+	// AddressFormatBitcoinRegtestP2wsh captures enum value "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WSH"
+	AddressFormatBitcoinRegtestP2wsh AddressFormat = "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WSH"
+
+	// AddressFormatBitcoinRegtestP2tr captures enum value "ADDRESS_FORMAT_BITCOIN_REGTEST_P2TR"
+	AddressFormatBitcoinRegtestP2tr AddressFormat = "ADDRESS_FORMAT_BITCOIN_REGTEST_P2TR"
 )
 
 // for schema
@@ -54,7 +120,7 @@ var AddressFormatEnum []AddressFormat
 
 func init() {
 	var res []AddressFormat
-	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM","ADDRESS_FORMAT_SOLANA","ADDRESS_FORMAT_COSMOS","ADDRESS_FORMAT_TRON"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ADDRESS_FORMAT_UNCOMPRESSED","ADDRESS_FORMAT_COMPRESSED","ADDRESS_FORMAT_ETHEREUM","ADDRESS_FORMAT_SOLANA","ADDRESS_FORMAT_COSMOS","ADDRESS_FORMAT_TRON","ADDRESS_FORMAT_SUI","ADDRESS_FORMAT_APTOS","ADDRESS_FORMAT_BITCOIN_MAINNET_P2PKH","ADDRESS_FORMAT_BITCOIN_MAINNET_P2SH","ADDRESS_FORMAT_BITCOIN_MAINNET_P2WPKH","ADDRESS_FORMAT_BITCOIN_MAINNET_P2WSH","ADDRESS_FORMAT_BITCOIN_MAINNET_P2TR","ADDRESS_FORMAT_BITCOIN_TESTNET_P2PKH","ADDRESS_FORMAT_BITCOIN_TESTNET_P2SH","ADDRESS_FORMAT_BITCOIN_TESTNET_P2WPKH","ADDRESS_FORMAT_BITCOIN_TESTNET_P2WSH","ADDRESS_FORMAT_BITCOIN_TESTNET_P2TR","ADDRESS_FORMAT_BITCOIN_SIGNET_P2PKH","ADDRESS_FORMAT_BITCOIN_SIGNET_P2SH","ADDRESS_FORMAT_BITCOIN_SIGNET_P2WPKH","ADDRESS_FORMAT_BITCOIN_SIGNET_P2WSH","ADDRESS_FORMAT_BITCOIN_SIGNET_P2TR","ADDRESS_FORMAT_BITCOIN_REGTEST_P2PKH","ADDRESS_FORMAT_BITCOIN_REGTEST_P2SH","ADDRESS_FORMAT_BITCOIN_REGTEST_P2WPKH","ADDRESS_FORMAT_BITCOIN_REGTEST_P2WSH","ADDRESS_FORMAT_BITCOIN_REGTEST_P2TR"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

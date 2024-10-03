@@ -30,8 +30,7 @@ type CreateReadWriteSessionIntentV2 struct {
 	TargetPublicKey *string `json:"targetPublicKey"`
 
 	// Unique identifier for a given User.
-	// Required: true
-	UserID *string `json:"userId"`
+	UserID string `json:"userId,omitempty"`
 }
 
 // Validate validates this create read write session intent v2
@@ -39,10 +38,6 @@ func (m *CreateReadWriteSessionIntentV2) Validate(formats strfmt.Registry) error
 	var res []error
 
 	if err := m.validateTargetPublicKey(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUserID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,15 +50,6 @@ func (m *CreateReadWriteSessionIntentV2) Validate(formats strfmt.Registry) error
 func (m *CreateReadWriteSessionIntentV2) validateTargetPublicKey(formats strfmt.Registry) error {
 
 	if err := validate.Required("targetPublicKey", "body", m.TargetPublicKey); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CreateReadWriteSessionIntentV2) validateUserID(formats strfmt.Registry) error {
-
-	if err := validate.Required("userId", "body", m.UserID); err != nil {
 		return err
 	}
 

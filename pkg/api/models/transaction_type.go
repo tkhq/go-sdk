@@ -32,6 +32,9 @@ const (
 
 	// TransactionTypeEthereum captures enum value "TRANSACTION_TYPE_ETHEREUM"
 	TransactionTypeEthereum TransactionType = "TRANSACTION_TYPE_ETHEREUM"
+
+	// TransactionTypeSolana captures enum value "TRANSACTION_TYPE_SOLANA"
+	TransactionTypeSolana TransactionType = "TRANSACTION_TYPE_SOLANA"
 )
 
 // for schema
@@ -39,7 +42,7 @@ var TransactionTypeEnum []TransactionType
 
 func init() {
 	var res []TransactionType
-	if err := json.Unmarshal([]byte(`["TRANSACTION_TYPE_ETHEREUM"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["TRANSACTION_TYPE_ETHEREUM","TRANSACTION_TYPE_SOLANA"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

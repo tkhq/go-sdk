@@ -147,6 +147,9 @@ type Intent struct {
 	// delete private keys intent
 	DeletePrivateKeysIntent *DeletePrivateKeysIntent `json:"deletePrivateKeysIntent,omitempty"`
 
+	// delete sub organization intent
+	DeleteSubOrganizationIntent *DeleteSubOrganizationIntent `json:"deleteSubOrganizationIntent,omitempty"`
+
 	// delete user tags intent
 	DeleteUserTagsIntent *DeleteUserTagsIntent `json:"deleteUserTagsIntent,omitempty"`
 
@@ -413,6 +416,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePrivateKeysIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteSubOrganizationIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1348,6 +1355,25 @@ func (m *Intent) validateDeletePrivateKeysIntent(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *Intent) validateDeleteSubOrganizationIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteSubOrganizationIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteSubOrganizationIntent != nil {
+		if err := m.DeleteSubOrganizationIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSubOrganizationIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSubOrganizationIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateDeleteUserTagsIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteUserTagsIntent) { // not required
 		return nil
@@ -2125,6 +2151,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePrivateKeysIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteSubOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3136,6 +3166,27 @@ func (m *Intent) contextValidateDeletePrivateKeysIntent(ctx context.Context, for
 				return ve.ValidateName("deletePrivateKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteSubOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteSubOrganizationIntent != nil {
+
+		if swag.IsZero(m.DeleteSubOrganizationIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteSubOrganizationIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSubOrganizationIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSubOrganizationIntent")
 			}
 			return err
 		}
