@@ -44,7 +44,11 @@ type ClientService interface {
 
 	GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUsersOK, error)
 
+	InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpAuthOK, error)
+
 	Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthOK, error)
+
+	OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpAuthOK, error)
 
 	UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserOK, error)
 
@@ -339,6 +343,47 @@ func (a *Client) GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInf
 }
 
 /*
+InitOtpAuth inits o t p auth
+
+Initiate an OTP auth activity
+*/
+func (a *Client) InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpAuthOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewInitOtpAuthParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "InitOtpAuth",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/init_otp_auth",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &InitOtpAuthReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*InitOtpAuthOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for InitOtpAuth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 Oauth oauths
 
 Authenticate a user with an Oidc token (Oauth) - BETA
@@ -376,6 +421,47 @@ func (a *Client) Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWrite
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for Oauth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+OtpAuth os t p auth
+
+Authenticate a user with an OTP code sent via email or SMS
+*/
+func (a *Client) OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpAuthOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewOtpAuthParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "OtpAuth",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/otp_auth",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &OtpAuthReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*OtpAuthOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for OtpAuth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -105,6 +105,9 @@ type Intent struct {
 	// create sub organization intent v6
 	CreateSubOrganizationIntentV6 *CreateSubOrganizationIntentV6 `json:"createSubOrganizationIntentV6,omitempty"`
 
+	// create sub organization intent v7
+	CreateSubOrganizationIntentV7 *CreateSubOrganizationIntentV7 `json:"createSubOrganizationIntentV7,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
@@ -189,11 +192,17 @@ type Intent struct {
 	// init import wallet intent
 	InitImportWalletIntent *InitImportWalletIntent `json:"initImportWalletIntent,omitempty"`
 
+	// init otp auth intent
+	InitOtpAuthIntent *InitOtpAuthIntent `json:"initOtpAuthIntent,omitempty"`
+
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
 
 	// oauth intent
 	OauthIntent *OauthIntent `json:"oauthIntent,omitempty"`
+
+	// otp auth intent
+	OtpAuthIntent *OtpAuthIntent `json:"otpAuthIntent,omitempty"`
 
 	// recover user intent
 	RecoverUserIntent *RecoverUserIntent `json:"recoverUserIntent,omitempty"`
@@ -363,6 +372,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSubOrganizationIntentV7(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -475,11 +488,19 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpAuthIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateOauthIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOtpAuthIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1089,6 +1110,25 @@ func (m *Intent) validateCreateSubOrganizationIntentV6(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *Intent) validateCreateSubOrganizationIntentV7(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSubOrganizationIntentV7) { // not required
+		return nil
+	}
+
+	if m.CreateSubOrganizationIntentV7 != nil {
+		if err := m.CreateSubOrganizationIntentV7.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV7")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateUserTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateUserTagIntent) { // not required
 		return nil
@@ -1621,6 +1661,25 @@ func (m *Intent) validateInitImportWalletIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitOtpAuthIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpAuthIntent) { // not required
+		return nil
+	}
+
+	if m.InitOtpAuthIntent != nil {
+		if err := m.InitOtpAuthIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
 		return nil
@@ -1651,6 +1710,25 @@ func (m *Intent) validateOauthIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("oauthIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("oauthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateOtpAuthIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.OtpAuthIntent) { // not required
+		return nil
+	}
+
+	if m.OtpAuthIntent != nil {
+		if err := m.OtpAuthIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpAuthIntent")
 			}
 			return err
 		}
@@ -2098,6 +2176,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSubOrganizationIntentV7(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2210,11 +2292,19 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpAuthIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.contextValidateOauthIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOtpAuthIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2880,6 +2970,27 @@ func (m *Intent) contextValidateCreateSubOrganizationIntentV6(ctx context.Contex
 	return nil
 }
 
+func (m *Intent) contextValidateCreateSubOrganizationIntentV7(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSubOrganizationIntentV7 != nil {
+
+		if swag.IsZero(m.CreateSubOrganizationIntentV7) { // not required
+			return nil
+		}
+
+		if err := m.CreateSubOrganizationIntentV7.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSubOrganizationIntentV7")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSubOrganizationIntentV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateUserTagIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateUserTagIntent != nil {
@@ -3468,6 +3579,27 @@ func (m *Intent) contextValidateInitImportWalletIntent(ctx context.Context, form
 	return nil
 }
 
+func (m *Intent) contextValidateInitOtpAuthIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpAuthIntent != nil {
+
+		if swag.IsZero(m.InitOtpAuthIntent) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpAuthIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryIntent != nil {
@@ -3502,6 +3634,27 @@ func (m *Intent) contextValidateOauthIntent(ctx context.Context, formats strfmt.
 				return ve.ValidateName("oauthIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("oauthIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateOtpAuthIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OtpAuthIntent != nil {
+
+		if swag.IsZero(m.OtpAuthIntent) { // not required
+			return nil
+		}
+
+		if err := m.OtpAuthIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpAuthIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpAuthIntent")
 			}
 			return err
 		}
