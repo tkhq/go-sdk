@@ -1521,6 +1521,32 @@
         "tags": ["Wallets"]
       }
     },
+    "/public/v1/submit/init_otp_auth": {
+      "post": {
+        "summary": "Init OTP auth",
+        "description": "Initiate an OTP auth activity",
+        "operationId": "InitOtpAuth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InitOtpAuthRequest"
+            }
+          }
+        ],
+        "tags": ["Users"]
+      }
+    },
     "/public/v1/submit/init_user_email_recovery": {
       "post": {
         "summary": "Init Email Recovery",
@@ -1567,6 +1593,32 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/OauthRequest"
+            }
+          }
+        ],
+        "tags": ["Users"]
+      }
+    },
+    "/public/v1/submit/otp_auth": {
+      "post": {
+        "summary": "OTP auth",
+        "description": "Authenticate a user with an OTP code sent via email or SMS",
+        "operationId": "OtpAuth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OtpAuthRequest"
             }
           }
         ],
@@ -2131,7 +2183,10 @@
         "ACTIVITY_TYPE_DELETE_PRIVATE_KEYS",
         "ACTIVITY_TYPE_DELETE_WALLETS",
         "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2",
-        "ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION"
+        "ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION",
+        "ACTIVITY_TYPE_INIT_OTP_AUTH",
+        "ACTIVITY_TYPE_OTP_AUTH",
+        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"
       ]
     },
     "AddressFormat": {
@@ -3478,12 +3533,55 @@
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
     },
+    "CreateSubOrganizationIntentV7": {
+      "type": "object",
+      "properties": {
+        "subOrganizationName": {
+          "type": "string",
+          "description": "Name for this sub-organization"
+        },
+        "rootUsers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/RootUserParamsV4"
+          },
+          "description": "Root users to create within this sub-organization"
+        },
+        "rootQuorumThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletParams",
+          "description": "The wallet to create for the sub-organization"
+        },
+        "disableEmailRecovery": {
+          "type": "boolean",
+          "description": "Disable email recovery for the sub-organization"
+        },
+        "disableEmailAuth": {
+          "type": "boolean",
+          "description": "Disable email auth for the sub-organization"
+        },
+        "disableSmsAuth": {
+          "type": "boolean",
+          "description": "Disable OTP SMS auth for the sub-organization"
+        },
+        "disableOtpEmailAuth": {
+          "type": "boolean",
+          "description": "Disable OTP email auth for the sub-organization"
+        }
+      },
+      "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
+    },
     "CreateSubOrganizationRequest": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"]
         },
         "timestampMs": {
           "type": "string",
@@ -3494,7 +3592,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/CreateSubOrganizationIntentV6"
+          "$ref": "#/definitions/CreateSubOrganizationIntentV7"
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3574,6 +3672,24 @@
       "required": ["subOrganizationId"]
     },
     "CreateSubOrganizationResultV6": {
+      "type": "object",
+      "properties": {
+        "subOrganizationId": {
+          "type": "string"
+        },
+        "wallet": {
+          "$ref": "#/definitions/WalletResult"
+        },
+        "rootUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["subOrganizationId"]
+    },
+    "CreateSubOrganizationResultV7": {
       "type": "object",
       "properties": {
         "subOrganizationId": {
@@ -3838,7 +3954,8 @@
         "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256",
         "CREDENTIAL_TYPE_API_KEY_SECP256K1",
         "CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256",
-        "CREDENTIAL_TYPE_API_KEY_ED25519"
+        "CREDENTIAL_TYPE_API_KEY_ED25519",
+        "CREDENTIAL_TYPE_OTP_AUTH_KEY_P256"
       ]
     },
     "Curve": {
@@ -4730,7 +4847,9 @@
         "FEATURE_NAME_WEBAUTHN_ORIGINS",
         "FEATURE_NAME_EMAIL_AUTH",
         "FEATURE_NAME_EMAIL_RECOVERY",
-        "FEATURE_NAME_WEBHOOK"
+        "FEATURE_NAME_WEBHOOK",
+        "FEATURE_NAME_SMS_AUTH",
+        "FEATURE_NAME_OTP_EMAIL_AUTH"
       ]
     },
     "GetActivitiesRequest": {
@@ -5461,6 +5580,55 @@
       },
       "required": ["importBundle"]
     },
+    "InitOtpAuthIntent": {
+      "type": "object",
+      "properties": {
+        "otpType": {
+          "type": "string",
+          "description": "Enum to specifiy whether to send OTP via SMS or email"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Email or phone number to send the OTP code to"
+        },
+        "emailCustomization": {
+          "$ref": "#/definitions/EmailCustomizationParams",
+          "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
+        }
+      },
+      "required": ["otpType", "contact"]
+    },
+    "InitOtpAuthRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_INIT_OTP_AUTH"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/InitOtpAuthIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "InitOtpAuthResult": {
+      "type": "object",
+      "properties": {
+        "otpId": {
+          "type": "string",
+          "description": "Unique identifier for an OTP authentication"
+        }
+      },
+      "required": ["otpId"]
+    },
     "InitUserEmailRecoveryIntent": {
       "type": "object",
       "properties": {
@@ -5744,6 +5912,15 @@
         },
         "deleteSubOrganizationIntent": {
           "$ref": "#/definitions/DeleteSubOrganizationIntent"
+        },
+        "initOtpAuthIntent": {
+          "$ref": "#/definitions/InitOtpAuthIntent"
+        },
+        "otpAuthIntent": {
+          "$ref": "#/definitions/OtpAuthIntent"
+        },
+        "createSubOrganizationIntentV7": {
+          "$ref": "#/definitions/CreateSubOrganizationIntentV7"
         }
       }
     },
@@ -5974,6 +6151,75 @@
         "OPERATOR_CONTAINS_ONE",
         "OPERATOR_CONTAINS_ALL"
       ]
+    },
+    "OtpAuthIntent": {
+      "type": "object",
+      "properties": {
+        "otpId": {
+          "type": "string",
+          "description": "ID representing the result of an init OTP activity."
+        },
+        "otpCode": {
+          "type": "string",
+          "description": "6 digit OTP code sent out to a user's contact (email or SMS)"
+        },
+        "targetPublicKey": {
+          "type": "string",
+          "description": "Client-side public key generated by the user, to which the OTP bundle (credentials) will be encrypted."
+        },
+        "apiKeyName": {
+          "type": "string",
+          "description": "Optional human-readable name for an API Key. If none provided, default to OTP Auth - \u003cTimestamp\u003e"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated OTP Auth API keys"
+        }
+      },
+      "required": ["otpId", "otpCode"]
+    },
+    "OtpAuthRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_OTP_AUTH"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/OtpAuthIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "OtpAuthResult": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for the authenticating User."
+        },
+        "apiKeyId": {
+          "type": "string",
+          "description": "Unique identifier for the created API key."
+        },
+        "credentialBundle": {
+          "type": "string",
+          "description": "HPKE encrypted credential bundle"
+        }
+      },
+      "required": ["userId"]
     },
     "Pagination": {
       "type": "object",
@@ -6494,6 +6740,15 @@
         },
         "deleteSubOrganizationResult": {
           "$ref": "#/definitions/DeleteSubOrganizationResult"
+        },
+        "initOtpAuthResult": {
+          "$ref": "#/definitions/InitOtpAuthResult"
+        },
+        "otpAuthResult": {
+          "$ref": "#/definitions/OtpAuthResult"
+        },
+        "createSubOrganizationResultV7": {
+          "$ref": "#/definitions/CreateSubOrganizationResultV7"
         }
       }
     },
@@ -6575,6 +6830,48 @@
         "userEmail": {
           "type": "string",
           "description": "The user's email address."
+        },
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ApiKeyParamsV2"
+          },
+          "description": "A list of API Key parameters."
+        },
+        "authenticators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AuthenticatorParamsV2"
+          },
+          "description": "A list of Authenticator parameters."
+        },
+        "oauthProviders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/OauthProviderParams"
+          },
+          "description": "A list of Oauth providers."
+        }
+      },
+      "required": ["userName", "apiKeys", "authenticators", "oauthProviders"]
+    },
+    "RootUserParamsV4": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "Human-readable name for a User."
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "The user's email address."
+        },
+        "userPhoneNumber": {
+          "type": "string",
+          "description": "The user's phone number in E.164 format e.g. +13214567890"
         },
         "apiKeys": {
           "type": "array",
@@ -7201,6 +7498,10 @@
             "type": "string"
           },
           "description": "An updated list of User Tags to apply to this User."
+        },
+        "userPhoneNumber": {
+          "type": "string",
+          "description": "The user's phone number in E.164 format e.g. +13214567890"
         }
       },
       "required": ["userId"]
@@ -7309,6 +7610,10 @@
         "userEmail": {
           "type": "string",
           "description": "The user's email address."
+        },
+        "userPhoneNumber": {
+          "type": "string",
+          "description": "The user's phone number in E.164 format e.g. +13214567890"
         },
         "authenticators": {
           "type": "array",

@@ -15,37 +15,25 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// User user
+// RootUserParamsV4 root user params v4
 //
-// swagger:model User
-type User struct {
+// swagger:model RootUserParamsV4
+type RootUserParamsV4 struct {
 
 	// A list of API Key parameters.
 	// Required: true
-	APIKeys []*APIKey `json:"apiKeys"`
+	APIKeys []*APIKeyParamsV2 `json:"apiKeys"`
 
 	// A list of Authenticator parameters.
 	// Required: true
-	Authenticators []*Authenticator `json:"authenticators"`
+	Authenticators []*AuthenticatorParamsV2 `json:"authenticators"`
 
-	// created at
+	// A list of Oauth providers.
 	// Required: true
-	CreatedAt *ExternalDataV1Timestamp `json:"createdAt"`
-
-	// A list of Oauth Providers.
-	// Required: true
-	OauthProviders []*OauthProvider `json:"oauthProviders"`
-
-	// updated at
-	// Required: true
-	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
+	OauthProviders []*OauthProviderParams `json:"oauthProviders"`
 
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
-
-	// Unique identifier for a given User.
-	// Required: true
-	UserID *string `json:"userId"`
 
 	// Human-readable name for a User.
 	// Required: true
@@ -53,14 +41,10 @@ type User struct {
 
 	// The user's phone number in E.164 format e.g. +13214567890
 	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
-
-	// A list of User Tag IDs.
-	// Required: true
-	UserTags []string `json:"userTags"`
 }
 
-// Validate validates this user
-func (m *User) Validate(formats strfmt.Registry) error {
+// Validate validates this root user params v4
+func (m *RootUserParamsV4) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAPIKeys(formats); err != nil {
@@ -71,27 +55,11 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateOauthProviders(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpdatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUserID(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateUserName(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUserTags(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -101,7 +69,7 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateAPIKeys(formats strfmt.Registry) error {
+func (m *RootUserParamsV4) validateAPIKeys(formats strfmt.Registry) error {
 
 	if err := validate.Required("apiKeys", "body", m.APIKeys); err != nil {
 		return err
@@ -128,7 +96,7 @@ func (m *User) validateAPIKeys(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateAuthenticators(formats strfmt.Registry) error {
+func (m *RootUserParamsV4) validateAuthenticators(formats strfmt.Registry) error {
 
 	if err := validate.Required("authenticators", "body", m.Authenticators); err != nil {
 		return err
@@ -155,27 +123,7 @@ func (m *User) validateAuthenticators(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateCreatedAt(formats strfmt.Registry) error {
-
-	if err := validate.Required("createdAt", "body", m.CreatedAt); err != nil {
-		return err
-	}
-
-	if m.CreatedAt != nil {
-		if err := m.CreatedAt.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("createdAt")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("createdAt")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *User) validateOauthProviders(formats strfmt.Registry) error {
+func (m *RootUserParamsV4) validateOauthProviders(formats strfmt.Registry) error {
 
 	if err := validate.Required("oauthProviders", "body", m.OauthProviders); err != nil {
 		return err
@@ -202,36 +150,7 @@ func (m *User) validateOauthProviders(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if err := validate.Required("updatedAt", "body", m.UpdatedAt); err != nil {
-		return err
-	}
-
-	if m.UpdatedAt != nil {
-		if err := m.UpdatedAt.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("updatedAt")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("updatedAt")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *User) validateUserID(formats strfmt.Registry) error {
-
-	if err := validate.Required("userId", "body", m.UserID); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *User) validateUserName(formats strfmt.Registry) error {
+func (m *RootUserParamsV4) validateUserName(formats strfmt.Registry) error {
 
 	if err := validate.Required("userName", "body", m.UserName); err != nil {
 		return err
@@ -240,17 +159,8 @@ func (m *User) validateUserName(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateUserTags(formats strfmt.Registry) error {
-
-	if err := validate.Required("userTags", "body", m.UserTags); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// ContextValidate validate this user based on the context it is used
-func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this root user params v4 based on the context it is used
+func (m *RootUserParamsV4) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateAPIKeys(ctx, formats); err != nil {
@@ -261,15 +171,7 @@ func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) err
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateOauthProviders(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -279,7 +181,7 @@ func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) err
 	return nil
 }
 
-func (m *User) contextValidateAPIKeys(ctx context.Context, formats strfmt.Registry) error {
+func (m *RootUserParamsV4) contextValidateAPIKeys(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.APIKeys); i++ {
 
@@ -304,7 +206,7 @@ func (m *User) contextValidateAPIKeys(ctx context.Context, formats strfmt.Regist
 	return nil
 }
 
-func (m *User) contextValidateAuthenticators(ctx context.Context, formats strfmt.Registry) error {
+func (m *RootUserParamsV4) contextValidateAuthenticators(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Authenticators); i++ {
 
@@ -329,24 +231,7 @@ func (m *User) contextValidateAuthenticators(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *User) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.CreatedAt != nil {
-
-		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("createdAt")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("createdAt")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *User) contextValidateOauthProviders(ctx context.Context, formats strfmt.Registry) error {
+func (m *RootUserParamsV4) contextValidateOauthProviders(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.OauthProviders); i++ {
 
@@ -371,25 +256,8 @@ func (m *User) contextValidateOauthProviders(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *User) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.UpdatedAt != nil {
-
-		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("updatedAt")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("updatedAt")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // MarshalBinary interface implementation
-func (m *User) MarshalBinary() ([]byte, error) {
+func (m *RootUserParamsV4) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -397,8 +265,8 @@ func (m *User) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *User) UnmarshalBinary(b []byte) error {
-	var res User
+func (m *RootUserParamsV4) UnmarshalBinary(b []byte) error {
+	var res RootUserParamsV4
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

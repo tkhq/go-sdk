@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CreateSubOrganizationRequest create sub organization request
+// OtpAuthRequest otp auth request
 //
-// swagger:model CreateSubOrganizationRequest
-type CreateSubOrganizationRequest struct {
+// swagger:model OtpAuthRequest
+type OtpAuthRequest struct {
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +26,7 @@ type CreateSubOrganizationRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *CreateSubOrganizationIntentV7 `json:"parameters"`
+	Parameters *OtpAuthIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +34,12 @@ type CreateSubOrganizationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7]
+	// Enum: [ACTIVITY_TYPE_OTP_AUTH]
 	Type *string `json:"type"`
 }
 
-// Validate validates this create sub organization request
-func (m *CreateSubOrganizationRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this otp auth request
+func (m *OtpAuthRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +64,7 @@ func (m *CreateSubOrganizationRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CreateSubOrganizationRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *OtpAuthRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *CreateSubOrganizationRequest) validateOrganizationID(formats strfmt.Reg
 	return nil
 }
 
-func (m *CreateSubOrganizationRequest) validateParameters(formats strfmt.Registry) error {
+func (m *OtpAuthRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +93,7 @@ func (m *CreateSubOrganizationRequest) validateParameters(formats strfmt.Registr
 	return nil
 }
 
-func (m *CreateSubOrganizationRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *OtpAuthRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +102,33 @@ func (m *CreateSubOrganizationRequest) validateTimestampMs(formats strfmt.Regist
 	return nil
 }
 
-var createSubOrganizationRequestTypeTypePropEnum []interface{}
+var otpAuthRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_OTP_AUTH"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		createSubOrganizationRequestTypeTypePropEnum = append(createSubOrganizationRequestTypeTypePropEnum, v)
+		otpAuthRequestTypeTypePropEnum = append(otpAuthRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV7 captures enum value "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"
-	CreateSubOrganizationRequestTypeACTIVITYTYPECREATESUBORGANIZATIONV7 string = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"
+	// OtpAuthRequestTypeACTIVITYTYPEOTPAUTH captures enum value "ACTIVITY_TYPE_OTP_AUTH"
+	OtpAuthRequestTypeACTIVITYTYPEOTPAUTH string = "ACTIVITY_TYPE_OTP_AUTH"
 )
 
 // prop value enum
-func (m *CreateSubOrganizationRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, createSubOrganizationRequestTypeTypePropEnum, true); err != nil {
+func (m *OtpAuthRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, otpAuthRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *CreateSubOrganizationRequest) validateType(formats strfmt.Registry) error {
+func (m *OtpAuthRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +142,8 @@ func (m *CreateSubOrganizationRequest) validateType(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validate this create sub organization request based on the context it is used
-func (m *CreateSubOrganizationRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this otp auth request based on the context it is used
+func (m *OtpAuthRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +156,7 @@ func (m *CreateSubOrganizationRequest) ContextValidate(ctx context.Context, form
 	return nil
 }
 
-func (m *CreateSubOrganizationRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *OtpAuthRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 
@@ -174,7 +174,7 @@ func (m *CreateSubOrganizationRequest) contextValidateParameters(ctx context.Con
 }
 
 // MarshalBinary interface implementation
-func (m *CreateSubOrganizationRequest) MarshalBinary() ([]byte, error) {
+func (m *OtpAuthRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -182,8 +182,8 @@ func (m *CreateSubOrganizationRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *CreateSubOrganizationRequest) UnmarshalBinary(b []byte) error {
-	var res CreateSubOrganizationRequest
+func (m *OtpAuthRequest) UnmarshalBinary(b []byte) error {
+	var res OtpAuthRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
