@@ -30,11 +30,11 @@ func (m Effect) Pointer() *Effect {
 
 const (
 
-	// EFFECTALLOW captures enum value "EFFECT_ALLOW"
-	EFFECTALLOW Effect = "EFFECT_ALLOW"
+	// EffectAllow captures enum value "EFFECT_ALLOW"
+	EffectAllow Effect = "EFFECT_ALLOW"
 
-	// EFFECTDENY captures enum value "EFFECT_DENY"
-	EFFECTDENY Effect = "EFFECT_DENY"
+	// EffectDeny captures enum value "EFFECT_DENY"
+	EffectDeny Effect = "EFFECT_DENY"
 )
 
 // for schema

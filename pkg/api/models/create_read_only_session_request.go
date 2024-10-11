@@ -34,7 +34,7 @@ type CreateReadOnlySessionRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION"]
+	// Enum: [ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION]
 	Type *string `json:"type"`
 }
 

@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *OtpAuthOK) Code() int {
 }
 
 func (o *OtpAuthOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/otp_auth][%d] otpAuthOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/otp_auth][%d] otpAuthOK  %+v", 200, o.Payload)
 }
 
 func (o *OtpAuthOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/otp_auth][%d] otpAuthOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/otp_auth][%d] otpAuthOK  %+v", 200, o.Payload)
 }
 
 func (o *OtpAuthOK) GetPayload() *models.ActivityResponse {

@@ -34,7 +34,7 @@ type DeletePolicyRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_DELETE_POLICY"]
+	// Enum: [ACTIVITY_TYPE_DELETE_POLICY]
 	Type *string `json:"type"`
 }
 

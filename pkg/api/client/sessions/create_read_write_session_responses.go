@@ -6,7 +6,6 @@ package sessions
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *CreateReadWriteSessionOK) Code() int {
 }
 
 func (o *CreateReadWriteSessionOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_read_write_session][%d] createReadWriteSessionOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_read_write_session][%d] createReadWriteSessionOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateReadWriteSessionOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/create_read_write_session][%d] createReadWriteSessionOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_read_write_session][%d] createReadWriteSessionOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateReadWriteSessionOK) GetPayload() *models.ActivityResponse {

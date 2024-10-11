@@ -34,7 +34,7 @@ type ExportWalletAccountRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT"]
+	// Enum: [ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT]
 	Type *string `json:"type"`
 }
 

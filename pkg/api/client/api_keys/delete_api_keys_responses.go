@@ -6,7 +6,6 @@ package api_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *DeleteAPIKeysOK) Code() int {
 }
 
 func (o *DeleteAPIKeysOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_api_keys][%d] deleteApiKeysOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_api_keys][%d] deleteApiKeysOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteAPIKeysOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_api_keys][%d] deleteApiKeysOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_api_keys][%d] deleteApiKeysOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteAPIKeysOK) GetPayload() *models.ActivityResponse {

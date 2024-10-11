@@ -26,7 +26,7 @@ type AuthenticatorAttestationResponse struct {
 	AttestationObject *string `json:"attestationObject"`
 
 	// authenticator attachment
-	// Enum: ["cross-platform","platform"]
+	// Enum: [cross-platform platform]
 	AuthenticatorAttachment *string `json:"authenticatorAttachment,omitempty"`
 
 	// client data Json

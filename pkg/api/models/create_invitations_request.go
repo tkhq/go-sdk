@@ -34,7 +34,7 @@ type CreateInvitationsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_CREATE_INVITATIONS"]
+	// Enum: [ACTIVITY_TYPE_CREATE_INVITATIONS]
 	Type *string `json:"type"`
 }
 

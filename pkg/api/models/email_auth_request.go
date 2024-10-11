@@ -34,7 +34,7 @@ type EmailAuthRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_EMAIL_AUTH_V2"]
+	// Enum: [ACTIVITY_TYPE_EMAIL_AUTH_V2]
 	Type *string `json:"type"`
 }
 

@@ -6,7 +6,6 @@ package private_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,13 +79,11 @@ func (o *DeletePrivateKeysOK) Code() int {
 }
 
 func (o *DeletePrivateKeysOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_private_keys][%d] deletePrivateKeysOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_private_keys][%d] deletePrivateKeysOK  %+v", 200, o.Payload)
 }
 
 func (o *DeletePrivateKeysOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /public/v1/submit/delete_private_keys][%d] deletePrivateKeysOK %s", 200, payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_private_keys][%d] deletePrivateKeysOK  %+v", 200, o.Payload)
 }
 
 func (o *DeletePrivateKeysOK) GetPayload() *models.ActivityResponse {

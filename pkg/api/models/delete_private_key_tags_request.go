@@ -34,7 +34,7 @@ type DeletePrivateKeyTagsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"]
+	// Enum: [ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS]
 	Type *string `json:"type"`
 }
 

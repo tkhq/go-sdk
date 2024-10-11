@@ -30,14 +30,14 @@ func (m APIKeyCurve) Pointer() *APIKeyCurve {
 
 const (
 
-	// APIKEYCURVEP256 captures enum value "API_KEY_CURVE_P256"
-	APIKEYCURVEP256 APIKeyCurve = "API_KEY_CURVE_P256"
+	// APIKeyCurveP256 captures enum value "API_KEY_CURVE_P256"
+	APIKeyCurveP256 APIKeyCurve = "API_KEY_CURVE_P256"
 
-	// APIKEYCURVESECP256K1 captures enum value "API_KEY_CURVE_SECP256K1"
-	APIKEYCURVESECP256K1 APIKeyCurve = "API_KEY_CURVE_SECP256K1"
+	// APIKeyCurveSecp256k1 captures enum value "API_KEY_CURVE_SECP256K1"
+	APIKeyCurveSecp256k1 APIKeyCurve = "API_KEY_CURVE_SECP256K1"
 
-	// APIKEYCURVEED25519 captures enum value "API_KEY_CURVE_ED25519"
-	APIKEYCURVEED25519 APIKeyCurve = "API_KEY_CURVE_ED25519"
+	// APIKeyCurveEd25519 captures enum value "API_KEY_CURVE_ED25519"
+	APIKeyCurveEd25519 APIKeyCurve = "API_KEY_CURVE_ED25519"
 )
 
 // for schema

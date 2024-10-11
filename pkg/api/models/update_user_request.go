@@ -34,7 +34,7 @@ type UpdateUserRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_UPDATE_USER"]
+	// Enum: [ACTIVITY_TYPE_UPDATE_USER]
 	Type *string `json:"type"`
 }
 

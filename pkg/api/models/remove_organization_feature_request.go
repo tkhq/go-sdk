@@ -34,7 +34,7 @@ type RemoveOrganizationFeatureRequest struct {
 
 	// type
 	// Required: true
-	// Enum: ["ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"]
+	// Enum: [ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE]
 	Type *string `json:"type"`
 }
 

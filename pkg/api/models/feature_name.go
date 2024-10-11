@@ -30,26 +30,26 @@ func (m FeatureName) Pointer() *FeatureName {
 
 const (
 
-	// FEATURENAMEROOTUSEREMAILRECOVERY captures enum value "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
-	FEATURENAMEROOTUSEREMAILRECOVERY FeatureName = "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
+	// FeatureNameRootUserEmailRecovery captures enum value "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
+	FeatureNameRootUserEmailRecovery FeatureName = "FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY"
 
-	// FEATURENAMEWEBAUTHNORIGINS captures enum value "FEATURE_NAME_WEBAUTHN_ORIGINS"
-	FEATURENAMEWEBAUTHNORIGINS FeatureName = "FEATURE_NAME_WEBAUTHN_ORIGINS"
+	// FeatureNameWebauthnOrigins captures enum value "FEATURE_NAME_WEBAUTHN_ORIGINS"
+	FeatureNameWebauthnOrigins FeatureName = "FEATURE_NAME_WEBAUTHN_ORIGINS"
 
-	// FEATURENAMEEMAILAUTH captures enum value "FEATURE_NAME_EMAIL_AUTH"
-	FEATURENAMEEMAILAUTH FeatureName = "FEATURE_NAME_EMAIL_AUTH"
+	// FeatureNameEmailAuth captures enum value "FEATURE_NAME_EMAIL_AUTH"
+	FeatureNameEmailAuth FeatureName = "FEATURE_NAME_EMAIL_AUTH"
 
-	// FEATURENAMEEMAILRECOVERY captures enum value "FEATURE_NAME_EMAIL_RECOVERY"
-	FEATURENAMEEMAILRECOVERY FeatureName = "FEATURE_NAME_EMAIL_RECOVERY"
+	// FeatureNameEmailRecovery captures enum value "FEATURE_NAME_EMAIL_RECOVERY"
+	FeatureNameEmailRecovery FeatureName = "FEATURE_NAME_EMAIL_RECOVERY"
 
-	// FEATURENAMEWEBHOOK captures enum value "FEATURE_NAME_WEBHOOK"
-	FEATURENAMEWEBHOOK FeatureName = "FEATURE_NAME_WEBHOOK"
+	// FeatureNameWebhook captures enum value "FEATURE_NAME_WEBHOOK"
+	FeatureNameWebhook FeatureName = "FEATURE_NAME_WEBHOOK"
 
-	// FEATURENAMESMSAUTH captures enum value "FEATURE_NAME_SMS_AUTH"
-	FEATURENAMESMSAUTH FeatureName = "FEATURE_NAME_SMS_AUTH"
+	// FeatureNameSmsAuth captures enum value "FEATURE_NAME_SMS_AUTH"
+	FeatureNameSmsAuth FeatureName = "FEATURE_NAME_SMS_AUTH"
 
-	// FEATURENAMEOTPEMAILAUTH captures enum value "FEATURE_NAME_OTP_EMAIL_AUTH"
-	FEATURENAMEOTPEMAILAUTH FeatureName = "FEATURE_NAME_OTP_EMAIL_AUTH"
+	// FeatureNameOtpEmailAuth captures enum value "FEATURE_NAME_OTP_EMAIL_AUTH"
+	FeatureNameOtpEmailAuth FeatureName = "FEATURE_NAME_OTP_EMAIL_AUTH"
 )
 
 // for schema

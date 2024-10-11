@@ -30,11 +30,11 @@ func (m TagType) Pointer() *TagType {
 
 const (
 
-	// TAGTYPEUSER captures enum value "TAG_TYPE_USER"
-	TAGTYPEUSER TagType = "TAG_TYPE_USER"
+	// TagTypeUser captures enum value "TAG_TYPE_USER"
+	TagTypeUser TagType = "TAG_TYPE_USER"
 
-	// TAGTYPEPRIVATEKEY captures enum value "TAG_TYPE_PRIVATE_KEY"
-	TAGTYPEPRIVATEKEY TagType = "TAG_TYPE_PRIVATE_KEY"
+	// TagTypePrivateKey captures enum value "TAG_TYPE_PRIVATE_KEY"
+	TagTypePrivateKey TagType = "TAG_TYPE_PRIVATE_KEY"
 )
 
 // for schema
