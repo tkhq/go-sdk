@@ -6,6 +6,7 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *DeleteOauthProvidersOK) Code() int {
 }
 
 func (o *DeleteOauthProvidersOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_oauth_providers][%d] deleteOauthProvidersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_oauth_providers][%d] deleteOauthProvidersOK %s", 200, payload)
 }
 
 func (o *DeleteOauthProvidersOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_oauth_providers][%d] deleteOauthProvidersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_oauth_providers][%d] deleteOauthProvidersOK %s", 200, payload)
 }
 
 func (o *DeleteOauthProvidersOK) GetPayload() *models.ActivityResponse {

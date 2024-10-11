@@ -6,6 +6,7 @@ package authenticators
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *CreateAuthenticatorsOK) Code() int {
 }
 
 func (o *CreateAuthenticatorsOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] createAuthenticatorsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] createAuthenticatorsOK %s", 200, payload)
 }
 
 func (o *CreateAuthenticatorsOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] createAuthenticatorsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/create_authenticators][%d] createAuthenticatorsOK %s", 200, payload)
 }
 
 func (o *CreateAuthenticatorsOK) GetPayload() *models.ActivityResponse {

@@ -46,7 +46,7 @@ type Vote struct {
 
 	// selection
 	// Required: true
-	// Enum: [VOTE_SELECTION_APPROVED VOTE_SELECTION_REJECTED]
+	// Enum: ["VOTE_SELECTION_APPROVED","VOTE_SELECTION_REJECTED"]
 	Selection *string `json:"selection"`
 
 	// The signature applied to a particular vote.

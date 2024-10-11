@@ -34,7 +34,7 @@ type CreateOauthProvidersRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS]
+	// Enum: ["ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS"]
 	Type *string `json:"type"`
 }
 

@@ -6,6 +6,7 @@ package organizations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *DeleteSubOrganizationOK) Code() int {
 }
 
 func (o *DeleteSubOrganizationOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_sub_organization][%d] deleteSubOrganizationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_sub_organization][%d] deleteSubOrganizationOK %s", 200, payload)
 }
 
 func (o *DeleteSubOrganizationOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_sub_organization][%d] deleteSubOrganizationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_sub_organization][%d] deleteSubOrganizationOK %s", 200, payload)
 }
 
 func (o *DeleteSubOrganizationOK) GetPayload() *models.ActivityResponse {

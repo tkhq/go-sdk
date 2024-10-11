@@ -34,7 +34,7 @@ type UpdateUserTagRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_UPDATE_USER_TAG]
+	// Enum: ["ACTIVITY_TYPE_UPDATE_USER_TAG"]
 	Type *string `json:"type"`
 }
 

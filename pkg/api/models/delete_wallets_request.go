@@ -34,7 +34,7 @@ type DeleteWalletsRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_DELETE_WALLETS]
+	// Enum: ["ACTIVITY_TYPE_DELETE_WALLETS"]
 	Type *string `json:"type"`
 }
 

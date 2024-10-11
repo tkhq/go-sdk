@@ -34,7 +34,7 @@ type OauthRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_OAUTH]
+	// Enum: ["ACTIVITY_TYPE_OAUTH"]
 	Type *string `json:"type"`
 }
 

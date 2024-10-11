@@ -6,6 +6,7 @@ package user_tags
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *DeleteUserTagsOK) Code() int {
 }
 
 func (o *DeleteUserTagsOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_user_tags][%d] deleteUserTagsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_user_tags][%d] deleteUserTagsOK %s", 200, payload)
 }
 
 func (o *DeleteUserTagsOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/delete_user_tags][%d] deleteUserTagsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/delete_user_tags][%d] deleteUserTagsOK %s", 200, payload)
 }
 
 func (o *DeleteUserTagsOK) GetPayload() *models.ActivityResponse {

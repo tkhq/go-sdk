@@ -34,7 +34,7 @@ type RecoverUserRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_RECOVER_USER]
+	// Enum: ["ACTIVITY_TYPE_RECOVER_USER"]
 	Type *string `json:"type"`
 }
 

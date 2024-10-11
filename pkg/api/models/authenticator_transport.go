@@ -30,20 +30,20 @@ func (m AuthenticatorTransport) Pointer() *AuthenticatorTransport {
 
 const (
 
-	// AuthenticatorTransportBle captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
-	AuthenticatorTransportBle AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
+	// AUTHENTICATORTRANSPORTBLE captures enum value "AUTHENTICATOR_TRANSPORT_BLE"
+	AUTHENTICATORTRANSPORTBLE AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_BLE"
 
-	// AuthenticatorTransportInternal captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
-	AuthenticatorTransportInternal AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	// AUTHENTICATORTRANSPORTINTERNAL captures enum value "AUTHENTICATOR_TRANSPORT_INTERNAL"
+	AUTHENTICATORTRANSPORTINTERNAL AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_INTERNAL"
 
-	// AuthenticatorTransportNfc captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
-	AuthenticatorTransportNfc AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
+	// AUTHENTICATORTRANSPORTNFC captures enum value "AUTHENTICATOR_TRANSPORT_NFC"
+	AUTHENTICATORTRANSPORTNFC AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_NFC"
 
-	// AuthenticatorTransportUsb captures enum value "AUTHENTICATOR_TRANSPORT_USB"
-	AuthenticatorTransportUsb AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
+	// AUTHENTICATORTRANSPORTUSB captures enum value "AUTHENTICATOR_TRANSPORT_USB"
+	AUTHENTICATORTRANSPORTUSB AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_USB"
 
-	// AuthenticatorTransportHybrid captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
-	AuthenticatorTransportHybrid AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
+	// AUTHENTICATORTRANSPORTHYBRID captures enum value "AUTHENTICATOR_TRANSPORT_HYBRID"
+	AUTHENTICATORTRANSPORTHYBRID AuthenticatorTransport = "AUTHENTICATOR_TRANSPORT_HYBRID"
 )
 
 // for schema

@@ -6,6 +6,7 @@ package signing
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *SignTransactionOK) Code() int {
 }
 
 func (o *SignTransactionOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] signTransactionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] signTransactionOK %s", 200, payload)
 }
 
 func (o *SignTransactionOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] signTransactionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/sign_transaction][%d] signTransactionOK %s", 200, payload)
 }
 
 func (o *SignTransactionOK) GetPayload() *models.ActivityResponse {

@@ -34,7 +34,7 @@ type DeletePrivateKeysRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_DELETE_PRIVATE_KEYS]
+	// Enum: ["ACTIVITY_TYPE_DELETE_PRIVATE_KEYS"]
 	Type *string `json:"type"`
 }
 

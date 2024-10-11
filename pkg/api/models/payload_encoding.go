@@ -30,11 +30,11 @@ func (m PayloadEncoding) Pointer() *PayloadEncoding {
 
 const (
 
-	// PayloadEncodingHexadecimal captures enum value "PAYLOAD_ENCODING_HEXADECIMAL"
-	PayloadEncodingHexadecimal PayloadEncoding = "PAYLOAD_ENCODING_HEXADECIMAL"
+	// PAYLOADENCODINGHEXADECIMAL captures enum value "PAYLOAD_ENCODING_HEXADECIMAL"
+	PAYLOADENCODINGHEXADECIMAL PayloadEncoding = "PAYLOAD_ENCODING_HEXADECIMAL"
 
-	// PayloadEncodingTextUTF8 captures enum value "PAYLOAD_ENCODING_TEXT_UTF8"
-	PayloadEncodingTextUTF8 PayloadEncoding = "PAYLOAD_ENCODING_TEXT_UTF8"
+	// PAYLOADENCODINGTEXTUTF8 captures enum value "PAYLOAD_ENCODING_TEXT_UTF8"
+	PAYLOADENCODINGTEXTUTF8 PayloadEncoding = "PAYLOAD_ENCODING_TEXT_UTF8"
 )
 
 // for schema

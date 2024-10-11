@@ -34,7 +34,7 @@ type InitOtpAuthRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_INIT_OTP_AUTH]
+	// Enum: ["ACTIVITY_TYPE_INIT_OTP_AUTH"]
 	Type *string `json:"type"`
 }
 

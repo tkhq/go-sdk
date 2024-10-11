@@ -6,6 +6,7 @@ package api_keys
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *GetAPIKeyOK) Code() int {
 }
 
 func (o *GetAPIKeyOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_api_key][%d] getApiKeyOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_api_key][%d] getApiKeyOK %s", 200, payload)
 }
 
 func (o *GetAPIKeyOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/query/get_api_key][%d] getApiKeyOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/query/get_api_key][%d] getApiKeyOK %s", 200, payload)
 }
 
 func (o *GetAPIKeyOK) GetPayload() *models.GetAPIKeyResponse {

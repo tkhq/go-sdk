@@ -6,6 +6,7 @@ package consensus
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *ApproveActivityOK) Code() int {
 }
 
 func (o *ApproveActivityOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] approveActivityOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] approveActivityOK %s", 200, payload)
 }
 
 func (o *ApproveActivityOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] approveActivityOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/approve_activity][%d] approveActivityOK %s", 200, payload)
 }
 
 func (o *ApproveActivityOK) GetPayload() *models.ActivityResponse {

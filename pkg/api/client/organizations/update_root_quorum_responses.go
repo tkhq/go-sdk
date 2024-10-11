@@ -6,6 +6,7 @@ package organizations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,11 +80,13 @@ func (o *UpdateRootQuorumOK) Code() int {
 }
 
 func (o *UpdateRootQuorumOK) Error() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_root_quorum][%d] updateRootQuorumOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/update_root_quorum][%d] updateRootQuorumOK %s", 200, payload)
 }
 
 func (o *UpdateRootQuorumOK) String() string {
-	return fmt.Sprintf("[POST /public/v1/submit/update_root_quorum][%d] updateRootQuorumOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /public/v1/submit/update_root_quorum][%d] updateRootQuorumOK %s", 200, payload)
 }
 
 func (o *UpdateRootQuorumOK) GetPayload() *models.ActivityResponse {

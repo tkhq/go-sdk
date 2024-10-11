@@ -30,38 +30,38 @@ func (m Operator) Pointer() *Operator {
 
 const (
 
-	// OperatorEqual captures enum value "OPERATOR_EQUAL"
-	OperatorEqual Operator = "OPERATOR_EQUAL"
+	// OPERATOREQUAL captures enum value "OPERATOR_EQUAL"
+	OPERATOREQUAL Operator = "OPERATOR_EQUAL"
 
-	// OperatorMoreThan captures enum value "OPERATOR_MORE_THAN"
-	OperatorMoreThan Operator = "OPERATOR_MORE_THAN"
+	// OPERATORMORETHAN captures enum value "OPERATOR_MORE_THAN"
+	OPERATORMORETHAN Operator = "OPERATOR_MORE_THAN"
 
-	// OperatorMoreThanOrEqual captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
-	OperatorMoreThanOrEqual Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
+	// OPERATORMORETHANOREQUAL captures enum value "OPERATOR_MORE_THAN_OR_EQUAL"
+	OPERATORMORETHANOREQUAL Operator = "OPERATOR_MORE_THAN_OR_EQUAL"
 
-	// OperatorLessThan captures enum value "OPERATOR_LESS_THAN"
-	OperatorLessThan Operator = "OPERATOR_LESS_THAN"
+	// OPERATORLESSTHAN captures enum value "OPERATOR_LESS_THAN"
+	OPERATORLESSTHAN Operator = "OPERATOR_LESS_THAN"
 
-	// OperatorLessThanOrEqual captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
-	OperatorLessThanOrEqual Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
+	// OPERATORLESSTHANOREQUAL captures enum value "OPERATOR_LESS_THAN_OR_EQUAL"
+	OPERATORLESSTHANOREQUAL Operator = "OPERATOR_LESS_THAN_OR_EQUAL"
 
-	// OperatorContains captures enum value "OPERATOR_CONTAINS"
-	OperatorContains Operator = "OPERATOR_CONTAINS"
+	// OPERATORCONTAINS captures enum value "OPERATOR_CONTAINS"
+	OPERATORCONTAINS Operator = "OPERATOR_CONTAINS"
 
-	// OperatorNotEqual captures enum value "OPERATOR_NOT_EQUAL"
-	OperatorNotEqual Operator = "OPERATOR_NOT_EQUAL"
+	// OPERATORNOTEQUAL captures enum value "OPERATOR_NOT_EQUAL"
+	OPERATORNOTEQUAL Operator = "OPERATOR_NOT_EQUAL"
 
-	// OperatorIn captures enum value "OPERATOR_IN"
-	OperatorIn Operator = "OPERATOR_IN"
+	// OPERATORIN captures enum value "OPERATOR_IN"
+	OPERATORIN Operator = "OPERATOR_IN"
 
-	// OperatorNotIn captures enum value "OPERATOR_NOT_IN"
-	OperatorNotIn Operator = "OPERATOR_NOT_IN"
+	// OPERATORNOTIN captures enum value "OPERATOR_NOT_IN"
+	OPERATORNOTIN Operator = "OPERATOR_NOT_IN"
 
-	// OperatorContainsOne captures enum value "OPERATOR_CONTAINS_ONE"
-	OperatorContainsOne Operator = "OPERATOR_CONTAINS_ONE"
+	// OPERATORCONTAINSONE captures enum value "OPERATOR_CONTAINS_ONE"
+	OPERATORCONTAINSONE Operator = "OPERATOR_CONTAINS_ONE"
 
-	// OperatorContainsAll captures enum value "OPERATOR_CONTAINS_ALL"
-	OperatorContainsAll Operator = "OPERATOR_CONTAINS_ALL"
+	// OPERATORCONTAINSALL captures enum value "OPERATOR_CONTAINS_ALL"
+	OPERATORCONTAINSALL Operator = "OPERATOR_CONTAINS_ALL"
 )
 
 // for schema

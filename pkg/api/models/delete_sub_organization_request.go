@@ -34,7 +34,7 @@ type DeleteSubOrganizationRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION]
+	// Enum: ["ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION"]
 	Type *string `json:"type"`
 }
 

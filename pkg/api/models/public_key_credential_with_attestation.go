@@ -21,7 +21,7 @@ import (
 type PublicKeyCredentialWithAttestation struct {
 
 	// authenticator attachment
-	// Enum: [cross-platform platform]
+	// Enum: ["cross-platform","platform"]
 	AuthenticatorAttachment *string `json:"authenticatorAttachment,omitempty"`
 
 	// client extension results
@@ -42,7 +42,7 @@ type PublicKeyCredentialWithAttestation struct {
 
 	// type
 	// Required: true
-	// Enum: [public-key]
+	// Enum: ["public-key"]
 	Type *string `json:"type"`
 }
 
