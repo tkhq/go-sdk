@@ -2,7 +2,6 @@
 package sdk
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-openapi/runtime"
@@ -24,10 +23,11 @@ type config struct {
 	transportConfig *client.TransportConfig
 }
 
-type Optfn func(c *config) error
+// OptionFunc defines a function which sets configuration options for a Client.
+type OptionFunc func(c *config) error
 
 // WithClientVersion overrides the client version used for this API client.
-func WithClientVersion(clientVersion string) Optfn {
+func WithClientVersion(clientVersion string) OptionFunc {
 	return func(c *config) error {
 		c.clientVersion = clientVersion
 		return nil
@@ -35,7 +35,7 @@ func WithClientVersion(clientVersion string) Optfn {
 }
 
 // WithRegistry sets the registry formats used for this API client.
-func WithRegistry(registry strfmt.Registry) Optfn {
+func WithRegistry(registry strfmt.Registry) OptionFunc {
 	return func(c *config) error {
 		c.registry = registry
 		return nil
@@ -43,7 +43,7 @@ func WithRegistry(registry strfmt.Registry) Optfn {
 }
 
 // WithTransportConfig sets the TransportConfig used for this API client.
-func WithTransportConfig(transportConfig client.TransportConfig) Optfn {
+func WithTransportConfig(transportConfig client.TransportConfig) OptionFunc {
 	return func(c *config) error {
 		c.transportConfig = &transportConfig
 		return nil
@@ -53,7 +53,7 @@ func WithTransportConfig(transportConfig client.TransportConfig) Optfn {
 // WithAPIKey sets the API key used for this API client.
 // Users would normally use WithAPIKeyName. This offers a lower-level custom API
 // key.
-func WithAPIKey(apiKey *apikey.Key) Optfn {
+func WithAPIKey(apiKey *apikey.Key) OptionFunc {
 	return func(c *config) error {
 		c.apiKey = apiKey
 		return nil
@@ -62,7 +62,7 @@ func WithAPIKey(apiKey *apikey.Key) Optfn {
 
 // WithAPIKeyName sets the API key to the key loaded from the local keystore
 // with the provided name.
-func WithAPIKeyName(keyname string) Optfn {
+func WithAPIKeyName(keyname string) OptionFunc {
 	return func(c *config) error {
 		apiKey, err := local.New[*apikey.Key]().Load(keyname)
 		if err != nil {
@@ -74,7 +74,7 @@ func WithAPIKeyName(keyname string) Optfn {
 }
 
 // New returns a new API Client with the given API key name from the default keystore.
-func New(options ...Optfn) (*Client, error) {
+func New(options ...OptionFunc) (*Client, error) {
 	c := &config{
 		clientVersion:   DefaultClientVersion,
 		transportConfig: client.DefaultTransportConfig(),
@@ -83,14 +83,15 @@ func New(options ...Optfn) (*Client, error) {
 	for _, o := range options {
 		o(c)
 	}
-	fmt.Println(c.transportConfig.Host)
 
-	// create transport and client
+	// Create transport and client
 	transport := httptransport.New(
 		c.transportConfig.Host,
 		c.transportConfig.BasePath,
 		c.transportConfig.Schemes,
 	)
+
+	// Add client version header
 	transport.Transport = SetClientVersion(transport.Transport, c.clientVersion)
 
 	return &Client{
