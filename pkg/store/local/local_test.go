@@ -14,11 +14,7 @@ import (
 
 // MacOSX has $HOME set by default.
 func TestGetKeyDirPathMacOSX(t *testing.T) {
-	require.NoError(t, os.Setenv("HOME", "/home/dir"))
-
-	defer func() {
-		require.NoError(t, os.Unsetenv("HOME"))
-	}()
+	t.Setenv("HOME", "/home/dir")
 
 	// Need to unset this explicitly: the test runner has this set by default!
 	originalValue := os.Getenv("XDG_CONFIG_HOME")
@@ -36,17 +32,8 @@ func TestGetKeyDirPathMacOSX(t *testing.T) {
 // On UNIX, we expect XDG_CONFIG_HOME to be set.
 // If it's not set, we're back to a MacOSX-like system.
 func TestGetKeyDirPathUnix(t *testing.T) {
-	require.NoError(t, os.Setenv("XDG_CONFIG_HOME", "/special/dir"))
-
-	defer func() {
-		require.NoError(t, os.Unsetenv("XDG_CONFIG_HOME"))
-	}()
-
-	require.NoError(t, os.Setenv("HOME", "/home/dir"))
-
-	defer func() {
-		require.NoError(t, os.Unsetenv("HOME"))
-	}()
+	t.Setenv("XDG_CONFIG_HOME", "/special/dir")
+	t.Setenv("HOME", "/home/dir")
 
 	assert.Equal(t, "/special/dir/turnkey/keys", local.DefaultAPIKeysDir())
 	assert.Equal(t, "/special/dir/turnkey/encryption-keys", local.DefaultEncryptionKeysDir())

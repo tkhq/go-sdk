@@ -26,6 +26,8 @@ const (
 	publicKeyExtension          = "public"
 	privateKeyExtension         = "private"
 	metadataExtension           = "meta"
+	fileOwnerRWGroupRAllR       = 0o0644
+	fileOwnerRW                 = 0o0600
 )
 
 // Store defines an api key Store using the local filesystem.
@@ -123,7 +125,6 @@ func getConfigDir() string {
 		var err error
 
 		cfgDir, err = os.UserConfigDir()
-
 		if err != nil {
 			shouldUseHomeDir = true
 		}
@@ -211,7 +212,7 @@ func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 		return errors.Errorf("a keypair named %q already exists; exiting", name)
 	}
 
-	if err = createKeyFile(s.PublicKeyFile(name), keypair.GetPublicKey(), 0o0644); err != nil {
+	if err = createKeyFile(s.PublicKeyFile(name), keypair.GetPublicKey(), fileOwnerRWGroupRAllR); err != nil {
 		return errors.Wrap(err, "failed to store public key to file")
 	}
 
@@ -220,11 +221,11 @@ func (s *Store[T, M]) Store(name string, keypair common.IKey[M]) error {
 		privateKeyData = fmt.Sprintf("%s:%s", privateKeyData, curve)
 	}
 
-	if err = createKeyFile(s.PrivateKeyFile(name), privateKeyData, 0o0600); err != nil {
+	if err = createKeyFile(s.PrivateKeyFile(name), privateKeyData, fileOwnerRW); err != nil {
 		return errors.Wrap(err, "failed to store private key to file")
 	}
 
-	if err = s.createMetadataFile(s.MetadataFile(name), keypair.GetMetadata(), 0o0600); err != nil {
+	if err = s.createMetadataFile(s.MetadataFile(name), keypair.GetMetadata(), fileOwnerRW); err != nil {
 		return errors.Wrap(err, "failed to store key metadata")
 	}
 

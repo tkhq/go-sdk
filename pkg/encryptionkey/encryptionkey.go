@@ -4,7 +4,6 @@ package encryptionkey
 import (
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/cloudflare/circl/hpke"
@@ -39,19 +38,19 @@ type Key struct {
 // New generates a new Turnkey encryption key.
 func New(userID string, organizationID string) (*Key, error) {
 	if userID == "" {
-		return nil, fmt.Errorf("please supply a valid User UUID")
+		return nil, errors.New("please supply a valid User UUID")
 	}
 
 	if _, err := uuid.Parse(userID); err != nil {
-		return nil, fmt.Errorf("failed to parse user ID")
+		return nil, errors.New("failed to parse user ID")
 	}
 
 	if organizationID == "" {
-		return nil, fmt.Errorf("please supply a valid Organization UUID")
+		return nil, errors.New("please supply a valid Organization UUID")
 	}
 
 	if _, err := uuid.Parse(organizationID); err != nil {
-		return nil, fmt.Errorf("failed to parse organization ID")
+		return nil, errors.New("failed to parse organization ID")
 	}
 
 	_, privateKey, err := KemID.Scheme().GenerateKeyPair()
