@@ -30,6 +30,7 @@ type OptionFunc func(c *config) error
 func WithClientVersion(clientVersion string) OptionFunc {
 	return func(c *config) error {
 		c.clientVersion = clientVersion
+
 		return nil
 	}
 }
@@ -38,6 +39,7 @@ func WithClientVersion(clientVersion string) OptionFunc {
 func WithRegistry(registry strfmt.Registry) OptionFunc {
 	return func(c *config) error {
 		c.registry = registry
+
 		return nil
 	}
 }
@@ -46,6 +48,7 @@ func WithRegistry(registry strfmt.Registry) OptionFunc {
 func WithTransportConfig(transportConfig client.TransportConfig) OptionFunc {
 	return func(c *config) error {
 		c.transportConfig = &transportConfig
+
 		return nil
 	}
 }
@@ -56,6 +59,7 @@ func WithTransportConfig(transportConfig client.TransportConfig) OptionFunc {
 func WithAPIKey(apiKey *apikey.Key) OptionFunc {
 	return func(c *config) error {
 		c.apiKey = apiKey
+
 		return nil
 	}
 }
@@ -68,7 +72,9 @@ func WithAPIKeyName(keyname string) OptionFunc {
 		if err != nil {
 			return errors.Wrap(err, "failed to load API key")
 		}
+
 		c.apiKey = apiKey
+
 		return nil
 	}
 }
@@ -81,7 +87,10 @@ func New(options ...OptionFunc) (*Client, error) {
 	}
 
 	for _, o := range options {
-		o(c)
+		err := o(c)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Create transport and client
@@ -115,12 +124,13 @@ type addClientVersion struct {
 
 func (acv *addClientVersion) RoundTrip(r *http.Request) (*http.Response, error) {
 	r.Header.Set("X-Client-Version", acv.Version)
+
 	return acv.inner.RoundTrip(r)
 }
 
 // NewHTTPClient returns a new base HTTP API client.
 // Most users will call New() instead.
-// Deprecated: Use New(WithRegistry(formats)) instead
+// Deprecated: Use New(WithRegistry(formats)) instead.
 func NewHTTPClient(formats strfmt.Registry) *client.TurnkeyAPI {
 	return client.NewHTTPClient(formats)
 }

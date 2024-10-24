@@ -29,6 +29,10 @@ func (k *ecdsaKey) sign(msg []byte) (string, error) {
 	return hex.EncodeToString(sigBytes), nil
 }
 
+// TurnkeyECDSAPublicKeyBytes is the expected number of bytes for a public ECDSA
+// key.
+const TurnkeyECDSAPublicKeyBytes = 33
+
 // EncodePrivateECDSAKey encodes an ECDSA private key into the Turnkey format.
 // For now, "Turnkey format" = raw DER form.
 func EncodePrivateECDSAKey(privateKey *ecdsa.PrivateKey) string {
@@ -81,7 +85,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 		return nil, err
 	}
 
-	if len(bytes) != 33 {
+	if len(bytes) != TurnkeyECDSAPublicKeyBytes {
 		return nil, fmt.Errorf("expected a 33-bytes-long public key (compressed). Got %d bytes", len(bytes))
 	}
 
@@ -99,7 +103,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 
 		pubkey, err := dcrec.ParsePubKey(bytes)
 		if err != nil {
-			return nil, fmt.Errorf("cannot parse bytes into secp256k1 public key")
+			return nil, errors.New("cannot parse bytes into secp256k1 public key")
 		}
 
 		x = pubkey.X()

@@ -50,11 +50,11 @@ type APIStamp struct {
 // New generates a new Turnkey API key.
 func New(organizationID string, opts ...optionFunc) (*Key, error) {
 	if organizationID == "" {
-		return nil, fmt.Errorf("please supply a valid Organization UUID")
+		return nil, errors.New("please supply a valid Organization UUID")
 	}
 
 	if _, err := uuid.Parse(organizationID); err != nil {
-		return nil, fmt.Errorf("failed to parse organization ID")
+		return nil, errors.New("failed to parse organization ID")
 	}
 
 	apiKey := &Key{
