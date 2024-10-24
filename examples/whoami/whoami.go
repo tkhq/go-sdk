@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// NB: make sure to create and register an API key, first.
-	client, err := sdk.New("")
+	client, err := sdk.New()
 	if err != nil {
 		log.Fatal("failed to create new SDK client:", err)
 	}

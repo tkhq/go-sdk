@@ -123,7 +123,6 @@ func getConfigDir() string {
 		var err error
 
 		cfgDir, err = os.UserConfigDir()
-
 		if err != nil {
 			shouldUseHomeDir = true
 		}
