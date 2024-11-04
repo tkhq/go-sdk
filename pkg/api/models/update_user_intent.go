@@ -29,6 +29,9 @@ type UpdateUserIntent struct {
 	// Human-readable name for a User.
 	UserName string `json:"userName,omitempty"`
 
+	// The user's phone number in E.164 format e.g. +13214567890
+	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
+
 	// An updated list of User Tags to apply to this User.
 	UserTagIds []string `json:"userTagIds"`
 }

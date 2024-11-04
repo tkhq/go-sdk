@@ -14,10 +14,11 @@ test:
 lint:
 	golangci-lint run --out-format=github-actions ./...
 
+# note
 .PHONY: generate
 generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
-	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
+	/Users/andrew/go/bin/swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
 	go mod tidy
 
 .PHONY: clean
