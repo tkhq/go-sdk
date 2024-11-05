@@ -14,11 +14,12 @@ test:
 lint:
 	golangci-lint run --out-format=github-actions ./...
 
-# note
+# Note: if you have multiple versions of swagger installed locally, point to the one located in your go path, 
+# e.g. /Users/<username>/go/bin/swagger
 .PHONY: generate
 generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
-	/Users/andrew/go/bin/swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
+	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
 	go mod tidy
 
 .PHONY: clean
