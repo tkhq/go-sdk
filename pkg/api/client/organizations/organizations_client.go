@@ -210,7 +210,7 @@ func (a *Client) GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.Clien
 /*
 UpdateRootQuorum updates root quorum
 
-Set the threshold and members of the root quorum. This must be approved by the current root quorum.
+Set the threshold and members of the root quorum. This activity must be approved by the current root quorum.
 */
 func (a *Client) UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error) {
 	// TODO: Validate the params before sending

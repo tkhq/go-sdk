@@ -1680,7 +1680,7 @@
     "/public/v1/submit/remove_organization_feature": {
       "post": {
         "summary": "Remove Organization Feature",
-        "description": "Removes an organization feature",
+        "description": "Removes an organization feature. This activity must be approved by the current root quorum.",
         "operationId": "RemoveOrganizationFeature",
         "responses": {
           "200": {
@@ -1706,7 +1706,7 @@
     "/public/v1/submit/set_organization_feature": {
       "post": {
         "summary": "Set Organization Feature",
-        "description": "Sets an organization feature",
+        "description": "Sets an organization feature. This activity must be approved by the current root quorum.",
         "operationId": "SetOrganizationFeature",
         "responses": {
           "200": {
@@ -1862,7 +1862,7 @@
     "/public/v1/submit/update_root_quorum": {
       "post": {
         "summary": "Update Root Quorum",
-        "description": "Set the threshold and members of the root quorum. This must be approved by the current root quorum.",
+        "description": "Set the threshold and members of the root quorum. This activity must be approved by the current root quorum.",
         "operationId": "UpdateRootQuorum",
         "responses": {
           "200": {
@@ -2219,7 +2219,13 @@
         "ADDRESS_FORMAT_BITCOIN_REGTEST_P2SH",
         "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WPKH",
         "ADDRESS_FORMAT_BITCOIN_REGTEST_P2WSH",
-        "ADDRESS_FORMAT_BITCOIN_REGTEST_P2TR"
+        "ADDRESS_FORMAT_BITCOIN_REGTEST_P2TR",
+        "ADDRESS_FORMAT_SEI",
+        "ADDRESS_FORMAT_XLM",
+        "ADDRESS_FORMAT_DOGE_MAINNET",
+        "ADDRESS_FORMAT_DOGE_TESTNET",
+        "ADDRESS_FORMAT_TON_V3R2",
+        "ADDRESS_FORMAT_TON_V4R2"
       ]
     },
     "Any": {

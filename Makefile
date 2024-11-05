@@ -14,6 +14,8 @@ test:
 lint:
 	golangci-lint run --out-format=github-actions ./...
 
+# Note: if you have multiple versions of swagger installed locally, point to the one located in your go path, 
+# e.g. /Users/<username>/go/bin/swagger
 .PHONY: generate
 generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
