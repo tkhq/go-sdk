@@ -14,15 +14,15 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// GetSubOrgIdsRequest get sub org ids request
+// GetVerifiedSubOrgIdsRequest get verified sub org ids request
 //
-// swagger:model GetSubOrgIdsRequest
-type GetSubOrgIdsRequest struct {
+// swagger:model GetVerifiedSubOrgIdsRequest
+type GetVerifiedSubOrgIdsRequest struct {
 
-	// Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL', 'PHONE_NUMBER', 'OIDC_TOKEN' or 'PUBLIC_KEY'
+	// Specifies the type of filter to apply, i.e 'EMAIL', 'PHONE_NUMBER'
 	FilterType string `json:"filterType,omitempty"`
 
-	// The value of the filter to apply for the specified type. For example, a specific email or name string.
+	// The value of the filter to apply for the specified type. For example, a specific email or phone number string.
 	FilterValue string `json:"filterValue,omitempty"`
 
 	// Unique identifier for the parent Organization. This is used to find sub-organizations within it.
@@ -33,8 +33,8 @@ type GetSubOrgIdsRequest struct {
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
 }
 
-// Validate validates this get sub org ids request
-func (m *GetSubOrgIdsRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this get verified sub org ids request
+func (m *GetVerifiedSubOrgIdsRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -51,7 +51,7 @@ func (m *GetSubOrgIdsRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *GetSubOrgIdsRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *GetVerifiedSubOrgIdsRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -60,7 +60,7 @@ func (m *GetSubOrgIdsRequest) validateOrganizationID(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *GetSubOrgIdsRequest) validatePaginationOptions(formats strfmt.Registry) error {
+func (m *GetVerifiedSubOrgIdsRequest) validatePaginationOptions(formats strfmt.Registry) error {
 	if swag.IsZero(m.PaginationOptions) { // not required
 		return nil
 	}
@@ -79,8 +79,8 @@ func (m *GetSubOrgIdsRequest) validatePaginationOptions(formats strfmt.Registry)
 	return nil
 }
 
-// ContextValidate validate this get sub org ids request based on the context it is used
-func (m *GetSubOrgIdsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this get verified sub org ids request based on the context it is used
+func (m *GetVerifiedSubOrgIdsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidatePaginationOptions(ctx, formats); err != nil {
@@ -93,7 +93,7 @@ func (m *GetSubOrgIdsRequest) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *GetSubOrgIdsRequest) contextValidatePaginationOptions(ctx context.Context, formats strfmt.Registry) error {
+func (m *GetVerifiedSubOrgIdsRequest) contextValidatePaginationOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PaginationOptions != nil {
 
@@ -115,7 +115,7 @@ func (m *GetSubOrgIdsRequest) contextValidatePaginationOptions(ctx context.Conte
 }
 
 // MarshalBinary interface implementation
-func (m *GetSubOrgIdsRequest) MarshalBinary() ([]byte, error) {
+func (m *GetVerifiedSubOrgIdsRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -123,8 +123,8 @@ func (m *GetSubOrgIdsRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *GetSubOrgIdsRequest) UnmarshalBinary(b []byte) error {
-	var res GetSubOrgIdsRequest
+func (m *GetVerifiedSubOrgIdsRequest) UnmarshalBinary(b []byte) error {
+	var res GetVerifiedSubOrgIdsRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -29,6 +29,12 @@ type InitOtpAuthIntent struct {
 	// Enum to specifiy whether to send OTP via SMS or email
 	// Required: true
 	OtpType *string `json:"otpType"`
+
+	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
+	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
+
+	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.
+	UserIdentifier string `json:"userIdentifier,omitempty"`
 }
 
 // Validate validates this init otp auth intent
@@ -44,6 +50,10 @@ func (m *InitOtpAuthIntent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOtpType(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSmsCustomization(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -90,11 +100,34 @@ func (m *InitOtpAuthIntent) validateOtpType(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *InitOtpAuthIntent) validateSmsCustomization(formats strfmt.Registry) error {
+	if swag.IsZero(m.SmsCustomization) { // not required
+		return nil
+	}
+
+	if m.SmsCustomization != nil {
+		if err := m.SmsCustomization.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("smsCustomization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("smsCustomization")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this init otp auth intent based on the context it is used
 func (m *InitOtpAuthIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateEmailCustomization(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSmsCustomization(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -117,6 +150,27 @@ func (m *InitOtpAuthIntent) contextValidateEmailCustomization(ctx context.Contex
 				return ve.ValidateName("emailCustomization")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailCustomization")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InitOtpAuthIntent) contextValidateSmsCustomization(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SmsCustomization != nil {
+
+		if swag.IsZero(m.SmsCustomization) { // not required
+			return nil
+		}
+
+		if err := m.SmsCustomization.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("smsCustomization")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("smsCustomization")
 			}
 			return err
 		}

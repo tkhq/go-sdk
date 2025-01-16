@@ -38,6 +38,8 @@ type ClientService interface {
 
 	GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSubOrgIdsOK, error)
 
+	GetVerifiedSubOrgIds(params *GetVerifiedSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetVerifiedSubOrgIdsOK, error)
+
 	UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -204,6 +206,47 @@ func (a *Client) GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.Clien
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetSubOrgIds: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetVerifiedSubOrgIds gets verified suborgs
+
+Get all email or phone verified suborg IDs associated given a parent org ID.
+*/
+func (a *Client) GetVerifiedSubOrgIds(params *GetVerifiedSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetVerifiedSubOrgIdsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetVerifiedSubOrgIdsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetVerifiedSubOrgIds",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_verified_suborgs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetVerifiedSubOrgIdsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetVerifiedSubOrgIdsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetVerifiedSubOrgIds: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -218,7 +218,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/query/get_organization_configs": {
@@ -533,6 +533,32 @@
         "tags": ["Users"]
       }
     },
+    "/public/v1/query/list_verified_suborgs": {
+      "post": {
+        "summary": "Get Verified Suborgs",
+        "description": "Get all email or phone verified suborg IDs associated given a parent org ID.",
+        "operationId": "GetVerifiedSubOrgIds",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetVerifiedSubOrgIdsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetVerifiedSubOrgIdsRequest"
+            }
+          }
+        ],
+        "tags": ["Organizations"]
+      }
+    },
     "/public/v1/query/list_wallet_accounts": {
       "post": {
         "summary": "List Wallets Accounts",
@@ -738,7 +764,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/create_policies": {
@@ -1128,7 +1154,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/delete_policy": {
@@ -1544,7 +1570,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/init_user_email_recovery": {
@@ -1596,7 +1622,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/otp_auth": {
@@ -1622,7 +1648,7 @@
             }
           }
         ],
-        "tags": ["Users"]
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/recover_user": {
@@ -2225,7 +2251,8 @@
         "ADDRESS_FORMAT_DOGE_MAINNET",
         "ADDRESS_FORMAT_DOGE_TESTNET",
         "ADDRESS_FORMAT_TON_V3R2",
-        "ADDRESS_FORMAT_TON_V4R2"
+        "ADDRESS_FORMAT_TON_V4R2",
+        "ADDRESS_FORMAT_XRP"
       ]
     },
     "Any": {
@@ -5171,7 +5198,7 @@
         },
         "filterType": {
           "type": "string",
-          "description": "Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL', 'OIDC_TOKEN' or 'PUBLIC_KEY'"
+          "description": "Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL', 'PHONE_NUMBER', 'OIDC_TOKEN' or 'PUBLIC_KEY'"
         },
         "filterValue": {
           "type": "string",
@@ -5244,6 +5271,41 @@
         }
       },
       "required": ["users"]
+    },
+    "GetVerifiedSubOrgIdsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for the parent Organization. This is used to find sub-organizations within it."
+        },
+        "filterType": {
+          "type": "string",
+          "description": "Specifies the type of filter to apply, i.e 'EMAIL', 'PHONE_NUMBER'"
+        },
+        "filterValue": {
+          "type": "string",
+          "description": "The value of the filter to apply for the specified type. For example, a specific email or phone number string."
+        },
+        "paginationOptions": {
+          "$ref": "#/definitions/Pagination",
+          "description": "Parameters used for cursor-based pagination."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "GetVerifiedSubOrgIdsResponse": {
+      "type": "object",
+      "properties": {
+        "organizationIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for the matching sub-organizations."
+        }
+      },
+      "required": ["organizationIds"]
     },
     "GetWalletAccountsRequest": {
       "type": "object",
@@ -5600,6 +5662,14 @@
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
+        },
+        "smsCustomization": {
+          "$ref": "#/definitions/SmsCustomizationParams",
+          "description": "Optional parameters for customizing SMS message. If not provided, the default sms message will be used."
+        },
+        "userIdentifier": {
+          "type": "string",
+          "description": "Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address."
         }
       },
       "required": ["otpType", "contact"]
@@ -7278,6 +7348,15 @@
         }
       }
     },
+    "SmsCustomizationParams": {
+      "type": "object",
+      "properties": {
+        "template": {
+          "type": "string",
+          "description": "Template containing references to .OtpCode i.e Your OTP is {{.OtpCode}}"
+        }
+      }
+    },
     "Status": {
       "type": "object",
       "properties": {
@@ -7848,6 +7927,10 @@
     "WalletAccount": {
       "type": "object",
       "properties": {
+        "walletAccountId": {
+          "type": "string",
+          "description": "Unique identifier for a given Wallet Account."
+        },
         "organizationId": {
           "type": "string",
           "description": "The Organization the Account belongs to."
@@ -7884,6 +7967,7 @@
         }
       },
       "required": [
+        "walletAccountId",
         "organizationId",
         "walletId",
         "curve",
