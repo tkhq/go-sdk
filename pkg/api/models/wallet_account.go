@@ -51,6 +51,10 @@ type WalletAccount struct {
 	// Required: true
 	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
 
+	// Unique identifier for a given Wallet Account.
+	// Required: true
+	WalletAccountID *string `json:"walletAccountId"`
+
 	// The Wallet the Account was derived from.
 	// Required: true
 	WalletID *string `json:"walletId"`
@@ -89,6 +93,10 @@ func (m *WalletAccount) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWalletAccountID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -236,6 +244,15 @@ func (m *WalletAccount) validateUpdatedAt(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *WalletAccount) validateWalletAccountID(formats strfmt.Registry) error {
+
+	if err := validate.Required("walletAccountId", "body", m.WalletAccountID); err != nil {
+		return err
 	}
 
 	return nil
