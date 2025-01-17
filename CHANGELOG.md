@@ -1,5 +1,8 @@
 
-## [v0.0.1-test-5](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-5) (0001-01-01)
+## [v0.0.1-test-6](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-5...v0.0.1-test-6) (0001-01-01)
+
+
+## [v0.0.1-test-5](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-5) (2025-01-17)
 
 
 ## [v0.0.1-test-4](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-3...v0.0.1-test-4) (2025-01-17)
