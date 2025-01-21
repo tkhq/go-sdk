@@ -47,6 +47,69 @@ func main() {
 
 ## Development
 
+### Changelog and Releases
+
+The SDK uses [git-chglog](https://github.com/git-chglog/git-chglog) for changelog management and publishes versions to [pkg.go.dev](https://pkg.go.dev/github.com/tkhq/go-sdk).
+
+#### Commit Conventions
+
+Note: these are not strictly enforced yet, but rather offers general guidelines.
+
+To ensure your changes appear correctly in the changelog, use these commit prefixes:
+- `feat:` for new features
+- `fix:` for bug fixes
+- `perf:` for performance improvements
+- `refactor:` for code refactoring
+- `docs:`, `test:`, `ci:` (these are excluded from changelog)
+
+Example: `feat(api): add new wallet creation endpoint`
+
+#### Managing Changes
+
+1. Install git-chglog:
+   ```bash
+   go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+   ```
+
+2. Preview changelog for next version:
+   ```bash
+   make changelog-next v=1.0.0
+   ```
+
+3. Update changelog without releasing:
+   ```bash
+   make changelog
+   ```
+
+#### Creating Releases
+
+To prepare a new release:
+```bash
+make prepare-release v=1.0.0
+```
+
+This will generate and update CHANGELOG.md. Please review the changes and manually modify as needed.
+
+Commit and push the changes, get the PR approved, merge, and move to the next step.
+
+To publish a new release (off of main):
+```bash
+make publish-release v=1.0.0
+```
+
+This will:
+1. Create a git tag
+2. Push changes to GitHub
+3. Trigger pkg.go.dev indexing
+
+Note: 
+- Use semantic versioning (e.g., v1.0.0, v0.1.0-beta)
+- New versions appear on pkg.go.dev within a few minutes
+- If needed, manually trigger pkg.go.dev indexing:
+  ```bash
+  GOPROXY=proxy.golang.org go list -m github.com/tkhq/go-sdk@v1.0.0
+  ```
+
 ### Updating the SDK
 
 #### With Nix
