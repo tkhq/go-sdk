@@ -8,16 +8,18 @@ options:
   commits:
     filters:
       Type:
-        - feat
-        - fix
-        - perf
-        - refactor
+        ## TODO: tweak these parameters
+        # - feat
+        # - fix
+        # - perf
+        # - refactor
   commit_groups:
     title_maps:
-      feat: Features
-      fix: Bug Fixes
-      perf: Performance Improvements
-      refactor: Code Refactoring
+      ## TODO: tweak these parameters
+      # feat: Features
+      # fix: Bug Fixes
+      # perf: Performance Improvements
+      # refactor: Code Refactoring
   header:
     pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
     pattern_maps:

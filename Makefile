@@ -46,17 +46,27 @@ changelog-next:
 	@echo "Previewing changes for v$(v)..."
 	@git-chglog --next-tag v$(v)
 
-.PHONY: release
-release:
+.PHONY: prepare-release
+prepare-release:
 	@if [ "$(v)" = "" ]; then \
-		echo "Error: version number required. Use: make release v=1.0.0"; \
+		echo "Error: version number required. Use: make prepare-release v=1.0.0"; \
 		exit 1; \
 	fi
 
-	@echo "Generating and committing changelog for v$(v)..."
+	@echo "Generating changelog for v$(v)..."
 	@git-chglog --next-tag v$(v) -o CHANGELOG.md
-	git add CHANGELOG.md
-	git commit -m "add changelog for v$(v)"
+
+	@echo "Generated CHANGELOG.md"
+	@echo "Review the changes and commit if satisfied:"
+	@echo "  git add CHANGELOG.md"
+	@echo "  git commit -m 'add changelog for v$(v)'"
+
+.PHONY: publish-release
+publish-release:
+	@if [ "$(v)" = "" ]; then \
+		echo "Error: version number required. Use: make publish-release v=1.0.0"; \
+		exit 1; \
+	fi
 
 	@echo "\nCreating and signing tag v$(v)..."
 	git config tag.forceSignAnnotated true

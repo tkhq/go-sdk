@@ -53,6 +53,8 @@ The SDK uses [git-chglog](https://github.com/git-chglog/git-chglog) for changelo
 
 #### Commit Conventions
 
+Note: these are not strictly enforced yet, but rather offers general guidelines.
+
 To ensure your changes appear correctly in the changelog, use these commit prefixes:
 - `feat:` for new features
 - `fix:` for bug fixes
@@ -81,16 +83,24 @@ Example: `feat(api): add new wallet creation endpoint`
 
 #### Creating Releases
 
-To create a new release:
+To prepare a new release:
 ```bash
-make release v=1.0.0
+make prepare-release v=1.0.0
+```
+
+This will generate and update CHANGELOG.md. Please review the changes and manually modify as needed.
+
+Commit and push the changes, get the PR approved, merge, and move to the next step.
+
+To publish a new release (off of main):
+```bash
+make publish-release v=1.0.0
 ```
 
 This will:
-1. Generate and update CHANGELOG.md
-2. Create a git tag
-3. Push changes to GitHub
-4. Trigger pkg.go.dev indexing
+1. Create a git tag
+2. Push changes to GitHub
+3. Trigger pkg.go.dev indexing
 
 Note: 
 - Use semantic versioning (e.g., v1.0.0, v0.1.0-beta)
