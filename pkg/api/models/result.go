@@ -212,6 +212,9 @@ type Result struct {
 
 	// update user tag result
 	UpdateUserTagResult *UpdateUserTagResult `json:"updateUserTagResult,omitempty"`
+
+	// update wallet result
+	UpdateWalletResult *UpdateWalletResult `json:"updateWalletResult,omitempty"`
 }
 
 // Validate validates this result
@@ -467,6 +470,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateUserTagResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateWalletResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1673,6 +1680,25 @@ func (m *Result) validateUpdateUserTagResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateUpdateWalletResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateWalletResult) { // not required
+		return nil
+	}
+
+	if m.UpdateWalletResult != nil {
+		if err := m.UpdateWalletResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this result based on the context it is used
 func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -1926,6 +1952,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateUserTagResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateWalletResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3250,6 +3280,27 @@ func (m *Result) contextValidateUpdateUserTagResult(ctx context.Context, formats
 				return ve.ValidateName("updateUserTagResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateUserTagResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateWalletResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateWalletResult != nil {
+
+		if swag.IsZero(m.UpdateWalletResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateWalletResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateWalletResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateWalletResult")
 			}
 			return err
 		}

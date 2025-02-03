@@ -254,6 +254,9 @@ type Intent struct {
 
 	// update user tag intent
 	UpdateUserTagIntent *UpdateUserTagIntent `json:"updateUserTagIntent,omitempty"`
+
+	// update wallet intent
+	UpdateWalletIntent *UpdateWalletIntent `json:"updateWalletIntent,omitempty"`
 }
 
 // Validate validates this intent
@@ -569,6 +572,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateUserTagIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateWalletIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2060,6 +2067,25 @@ func (m *Intent) validateUpdateUserTagIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateUpdateWalletIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateWalletIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateWalletIntent != nil {
+		if err := m.UpdateWalletIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this intent based on the context it is used
 func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -2373,6 +2399,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateUserTagIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateWalletIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -4012,6 +4042,27 @@ func (m *Intent) contextValidateUpdateUserTagIntent(ctx context.Context, formats
 				return ve.ValidateName("updateUserTagIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateUserTagIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateWalletIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateWalletIntent != nil {
+
+		if swag.IsZero(m.UpdateWalletIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateWalletIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateWalletIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateWalletIntent")
 			}
 			return err
 		}
