@@ -30,6 +30,9 @@ type InitOtpAuthIntent struct {
 	// Required: true
 	OtpType *string `json:"otpType"`
 
+	// Optional custom email address from which to send the OTP email
+	SendFromEmailAddress string `json:"sendFromEmailAddress,omitempty"`
+
 	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
