@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## [v0.3.0](https://github.com/tkhq/go-sdk/compare/v0.2.0...v0.3.0) (2025-02-19)
+- Update per mono release v2025.2.1
+  - Introduces new `GetWalletAccount` query
  
 ## [v0.2.0](https://github.com/tkhq/go-sdk/compare/v0.1.0...v0.2.0) (2025-02-13)
 - Update per mono release v2025.1.11
