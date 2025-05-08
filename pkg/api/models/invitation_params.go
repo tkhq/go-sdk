@@ -31,7 +31,7 @@ type InvitationParams struct {
 	// Required: true
 	ReceiverUserName *string `json:"receiverUserName"`
 
-	// A list of tags assigned to the Invitation recipient.
+	// A list of tags assigned to the Invitation recipient. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	ReceiverUserTags []string `json:"receiverUserTags"`
 

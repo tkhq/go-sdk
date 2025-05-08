@@ -165,6 +165,9 @@ type Result struct {
 	// init otp auth result
 	InitOtpAuthResult *InitOtpAuthResult `json:"initOtpAuthResult,omitempty"`
 
+	// init otp auth result v2
+	InitOtpAuthResultV2 *InitOtpAuthResultV2 `json:"initOtpAuthResultV2,omitempty"`
+
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
 
@@ -200,6 +203,9 @@ type Result struct {
 
 	// update policy result
 	UpdatePolicyResult *UpdatePolicyResult `json:"updatePolicyResult,omitempty"`
+
+	// update policy result v2
+	UpdatePolicyResultV2 *UpdatePolicyResultV2 `json:"updatePolicyResultV2,omitempty"`
 
 	// update private key tag result
 	UpdatePrivateKeyTagResult *UpdatePrivateKeyTagResult `json:"updatePrivateKeyTagResult,omitempty"`
@@ -417,6 +423,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpAuthResultV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -458,6 +468,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatePolicyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatePolicyResultV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1414,6 +1428,25 @@ func (m *Result) validateInitOtpAuthResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateInitOtpAuthResultV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpAuthResultV2) { // not required
+		return nil
+	}
+
+	if m.InitOtpAuthResultV2 != nil {
+		if err := m.InitOtpAuthResultV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthResultV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryResult) { // not required
 		return nil
@@ -1615,6 +1648,25 @@ func (m *Result) validateUpdatePolicyResult(formats strfmt.Registry) error {
 				return ve.ValidateName("updatePolicyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePolicyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateUpdatePolicyResultV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatePolicyResultV2) { // not required
+		return nil
+	}
+
+	if m.UpdatePolicyResultV2 != nil {
+		if err := m.UpdatePolicyResultV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyResultV2")
 			}
 			return err
 		}
@@ -1899,6 +1951,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpAuthResultV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1940,6 +1996,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdatePolicyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatePolicyResultV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2994,6 +3054,27 @@ func (m *Result) contextValidateInitOtpAuthResult(ctx context.Context, formats s
 	return nil
 }
 
+func (m *Result) contextValidateInitOtpAuthResultV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpAuthResultV2 != nil {
+
+		if swag.IsZero(m.InitOtpAuthResultV2) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpAuthResultV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthResultV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryResult != nil {
@@ -3217,6 +3298,27 @@ func (m *Result) contextValidateUpdatePolicyResult(ctx context.Context, formats 
 				return ve.ValidateName("updatePolicyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePolicyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdatePolicyResultV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatePolicyResultV2 != nil {
+
+		if swag.IsZero(m.UpdatePolicyResultV2) { // not required
+			return nil
+		}
+
+		if err := m.UpdatePolicyResultV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyResultV2")
 			}
 			return err
 		}

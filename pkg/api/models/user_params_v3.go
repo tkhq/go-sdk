@@ -15,22 +15,22 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// UserParams user params
+// UserParamsV3 user params v3
 //
-// swagger:model UserParams
-type UserParams struct {
-
-	// The User's permissible access method(s).
-	// Required: true
-	AccessType *AccessType `json:"accessType"`
+// swagger:model UserParamsV3
+type UserParamsV3 struct {
 
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
-	APIKeys []*APIKeyParams `json:"apiKeys"`
+	APIKeys []*APIKeyParamsV2 `json:"apiKeys"`
 
 	// A list of Authenticator parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
-	Authenticators []*AuthenticatorParams `json:"authenticators"`
+	Authenticators []*AuthenticatorParamsV2 `json:"authenticators"`
+
+	// A list of Oauth providers. This field, if not needed, should be an empty array in your request body.
+	// Required: true
+	OauthProviders []*OauthProviderParams `json:"oauthProviders"`
 
 	// The user's email address.
 	UserEmail string `json:"userEmail,omitempty"`
@@ -39,24 +39,27 @@ type UserParams struct {
 	// Required: true
 	UserName *string `json:"userName"`
 
+	// The user's phone number in E.164 format e.g. +13214567890
+	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
+
 	// A list of User Tag IDs. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	UserTags []string `json:"userTags"`
 }
 
-// Validate validates this user params
-func (m *UserParams) Validate(formats strfmt.Registry) error {
+// Validate validates this user params v3
+func (m *UserParamsV3) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateAccessType(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateAPIKeys(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateAuthenticators(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauthProviders(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -74,31 +77,7 @@ func (m *UserParams) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *UserParams) validateAccessType(formats strfmt.Registry) error {
-
-	if err := validate.Required("accessType", "body", m.AccessType); err != nil {
-		return err
-	}
-
-	if err := validate.Required("accessType", "body", m.AccessType); err != nil {
-		return err
-	}
-
-	if m.AccessType != nil {
-		if err := m.AccessType.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("accessType")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("accessType")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *UserParams) validateAPIKeys(formats strfmt.Registry) error {
+func (m *UserParamsV3) validateAPIKeys(formats strfmt.Registry) error {
 
 	if err := validate.Required("apiKeys", "body", m.APIKeys); err != nil {
 		return err
@@ -125,7 +104,7 @@ func (m *UserParams) validateAPIKeys(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *UserParams) validateAuthenticators(formats strfmt.Registry) error {
+func (m *UserParamsV3) validateAuthenticators(formats strfmt.Registry) error {
 
 	if err := validate.Required("authenticators", "body", m.Authenticators); err != nil {
 		return err
@@ -152,7 +131,34 @@ func (m *UserParams) validateAuthenticators(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *UserParams) validateUserName(formats strfmt.Registry) error {
+func (m *UserParamsV3) validateOauthProviders(formats strfmt.Registry) error {
+
+	if err := validate.Required("oauthProviders", "body", m.OauthProviders); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.OauthProviders); i++ {
+		if swag.IsZero(m.OauthProviders[i]) { // not required
+			continue
+		}
+
+		if m.OauthProviders[i] != nil {
+			if err := m.OauthProviders[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UserParamsV3) validateUserName(formats strfmt.Registry) error {
 
 	if err := validate.Required("userName", "body", m.UserName); err != nil {
 		return err
@@ -161,7 +167,7 @@ func (m *UserParams) validateUserName(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *UserParams) validateUserTags(formats strfmt.Registry) error {
+func (m *UserParamsV3) validateUserTags(formats strfmt.Registry) error {
 
 	if err := validate.Required("userTags", "body", m.UserTags); err != nil {
 		return err
@@ -170,13 +176,9 @@ func (m *UserParams) validateUserTags(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this user params based on the context it is used
-func (m *UserParams) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this user params v3 based on the context it is used
+func (m *UserParamsV3) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.contextValidateAccessType(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.contextValidateAPIKeys(ctx, formats); err != nil {
 		res = append(res, err)
@@ -186,30 +188,17 @@ func (m *UserParams) ContextValidate(ctx context.Context, formats strfmt.Registr
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateOauthProviders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
 }
 
-func (m *UserParams) contextValidateAccessType(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.AccessType != nil {
-
-		if err := m.AccessType.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("accessType")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("accessType")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *UserParams) contextValidateAPIKeys(ctx context.Context, formats strfmt.Registry) error {
+func (m *UserParamsV3) contextValidateAPIKeys(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.APIKeys); i++ {
 
@@ -234,7 +223,7 @@ func (m *UserParams) contextValidateAPIKeys(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *UserParams) contextValidateAuthenticators(ctx context.Context, formats strfmt.Registry) error {
+func (m *UserParamsV3) contextValidateAuthenticators(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Authenticators); i++ {
 
@@ -259,8 +248,33 @@ func (m *UserParams) contextValidateAuthenticators(ctx context.Context, formats 
 	return nil
 }
 
+func (m *UserParamsV3) contextValidateOauthProviders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.OauthProviders); i++ {
+
+		if m.OauthProviders[i] != nil {
+
+			if swag.IsZero(m.OauthProviders[i]) { // not required
+				return nil
+			}
+
+			if err := m.OauthProviders[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("oauthProviders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 // MarshalBinary interface implementation
-func (m *UserParams) MarshalBinary() ([]byte, error) {
+func (m *UserParamsV3) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -268,8 +282,8 @@ func (m *UserParams) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *UserParams) UnmarshalBinary(b []byte) error {
-	var res UserParams
+func (m *UserParamsV3) UnmarshalBinary(b []byte) error {
+	var res UserParamsV3
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

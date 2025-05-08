@@ -20,11 +20,11 @@ import (
 // swagger:model RootUserParams
 type RootUserParams struct {
 
-	// A list of API Key parameters.
+	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	APIKeys []*APIKeyParams `json:"apiKeys"`
 
-	// A list of Authenticator parameters.
+	// A list of Authenticator parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	Authenticators []*AuthenticatorParamsV2 `json:"authenticators"`
 

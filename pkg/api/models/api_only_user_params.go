@@ -20,7 +20,7 @@ import (
 // swagger:model ApiOnlyUserParams
 type APIOnlyUserParams struct {
 
-	// A list of API Key parameters.
+	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	APIKeys []*APIKeyParams `json:"apiKeys"`
 
@@ -31,7 +31,7 @@ type APIOnlyUserParams struct {
 	// Required: true
 	UserName *string `json:"userName"`
 
-	// A list of tags assigned to the new API-only User.
+	// A list of tags assigned to the new API-only User. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	UserTags []string `json:"userTags"`
 }

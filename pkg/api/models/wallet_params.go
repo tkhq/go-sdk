@@ -20,7 +20,7 @@ import (
 // swagger:model WalletParams
 type WalletParams struct {
 
-	// A list of wallet Accounts.
+	// A list of wallet Accounts. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	Accounts []*WalletAccountParams `json:"accounts"`
 
