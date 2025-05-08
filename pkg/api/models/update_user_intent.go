@@ -32,7 +32,7 @@ type UpdateUserIntent struct {
 	// The user's phone number in E.164 format e.g. +13214567890
 	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
 
-	// An updated list of User Tags to apply to this User.
+	// An updated list of User Tags to apply to this User. This field, if not needed, should be an empty array in your request body.
 	UserTagIds []string `json:"userTagIds"`
 }
 

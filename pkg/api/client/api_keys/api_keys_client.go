@@ -165,7 +165,7 @@ func (a *Client) GetAPIKey(params *GetAPIKeyParams, authInfo runtime.ClientAuthI
 }
 
 /*
-GetAPIKeys gets API key
+GetAPIKeys gets API keys
 
 Get details about API keys for a user
 */

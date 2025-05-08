@@ -14,10 +14,13 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// InitOtpAuthIntent init otp auth intent
+// InitOtpAuthIntentV2 init otp auth intent v2
 //
-// swagger:model InitOtpAuthIntent
-type InitOtpAuthIntent struct {
+// swagger:model InitOtpAuthIntentV2
+type InitOtpAuthIntentV2 struct {
+
+	// Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true
+	Alphanumeric bool `json:"alphanumeric,omitempty"`
 
 	// Email or phone number to send the OTP code to
 	// Required: true
@@ -25,6 +28,9 @@ type InitOtpAuthIntent struct {
 
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
 	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
+
+	// Optional length of the OTP code. Default = 9
+	OtpLength int32 `json:"otpLength,omitempty"`
 
 	// Enum to specifiy whether to send OTP via SMS or email
 	// Required: true
@@ -46,8 +52,8 @@ type InitOtpAuthIntent struct {
 	UserIdentifier string `json:"userIdentifier,omitempty"`
 }
 
-// Validate validates this init otp auth intent
-func (m *InitOtpAuthIntent) Validate(formats strfmt.Registry) error {
+// Validate validates this init otp auth intent v2
+func (m *InitOtpAuthIntentV2) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateContact(formats); err != nil {
@@ -72,7 +78,7 @@ func (m *InitOtpAuthIntent) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *InitOtpAuthIntent) validateContact(formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) validateContact(formats strfmt.Registry) error {
 
 	if err := validate.Required("contact", "body", m.Contact); err != nil {
 		return err
@@ -81,7 +87,7 @@ func (m *InitOtpAuthIntent) validateContact(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *InitOtpAuthIntent) validateEmailCustomization(formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) validateEmailCustomization(formats strfmt.Registry) error {
 	if swag.IsZero(m.EmailCustomization) { // not required
 		return nil
 	}
@@ -100,7 +106,7 @@ func (m *InitOtpAuthIntent) validateEmailCustomization(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *InitOtpAuthIntent) validateOtpType(formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) validateOtpType(formats strfmt.Registry) error {
 
 	if err := validate.Required("otpType", "body", m.OtpType); err != nil {
 		return err
@@ -109,7 +115,7 @@ func (m *InitOtpAuthIntent) validateOtpType(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *InitOtpAuthIntent) validateSmsCustomization(formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) validateSmsCustomization(formats strfmt.Registry) error {
 	if swag.IsZero(m.SmsCustomization) { // not required
 		return nil
 	}
@@ -128,8 +134,8 @@ func (m *InitOtpAuthIntent) validateSmsCustomization(formats strfmt.Registry) er
 	return nil
 }
 
-// ContextValidate validate this init otp auth intent based on the context it is used
-func (m *InitOtpAuthIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this init otp auth intent v2 based on the context it is used
+func (m *InitOtpAuthIntentV2) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateEmailCustomization(ctx, formats); err != nil {
@@ -146,7 +152,7 @@ func (m *InitOtpAuthIntent) ContextValidate(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *InitOtpAuthIntent) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EmailCustomization != nil {
 
@@ -167,7 +173,7 @@ func (m *InitOtpAuthIntent) contextValidateEmailCustomization(ctx context.Contex
 	return nil
 }
 
-func (m *InitOtpAuthIntent) contextValidateSmsCustomization(ctx context.Context, formats strfmt.Registry) error {
+func (m *InitOtpAuthIntentV2) contextValidateSmsCustomization(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SmsCustomization != nil {
 
@@ -189,7 +195,7 @@ func (m *InitOtpAuthIntent) contextValidateSmsCustomization(ctx context.Context,
 }
 
 // MarshalBinary interface implementation
-func (m *InitOtpAuthIntent) MarshalBinary() ([]byte, error) {
+func (m *InitOtpAuthIntentV2) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -197,8 +203,8 @@ func (m *InitOtpAuthIntent) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *InitOtpAuthIntent) UnmarshalBinary(b []byte) error {
-	var res InitOtpAuthIntent
+func (m *InitOtpAuthIntentV2) UnmarshalBinary(b []byte) error {
+	var res InitOtpAuthIntentV2
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

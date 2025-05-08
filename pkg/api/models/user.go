@@ -20,7 +20,7 @@ import (
 // swagger:model User
 type User struct {
 
-	// A list of API Key parameters.
+	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	APIKeys []*APIKey `json:"apiKeys"`
 

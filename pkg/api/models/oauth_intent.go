@@ -25,6 +25,9 @@ type OauthIntent struct {
 	// Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
+	// Invalidate all other previously generated Oauth API keys
+	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+
 	// Base64 encoded OIDC token
 	// Required: true
 	OidcToken *string `json:"oidcToken"`

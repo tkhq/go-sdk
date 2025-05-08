@@ -117,6 +117,9 @@ type Intent struct {
 	// create users intent v2
 	CreateUsersIntentV2 *CreateUsersIntentV2 `json:"createUsersIntentV2,omitempty"`
 
+	// create users intent v3
+	CreateUsersIntentV3 *CreateUsersIntentV3 `json:"createUsersIntentV3,omitempty"`
+
 	// create wallet accounts intent
 	CreateWalletAccountsIntent *CreateWalletAccountsIntent `json:"createWalletAccountsIntent,omitempty"`
 
@@ -195,6 +198,9 @@ type Intent struct {
 	// init otp auth intent
 	InitOtpAuthIntent *InitOtpAuthIntent `json:"initOtpAuthIntent,omitempty"`
 
+	// init otp auth intent v2
+	InitOtpAuthIntentV2 *InitOtpAuthIntentV2 `json:"initOtpAuthIntentV2,omitempty"`
+
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
 
@@ -242,6 +248,9 @@ type Intent struct {
 
 	// update policy intent
 	UpdatePolicyIntent *UpdatePolicyIntent `json:"updatePolicyIntent,omitempty"`
+
+	// update policy intent v2
+	UpdatePolicyIntentV2 *UpdatePolicyIntentV2 `json:"updatePolicyIntentV2,omitempty"`
 
 	// update private key tag intent
 	UpdatePrivateKeyTagIntent *UpdatePrivateKeyTagIntent `json:"updatePrivateKeyTagIntent,omitempty"`
@@ -391,6 +400,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateUsersIntentV3(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateWalletAccountsIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -495,6 +508,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpAuthIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -556,6 +573,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatePolicyIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatePolicyIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1193,6 +1214,25 @@ func (m *Intent) validateCreateUsersIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateCreateUsersIntentV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateUsersIntentV3) { // not required
+		return nil
+	}
+
+	if m.CreateUsersIntentV3 != nil {
+		if err := m.CreateUsersIntentV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createUsersIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createUsersIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateWalletAccountsIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateWalletAccountsIntent) { // not required
 		return nil
@@ -1687,6 +1727,25 @@ func (m *Intent) validateInitOtpAuthIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitOtpAuthIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpAuthIntentV2) { // not required
+		return nil
+	}
+
+	if m.InitOtpAuthIntentV2 != nil {
+		if err := m.InitOtpAuthIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
 		return nil
@@ -1991,6 +2050,25 @@ func (m *Intent) validateUpdatePolicyIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateUpdatePolicyIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdatePolicyIntentV2) { // not required
+		return nil
+	}
+
+	if m.UpdatePolicyIntentV2 != nil {
+		if err := m.UpdatePolicyIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateUpdatePrivateKeyTagIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePrivateKeyTagIntent) { // not required
 		return nil
@@ -2218,6 +2296,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateUsersIntentV3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateWalletAccountsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2322,6 +2404,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpAuthIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2383,6 +2469,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdatePolicyIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatePolicyIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3084,6 +3174,27 @@ func (m *Intent) contextValidateCreateUsersIntentV2(ctx context.Context, formats
 	return nil
 }
 
+func (m *Intent) contextValidateCreateUsersIntentV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateUsersIntentV3 != nil {
+
+		if swag.IsZero(m.CreateUsersIntentV3) { // not required
+			return nil
+		}
+
+		if err := m.CreateUsersIntentV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createUsersIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createUsersIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateWalletAccountsIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateWalletAccountsIntent != nil {
@@ -3630,6 +3741,27 @@ func (m *Intent) contextValidateInitOtpAuthIntent(ctx context.Context, formats s
 	return nil
 }
 
+func (m *Intent) contextValidateInitOtpAuthIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpAuthIntentV2 != nil {
+
+		if swag.IsZero(m.InitOtpAuthIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpAuthIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryIntent != nil {
@@ -3958,6 +4090,27 @@ func (m *Intent) contextValidateUpdatePolicyIntent(ctx context.Context, formats 
 				return ve.ValidateName("updatePolicyIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePolicyIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdatePolicyIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatePolicyIntentV2 != nil {
+
+		if swag.IsZero(m.UpdatePolicyIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.UpdatePolicyIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updatePolicyIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updatePolicyIntentV2")
 			}
 			return err
 		}

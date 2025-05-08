@@ -23,7 +23,7 @@ type WalletAccount struct {
 	// Required: true
 	Address *string `json:"address"`
 
-	// Address format used to generate the Acccount.
+	// Address format used to generate the Account.
 	// Required: true
 	AddressFormat *AddressFormat `json:"addressFormat"`
 
@@ -46,6 +46,9 @@ type WalletAccount struct {
 	// Path format used to generate the Account.
 	// Required: true
 	PathFormat *PathFormat `json:"pathFormat"`
+
+	// The public component of this wallet account's underlying cryptographic key pair.
+	PublicKey string `json:"publicKey,omitempty"`
 
 	// updated at
 	// Required: true

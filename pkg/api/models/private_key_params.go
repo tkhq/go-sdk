@@ -32,7 +32,7 @@ type PrivateKeyParams struct {
 	// Required: true
 	PrivateKeyName *string `json:"privateKeyName"`
 
-	// A list of Private Key Tag IDs.
+	// A list of Private Key Tag IDs. This field, if not needed, should be an empty array in your request body.
 	// Required: true
 	PrivateKeyTags []string `json:"privateKeyTags"`
 }
