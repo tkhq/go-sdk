@@ -20,6 +20,8 @@ func main() {
 	}
 
 	path := "m/44'/60'/0'/0/0"
+	// replace the <Wallet ID> below
+	walletid := "<Wallet ID>"
 
 	timestamp := time.Now().UnixMilli()
 	timestampString := strconv.FormatInt(timestamp, 10)
@@ -27,6 +29,7 @@ func main() {
 	params := wallets.NewCreateWalletAccountsParams().WithBody(&models.CreateWalletAccountsRequest{
 		OrganizationID: client.DefaultOrganization(),
 		Parameters: &models.CreateWalletAccountsIntent{
+			WalletID: &walletid,
 			Accounts: []*models.WalletAccountParams{
 				{
 					AddressFormat: models.AddressFormatEthereum.Pointer(),
