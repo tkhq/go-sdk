@@ -15,7 +15,7 @@ import (
 // KemID for HPKE protocol.
 const KemID hpke.KEM = hpke.KEM_P256_HKDF_SHA256
 
-// Enclave quorum public key
+// Enclave quorum public key.
 const SignerProductionPublicKey = "04cf288fe433cc4e1aa0ce1632feac4ea26bf2f5a09dcfe5a42c398e06898710330f0572882f4dbdf0f5304b8fc8703acd69adca9a4bbf7f5d00d20a5e364b2569"
 
 // Metadata stores non-secret metadata about the Encryption key.
