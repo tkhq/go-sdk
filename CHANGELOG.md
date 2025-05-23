@@ -1,13 +1,25 @@
 # CHANGELOG
 
-## [v0.3.0](https://github.com/tkhq/go-sdk/compare/v0.2.0...v0.3.0) (2025-02-19)
-- Update per mono release v2025.2.1
-  - Introduces new `GetWalletAccount` query
- 
-## [v0.2.0](https://github.com/tkhq/go-sdk/compare/v0.1.0...v0.2.0) (2025-02-13)
-- Update per mono release v2025.1.11
-- Update vulnerable go crypto package
+## [v0.4.0](https://github.com/tkhq/go-sdk/compare/v0.3.0...v0.4.0) (2025-05-08)
 
-## [v0.1.0](https://github.com/tkhq/go-sdk/compare/8c73e973e9a5e1e4cfabef7aaae24a8fad91478f...v0.1.0) (2025-01-17)
-- First "official" beta release! 🥳
-- Because it's the first, this release version corresponds to the latest changes merged in `8c73e973e9a5e1e4cfabef7aaae24a8fad91478f`
+
+## [v0.3.0](https://github.com/tkhq/go-sdk/compare/v0.2.0...v0.3.0) (2025-02-20)
+
+
+## [v0.2.0](https://github.com/tkhq/go-sdk/compare/v0.1.0...v0.2.0) (2025-02-13)
+
+
+## [v0.1.0](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.1.0) (2025-01-21)
+
+
+## [v0.0.1-test-4](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-3...v0.0.1-test-4) (2025-01-17)
+
+
+## [v0.0.1-test-3](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-2...v0.0.1-test-3) (2025-01-17)
+
+
+## [v0.0.1-test-2](https://github.com/tkhq/go-sdk/compare/v0.0.1-test...v0.0.1-test-2) (2025-01-17)
+
+
+## v0.0.1-test (2025-01-17)
+
