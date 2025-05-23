@@ -168,14 +168,23 @@ type Result struct {
 	// init otp auth result v2
 	InitOtpAuthResultV2 *InitOtpAuthResultV2 `json:"initOtpAuthResultV2,omitempty"`
 
+	// init otp result
+	InitOtpResult *InitOtpResult `json:"initOtpResult,omitempty"`
+
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
+
+	// oauth login result
+	OauthLoginResult *OauthLoginResult `json:"oauthLoginResult,omitempty"`
 
 	// oauth result
 	OauthResult *OauthResult `json:"oauthResult,omitempty"`
 
 	// otp auth result
 	OtpAuthResult *OtpAuthResult `json:"otpAuthResult,omitempty"`
+
+	// otp login result
+	OtpLoginResult *OtpLoginResult `json:"otpLoginResult,omitempty"`
 
 	// recover user result
 	RecoverUserResult *RecoverUserResult `json:"recoverUserResult,omitempty"`
@@ -197,6 +206,9 @@ type Result struct {
 
 	// sign transaction result
 	SignTransactionResult *SignTransactionResult `json:"signTransactionResult,omitempty"`
+
+	// stamp login result
+	StampLoginResult *StampLoginResult `json:"stampLoginResult,omitempty"`
 
 	// update allowed origins result
 	UpdateAllowedOriginsResult UpdateAllowedOriginsResult `json:"updateAllowedOriginsResult,omitempty"`
@@ -221,6 +233,9 @@ type Result struct {
 
 	// update wallet result
 	UpdateWalletResult *UpdateWalletResult `json:"updateWalletResult,omitempty"`
+
+	// verify otp result
+	VerifyOtpResult *VerifyOtpResult `json:"verifyOtpResult,omitempty"`
 }
 
 // Validate validates this result
@@ -427,7 +442,15 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauthLoginResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -436,6 +459,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOtpAuthResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOtpLoginResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -467,6 +494,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateStampLoginResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUpdatePolicyResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -488,6 +519,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateWalletResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVerifyOtpResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1447,6 +1482,25 @@ func (m *Result) validateInitOtpAuthResultV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateInitOtpResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpResult) { // not required
+		return nil
+	}
+
+	if m.InitOtpResult != nil {
+		if err := m.InitOtpResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryResult) { // not required
 		return nil
@@ -1458,6 +1512,25 @@ func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) er
 				return ve.ValidateName("initUserEmailRecoveryResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateOauthLoginResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.OauthLoginResult) { // not required
+		return nil
+	}
+
+	if m.OauthLoginResult != nil {
+		if err := m.OauthLoginResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthLoginResult")
 			}
 			return err
 		}
@@ -1496,6 +1569,25 @@ func (m *Result) validateOtpAuthResult(formats strfmt.Registry) error {
 				return ve.ValidateName("otpAuthResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("otpAuthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateOtpLoginResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.OtpLoginResult) { // not required
+		return nil
+	}
+
+	if m.OtpLoginResult != nil {
+		if err := m.OtpLoginResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpLoginResult")
 			}
 			return err
 		}
@@ -1637,6 +1729,25 @@ func (m *Result) validateSignTransactionResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateStampLoginResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.StampLoginResult) { // not required
+		return nil
+	}
+
+	if m.StampLoginResult != nil {
+		if err := m.StampLoginResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("stampLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("stampLoginResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateUpdatePolicyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePolicyResult) { // not required
 		return nil
@@ -1743,6 +1854,25 @@ func (m *Result) validateUpdateWalletResult(formats strfmt.Registry) error {
 				return ve.ValidateName("updateWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateVerifyOtpResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.VerifyOtpResult) { // not required
+		return nil
+	}
+
+	if m.VerifyOtpResult != nil {
+		if err := m.VerifyOtpResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("verifyOtpResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("verifyOtpResult")
 			}
 			return err
 		}
@@ -1955,7 +2085,15 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauthLoginResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1964,6 +2102,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateOtpAuthResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOtpLoginResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1995,6 +2137,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateStampLoginResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUpdatePolicyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2016,6 +2162,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateWalletResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVerifyOtpResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3075,6 +3225,27 @@ func (m *Result) contextValidateInitOtpAuthResultV2(ctx context.Context, formats
 	return nil
 }
 
+func (m *Result) contextValidateInitOtpResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpResult != nil {
+
+		if swag.IsZero(m.InitOtpResult) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryResult != nil {
@@ -3088,6 +3259,27 @@ func (m *Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context,
 				return ve.ValidateName("initUserEmailRecoveryResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateOauthLoginResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OauthLoginResult != nil {
+
+		if swag.IsZero(m.OauthLoginResult) { // not required
+			return nil
+		}
+
+		if err := m.OauthLoginResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauthLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauthLoginResult")
 			}
 			return err
 		}
@@ -3130,6 +3322,27 @@ func (m *Result) contextValidateOtpAuthResult(ctx context.Context, formats strfm
 				return ve.ValidateName("otpAuthResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("otpAuthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateOtpLoginResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OtpLoginResult != nil {
+
+		if swag.IsZero(m.OtpLoginResult) { // not required
+			return nil
+		}
+
+		if err := m.OtpLoginResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpLoginResult")
 			}
 			return err
 		}
@@ -3285,6 +3498,27 @@ func (m *Result) contextValidateSignTransactionResult(ctx context.Context, forma
 	return nil
 }
 
+func (m *Result) contextValidateStampLoginResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.StampLoginResult != nil {
+
+		if swag.IsZero(m.StampLoginResult) { // not required
+			return nil
+		}
+
+		if err := m.StampLoginResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("stampLoginResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("stampLoginResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateUpdatePolicyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatePolicyResult != nil {
@@ -3403,6 +3637,27 @@ func (m *Result) contextValidateUpdateWalletResult(ctx context.Context, formats 
 				return ve.ValidateName("updateWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateVerifyOtpResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.VerifyOtpResult != nil {
+
+		if swag.IsZero(m.VerifyOtpResult) { // not required
+			return nil
+		}
+
+		if err := m.VerifyOtpResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("verifyOtpResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("verifyOtpResult")
 			}
 			return err
 		}

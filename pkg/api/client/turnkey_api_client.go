@@ -25,6 +25,7 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/user_auth"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_recovery"
 	"github.com/tkhq/go-sdk/pkg/api/client/user_tags"
+	"github.com/tkhq/go-sdk/pkg/api/client/user_verification"
 	"github.com/tkhq/go-sdk/pkg/api/client/users"
 	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 )
@@ -86,6 +87,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyAPI
 	cli.UserAuth = user_auth.New(transport, formats)
 	cli.UserRecovery = user_recovery.New(transport, formats)
 	cli.UserTags = user_tags.New(transport, formats)
+	cli.UserVerification = user_verification.New(transport, formats)
 	cli.Users = users.New(transport, formats)
 	cli.Wallets = wallets.New(transport, formats)
 	return cli
@@ -162,6 +164,8 @@ type TurnkeyAPI struct {
 
 	UserTags user_tags.ClientService
 
+	UserVerification user_verification.ClientService
+
 	Users users.ClientService
 
 	Wallets wallets.ClientService
@@ -187,6 +191,7 @@ func (c *TurnkeyAPI) SetTransport(transport runtime.ClientTransport) {
 	c.UserAuth.SetTransport(transport)
 	c.UserRecovery.SetTransport(transport)
 	c.UserTags.SetTransport(transport)
+	c.UserVerification.SetTransport(transport)
 	c.Users.SetTransport(transport)
 	c.Wallets.SetTransport(transport)
 }

@@ -1573,6 +1573,32 @@
         "tags": ["Wallets"]
       }
     },
+    "/public/v1/submit/init_otp": {
+      "post": {
+        "summary": "Init Generic OTP",
+        "description": "Initiate a Generic OTP activity",
+        "operationId": "InitOtp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InitOtpRequest"
+            }
+          }
+        ],
+        "tags": ["User Verification"]
+      }
+    },
     "/public/v1/submit/init_otp_auth": {
       "post": {
         "summary": "Init OTP auth",
@@ -1651,6 +1677,32 @@
         "tags": ["User Auth"]
       }
     },
+    "/public/v1/submit/oauth_login": {
+      "post": {
+        "summary": "Login with Oauth",
+        "description": "Create an Oauth session for a user",
+        "operationId": "OauthLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OauthLoginRequest"
+            }
+          }
+        ],
+        "tags": ["Sessions"]
+      }
+    },
     "/public/v1/submit/otp_auth": {
       "post": {
         "summary": "OTP auth",
@@ -1675,6 +1727,32 @@
           }
         ],
         "tags": ["User Auth"]
+      }
+    },
+    "/public/v1/submit/otp_login": {
+      "post": {
+        "summary": "Login with OTP",
+        "description": "Create an OTP session for a user",
+        "operationId": "OtpLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OtpLoginRequest"
+            }
+          }
+        ],
+        "tags": ["Sessions"]
       }
     },
     "/public/v1/submit/recover_user": {
@@ -1859,6 +1937,32 @@
         "tags": ["Signing"]
       }
     },
+    "/public/v1/submit/stamp_login": {
+      "post": {
+        "summary": "Login with a Stamp",
+        "description": "Create a session for a user through stamping client side (api key, wallet client, or passkey client)",
+        "operationId": "StampLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StampLoginRequest"
+            }
+          }
+        ],
+        "tags": ["Sessions"]
+      }
+    },
     "/public/v1/submit/update_policy": {
       "post": {
         "summary": "Update Policy",
@@ -2013,6 +2117,32 @@
           }
         ],
         "tags": ["Wallets"]
+      }
+    },
+    "/public/v1/submit/verify_otp": {
+      "post": {
+        "summary": "Verify Generic OTP",
+        "description": "Verify a Generic OTP",
+        "operationId": "VerifyOtp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyOtpRequest"
+            }
+          }
+        ],
+        "tags": ["User Verification"]
       }
     }
   },
@@ -2268,7 +2398,12 @@
         "ACTIVITY_TYPE_UPDATE_WALLET",
         "ACTIVITY_TYPE_UPDATE_POLICY_V2",
         "ACTIVITY_TYPE_CREATE_USERS_V3",
-        "ACTIVITY_TYPE_INIT_OTP_AUTH_V2"
+        "ACTIVITY_TYPE_INIT_OTP_AUTH_V2",
+        "ACTIVITY_TYPE_INIT_OTP",
+        "ACTIVITY_TYPE_VERIFY_OTP",
+        "ACTIVITY_TYPE_OTP_LOGIN",
+        "ACTIVITY_TYPE_STAMP_LOGIN",
+        "ACTIVITY_TYPE_OAUTH_LOGIN"
       ]
     },
     "AddressFormat": {
@@ -3322,7 +3457,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         }
       },
       "required": ["targetPublicKey", "email"]
@@ -3344,7 +3479,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
@@ -4064,7 +4199,8 @@
         "CREDENTIAL_TYPE_API_KEY_ED25519",
         "CREDENTIAL_TYPE_OTP_AUTH_KEY_P256",
         "CREDENTIAL_TYPE_READ_WRITE_SESSION_KEY_P256",
-        "CREDENTIAL_TYPE_OAUTH_KEY_P256"
+        "CREDENTIAL_TYPE_OAUTH_KEY_P256",
+        "CREDENTIAL_TYPE_LOGIN"
       ]
     },
     "Curve": {
@@ -4684,7 +4820,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
@@ -4726,7 +4862,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
@@ -5906,6 +6042,88 @@
       },
       "required": ["otpId"]
     },
+    "InitOtpIntent": {
+      "type": "object",
+      "properties": {
+        "otpType": {
+          "type": "string",
+          "description": "Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Email or phone number to send the OTP code to"
+        },
+        "otpLength": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Optional length of the OTP code. Default = 9"
+        },
+        "emailCustomization": {
+          "$ref": "#/definitions/EmailCustomizationParams",
+          "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
+        },
+        "smsCustomization": {
+          "$ref": "#/definitions/SmsCustomizationParams",
+          "description": "Optional parameters for customizing SMS message. If not provided, the default sms message will be used."
+        },
+        "userIdentifier": {
+          "type": "string",
+          "description": "Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address."
+        },
+        "sendFromEmailAddress": {
+          "type": "string",
+          "description": "Optional custom email address from which to send the OTP email"
+        },
+        "alphanumeric": {
+          "type": "boolean",
+          "description": "Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true"
+        },
+        "sendFromEmailSenderName": {
+          "type": "string",
+          "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the OTP is valid for. If not provided, a default of 5 minutes will be used. Maximum value is 600 seconds (10 minutes)"
+        },
+        "replyToEmailAddress": {
+          "type": "string",
+          "description": "Optional custom email address to use as reply-to"
+        }
+      },
+      "required": ["otpType", "contact"]
+    },
+    "InitOtpRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_INIT_OTP"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/InitOtpIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "InitOtpResult": {
+      "type": "object",
+      "properties": {
+        "otpId": {
+          "type": "string",
+          "description": "Unique identifier for an OTP authentication"
+        }
+      },
+      "required": ["otpId"]
+    },
     "InitUserEmailRecoveryIntent": {
       "type": "object",
       "properties": {
@@ -5919,7 +6137,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the recovery credential is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the recovery credential is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
@@ -6210,6 +6428,21 @@
         },
         "initOtpAuthIntentV2": {
           "$ref": "#/definitions/InitOtpAuthIntentV2"
+        },
+        "initOtpIntent": {
+          "$ref": "#/definitions/InitOtpIntent"
+        },
+        "verifyOtpIntent": {
+          "$ref": "#/definitions/VerifyOtpIntent"
+        },
+        "otpLoginIntent": {
+          "$ref": "#/definitions/OtpLoginIntent"
+        },
+        "stampLoginIntent": {
+          "$ref": "#/definitions/StampLoginIntent"
+        },
+        "oauthLoginIntent": {
+          "$ref": "#/definitions/OauthLoginIntent"
         }
       }
     },
@@ -6327,7 +6560,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
@@ -6335,6 +6568,59 @@
         }
       },
       "required": ["oidcToken", "targetPublicKey"]
+    },
+    "OauthLoginIntent": {
+      "type": "object",
+      "properties": {
+        "oidcToken": {
+          "type": "string",
+          "description": "Base64 encoded OIDC token"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Client-side public key generated by the user, which will be conditionally added to org data based on the validity of the oidc token associated with this request"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated Login API keys"
+        }
+      },
+      "required": ["oidcToken", "publicKey"]
+    },
+    "OauthLoginRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_OAUTH_LOGIN"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/OauthLoginIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "OauthLoginResult": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string",
+          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
+        }
+      },
+      "required": ["session"]
     },
     "OauthProvider": {
       "type": "object",
@@ -6466,7 +6752,7 @@
         },
         "expirationSeconds": {
           "type": "string",
-          "description": "Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used."
+          "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
@@ -6513,6 +6799,59 @@
         }
       },
       "required": ["userId"]
+    },
+    "OtpLoginIntent": {
+      "type": "object",
+      "properties": {
+        "verificationToken": {
+          "type": "string",
+          "description": "Signed JWT containing a unique id, expiry, verification type, contact"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Client-side public key generated by the user, which will be conditionally added to org data based on the validity of the verification token"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated Login API keys"
+        }
+      },
+      "required": ["verificationToken", "publicKey"]
+    },
+    "OtpLoginRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_OTP_LOGIN"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/OtpLoginIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "OtpLoginResult": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string",
+          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
+        }
+      },
+      "required": ["session"]
     },
     "Pagination": {
       "type": "object",
@@ -7051,6 +7390,21 @@
         },
         "initOtpAuthResultV2": {
           "$ref": "#/definitions/InitOtpAuthResultV2"
+        },
+        "initOtpResult": {
+          "$ref": "#/definitions/InitOtpResult"
+        },
+        "verifyOtpResult": {
+          "$ref": "#/definitions/VerifyOtpResult"
+        },
+        "otpLoginResult": {
+          "$ref": "#/definitions/OtpLoginResult"
+        },
+        "stampLoginResult": {
+          "$ref": "#/definitions/StampLoginResult"
+        },
+        "oauthLoginResult": {
+          "$ref": "#/definitions/OauthLoginResult"
         }
       }
     },
@@ -7582,6 +7936,55 @@
           "description": "Template containing references to .OtpCode i.e Your OTP is {{.OtpCode}}"
         }
       }
+    },
+    "StampLoginIntent": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "description": "Client-side public key generated by the user, which will be conditionally added to org data based on the passkey stamp associated with this request"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
+        },
+        "invalidateExisting": {
+          "type": "boolean",
+          "description": "Invalidate all other previously generated Login API keys"
+        }
+      },
+      "required": ["publicKey"]
+    },
+    "StampLoginRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_STAMP_LOGIN"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/StampLoginIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "StampLoginResult": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string",
+          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
+        }
+      },
+      "required": ["session"]
     },
     "Status": {
       "type": "object",
@@ -8202,6 +8605,55 @@
         "oauthProviders",
         "userTags"
       ]
+    },
+    "VerifyOtpIntent": {
+      "type": "object",
+      "properties": {
+        "otpId": {
+          "type": "string",
+          "description": "ID representing the result of an init OTP activity."
+        },
+        "otpCode": {
+          "type": "string",
+          "description": "OTP sent out to a user's contact (email or SMS)"
+        },
+        "expirationSeconds": {
+          "type": "string",
+          "description": "Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)"
+        }
+      },
+      "required": ["otpId", "otpCode"]
+    },
+    "VerifyOtpRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_VERIFY_OTP"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/VerifyOtpIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "VerifyOtpResult": {
+      "type": "object",
+      "properties": {
+        "verificationToken": {
+          "type": "string",
+          "description": "Signed JWT containing a unique id, expiry, verification type, contact"
+        }
+      },
+      "required": ["verificationToken"]
     },
     "Vote": {
       "type": "object",
