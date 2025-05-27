@@ -38,12 +38,18 @@ func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 	resp, err := lrt.inner.RoundTrip(req)
 	if err != nil {
 		fmt.Printf("Request failed: %v\n", err)
+
 		return nil, err
 	}
 
 	// Capture the response body here
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		body, _ := io.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("Failed to read response body: %v\n", err)
+
+			return resp, nil
+		}
 		fmt.Printf("Turnkey API response: %s\n", string(body))
 		// Rewind the body so it could be re-read
 		resp.Body = io.NopCloser(bytes.NewBuffer(body))
