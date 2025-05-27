@@ -50,7 +50,9 @@ func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 
 			return resp, nil
 		}
+
 		fmt.Printf("Turnkey API response: %s\n", string(body))
+
 		// Rewind the body so it could be re-read
 		resp.Body = io.NopCloser(bytes.NewBuffer(body))
 	}
