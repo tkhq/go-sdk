@@ -3,8 +3,8 @@ package sdk
 
 import (
 	"bytes"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/go-openapi/runtime"
@@ -24,41 +24,32 @@ type config struct {
 	clientVersion   string
 	registry        strfmt.Registry
 	transportConfig *client.TransportConfig
-	customTransport http.RoundTripper
 }
 
 // OptionFunc defines a function which sets configuration options for a Client.
 type OptionFunc func(c *config) error
 
-// WithCustomTransport overrides the client default transport to expose error messages.
-func WithCustomTransport(rt http.RoundTripper) OptionFunc {
-	return func(c *config) error {
-		c.customTransport = rt
-		return nil
-	}
+// loggingRoundTripper defines a wrapper around an http.RoundTripper
+type loggingRoundTripper struct {
+	inner http.RoundTripper
 }
 
-// LoggingRoundTripper is a custom transport that logs HTTP requests and responses.
-type LoggingRoundTripper struct {
-	RT http.RoundTripper
-}
-
-// RoundTrip implements the http.RoundTripper interface.
-func (l *LoggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	log.Printf("Request: %s %s", req.Method, req.URL)
-	resp, err := l.RT.RoundTrip(req)
+func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	resp, err := lrt.inner.RoundTrip(req)
 	if err != nil {
+		fmt.Printf("Request failed: %v\n", err)
 		return nil, err
 	}
-	bodyCopy, _ := io.ReadAll(resp.Body)
-	resp.Body = io.NopCloser(bytes.NewBuffer(bodyCopy))
-	log.Printf("Response: %s", string(bodyCopy))
-	return resp, nil
-}
 
-// NewLoggingRoundTripper is a LoggingRoundTripper constructor.
-func NewLoggingRoundTripper(base http.RoundTripper) http.RoundTripper {
-	return &LoggingRoundTripper{RT: base}
+	// Log error responses or capture body here
+	if resp.StatusCode >= 400 {
+		body, _ := io.ReadAll(resp.Body)
+		fmt.Printf("Error response body: %s\n", string(body))
+		// You can re-wrap body if needed
+		resp.Body = io.NopCloser(bytes.NewBuffer(body))
+	}
+
+	return resp, nil
 }
 
 // WithClientVersion overrides the client version used for this API client.
@@ -135,12 +126,13 @@ func New(options ...OptionFunc) (*Client, error) {
 		c.transportConfig.Schemes,
 	)
 
-	// Add client version header
-	baseTransport := http.DefaultTransport
-	if c.customTransport != nil {
-		baseTransport = c.customTransport
-	}
-	transport.Transport = SetClientVersion(baseTransport, c.clientVersion)
+	// Wrap the underlying RoundTripper
+	base := transport.Transport
+	base = &loggingRoundTripper{inner: base}
+	base = SetClientVersion(base, c.clientVersion)
+
+	// Replace the underlying RoundTripper
+	transport.Transport = base
 
 	return &Client{
 		Client:        client.New(transport, c.registry),
