@@ -29,11 +29,11 @@ type config struct {
 // OptionFunc defines a function which sets configuration options for a Client.
 type OptionFunc func(c *config) error
 
-// loggingRoundTripper defines a wrapper around an http.RoundTripper
 type loggingRoundTripper struct {
 	inner http.RoundTripper
 }
 
+// loggingRoundTripper defines a wrapper around an http.RoundTripper.
 func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	resp, err := lrt.inner.RoundTrip(req)
 	if err != nil {
@@ -41,11 +41,11 @@ func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 		return nil, err
 	}
 
-	// Log error responses or capture body here
-	if resp.StatusCode >= 400 {
+	// Capture the response body here
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		body, _ := io.ReadAll(resp.Body)
-		fmt.Printf("Error response body: %s\n", string(body))
-		// You can re-wrap body if needed
+		fmt.Printf("Turnkey API response: %s\n", string(body))
+		// Rewind the body so it could be re-read
 		resp.Body = io.NopCloser(bytes.NewBuffer(body))
 	}
 
