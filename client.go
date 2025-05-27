@@ -2,6 +2,9 @@
 package sdk
 
 import (
+	"bytes"
+	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/go-openapi/runtime"
@@ -25,6 +28,37 @@ type config struct {
 
 // OptionFunc defines a function which sets configuration options for a Client.
 type OptionFunc func(c *config) error
+
+type loggingRoundTripper struct {
+	inner http.RoundTripper
+}
+
+// loggingRoundTripper defines a wrapper around an http.RoundTripper.
+func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	resp, err := lrt.inner.RoundTrip(req)
+	if err != nil {
+		fmt.Printf("Request failed: %v\n", err)
+
+		return nil, err
+	}
+
+	// Capture the response body here
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("Failed to read response body: %v\n", err)
+
+			return resp, nil
+		}
+
+		fmt.Printf("Turnkey API response: %s\n", string(body))
+
+		// Rewind the body so it could be re-read
+		resp.Body = io.NopCloser(bytes.NewBuffer(body))
+	}
+
+	return resp, nil
+}
 
 // WithClientVersion overrides the client version used for this API client.
 func WithClientVersion(clientVersion string) OptionFunc {
@@ -100,8 +134,13 @@ func New(options ...OptionFunc) (*Client, error) {
 		c.transportConfig.Schemes,
 	)
 
-	// Add client version header
-	transport.Transport = SetClientVersion(transport.Transport, c.clientVersion)
+	// Wrap the underlying RoundTripper
+	base := transport.Transport
+	base = &loggingRoundTripper{inner: base}
+	base = SetClientVersion(base, c.clientVersion)
+
+	// Replace the underlying RoundTripper
+	transport.Transport = base
 
 	return &Client{
 		Client:        client.New(transport, c.registry),
