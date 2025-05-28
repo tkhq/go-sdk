@@ -1,15 +1,14 @@
-// Package main demonstrates an API client which signs a raw payload with a private key ID or wallet account.
+// Package main demonstrates an API client which signs a raw payload with a wallet account
 package main
 
 import (
 	"fmt"
 	"log"
-	"strconv"
-	"time"
 
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/signing"
 	"github.com/tkhq/go-sdk/pkg/api/models"
+	"github.com/tkhq/go-sdk/pkg/util"
 )
 
 func main() {
@@ -19,27 +18,30 @@ func main() {
 		log.Fatal("failed to create new SDK client:", err)
 	}
 
-	timestamp := time.Now().UnixMilli()
-	timestampString := strconv.FormatInt(timestamp, 10)
+	// you could use https://build.tx.xyz/ to generate an Ethereum unsignedTransaction string
+	unsignedTransaction := "<unisgned_transaction_here>"
+	walletAccountAddress := "<account_address_here>"
 
-	var privateKeyID string
-	var unsignedTransaction string // no 0x prefix necessary
-
-	pkParams := signing.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{
+	params := signing.NewSignRawPayloadParams().WithBody(&models.SignRawPayloadRequest{
 		OrganizationID: client.DefaultOrganization(),
-		TimestampMs:    &timestampString,
-		Parameters: &models.SignTransactionIntentV2{
-			SignWith:            &privateKeyID,
-			Type:                models.TransactionTypeEthereum.Pointer(),
-			UnsignedTransaction: &unsignedTransaction,
+		TimestampMs:    util.RequestTimestamp(),
+		Parameters: &models.SignRawPayloadIntentV2{
+			Encoding:     models.PayloadEncodingHexadecimal.Pointer(),
+			HashFunction: models.HashFunctionKeccak256.Pointer(),
+			Payload:      &unsignedTransaction,
+			SignWith:     &walletAccountAddress,
 		},
-		Type: (*string)(models.ActivityTypeSignTransactionV2.Pointer()),
+		Type: (*string)(models.ActivityTypeSignRawPayloadV2.Pointer()),
 	})
 
-	signResp, err := client.V0().Signing.SignTransaction(pkParams, client.Authenticator)
+	signResp, err := client.V0().Signing.SignRawPayload(params, client.Authenticator)
 	if err != nil {
-		log.Fatal("failed to make PrivateKeys SignTransaction request:", err)
+		log.Fatal("failed to make Sign Raw Payload request:", err)
 	}
 
-	fmt.Printf("Signed tx: %v\n", *signResp.Payload.Activity.Result.SignTransactionResult.SignedTransaction)
+	fmt.Printf("Signed raw payload:\nR: %v\nS: %v\nV: %v\n",
+		*signResp.Payload.Activity.Result.SignRawPayloadResult.R,
+		*signResp.Payload.Activity.Result.SignRawPayloadResult.S,
+		*signResp.Payload.Activity.Result.SignRawPayloadResult.V,
+	)
 }
