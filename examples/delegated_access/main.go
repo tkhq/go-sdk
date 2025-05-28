@@ -110,7 +110,7 @@ func main() {
 	fmt.Printf("Sub-organization id : %v\n", *resp.Payload.Activity.Result.CreateSubOrganizationResultV7.SubOrganizationID)
 	subOrganizationId := *resp.Payload.Activity.Result.CreateSubOrganizationResultV7.SubOrganizationID
 
-	// Initializing a new Turkey client used by the Delegated account activities
+	// Initializing a new Turnkey client used by the Delegated account activities
 	// Notice the subOrganizationId created above
 	delegatedApiKey, err := apikey.FromTurnkeyPrivateKey(delegatedPrivateKey, apikey.SchemeP256)
 	if err != nil {
