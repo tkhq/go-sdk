@@ -22,7 +22,7 @@ type OauthIntent struct {
 	// Optional human-readable name for an API Key. If none provided, default to Oauth - <Timestamp>
 	APIKeyName string `json:"apiKeyName,omitempty"`
 
-	// Expiration window (in seconds) indicating how long the API key is valid. If not provided, a default of 15 minutes will be used.
+	// Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated Oauth API keys
