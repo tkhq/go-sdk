@@ -36,6 +36,12 @@ type ClientService interface {
 
 	GetWhoami(params *GetWhoamiParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWhoamiOK, error)
 
+	OauthLogin(params *OauthLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthLoginOK, error)
+
+	OtpLogin(params *OtpLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpLoginOK, error)
+
+	StampLogin(params *StampLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*StampLoginOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -159,6 +165,129 @@ func (a *Client) GetWhoami(params *GetWhoamiParams, authInfo runtime.ClientAuthI
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetWhoami: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+OauthLogin logins with oauth
+
+Create an Oauth session for a user
+*/
+func (a *Client) OauthLogin(params *OauthLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthLoginOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewOauthLoginParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "OauthLogin",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/oauth_login",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &OauthLoginReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*OauthLoginOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for OauthLogin: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+OtpLogin logins with o t p
+
+Create an OTP session for a user
+*/
+func (a *Client) OtpLogin(params *OtpLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpLoginOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewOtpLoginParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "OtpLogin",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/otp_login",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &OtpLoginReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*OtpLoginOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for OtpLogin: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+StampLogin logins with a stamp
+
+Create a session for a user through stamping client side (api key, wallet client, or passkey client)
+*/
+func (a *Client) StampLogin(params *StampLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*StampLoginOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewStampLoginParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "StampLogin",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/stamp_login",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &StampLoginReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*StampLoginOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for StampLogin: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
