@@ -19,7 +19,17 @@ lint:
 .PHONY: generate
 generate: you-need-to-install-go-swagger-check-readme clean
 	mkdir -p pkg/api
-	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
+
+	go run scripts/add_nullable.go api/public_api.swagger.json api/_swagger_nullable.json
+
+	swagger generate client \
+	  -f api/_swagger_nullable.json \
+	  -t pkg/api \
+	  -A TurnkeyAPI \
+	  -T templates \
+	  --allow-template-override
+
+	rm api/_swagger_nullable.json
 	go mod tidy
 
 .PHONY: clean

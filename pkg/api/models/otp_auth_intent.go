@@ -26,7 +26,7 @@ type OtpAuthIntent struct {
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated OTP Auth API keys
-	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
 
 	// OTP sent out to a user's contact (email or SMS)
 	// Required: true

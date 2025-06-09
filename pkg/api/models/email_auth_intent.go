@@ -33,7 +33,7 @@ type EmailAuthIntent struct {
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated Email Auth API keys
-	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
 
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress string `json:"replyToEmailAddress,omitempty"`

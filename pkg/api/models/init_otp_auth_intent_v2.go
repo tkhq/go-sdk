@@ -20,7 +20,7 @@ import (
 type InitOtpAuthIntentV2 struct {
 
 	// Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true
-	Alphanumeric bool `json:"alphanumeric,omitempty"`
+	Alphanumeric *bool `json:"alphanumeric,omitempty"`
 
 	// Email or phone number to send the OTP code to
 	// Required: true
