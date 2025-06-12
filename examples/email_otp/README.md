@@ -3,6 +3,8 @@
 This example shows the backend email OTP verification flow that uses the new [init_otp](https://docs.turnkey.com/api-reference/activities/init-generic-otp) and [verify_otp](https://docs.turnkey.com/api-reference/activities/verify-generic-otp) endpoints.
 It should be used in conjuction with the `indexedDbClient` on the frontend side as shown in this example:  https://github.com/tkhq/sdk/tree/main/examples/otp-auth
 
+**Note:** Before leveraging the `indexedDbClient`, you would need to call the `otpLogin` method that would create the user session.
+
 ### 1/ Setting up Turnkey
 
 The first step is to set up your Turnkey organization and account. By following the [Quickstart](https://docs.turnkey.com/getting-started/quickstart) guide, you should have:
