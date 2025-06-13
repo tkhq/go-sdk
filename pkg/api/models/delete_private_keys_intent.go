@@ -20,7 +20,7 @@ import (
 type DeletePrivateKeysIntent struct {
 
 	// Optional parameter for deleting the private keys, even if any have not been previously exported. If they have been exported, this field is ignored.
-	DeleteWithoutExport bool `json:"deleteWithoutExport,omitempty"`
+	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
 
 	// List of unique identifiers for private keys within an organization
 	// Required: true

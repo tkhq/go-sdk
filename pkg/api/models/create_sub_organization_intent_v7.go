@@ -21,16 +21,16 @@ import (
 type CreateSubOrganizationIntentV7 struct {
 
 	// Disable email auth for the sub-organization
-	DisableEmailAuth bool `json:"disableEmailAuth,omitempty"`
+	DisableEmailAuth *bool `json:"disableEmailAuth,omitempty"`
 
 	// Disable email recovery for the sub-organization
-	DisableEmailRecovery bool `json:"disableEmailRecovery,omitempty"`
+	DisableEmailRecovery *bool `json:"disableEmailRecovery,omitempty"`
 
 	// Disable OTP email auth for the sub-organization
-	DisableOtpEmailAuth bool `json:"disableOtpEmailAuth,omitempty"`
+	DisableOtpEmailAuth *bool `json:"disableOtpEmailAuth,omitempty"`
 
 	// Disable OTP SMS auth for the sub-organization
-	DisableSmsAuth bool `json:"disableSmsAuth,omitempty"`
+	DisableSmsAuth *bool `json:"disableSmsAuth,omitempty"`
 
 	// The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users
 	// Required: true

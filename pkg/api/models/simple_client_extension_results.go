@@ -19,10 +19,10 @@ import (
 type SimpleClientExtensionResults struct {
 
 	// appid
-	Appid bool `json:"appid,omitempty"`
+	Appid *bool `json:"appid,omitempty"`
 
 	// appid exclude
-	AppidExclude bool `json:"appidExclude,omitempty"`
+	AppidExclude *bool `json:"appidExclude,omitempty"`
 
 	// cred props
 	CredProps *CredPropsAuthenticationExtensionsClientOutputs `json:"credProps,omitempty"`

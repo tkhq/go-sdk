@@ -23,7 +23,7 @@ type OauthLoginIntent struct {
 	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated Login API keys
-	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
 
 	// Base64 encoded OIDC token
 	// Required: true
