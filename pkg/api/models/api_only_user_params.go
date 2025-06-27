@@ -25,7 +25,7 @@ type APIOnlyUserParams struct {
 	APIKeys []*APIKeyParams `json:"apiKeys"`
 
 	// The email address for this API-only User (optional).
-	UserEmail string `json:"userEmail,omitempty"`
+	UserEmail *string `json:"userEmail,omitempty"`
 
 	// The name of the new API-only User.
 	// Required: true

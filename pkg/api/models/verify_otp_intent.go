@@ -20,7 +20,7 @@ import (
 type VerifyOtpIntent struct {
 
 	// Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// OTP sent out to a user's contact (email or SMS)
 	// Required: true

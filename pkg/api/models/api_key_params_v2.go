@@ -28,7 +28,7 @@ type APIKeyParamsV2 struct {
 	CurveType *APIKeyCurve `json:"curveType"`
 
 	// Optional window (in seconds) indicating how long the API Key should last.
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// The public component of a cryptographic key pair used to sign messages and transactions.
 	// Required: true

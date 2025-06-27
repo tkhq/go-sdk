@@ -156,6 +156,9 @@ type Result struct {
 	// import wallet result
 	ImportWalletResult *ImportWalletResult `json:"importWalletResult,omitempty"`
 
+	// init fiat on ramp result
+	InitFiatOnRampResult *InitFiatOnRampResult `json:"initFiatOnRampResult,omitempty"`
+
 	// init import private key result
 	InitImportPrivateKeyResult *InitImportPrivateKeyResult `json:"initImportPrivateKeyResult,omitempty"`
 
@@ -224,6 +227,15 @@ type Result struct {
 
 	// update root quorum result
 	UpdateRootQuorumResult UpdateRootQuorumResult `json:"updateRootQuorumResult,omitempty"`
+
+	// update user email result
+	UpdateUserEmailResult *UpdateUserEmailResult `json:"updateUserEmailResult,omitempty"`
+
+	// update user name result
+	UpdateUserNameResult *UpdateUserNameResult `json:"updateUserNameResult,omitempty"`
+
+	// update user phone number result
+	UpdateUserPhoneNumberResult *UpdateUserPhoneNumberResult `json:"updateUserPhoneNumberResult,omitempty"`
 
 	// update user result
 	UpdateUserResult *UpdateUserResult `json:"updateUserResult,omitempty"`
@@ -426,6 +438,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitFiatOnRampResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitImportPrivateKeyResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -507,6 +523,18 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdatePrivateKeyTagResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserEmailResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserNameResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserPhoneNumberResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1406,6 +1434,25 @@ func (m *Result) validateImportWalletResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateInitFiatOnRampResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitFiatOnRampResult) { // not required
+		return nil
+	}
+
+	if m.InitFiatOnRampResult != nil {
+		if err := m.InitFiatOnRampResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initFiatOnRampResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initFiatOnRampResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateInitImportPrivateKeyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitImportPrivateKeyResult) { // not required
 		return nil
@@ -1805,6 +1852,63 @@ func (m *Result) validateUpdatePrivateKeyTagResult(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *Result) validateUpdateUserEmailResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserEmailResult) { // not required
+		return nil
+	}
+
+	if m.UpdateUserEmailResult != nil {
+		if err := m.UpdateUserEmailResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserEmailResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserEmailResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateUpdateUserNameResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserNameResult) { // not required
+		return nil
+	}
+
+	if m.UpdateUserNameResult != nil {
+		if err := m.UpdateUserNameResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserNameResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserNameResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateUpdateUserPhoneNumberResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserPhoneNumberResult) { // not required
+		return nil
+	}
+
+	if m.UpdateUserPhoneNumberResult != nil {
+		if err := m.UpdateUserPhoneNumberResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserPhoneNumberResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserPhoneNumberResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateUpdateUserResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdateUserResult) { // not required
 		return nil
@@ -2069,6 +2173,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitFiatOnRampResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitImportPrivateKeyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2150,6 +2258,18 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdatePrivateKeyTagResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserEmailResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserNameResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserPhoneNumberResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3141,6 +3261,27 @@ func (m *Result) contextValidateImportWalletResult(ctx context.Context, formats 
 	return nil
 }
 
+func (m *Result) contextValidateInitFiatOnRampResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitFiatOnRampResult != nil {
+
+		if swag.IsZero(m.InitFiatOnRampResult) { // not required
+			return nil
+		}
+
+		if err := m.InitFiatOnRampResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initFiatOnRampResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initFiatOnRampResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateInitImportPrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitImportPrivateKeyResult != nil {
@@ -3574,6 +3715,69 @@ func (m *Result) contextValidateUpdatePrivateKeyTagResult(ctx context.Context, f
 				return ve.ValidateName("updatePrivateKeyTagResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatePrivateKeyTagResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateUserEmailResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserEmailResult != nil {
+
+		if swag.IsZero(m.UpdateUserEmailResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserEmailResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserEmailResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserEmailResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateUserNameResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserNameResult != nil {
+
+		if swag.IsZero(m.UpdateUserNameResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserNameResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserNameResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserNameResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateUserPhoneNumberResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserPhoneNumberResult != nil {
+
+		if swag.IsZero(m.UpdateUserPhoneNumberResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserPhoneNumberResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserPhoneNumberResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserPhoneNumberResult")
 			}
 			return err
 		}

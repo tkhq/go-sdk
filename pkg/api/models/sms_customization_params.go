@@ -18,7 +18,7 @@ import (
 type SmsCustomizationParams struct {
 
 	// Template containing references to .OtpCode i.e Your OTP is {{.OtpCode}}
-	Template string `json:"template,omitempty"`
+	Template *string `json:"template,omitempty"`
 }
 
 // Validate validates this sms customization params

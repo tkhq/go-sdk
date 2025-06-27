@@ -1521,6 +1521,32 @@
         "tags": ["Wallets"]
       }
     },
+    "/public/v1/submit/init_fiat_on_ramp": {
+      "post": {
+        "summary": "Init Fiat On Ramp",
+        "description": "Initiate a fiat on ramp flow",
+        "operationId": "InitFiatOnRamp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InitFiatOnRampRequest"
+            }
+          }
+        ],
+        "tags": ["On Ramp"]
+      }
+    },
     "/public/v1/submit/init_import_private_key": {
       "post": {
         "summary": "Init Import Private Key",
@@ -2067,6 +2093,84 @@
         "tags": ["Users"]
       }
     },
+    "/public/v1/submit/update_user_email": {
+      "post": {
+        "summary": "Update User's Email",
+        "description": "Update a User's email in an existing Organization",
+        "operationId": "UpdateUserEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserEmailRequest"
+            }
+          }
+        ],
+        "tags": ["Users"]
+      }
+    },
+    "/public/v1/submit/update_user_name": {
+      "post": {
+        "summary": "Update User's Name",
+        "description": "Update a User's name in an existing Organization",
+        "operationId": "UpdateUserName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserNameRequest"
+            }
+          }
+        ],
+        "tags": ["Users"]
+      }
+    },
+    "/public/v1/submit/update_user_phone_number": {
+      "post": {
+        "summary": "Update User's Phone Number",
+        "description": "Update a User's phone number in an existing Organization",
+        "operationId": "UpdateUserPhoneNumber",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserPhoneNumberRequest"
+            }
+          }
+        ],
+        "tags": ["Users"]
+      }
+    },
     "/public/v1/submit/update_user_tag": {
       "post": {
         "summary": "Update User Tag",
@@ -2403,7 +2507,11 @@
         "ACTIVITY_TYPE_VERIFY_OTP",
         "ACTIVITY_TYPE_OTP_LOGIN",
         "ACTIVITY_TYPE_STAMP_LOGIN",
-        "ACTIVITY_TYPE_OAUTH_LOGIN"
+        "ACTIVITY_TYPE_OAUTH_LOGIN",
+        "ACTIVITY_TYPE_UPDATE_USER_NAME",
+        "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
+        "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
+        "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP"
       ]
     },
     "AddressFormat": {
@@ -2480,6 +2588,7 @@
         "expirationSeconds": {
           "type": "string",
           "format": "uint64",
+          "x-nullable": true,
           "description": "Optional window (in seconds) indicating how long the API Key should last."
         }
       },
@@ -2512,6 +2621,7 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional window (in seconds) indicating how long the API Key should last."
         }
       },
@@ -2534,6 +2644,7 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional window (in seconds) indicating how long the API Key should last."
         }
       },
@@ -2548,6 +2659,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The email address for this API-only User (optional)."
         },
         "userTags": {
@@ -3057,6 +3169,7 @@
         },
         "rootUserId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for the root user object."
         }
       },
@@ -3079,6 +3192,7 @@
         },
         "rootUserId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for the root user object."
         }
       },
@@ -3205,10 +3319,12 @@
         },
         "condition": {
           "type": "string",
+          "x-nullable": true,
           "description": "The condition expression that triggers the Effect"
         },
         "consensus": {
           "type": "string",
+          "x-nullable": true,
           "description": "The consensus expression that triggers the Effect"
         },
         "notes": {
@@ -3454,10 +3570,12 @@
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to Read Write Session - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         }
       },
@@ -3472,18 +3590,22 @@
         },
         "userId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for a given User."
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to Read Write Session - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated ReadWriteSession API keys"
         }
       },
@@ -3679,14 +3801,17 @@
         },
         "wallet": {
           "$ref": "#/definitions/WalletParams",
+          "x-nullable": true,
           "description": "The wallet to create for the sub-organization"
         },
         "disableEmailRecovery": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email recovery for the sub-organization"
         },
         "disableEmailAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email auth for the sub-organization"
         }
       },
@@ -3714,14 +3839,17 @@
         },
         "wallet": {
           "$ref": "#/definitions/WalletParams",
+          "x-nullable": true,
           "description": "The wallet to create for the sub-organization"
         },
         "disableEmailRecovery": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email recovery for the sub-organization"
         },
         "disableEmailAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email auth for the sub-organization"
         }
       },
@@ -3749,14 +3877,17 @@
         },
         "wallet": {
           "$ref": "#/definitions/WalletParams",
+          "x-nullable": true,
           "description": "The wallet to create for the sub-organization"
         },
         "disableEmailRecovery": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email recovery for the sub-organization"
         },
         "disableEmailAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email auth for the sub-organization"
         }
       },
@@ -3784,22 +3915,27 @@
         },
         "wallet": {
           "$ref": "#/definitions/WalletParams",
+          "x-nullable": true,
           "description": "The wallet to create for the sub-organization"
         },
         "disableEmailRecovery": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email recovery for the sub-organization"
         },
         "disableEmailAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable email auth for the sub-organization"
         },
         "disableSmsAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable OTP SMS auth for the sub-organization"
         },
         "disableOtpEmailAuth": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Disable OTP email auth for the sub-organization"
         }
       },
@@ -3871,7 +4007,8 @@
           "type": "string"
         },
         "wallet": {
-          "$ref": "#/definitions/WalletResult"
+          "$ref": "#/definitions/WalletResult",
+          "x-nullable": true
         },
         "rootUserIds": {
           "type": "array",
@@ -3889,7 +4026,8 @@
           "type": "string"
         },
         "wallet": {
-          "$ref": "#/definitions/WalletResult"
+          "$ref": "#/definitions/WalletResult",
+          "x-nullable": true
         },
         "rootUserIds": {
           "type": "array",
@@ -3907,7 +4045,8 @@
           "type": "string"
         },
         "wallet": {
-          "$ref": "#/definitions/WalletResult"
+          "$ref": "#/definitions/WalletResult",
+          "x-nullable": true
         },
         "rootUserIds": {
           "type": "array",
@@ -3925,7 +4064,8 @@
           "type": "string"
         },
         "wallet": {
-          "$ref": "#/definitions/WalletResult"
+          "$ref": "#/definitions/WalletResult",
+          "x-nullable": true
         },
         "rootUserIds": {
           "type": "array",
@@ -4137,6 +4277,7 @@
         "mnemonicLength": {
           "type": "integer",
           "format": "int32",
+          "x-nullable": true,
           "description": "Length of mnemonic to generate the Wallet seed. Defaults to 12. Accepted values: 12, 15, 18, 21, 24."
         }
       },
@@ -4427,6 +4568,7 @@
       "properties": {
         "paymentMethodId": {
           "type": "string",
+          "x-nullable": true,
           "description": "The payment method that the customer wants to remove."
         }
       },
@@ -4549,6 +4691,7 @@
         },
         "deleteWithoutExport": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Optional parameter for deleting the private keys, even if any have not been previously exported. If they have been exported, this field is ignored."
         }
       },
@@ -4593,6 +4736,7 @@
       "properties": {
         "deleteWithoutExport": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Sub-organization deletion, by default, requires associated wallets and private keys to be exported for security reasons. Set this boolean to true to force sub-organization deletion even if some wallets or private keys within it have not been exported yet. Default: false."
         }
       }
@@ -4741,6 +4885,7 @@
         },
         "deleteWithoutExport": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Optional parameter for deleting the wallets, even if any have not been previously exported. If they have been exported, this field is ignored."
         }
       },
@@ -4817,30 +4962,37 @@
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to Email Auth - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Email Auth API keys"
         },
         "sendFromEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address from which to send the email"
         },
         "sendFromEmailSenderName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
         },
         "replyToEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address to use as reply-to"
         }
       },
@@ -4859,30 +5011,37 @@
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to Email Auth - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Email Auth API keys"
         },
         "sendFromEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address from which to send the email"
         },
         "sendFromEmailSenderName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
         },
         "replyToEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address to use as reply-to"
         }
       },
@@ -4928,22 +5087,27 @@
       "properties": {
         "appName": {
           "type": "string",
+          "x-nullable": true,
           "description": "The name of the application."
         },
         "logoUrl": {
           "type": "string",
+          "x-nullable": true,
           "description": "A URL pointing to a logo in PNG format. Note this logo will be resized to fit into 340px x 124px."
         },
         "magicLinkTemplate": {
           "type": "string",
+          "x-nullable": true,
           "description": "A template for the URL to be used in a magic link button, e.g. `https://dapp.xyz/%s`. The auth bundle will be interpolated into the `%s`."
         },
         "templateVariables": {
           "type": "string",
+          "x-nullable": true,
           "description": "JSON object containing key/value pairs to be used with custom templates."
         },
         "templateId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for a given Email Template. If not specified, the default is the most recent Email Template."
         }
       }
@@ -5059,6 +5223,7 @@
         },
         "language": {
           "$ref": "#/definitions/MnemonicLanguage",
+          "x-nullable": true,
           "description": "The language of the mnemonic to export. Defaults to English."
         }
       },
@@ -5106,7 +5271,8 @@
           "$ref": "#/definitions/FeatureName"
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "x-nullable": true
         }
       }
     },
@@ -5120,6 +5286,88 @@
         "FEATURE_NAME_WEBHOOK",
         "FEATURE_NAME_SMS_AUTH",
         "FEATURE_NAME_OTP_EMAIL_AUTH"
+      ]
+    },
+    "FiatOnRampBlockchainNetwork": {
+      "type": "string",
+      "enum": [
+        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BITCOIN",
+        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_ETHEREUM",
+        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_SOLANA",
+        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BASE"
+      ]
+    },
+    "FiatOnRampCryptoCurrency": {
+      "type": "string",
+      "enum": [
+        "FIAT_ON_RAMP_CRYPTO_CURRENCY_BTC",
+        "FIAT_ON_RAMP_CRYPTO_CURRENCY_ETH",
+        "FIAT_ON_RAMP_CRYPTO_CURRENCY_SOL",
+        "FIAT_ON_RAMP_CRYPTO_CURRENCY_USDC"
+      ]
+    },
+    "FiatOnRampCurrency": {
+      "type": "string",
+      "enum": [
+        "FIAT_ON_RAMP_CURRENCY_AUD",
+        "FIAT_ON_RAMP_CURRENCY_BGN",
+        "FIAT_ON_RAMP_CURRENCY_BRL",
+        "FIAT_ON_RAMP_CURRENCY_CAD",
+        "FIAT_ON_RAMP_CURRENCY_CHF",
+        "FIAT_ON_RAMP_CURRENCY_COP",
+        "FIAT_ON_RAMP_CURRENCY_CZK",
+        "FIAT_ON_RAMP_CURRENCY_DKK",
+        "FIAT_ON_RAMP_CURRENCY_DOP",
+        "FIAT_ON_RAMP_CURRENCY_EGP",
+        "FIAT_ON_RAMP_CURRENCY_EUR",
+        "FIAT_ON_RAMP_CURRENCY_GBP",
+        "FIAT_ON_RAMP_CURRENCY_HKD",
+        "FIAT_ON_RAMP_CURRENCY_IDR",
+        "FIAT_ON_RAMP_CURRENCY_ILS",
+        "FIAT_ON_RAMP_CURRENCY_JOD",
+        "FIAT_ON_RAMP_CURRENCY_KES",
+        "FIAT_ON_RAMP_CURRENCY_KWD",
+        "FIAT_ON_RAMP_CURRENCY_LKR",
+        "FIAT_ON_RAMP_CURRENCY_MXN",
+        "FIAT_ON_RAMP_CURRENCY_NGN",
+        "FIAT_ON_RAMP_CURRENCY_NOK",
+        "FIAT_ON_RAMP_CURRENCY_NZD",
+        "FIAT_ON_RAMP_CURRENCY_OMR",
+        "FIAT_ON_RAMP_CURRENCY_PEN",
+        "FIAT_ON_RAMP_CURRENCY_PLN",
+        "FIAT_ON_RAMP_CURRENCY_RON",
+        "FIAT_ON_RAMP_CURRENCY_SEK",
+        "FIAT_ON_RAMP_CURRENCY_THB",
+        "FIAT_ON_RAMP_CURRENCY_TRY",
+        "FIAT_ON_RAMP_CURRENCY_TWD",
+        "FIAT_ON_RAMP_CURRENCY_USD",
+        "FIAT_ON_RAMP_CURRENCY_VND",
+        "FIAT_ON_RAMP_CURRENCY_ZAR"
+      ]
+    },
+    "FiatOnRampPaymentMethod": {
+      "type": "string",
+      "enum": [
+        "FIAT_ON_RAMP_PAYMENT_METHOD_CREDIT_DEBIT_CARD",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_APPLE_PAY",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_GBP_BANK_TRANSFER",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_GBP_OPEN_BANKING_PAYMENT",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_GOOGLE_PAY",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_SEPA_BANK_TRANSFER",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_PIX_INSTANT_PAYMENT",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_PAYPAL",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_VENMO",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_MOONPAY_BALANCE",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_CRYPTO_ACCOUNT",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_FIAT_WALLET",
+        "FIAT_ON_RAMP_PAYMENT_METHOD_ACH_BANK_ACCOUNT"
+      ]
+    },
+    "FiatOnRampProvider": {
+      "type": "string",
+      "enum": [
+        "FIAT_ON_RAMP_PROVIDER_COINBASE",
+        "FIAT_ON_RAMP_PROVIDER_MOONPAY"
       ]
     },
     "GetActivitiesRequest": {
@@ -5211,6 +5459,7 @@
         },
         "userId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for a given User."
         }
       },
@@ -5291,6 +5540,7 @@
         },
         "userId": {
           "type": "string",
+          "x-nullable": true,
           "description": "Unique identifier for a given User."
         }
       },
@@ -5557,10 +5807,12 @@
         },
         "address": {
           "type": "string",
+          "x-nullable": true,
           "description": "Address corresponding to a Wallet Account."
         },
         "path": {
           "type": "string",
+          "x-nullable": true,
           "description": "Path corresponding to a Wallet Account."
         }
       },
@@ -5835,6 +6087,93 @@
       },
       "required": ["walletId", "addresses"]
     },
+    "InitFiatOnRampIntent": {
+      "type": "object",
+      "properties": {
+        "onrampProvider": {
+          "$ref": "#/definitions/FiatOnRampProvider",
+          "description": "Enum to specifiy which on-ramp provider to use"
+        },
+        "walletAddress": {
+          "type": "string",
+          "description": "Destination wallet address for the buy transaction."
+        },
+        "network": {
+          "$ref": "#/definitions/FiatOnRampBlockchainNetwork",
+          "description": "Blockchain network to be used for the transaction, e.g., bitcoin, ethereum. Maps to MoonPay's network or Coinbase's defaultNetwork."
+        },
+        "cryptoCurrencyCode": {
+          "$ref": "#/definitions/FiatOnRampCryptoCurrency",
+          "description": "Code for the cryptocurrency to be purchased, e.g., btc, eth. Maps to MoonPay's currencyCode or Coinbase's defaultAsset."
+        },
+        "fiatCurrencyCode": {
+          "$ref": "#/definitions/FiatOnRampCurrency",
+          "x-nullable": true,
+          "description": "Code for the fiat currency to be used in the transaction, e.g., USD, EUR."
+        },
+        "fiatCurrencyAmount": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Specifies a preset fiat amount for the transaction, e.g., '100'. Must be greater than '20'. If not provided, the user will be prompted to enter an amount."
+        },
+        "paymentMethod": {
+          "$ref": "#/definitions/FiatOnRampPaymentMethod",
+          "x-nullable": true,
+          "description": "Pre-selected payment method, e.g., CREDIT_DEBIT_CARD, APPLE_PAY. Validated against the chosen provider."
+        },
+        "countryCode": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "ISO 3166-1 two-digit country code for Coinbase representing the purchasing user’s country of residence, e.g., US, GB."
+        },
+        "countrySubdivisionCode": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "ISO 3166-2 two-digit country subdivision code for Coinbase representing the purchasing user’s subdivision of residence within their country, e.g. NY. Required if country_code=US."
+        }
+      },
+      "required": [
+        "onrampProvider",
+        "walletAddress",
+        "network",
+        "cryptoCurrencyCode"
+      ]
+    },
+    "InitFiatOnRampRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_INIT_FIAT_ON_RAMP"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/InitFiatOnRampIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "InitFiatOnRampResult": {
+      "type": "object",
+      "properties": {
+        "onRampUrl": {
+          "type": "string",
+          "description": "Unique URL for a given fiat on-ramp flow."
+        },
+        "onRampTransactionId": {
+          "type": "string",
+          "description": "Unique identifier used to retrieve transaction statuses for a given fiat on-ramp flow."
+        }
+      },
+      "required": ["onRampUrl", "onRampTransactionId"]
+    },
     "InitImportPrivateKeyIntent": {
       "type": "object",
       "properties": {
@@ -5930,26 +6269,32 @@
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         },
         "smsCustomization": {
           "$ref": "#/definitions/SmsCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing SMS message. If not provided, the default sms message will be used."
         },
         "userIdentifier": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address."
         },
         "sendFromEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address from which to send the OTP email"
         },
         "sendFromEmailSenderName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
         },
         "replyToEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address to use as reply-to"
         }
       },
@@ -5969,34 +6314,42 @@
         "otpLength": {
           "type": "integer",
           "format": "int32",
+          "x-nullable": true,
           "description": "Optional length of the OTP code. Default = 9"
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         },
         "smsCustomization": {
           "$ref": "#/definitions/SmsCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing SMS message. If not provided, the default sms message will be used."
         },
         "userIdentifier": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address."
         },
         "sendFromEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address from which to send the OTP email"
         },
         "alphanumeric": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true"
         },
         "sendFromEmailSenderName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
         },
         "replyToEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address to use as reply-to"
         }
       },
@@ -6057,38 +6410,47 @@
         "otpLength": {
           "type": "integer",
           "format": "int32",
+          "x-nullable": true,
           "description": "Optional length of the OTP code. Default = 9"
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         },
         "smsCustomization": {
           "$ref": "#/definitions/SmsCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing SMS message. If not provided, the default sms message will be used."
         },
         "userIdentifier": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address."
         },
         "sendFromEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address from which to send the OTP email"
         },
         "alphanumeric": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true"
         },
         "sendFromEmailSenderName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the OTP is valid for. If not provided, a default of 5 minutes will be used. Maximum value is 600 seconds (10 minutes)"
         },
         "replyToEmailAddress": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional custom email address to use as reply-to"
         }
       },
@@ -6138,10 +6500,12 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the recovery credential is valid for. If not provided, a default of 15 minutes will be used."
         },
         "emailCustomization": {
           "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
           "description": "Optional parameters for customizing emails. If not provided, the default email will be used."
         }
       },
@@ -6444,6 +6808,18 @@
         },
         "oauthLoginIntent": {
           "$ref": "#/definitions/OauthLoginIntent"
+        },
+        "updateUserNameIntent": {
+          "$ref": "#/definitions/UpdateUserNameIntent"
+        },
+        "updateUserEmailIntent": {
+          "$ref": "#/definitions/UpdateUserEmailIntent"
+        },
+        "updateUserPhoneNumberIntent": {
+          "$ref": "#/definitions/UpdateUserPhoneNumberIntent"
+        },
+        "initFiatOnRampIntent": {
+          "$ref": "#/definitions/InitFiatOnRampIntent"
         }
       }
     },
@@ -6557,14 +6933,17 @@
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to Oauth - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Oauth API keys"
         }
       },
@@ -6583,10 +6962,12 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Login API keys"
         }
       },
@@ -6749,14 +7130,17 @@
         },
         "apiKeyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional human-readable name for an API Key. If none provided, default to OTP Auth - \u003cTimestamp\u003e"
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated OTP Auth API keys"
         }
       },
@@ -6814,10 +7198,12 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Login API keys"
         }
       },
@@ -6877,7 +7263,11 @@
     },
     "PayloadEncoding": {
       "type": "string",
-      "enum": ["PAYLOAD_ENCODING_HEXADECIMAL", "PAYLOAD_ENCODING_TEXT_UTF8"]
+      "enum": [
+        "PAYLOAD_ENCODING_HEXADECIMAL",
+        "PAYLOAD_ENCODING_TEXT_UTF8",
+        "PAYLOAD_ENCODING_EIP712"
+      ]
     },
     "Policy": {
       "type": "object",
@@ -6906,10 +7296,12 @@
         },
         "consensus": {
           "type": "string",
+          "x-nullable": true,
           "description": "A consensus expression that evalutes to true or false."
         },
         "condition": {
           "type": "string",
+          "x-nullable": true,
           "description": "A condition expression that evalutes to true or false."
         }
       },
@@ -7406,6 +7798,18 @@
         },
         "oauthLoginResult": {
           "$ref": "#/definitions/OauthLoginResult"
+        },
+        "updateUserNameResult": {
+          "$ref": "#/definitions/UpdateUserNameResult"
+        },
+        "updateUserEmailResult": {
+          "$ref": "#/definitions/UpdateUserEmailResult"
+        },
+        "updateUserPhoneNumberResult": {
+          "$ref": "#/definitions/UpdateUserPhoneNumberResult"
+        },
+        "initFiatOnRampResult": {
+          "$ref": "#/definitions/InitFiatOnRampResult"
         }
       }
     },
@@ -7418,6 +7822,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "apiKeys": {
@@ -7448,6 +7853,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "apiKeys": {
@@ -7486,6 +7892,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "apiKeys": {
@@ -7524,10 +7931,12 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "userPhoneNumber": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's phone number in E.164 format e.g. +13214567890"
         },
         "apiKeys": {
@@ -7597,6 +8006,7 @@
         },
         "value": {
           "type": "string",
+          "x-nullable": true,
           "description": "Optional value for the feature. Will override existing values if feature is already set."
         }
       },
@@ -7919,13 +8329,16 @@
       "type": "object",
       "properties": {
         "appid": {
-          "type": "boolean"
+          "type": "boolean",
+          "x-nullable": true
         },
         "appidExclude": {
-          "type": "boolean"
+          "type": "boolean",
+          "x-nullable": true
         },
         "credProps": {
-          "$ref": "#/definitions/CredPropsAuthenticationExtensionsClientOutputs"
+          "$ref": "#/definitions/CredPropsAuthenticationExtensionsClientOutputs",
+          "x-nullable": true
         }
       }
     },
@@ -7934,6 +8347,7 @@
       "properties": {
         "template": {
           "type": "string",
+          "x-nullable": true,
           "description": "Template containing references to .OtpCode i.e Your OTP is {{.OtpCode}}"
         }
       }
@@ -7947,10 +8361,12 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used."
         },
         "invalidateExisting": {
           "type": "boolean",
+          "x-nullable": true,
           "description": "Invalidate all other previously generated Login API keys"
         }
       },
@@ -8043,22 +8459,27 @@
         },
         "policyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Human-readable name for a Policy."
         },
         "policyEffect": {
           "$ref": "#/definitions/Effect",
+          "x-nullable": true,
           "description": "The instruction to DENY or ALLOW an activity (optional)."
         },
         "policyCondition": {
           "type": "string",
+          "x-nullable": true,
           "description": "The condition expression that triggers the Effect (optional)."
         },
         "policyConsensus": {
           "type": "string",
+          "x-nullable": true,
           "description": "The consensus expression that triggers the Effect (optional)."
         },
         "policyNotes": {
           "type": "string",
+          "x-nullable": true,
           "description": "Accompanying notes for a Policy (optional)."
         }
       },
@@ -8073,22 +8494,27 @@
         },
         "policyName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Human-readable name for a Policy."
         },
         "policyEffect": {
           "$ref": "#/definitions/Effect",
+          "x-nullable": true,
           "description": "The instruction to DENY or ALLOW an activity (optional)."
         },
         "policyCondition": {
           "type": "string",
+          "x-nullable": true,
           "description": "The condition expression that triggers the Effect (optional)."
         },
         "policyConsensus": {
           "type": "string",
+          "x-nullable": true,
           "description": "The consensus expression that triggers the Effect (optional)."
         },
         "policyNotes": {
           "type": "string",
+          "x-nullable": true,
           "description": "Accompanying notes for a Policy (optional)."
         }
       },
@@ -8144,6 +8570,7 @@
         },
         "newPrivateKeyTagName": {
           "type": "string",
+          "x-nullable": true,
           "description": "The new, human-readable name for the tag with the given ID."
         },
         "addPrivateKeyIds": {
@@ -8236,6 +8663,56 @@
     "UpdateRootQuorumResult": {
       "type": "object"
     },
+    "UpdateUserEmailIntent": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for a given User."
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "The user's email address. Setting this to an empty string will remove the user's email."
+        },
+        "verificationToken": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Signed JWT containing a unique id, expiry, verification type, contact"
+        }
+      },
+      "required": ["userId", "userEmail"]
+    },
+    "UpdateUserEmailRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_UPDATE_USER_EMAIL"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/UpdateUserEmailIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "UpdateUserEmailResult": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier of the User whose email was updated."
+        }
+      },
+      "required": ["userId"]
+    },
     "UpdateUserIntent": {
       "type": "object",
       "properties": {
@@ -8245,10 +8722,12 @@
         },
         "userName": {
           "type": "string",
+          "x-nullable": true,
           "description": "Human-readable name for a User."
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "userTagIds": {
@@ -8260,7 +8739,103 @@
         },
         "userPhoneNumber": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's phone number in E.164 format e.g. +13214567890"
+        }
+      },
+      "required": ["userId"]
+    },
+    "UpdateUserNameIntent": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for a given User."
+        },
+        "userName": {
+          "type": "string",
+          "description": "Human-readable name for a User."
+        }
+      },
+      "required": ["userId", "userName"]
+    },
+    "UpdateUserNameRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_UPDATE_USER_NAME"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/UpdateUserNameIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "UpdateUserNameResult": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier of the User whose name was updated."
+        }
+      },
+      "required": ["userId"]
+    },
+    "UpdateUserPhoneNumberIntent": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier for a given User."
+        },
+        "userPhoneNumber": {
+          "type": "string",
+          "description": "The user's phone number in E.164 format e.g. +13214567890. Setting this to an empty string will remove the user's phone number."
+        },
+        "verificationToken": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Signed JWT containing a unique id, expiry, verification type, contact"
+        }
+      },
+      "required": ["userId", "userPhoneNumber"]
+    },
+    "UpdateUserPhoneNumberRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/UpdateUserPhoneNumberIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "UpdateUserPhoneNumberResult": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier of the User whose phone number was updated."
         }
       },
       "required": ["userId"]
@@ -8305,6 +8880,7 @@
         },
         "newUserTagName": {
           "type": "string",
+          "x-nullable": true,
           "description": "The new, human-readable name for the tag with the given ID."
         },
         "addUserIds": {
@@ -8413,10 +8989,12 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "userPhoneNumber": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's phone number in E.164 format e.g. +13214567890"
         },
         "authenticators": {
@@ -8477,6 +9055,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "accessType": {
@@ -8524,6 +9103,7 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "apiKeys": {
@@ -8561,10 +9141,12 @@
         },
         "userEmail": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's email address."
         },
         "userPhoneNumber": {
           "type": "string",
+          "x-nullable": true,
           "description": "The user's phone number in E.164 format e.g. +13214567890"
         },
         "apiKeys": {
@@ -8620,6 +9202,7 @@
         },
         "expirationSeconds": {
           "type": "string",
+          "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)"
         }
       },
@@ -8790,6 +9373,7 @@
         },
         "publicKey": {
           "type": "string",
+          "x-nullable": true,
           "description": "The public component of this wallet account's underlying cryptographic key pair."
         }
       },
@@ -8846,6 +9430,7 @@
         "mnemonicLength": {
           "type": "integer",
           "format": "int32",
+          "x-nullable": true,
           "description": "Length of mnemonic to generate the Wallet seed. Defaults to 12. Accepted values: 12, 15, 18, 21, 24."
         }
       },

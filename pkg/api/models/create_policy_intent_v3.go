@@ -20,10 +20,10 @@ import (
 type CreatePolicyIntentV3 struct {
 
 	// The condition expression that triggers the Effect
-	Condition string `json:"condition,omitempty"`
+	Condition *string `json:"condition,omitempty"`
 
 	// The consensus expression that triggers the Effect
-	Consensus string `json:"consensus,omitempty"`
+	Consensus *string `json:"consensus,omitempty"`
 
 	// The instruction to DENY or ALLOW an activity.
 	// Required: true

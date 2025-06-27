@@ -32,7 +32,7 @@ type CreateOrganizationIntentV2 struct {
 	RootEmail *string `json:"rootEmail"`
 
 	// Unique identifier for the root user object.
-	RootUserID string `json:"rootUserId,omitempty"`
+	RootUserID *string `json:"rootUserId,omitempty"`
 }
 
 // Validate validates this create organization intent v2

@@ -22,7 +22,7 @@ type Feature struct {
 	Name FeatureName `json:"name,omitempty"`
 
 	// value
-	Value string `json:"value,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 // Validate validates this feature

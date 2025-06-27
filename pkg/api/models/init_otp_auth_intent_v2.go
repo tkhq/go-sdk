@@ -20,7 +20,7 @@ import (
 type InitOtpAuthIntentV2 struct {
 
 	// Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true
-	Alphanumeric bool `json:"alphanumeric,omitempty"`
+	Alphanumeric *bool `json:"alphanumeric,omitempty"`
 
 	// Email or phone number to send the OTP code to
 	// Required: true
@@ -30,26 +30,26 @@ type InitOtpAuthIntentV2 struct {
 	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
 
 	// Optional length of the OTP code. Default = 9
-	OtpLength int32 `json:"otpLength,omitempty"`
+	OtpLength *int32 `json:"otpLength,omitempty"`
 
 	// Enum to specifiy whether to send OTP via SMS or email
 	// Required: true
 	OtpType *string `json:"otpType"`
 
 	// Optional custom email address to use as reply-to
-	ReplyToEmailAddress string `json:"replyToEmailAddress,omitempty"`
+	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
 
 	// Optional custom email address from which to send the OTP email
-	SendFromEmailAddress string `json:"sendFromEmailAddress,omitempty"`
+	SendFromEmailAddress *string `json:"sendFromEmailAddress,omitempty"`
 
 	// Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'
-	SendFromEmailSenderName string `json:"sendFromEmailSenderName,omitempty"`
+	SendFromEmailSenderName *string `json:"sendFromEmailSenderName,omitempty"`
 
 	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
 	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.
-	UserIdentifier string `json:"userIdentifier,omitempty"`
+	UserIdentifier *string `json:"userIdentifier,omitempty"`
 }
 
 // Validate validates this init otp auth intent v2

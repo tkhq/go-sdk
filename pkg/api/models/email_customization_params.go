@@ -18,19 +18,19 @@ import (
 type EmailCustomizationParams struct {
 
 	// The name of the application.
-	AppName string `json:"appName,omitempty"`
+	AppName *string `json:"appName,omitempty"`
 
 	// A URL pointing to a logo in PNG format. Note this logo will be resized to fit into 340px x 124px.
-	LogoURL string `json:"logoUrl,omitempty"`
+	LogoURL *string `json:"logoUrl,omitempty"`
 
 	// A template for the URL to be used in a magic link button, e.g. `https://dapp.xyz/%s`. The auth bundle will be interpolated into the `%s`.
-	MagicLinkTemplate string `json:"magicLinkTemplate,omitempty"`
+	MagicLinkTemplate *string `json:"magicLinkTemplate,omitempty"`
 
 	// Unique identifier for a given Email Template. If not specified, the default is the most recent Email Template.
-	TemplateID string `json:"templateId,omitempty"`
+	TemplateID *string `json:"templateId,omitempty"`
 
 	// JSON object containing key/value pairs to be used with custom templates.
-	TemplateVariables string `json:"templateVariables,omitempty"`
+	TemplateVariables *string `json:"templateVariables,omitempty"`
 }
 
 // Validate validates this email customization params

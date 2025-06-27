@@ -66,7 +66,7 @@ func main() {
 			RootUsers: []*models.RootUserParamsV4{
 				{
 					UserName:  StringPointer("Delegated User"),
-					UserEmail: *StringPointer("<email_address>"),
+					UserEmail: StringPointer("<email_address>"),
 					APIKeys: []*models.APIKeyParamsV2{
 						{
 							APIKeyName: StringPointer("Delegated - API Key"),
@@ -79,7 +79,7 @@ func main() {
 				},
 				{
 					UserName:       StringPointer("End User"),
-					UserEmail:      *StringPointer("<email_address>"),
+					UserEmail:      StringPointer("<email_address>"),
 					APIKeys:        []*models.APIKeyParamsV2{},
 					Authenticators: []*models.AuthenticatorParamsV2{},
 					OauthProviders: []*models.OauthProviderParams{},
@@ -135,8 +135,8 @@ func main() {
 		Parameters: &models.CreatePolicyIntentV3{
 			PolicyName: StringPointer("Allow Delegated Account to sign transactions to specific address"),
 			Effect:     models.EffectAllow.Pointer(),
-			Condition:  fmt.Sprintf("eth.tx.to == '%s'", recipientAddress),
-			Consensus:  fmt.Sprintf("approvers.any(user, user.id == '%s')", delegatedUserId),
+			Condition:  StringPointer(fmt.Sprintf("eth.tx.to == '%s'", recipientAddress)),
+			Consensus:  StringPointer(fmt.Sprintf("approvers.any(user, user.id == '%s')", delegatedUserId)),
 			Notes:      "Policy notes",
 		},
 	})

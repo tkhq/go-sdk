@@ -48,7 +48,7 @@ type WalletAccount struct {
 	PathFormat *PathFormat `json:"pathFormat"`
 
 	// The public component of this wallet account's underlying cryptographic key pair.
-	PublicKey string `json:"publicKey,omitempty"`
+	PublicKey *string `json:"publicKey,omitempty"`
 
 	// updated at
 	// Required: true

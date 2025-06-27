@@ -29,7 +29,7 @@ type RootUserParams struct {
 	Authenticators []*AuthenticatorParamsV2 `json:"authenticators"`
 
 	// The user's email address.
-	UserEmail string `json:"userEmail,omitempty"`
+	UserEmail *string `json:"userEmail,omitempty"`
 
 	// Human-readable name for a User.
 	// Required: true

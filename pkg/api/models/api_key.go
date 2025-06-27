@@ -36,7 +36,7 @@ type APIKey struct {
 	Credential *ExternalDataV1Credential `json:"credential"`
 
 	// Optional window (in seconds) indicating how long the API Key should last.
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// updated at
 	// Required: true

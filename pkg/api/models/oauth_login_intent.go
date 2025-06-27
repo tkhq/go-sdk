@@ -20,10 +20,10 @@ import (
 type OauthLoginIntent struct {
 
 	// Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used.
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated Login API keys
-	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
 
 	// Base64 encoded OIDC token
 	// Required: true

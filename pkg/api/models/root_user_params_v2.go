@@ -33,7 +33,7 @@ type RootUserParamsV2 struct {
 	OauthProviders []*OauthProviderParams `json:"oauthProviders"`
 
 	// The user's email address.
-	UserEmail string `json:"userEmail,omitempty"`
+	UserEmail *string `json:"userEmail,omitempty"`
 
 	// Human-readable name for a User.
 	// Required: true

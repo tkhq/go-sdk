@@ -24,7 +24,7 @@ type GetOauthProvidersRequest struct {
 	OrganizationID *string `json:"organizationId"`
 
 	// Unique identifier for a given User.
-	UserID string `json:"userId,omitempty"`
+	UserID *string `json:"userId,omitempty"`
 }
 
 // Validate validates this get oauth providers request

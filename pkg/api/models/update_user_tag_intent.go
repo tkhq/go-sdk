@@ -24,7 +24,7 @@ type UpdateUserTagIntent struct {
 	AddUserIds []string `json:"addUserIds"`
 
 	// The new, human-readable name for the tag with the given ID.
-	NewUserTagName string `json:"newUserTagName,omitempty"`
+	NewUserTagName *string `json:"newUserTagName,omitempty"`
 
 	// A list of User IDs to remove this tag from.
 	// Required: true
