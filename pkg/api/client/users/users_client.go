@@ -40,6 +40,12 @@ type ClientService interface {
 
 	UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserOK, error)
 
+	UpdateUserEmail(params *UpdateUserEmailParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserEmailOK, error)
+
+	UpdateUserName(params *UpdateUserNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserNameOK, error)
+
+	UpdateUserPhoneNumber(params *UpdateUserPhoneNumberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserPhoneNumberOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -245,6 +251,129 @@ func (a *Client) UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAut
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for UpdateUser: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UpdateUserEmail updates user s email
+
+Update a User's email in an existing Organization
+*/
+func (a *Client) UpdateUserEmail(params *UpdateUserEmailParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserEmailOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateUserEmailParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateUserEmail",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_user_email",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateUserEmailReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateUserEmailOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateUserEmail: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UpdateUserName updates user s name
+
+Update a User's name in an existing Organization
+*/
+func (a *Client) UpdateUserName(params *UpdateUserNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserNameOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateUserNameParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateUserName",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_user_name",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateUserNameReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateUserNameOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateUserName: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UpdateUserPhoneNumber updates user s phone number
+
+Update a User's phone number in an existing Organization
+*/
+func (a *Client) UpdateUserPhoneNumber(params *UpdateUserPhoneNumberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserPhoneNumberOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateUserPhoneNumberParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateUserPhoneNumber",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_user_phone_number",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateUserPhoneNumberReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateUserPhoneNumberOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateUserPhoneNumber: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

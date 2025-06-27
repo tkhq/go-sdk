@@ -189,6 +189,9 @@ type Intent struct {
 	// import wallet intent
 	ImportWalletIntent *ImportWalletIntent `json:"importWalletIntent,omitempty"`
 
+	// init fiat on ramp intent
+	InitFiatOnRampIntent *InitFiatOnRampIntent `json:"initFiatOnRampIntent,omitempty"`
+
 	// init import private key intent
 	InitImportPrivateKeyIntent *InitImportPrivateKeyIntent `json:"initImportPrivateKeyIntent,omitempty"`
 
@@ -270,8 +273,17 @@ type Intent struct {
 	// update root quorum intent
 	UpdateRootQuorumIntent *UpdateRootQuorumIntent `json:"updateRootQuorumIntent,omitempty"`
 
+	// update user email intent
+	UpdateUserEmailIntent *UpdateUserEmailIntent `json:"updateUserEmailIntent,omitempty"`
+
 	// update user intent
 	UpdateUserIntent *UpdateUserIntent `json:"updateUserIntent,omitempty"`
+
+	// update user name intent
+	UpdateUserNameIntent *UpdateUserNameIntent `json:"updateUserNameIntent,omitempty"`
+
+	// update user phone number intent
+	UpdateUserPhoneNumberIntent *UpdateUserPhoneNumberIntent `json:"updateUserPhoneNumberIntent,omitempty"`
 
 	// update user tag intent
 	UpdateUserTagIntent *UpdateUserTagIntent `json:"updateUserTagIntent,omitempty"`
@@ -511,6 +523,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitFiatOnRampIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitImportPrivateKeyIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -619,7 +635,19 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUpdateUserEmailIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUpdateUserIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserNameIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateUserPhoneNumberIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1705,6 +1733,25 @@ func (m *Intent) validateImportWalletIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitFiatOnRampIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitFiatOnRampIntent) { // not required
+		return nil
+	}
+
+	if m.InitFiatOnRampIntent != nil {
+		if err := m.InitFiatOnRampIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initFiatOnRampIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initFiatOnRampIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitImportPrivateKeyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitImportPrivateKeyIntent) { // not required
 		return nil
@@ -2218,6 +2265,25 @@ func (m *Intent) validateUpdateRootQuorumIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateUpdateUserEmailIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserEmailIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateUserEmailIntent != nil {
+		if err := m.UpdateUserEmailIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserEmailIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserEmailIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateUpdateUserIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdateUserIntent) { // not required
 		return nil
@@ -2229,6 +2295,44 @@ func (m *Intent) validateUpdateUserIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("updateUserIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateUserIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateUpdateUserNameIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserNameIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateUserNameIntent != nil {
+		if err := m.UpdateUserNameIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserNameIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserNameIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateUpdateUserPhoneNumberIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateUserPhoneNumberIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateUserPhoneNumberIntent != nil {
+		if err := m.UpdateUserPhoneNumberIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserPhoneNumberIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserPhoneNumberIntent")
 			}
 			return err
 		}
@@ -2522,6 +2626,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitFiatOnRampIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitImportPrivateKeyIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2630,7 +2738,19 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateUpdateUserEmailIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUpdateUserIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserNameIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateUserPhoneNumberIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3828,6 +3948,27 @@ func (m *Intent) contextValidateImportWalletIntent(ctx context.Context, formats 
 	return nil
 }
 
+func (m *Intent) contextValidateInitFiatOnRampIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitFiatOnRampIntent != nil {
+
+		if swag.IsZero(m.InitFiatOnRampIntent) { // not required
+			return nil
+		}
+
+		if err := m.InitFiatOnRampIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initFiatOnRampIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initFiatOnRampIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitImportPrivateKeyIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitImportPrivateKeyIntent != nil {
@@ -4395,6 +4536,27 @@ func (m *Intent) contextValidateUpdateRootQuorumIntent(ctx context.Context, form
 	return nil
 }
 
+func (m *Intent) contextValidateUpdateUserEmailIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserEmailIntent != nil {
+
+		if swag.IsZero(m.UpdateUserEmailIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserEmailIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserEmailIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserEmailIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateUpdateUserIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdateUserIntent != nil {
@@ -4408,6 +4570,48 @@ func (m *Intent) contextValidateUpdateUserIntent(ctx context.Context, formats st
 				return ve.ValidateName("updateUserIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateUserIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateUserNameIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserNameIntent != nil {
+
+		if swag.IsZero(m.UpdateUserNameIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserNameIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserNameIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserNameIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateUserPhoneNumberIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateUserPhoneNumberIntent != nil {
+
+		if swag.IsZero(m.UpdateUserPhoneNumberIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateUserPhoneNumberIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateUserPhoneNumberIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateUserPhoneNumberIntent")
 			}
 			return err
 		}

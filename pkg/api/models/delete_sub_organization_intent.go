@@ -18,7 +18,7 @@ import (
 type DeleteSubOrganizationIntent struct {
 
 	// Sub-organization deletion, by default, requires associated wallets and private keys to be exported for security reasons. Set this boolean to true to force sub-organization deletion even if some wallets or private keys within it have not been exported yet. Default: false.
-	DeleteWithoutExport bool `json:"deleteWithoutExport,omitempty"`
+	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
 }
 
 // Validate validates this delete sub organization intent

@@ -20,7 +20,7 @@ import (
 type InitOtpIntent struct {
 
 	// Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true
-	Alphanumeric bool `json:"alphanumeric,omitempty"`
+	Alphanumeric *bool `json:"alphanumeric,omitempty"`
 
 	// Email or phone number to send the OTP code to
 	// Required: true
@@ -30,29 +30,29 @@ type InitOtpIntent struct {
 	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
 
 	// Expiration window (in seconds) indicating how long the OTP is valid for. If not provided, a default of 5 minutes will be used. Maximum value is 600 seconds (10 minutes)
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// Optional length of the OTP code. Default = 9
-	OtpLength int32 `json:"otpLength,omitempty"`
+	OtpLength *int32 `json:"otpLength,omitempty"`
 
 	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
 	// Required: true
 	OtpType *string `json:"otpType"`
 
 	// Optional custom email address to use as reply-to
-	ReplyToEmailAddress string `json:"replyToEmailAddress,omitempty"`
+	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
 
 	// Optional custom email address from which to send the OTP email
-	SendFromEmailAddress string `json:"sendFromEmailAddress,omitempty"`
+	SendFromEmailAddress *string `json:"sendFromEmailAddress,omitempty"`
 
 	// Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'
-	SendFromEmailSenderName string `json:"sendFromEmailSenderName,omitempty"`
+	SendFromEmailSenderName *string `json:"sendFromEmailSenderName,omitempty"`
 
 	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
 	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.
-	UserIdentifier string `json:"userIdentifier,omitempty"`
+	UserIdentifier *string `json:"userIdentifier,omitempty"`
 }
 
 // Validate validates this init otp intent

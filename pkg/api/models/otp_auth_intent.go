@@ -20,13 +20,13 @@ import (
 type OtpAuthIntent struct {
 
 	// Optional human-readable name for an API Key. If none provided, default to OTP Auth - <Timestamp>
-	APIKeyName string `json:"apiKeyName,omitempty"`
+	APIKeyName *string `json:"apiKeyName,omitempty"`
 
 	// Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used.
-	ExpirationSeconds string `json:"expirationSeconds,omitempty"`
+	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 
 	// Invalidate all other previously generated OTP Auth API keys
-	InvalidateExisting bool `json:"invalidateExisting,omitempty"`
+	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
 
 	// OTP sent out to a user's contact (email or SMS)
 	// Required: true

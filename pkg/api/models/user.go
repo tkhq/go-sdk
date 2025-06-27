@@ -41,7 +41,7 @@ type User struct {
 	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
 
 	// The user's email address.
-	UserEmail string `json:"userEmail,omitempty"`
+	UserEmail *string `json:"userEmail,omitempty"`
 
 	// Unique identifier for a given User.
 	// Required: true
@@ -52,7 +52,7 @@ type User struct {
 	UserName *string `json:"userName"`
 
 	// The user's phone number in E.164 format e.g. +13214567890
-	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
+	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
 
 	// A list of User Tag IDs.
 	// Required: true

@@ -33,14 +33,14 @@ type RootUserParamsV4 struct {
 	OauthProviders []*OauthProviderParams `json:"oauthProviders"`
 
 	// The user's email address.
-	UserEmail string `json:"userEmail,omitempty"`
+	UserEmail *string `json:"userEmail,omitempty"`
 
 	// Human-readable name for a User.
 	// Required: true
 	UserName *string `json:"userName"`
 
 	// The user's phone number in E.164 format e.g. +13214567890
-	UserPhoneNumber string `json:"userPhoneNumber,omitempty"`
+	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
 }
 
 // Validate validates this root user params v4

@@ -24,7 +24,7 @@ type UpdatePrivateKeyTagIntent struct {
 	AddPrivateKeyIds []string `json:"addPrivateKeyIds"`
 
 	// The new, human-readable name for the tag with the given ID.
-	NewPrivateKeyTagName string `json:"newPrivateKeyTagName,omitempty"`
+	NewPrivateKeyTagName *string `json:"newPrivateKeyTagName,omitempty"`
 
 	// Unique identifier for a given Private Key Tag.
 	// Required: true

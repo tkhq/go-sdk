@@ -20,10 +20,10 @@ import (
 type UpdatePolicyIntent struct {
 
 	// The condition expression that triggers the Effect (optional).
-	PolicyCondition string `json:"policyCondition,omitempty"`
+	PolicyCondition *string `json:"policyCondition,omitempty"`
 
 	// The consensus expression that triggers the Effect (optional).
-	PolicyConsensus string `json:"policyConsensus,omitempty"`
+	PolicyConsensus *string `json:"policyConsensus,omitempty"`
 
 	// The instruction to DENY or ALLOW an activity (optional).
 	PolicyEffect Effect `json:"policyEffect,omitempty"`
@@ -33,10 +33,10 @@ type UpdatePolicyIntent struct {
 	PolicyID *string `json:"policyId"`
 
 	// Human-readable name for a Policy.
-	PolicyName string `json:"policyName,omitempty"`
+	PolicyName *string `json:"policyName,omitempty"`
 
 	// Accompanying notes for a Policy (optional).
-	PolicyNotes string `json:"policyNotes,omitempty"`
+	PolicyNotes *string `json:"policyNotes,omitempty"`
 }
 
 // Validate validates this update policy intent

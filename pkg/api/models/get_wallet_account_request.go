@@ -20,14 +20,14 @@ import (
 type GetWalletAccountRequest struct {
 
 	// Address corresponding to a Wallet Account.
-	Address string `json:"address,omitempty"`
+	Address *string `json:"address,omitempty"`
 
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
 	// Path corresponding to a Wallet Account.
-	Path string `json:"path,omitempty"`
+	Path *string `json:"path,omitempty"`
 
 	// Unique identifier for a given Wallet.
 	// Required: true

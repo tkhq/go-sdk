@@ -31,19 +31,19 @@ type InitOtpAuthIntent struct {
 	OtpType *string `json:"otpType"`
 
 	// Optional custom email address to use as reply-to
-	ReplyToEmailAddress string `json:"replyToEmailAddress,omitempty"`
+	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
 
 	// Optional custom email address from which to send the OTP email
-	SendFromEmailAddress string `json:"sendFromEmailAddress,omitempty"`
+	SendFromEmailAddress *string `json:"sendFromEmailAddress,omitempty"`
 
 	// Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'
-	SendFromEmailSenderName string `json:"sendFromEmailSenderName,omitempty"`
+	SendFromEmailSenderName *string `json:"sendFromEmailSenderName,omitempty"`
 
 	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
 	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.
-	UserIdentifier string `json:"userIdentifier,omitempty"`
+	UserIdentifier *string `json:"userIdentifier,omitempty"`
 }
 
 // Validate validates this init otp auth intent

@@ -20,7 +20,7 @@ import (
 type DeleteWalletsIntent struct {
 
 	// Optional parameter for deleting the wallets, even if any have not been previously exported. If they have been exported, this field is ignored.
-	DeleteWithoutExport bool `json:"deleteWithoutExport,omitempty"`
+	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
 
 	// List of unique identifiers for wallets within an organization
 	// Required: true
