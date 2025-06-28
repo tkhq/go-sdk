@@ -7,8 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
@@ -49,7 +47,7 @@ func TestGetAPIKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New[*apikey.Key, apikey.Metadata]()
+	s := local.NewAPIKeyStore()
 
 	require.Error(t, s.SetAPIKeysDirectory("/does/not/exist"))
 
@@ -66,7 +64,7 @@ func TestGetEncryptionKeyDirPathOverride(t *testing.T) {
 		require.NoError(t, os.RemoveAll(tmpDir))
 	}()
 
-	s := local.New[*encryptionkey.Key, encryptionkey.Metadata]()
+	s := local.NewEncryptionKeyStore()
 
 	require.Error(t, s.SetEncryptionKeysDirectory("/does/not/exist"))
 

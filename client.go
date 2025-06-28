@@ -102,7 +102,7 @@ func WithAPIKey(apiKey *apikey.Key) OptionFunc {
 // with the provided name.
 func WithAPIKeyName(keyname string) OptionFunc {
 	return func(c *config) error {
-		apiKey, err := local.New[*apikey.Key]().Load(keyname)
+		apiKey, err := local.NewAPIKeyStore().Load(keyname)
 		if err != nil {
 			return errors.Wrap(err, "failed to load API key")
 		}
