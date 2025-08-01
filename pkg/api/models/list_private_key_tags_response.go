@@ -20,7 +20,7 @@ import (
 // swagger:model ListPrivateKeyTagsResponse
 type ListPrivateKeyTagsResponse struct {
 
-	// A list of Private Key Tags
+	// A list of private key tags.
 	// Required: true
 	PrivateKeyTags []*V1Tag `json:"privateKeyTags"`
 }

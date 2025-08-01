@@ -20,7 +20,7 @@ import (
 // swagger:model GetWalletAccountsResponse
 type GetWalletAccountsResponse struct {
 
-	// A list of Accounts generated from a Wallet that share a common seed.
+	// A list of accounts generated from a wallet that share a common seed.
 	// Required: true
 	Accounts []*WalletAccount `json:"accounts"`
 }

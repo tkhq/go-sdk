@@ -20,7 +20,7 @@ import (
 // swagger:model GetPoliciesResponse
 type GetPoliciesResponse struct {
 
-	// A list of Policies.
+	// A list of policies.
 	// Required: true
 	Policies []*Policy `json:"policies"`
 }

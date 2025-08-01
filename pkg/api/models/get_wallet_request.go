@@ -19,11 +19,11 @@ import (
 // swagger:model GetWalletRequest
 type GetWalletRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Unique identifier for a given Wallet.
+	// Unique identifier for a given wallet.
 	// Required: true
 	WalletID *string `json:"walletId"`
 }

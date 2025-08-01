@@ -50,7 +50,7 @@ type ClientService interface {
 /*
 CreateOauthProviders creates oauth providers
 
-Creates Oauth providers for a specified user - BETA
+Create Oauth providers for a specified user.
 */
 func (a *Client) CreateOauthProviders(params *CreateOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauthProvidersOK, error) {
 	// TODO: Validate the params before sending
@@ -91,7 +91,7 @@ func (a *Client) CreateOauthProviders(params *CreateOauthProvidersParams, authIn
 /*
 DeleteOauthProviders deletes oauth providers
 
-Removes Oauth providers for a specified user - BETA
+Remove Oauth providers for a specified user.
 */
 func (a *Client) DeleteOauthProviders(params *DeleteOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauthProvidersOK, error) {
 	// TODO: Validate the params before sending
@@ -132,7 +132,7 @@ func (a *Client) DeleteOauthProviders(params *DeleteOauthProvidersParams, authIn
 /*
 EmailAuth performs email auth
 
-Authenticate a user via Email
+Authenticate a user via email.
 */
 func (a *Client) EmailAuth(params *EmailAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EmailAuthOK, error) {
 	// TODO: Validate the params before sending
@@ -173,7 +173,7 @@ func (a *Client) EmailAuth(params *EmailAuthParams, authInfo runtime.ClientAuthI
 /*
 GetOauthProviders gets oauth providers
 
-Get details about Oauth providers for a user
+Get details about Oauth providers for a user.
 */
 func (a *Client) GetOauthProviders(params *GetOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOauthProvidersOK, error) {
 	// TODO: Validate the params before sending
@@ -214,7 +214,7 @@ func (a *Client) GetOauthProviders(params *GetOauthProvidersParams, authInfo run
 /*
 InitOtpAuth inits o t p auth
 
-Initiate an OTP auth activity
+Initiate an OTP auth activity.
 */
 func (a *Client) InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpAuthOK, error) {
 	// TODO: Validate the params before sending
@@ -255,7 +255,7 @@ func (a *Client) InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientA
 /*
 Oauth oauths
 
-Authenticate a user with an Oidc token (Oauth) - BETA
+Authenticate a user with an OIDC token (Oauth).
 */
 func (a *Client) Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthOK, error) {
 	// TODO: Validate the params before sending
@@ -296,7 +296,7 @@ func (a *Client) Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWrite
 /*
 OtpAuth os t p auth
 
-Authenticate a user with an OTP code sent via email or SMS
+Authenticate a user with an OTP code sent via email or SMS.
 */
 func (a *Client) OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpAuthOK, error) {
 	// TODO: Validate the params before sending

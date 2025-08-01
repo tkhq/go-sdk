@@ -46,6 +46,9 @@ type InitFiatOnRampIntent struct {
 	// Pre-selected payment method, e.g., CREDIT_DEBIT_CARD, APPLE_PAY. Validated against the chosen provider.
 	PaymentMethod FiatOnRampPaymentMethod `json:"paymentMethod,omitempty"`
 
+	// Optional flag to indicate whether to use the sandbox mode to simulate transactions for the on-ramp provider. Default is false.
+	SandboxMode *bool `json:"sandboxMode,omitempty"`
+
 	// Destination wallet address for the buy transaction.
 	// Required: true
 	WalletAddress *string `json:"walletAddress"`

@@ -85,7 +85,7 @@ func (a *Client) CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo
 /*
 DeletePrivateKeyTags deletes private key tags
 
-Delete Private Key Tags within an Organization
+Delete private key tags within an organization.
 */
 func (a *Client) DeletePrivateKeyTags(params *DeletePrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeyTagsOK, error) {
 	// TODO: Validate the params before sending
@@ -126,7 +126,7 @@ func (a *Client) DeletePrivateKeyTags(params *DeletePrivateKeyTagsParams, authIn
 /*
 ListPrivateKeyTags lists private key tags
 
-List all Private Key Tags within an Organization
+List all private key tags within an organization.
 */
 func (a *Client) ListPrivateKeyTags(params *ListPrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrivateKeyTagsOK, error) {
 	// TODO: Validate the params before sending

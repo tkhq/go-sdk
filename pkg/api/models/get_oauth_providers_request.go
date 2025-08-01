@@ -19,11 +19,11 @@ import (
 // swagger:model GetOauthProvidersRequest
 type GetOauthProvidersRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Unique identifier for a given User.
+	// Unique identifier for a given user.
 	UserID *string `json:"userId,omitempty"`
 }
 

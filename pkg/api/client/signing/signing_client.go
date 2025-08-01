@@ -42,7 +42,7 @@ type ClientService interface {
 /*
 SignRawPayload signs raw payload
 
-Sign a raw payload
+Sign a raw payload.
 */
 func (a *Client) SignRawPayload(params *SignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadOK, error) {
 	// TODO: Validate the params before sending
@@ -83,7 +83,7 @@ func (a *Client) SignRawPayload(params *SignRawPayloadParams, authInfo runtime.C
 /*
 SignRawPayloads signs raw payloads
 
-Sign multiple raw payloads with the same signing parameters
+Sign multiple raw payloads with the same signing parameters.
 */
 func (a *Client) SignRawPayloads(params *SignRawPayloadsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadsOK, error) {
 	// TODO: Validate the params before sending
@@ -124,7 +124,7 @@ func (a *Client) SignRawPayloads(params *SignRawPayloadsParams, authInfo runtime
 /*
 SignTransaction signs transaction
 
-Sign a transaction
+Sign a transaction.
 */
 func (a *Client) SignTransaction(params *SignTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignTransactionOK, error) {
 	// TODO: Validate the params before sending

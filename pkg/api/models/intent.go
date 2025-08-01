@@ -87,6 +87,9 @@ type Intent struct {
 	// create read write session intent v2
 	CreateReadWriteSessionIntentV2 *CreateReadWriteSessionIntentV2 `json:"createReadWriteSessionIntentV2,omitempty"`
 
+	// create smart contract interface intent
+	CreateSmartContractInterfaceIntent *CreateSmartContractInterfaceIntent `json:"createSmartContractInterfaceIntent,omitempty"`
+
 	// create sub organization intent
 	CreateSubOrganizationIntent *CreateSubOrganizationIntent `json:"createSubOrganizationIntent,omitempty"`
 
@@ -152,6 +155,9 @@ type Intent struct {
 
 	// delete private keys intent
 	DeletePrivateKeysIntent *DeletePrivateKeysIntent `json:"deletePrivateKeysIntent,omitempty"`
+
+	// delete smart contract interface intent
+	DeleteSmartContractInterfaceIntent *DeleteSmartContractInterfaceIntent `json:"deleteSmartContractInterfaceIntent,omitempty"`
 
 	// delete sub organization intent
 	DeleteSubOrganizationIntent *DeleteSubOrganizationIntent `json:"deleteSubOrganizationIntent,omitempty"`
@@ -387,6 +393,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSmartContractInterfaceIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateSubOrganizationIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -472,6 +482,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePrivateKeysIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteSmartContractInterfaceIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1087,6 +1101,25 @@ func (m *Intent) validateCreateReadWriteSessionIntentV2(formats strfmt.Registry)
 	return nil
 }
 
+func (m *Intent) validateCreateSmartContractInterfaceIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSmartContractInterfaceIntent) { // not required
+		return nil
+	}
+
+	if m.CreateSmartContractInterfaceIntent != nil {
+		if err := m.CreateSmartContractInterfaceIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSmartContractInterfaceIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSmartContractInterfaceIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateCreateSubOrganizationIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateSubOrganizationIntent) { // not required
 		return nil
@@ -1497,6 +1530,25 @@ func (m *Intent) validateDeletePrivateKeysIntent(formats strfmt.Registry) error 
 				return ve.ValidateName("deletePrivateKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeleteSmartContractInterfaceIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteSmartContractInterfaceIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteSmartContractInterfaceIntent != nil {
+		if err := m.DeleteSmartContractInterfaceIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSmartContractInterfaceIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSmartContractInterfaceIntent")
 			}
 			return err
 		}
@@ -2490,6 +2542,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSmartContractInterfaceIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2575,6 +2631,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePrivateKeysIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteSmartContractInterfaceIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3234,6 +3294,27 @@ func (m *Intent) contextValidateCreateReadWriteSessionIntentV2(ctx context.Conte
 	return nil
 }
 
+func (m *Intent) contextValidateCreateSmartContractInterfaceIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSmartContractInterfaceIntent != nil {
+
+		if swag.IsZero(m.CreateSmartContractInterfaceIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateSmartContractInterfaceIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSmartContractInterfaceIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSmartContractInterfaceIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateCreateSubOrganizationIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationIntent != nil {
@@ -3688,6 +3769,27 @@ func (m *Intent) contextValidateDeletePrivateKeysIntent(ctx context.Context, for
 				return ve.ValidateName("deletePrivateKeysIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteSmartContractInterfaceIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteSmartContractInterfaceIntent != nil {
+
+		if swag.IsZero(m.DeleteSmartContractInterfaceIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteSmartContractInterfaceIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSmartContractInterfaceIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSmartContractInterfaceIntent")
 			}
 			return err
 		}

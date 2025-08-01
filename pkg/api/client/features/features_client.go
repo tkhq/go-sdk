@@ -40,7 +40,7 @@ type ClientService interface {
 /*
 RemoveOrganizationFeature removes organization feature
 
-Removes an organization feature. This activity must be approved by the current root quorum.
+Remove an organization feature. This activity must be approved by the current root quorum.
 */
 func (a *Client) RemoveOrganizationFeature(params *RemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveOrganizationFeatureOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +81,7 @@ func (a *Client) RemoveOrganizationFeature(params *RemoveOrganizationFeaturePara
 /*
 SetOrganizationFeature sets organization feature
 
-Sets an organization feature. This activity must be approved by the current root quorum.
+Set an organization feature. This activity must be approved by the current root quorum.
 */
 func (a *Client) SetOrganizationFeature(params *SetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SetOrganizationFeatureOK, error) {
 	// TODO: Validate the params before sending

@@ -19,7 +19,7 @@ import (
 // swagger:model GetWalletAccountResponse
 type GetWalletAccountResponse struct {
 
-	// The resulting Wallet Account.
+	// The resulting wallet account.
 	// Required: true
 	Account *WalletAccount `json:"account"`
 }

@@ -19,7 +19,7 @@ import (
 // swagger:model GetOrganizationConfigsResponse
 type GetOrganizationConfigsResponse struct {
 
-	// Organization configs including quorum settings and organization features
+	// Organization configs including quorum settings and organization features.
 	// Required: true
 	Configs *Config `json:"configs"`
 }

@@ -40,7 +40,7 @@ type ClientService interface {
 /*
 InitUserEmailRecovery inits email recovery
 
-Initializes a new email recovery
+Initialize a new email recovery.
 */
 func (a *Client) InitUserEmailRecovery(params *InitUserEmailRecoveryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitUserEmailRecoveryOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +81,7 @@ func (a *Client) InitUserEmailRecovery(params *InitUserEmailRecoveryParams, auth
 /*
 RecoverUser recovers a user
 
-Completes the process of recovering a user by adding an authenticator
+Complete the process of recovering a user by adding an authenticator.
 */
 func (a *Client) RecoverUser(params *RecoverUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecoverUserOK, error) {
 	// TODO: Validate the params before sending

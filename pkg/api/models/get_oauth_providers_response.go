@@ -20,7 +20,7 @@ import (
 // swagger:model GetOauthProvidersResponse
 type GetOauthProvidersResponse struct {
 
-	// A list of Oauth Providers
+	// A list of Oauth providers.
 	// Required: true
 	OauthProviders []*OauthProvider `json:"oauthProviders"`
 }

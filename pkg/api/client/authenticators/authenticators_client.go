@@ -44,7 +44,7 @@ type ClientService interface {
 /*
 CreateAuthenticators creates authenticators
 
-Create Authenticators to authenticate requests to Turnkey
+Create authenticators to authenticate requests to Turnkey.
 */
 func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending
@@ -85,7 +85,7 @@ func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authIn
 /*
 DeleteAuthenticators deletes authenticators
 
-Remove authenticators from a User
+Remove authenticators from a user.
 */
 func (a *Client) DeleteAuthenticators(params *DeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending
@@ -126,7 +126,7 @@ func (a *Client) DeleteAuthenticators(params *DeleteAuthenticatorsParams, authIn
 /*
 GetAuthenticator gets authenticator
 
-Get details about an authenticator
+Get details about an authenticator.
 */
 func (a *Client) GetAuthenticator(params *GetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorOK, error) {
 	// TODO: Validate the params before sending
@@ -167,7 +167,7 @@ func (a *Client) GetAuthenticator(params *GetAuthenticatorParams, authInfo runti
 /*
 GetAuthenticators gets authenticators
 
-Get details about authenticators for a user
+Get details about authenticators for a user.
 */
 func (a *Client) GetAuthenticators(params *GetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorsOK, error) {
 	// TODO: Validate the params before sending

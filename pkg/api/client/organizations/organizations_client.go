@@ -48,7 +48,7 @@ type ClientService interface {
 /*
 CreateSubOrganization creates sub organization
 
-Create a new Sub-Organization
+Create a new sub-organization.
 */
 func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error) {
 	// TODO: Validate the params before sending
@@ -89,7 +89,7 @@ func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, auth
 /*
 DeleteSubOrganization deletes sub organization
 
-Deletes a sub organization
+Delete a sub-organization.
 */
 func (a *Client) DeleteSubOrganization(params *DeleteSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSubOrganizationOK, error) {
 	// TODO: Validate the params before sending
@@ -130,7 +130,7 @@ func (a *Client) DeleteSubOrganization(params *DeleteSubOrganizationParams, auth
 /*
 GetOrganizationConfigs gets configs
 
-Get quorum settings and features for an organization
+Get quorum settings and features for an organization.
 */
 func (a *Client) GetOrganizationConfigs(params *GetOrganizationConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrganizationConfigsOK, error) {
 	// TODO: Validate the params before sending
@@ -169,7 +169,7 @@ func (a *Client) GetOrganizationConfigs(params *GetOrganizationConfigsParams, au
 }
 
 /*
-GetSubOrgIds gets suborgs
+GetSubOrgIds gets sub organizations
 
 Get all suborg IDs associated given a parent org ID and an optional filter.
 */
@@ -210,7 +210,7 @@ func (a *Client) GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.Clien
 }
 
 /*
-GetVerifiedSubOrgIds gets verified suborgs
+GetVerifiedSubOrgIds gets verified sub organizations
 
 Get all email or phone verified suborg IDs associated given a parent org ID.
 */

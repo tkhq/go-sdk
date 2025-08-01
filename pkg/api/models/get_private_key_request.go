@@ -19,11 +19,11 @@ import (
 // swagger:model GetPrivateKeyRequest
 type GetPrivateKeyRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Unique identifier for a given Private Key.
+	// Unique identifier for a given private key.
 	// Required: true
 	PrivateKeyID *string `json:"privateKeyId"`
 }

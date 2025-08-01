@@ -34,13 +34,15 @@ type ClientService interface {
 
 	GetActivity(params *GetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivityOK, error)
 
+	GetPolicyEvaluations(params *GetPolicyEvaluationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyEvaluationsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
 GetActivities lists activities
 
-List all Activities within an Organization
+List all activities within an organization.
 */
 func (a *Client) GetActivities(params *GetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivitiesOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +83,7 @@ func (a *Client) GetActivities(params *GetActivitiesParams, authInfo runtime.Cli
 /*
 GetActivity gets activity
 
-Get details about an Activity
+Get details about an activity.
 */
 func (a *Client) GetActivity(params *GetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivityOK, error) {
 	// TODO: Validate the params before sending
@@ -116,6 +118,47 @@ func (a *Client) GetActivity(params *GetActivityParams, authInfo runtime.ClientA
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetActivity: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetPolicyEvaluations gets policy evaluations
+
+Get the policy evaluations for an activity.
+*/
+func (a *Client) GetPolicyEvaluations(params *GetPolicyEvaluationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyEvaluationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetPolicyEvaluationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetPolicyEvaluations",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_policy_evaluations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPolicyEvaluationsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetPolicyEvaluationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPolicyEvaluations: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

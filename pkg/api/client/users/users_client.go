@@ -52,7 +52,7 @@ type ClientService interface {
 /*
 CreateUsers creates users
 
-Create Users in an existing Organization
+Create users in an existing organization.
 */
 func (a *Client) CreateUsers(params *CreateUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUsersOK, error) {
 	// TODO: Validate the params before sending
@@ -93,7 +93,7 @@ func (a *Client) CreateUsers(params *CreateUsersParams, authInfo runtime.ClientA
 /*
 DeleteUsers deletes users
 
-Delete Users within an Organization
+Delete users within an organization.
 */
 func (a *Client) DeleteUsers(params *DeleteUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUsersOK, error) {
 	// TODO: Validate the params before sending
@@ -134,7 +134,7 @@ func (a *Client) DeleteUsers(params *DeleteUsersParams, authInfo runtime.ClientA
 /*
 GetUser gets user
 
-Get details about a User
+Get details about a user.
 */
 func (a *Client) GetUser(params *GetUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUserOK, error) {
 	// TODO: Validate the params before sending
@@ -175,7 +175,7 @@ func (a *Client) GetUser(params *GetUserParams, authInfo runtime.ClientAuthInfoW
 /*
 GetUsers lists users
 
-List all Users within an Organization
+List all users within an organization.
 */
 func (a *Client) GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetUsersOK, error) {
 	// TODO: Validate the params before sending
@@ -216,7 +216,7 @@ func (a *Client) GetUsers(params *GetUsersParams, authInfo runtime.ClientAuthInf
 /*
 UpdateUser updates user
 
-Update a User in an existing Organization
+Update a user in an existing organization.
 */
 func (a *Client) UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserOK, error) {
 	// TODO: Validate the params before sending
@@ -257,7 +257,7 @@ func (a *Client) UpdateUser(params *UpdateUserParams, authInfo runtime.ClientAut
 /*
 UpdateUserEmail updates user s email
 
-Update a User's email in an existing Organization
+Update a user's email in an existing organization.
 */
 func (a *Client) UpdateUserEmail(params *UpdateUserEmailParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserEmailOK, error) {
 	// TODO: Validate the params before sending
@@ -298,7 +298,7 @@ func (a *Client) UpdateUserEmail(params *UpdateUserEmailParams, authInfo runtime
 /*
 UpdateUserName updates user s name
 
-Update a User's name in an existing Organization
+Update a user's name in an existing organization.
 */
 func (a *Client) UpdateUserName(params *UpdateUserNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserNameOK, error) {
 	// TODO: Validate the params before sending
@@ -339,7 +339,7 @@ func (a *Client) UpdateUserName(params *UpdateUserNameParams, authInfo runtime.C
 /*
 UpdateUserPhoneNumber updates user s phone number
 
-Update a User's phone number in an existing Organization
+Update a user's phone number in an existing organization.
 */
 func (a *Client) UpdateUserPhoneNumber(params *UpdateUserPhoneNumberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserPhoneNumberOK, error) {
 	// TODO: Validate the params before sending

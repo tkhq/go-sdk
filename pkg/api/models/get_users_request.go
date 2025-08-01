@@ -19,7 +19,7 @@ import (
 // swagger:model GetUsersRequest
 type GetUsersRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 }

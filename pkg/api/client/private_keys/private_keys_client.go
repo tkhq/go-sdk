@@ -50,7 +50,7 @@ type ClientService interface {
 /*
 CreatePrivateKeys creates private keys
 
-Create new Private Keys
+Create new private keys.
 */
 func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeysOK, error) {
 	// TODO: Validate the params before sending
@@ -91,7 +91,7 @@ func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo run
 /*
 DeletePrivateKeys deletes private keys
 
-Deletes private keys for an organization
+Delete private keys for an organization.
 */
 func (a *Client) DeletePrivateKeys(params *DeletePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeysOK, error) {
 	// TODO: Validate the params before sending
@@ -132,7 +132,7 @@ func (a *Client) DeletePrivateKeys(params *DeletePrivateKeysParams, authInfo run
 /*
 ExportPrivateKey exports private key
 
-Exports a Private Key
+Export a private key.
 */
 func (a *Client) ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportPrivateKeyOK, error) {
 	// TODO: Validate the params before sending
@@ -173,7 +173,7 @@ func (a *Client) ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runti
 /*
 GetPrivateKey gets private key
 
-Get details about a Private Key
+Get details about a private key.
 */
 func (a *Client) GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeyOK, error) {
 	// TODO: Validate the params before sending
@@ -214,7 +214,7 @@ func (a *Client) GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.Cli
 /*
 GetPrivateKeys lists private keys
 
-List all Private Keys within an Organization
+List all private keys within an organization.
 */
 func (a *Client) GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeysOK, error) {
 	// TODO: Validate the params before sending
@@ -255,7 +255,7 @@ func (a *Client) GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.C
 /*
 ImportPrivateKey imports private key
 
-Imports a private key
+Import a private key.
 */
 func (a *Client) ImportPrivateKey(params *ImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportPrivateKeyOK, error) {
 	// TODO: Validate the params before sending
@@ -296,7 +296,7 @@ func (a *Client) ImportPrivateKey(params *ImportPrivateKeyParams, authInfo runti
 /*
 InitImportPrivateKey inits import private key
 
-Initializes a new private key import
+Initialize a new private key import.
 */
 func (a *Client) InitImportPrivateKey(params *InitImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportPrivateKeyOK, error) {
 	// TODO: Validate the params before sending

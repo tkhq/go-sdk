@@ -40,7 +40,7 @@ type ClientService interface {
 /*
 CreateInvitations creates invitations
 
-Create Invitations to join an existing Organization
+Create invitations to join an existing organization.
 */
 func (a *Client) CreateInvitations(params *CreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvitationsOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +81,7 @@ func (a *Client) CreateInvitations(params *CreateInvitationsParams, authInfo run
 /*
 DeleteInvitation deletes invitation
 
-Delete an existing Invitation
+Delete an existing invitation.
 */
 func (a *Client) DeleteInvitation(params *DeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvitationOK, error) {
 	// TODO: Validate the params before sending
