@@ -19,11 +19,11 @@ import (
 // swagger:model GetAuthenticatorRequest
 type GetAuthenticatorRequest struct {
 
-	// Unique identifier for a given Authenticator.
+	// Unique identifier for a given authenticator.
 	// Required: true
 	AuthenticatorID *string `json:"authenticatorId"`
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 }

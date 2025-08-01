@@ -19,7 +19,7 @@ import (
 // swagger:model GetUserResponse
 type GetUserResponse struct {
 
-	// Web and/or API user within your Organization.
+	// Web and/or API user within your organization.
 	// Required: true
 	User *User `json:"user"`
 }

@@ -40,7 +40,7 @@ type ClientService interface {
 /*
 InitOtp inits generic o t p
 
-Initiate a Generic OTP activity
+Initiate a generic OTP activity.
 */
 func (a *Client) InitOtp(params *InitOtpParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +81,7 @@ func (a *Client) InitOtp(params *InitOtpParams, authInfo runtime.ClientAuthInfoW
 /*
 VerifyOtp verifies generic o t p
 
-Verify a Generic OTP
+Verify a generic OTP.
 */
 func (a *Client) VerifyOtp(params *VerifyOtpParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*VerifyOtpOK, error) {
 	// TODO: Validate the params before sending

@@ -20,7 +20,7 @@ import (
 // swagger:model ListUserTagsResponse
 type ListUserTagsResponse struct {
 
-	// A list of User Tags
+	// A list of user tags.
 	// Required: true
 	UserTags []*V1Tag `json:"userTags"`
 }

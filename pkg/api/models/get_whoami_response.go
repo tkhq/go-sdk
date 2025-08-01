@@ -19,19 +19,19 @@ import (
 // swagger:model GetWhoamiResponse
 type GetWhoamiResponse struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Human-readable name for an Organization.
+	// Human-readable name for an organization.
 	// Required: true
 	OrganizationName *string `json:"organizationName"`
 
-	// Unique identifier for a given User.
+	// Unique identifier for a given user.
 	// Required: true
 	UserID *string `json:"userId"`
 
-	// Human-readable name for a User.
+	// Human-readable name for a user.
 	// Required: true
 	Username *string `json:"username"`
 }

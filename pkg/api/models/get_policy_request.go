@@ -19,11 +19,11 @@ import (
 // swagger:model GetPolicyRequest
 type GetPolicyRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Unique identifier for a given Policy.
+	// Unique identifier for a given policy.
 	// Required: true
 	PolicyID *string `json:"policyId"`
 }

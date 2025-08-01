@@ -20,7 +20,7 @@ import (
 // swagger:model GetActivitiesResponse
 type GetActivitiesResponse struct {
 
-	// A list of Activities.
+	// A list of activities.
 	// Required: true
 	Activities []*Activity `json:"activities"`
 }

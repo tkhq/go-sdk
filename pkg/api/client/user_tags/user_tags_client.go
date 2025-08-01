@@ -85,7 +85,7 @@ func (a *Client) CreateUserTag(params *CreateUserTagParams, authInfo runtime.Cli
 /*
 DeleteUserTags deletes user tags
 
-Delete User Tags within an Organization
+Delete user tags within an organization.
 */
 func (a *Client) DeleteUserTags(params *DeleteUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserTagsOK, error) {
 	// TODO: Validate the params before sending
@@ -126,7 +126,7 @@ func (a *Client) DeleteUserTags(params *DeleteUserTagsParams, authInfo runtime.C
 /*
 ListUserTags lists user tags
 
-List all User Tags within an Organization
+List all user tags within an organization.
 */
 func (a *Client) ListUserTags(params *ListUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListUserTagsOK, error) {
 	// TODO: Validate the params before sending

@@ -19,7 +19,7 @@ import (
 // swagger:model GetWalletResponse
 type GetWalletResponse struct {
 
-	// A collection of deterministically generated cryptographic public / private key pairs that share a common seed
+	// A collection of deterministically generated cryptographic public / private key pairs that share a common seed.
 	// Required: true
 	Wallet *Wallet `json:"wallet"`
 }

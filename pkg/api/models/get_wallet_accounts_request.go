@@ -19,16 +19,15 @@ import (
 // swagger:model GetWalletAccountsRequest
 type GetWalletAccountsRequest struct {
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
 	// Parameters used for cursor-based pagination.
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
 
-	// Unique identifier for a given Wallet.
-	// Required: true
-	WalletID *string `json:"walletId"`
+	// Unique identifier for a given wallet. If not provided, all accounts for the organization will be returned.
+	WalletID *string `json:"walletId,omitempty"`
 }
 
 // Validate validates this get wallet accounts request
@@ -40,10 +39,6 @@ func (m *GetWalletAccountsRequest) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePaginationOptions(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateWalletID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -76,15 +71,6 @@ func (m *GetWalletAccountsRequest) validatePaginationOptions(formats strfmt.Regi
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *GetWalletAccountsRequest) validateWalletID(formats strfmt.Registry) error {
-
-	if err := validate.Required("walletId", "body", m.WalletID); err != nil {
-		return err
 	}
 
 	return nil

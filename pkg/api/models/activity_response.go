@@ -19,7 +19,7 @@ import (
 // swagger:model ActivityResponse
 type ActivityResponse struct {
 
-	// An action that can that can be taken within the Turnkey infrastructure.
+	// An action that can be taken within the Turnkey infrastructure.
 	// Required: true
 	Activity *Activity `json:"activity"`
 }

@@ -40,7 +40,7 @@ type ClientService interface {
 /*
 ApproveActivity approves activity
 
-Approve an Activity
+Approve an activity.
 */
 func (a *Client) ApproveActivity(params *ApproveActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApproveActivityOK, error) {
 	// TODO: Validate the params before sending
@@ -81,7 +81,7 @@ func (a *Client) ApproveActivity(params *ApproveActivityParams, authInfo runtime
 /*
 RejectActivity rejects activity
 
-Reject an Activity
+Reject an activity.
 */
 func (a *Client) RejectActivity(params *RejectActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RejectActivityOK, error) {
 	// TODO: Validate the params before sending

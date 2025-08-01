@@ -19,7 +19,7 @@ import (
 // swagger:model GetPolicyResponse
 type GetPolicyResponse struct {
 
-	// Object that codifies rules defining the actions that are permissible within an Organization.
+	// Object that codifies rules defining the actions that are permissible within an organization.
 	// Required: true
 	Policy *Policy `json:"policy"`
 }

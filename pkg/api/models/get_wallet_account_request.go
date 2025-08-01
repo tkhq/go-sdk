@@ -19,17 +19,17 @@ import (
 // swagger:model GetWalletAccountRequest
 type GetWalletAccountRequest struct {
 
-	// Address corresponding to a Wallet Account.
+	// Address corresponding to a wallet account.
 	Address *string `json:"address,omitempty"`
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
-	// Path corresponding to a Wallet Account.
+	// Path corresponding to a wallet account.
 	Path *string `json:"path,omitempty"`
 
-	// Unique identifier for a given Wallet.
+	// Unique identifier for a given wallet.
 	// Required: true
 	WalletID *string `json:"walletId"`
 }

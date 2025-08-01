@@ -20,7 +20,7 @@ import (
 // swagger:model GetWalletsResponse
 type GetWalletsResponse struct {
 
-	// A list of Wallets.
+	// A list of wallets.
 	// Required: true
 	Wallets []*Wallet `json:"wallets"`
 }

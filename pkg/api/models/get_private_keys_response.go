@@ -20,7 +20,7 @@ import (
 // swagger:model GetPrivateKeysResponse
 type GetPrivateKeysResponse struct {
 
-	// A list of Private Keys.
+	// A list of private keys.
 	// Required: true
 	PrivateKeys []*PrivateKey `json:"privateKeys"`
 }

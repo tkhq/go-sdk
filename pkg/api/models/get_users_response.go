@@ -20,7 +20,7 @@ import (
 // swagger:model GetUsersResponse
 type GetUsersResponse struct {
 
-	// A list of Users.
+	// A list of users.
 	// Required: true
 	Users []*User `json:"users"`
 }

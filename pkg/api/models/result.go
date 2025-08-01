@@ -66,6 +66,9 @@ type Result struct {
 	// create read write session result v2
 	CreateReadWriteSessionResultV2 *CreateReadWriteSessionResultV2 `json:"createReadWriteSessionResultV2,omitempty"`
 
+	// create smart contract interface result
+	CreateSmartContractInterfaceResult *CreateSmartContractInterfaceResult `json:"createSmartContractInterfaceResult,omitempty"`
+
 	// create sub organization result
 	CreateSubOrganizationResult *CreateSubOrganizationResult `json:"createSubOrganizationResult,omitempty"`
 
@@ -122,6 +125,9 @@ type Result struct {
 
 	// delete private keys result
 	DeletePrivateKeysResult *DeletePrivateKeysResult `json:"deletePrivateKeysResult,omitempty"`
+
+	// delete smart contract interface result
+	DeleteSmartContractInterfaceResult *DeleteSmartContractInterfaceResult `json:"deleteSmartContractInterfaceResult,omitempty"`
 
 	// delete sub organization result
 	DeleteSubOrganizationResult *DeleteSubOrganizationResult `json:"deleteSubOrganizationResult,omitempty"`
@@ -318,6 +324,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateSmartContractInterfaceResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateSubOrganizationResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -391,6 +401,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePrivateKeysResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteSmartContractInterfaceResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -864,6 +878,25 @@ func (m *Result) validateCreateReadWriteSessionResultV2(formats strfmt.Registry)
 	return nil
 }
 
+func (m *Result) validateCreateSmartContractInterfaceResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateSmartContractInterfaceResult) { // not required
+		return nil
+	}
+
+	if m.CreateSmartContractInterfaceResult != nil {
+		if err := m.CreateSmartContractInterfaceResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSmartContractInterfaceResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSmartContractInterfaceResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateCreateSubOrganizationResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.CreateSubOrganizationResult) { // not required
 		return nil
@@ -1217,6 +1250,25 @@ func (m *Result) validateDeletePrivateKeysResult(formats strfmt.Registry) error 
 				return ve.ValidateName("deletePrivateKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateDeleteSmartContractInterfaceResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteSmartContractInterfaceResult) { // not required
+		return nil
+	}
+
+	if m.DeleteSmartContractInterfaceResult != nil {
+		if err := m.DeleteSmartContractInterfaceResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSmartContractInterfaceResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSmartContractInterfaceResult")
 			}
 			return err
 		}
@@ -2053,6 +2105,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateSmartContractInterfaceResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateSubOrganizationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2126,6 +2182,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePrivateKeysResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteSmartContractInterfaceResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2631,6 +2691,27 @@ func (m *Result) contextValidateCreateReadWriteSessionResultV2(ctx context.Conte
 	return nil
 }
 
+func (m *Result) contextValidateCreateSmartContractInterfaceResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateSmartContractInterfaceResult != nil {
+
+		if swag.IsZero(m.CreateSmartContractInterfaceResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateSmartContractInterfaceResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createSmartContractInterfaceResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createSmartContractInterfaceResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateCreateSubOrganizationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreateSubOrganizationResult != nil {
@@ -3022,6 +3103,27 @@ func (m *Result) contextValidateDeletePrivateKeysResult(ctx context.Context, for
 				return ve.ValidateName("deletePrivateKeysResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePrivateKeysResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateDeleteSmartContractInterfaceResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteSmartContractInterfaceResult != nil {
+
+		if swag.IsZero(m.DeleteSmartContractInterfaceResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteSmartContractInterfaceResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteSmartContractInterfaceResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteSmartContractInterfaceResult")
 			}
 			return err
 		}

@@ -19,11 +19,11 @@ import (
 // swagger:model GetActivityRequest
 type GetActivityRequest struct {
 
-	// Unique identifier for a given Activity object.
+	// Unique identifier for a given activity object.
 	// Required: true
 	ActivityID *string `json:"activityId"`
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 }

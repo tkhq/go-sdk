@@ -20,13 +20,13 @@ import (
 // swagger:model GetActivitiesRequest
 type GetActivitiesRequest struct {
 
-	// Array of Activity Statuses filtering which Activities will be listed in the response.
+	// Array of activity statuses filtering which activities will be listed in the response.
 	FilterByStatus []ActivityStatus `json:"filterByStatus"`
 
-	// Array of Activity Types filtering which Activities will be listed in the response.
+	// Array of activity types filtering which activities will be listed in the response.
 	FilterByType []ActivityType `json:"filterByType"`
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 

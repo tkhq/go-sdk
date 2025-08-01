@@ -34,11 +34,19 @@ type ClientService interface {
 
 	CreatePolicy(params *CreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyOK, error)
 
+	CreateSmartContractInterface(params *CreateSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSmartContractInterfaceOK, error)
+
 	DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error)
+
+	DeleteSmartContractInterface(params *DeleteSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSmartContractInterfaceOK, error)
 
 	GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPoliciesOK, error)
 
 	GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyOK, error)
+
+	GetSmartContractInterface(params *GetSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfaceOK, error)
+
+	GetSmartContractInterfaces(params *GetSmartContractInterfacesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfacesOK, error)
 
 	UpdatePolicy(params *UpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePolicyOK, error)
 
@@ -48,7 +56,7 @@ type ClientService interface {
 /*
 CreatePolicies creates policies
 
-Create new Policies
+Create new policies.
 */
 func (a *Client) CreatePolicies(params *CreatePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePoliciesOK, error) {
 	// TODO: Validate the params before sending
@@ -89,7 +97,7 @@ func (a *Client) CreatePolicies(params *CreatePoliciesParams, authInfo runtime.C
 /*
 CreatePolicy creates policy
 
-Create a new Policy
+Create a new policy.
 */
 func (a *Client) CreatePolicy(params *CreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyOK, error) {
 	// TODO: Validate the params before sending
@@ -128,9 +136,50 @@ func (a *Client) CreatePolicy(params *CreatePolicyParams, authInfo runtime.Clien
 }
 
 /*
+CreateSmartContractInterface creates smart contract interface
+
+Create an ABI/IDL in JSON.
+*/
+func (a *Client) CreateSmartContractInterface(params *CreateSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSmartContractInterfaceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateSmartContractInterfaceParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateSmartContractInterface",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_smart_contract_interface",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateSmartContractInterfaceReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateSmartContractInterfaceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateSmartContractInterface: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 DeletePolicy deletes policy
 
-Delete an existing Policy
+Delete an existing policy.
 */
 func (a *Client) DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error) {
 	// TODO: Validate the params before sending
@@ -169,9 +218,50 @@ func (a *Client) DeletePolicy(params *DeletePolicyParams, authInfo runtime.Clien
 }
 
 /*
+DeleteSmartContractInterface deletes smart contract interface
+
+Delete a smart contract interface.
+*/
+func (a *Client) DeleteSmartContractInterface(params *DeleteSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSmartContractInterfaceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteSmartContractInterfaceParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteSmartContractInterface",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_smart_contract_interface",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteSmartContractInterfaceReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteSmartContractInterfaceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteSmartContractInterface: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 GetPolicies lists policies
 
-List all Policies within an Organization
+List all policies within an organization.
 */
 func (a *Client) GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPoliciesOK, error) {
 	// TODO: Validate the params before sending
@@ -212,7 +302,7 @@ func (a *Client) GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientA
 /*
 GetPolicy gets policy
 
-Get details about a Policy
+Get details about a policy.
 */
 func (a *Client) GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyOK, error) {
 	// TODO: Validate the params before sending
@@ -251,9 +341,91 @@ func (a *Client) GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthI
 }
 
 /*
+GetSmartContractInterface gets smart contract interface
+
+Get details about a smart contract interface.
+*/
+func (a *Client) GetSmartContractInterface(params *GetSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfaceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetSmartContractInterfaceParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetSmartContractInterface",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_smart_contract_interface",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetSmartContractInterfaceReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetSmartContractInterfaceOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetSmartContractInterface: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetSmartContractInterfaces lists smart contract interfaces
+
+List all smart contract interfaces within an organization.
+*/
+func (a *Client) GetSmartContractInterfaces(params *GetSmartContractInterfacesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfacesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetSmartContractInterfacesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetSmartContractInterfaces",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_smart_contract_interfaces",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetSmartContractInterfacesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetSmartContractInterfacesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetSmartContractInterfaces: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 UpdatePolicy updates policy
 
-Update an existing Policy
+Update an existing policy.
 */
 func (a *Client) UpdatePolicy(params *UpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePolicyOK, error) {
 	// TODO: Validate the params before sending

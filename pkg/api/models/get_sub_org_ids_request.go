@@ -19,13 +19,13 @@ import (
 // swagger:model GetSubOrgIdsRequest
 type GetSubOrgIdsRequest struct {
 
-	// Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL', 'PHONE_NUMBER', 'OIDC_TOKEN' or 'PUBLIC_KEY'
+	// Specifies the type of filter to apply, i.e 'CREDENTIAL_ID', 'NAME', 'USERNAME', 'EMAIL', 'PHONE_NUMBER', 'OIDC_TOKEN', 'WALLET_ACCOUNT_ADDRESS' or 'PUBLIC_KEY'
 	FilterType string `json:"filterType,omitempty"`
 
 	// The value of the filter to apply for the specified type. For example, a specific email or name string.
 	FilterValue string `json:"filterValue,omitempty"`
 
-	// Unique identifier for the parent Organization. This is used to find sub-organizations within it.
+	// Unique identifier for the parent organization. This is used to find sub-organizations within it.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 

@@ -23,7 +23,7 @@ type GetAPIKeyRequest struct {
 	// Required: true
 	APIKeyID *string `json:"apiKeyId"`
 
-	// Unique identifier for a given Organization.
+	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 }

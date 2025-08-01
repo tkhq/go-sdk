@@ -60,7 +60,7 @@ type ClientService interface {
 /*
 CreateWallet creates wallet
 
-Create a Wallet and derive addresses
+Create a wallet and derive addresses.
 */
 func (a *Client) CreateWallet(params *CreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletOK, error) {
 	// TODO: Validate the params before sending
@@ -101,7 +101,7 @@ func (a *Client) CreateWallet(params *CreateWalletParams, authInfo runtime.Clien
 /*
 CreateWalletAccounts creates wallet accounts
 
-Derive additional addresses using an existing wallet
+Derive additional addresses using an existing wallet.
 */
 func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletAccountsOK, error) {
 	// TODO: Validate the params before sending
@@ -142,7 +142,7 @@ func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authIn
 /*
 DeleteWallets deletes wallets
 
-Deletes wallets for an organization
+Delete wallets for an organization.
 */
 func (a *Client) DeleteWallets(params *DeleteWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletsOK, error) {
 	// TODO: Validate the params before sending
@@ -183,7 +183,7 @@ func (a *Client) DeleteWallets(params *DeleteWalletsParams, authInfo runtime.Cli
 /*
 ExportWallet exports wallet
 
-Exports a Wallet
+Export a wallet.
 */
 func (a *Client) ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error) {
 	// TODO: Validate the params before sending
@@ -224,7 +224,7 @@ func (a *Client) ExportWallet(params *ExportWalletParams, authInfo runtime.Clien
 /*
 ExportWalletAccount exports wallet account
 
-Exports a Wallet Account
+Export a wallet account.
 */
 func (a *Client) ExportWalletAccount(params *ExportWalletAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletAccountOK, error) {
 	// TODO: Validate the params before sending
@@ -265,7 +265,7 @@ func (a *Client) ExportWalletAccount(params *ExportWalletAccountParams, authInfo
 /*
 GetWallet gets wallet
 
-Get details about a Wallet
+Get details about a wallet.
 */
 func (a *Client) GetWallet(params *GetWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletOK, error) {
 	// TODO: Validate the params before sending
@@ -306,7 +306,7 @@ func (a *Client) GetWallet(params *GetWalletParams, authInfo runtime.ClientAuthI
 /*
 GetWalletAccount gets wallet account
 
-Get a single wallet account
+Get a single wallet account.
 */
 func (a *Client) GetWalletAccount(params *GetWalletAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountOK, error) {
 	// TODO: Validate the params before sending
@@ -347,7 +347,7 @@ func (a *Client) GetWalletAccount(params *GetWalletAccountParams, authInfo runti
 /*
 GetWalletAccounts lists wallets accounts
 
-List all Accounts within a Wallet
+List all accounts within a wallet.
 */
 func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountsOK, error) {
 	// TODO: Validate the params before sending
@@ -388,7 +388,7 @@ func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo run
 /*
 GetWallets lists wallets
 
-List all Wallets within an Organization
+List all wallets within an organization.
 */
 func (a *Client) GetWallets(params *GetWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletsOK, error) {
 	// TODO: Validate the params before sending
@@ -429,7 +429,7 @@ func (a *Client) GetWallets(params *GetWalletsParams, authInfo runtime.ClientAut
 /*
 ImportWallet imports wallet
 
-Imports a wallet
+Import a wallet.
 */
 func (a *Client) ImportWallet(params *ImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportWalletOK, error) {
 	// TODO: Validate the params before sending
@@ -470,7 +470,7 @@ func (a *Client) ImportWallet(params *ImportWalletParams, authInfo runtime.Clien
 /*
 InitImportWallet inits import wallet
 
-Initializes a new wallet import
+Initialize a new wallet import.
 */
 func (a *Client) InitImportWallet(params *InitImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportWalletOK, error) {
 	// TODO: Validate the params before sending
@@ -511,7 +511,7 @@ func (a *Client) InitImportWallet(params *InitImportWalletParams, authInfo runti
 /*
 UpdateWallet updates wallet
 
-Update a wallet for an organization
+Update a wallet for an organization.
 */
 func (a *Client) UpdateWallet(params *UpdateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWalletOK, error) {
 	// TODO: Validate the params before sending

@@ -38,7 +38,7 @@ type ClientService interface {
 /*
 InitFiatOnRamp inits fiat on ramp
 
-Initiate a fiat on ramp flow
+Initiate a fiat on ramp flow.
 */
 func (a *Client) InitFiatOnRamp(params *InitFiatOnRampParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitFiatOnRampOK, error) {
 	// TODO: Validate the params before sending
