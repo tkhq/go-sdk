@@ -52,6 +52,7 @@ type loggingRoundTripper struct {
 func WithLogger(logger Logger) OptionFunc {
 	return func(c *config) error {
 		c.logger = logger
+
 		return nil
 	}
 }
