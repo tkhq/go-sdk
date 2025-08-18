@@ -24,20 +24,43 @@ type config struct {
 	clientVersion   string
 	registry        strfmt.Registry
 	transportConfig *client.TransportConfig
+	logger          Logger
+}
+
+type defaultLogger struct{}
+
+func (d *defaultLogger) Printf(format string, v ...interface{}) {
+	fmt.Printf(format+"\n", v...)
+}
+
+// Logger defines a minimal logging interface.
+// Compatible with stdlib log.Logger, zap.SugaredLogger, etc.
+type Logger interface {
+	Printf(format string, v ...interface{})
 }
 
 // OptionFunc defines a function which sets configuration options for a Client.
 type OptionFunc func(c *config) error
 
 type loggingRoundTripper struct {
-	inner http.RoundTripper
+	inner  http.RoundTripper
+	logger Logger
+}
+
+// WithLogger sets a custom logger for the SDK.
+// Defaults to fmt.Printf if none is provided.
+func WithLogger(logger Logger) OptionFunc {
+	return func(c *config) error {
+		c.logger = logger
+		return nil
+	}
 }
 
 // loggingRoundTripper defines a wrapper around an http.RoundTripper.
 func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	resp, err := lrt.inner.RoundTrip(req)
 	if err != nil {
-		fmt.Printf("Request failed: %v\n", err)
+		lrt.logger.Printf("Request failed: %v", err)
 
 		return nil, err
 	}
@@ -46,12 +69,12 @@ func (lrt *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, er
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
-			fmt.Printf("Failed to read response body: %v\n", err)
+			lrt.logger.Printf("Failed to read response body: %v", err)
 
 			return resp, nil
 		}
 
-		fmt.Printf("Turnkey API response: %s\n", string(body))
+		lrt.logger.Printf("Turnkey API response: %s", string(body))
 
 		// Rewind the body so it could be re-read
 		resp.Body = io.NopCloser(bytes.NewBuffer(body))
@@ -127,6 +150,11 @@ func New(options ...OptionFunc) (*Client, error) {
 		}
 	}
 
+	// Default logger with fmt.Printf
+	if c.logger == nil {
+		c.logger = &defaultLogger{}
+	}
+
 	// Create transport and client
 	transport := httptransport.New(
 		c.transportConfig.Host,
@@ -136,7 +164,10 @@ func New(options ...OptionFunc) (*Client, error) {
 
 	// Wrap the underlying RoundTripper
 	base := transport.Transport
-	base = &loggingRoundTripper{inner: base}
+	base = &loggingRoundTripper{
+		inner:  base,
+		logger: c.logger,
+	}
 	base = SetClientVersion(base, c.clientVersion)
 
 	// Replace the underlying RoundTripper
