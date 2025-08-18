@@ -44,6 +44,41 @@ func main() {
 	fmt.Println("UserID: ", *resp.Payload.UserID)
 }
 ```
+### Error Handling
+
+By default, the SDK will wrap Turnkey API error responses inside the returned error.
+You can inspect the raw API body by type-asserting the error to *runtime.APIError and reading the response body:
+```go
+if err != nil {
+  // log the high-level error using your preferred logger
+  log.Printf("failed to make request: %v", err)
+
+  // extract and inspect the raw API response
+  if apiErr, ok := err.(*runtime.APIError); ok && apiErr.Response != nil {
+    b, _ := io.ReadAll(apiErr.Response.Body())
+    log.Printf("Turnkey API raw response: %s", string(b))
+  }
+
+  return nil, err
+}
+```
+
+### Custom Logging
+
+By default, the SDK prints Turnkey API responses to stdout when requests fail.
+If you’d like to control this output (for example, to send logs to Zap, Logrus, or Datadog), you can provide your own logger:
+```go
+type myLogger struct{}
+func (l *myLogger) Printf(format string, v ...interface{}) {
+    log.Printf("[SDK] "+format, v...)
+}
+
+client, err := sdk.New(
+    sdk.WithAPIKeyName("default"),
+    sdk.WithLogger(&myLogger{}), // plug in your logger
+)
+```
+If no logger is provided, the SDK falls back to fmt.Printf("Turnkey API response: ...") to preserve current behavior.
 
 ## Development
 
