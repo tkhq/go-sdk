@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v0.8.0](https://github.com/tkhq/go-sdk/compare/v0.7.0...v0.8.0) (2025-08-18)
+
+
 ## [v0.7.0](https://github.com/tkhq/go-sdk/compare/v0.6.0...v0.7.0) (2025-08-01)
 
 
