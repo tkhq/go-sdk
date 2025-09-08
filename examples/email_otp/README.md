@@ -1,9 +1,11 @@
 # Example: `email OTP` backend auth flow
 
-This example shows the backend email OTP verification flow that uses the new [init_otp](https://docs.turnkey.com/api-reference/activities/init-generic-otp) and [verify_otp](https://docs.turnkey.com/api-reference/activities/verify-generic-otp) endpoints.
+This example shows the backend email OTP verification flow that uses the new [init_otp](https://docs.turnkey.com/api-reference/activities/init-generic-otp), [verify_otp](https://docs.turnkey.com/api-reference/activities/verify-generic-otp) and [otp_login](https://docs.turnkey.com/api-reference/activities/login-with-otp) endpoints.
 It should be used in conjuction with the `indexedDbClient` on the frontend side as shown in this example:  https://github.com/tkhq/sdk/tree/main/examples/otp-auth
 
-**Note:** Before leveraging the `indexedDbClient`, you would need to call the `otpLogin` method that would create the user session.
+**Notes:** 
+- This example mocks an `indexedDbClient` API key that is being used with `otpLogin` to demo the returned user jwt session.
+- These are all activities that should be initiated by the parent oeganization key, the specific organization id is targeted within the `otp_login` activity. For details, check out our [documentation](https://docs.turnkey.com/authentication/email#user-experience). 
 
 ### 1/ Setting up Turnkey
 
@@ -18,11 +20,14 @@ Once you've gathered these values, update them in the main.go scripts, you'll se
 
 
 ```bash
-cd go-sdk/examples/otp
+cd go-sdk/examples/email_otp
 
-# Send the OTP code
+# Run the script
 go run init_otp/main.go
-
-# Copy the returned OTP ID (replace <otp_id> below) and the OTP code (replace <otp_code> below) received via email and run:
-go run verify_otp/main.go --id <otp_id> --code <otp_code>
 ```
+
+The script with do the following:
+- Send the OTP code to the specified email address
+- Wait for you to input the OTP code
+- Verify the OTP code and generate the verification token
+- Login into a suborganization using the verification token, indexedDb APi key and issue the user session jwt 
