@@ -122,8 +122,8 @@ func verifyOTP(id, code string) (string, error) {
 
 func loginOTP(token string) error {
 
-	// Mock an indexedDb P256 API key, in reality this would be passed from your frontend
-	indexedDbKey, err := apikey.New(parentOrgID)
+	// Mock a client-side P256 API key, in reality this would be passed from your frontend
+	clientApiKey, err := apikey.New(parentOrgID)
 	if err != nil {
 		log.Fatalf("failed to generate user API key: %s", err)
 	}
@@ -134,7 +134,7 @@ func loginOTP(token string) error {
 		Type:           (*string)(models.ActivityTypeOtpLogin.Pointer()),
 		Parameters: &models.OtpLoginIntent{
 			VerificationToken: &token,
-			PublicKey:         &indexedDbKey.TkPublicKey,
+			PublicKey:         &clientApiKey.TkPublicKey,
 		},
 	})
 
