@@ -26,6 +26,9 @@ type InitFiatOnRampResult struct {
 	// Unique URL for a given fiat on-ramp flow.
 	// Required: true
 	OnRampURL *string `json:"onRampUrl"`
+
+	// Optional signature of the MoonPay Widget URL. The signature is generated if the Init Fiat On Ramp intent includes the urlForSignature field. The signature can be used to initialize the MoonPay SDKs when URL signing is enabled for your project.
+	OnRampURLSignature string `json:"onRampUrlSignature,omitempty"`
 }
 
 // Validate validates this init fiat on ramp result

@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// DataV1SmartContractInterface data v1 smart contract interface
+// SmartContractInterface smart contract interface
 //
-// swagger:model data.v1.SmartContractInterface
-type DataV1SmartContractInterface struct {
+// swagger:model SmartContractInterface
+type SmartContractInterface struct {
 
 	// created at
 	// Required: true
@@ -56,8 +56,8 @@ type DataV1SmartContractInterface struct {
 	UpdatedAt *ExternalDataV1Timestamp `json:"updatedAt"`
 }
 
-// Validate validates this data v1 smart contract interface
-func (m *DataV1SmartContractInterface) Validate(formats strfmt.Registry) error {
+// Validate validates this smart contract interface
+func (m *SmartContractInterface) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCreatedAt(formats); err != nil {
@@ -102,7 +102,7 @@ func (m *DataV1SmartContractInterface) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateCreatedAt(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateCreatedAt(formats strfmt.Registry) error {
 
 	if err := validate.Required("createdAt", "body", m.CreatedAt); err != nil {
 		return err
@@ -122,7 +122,7 @@ func (m *DataV1SmartContractInterface) validateCreatedAt(formats strfmt.Registry
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateLabel(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateLabel(formats strfmt.Registry) error {
 
 	if err := validate.Required("label", "body", m.Label); err != nil {
 		return err
@@ -131,7 +131,7 @@ func (m *DataV1SmartContractInterface) validateLabel(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateNotes(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateNotes(formats strfmt.Registry) error {
 
 	if err := validate.Required("notes", "body", m.Notes); err != nil {
 		return err
@@ -140,7 +140,7 @@ func (m *DataV1SmartContractInterface) validateNotes(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateOrganizationID(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -149,7 +149,7 @@ func (m *DataV1SmartContractInterface) validateOrganizationID(formats strfmt.Reg
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateSmartContractAddress(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateSmartContractAddress(formats strfmt.Registry) error {
 
 	if err := validate.Required("smartContractAddress", "body", m.SmartContractAddress); err != nil {
 		return err
@@ -158,7 +158,7 @@ func (m *DataV1SmartContractInterface) validateSmartContractAddress(formats strf
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateSmartContractInterface(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateSmartContractInterface(formats strfmt.Registry) error {
 
 	if err := validate.Required("smartContractInterface", "body", m.SmartContractInterface); err != nil {
 		return err
@@ -167,7 +167,7 @@ func (m *DataV1SmartContractInterface) validateSmartContractInterface(formats st
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateSmartContractInterfaceID(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateSmartContractInterfaceID(formats strfmt.Registry) error {
 
 	if err := validate.Required("smartContractInterfaceId", "body", m.SmartContractInterfaceID); err != nil {
 		return err
@@ -176,7 +176,7 @@ func (m *DataV1SmartContractInterface) validateSmartContractInterfaceID(formats 
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateType(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -185,7 +185,7 @@ func (m *DataV1SmartContractInterface) validateType(formats strfmt.Registry) err
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) validateUpdatedAt(formats strfmt.Registry) error {
+func (m *SmartContractInterface) validateUpdatedAt(formats strfmt.Registry) error {
 
 	if err := validate.Required("updatedAt", "body", m.UpdatedAt); err != nil {
 		return err
@@ -205,8 +205,8 @@ func (m *DataV1SmartContractInterface) validateUpdatedAt(formats strfmt.Registry
 	return nil
 }
 
-// ContextValidate validate this data v1 smart contract interface based on the context it is used
-func (m *DataV1SmartContractInterface) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this smart contract interface based on the context it is used
+func (m *SmartContractInterface) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
@@ -223,7 +223,7 @@ func (m *DataV1SmartContractInterface) ContextValidate(ctx context.Context, form
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *SmartContractInterface) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CreatedAt != nil {
 
@@ -240,7 +240,7 @@ func (m *DataV1SmartContractInterface) contextValidateCreatedAt(ctx context.Cont
 	return nil
 }
 
-func (m *DataV1SmartContractInterface) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+func (m *SmartContractInterface) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UpdatedAt != nil {
 
@@ -258,7 +258,7 @@ func (m *DataV1SmartContractInterface) contextValidateUpdatedAt(ctx context.Cont
 }
 
 // MarshalBinary interface implementation
-func (m *DataV1SmartContractInterface) MarshalBinary() ([]byte, error) {
+func (m *SmartContractInterface) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -266,8 +266,8 @@ func (m *DataV1SmartContractInterface) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *DataV1SmartContractInterface) UnmarshalBinary(b []byte) error {
-	var res DataV1SmartContractInterface
+func (m *SmartContractInterface) UnmarshalBinary(b []byte) error {
+	var res SmartContractInterface
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

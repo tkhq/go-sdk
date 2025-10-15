@@ -50,6 +50,9 @@ const (
 
 	// FeatureNameOtpEmailAuth captures enum value "FEATURE_NAME_OTP_EMAIL_AUTH"
 	FeatureNameOtpEmailAuth FeatureName = "FEATURE_NAME_OTP_EMAIL_AUTH"
+
+	// FeatureNameAuthProxy captures enum value "FEATURE_NAME_AUTH_PROXY"
+	FeatureNameAuthProxy FeatureName = "FEATURE_NAME_AUTH_PROXY"
 )
 
 // for schema
@@ -57,7 +60,7 @@ var FeatureNameEnum []FeatureName
 
 func init() {
 	var res []FeatureName
-	if err := json.Unmarshal([]byte(`["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY","FEATURE_NAME_WEBAUTHN_ORIGINS","FEATURE_NAME_EMAIL_AUTH","FEATURE_NAME_EMAIL_RECOVERY","FEATURE_NAME_WEBHOOK","FEATURE_NAME_SMS_AUTH","FEATURE_NAME_OTP_EMAIL_AUTH"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["FEATURE_NAME_ROOT_USER_EMAIL_RECOVERY","FEATURE_NAME_WEBAUTHN_ORIGINS","FEATURE_NAME_EMAIL_AUTH","FEATURE_NAME_EMAIL_RECOVERY","FEATURE_NAME_WEBHOOK","FEATURE_NAME_SMS_AUTH","FEATURE_NAME_OTP_EMAIL_AUTH","FEATURE_NAME_AUTH_PROXY"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

@@ -12,11 +12,14 @@ import (
 
 	"github.com/tkhq/go-sdk/pkg/api/client/activities"
 	"github.com/tkhq/go-sdk/pkg/api/client/api_keys"
+	"github.com/tkhq/go-sdk/pkg/api/client/app_proof"
 	"github.com/tkhq/go-sdk/pkg/api/client/authenticators"
+	"github.com/tkhq/go-sdk/pkg/api/client/boot_proof"
 	"github.com/tkhq/go-sdk/pkg/api/client/consensus"
 	"github.com/tkhq/go-sdk/pkg/api/client/features"
 	"github.com/tkhq/go-sdk/pkg/api/client/invitations"
 	"github.com/tkhq/go-sdk/pkg/api/client/on_ramp"
+	"github.com/tkhq/go-sdk/pkg/api/client/operations"
 	"github.com/tkhq/go-sdk/pkg/api/client/organizations"
 	"github.com/tkhq/go-sdk/pkg/api/client/policies"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_key_tags"
@@ -75,11 +78,14 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyAPI
 	cli.Transport = transport
 	cli.Activities = activities.New(transport, formats)
 	cli.APIKeys = api_keys.New(transport, formats)
+	cli.AppProof = app_proof.New(transport, formats)
 	cli.Authenticators = authenticators.New(transport, formats)
+	cli.BootProof = boot_proof.New(transport, formats)
 	cli.Consensus = consensus.New(transport, formats)
 	cli.Features = features.New(transport, formats)
 	cli.Invitations = invitations.New(transport, formats)
 	cli.OnRamp = on_ramp.New(transport, formats)
+	cli.Operations = operations.New(transport, formats)
 	cli.Organizations = organizations.New(transport, formats)
 	cli.Policies = policies.New(transport, formats)
 	cli.PrivateKeyTags = private_key_tags.New(transport, formats)
@@ -140,7 +146,11 @@ type TurnkeyAPI struct {
 
 	APIKeys api_keys.ClientService
 
+	AppProof app_proof.ClientService
+
 	Authenticators authenticators.ClientService
+
+	BootProof boot_proof.ClientService
 
 	Consensus consensus.ClientService
 
@@ -149,6 +159,8 @@ type TurnkeyAPI struct {
 	Invitations invitations.ClientService
 
 	OnRamp on_ramp.ClientService
+
+	Operations operations.ClientService
 
 	Organizations organizations.ClientService
 
@@ -182,11 +194,14 @@ func (c *TurnkeyAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.Activities.SetTransport(transport)
 	c.APIKeys.SetTransport(transport)
+	c.AppProof.SetTransport(transport)
 	c.Authenticators.SetTransport(transport)
+	c.BootProof.SetTransport(transport)
 	c.Consensus.SetTransport(transport)
 	c.Features.SetTransport(transport)
 	c.Invitations.SetTransport(transport)
 	c.OnRamp.SetTransport(transport)
+	c.Operations.SetTransport(transport)
 	c.Organizations.SetTransport(transport)
 	c.Policies.SetTransport(transport)
 	c.PrivateKeyTags.SetTransport(transport)

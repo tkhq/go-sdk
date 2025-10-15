@@ -36,6 +36,9 @@ type Result struct {
 	// create invitations result
 	CreateInvitationsResult *CreateInvitationsResult `json:"createInvitationsResult,omitempty"`
 
+	// create oauth2 credential result
+	CreateOauth2CredentialResult *CreateOauth2CredentialResult `json:"createOauth2CredentialResult,omitempty"`
+
 	// create oauth providers result
 	CreateOauthProvidersResult *CreateOauthProvidersResult `json:"createOauthProvidersResult,omitempty"`
 
@@ -108,6 +111,9 @@ type Result struct {
 	// delete invitation result
 	DeleteInvitationResult *DeleteInvitationResult `json:"deleteInvitationResult,omitempty"`
 
+	// delete oauth2 credential result
+	DeleteOauth2CredentialResult *DeleteOauth2CredentialResult `json:"deleteOauth2CredentialResult,omitempty"`
+
 	// delete oauth providers result
 	DeleteOauthProvidersResult *DeleteOauthProvidersResult `json:"deleteOauthProvidersResult,omitempty"`
 
@@ -116,6 +122,9 @@ type Result struct {
 
 	// delete payment method result
 	DeletePaymentMethodResult *DeletePaymentMethodResult `json:"deletePaymentMethodResult,omitempty"`
+
+	// delete policies result
+	DeletePoliciesResult *DeletePoliciesResult `json:"deletePoliciesResult,omitempty"`
 
 	// delete policy result
 	DeletePolicyResult *DeletePolicyResult `json:"deletePolicyResult,omitempty"`
@@ -138,14 +147,23 @@ type Result struct {
 	// delete users result
 	DeleteUsersResult *DeleteUsersResult `json:"deleteUsersResult,omitempty"`
 
+	// delete wallet accounts result
+	DeleteWalletAccountsResult *DeleteWalletAccountsResult `json:"deleteWalletAccountsResult,omitempty"`
+
 	// delete wallets result
 	DeleteWalletsResult *DeleteWalletsResult `json:"deleteWalletsResult,omitempty"`
+
+	// disable auth proxy result
+	DisableAuthProxyResult DisableAuthProxyResult `json:"disableAuthProxyResult,omitempty"`
 
 	// disable private key result
 	DisablePrivateKeyResult *DisablePrivateKeyResult `json:"disablePrivateKeyResult,omitempty"`
 
 	// email auth result
 	EmailAuthResult *EmailAuthResult `json:"emailAuthResult,omitempty"`
+
+	// enable auth proxy result
+	EnableAuthProxyResult *EnableAuthProxyResult `json:"enableAuthProxyResult,omitempty"`
 
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
@@ -182,6 +200,9 @@ type Result struct {
 
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
+
+	// oauth2 authenticate result
+	Oauth2AuthenticateResult *Oauth2AuthenticateResult `json:"oauth2AuthenticateResult,omitempty"`
 
 	// oauth login result
 	OauthLoginResult *OauthLoginResult `json:"oauthLoginResult,omitempty"`
@@ -221,6 +242,12 @@ type Result struct {
 
 	// update allowed origins result
 	UpdateAllowedOriginsResult UpdateAllowedOriginsResult `json:"updateAllowedOriginsResult,omitempty"`
+
+	// update auth proxy config result
+	UpdateAuthProxyConfigResult *UpdateAuthProxyConfigResult `json:"updateAuthProxyConfigResult,omitempty"`
+
+	// update oauth2 credential result
+	UpdateOauth2CredentialResult *UpdateOauth2CredentialResult `json:"updateOauth2CredentialResult,omitempty"`
 
 	// update policy result
 	UpdatePolicyResult *UpdatePolicyResult `json:"updatePolicyResult,omitempty"`
@@ -281,6 +308,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateInvitationsResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateOauth2CredentialResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -380,6 +411,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeleteOauth2CredentialResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteOauthProvidersResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -389,6 +424,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePaymentMethodResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeletePoliciesResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -420,6 +459,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeleteWalletAccountsResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteWalletsResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -429,6 +472,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEmailAuthResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEnableAuthProxyResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -480,6 +527,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateOauth2AuthenticateResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateOauthLoginResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -525,6 +576,14 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateStampLoginResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateAuthProxyConfigResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateOauth2CredentialResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -680,6 +739,25 @@ func (m *Result) validateCreateInvitationsResult(formats strfmt.Registry) error 
 				return ve.ValidateName("createInvitationsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateOauth2CredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateOauth2CredentialResult) { // not required
+		return nil
+	}
+
+	if m.CreateOauth2CredentialResult != nil {
+		if err := m.CreateOauth2CredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauth2CredentialResult")
 			}
 			return err
 		}
@@ -1144,6 +1222,25 @@ func (m *Result) validateDeleteInvitationResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateDeleteOauth2CredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteOauth2CredentialResult) { // not required
+		return nil
+	}
+
+	if m.DeleteOauth2CredentialResult != nil {
+		if err := m.DeleteOauth2CredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauth2CredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateDeleteOauthProvidersResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteOauthProvidersResult) { // not required
 		return nil
@@ -1193,6 +1290,25 @@ func (m *Result) validateDeletePaymentMethodResult(formats strfmt.Registry) erro
 				return ve.ValidateName("deletePaymentMethodResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePaymentMethodResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateDeletePoliciesResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePoliciesResult) { // not required
+		return nil
+	}
+
+	if m.DeletePoliciesResult != nil {
+		if err := m.DeletePoliciesResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePoliciesResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePoliciesResult")
 			}
 			return err
 		}
@@ -1334,6 +1450,25 @@ func (m *Result) validateDeleteUsersResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateDeleteWalletAccountsResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteWalletAccountsResult) { // not required
+		return nil
+	}
+
+	if m.DeleteWalletAccountsResult != nil {
+		if err := m.DeleteWalletAccountsResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletAccountsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletAccountsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateDeleteWalletsResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteWalletsResult) { // not required
 		return nil
@@ -1383,6 +1518,25 @@ func (m *Result) validateEmailAuthResult(formats strfmt.Registry) error {
 				return ve.ValidateName("emailAuthResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailAuthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateEnableAuthProxyResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EnableAuthProxyResult) { // not required
+		return nil
+	}
+
+	if m.EnableAuthProxyResult != nil {
+		if err := m.EnableAuthProxyResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enableAuthProxyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enableAuthProxyResult")
 			}
 			return err
 		}
@@ -1619,6 +1773,25 @@ func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Result) validateOauth2AuthenticateResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.Oauth2AuthenticateResult) { // not required
+		return nil
+	}
+
+	if m.Oauth2AuthenticateResult != nil {
+		if err := m.Oauth2AuthenticateResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2AuthenticateResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2AuthenticateResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateOauthLoginResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.OauthLoginResult) { // not required
 		return nil
@@ -1847,6 +2020,44 @@ func (m *Result) validateStampLoginResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateUpdateAuthProxyConfigResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateAuthProxyConfigResult) { // not required
+		return nil
+	}
+
+	if m.UpdateAuthProxyConfigResult != nil {
+		if err := m.UpdateAuthProxyConfigResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAuthProxyConfigResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAuthProxyConfigResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateUpdateOauth2CredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateOauth2CredentialResult) { // not required
+		return nil
+	}
+
+	if m.UpdateOauth2CredentialResult != nil {
+		if err := m.UpdateOauth2CredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateOauth2CredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateUpdatePolicyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePolicyResult) { // not required
 		return nil
@@ -2065,6 +2276,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateOauth2CredentialResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateOauthProvidersResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2161,6 +2376,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeleteOauth2CredentialResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteOauthProvidersResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2170,6 +2389,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePaymentMethodResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeletePoliciesResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2201,6 +2424,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeleteWalletAccountsResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteWalletsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2210,6 +2437,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEmailAuthResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEnableAuthProxyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2261,6 +2492,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateOauth2AuthenticateResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOauthLoginResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2306,6 +2541,14 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateStampLoginResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateAuthProxyConfigResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateOauth2CredentialResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2473,6 +2716,27 @@ func (m *Result) contextValidateCreateInvitationsResult(ctx context.Context, for
 				return ve.ValidateName("createInvitationsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateOauth2CredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateOauth2CredentialResult != nil {
+
+		if swag.IsZero(m.CreateOauth2CredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateOauth2CredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauth2CredentialResult")
 			}
 			return err
 		}
@@ -2985,6 +3249,27 @@ func (m *Result) contextValidateDeleteInvitationResult(ctx context.Context, form
 	return nil
 }
 
+func (m *Result) contextValidateDeleteOauth2CredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteOauth2CredentialResult != nil {
+
+		if swag.IsZero(m.DeleteOauth2CredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteOauth2CredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauth2CredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateDeleteOauthProvidersResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteOauthProvidersResult != nil {
@@ -3040,6 +3325,27 @@ func (m *Result) contextValidateDeletePaymentMethodResult(ctx context.Context, f
 				return ve.ValidateName("deletePaymentMethodResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePaymentMethodResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateDeletePoliciesResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePoliciesResult != nil {
+
+		if swag.IsZero(m.DeletePoliciesResult) { // not required
+			return nil
+		}
+
+		if err := m.DeletePoliciesResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePoliciesResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePoliciesResult")
 			}
 			return err
 		}
@@ -3195,6 +3501,27 @@ func (m *Result) contextValidateDeleteUsersResult(ctx context.Context, formats s
 	return nil
 }
 
+func (m *Result) contextValidateDeleteWalletAccountsResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteWalletAccountsResult != nil {
+
+		if swag.IsZero(m.DeleteWalletAccountsResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteWalletAccountsResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletAccountsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletAccountsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateDeleteWalletsResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteWalletsResult != nil {
@@ -3250,6 +3577,27 @@ func (m *Result) contextValidateEmailAuthResult(ctx context.Context, formats str
 				return ve.ValidateName("emailAuthResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailAuthResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateEnableAuthProxyResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EnableAuthProxyResult != nil {
+
+		if swag.IsZero(m.EnableAuthProxyResult) { // not required
+			return nil
+		}
+
+		if err := m.EnableAuthProxyResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enableAuthProxyResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enableAuthProxyResult")
 			}
 			return err
 		}
@@ -3510,6 +3858,27 @@ func (m *Result) contextValidateInitUserEmailRecoveryResult(ctx context.Context,
 	return nil
 }
 
+func (m *Result) contextValidateOauth2AuthenticateResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Oauth2AuthenticateResult != nil {
+
+		if swag.IsZero(m.Oauth2AuthenticateResult) { // not required
+			return nil
+		}
+
+		if err := m.Oauth2AuthenticateResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2AuthenticateResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2AuthenticateResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateOauthLoginResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OauthLoginResult != nil {
@@ -3754,6 +4123,48 @@ func (m *Result) contextValidateStampLoginResult(ctx context.Context, formats st
 				return ve.ValidateName("stampLoginResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("stampLoginResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateAuthProxyConfigResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateAuthProxyConfigResult != nil {
+
+		if swag.IsZero(m.UpdateAuthProxyConfigResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateAuthProxyConfigResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAuthProxyConfigResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAuthProxyConfigResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateOauth2CredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateOauth2CredentialResult != nil {
+
+		if swag.IsZero(m.UpdateOauth2CredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateOauth2CredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateOauth2CredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateOauth2CredentialResult")
 			}
 			return err
 		}

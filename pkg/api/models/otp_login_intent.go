@@ -19,6 +19,9 @@ import (
 // swagger:model OtpLoginIntent
 type OtpLoginIntent struct {
 
+	// Optional signature associated with the public key passed into the verification step. This must be a hex-encoded ECDSA signature over the verification token. Only required if a public key was provided during the verification step.
+	ClientSignature *string `json:"clientSignature,omitempty"`
+
 	// Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 

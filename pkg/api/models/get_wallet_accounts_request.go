@@ -19,6 +19,9 @@ import (
 // swagger:model GetWalletAccountsRequest
 type GetWalletAccountsRequest struct {
 
+	// Optional flag to specify if the wallet details should be included in the response. Default = false.
+	IncludeWalletDetails *bool `json:"includeWalletDetails,omitempty"`
+
 	// Unique identifier for a given organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`

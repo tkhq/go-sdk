@@ -48,6 +48,9 @@ type Intent struct {
 	// create invitations intent
 	CreateInvitationsIntent *CreateInvitationsIntent `json:"createInvitationsIntent,omitempty"`
 
+	// create oauth2 credential intent
+	CreateOauth2CredentialIntent *CreateOauth2CredentialIntent `json:"createOauth2CredentialIntent,omitempty"`
+
 	// create oauth providers intent
 	CreateOauthProvidersIntent *CreateOauthProvidersIntent `json:"createOauthProvidersIntent,omitempty"`
 
@@ -138,6 +141,9 @@ type Intent struct {
 	// delete invitation intent
 	DeleteInvitationIntent *DeleteInvitationIntent `json:"deleteInvitationIntent,omitempty"`
 
+	// delete oauth2 credential intent
+	DeleteOauth2CredentialIntent *DeleteOauth2CredentialIntent `json:"deleteOauth2CredentialIntent,omitempty"`
+
 	// delete oauth providers intent
 	DeleteOauthProvidersIntent *DeleteOauthProvidersIntent `json:"deleteOauthProvidersIntent,omitempty"`
 
@@ -146,6 +152,9 @@ type Intent struct {
 
 	// delete payment method intent
 	DeletePaymentMethodIntent *DeletePaymentMethodIntent `json:"deletePaymentMethodIntent,omitempty"`
+
+	// delete policies intent
+	DeletePoliciesIntent *DeletePoliciesIntent `json:"deletePoliciesIntent,omitempty"`
 
 	// delete policy intent
 	DeletePolicyIntent *DeletePolicyIntent `json:"deletePolicyIntent,omitempty"`
@@ -168,8 +177,14 @@ type Intent struct {
 	// delete users intent
 	DeleteUsersIntent *DeleteUsersIntent `json:"deleteUsersIntent,omitempty"`
 
+	// delete wallet accounts intent
+	DeleteWalletAccountsIntent *DeleteWalletAccountsIntent `json:"deleteWalletAccountsIntent,omitempty"`
+
 	// delete wallets intent
 	DeleteWalletsIntent *DeleteWalletsIntent `json:"deleteWalletsIntent,omitempty"`
+
+	// disable auth proxy intent
+	DisableAuthProxyIntent DisableAuthProxyIntent `json:"disableAuthProxyIntent,omitempty"`
 
 	// disable private key intent
 	DisablePrivateKeyIntent *DisablePrivateKeyIntent `json:"disablePrivateKeyIntent,omitempty"`
@@ -179,6 +194,9 @@ type Intent struct {
 
 	// email auth intent v2
 	EmailAuthIntentV2 *EmailAuthIntentV2 `json:"emailAuthIntentV2,omitempty"`
+
+	// enable auth proxy intent
+	EnableAuthProxyIntent EnableAuthProxyIntent `json:"enableAuthProxyIntent,omitempty"`
 
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
@@ -215,6 +233,9 @@ type Intent struct {
 
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
+
+	// oauth2 authenticate intent
+	Oauth2AuthenticateIntent *Oauth2AuthenticateIntent `json:"oauth2AuthenticateIntent,omitempty"`
 
 	// oauth intent
 	OauthIntent *OauthIntent `json:"oauthIntent,omitempty"`
@@ -266,6 +287,12 @@ type Intent struct {
 
 	// update allowed origins intent
 	UpdateAllowedOriginsIntent *UpdateAllowedOriginsIntent `json:"updateAllowedOriginsIntent,omitempty"`
+
+	// update auth proxy config intent
+	UpdateAuthProxyConfigIntent *UpdateAuthProxyConfigIntent `json:"updateAuthProxyConfigIntent,omitempty"`
+
+	// update oauth2 credential intent
+	UpdateOauth2CredentialIntent *UpdateOauth2CredentialIntent `json:"updateOauth2CredentialIntent,omitempty"`
 
 	// update policy intent
 	UpdatePolicyIntent *UpdatePolicyIntent `json:"updatePolicyIntent,omitempty"`
@@ -342,6 +369,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateInvitationsIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateOauth2CredentialIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -461,6 +492,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeleteOauth2CredentialIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteOauthProvidersIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -470,6 +505,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeletePaymentMethodIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeletePoliciesIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -498,6 +537,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeleteUsersIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteWalletAccountsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -562,6 +605,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOauth2AuthenticateIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -630,6 +677,14 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateAllowedOriginsIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateAuthProxyConfigIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateOauth2CredentialIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -865,6 +920,25 @@ func (m *Intent) validateCreateInvitationsIntent(formats strfmt.Registry) error 
 				return ve.ValidateName("createInvitationsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateOauth2CredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateOauth2CredentialIntent) { // not required
+		return nil
+	}
+
+	if m.CreateOauth2CredentialIntent != nil {
+		if err := m.CreateOauth2CredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauth2CredentialIntent")
 			}
 			return err
 		}
@@ -1424,6 +1498,25 @@ func (m *Intent) validateDeleteInvitationIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateDeleteOauth2CredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteOauth2CredentialIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteOauth2CredentialIntent != nil {
+		if err := m.DeleteOauth2CredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauth2CredentialIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateDeleteOauthProvidersIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteOauthProvidersIntent) { // not required
 		return nil
@@ -1473,6 +1566,25 @@ func (m *Intent) validateDeletePaymentMethodIntent(formats strfmt.Registry) erro
 				return ve.ValidateName("deletePaymentMethodIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePaymentMethodIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeletePoliciesIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeletePoliciesIntent) { // not required
+		return nil
+	}
+
+	if m.DeletePoliciesIntent != nil {
+		if err := m.DeletePoliciesIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePoliciesIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePoliciesIntent")
 			}
 			return err
 		}
@@ -1606,6 +1718,25 @@ func (m *Intent) validateDeleteUsersIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("deleteUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeleteWalletAccountsIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteWalletAccountsIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteWalletAccountsIntent != nil {
+		if err := m.DeleteWalletAccountsIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletAccountsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletAccountsIntent")
 			}
 			return err
 		}
@@ -1910,6 +2041,25 @@ func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) er
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateOauth2AuthenticateIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.Oauth2AuthenticateIntent) { // not required
+		return nil
+	}
+
+	if m.Oauth2AuthenticateIntent != nil {
+		if err := m.Oauth2AuthenticateIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2AuthenticateIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2AuthenticateIntent")
 			}
 			return err
 		}
@@ -2241,6 +2391,44 @@ func (m *Intent) validateUpdateAllowedOriginsIntent(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *Intent) validateUpdateAuthProxyConfigIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateAuthProxyConfigIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateAuthProxyConfigIntent != nil {
+		if err := m.UpdateAuthProxyConfigIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAuthProxyConfigIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAuthProxyConfigIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateUpdateOauth2CredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateOauth2CredentialIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateOauth2CredentialIntent != nil {
+		if err := m.UpdateOauth2CredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateOauth2CredentialIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateUpdatePolicyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdatePolicyIntent) { // not required
 		return nil
@@ -2494,6 +2682,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateOauth2CredentialIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateOauthProvidersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2610,6 +2802,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeleteOauth2CredentialIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteOauthProvidersIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2619,6 +2815,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeletePaymentMethodIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeletePoliciesIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2647,6 +2847,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeleteUsersIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteWalletAccountsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2711,6 +2915,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOauth2AuthenticateIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2779,6 +2987,14 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateAllowedOriginsIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateAuthProxyConfigIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateOauth2CredentialIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3034,6 +3250,27 @@ func (m *Intent) contextValidateCreateInvitationsIntent(ctx context.Context, for
 				return ve.ValidateName("createInvitationsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createInvitationsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateOauth2CredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateOauth2CredentialIntent != nil {
+
+		if swag.IsZero(m.CreateOauth2CredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateOauth2CredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createOauth2CredentialIntent")
 			}
 			return err
 		}
@@ -3651,6 +3888,27 @@ func (m *Intent) contextValidateDeleteInvitationIntent(ctx context.Context, form
 	return nil
 }
 
+func (m *Intent) contextValidateDeleteOauth2CredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteOauth2CredentialIntent != nil {
+
+		if swag.IsZero(m.DeleteOauth2CredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteOauth2CredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteOauth2CredentialIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateDeleteOauthProvidersIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteOauthProvidersIntent != nil {
@@ -3706,6 +3964,27 @@ func (m *Intent) contextValidateDeletePaymentMethodIntent(ctx context.Context, f
 				return ve.ValidateName("deletePaymentMethodIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deletePaymentMethodIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeletePoliciesIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeletePoliciesIntent != nil {
+
+		if swag.IsZero(m.DeletePoliciesIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeletePoliciesIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deletePoliciesIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deletePoliciesIntent")
 			}
 			return err
 		}
@@ -3853,6 +4132,27 @@ func (m *Intent) contextValidateDeleteUsersIntent(ctx context.Context, formats s
 				return ve.ValidateName("deleteUsersIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteUsersIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteWalletAccountsIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteWalletAccountsIntent != nil {
+
+		if swag.IsZero(m.DeleteWalletAccountsIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteWalletAccountsIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteWalletAccountsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteWalletAccountsIntent")
 			}
 			return err
 		}
@@ -4189,6 +4489,27 @@ func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context,
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateOauth2AuthenticateIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Oauth2AuthenticateIntent != nil {
+
+		if swag.IsZero(m.Oauth2AuthenticateIntent) { // not required
+			return nil
+		}
+
+		if err := m.Oauth2AuthenticateIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("oauth2AuthenticateIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("oauth2AuthenticateIntent")
 			}
 			return err
 		}
@@ -4546,6 +4867,48 @@ func (m *Intent) contextValidateUpdateAllowedOriginsIntent(ctx context.Context, 
 				return ve.ValidateName("updateAllowedOriginsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateAllowedOriginsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateAuthProxyConfigIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateAuthProxyConfigIntent != nil {
+
+		if swag.IsZero(m.UpdateAuthProxyConfigIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateAuthProxyConfigIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateAuthProxyConfigIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateAuthProxyConfigIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateOauth2CredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateOauth2CredentialIntent != nil {
+
+		if swag.IsZero(m.UpdateOauth2CredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateOauth2CredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateOauth2CredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateOauth2CredentialIntent")
 			}
 			return err
 		}

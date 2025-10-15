@@ -195,6 +195,83 @@
         "tags": ["Authenticators"]
       }
     },
+    "/public/v1/query/get_boot_proof": {
+      "post": {
+        "summary": "Get a specific boot proof",
+        "description": "Get the boot proof for a given ephemeral key.",
+        "operationId": "GetBootProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BootProofResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetBootProofRequest"
+            }
+          }
+        ],
+        "tags": ["Boot Proof"]
+      }
+    },
+    "/public/v1/query/get_latest_boot_proof": {
+      "post": {
+        "summary": "Get the latest boot proof for an app",
+        "description": "Get the latest boot proof for a given enclave app name.",
+        "operationId": "GetLatestBootProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BootProofResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetLatestBootProofRequest"
+            }
+          }
+        ],
+        "tags": ["Boot Proof"]
+      }
+    },
+    "/public/v1/query/get_oauth2_credential": {
+      "post": {
+        "summary": "Get OAuth 2.0 credential",
+        "description": "Get details about an OAuth 2.0 credential.",
+        "operationId": "GetOauth2Credential",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetOauth2CredentialResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetOauth2CredentialRequest"
+            }
+          }
+        ]
+      }
+    },
     "/public/v1/query/get_oauth_providers": {
       "post": {
         "summary": "Get Oauth providers",
@@ -453,6 +530,58 @@
           }
         ],
         "tags": ["Activities"]
+      }
+    },
+    "/public/v1/query/list_app_proofs": {
+      "post": {
+        "summary": "List app proofs for an activity",
+        "description": "List the app proofs for the given activity.",
+        "operationId": "GetAppProofs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetAppProofsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetAppProofsRequest"
+            }
+          }
+        ],
+        "tags": ["App Proof"]
+      }
+    },
+    "/public/v1/query/list_oauth2_credentials": {
+      "post": {
+        "summary": "List OAuth 2.0 Credentials",
+        "description": "List all OAuth 2.0 credentials within an organization.",
+        "operationId": "ListOauth2Credentials",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListOauth2CredentialsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ListOauth2CredentialsRequest"
+            }
+          }
+        ],
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/query/list_policies": {
@@ -843,6 +972,32 @@
           }
         ],
         "tags": ["Invitations"]
+      }
+    },
+    "/public/v1/submit/create_oauth2_credential": {
+      "post": {
+        "summary": "Create an OAuth 2.0 Credential",
+        "description": "Enable authentication for end users with an OAuth 2.0 provider",
+        "operationId": "CreateOauth2Credential",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateOauth2CredentialRequest"
+            }
+          }
+        ],
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/create_oauth_providers": {
@@ -1261,6 +1416,32 @@
         "tags": ["Invitations"]
       }
     },
+    "/public/v1/submit/delete_oauth2_credential": {
+      "post": {
+        "summary": "Delete an OAuth 2.0 Credential",
+        "description": "Disable authentication for end users with an OAuth 2.0 provider",
+        "operationId": "DeleteOauth2Credential",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteOauth2CredentialRequest"
+            }
+          }
+        ],
+        "tags": ["User Auth"]
+      }
+    },
     "/public/v1/submit/delete_oauth_providers": {
       "post": {
         "summary": "Delete Oauth providers",
@@ -1285,6 +1466,32 @@
           }
         ],
         "tags": ["User Auth"]
+      }
+    },
+    "/public/v1/submit/delete_policies": {
+      "post": {
+        "summary": "Delete policies",
+        "description": "Delete existing policies.",
+        "operationId": "DeletePolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeletePoliciesRequest"
+            }
+          }
+        ],
+        "tags": ["Policies"]
       }
     },
     "/public/v1/submit/delete_policy": {
@@ -1467,6 +1674,32 @@
           }
         ],
         "tags": ["Users"]
+      }
+    },
+    "/public/v1/submit/delete_wallet_accounts": {
+      "post": {
+        "summary": "Delete wallet accounts",
+        "description": "Delete wallet accounts for an organization.",
+        "operationId": "DeleteWalletAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteWalletAccountsRequest"
+            }
+          }
+        ],
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/submit/delete_wallets": {
@@ -1833,6 +2066,32 @@
         "tags": ["User Auth"]
       }
     },
+    "/public/v1/submit/oauth2_authenticate": {
+      "post": {
+        "summary": "OAuth 2.0 authentication",
+        "description": "Authenticate a user with an OAuth 2.0 provider and receive an OIDC token to use with the LoginWithOAuth or CreateSubOrganization activities",
+        "operationId": "Oauth2Authenticate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Oauth2AuthenticateRequest"
+            }
+          }
+        ],
+        "tags": ["User Auth"]
+      }
+    },
     "/public/v1/submit/oauth_login": {
       "post": {
         "summary": "Login with Oauth",
@@ -2117,6 +2376,32 @@
           }
         ],
         "tags": ["Sessions"]
+      }
+    },
+    "/public/v1/submit/update_oauth2_credential": {
+      "post": {
+        "summary": "Update an OAuth 2.0 Credential",
+        "description": "Update an OAuth 2.0 provider credential",
+        "operationId": "UpdateOauth2Credential",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ActivityResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateOauth2CredentialRequest"
+            }
+          }
+        ],
+        "tags": ["User Auth"]
       }
     },
     "/public/v1/submit/update_policy": {
@@ -2490,6 +2775,14 @@
           },
           "description": "A list of objects representing a particular User's approval or rejection of a Consensus request, including all relevant metadata."
         },
+        "appProofs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AppProof"
+          },
+          "description": "A list of app proofs generated by enclaves during activity execution, providing verifiable attestations of performed operations."
+        },
         "fingerprint": {
           "type": "string",
           "description": "An artifact verifying a User's action."
@@ -2643,7 +2936,16 @@
         "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
         "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP",
         "ACTIVITY_TYPE_CREATE_SMART_CONTRACT_INTERFACE",
-        "ACTIVITY_TYPE_DELETE_SMART_CONTRACT_INTERFACE"
+        "ACTIVITY_TYPE_DELETE_SMART_CONTRACT_INTERFACE",
+        "ACTIVITY_TYPE_ENABLE_AUTH_PROXY",
+        "ACTIVITY_TYPE_DISABLE_AUTH_PROXY",
+        "ACTIVITY_TYPE_UPDATE_AUTH_PROXY_CONFIG",
+        "ACTIVITY_TYPE_CREATE_OAUTH2_CREDENTIAL",
+        "ACTIVITY_TYPE_UPDATE_OAUTH2_CREDENTIAL",
+        "ACTIVITY_TYPE_DELETE_OAUTH2_CREDENTIAL",
+        "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE",
+        "ACTIVITY_TYPE_DELETE_WALLET_ACCOUNTS",
+        "ACTIVITY_TYPE_DELETE_POLICIES"
       ]
     },
     "AddressFormat": {
@@ -2811,6 +3113,28 @@
         }
       },
       "required": ["userName", "userTags", "apiKeys"]
+    },
+    "AppProof": {
+      "type": "object",
+      "properties": {
+        "scheme": {
+          "$ref": "#/definitions/SignatureScheme",
+          "description": "Scheme of signing key."
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "Ephemeral public key."
+        },
+        "proofPayload": {
+          "type": "string",
+          "description": "JSON serialized AppProofPayload."
+        },
+        "signature": {
+          "type": "string",
+          "description": "Signature over hashed proof_payload."
+        }
+      },
+      "required": ["scheme", "publicKey", "proofPayload", "signature"]
     },
     "ApproveActivityIntent": {
       "type": "object",
@@ -3001,6 +3325,61 @@
         "AUTHENTICATOR_TRANSPORT_USB",
         "AUTHENTICATOR_TRANSPORT_HYBRID"
       ]
+    },
+    "BootProof": {
+      "type": "object",
+      "properties": {
+        "ephemeralPublicKeyHex": {
+          "type": "string",
+          "description": "The hex encoded Ephemeral Public Key."
+        },
+        "awsAttestationDocB64": {
+          "type": "string",
+          "description": "The DER encoded COSE Sign1 struct Attestation doc."
+        },
+        "qosManifestB64": {
+          "type": "string",
+          "description": "The borsch serialized base64 encoded Manifest."
+        },
+        "qosManifestEnvelopeB64": {
+          "type": "string",
+          "description": "The borsch serialized base64 encoded Manifest Envelope."
+        },
+        "deploymentLabel": {
+          "type": "string",
+          "description": "The label under which the enclave app was deployed."
+        },
+        "enclaveApp": {
+          "type": "string",
+          "description": "Name of the enclave app"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Owner of the app i.e. 'tkhq'"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        }
+      },
+      "required": [
+        "ephemeralPublicKeyHex",
+        "awsAttestationDocB64",
+        "qosManifestB64",
+        "qosManifestEnvelopeB64",
+        "deploymentLabel",
+        "enclaveApp",
+        "owner",
+        "createdAt"
+      ]
+    },
+    "BootProofResponse": {
+      "type": "object",
+      "properties": {
+        "bootProof": {
+          "$ref": "#/definitions/BootProof"
+        }
+      },
+      "required": ["bootProof"]
     },
     "Config": {
       "type": "object",
@@ -3231,6 +3610,55 @@
         }
       },
       "required": ["invitationIds"]
+    },
+    "CreateOauth2CredentialIntent": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "$ref": "#/definitions/Oauth2Provider",
+          "description": "The OAuth 2.0 provider"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "The Client ID issued by the OAuth 2.0 provider"
+        },
+        "encryptedClientSecret": {
+          "type": "string",
+          "description": "The client secret issued by the OAuth 2.0 provider encrypted to the TLS Fetcher quorum key"
+        }
+      },
+      "required": ["provider", "clientId", "encryptedClientSecret"]
+    },
+    "CreateOauth2CredentialRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_CREATE_OAUTH2_CREDENTIAL"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/CreateOauth2CredentialIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "CreateOauth2CredentialResult": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "Unique identifier of the OAuth 2.0 credential that was created"
+        }
+      },
+      "required": ["oauth2CredentialId"]
     },
     "CreateOauthProvidersIntent": {
       "type": "object",
@@ -4130,6 +4558,11 @@
           "type": "boolean",
           "x-nullable": true,
           "description": "Disable OTP email auth for the sub-organization"
+        },
+        "verificationToken": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Signed JWT containing a unique id, expiry, verification type, contact"
         }
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
@@ -4414,6 +4847,11 @@
             "$ref": "#/definitions/WalletAccountParams"
           },
           "description": "A list of wallet Accounts."
+        },
+        "persist": {
+          "type": "boolean",
+          "x-nullable": true,
+          "description": "Indicates if the wallet accounts should be persisted. This is helpful if you'd like to see the addresses of different derivation paths without actually creating the accounts. Defaults to true."
         }
       },
       "required": ["walletId", "accounts"]
@@ -4685,6 +5123,47 @@
       },
       "required": ["invitationId"]
     },
+    "DeleteOauth2CredentialIntent": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "The ID of the OAuth 2.0 credential to delete"
+        }
+      },
+      "required": ["oauth2CredentialId"]
+    },
+    "DeleteOauth2CredentialRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_DELETE_OAUTH2_CREDENTIAL"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/DeleteOauth2CredentialIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "DeleteOauth2CredentialResult": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "Unique identifier of the OAuth 2.0 credential that was deleted"
+        }
+      },
+      "required": ["oauth2CredentialId"]
+    },
     "DeleteOauthProvidersIntent": {
       "type": "object",
       "properties": {
@@ -4776,6 +5255,53 @@
         }
       },
       "required": ["paymentMethodId"]
+    },
+    "DeletePoliciesIntent": {
+      "type": "object",
+      "properties": {
+        "policyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for policies within an organization"
+        }
+      },
+      "required": ["policyIds"]
+    },
+    "DeletePoliciesRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_DELETE_POLICIES"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/DeletePoliciesIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "DeletePoliciesResult": {
+      "type": "object",
+      "properties": {
+        "policyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of unique identifiers for the deleted policies."
+        }
+      },
+      "required": ["policyIds"]
     },
     "DeletePolicyIntent": {
       "type": "object",
@@ -5107,6 +5633,58 @@
       },
       "required": ["userIds"]
     },
+    "DeleteWalletAccountsIntent": {
+      "type": "object",
+      "properties": {
+        "walletAccountIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of unique identifiers for wallet accounts within an organization"
+        },
+        "deleteWithoutExport": {
+          "type": "boolean",
+          "x-nullable": true,
+          "description": "Optional parameter for deleting the wallet accounts, even if any have not been previously exported. If they have been exported, this field is ignored."
+        }
+      },
+      "required": ["walletAccountIds"]
+    },
+    "DeleteWalletAccountsRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_DELETE_WALLET_ACCOUNTS"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/DeleteWalletAccountsIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "DeleteWalletAccountsResult": {
+      "type": "object",
+      "properties": {
+        "walletAccountIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of wallet account unique identifiers that were removed"
+        }
+      },
+      "required": ["walletAccountIds"]
+    },
     "DeleteWalletsIntent": {
       "type": "object",
       "properties": {
@@ -5158,6 +5736,12 @@
         }
       },
       "required": ["walletIds"]
+    },
+    "DisableAuthProxyIntent": {
+      "type": "object"
+    },
+    "DisableAuthProxyResult": {
+      "type": "object"
     },
     "DisablePrivateKeyIntent": {
       "type": "object",
@@ -5346,6 +5930,19 @@
         }
       }
     },
+    "EnableAuthProxyIntent": {
+      "type": "object"
+    },
+    "EnableAuthProxyResult": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "A User ID with permission to initiate authentication."
+        }
+      },
+      "required": ["userId"]
+    },
     "ExportPrivateKeyIntent": {
       "type": "object",
       "properties": {
@@ -5519,7 +6116,8 @@
         "FEATURE_NAME_EMAIL_RECOVERY",
         "FEATURE_NAME_WEBHOOK",
         "FEATURE_NAME_SMS_AUTH",
-        "FEATURE_NAME_OTP_EMAIL_AUTH"
+        "FEATURE_NAME_OTP_EMAIL_AUTH",
+        "FEATURE_NAME_AUTH_PROXY"
       ]
     },
     "FiatOnRampBlockchainNetwork": {
@@ -5713,6 +6311,33 @@
       },
       "required": ["apiKeys"]
     },
+    "GetAppProofsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "activityId": {
+          "type": "string",
+          "description": "Unique identifier for a given activity."
+        }
+      },
+      "required": ["organizationId", "activityId"]
+    },
+    "GetAppProofsResponse": {
+      "type": "object",
+      "properties": {
+        "appProofs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AppProof"
+          }
+        }
+      },
+      "required": ["appProofs"]
+    },
     "GetAuthenticatorRequest": {
       "type": "object",
       "properties": {
@@ -5764,6 +6389,57 @@
         }
       },
       "required": ["authenticators"]
+    },
+    "GetBootProofRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "ephemeralKey": {
+          "type": "string",
+          "description": "Hex encoded ephemeral public key."
+        }
+      },
+      "required": ["organizationId", "ephemeralKey"]
+    },
+    "GetLatestBootProofRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "appName": {
+          "type": "string",
+          "description": "Name of enclave app."
+        }
+      },
+      "required": ["organizationId", "appName"]
+    },
+    "GetOauth2CredentialRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "Unique identifier for a given OAuth 2.0 Credential."
+        }
+      },
+      "required": ["organizationId", "oauth2CredentialId"]
+    },
+    "GetOauth2CredentialResponse": {
+      "type": "object",
+      "properties": {
+        "oauth2Credential": {
+          "$ref": "#/definitions/Oauth2Credential"
+        }
+      },
+      "required": ["oauth2Credential"]
     },
     "GetOauthProvidersRequest": {
       "type": "object",
@@ -5955,7 +6631,7 @@
       "type": "object",
       "properties": {
         "smartContractInterface": {
-          "$ref": "#/definitions/data.v1.SmartContractInterface",
+          "$ref": "#/definitions/SmartContractInterface",
           "description": "Object to be used in conjunction with policies to guard transaction signing."
         }
       },
@@ -5978,7 +6654,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/data.v1.SmartContractInterface"
+            "$ref": "#/definitions/SmartContractInterface"
           },
           "description": "A list of smart contract interfaces."
         }
@@ -6148,6 +6824,11 @@
           "type": "string",
           "x-nullable": true,
           "description": "Unique identifier for a given wallet. If not provided, all accounts for the organization will be returned."
+        },
+        "includeWalletDetails": {
+          "type": "boolean",
+          "x-nullable": true,
+          "description": "Optional flag to specify if the wallet details should be included in the response. Default = false."
         },
         "paginationOptions": {
           "$ref": "#/definitions/Pagination",
@@ -6445,6 +7126,11 @@
           "type": "boolean",
           "x-nullable": true,
           "description": "Optional flag to indicate whether to use the sandbox mode to simulate transactions for the on-ramp provider. Default is false."
+        },
+        "urlForSignature": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Optional MoonPay Widget URL to sign when using MoonPay client SDKs with URL Signing enabled."
         }
       },
       "required": [
@@ -6485,6 +7171,10 @@
         "onRampTransactionId": {
           "type": "string",
           "description": "Unique identifier used to retrieve transaction statuses for a given fiat on-ramp flow."
+        },
+        "onRampUrlSignature": {
+          "type": "string",
+          "description": "Optional signature of the MoonPay Widget URL. The signature is generated if the Init Fiat On Ramp intent includes the urlForSignature field. The signature can be used to initialize the MoonPay SDKs when URL signing is enabled for your project."
         }
       },
       "required": ["onRampUrl", "onRampTransactionId"]
@@ -7141,6 +7831,33 @@
         },
         "deleteSmartContractInterfaceIntent": {
           "$ref": "#/definitions/DeleteSmartContractInterfaceIntent"
+        },
+        "enableAuthProxyIntent": {
+          "$ref": "#/definitions/EnableAuthProxyIntent"
+        },
+        "disableAuthProxyIntent": {
+          "$ref": "#/definitions/DisableAuthProxyIntent"
+        },
+        "updateAuthProxyConfigIntent": {
+          "$ref": "#/definitions/UpdateAuthProxyConfigIntent"
+        },
+        "createOauth2CredentialIntent": {
+          "$ref": "#/definitions/CreateOauth2CredentialIntent"
+        },
+        "updateOauth2CredentialIntent": {
+          "$ref": "#/definitions/UpdateOauth2CredentialIntent"
+        },
+        "deleteOauth2CredentialIntent": {
+          "$ref": "#/definitions/DeleteOauth2CredentialIntent"
+        },
+        "oauth2AuthenticateIntent": {
+          "$ref": "#/definitions/Oauth2AuthenticateIntent"
+        },
+        "deleteWalletAccountsIntent": {
+          "$ref": "#/definitions/DeleteWalletAccountsIntent"
+        },
+        "deletePoliciesIntent": {
+          "$ref": "#/definitions/DeletePoliciesIntent"
         }
       }
     },
@@ -7178,6 +7895,29 @@
         "accessType",
         "senderUserId"
       ]
+    },
+    "ListOauth2CredentialsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "ListOauth2CredentialsResponse": {
+      "type": "object",
+      "properties": {
+        "oauth2Credentials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Oauth2Credential"
+          }
+        }
+      },
+      "required": ["oauth2Credentials"]
     },
     "ListPrivateKeyTagsRequest": {
       "type": "object",
@@ -7240,6 +7980,118 @@
         "MNEMONIC_LANGUAGE_KOREAN",
         "MNEMONIC_LANGUAGE_SPANISH"
       ]
+    },
+    "Oauth2AuthenticateIntent": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "The OAuth 2.0 credential id whose client_id and client_secret will be used in the OAuth 2.0 flow"
+        },
+        "authCode": {
+          "type": "string",
+          "description": "The auth_code provided by the OAuth 2.0 provider to the end user to be exchanged for a Bearer token in the OAuth 2.0 flow"
+        },
+        "redirectUri": {
+          "type": "string",
+          "description": "The URI the user is redirected to after they have authenticated with the OAuth 2.0 provider"
+        },
+        "codeVerifier": {
+          "type": "string",
+          "description": "The code verifier used by OAuth 2.0 PKCE providers"
+        },
+        "nonce": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "An optional nonce used by the client to prevent replay/substitution of an ID token"
+        },
+        "bearerTokenTargetPublicKey": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "An optional P256 public key to which, if provided, the bearer token will be encrypted and returned via the `encrypted_bearer_token` claim of the OIDC Token"
+        }
+      },
+      "required": [
+        "oauth2CredentialId",
+        "authCode",
+        "redirectUri",
+        "codeVerifier"
+      ]
+    },
+    "Oauth2AuthenticateRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_OAUTH2_AUTHENTICATE"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/Oauth2AuthenticateIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "Oauth2AuthenticateResult": {
+      "type": "object",
+      "properties": {
+        "oidcToken": {
+          "type": "string",
+          "description": "Base64 encoded OIDC token issued by Turnkey to be used with the LoginWithOAuth activity"
+        }
+      },
+      "required": ["oidcToken"]
+    },
+    "Oauth2Credential": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "Unique identifier for a given OAuth 2.0 Credential."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for an Organization."
+        },
+        "provider": {
+          "$ref": "#/definitions/Oauth2Provider",
+          "description": "The provider for a given OAuth 2.0 Credential."
+        },
+        "clientId": {
+          "type": "string",
+          "description": "The client id for a given OAuth 2.0 Credential."
+        },
+        "encryptedClientSecret": {
+          "type": "string",
+          "description": "The encrypted client secret for a given OAuth 2.0 Credential encrypted to the TLS Fetcher quorum key."
+        },
+        "createdAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        }
+      },
+      "required": [
+        "oauth2CredentialId",
+        "organizationId",
+        "provider",
+        "clientId",
+        "encryptedClientSecret",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Oauth2Provider": {
+      "type": "string",
+      "enum": ["OAUTH2_PROVIDER_X", "OAUTH2_PROVIDER_DISCORD"]
     },
     "OauthIntent": {
       "type": "object",
@@ -7526,6 +8378,11 @@
           "type": "boolean",
           "x-nullable": true,
           "description": "Invalidate all other previously generated Login API keys"
+        },
+        "clientSignature": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Optional signature associated with the public key passed into the verification step. This must be a hex-encoded ECDSA signature over the verification token. Only required if a public key was provided during the verification step."
         }
       },
       "required": ["verificationToken", "publicKey"]
@@ -7598,7 +8455,8 @@
       "enum": [
         "PAYLOAD_ENCODING_HEXADECIMAL",
         "PAYLOAD_ENCODING_TEXT_UTF8",
-        "PAYLOAD_ENCODING_EIP712"
+        "PAYLOAD_ENCODING_EIP712",
+        "PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"
       ]
     },
     "Policy": {
@@ -8148,6 +9006,33 @@
         },
         "deleteSmartContractInterfaceResult": {
           "$ref": "#/definitions/DeleteSmartContractInterfaceResult"
+        },
+        "enableAuthProxyResult": {
+          "$ref": "#/definitions/EnableAuthProxyResult"
+        },
+        "disableAuthProxyResult": {
+          "$ref": "#/definitions/DisableAuthProxyResult"
+        },
+        "updateAuthProxyConfigResult": {
+          "$ref": "#/definitions/UpdateAuthProxyConfigResult"
+        },
+        "createOauth2CredentialResult": {
+          "$ref": "#/definitions/CreateOauth2CredentialResult"
+        },
+        "updateOauth2CredentialResult": {
+          "$ref": "#/definitions/UpdateOauth2CredentialResult"
+        },
+        "deleteOauth2CredentialResult": {
+          "$ref": "#/definitions/DeleteOauth2CredentialResult"
+        },
+        "oauth2AuthenticateResult": {
+          "$ref": "#/definitions/Oauth2AuthenticateResult"
+        },
+        "deleteWalletAccountsResult": {
+          "$ref": "#/definitions/DeleteWalletAccountsResult"
+        },
+        "deletePoliciesResult": {
+          "$ref": "#/definitions/DeletePoliciesResult"
         }
       }
     },
@@ -8663,6 +9548,10 @@
       },
       "required": ["signedTransaction"]
     },
+    "SignatureScheme": {
+      "type": "string",
+      "enum": ["SIGNATURE_SCHEME_EPHEMERAL_KEY_P256"]
+    },
     "SimpleClientExtensionResults": {
       "type": "object",
       "properties": {
@@ -8679,6 +9568,56 @@
           "x-nullable": true
         }
       }
+    },
+    "SmartContractInterface": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "The Organization the Smart Contract Interface belongs to."
+        },
+        "smartContractInterfaceId": {
+          "type": "string",
+          "description": "Unique identifier for a given Smart Contract Interface (ABI or IDL)."
+        },
+        "smartContractAddress": {
+          "type": "string",
+          "description": "The address corresponding to the Smart Contract or Program."
+        },
+        "smartContractInterface": {
+          "type": "string",
+          "description": "The JSON corresponding to the Smart Contract Interface (ABI or IDL)."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "The notes corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "createdAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        }
+      },
+      "required": [
+        "organizationId",
+        "smartContractInterfaceId",
+        "smartContractAddress",
+        "smartContractInterface",
+        "type",
+        "label",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
     },
     "SmartContractInterfaceType": {
       "type": "string",
@@ -8776,7 +9715,8 @@
       "enum": [
         "TRANSACTION_TYPE_ETHEREUM",
         "TRANSACTION_TYPE_SOLANA",
-        "TRANSACTION_TYPE_TRON"
+        "TRANSACTION_TYPE_TRON",
+        "TRANSACTION_TYPE_BITCOIN"
       ]
     },
     "UpdateAllowedOriginsIntent": {
@@ -8794,6 +9734,166 @@
     },
     "UpdateAllowedOriginsResult": {
       "type": "object"
+    },
+    "UpdateAuthProxyConfigIntent": {
+      "type": "object",
+      "properties": {
+        "allowedOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Updated list of allowed origins for CORS."
+        },
+        "allowedAuthMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Updated list of allowed proxy authentication methods."
+        },
+        "sendFromEmailAddress": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Custom 'from' address for auth-related emails."
+        },
+        "replyToEmailAddress": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Custom reply-to address for auth-related emails."
+        },
+        "emailAuthTemplateId": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Template ID for email-auth messages."
+        },
+        "otpTemplateId": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Template ID for OTP SMS messages."
+        },
+        "emailCustomizationParams": {
+          "$ref": "#/definitions/EmailCustomizationParams",
+          "x-nullable": true,
+          "description": "Overrides for auth-related email content."
+        },
+        "smsCustomizationParams": {
+          "$ref": "#/definitions/SmsCustomizationParams",
+          "x-nullable": true,
+          "description": "Overrides for auth-related SMS content."
+        },
+        "walletKitSettings": {
+          "$ref": "#/definitions/WalletKitSettingsParams",
+          "x-nullable": true,
+          "description": "Overrides for react wallet kit related settings."
+        },
+        "otpExpirationSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "x-nullable": true,
+          "description": "OTP code lifetime in seconds."
+        },
+        "verificationTokenExpirationSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "x-nullable": true,
+          "description": "Verification-token lifetime in seconds."
+        },
+        "sessionExpirationSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "x-nullable": true,
+          "description": "Session lifetime in seconds."
+        },
+        "otpAlphanumeric": {
+          "type": "boolean",
+          "x-nullable": true,
+          "description": "Enable alphanumeric OTP codes."
+        },
+        "otpLength": {
+          "type": "integer",
+          "format": "int32",
+          "x-nullable": true,
+          "description": "Desired OTP code length (6–9)."
+        },
+        "sendFromEmailSenderName": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Custom 'from' email sender for auth-related emails."
+        },
+        "verificationTokenRequiredForGetAccountPii": {
+          "type": "boolean",
+          "x-nullable": true,
+          "description": "Verification token required for get account with PII (email/phone number). Default false."
+        }
+      }
+    },
+    "UpdateAuthProxyConfigResult": {
+      "type": "object",
+      "properties": {
+        "configId": {
+          "type": "string",
+          "description": "Unique identifier for a given User. (representing the turnkey signer user id)"
+        }
+      }
+    },
+    "UpdateOauth2CredentialIntent": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "The ID of the OAuth 2.0 credential to update"
+        },
+        "provider": {
+          "$ref": "#/definitions/Oauth2Provider",
+          "description": "The OAuth 2.0 provider"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "The Client ID issued by the OAuth 2.0 provider"
+        },
+        "encryptedClientSecret": {
+          "type": "string",
+          "description": "The client secret issued by the OAuth 2.0 provider encrypted to the TLS Fetcher quorum key"
+        }
+      },
+      "required": [
+        "oauth2CredentialId",
+        "provider",
+        "clientId",
+        "encryptedClientSecret"
+      ]
+    },
+    "UpdateOauth2CredentialRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ACTIVITY_TYPE_UPDATE_OAUTH2_CREDENTIAL"]
+        },
+        "timestampMs": {
+          "type": "string",
+          "description": "Timestamp (in milliseconds) of the request, used to verify liveness of user requests."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "parameters": {
+          "$ref": "#/definitions/UpdateOauth2CredentialIntent"
+        }
+      },
+      "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "UpdateOauth2CredentialResult": {
+      "type": "object",
+      "properties": {
+        "oauth2CredentialId": {
+          "type": "string",
+          "description": "Unique identifier of the OAuth 2.0 credential that was updated"
+        }
+      },
+      "required": ["oauth2CredentialId"]
     },
     "UpdatePolicyIntent": {
       "type": "object",
@@ -9549,6 +10649,11 @@
           "type": "string",
           "x-nullable": true,
           "description": "Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)"
+        },
+        "publicKey": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Client-side public key generated by the user, which will be added to the JWT response and verified in subsequent requests via a client proof signature"
         }
       },
       "required": ["otpId", "otpCode"]
@@ -9720,6 +10825,11 @@
           "type": "string",
           "x-nullable": true,
           "description": "The public component of this wallet account's underlying cryptographic key pair."
+        },
+        "walletDetails": {
+          "$ref": "#/definitions/Wallet",
+          "x-nullable": true,
+          "description": "Wallet details for this account. This is only present when include_wallet_details=true."
         }
       },
       "required": [
@@ -9756,6 +10866,32 @@
         }
       },
       "required": ["curve", "pathFormat", "path", "addressFormat"]
+    },
+    "WalletKitSettingsParams": {
+      "type": "object",
+      "properties": {
+        "enabledSocialProviders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of enabled social login providers (e.g., 'apple', 'google', 'facebook')",
+          "title": "Enabled Social Providers"
+        },
+        "oauthClientIds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapping of social login providers to their Oauth client IDs.",
+          "title": "Oauth Client IDs"
+        },
+        "oauthRedirectUrl": {
+          "type": "string",
+          "description": "Oauth redirect URL to be used for social login flows.",
+          "title": "Oauth Redirect URL"
+        }
+      }
     },
     "WalletParams": {
       "type": "object",
@@ -9831,7 +10967,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/ump.v1.PolicyEvaluation"
+            "$ref": "#/definitions/common.v1.PolicyEvaluation"
           },
           "description": "Detailed evaluation result for each Policy that was run."
         },
@@ -9848,6 +10984,17 @@
         "createdAt"
       ]
     },
+    "common.v1.PolicyEvaluation": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "type": "string"
+        },
+        "outcome": {
+          "$ref": "#/definitions/Outcome"
+        }
+      }
+    },
     "data.v1.Address": {
       "type": "object",
       "properties": {
@@ -9858,56 +11005,6 @@
           "type": "string"
         }
       }
-    },
-    "data.v1.SmartContractInterface": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "The Organization the Smart Contract Interface belongs to."
-        },
-        "smartContractInterfaceId": {
-          "type": "string",
-          "description": "Unique identifier for a given Smart Contract Interface (ABI or IDL)."
-        },
-        "smartContractAddress": {
-          "type": "string",
-          "description": "The address corresponding to the Smart Contract or Program."
-        },
-        "smartContractInterface": {
-          "type": "string",
-          "description": "The JSON corresponding to the Smart Contract Interface (ABI or IDL)."
-        },
-        "type": {
-          "type": "string",
-          "description": "The type corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "label": {
-          "type": "string",
-          "description": "The label corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "notes": {
-          "type": "string",
-          "description": "The notes corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/external.data.v1.Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/external.data.v1.Timestamp"
-        }
-      },
-      "required": [
-        "organizationId",
-        "smartContractInterfaceId",
-        "smartContractAddress",
-        "smartContractInterface",
-        "type",
-        "label",
-        "notes",
-        "createdAt",
-        "updatedAt"
-      ]
     },
     "external.data.v1.Credential": {
       "type": "object",
@@ -9951,17 +11048,6 @@
         }
       },
       "required": ["seconds", "nanos"]
-    },
-    "ump.v1.PolicyEvaluation": {
-      "type": "object",
-      "properties": {
-        "policyId": {
-          "type": "string"
-        },
-        "outcome": {
-          "$ref": "#/definitions/Outcome"
-        }
-      }
     },
     "v1.Tag": {
       "type": "object",
