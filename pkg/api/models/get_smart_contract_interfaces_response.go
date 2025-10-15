@@ -22,7 +22,7 @@ type GetSmartContractInterfacesResponse struct {
 
 	// A list of smart contract interfaces.
 	// Required: true
-	SmartContractInterfaces []*DataV1SmartContractInterface `json:"smartContractInterfaces"`
+	SmartContractInterfaces []*SmartContractInterface `json:"smartContractInterfaces"`
 }
 
 // Validate validates this get smart contract interfaces response

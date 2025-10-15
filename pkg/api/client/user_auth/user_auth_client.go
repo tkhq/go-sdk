@@ -30,7 +30,11 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateOauth2Credential(params *CreateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauth2CredentialOK, error)
+
 	CreateOauthProviders(params *CreateOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauthProvidersOK, error)
+
+	DeleteOauth2Credential(params *DeleteOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauth2CredentialOK, error)
 
 	DeleteOauthProviders(params *DeleteOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauthProvidersOK, error)
 
@@ -40,11 +44,58 @@ type ClientService interface {
 
 	InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpAuthOK, error)
 
+	ListOauth2Credentials(params *ListOauth2CredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOauth2CredentialsOK, error)
+
 	Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthOK, error)
+
+	Oauth2Authenticate(params *Oauth2AuthenticateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*Oauth2AuthenticateOK, error)
 
 	OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpAuthOK, error)
 
+	UpdateOauth2Credential(params *UpdateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateOauth2CredentialOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateOauth2Credential creates an o auth 2 0 credential
+
+Enable authentication for end users with an OAuth 2.0 provider
+*/
+func (a *Client) CreateOauth2Credential(params *CreateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauth2CredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateOauth2CredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateOauth2Credential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_oauth2_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateOauth2CredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateOauth2CredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateOauth2Credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
@@ -85,6 +136,47 @@ func (a *Client) CreateOauthProviders(params *CreateOauthProvidersParams, authIn
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateOauthProviders: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteOauth2Credential deletes an o auth 2 0 credential
+
+Disable authentication for end users with an OAuth 2.0 provider
+*/
+func (a *Client) DeleteOauth2Credential(params *DeleteOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauth2CredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteOauth2CredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteOauth2Credential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_oauth2_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteOauth2CredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteOauth2CredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteOauth2Credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -253,6 +345,47 @@ func (a *Client) InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientA
 }
 
 /*
+ListOauth2Credentials lists o auth 2 0 credentials
+
+List all OAuth 2.0 credentials within an organization.
+*/
+func (a *Client) ListOauth2Credentials(params *ListOauth2CredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOauth2CredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListOauth2CredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListOauth2Credentials",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_oauth2_credentials",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListOauth2CredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListOauth2CredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ListOauth2Credentials: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 Oauth oauths
 
 Authenticate a user with an OIDC token (Oauth).
@@ -294,6 +427,47 @@ func (a *Client) Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWrite
 }
 
 /*
+Oauth2Authenticate os auth 2 0 authentication
+
+Authenticate a user with an OAuth 2.0 provider and receive an OIDC token to use with the LoginWithOAuth or CreateSubOrganization activities
+*/
+func (a *Client) Oauth2Authenticate(params *Oauth2AuthenticateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*Oauth2AuthenticateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewOauth2AuthenticateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "Oauth2Authenticate",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/oauth2_authenticate",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &Oauth2AuthenticateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*Oauth2AuthenticateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for Oauth2Authenticate: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 OtpAuth os t p auth
 
 Authenticate a user with an OTP code sent via email or SMS.
@@ -331,6 +505,47 @@ func (a *Client) OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoW
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for OtpAuth: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UpdateOauth2Credential updates an o auth 2 0 credential
+
+Update an OAuth 2.0 provider credential
+*/
+func (a *Client) UpdateOauth2Credential(params *UpdateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateOauth2CredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateOauth2CredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateOauth2Credential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_oauth2_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateOauth2CredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateOauth2CredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateOauth2Credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

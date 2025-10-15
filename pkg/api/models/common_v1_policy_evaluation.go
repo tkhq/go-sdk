@@ -13,10 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// UmpV1PolicyEvaluation ump v1 policy evaluation
+// CommonV1PolicyEvaluation common v1 policy evaluation
 //
-// swagger:model ump.v1.PolicyEvaluation
-type UmpV1PolicyEvaluation struct {
+// swagger:model common.v1.PolicyEvaluation
+type CommonV1PolicyEvaluation struct {
 
 	// outcome
 	Outcome Outcome `json:"outcome,omitempty"`
@@ -25,8 +25,8 @@ type UmpV1PolicyEvaluation struct {
 	PolicyID string `json:"policyId,omitempty"`
 }
 
-// Validate validates this ump v1 policy evaluation
-func (m *UmpV1PolicyEvaluation) Validate(formats strfmt.Registry) error {
+// Validate validates this common v1 policy evaluation
+func (m *CommonV1PolicyEvaluation) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOutcome(formats); err != nil {
@@ -39,7 +39,7 @@ func (m *UmpV1PolicyEvaluation) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *UmpV1PolicyEvaluation) validateOutcome(formats strfmt.Registry) error {
+func (m *CommonV1PolicyEvaluation) validateOutcome(formats strfmt.Registry) error {
 	if swag.IsZero(m.Outcome) { // not required
 		return nil
 	}
@@ -56,8 +56,8 @@ func (m *UmpV1PolicyEvaluation) validateOutcome(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this ump v1 policy evaluation based on the context it is used
-func (m *UmpV1PolicyEvaluation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this common v1 policy evaluation based on the context it is used
+func (m *CommonV1PolicyEvaluation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOutcome(ctx, formats); err != nil {
@@ -70,7 +70,7 @@ func (m *UmpV1PolicyEvaluation) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *UmpV1PolicyEvaluation) contextValidateOutcome(ctx context.Context, formats strfmt.Registry) error {
+func (m *CommonV1PolicyEvaluation) contextValidateOutcome(ctx context.Context, formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Outcome) { // not required
 		return nil
@@ -89,7 +89,7 @@ func (m *UmpV1PolicyEvaluation) contextValidateOutcome(ctx context.Context, form
 }
 
 // MarshalBinary interface implementation
-func (m *UmpV1PolicyEvaluation) MarshalBinary() ([]byte, error) {
+func (m *CommonV1PolicyEvaluation) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -97,8 +97,8 @@ func (m *UmpV1PolicyEvaluation) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *UmpV1PolicyEvaluation) UnmarshalBinary(b []byte) error {
-	var res UmpV1PolicyEvaluation
+func (m *CommonV1PolicyEvaluation) UnmarshalBinary(b []byte) error {
+	var res CommonV1PolicyEvaluation
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

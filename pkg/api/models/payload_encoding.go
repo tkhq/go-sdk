@@ -38,6 +38,9 @@ const (
 
 	// PayloadEncodingEip712 captures enum value "PAYLOAD_ENCODING_EIP712"
 	PayloadEncodingEip712 PayloadEncoding = "PAYLOAD_ENCODING_EIP712"
+
+	// PayloadEncodingEip7702Authorization captures enum value "PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"
+	PayloadEncodingEip7702Authorization PayloadEncoding = "PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"
 )
 
 // for schema
@@ -45,7 +48,7 @@ var PayloadEncodingEnum []PayloadEncoding
 
 func init() {
 	var res []PayloadEncoding
-	if err := json.Unmarshal([]byte(`["PAYLOAD_ENCODING_HEXADECIMAL","PAYLOAD_ENCODING_TEXT_UTF8","PAYLOAD_ENCODING_EIP712"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["PAYLOAD_ENCODING_HEXADECIMAL","PAYLOAD_ENCODING_TEXT_UTF8","PAYLOAD_ENCODING_EIP712","PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

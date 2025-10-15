@@ -49,6 +49,9 @@ type InitFiatOnRampIntent struct {
 	// Optional flag to indicate whether to use the sandbox mode to simulate transactions for the on-ramp provider. Default is false.
 	SandboxMode *bool `json:"sandboxMode,omitempty"`
 
+	// Optional MoonPay Widget URL to sign when using MoonPay client SDKs with URL Signing enabled.
+	URLForSignature *string `json:"urlForSignature,omitempty"`
+
 	// Destination wallet address for the buy transaction.
 	// Required: true
 	WalletAddress *string `json:"walletAddress"`

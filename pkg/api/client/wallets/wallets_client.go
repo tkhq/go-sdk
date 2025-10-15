@@ -34,6 +34,8 @@ type ClientService interface {
 
 	CreateWalletAccounts(params *CreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletAccountsOK, error)
 
+	DeleteWalletAccounts(params *DeleteWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletAccountsOK, error)
+
 	DeleteWallets(params *DeleteWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletsOK, error)
 
 	ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error)
@@ -136,6 +138,47 @@ func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authIn
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateWalletAccounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteWalletAccounts deletes wallet accounts
+
+Delete wallet accounts for an organization.
+*/
+func (a *Client) DeleteWalletAccounts(params *DeleteWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletAccountsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteWalletAccountsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteWalletAccounts",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_wallet_accounts",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteWalletAccountsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteWalletAccountsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteWalletAccounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

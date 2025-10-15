@@ -38,7 +38,7 @@ type ActivityV1PolicyEvaluation struct {
 
 	// Detailed evaluation result for each Policy that was run.
 	// Required: true
-	PolicyEvaluations []*UmpV1PolicyEvaluation `json:"policyEvaluations"`
+	PolicyEvaluations []*CommonV1PolicyEvaluation `json:"policyEvaluations"`
 
 	// Unique identifier for the Vote associated with this policy evaluation.
 	// Required: true

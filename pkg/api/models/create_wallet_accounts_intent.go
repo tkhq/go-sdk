@@ -24,6 +24,9 @@ type CreateWalletAccountsIntent struct {
 	// Required: true
 	Accounts []*WalletAccountParams `json:"accounts"`
 
+	// Indicates if the wallet accounts should be persisted. This is helpful if you'd like to see the addresses of different derivation paths without actually creating the accounts. Defaults to true.
+	Persist *bool `json:"persist,omitempty"`
+
 	// Unique identifier for a given Wallet.
 	// Required: true
 	WalletID *string `json:"walletId"`

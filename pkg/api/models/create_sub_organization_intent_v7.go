@@ -44,6 +44,9 @@ type CreateSubOrganizationIntentV7 struct {
 	// Required: true
 	SubOrganizationName *string `json:"subOrganizationName"`
 
+	// Signed JWT containing a unique id, expiry, verification type, contact
+	VerificationToken *string `json:"verificationToken,omitempty"`
+
 	// The wallet to create for the sub-organization
 	Wallet *WalletParams `json:"wallet,omitempty"`
 }

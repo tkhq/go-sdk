@@ -58,6 +58,9 @@ type WalletAccount struct {
 	// Required: true
 	WalletAccountID *string `json:"walletAccountId"`
 
+	// Wallet details for this account. This is only present when include_wallet_details=true.
+	WalletDetails *Wallet `json:"walletDetails,omitempty"`
+
 	// The Wallet the Account was derived from.
 	// Required: true
 	WalletID *string `json:"walletId"`
@@ -100,6 +103,10 @@ func (m *WalletAccount) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateWalletAccountID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWalletDetails(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -261,6 +268,25 @@ func (m *WalletAccount) validateWalletAccountID(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *WalletAccount) validateWalletDetails(formats strfmt.Registry) error {
+	if swag.IsZero(m.WalletDetails) { // not required
+		return nil
+	}
+
+	if m.WalletDetails != nil {
+		if err := m.WalletDetails.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("walletDetails")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("walletDetails")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *WalletAccount) validateWalletID(formats strfmt.Registry) error {
 
 	if err := validate.Required("walletId", "body", m.WalletID); err != nil {
@@ -291,6 +317,10 @@ func (m *WalletAccount) ContextValidate(ctx context.Context, formats strfmt.Regi
 	}
 
 	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWalletDetails(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -377,6 +407,27 @@ func (m *WalletAccount) contextValidateUpdatedAt(ctx context.Context, formats st
 				return ve.ValidateName("updatedAt")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updatedAt")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WalletAccount) contextValidateWalletDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WalletDetails != nil {
+
+		if swag.IsZero(m.WalletDetails) { // not required
+			return nil
+		}
+
+		if err := m.WalletDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("walletDetails")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("walletDetails")
 			}
 			return err
 		}

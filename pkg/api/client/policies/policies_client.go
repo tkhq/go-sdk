@@ -36,6 +36,8 @@ type ClientService interface {
 
 	CreateSmartContractInterface(params *CreateSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSmartContractInterfaceOK, error)
 
+	DeletePolicies(params *DeletePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePoliciesOK, error)
+
 	DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error)
 
 	DeleteSmartContractInterface(params *DeleteSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSmartContractInterfaceOK, error)
@@ -173,6 +175,47 @@ func (a *Client) CreateSmartContractInterface(params *CreateSmartContractInterfa
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for CreateSmartContractInterface: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeletePolicies deletes policies
+
+Delete existing policies.
+*/
+func (a *Client) DeletePolicies(params *DeletePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePoliciesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeletePoliciesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeletePolicies",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_policies",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePoliciesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeletePoliciesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeletePolicies: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
