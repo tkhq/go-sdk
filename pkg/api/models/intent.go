@@ -198,6 +198,9 @@ type Intent struct {
 	// enable auth proxy intent
 	EnableAuthProxyIntent EnableAuthProxyIntent `json:"enableAuthProxyIntent,omitempty"`
 
+	// eth send raw transaction intent
+	EthSendRawTransactionIntent *EthSendRawTransactionIntent `json:"ethSendRawTransactionIntent,omitempty"`
+
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
 
@@ -557,6 +560,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEmailAuthIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEthSendRawTransactionIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1821,6 +1828,25 @@ func (m *Intent) validateEmailAuthIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateEthSendRawTransactionIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendRawTransactionIntent) { // not required
+		return nil
+	}
+
+	if m.EthSendRawTransactionIntent != nil {
+		if err := m.EthSendRawTransactionIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendRawTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendRawTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateExportPrivateKeyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyIntent) { // not required
 		return nil
@@ -2867,6 +2893,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEmailAuthIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEthSendRawTransactionIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -4237,6 +4267,27 @@ func (m *Intent) contextValidateEmailAuthIntentV2(ctx context.Context, formats s
 				return ve.ValidateName("emailAuthIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("emailAuthIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateEthSendRawTransactionIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendRawTransactionIntent != nil {
+
+		if swag.IsZero(m.EthSendRawTransactionIntent) { // not required
+			return nil
+		}
+
+		if err := m.EthSendRawTransactionIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendRawTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendRawTransactionIntent")
 			}
 			return err
 		}
