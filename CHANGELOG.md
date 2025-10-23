@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v0.10.0](https://github.com/tkhq/go-sdk/compare/v0.9.0...v0.10.0) (2025-10-23)
+
+
 ## [v0.9.0](https://github.com/tkhq/go-sdk/compare/v0.8.0...v0.9.0) (2025-10-15)
 
 
@@ -27,10 +30,7 @@
 ## [v0.1.0](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-6...v0.1.0) (2025-01-21)
 
 
-## [v0.0.1-test-6](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-5...v0.0.1-test-6) (2025-01-17)
-
-
-## [v0.0.1-test-5](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-5) (2025-01-17)
+## [v0.0.1-test-6](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-6) (2025-01-17)
 
 
 ## [v0.0.1-test-4](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-3...v0.0.1-test-4) (2025-01-17)
@@ -42,8 +42,5 @@
 ## [v0.0.1-test-2](https://github.com/tkhq/go-sdk/compare/v0.0.1-test...v0.0.1-test-2) (2025-01-17)
 
 
-## [v0.0.1-test](https://github.com/tkhq/go-sdk/compare/v1.0.0...v0.0.1-test) (2025-01-17)
-
-
-## v1.0.0 (2025-01-17)
+## v0.0.1-test (2025-01-17)
 

@@ -165,6 +165,9 @@ type Result struct {
 	// enable auth proxy result
 	EnableAuthProxyResult *EnableAuthProxyResult `json:"enableAuthProxyResult,omitempty"`
 
+	// eth send raw transaction result
+	EthSendRawTransactionResult *EthSendRawTransactionResult `json:"ethSendRawTransactionResult,omitempty"`
+
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
 
@@ -476,6 +479,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEnableAuthProxyResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEthSendRawTransactionResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1545,6 +1552,25 @@ func (m *Result) validateEnableAuthProxyResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateEthSendRawTransactionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendRawTransactionResult) { // not required
+		return nil
+	}
+
+	if m.EthSendRawTransactionResult != nil {
+		if err := m.EthSendRawTransactionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendRawTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendRawTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateExportPrivateKeyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyResult) { // not required
 		return nil
@@ -2441,6 +2467,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEnableAuthProxyResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEthSendRawTransactionResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3598,6 +3628,27 @@ func (m *Result) contextValidateEnableAuthProxyResult(ctx context.Context, forma
 				return ve.ValidateName("enableAuthProxyResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("enableAuthProxyResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateEthSendRawTransactionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendRawTransactionResult != nil {
+
+		if swag.IsZero(m.EthSendRawTransactionResult) { // not required
+			return nil
+		}
+
+		if err := m.EthSendRawTransactionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendRawTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendRawTransactionResult")
 			}
 			return err
 		}

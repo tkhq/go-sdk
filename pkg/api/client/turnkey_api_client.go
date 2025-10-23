@@ -15,6 +15,7 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/app_proof"
 	"github.com/tkhq/go-sdk/pkg/api/client/authenticators"
 	"github.com/tkhq/go-sdk/pkg/api/client/boot_proof"
+	"github.com/tkhq/go-sdk/pkg/api/client/broadcasting"
 	"github.com/tkhq/go-sdk/pkg/api/client/consensus"
 	"github.com/tkhq/go-sdk/pkg/api/client/features"
 	"github.com/tkhq/go-sdk/pkg/api/client/invitations"
@@ -81,6 +82,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *TurnkeyAPI
 	cli.AppProof = app_proof.New(transport, formats)
 	cli.Authenticators = authenticators.New(transport, formats)
 	cli.BootProof = boot_proof.New(transport, formats)
+	cli.Broadcasting = broadcasting.New(transport, formats)
 	cli.Consensus = consensus.New(transport, formats)
 	cli.Features = features.New(transport, formats)
 	cli.Invitations = invitations.New(transport, formats)
@@ -152,6 +154,8 @@ type TurnkeyAPI struct {
 
 	BootProof boot_proof.ClientService
 
+	Broadcasting broadcasting.ClientService
+
 	Consensus consensus.ClientService
 
 	Features features.ClientService
@@ -197,6 +201,7 @@ func (c *TurnkeyAPI) SetTransport(transport runtime.ClientTransport) {
 	c.AppProof.SetTransport(transport)
 	c.Authenticators.SetTransport(transport)
 	c.BootProof.SetTransport(transport)
+	c.Broadcasting.SetTransport(transport)
 	c.Consensus.SetTransport(transport)
 	c.Features.SetTransport(transport)
 	c.Invitations.SetTransport(transport)
