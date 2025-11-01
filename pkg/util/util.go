@@ -18,6 +18,11 @@ func RequestTimestamp() *string {
 	return &ts
 }
 
+// Int32Pointer returns a pointer to the given string.
+func Int32Pointer(i int32) *int32 {
+	return &i
+}
+
 // StringPointer returns a pointer to the given string.
 func StringPointer(s string) *string {
 	return &s
