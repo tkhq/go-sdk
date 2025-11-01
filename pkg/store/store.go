@@ -2,8 +2,6 @@
 package store
 
 import (
-	"reflect"
-
 	"github.com/pkg/errors"
 
 	"github.com/tkhq/go-sdk/pkg/apikey"
@@ -20,40 +18,44 @@ type Store[T common.IKey[M], M common.IMetadata] interface {
 	Store(name string, key common.IKey[M]) error
 }
 
-// KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function.
-type KeyFactory[T common.IKey[M], M common.IMetadata] struct{}
+// KeyFactory is a generic factory that wraps a concrete TurnkeyKeyFactory implementation.
+// This eliminates the need for reflection by using the strategy pattern with generics.
+type KeyFactory[T common.IKey[M], M common.IMetadata] struct {
+	factory common.TurnkeyKeyFactory[T, M]
+}
+
+// NewKeyFactory creates a new KeyFactory with the provided concrete factory implementation.
+func NewKeyFactory[T common.IKey[M], M common.IMetadata](factory common.TurnkeyKeyFactory[T, M]) KeyFactory[T, M] {
+	return KeyFactory[T, M]{factory: factory}
+}
 
 // FromTurnkeyPrivateKey converts a Turnkey-encoded private key string to a key.
+// This method delegates to the concrete factory implementation, eliminating reflection.
 func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
+	return kf.factory.FromTurnkeyPrivateKey(data)
+}
+
+// DeprecatedKeyFactory is the old reflection-based factory for backward compatibility.
+// Deprecated: Use NewKeyFactory with concrete factory implementations instead.
+type DeprecatedKeyFactory[T common.IKey[M], M common.IMetadata] struct{}
+
+// FromTurnkeyPrivateKey converts a Turnkey-encoded private key string to a key using reflection.
+// Deprecated: Use NewKeyFactory with concrete factory implementations instead.
+func (kf DeprecatedKeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
+	// For backward compatibility, detect the type and delegate to the appropriate factory
 	var instance T
-
-	// Determine type T and call the corresponding FromTurnkeyPrivateKey function
-	typeOfT := reflect.TypeOf(instance)
-	if typeOfT.Kind() == reflect.Ptr {
-		typeOfT = typeOfT.Elem()
+	
+	// Create the appropriate factory based on the concrete type
+	if _, ok := any(instance).(*apikey.Key); ok {
+		factory := NewKeyFactory[T, M](any(apikey.Factory{}).(common.TurnkeyKeyFactory[T, M]))
+		return factory.FromTurnkeyPrivateKey(data)
 	}
-
-	if typeOfT == reflect.TypeOf(apikey.Key{}) {
-		keyWithoutSuffix, scheme, err := apikey.ExtractSignatureSchemeFromSuffixedPrivateKey(data)
-		if err != nil {
-			return instance, err
-		}
-
-		key, err := apikey.FromTurnkeyPrivateKey(keyWithoutSuffix, scheme)
-		if err != nil {
-			return instance, err
-		}
-		// Since T is an interface, we need to return the concrete type that implements T.
-		// The conversion to T happens automatically if the concrete type satisfies T.
-		return (interface{}(key).(T)), nil
-	} else if typeOfT == reflect.TypeOf(encryptionkey.Key{}) {
-		key, err := encryptionkey.FromTurnkeyPrivateKey(data)
-		if err != nil {
-			return instance, err
-		}
-		// Same automatic conversion to T applies here.
-		return (interface{}(key).(T)), nil
+	
+	if _, ok := any(instance).(*encryptionkey.Key); ok {
+		factory := NewKeyFactory[T, M](any(encryptionkey.Factory{}).(common.TurnkeyKeyFactory[T, M]))
+		return factory.FromTurnkeyPrivateKey(data)
 	}
-
-	return instance, errors.Errorf("unsupported key type: %v", reflect.TypeOf(instance))
+	
+	var zero T
+	return zero, errors.New("unsupported key type: use NewKeyFactory with appropriate concrete factory")
 }
