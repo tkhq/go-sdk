@@ -201,6 +201,9 @@ type Intent struct {
 	// eth send raw transaction intent
 	EthSendRawTransactionIntent *EthSendRawTransactionIntent `json:"ethSendRawTransactionIntent,omitempty"`
 
+	// eth send transaction intent
+	EthSendTransactionIntent *EthSendTransactionIntent `json:"ethSendTransactionIntent,omitempty"`
+
 	// export private key intent
 	ExportPrivateKeyIntent *ExportPrivateKeyIntent `json:"exportPrivateKeyIntent,omitempty"`
 
@@ -564,6 +567,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEthSendRawTransactionIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEthSendTransactionIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1847,6 +1854,25 @@ func (m *Intent) validateEthSendRawTransactionIntent(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Intent) validateEthSendTransactionIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendTransactionIntent) { // not required
+		return nil
+	}
+
+	if m.EthSendTransactionIntent != nil {
+		if err := m.EthSendTransactionIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateExportPrivateKeyIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyIntent) { // not required
 		return nil
@@ -2897,6 +2923,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEthSendRawTransactionIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEthSendTransactionIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -4288,6 +4318,27 @@ func (m *Intent) contextValidateEthSendRawTransactionIntent(ctx context.Context,
 				return ve.ValidateName("ethSendRawTransactionIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("ethSendRawTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateEthSendTransactionIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendTransactionIntent != nil {
+
+		if swag.IsZero(m.EthSendTransactionIntent) { // not required
+			return nil
+		}
+
+		if err := m.EthSendTransactionIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionIntent")
 			}
 			return err
 		}

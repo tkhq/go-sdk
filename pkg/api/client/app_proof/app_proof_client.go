@@ -38,7 +38,7 @@ type ClientService interface {
 /*
 GetAppProofs lists app proofs for an activity
 
-List the app proofs for the given activity.
+List the App Proofs for the given activity.
 */
 func (a *Client) GetAppProofs(params *GetAppProofsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAppProofsOK, error) {
 	// TODO: Validate the params before sending
