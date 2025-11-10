@@ -20,10 +20,10 @@ import (
 // swagger:model EthSendRawTransactionIntent
 type EthSendRawTransactionIntent struct {
 
-	// The CAIP-2 chain ID.
+	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	// Required: true
 	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532]
-	ChainID *string `json:"chainId"`
+	Caip2 *string `json:"caip2"`
 
 	// The raw, signed transaction to be sent.
 	// Required: true
@@ -34,7 +34,7 @@ type EthSendRawTransactionIntent struct {
 func (m *EthSendRawTransactionIntent) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateChainID(formats); err != nil {
+	if err := m.validateCaip2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -48,7 +48,7 @@ func (m *EthSendRawTransactionIntent) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-var ethSendRawTransactionIntentTypeChainIDPropEnum []interface{}
+var ethSendRawTransactionIntentTypeCaip2PropEnum []interface{}
 
 func init() {
 	var res []string
@@ -56,41 +56,41 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		ethSendRawTransactionIntentTypeChainIDPropEnum = append(ethSendRawTransactionIntentTypeChainIDPropEnum, v)
+		ethSendRawTransactionIntentTypeCaip2PropEnum = append(ethSendRawTransactionIntentTypeCaip2PropEnum, v)
 	}
 }
 
 const (
 
-	// EthSendRawTransactionIntentChainIDEip1551 captures enum value "eip155:1"
-	EthSendRawTransactionIntentChainIDEip1551 string = "eip155:1"
+	// EthSendRawTransactionIntentCaip2Eip1551 captures enum value "eip155:1"
+	EthSendRawTransactionIntentCaip2Eip1551 string = "eip155:1"
 
-	// EthSendRawTransactionIntentChainIDEip15511155111 captures enum value "eip155:11155111"
-	EthSendRawTransactionIntentChainIDEip15511155111 string = "eip155:11155111"
+	// EthSendRawTransactionIntentCaip2Eip15511155111 captures enum value "eip155:11155111"
+	EthSendRawTransactionIntentCaip2Eip15511155111 string = "eip155:11155111"
 
-	// EthSendRawTransactionIntentChainIDEip1558453 captures enum value "eip155:8453"
-	EthSendRawTransactionIntentChainIDEip1558453 string = "eip155:8453"
+	// EthSendRawTransactionIntentCaip2Eip1558453 captures enum value "eip155:8453"
+	EthSendRawTransactionIntentCaip2Eip1558453 string = "eip155:8453"
 
-	// EthSendRawTransactionIntentChainIDEip15584532 captures enum value "eip155:84532"
-	EthSendRawTransactionIntentChainIDEip15584532 string = "eip155:84532"
+	// EthSendRawTransactionIntentCaip2Eip15584532 captures enum value "eip155:84532"
+	EthSendRawTransactionIntentCaip2Eip15584532 string = "eip155:84532"
 )
 
 // prop value enum
-func (m *EthSendRawTransactionIntent) validateChainIDEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, ethSendRawTransactionIntentTypeChainIDPropEnum, true); err != nil {
+func (m *EthSendRawTransactionIntent) validateCaip2Enum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, ethSendRawTransactionIntentTypeCaip2PropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *EthSendRawTransactionIntent) validateChainID(formats strfmt.Registry) error {
+func (m *EthSendRawTransactionIntent) validateCaip2(formats strfmt.Registry) error {
 
-	if err := validate.Required("chainId", "body", m.ChainID); err != nil {
+	if err := validate.Required("caip2", "body", m.Caip2); err != nil {
 		return err
 	}
 
 	// value enum
-	if err := m.validateChainIDEnum("chainId", "body", *m.ChainID); err != nil {
+	if err := m.validateCaip2Enum("caip2", "body", *m.Caip2); err != nil {
 		return err
 	}
 
