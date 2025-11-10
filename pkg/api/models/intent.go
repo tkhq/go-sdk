@@ -45,6 +45,9 @@ type Intent struct {
 	// create authenticators intent v2
 	CreateAuthenticatorsIntentV2 *CreateAuthenticatorsIntentV2 `json:"createAuthenticatorsIntentV2,omitempty"`
 
+	// create fiat on ramp credential intent
+	CreateFiatOnRampCredentialIntent *CreateFiatOnRampCredentialIntent `json:"createFiatOnRampCredentialIntent,omitempty"`
+
 	// create invitations intent
 	CreateInvitationsIntent *CreateInvitationsIntent `json:"createInvitationsIntent,omitempty"`
 
@@ -137,6 +140,9 @@ type Intent struct {
 
 	// delete authenticators intent
 	DeleteAuthenticatorsIntent *DeleteAuthenticatorsIntent `json:"deleteAuthenticatorsIntent,omitempty"`
+
+	// delete fiat on ramp credential intent
+	DeleteFiatOnRampCredentialIntent *DeleteFiatOnRampCredentialIntent `json:"deleteFiatOnRampCredentialIntent,omitempty"`
 
 	// delete invitation intent
 	DeleteInvitationIntent *DeleteInvitationIntent `json:"deleteInvitationIntent,omitempty"`
@@ -297,6 +303,9 @@ type Intent struct {
 	// update auth proxy config intent
 	UpdateAuthProxyConfigIntent *UpdateAuthProxyConfigIntent `json:"updateAuthProxyConfigIntent,omitempty"`
 
+	// update fiat on ramp credential intent
+	UpdateFiatOnRampCredentialIntent *UpdateFiatOnRampCredentialIntent `json:"updateFiatOnRampCredentialIntent,omitempty"`
+
 	// update oauth2 credential intent
 	UpdateOauth2CredentialIntent *UpdateOauth2CredentialIntent `json:"updateOauth2CredentialIntent,omitempty"`
 
@@ -371,6 +380,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateAuthenticatorsIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateFiatOnRampCredentialIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -491,6 +504,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDeleteAuthenticatorsIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeleteFiatOnRampCredentialIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -695,6 +712,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateAuthProxyConfigIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateFiatOnRampCredentialIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -915,6 +936,25 @@ func (m *Intent) validateCreateAuthenticatorsIntentV2(formats strfmt.Registry) e
 				return ve.ValidateName("createAuthenticatorsIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createAuthenticatorsIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateFiatOnRampCredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateFiatOnRampCredentialIntent) { // not required
+		return nil
+	}
+
+	if m.CreateFiatOnRampCredentialIntent != nil {
+		if err := m.CreateFiatOnRampCredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createFiatOnRampCredentialIntent")
 			}
 			return err
 		}
@@ -1485,6 +1525,25 @@ func (m *Intent) validateDeleteAuthenticatorsIntent(formats strfmt.Registry) err
 				return ve.ValidateName("deleteAuthenticatorsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteAuthenticatorsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateDeleteFiatOnRampCredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteFiatOnRampCredentialIntent) { // not required
+		return nil
+	}
+
+	if m.DeleteFiatOnRampCredentialIntent != nil {
+		if err := m.DeleteFiatOnRampCredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteFiatOnRampCredentialIntent")
 			}
 			return err
 		}
@@ -2462,6 +2521,25 @@ func (m *Intent) validateUpdateAuthProxyConfigIntent(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Intent) validateUpdateFiatOnRampCredentialIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateFiatOnRampCredentialIntent) { // not required
+		return nil
+	}
+
+	if m.UpdateFiatOnRampCredentialIntent != nil {
+		if err := m.UpdateFiatOnRampCredentialIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateFiatOnRampCredentialIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateUpdateOauth2CredentialIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdateOauth2CredentialIntent) { // not required
 		return nil
@@ -2730,6 +2808,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateFiatOnRampCredentialIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateInvitationsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2847,6 +2929,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateDeleteAuthenticatorsIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteFiatOnRampCredentialIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3051,6 +3137,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateAuthProxyConfigIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateFiatOnRampCredentialIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3289,6 +3379,27 @@ func (m *Intent) contextValidateCreateAuthenticatorsIntentV2(ctx context.Context
 				return ve.ValidateName("createAuthenticatorsIntentV2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createAuthenticatorsIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateFiatOnRampCredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateFiatOnRampCredentialIntent != nil {
+
+		if swag.IsZero(m.CreateFiatOnRampCredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateFiatOnRampCredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createFiatOnRampCredentialIntent")
 			}
 			return err
 		}
@@ -3919,6 +4030,27 @@ func (m *Intent) contextValidateDeleteAuthenticatorsIntent(ctx context.Context, 
 				return ve.ValidateName("deleteAuthenticatorsIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("deleteAuthenticatorsIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateDeleteFiatOnRampCredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteFiatOnRampCredentialIntent != nil {
+
+		if swag.IsZero(m.DeleteFiatOnRampCredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.DeleteFiatOnRampCredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteFiatOnRampCredentialIntent")
 			}
 			return err
 		}
@@ -4990,6 +5122,27 @@ func (m *Intent) contextValidateUpdateAuthProxyConfigIntent(ctx context.Context,
 				return ve.ValidateName("updateAuthProxyConfigIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateAuthProxyConfigIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpdateFiatOnRampCredentialIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateFiatOnRampCredentialIntent != nil {
+
+		if swag.IsZero(m.UpdateFiatOnRampCredentialIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpdateFiatOnRampCredentialIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateFiatOnRampCredentialIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateFiatOnRampCredentialIntent")
 			}
 			return err
 		}

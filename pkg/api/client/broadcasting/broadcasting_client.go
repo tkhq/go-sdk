@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	EthSendRawTransaction(params *EthSendRawTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendRawTransactionOK, error)
 
+	EthSendTransaction(params *EthSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendTransactionOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -73,6 +75,47 @@ func (a *Client) EthSendRawTransaction(params *EthSendRawTransactionParams, auth
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for EthSendRawTransaction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+EthSendTransaction submits a transaction intent for broadcasting
+
+Submit a transaction intent describing a transaction you would like to broadcast.
+*/
+func (a *Client) EthSendTransaction(params *EthSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendTransactionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewEthSendTransactionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "EthSendTransaction",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/eth_send_transaction",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &EthSendTransactionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*EthSendTransactionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for EthSendTransaction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

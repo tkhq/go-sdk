@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -21,7 +22,8 @@ type EthSendTransactionIntent struct {
 
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	// Required: true
-	ChainID *string `json:"chainId"`
+	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532]
+	Caip2 *string `json:"caip2"`
 
 	// Hex-encoded call data for contract interactions.
 	Data *string `json:"data,omitempty"`
@@ -64,7 +66,7 @@ type EthSendTransactionIntent struct {
 func (m *EthSendTransactionIntent) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateChainID(formats); err != nil {
+	if err := m.validateCaip2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -98,9 +100,49 @@ func (m *EthSendTransactionIntent) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EthSendTransactionIntent) validateChainID(formats strfmt.Registry) error {
+var ethSendTransactionIntentTypeCaip2PropEnum []interface{}
 
-	if err := validate.Required("chainId", "body", m.ChainID); err != nil {
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		ethSendTransactionIntentTypeCaip2PropEnum = append(ethSendTransactionIntentTypeCaip2PropEnum, v)
+	}
+}
+
+const (
+
+	// EthSendTransactionIntentCaip2Eip1551 captures enum value "eip155:1"
+	EthSendTransactionIntentCaip2Eip1551 string = "eip155:1"
+
+	// EthSendTransactionIntentCaip2Eip15511155111 captures enum value "eip155:11155111"
+	EthSendTransactionIntentCaip2Eip15511155111 string = "eip155:11155111"
+
+	// EthSendTransactionIntentCaip2Eip1558453 captures enum value "eip155:8453"
+	EthSendTransactionIntentCaip2Eip1558453 string = "eip155:8453"
+
+	// EthSendTransactionIntentCaip2Eip15584532 captures enum value "eip155:84532"
+	EthSendTransactionIntentCaip2Eip15584532 string = "eip155:84532"
+)
+
+// prop value enum
+func (m *EthSendTransactionIntent) validateCaip2Enum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, ethSendTransactionIntentTypeCaip2PropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *EthSendTransactionIntent) validateCaip2(formats strfmt.Registry) error {
+
+	if err := validate.Required("caip2", "body", m.Caip2); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateCaip2Enum("caip2", "body", *m.Caip2); err != nil {
 		return err
 	}
 

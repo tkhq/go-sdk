@@ -30,9 +30,142 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateFiatOnRampCredential(params *CreateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateFiatOnRampCredentialOK, error)
+
+	DeleteFiatOnRampCredential(params *DeleteFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteFiatOnRampCredentialOK, error)
+
+	GetOnRampTransactionStatus(params *GetOnRampTransactionStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOnRampTransactionStatusOK, error)
+
 	InitFiatOnRamp(params *InitFiatOnRampParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitFiatOnRampOK, error)
 
+	ListFiatOnRampCredentials(params *ListFiatOnRampCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListFiatOnRampCredentialsOK, error)
+
+	UpdateFiatOnRampCredential(params *UpdateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateFiatOnRampCredentialOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateFiatOnRampCredential creates a fiat on ramp credential
+
+Create a fiat on ramp provider credential
+*/
+func (a *Client) CreateFiatOnRampCredential(params *CreateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateFiatOnRampCredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateFiatOnRampCredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateFiatOnRampCredential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/create_fiat_on_ramp_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateFiatOnRampCredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateFiatOnRampCredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateFiatOnRampCredential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+DeleteFiatOnRampCredential deletes a fiat on ramp credential
+
+Delete a fiat on ramp provider credential
+*/
+func (a *Client) DeleteFiatOnRampCredential(params *DeleteFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteFiatOnRampCredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteFiatOnRampCredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "DeleteFiatOnRampCredential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/delete_fiat_on_ramp_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteFiatOnRampCredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteFiatOnRampCredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for DeleteFiatOnRampCredential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetOnRampTransactionStatus gets on ramp transaction status
+
+Get the status of an on ramp transaction.
+*/
+func (a *Client) GetOnRampTransactionStatus(params *GetOnRampTransactionStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOnRampTransactionStatusOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetOnRampTransactionStatusParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetOnRampTransactionStatus",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_onramp_transaction_status",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetOnRampTransactionStatusReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetOnRampTransactionStatusOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetOnRampTransactionStatus: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*
@@ -73,6 +206,88 @@ func (a *Client) InitFiatOnRamp(params *InitFiatOnRampParams, authInfo runtime.C
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for InitFiatOnRamp: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListFiatOnRampCredentials lists fiat on ramp credentials
+
+List all fiat on ramp provider credentials within an organization.
+*/
+func (a *Client) ListFiatOnRampCredentials(params *ListFiatOnRampCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListFiatOnRampCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListFiatOnRampCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListFiatOnRampCredentials",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_fiat_on_ramp_credentials",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListFiatOnRampCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListFiatOnRampCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ListFiatOnRampCredentials: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+UpdateFiatOnRampCredential updates a fiat on ramp credential
+
+Update a fiat on ramp provider credential
+*/
+func (a *Client) UpdateFiatOnRampCredential(params *UpdateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateFiatOnRampCredentialOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewUpdateFiatOnRampCredentialParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "UpdateFiatOnRampCredential",
+		Method:             "POST",
+		PathPattern:        "/public/v1/submit/update_fiat_on_ramp_credential",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &UpdateFiatOnRampCredentialReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*UpdateFiatOnRampCredentialOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for UpdateFiatOnRampCredential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

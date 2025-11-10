@@ -33,6 +33,9 @@ type Result struct {
 	// create authenticators result
 	CreateAuthenticatorsResult *CreateAuthenticatorsResult `json:"createAuthenticatorsResult,omitempty"`
 
+	// create fiat on ramp credential result
+	CreateFiatOnRampCredentialResult *CreateFiatOnRampCredentialResult `json:"createFiatOnRampCredentialResult,omitempty"`
+
 	// create invitations result
 	CreateInvitationsResult *CreateInvitationsResult `json:"createInvitationsResult,omitempty"`
 
@@ -108,6 +111,9 @@ type Result struct {
 	// delete authenticators result
 	DeleteAuthenticatorsResult *DeleteAuthenticatorsResult `json:"deleteAuthenticatorsResult,omitempty"`
 
+	// delete fiat on ramp credential result
+	DeleteFiatOnRampCredentialResult *DeleteFiatOnRampCredentialResult `json:"deleteFiatOnRampCredentialResult,omitempty"`
+
 	// delete invitation result
 	DeleteInvitationResult *DeleteInvitationResult `json:"deleteInvitationResult,omitempty"`
 
@@ -167,6 +173,9 @@ type Result struct {
 
 	// eth send raw transaction result
 	EthSendRawTransactionResult *EthSendRawTransactionResult `json:"ethSendRawTransactionResult,omitempty"`
+
+	// eth send transaction result
+	EthSendTransactionResult *EthSendTransactionResult `json:"ethSendTransactionResult,omitempty"`
 
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
@@ -249,6 +258,9 @@ type Result struct {
 	// update auth proxy config result
 	UpdateAuthProxyConfigResult *UpdateAuthProxyConfigResult `json:"updateAuthProxyConfigResult,omitempty"`
 
+	// update fiat on ramp credential result
+	UpdateFiatOnRampCredentialResult *UpdateFiatOnRampCredentialResult `json:"updateFiatOnRampCredentialResult,omitempty"`
+
 	// update oauth2 credential result
 	UpdateOauth2CredentialResult *UpdateOauth2CredentialResult `json:"updateOauth2CredentialResult,omitempty"`
 
@@ -307,6 +319,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateAuthenticatorsResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateFiatOnRampCredentialResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -410,6 +426,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeleteFiatOnRampCredentialResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDeleteInvitationResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -483,6 +503,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEthSendRawTransactionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEthSendTransactionResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -587,6 +611,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateAuthProxyConfigResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdateFiatOnRampCredentialResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -727,6 +755,25 @@ func (m *Result) validateCreateAuthenticatorsResult(formats strfmt.Registry) err
 				return ve.ValidateName("createAuthenticatorsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createAuthenticatorsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateFiatOnRampCredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateFiatOnRampCredentialResult) { // not required
+		return nil
+	}
+
+	if m.CreateFiatOnRampCredentialResult != nil {
+		if err := m.CreateFiatOnRampCredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createFiatOnRampCredentialResult")
 			}
 			return err
 		}
@@ -1210,6 +1257,25 @@ func (m *Result) validateDeleteAuthenticatorsResult(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *Result) validateDeleteFiatOnRampCredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.DeleteFiatOnRampCredentialResult) { // not required
+		return nil
+	}
+
+	if m.DeleteFiatOnRampCredentialResult != nil {
+		if err := m.DeleteFiatOnRampCredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteFiatOnRampCredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateDeleteInvitationResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeleteInvitationResult) { // not required
 		return nil
@@ -1563,6 +1629,25 @@ func (m *Result) validateEthSendRawTransactionResult(formats strfmt.Registry) er
 				return ve.ValidateName("ethSendRawTransactionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("ethSendRawTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateEthSendTransactionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendTransactionResult) { // not required
+		return nil
+	}
+
+	if m.EthSendTransactionResult != nil {
+		if err := m.EthSendTransactionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
 			}
 			return err
 		}
@@ -2065,6 +2150,25 @@ func (m *Result) validateUpdateAuthProxyConfigResult(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Result) validateUpdateFiatOnRampCredentialResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpdateFiatOnRampCredentialResult) { // not required
+		return nil
+	}
+
+	if m.UpdateFiatOnRampCredentialResult != nil {
+		if err := m.UpdateFiatOnRampCredentialResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateFiatOnRampCredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateUpdateOauth2CredentialResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.UpdateOauth2CredentialResult) { // not required
 		return nil
@@ -2298,6 +2402,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateFiatOnRampCredentialResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateInvitationsResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2398,6 +2506,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDeleteFiatOnRampCredentialResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDeleteInvitationResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2471,6 +2583,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEthSendRawTransactionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEthSendTransactionResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2575,6 +2691,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateAuthProxyConfigResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdateFiatOnRampCredentialResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2725,6 +2845,27 @@ func (m *Result) contextValidateCreateAuthenticatorsResult(ctx context.Context, 
 				return ve.ValidateName("createAuthenticatorsResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createAuthenticatorsResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateFiatOnRampCredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateFiatOnRampCredentialResult != nil {
+
+		if swag.IsZero(m.CreateFiatOnRampCredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateFiatOnRampCredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createFiatOnRampCredentialResult")
 			}
 			return err
 		}
@@ -3258,6 +3399,27 @@ func (m *Result) contextValidateDeleteAuthenticatorsResult(ctx context.Context, 
 	return nil
 }
 
+func (m *Result) contextValidateDeleteFiatOnRampCredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteFiatOnRampCredentialResult != nil {
+
+		if swag.IsZero(m.DeleteFiatOnRampCredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.DeleteFiatOnRampCredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("deleteFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("deleteFiatOnRampCredentialResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateDeleteInvitationResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeleteInvitationResult != nil {
@@ -3649,6 +3811,27 @@ func (m *Result) contextValidateEthSendRawTransactionResult(ctx context.Context,
 				return ve.ValidateName("ethSendRawTransactionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("ethSendRawTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateEthSendTransactionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendTransactionResult != nil {
+
+		if swag.IsZero(m.EthSendTransactionResult) { // not required
+			return nil
+		}
+
+		if err := m.EthSendTransactionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
 			}
 			return err
 		}
@@ -4195,6 +4378,27 @@ func (m *Result) contextValidateUpdateAuthProxyConfigResult(ctx context.Context,
 				return ve.ValidateName("updateAuthProxyConfigResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateAuthProxyConfigResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpdateFiatOnRampCredentialResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdateFiatOnRampCredentialResult != nil {
+
+		if swag.IsZero(m.UpdateFiatOnRampCredentialResult) { // not required
+			return nil
+		}
+
+		if err := m.UpdateFiatOnRampCredentialResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updateFiatOnRampCredentialResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("updateFiatOnRampCredentialResult")
 			}
 			return err
 		}
