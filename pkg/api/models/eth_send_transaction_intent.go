@@ -35,21 +35,20 @@ type EthSendTransactionIntent struct {
 	// Required: true
 	From *string `json:"from"`
 
-	// Maximum amount of gas to use for this transaction.
-	// Required: true
-	GasLimit *string `json:"gasLimit"`
+	// Maximum amount of gas to use for this transaction, for EIP-1559 transactions.
+	GasLimit *string `json:"gasLimit,omitempty"`
 
-	// Maximum total fee per gas unit (base fee + priority fee) in wei, for EIP-1559 transactions.
-	// Required: true
-	MaxFeePerGas *string `json:"maxFeePerGas"`
+	// The gas station delegate contract nonce. Only used when sponsor=true.
+	GasStationNonce *string `json:"gasStationNonce,omitempty"`
 
-	// Maximum priority fee (tip) per gas unit in wei, for EIP-1559 transactions.
-	// Required: true
-	MaxPriorityFeePerGas *string `json:"maxPriorityFeePerGas"`
+	// Maximum total fee per gas unit (base fee + priority fee) in wei. Required for non-sponsored (EIP-1559) transactions. Not used for sponsored transactions.
+	MaxFeePerGas *string `json:"maxFeePerGas,omitempty"`
 
-	// Transaction nonce.
-	// Required: true
-	Nonce *string `json:"nonce"`
+	// Maximum priority fee (tip) per gas unit in wei. Required for non-sponsored (EIP-1559) transactions. Not used for sponsored transactions.
+	MaxPriorityFeePerGas *string `json:"maxPriorityFeePerGas,omitempty"`
+
+	// Transaction nonce, for EIP-1559 and Turnkey Gas Station authorizations.
+	Nonce *string `json:"nonce,omitempty"`
 
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
@@ -71,22 +70,6 @@ func (m *EthSendTransactionIntent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateFrom(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateGasLimit(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateMaxFeePerGas(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateMaxPriorityFeePerGas(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateNonce(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -152,42 +135,6 @@ func (m *EthSendTransactionIntent) validateCaip2(formats strfmt.Registry) error 
 func (m *EthSendTransactionIntent) validateFrom(formats strfmt.Registry) error {
 
 	if err := validate.Required("from", "body", m.From); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EthSendTransactionIntent) validateGasLimit(formats strfmt.Registry) error {
-
-	if err := validate.Required("gasLimit", "body", m.GasLimit); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EthSendTransactionIntent) validateMaxFeePerGas(formats strfmt.Registry) error {
-
-	if err := validate.Required("maxFeePerGas", "body", m.MaxFeePerGas); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EthSendTransactionIntent) validateMaxPriorityFeePerGas(formats strfmt.Registry) error {
-
-	if err := validate.Required("maxPriorityFeePerGas", "body", m.MaxPriorityFeePerGas); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *EthSendTransactionIntent) validateNonce(formats strfmt.Registry) error {
-
-	if err := validate.Required("nonce", "body", m.Nonce); err != nil {
 		return err
 	}
 

@@ -201,6 +201,9 @@ type Intent struct {
 	// email auth intent v2
 	EmailAuthIntentV2 *EmailAuthIntentV2 `json:"emailAuthIntentV2,omitempty"`
 
+	// email auth intent v3
+	EmailAuthIntentV3 *EmailAuthIntentV3 `json:"emailAuthIntentV3,omitempty"`
+
 	// enable auth proxy intent
 	EnableAuthProxyIntent EnableAuthProxyIntent `json:"enableAuthProxyIntent,omitempty"`
 
@@ -240,11 +243,20 @@ type Intent struct {
 	// init otp auth intent v2
 	InitOtpAuthIntentV2 *InitOtpAuthIntentV2 `json:"initOtpAuthIntentV2,omitempty"`
 
+	// init otp auth intent v3
+	InitOtpAuthIntentV3 *InitOtpAuthIntentV3 `json:"initOtpAuthIntentV3,omitempty"`
+
 	// init otp intent
 	InitOtpIntent *InitOtpIntent `json:"initOtpIntent,omitempty"`
 
+	// init otp intent v2
+	InitOtpIntentV2 *InitOtpIntentV2 `json:"initOtpIntentV2,omitempty"`
+
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
+
+	// init user email recovery intent v2
+	InitUserEmailRecoveryIntentV2 *InitUserEmailRecoveryIntentV2 `json:"initUserEmailRecoveryIntentV2,omitempty"`
 
 	// oauth2 authenticate intent
 	Oauth2AuthenticateIntent *Oauth2AuthenticateIntent `json:"oauth2AuthenticateIntent,omitempty"`
@@ -583,6 +595,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateEmailAuthIntentV3(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateEthSendRawTransactionIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -631,11 +647,23 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpAuthIntentV3(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitOtpIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpIntentV2(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitUserEmailRecoveryIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1894,6 +1922,25 @@ func (m *Intent) validateEmailAuthIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateEmailAuthIntentV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.EmailAuthIntentV3) { // not required
+		return nil
+	}
+
+	if m.EmailAuthIntentV3 != nil {
+		if err := m.EmailAuthIntentV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateEthSendRawTransactionIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.EthSendRawTransactionIntent) { // not required
 		return nil
@@ -2122,6 +2169,25 @@ func (m *Intent) validateInitOtpAuthIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitOtpAuthIntentV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpAuthIntentV3) { // not required
+		return nil
+	}
+
+	if m.InitOtpAuthIntentV3 != nil {
+		if err := m.InitOtpAuthIntentV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitOtpIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitOtpIntent) { // not required
 		return nil
@@ -2141,6 +2207,25 @@ func (m *Intent) validateInitOtpIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitOtpIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpIntentV2) { // not required
+		return nil
+	}
+
+	if m.InitOtpIntentV2 != nil {
+		if err := m.InitOtpIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
 		return nil
@@ -2152,6 +2237,25 @@ func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) er
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateInitUserEmailRecoveryIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitUserEmailRecoveryIntentV2) { // not required
+		return nil
+	}
+
+	if m.InitUserEmailRecoveryIntentV2 != nil {
+		if err := m.InitUserEmailRecoveryIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initUserEmailRecoveryIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initUserEmailRecoveryIntentV2")
 			}
 			return err
 		}
@@ -3008,6 +3112,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateEmailAuthIntentV3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateEthSendRawTransactionIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -3056,11 +3164,23 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpAuthIntentV3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitOtpIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpIntentV2(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitUserEmailRecoveryIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -4437,6 +4557,27 @@ func (m *Intent) contextValidateEmailAuthIntentV2(ctx context.Context, formats s
 	return nil
 }
 
+func (m *Intent) contextValidateEmailAuthIntentV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailAuthIntentV3 != nil {
+
+		if swag.IsZero(m.EmailAuthIntentV3) { // not required
+			return nil
+		}
+
+		if err := m.EmailAuthIntentV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("emailAuthIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("emailAuthIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateEthSendRawTransactionIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EthSendRawTransactionIntent != nil {
@@ -4689,6 +4830,27 @@ func (m *Intent) contextValidateInitOtpAuthIntentV2(ctx context.Context, formats
 	return nil
 }
 
+func (m *Intent) contextValidateInitOtpAuthIntentV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpAuthIntentV3 != nil {
+
+		if swag.IsZero(m.InitOtpAuthIntentV3) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpAuthIntentV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpAuthIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpAuthIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitOtpIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitOtpIntent != nil {
@@ -4710,6 +4872,27 @@ func (m *Intent) contextValidateInitOtpIntent(ctx context.Context, formats strfm
 	return nil
 }
 
+func (m *Intent) contextValidateInitOtpIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpIntentV2 != nil {
+
+		if swag.IsZero(m.InitOtpIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryIntent != nil {
@@ -4723,6 +4906,27 @@ func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context,
 				return ve.ValidateName("initUserEmailRecoveryIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initUserEmailRecoveryIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateInitUserEmailRecoveryIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitUserEmailRecoveryIntentV2 != nil {
+
+		if swag.IsZero(m.InitUserEmailRecoveryIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.InitUserEmailRecoveryIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initUserEmailRecoveryIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initUserEmailRecoveryIntentV2")
 			}
 			return err
 		}
