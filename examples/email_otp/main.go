@@ -77,7 +77,7 @@ func sendOTP() (string, error) {
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(parentOrgID),
 		Type:           (*string)(models.ActivityTypeInitOtp.Pointer()),
-		Parameters: &models.InitOtpIntent{
+		Parameters: &models.InitOtpIntentV2{
 			Contact: util.StringPointer(emailAddress),
 			OtpType: &otpType,
 		},
