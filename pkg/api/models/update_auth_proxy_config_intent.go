@@ -27,7 +27,7 @@ type UpdateAuthProxyConfigIntent struct {
 	// Template ID for email-auth messages.
 	EmailAuthTemplateID *string `json:"emailAuthTemplateId,omitempty"`
 
-	// Overrides for auth-related email content.
+	// Optional parameters for customizing emails. If not provided, the default email will be used.
 	EmailCustomizationParams *EmailCustomizationParams `json:"emailCustomizationParams,omitempty"`
 
 	// Enable alphanumeric OTP codes.
