@@ -26,7 +26,7 @@ type InitUserEmailRecoveryRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *InitUserEmailRecoveryIntentV2 `json:"parameters"`
+	Parameters *InitUserEmailRecoveryIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +34,7 @@ type InitUserEmailRecoveryRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2]
+	// Enum: [ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +106,7 @@ var initUserEmailRecoveryRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +116,8 @@ func init() {
 
 const (
 
-	// InitUserEmailRecoveryRequestTypeACTIVITYTYPEINITUSEREMAILRECOVERYV2 captures enum value "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2"
-	InitUserEmailRecoveryRequestTypeACTIVITYTYPEINITUSEREMAILRECOVERYV2 string = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2"
+	// InitUserEmailRecoveryRequestTypeACTIVITYTYPEINITUSEREMAILRECOVERY captures enum value "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
+	InitUserEmailRecoveryRequestTypeACTIVITYTYPEINITUSEREMAILRECOVERY string = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
 )
 
 // prop value enum
