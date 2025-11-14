@@ -1,6 +1,11 @@
 # CHANGELOG
 
+## [v0.14.0](https://github.com/tkhq/go-sdk/compare/v0.13.0...v0.14.0) (2025-11-14)
+
+
 ## [v0.13.0](https://github.com/tkhq/go-sdk/compare/v0.12.0...v0.13.0) (2025-11-13)
+
+- We recommend avoiding this version in the interim as it introduced a bug affecting email-related activities.
 
 
 ## [v0.12.0](https://github.com/tkhq/go-sdk/compare/v0.11.0...v0.12.0) (2025-11-10)
@@ -39,7 +44,10 @@
 ## [v0.1.0](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-6...v0.1.0) (2025-01-21)
 
 
-## [v0.0.1-test-6](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-6) (2025-01-17)
+## [v0.0.1-test-6](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-5...v0.0.1-test-6) (2025-01-17)
+
+
+## [v0.0.1-test-5](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-4...v0.0.1-test-5) (2025-01-17)
 
 
 ## [v0.0.1-test-4](https://github.com/tkhq/go-sdk/compare/v0.0.1-test-3...v0.0.1-test-4) (2025-01-17)
@@ -51,5 +59,8 @@
 ## [v0.0.1-test-2](https://github.com/tkhq/go-sdk/compare/v0.0.1-test...v0.0.1-test-2) (2025-01-17)
 
 
-## v0.0.1-test (2025-01-17)
+## [v0.0.1-test](https://github.com/tkhq/go-sdk/compare/v1.0.0...v0.0.1-test) (2025-01-17)
+
+
+## v1.0.0 (2025-01-17)
 
