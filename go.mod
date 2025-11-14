@@ -2,6 +2,8 @@ module github.com/tkhq/go-sdk
 
 go 1.21
 
+retract v0.13.0
+
 require (
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/cloudflare/circl v1.3.7
