@@ -23,6 +23,9 @@ run:
   skip-files:
     - .*\\.pb\\.go$
 
+  skip-dirs:
+    - pkg/api/client
+
   # list of build tags, all linters use it. Default is empty list.
   build-tags:
     - integration
