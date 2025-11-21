@@ -23,6 +23,9 @@ run:
   skip-files:
     - .*\\.pb\\.go$
 
+  # exclude auto-generated swagger client code
+  # the go-ethereum examples introduce an extra module, causing golangci-lint
+  # to recurse deeper into pkg/api/client — so we skip it explicitly
   skip-dirs:
     - pkg/api/client
 
