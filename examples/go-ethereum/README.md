@@ -27,14 +27,15 @@ Instead of manually building RLP payloads all over the place, you want a **singl
 
 3. **bindsigner-abigen — “I’m using abigen-generated contract bindings”**  
 
-Use abigen-generated bindings and call functions like `token.Transfer(opts, to, amount)` without caring about tx construction.
+Use abigen-generated bindings to encode contract calls and submit them with a Turnkey-backed signer.
 
 This example shows how to:
-- use the same Turnkey-backed `SignerFn`,
-- plug it into `bind.TransactOpts`,
-- let `abigen` build the tx,
-- let Turnkey sign it,
-- then broadcast it.
+- initialize the generated ERC-20 wrapper,
+- pack calldata with methods such as `erc.PackTransfer(to, amount)`,
+- plug a Turnkey-powered `SignerFn` into `bind.TransactOpts`,
+- build a normal EIP-1559 transaction containing that calldata,
+- let Turnkey sign it inside the `SignerFn`,
+- and broadcast the signed transaction through JSON-RPC.
 
 ---
 
@@ -62,53 +63,61 @@ Provide a reusable Turnkey-backed `bind.SignerFn` that can sign any EIP-1559 tra
 
 **How it works:**
 
-- Creates a `MakeTurnkeySignerFn(client, signWith, chainID)` helper that returns a `bind.SignerFn`.
+- Defines `MakeTurnkeySignerFn(client, signWith, chainID)` which returns a `bind.SignerFn` compatible with `accounts/abi/bind/v2`.
 - Inside the signer:
-  - checks the from address matches the Turnkey address,
-	- ensures the tx is `DynamicFeeTxType`,
-	- injects the chain ID if missing,
-	- builds the minimal unsigned payload,
-	- RLP-encodes and prepends `0x02`,
-	- calls Turnkey `SignTransaction`,
-	- rebuilds and returns a signed `*types.Transaction`.
-  - broadcasts via `ethclient.Client.SendTransaction`.
+  - verifies the transaction’s `from` address matches the Turnkey signer address,
+  - ensures the transaction is EIP-1559 (`DynamicFeeTxType`),
+  - injects the correct chain ID if omitted by upstream code,
+  - builds the unsigned EIP-1559 payload Turnkey expects,
+  - RLP-encodes it and prepends the `0x02` type byte,
+  - sends the payload to Turnkey’s `SignTransactionV2`,
+  - reconstructs and returns a fully signed `*types.Transaction`.
+- You then broadcast the signed transaction using `ethclient.Client.SendTransaction`.
 
 ## `bindsigner-abigen`
 
 **Goal:**  
-Demonstrate Turnkey signing in a full ERC-20 workflow using abigen-generated Go types.
+Use abigen-generated contract bindings (v2) together with a Turnkey-backed signer, allowing you to encode typed contract calls while Turnkey signs the resulting transaction.
 
 **How it works:**
 
-- Uses `abigen` to generate a typed ERC-20 binding from `ERC20.abi`.
-- Imports the generated erc20 package and binds to a deployed ERC-20:
+- Uses `abigen --v2` to generate a typed ERC-20 binding from `ERC20.abi`.
+- Loads the binding and creates a contract instance:
 ```go
-token, err := erc20.NewErc20(tokenAddr, rpc)
+erc := erc20.NewErc20()
+contract := erc.Instance(rpc, tokenAddr)
 ```
 - Constructs `bind.TransactOpts` using the same `MakeTurnkeySignerFn`.
 
 ```go
-opts := &bind.TransactOpts{
+auth := &bind.TransactOpts{
     From:   turnkeyAddress,
     Signer: signerFn,
 }
 ```
-- Calls the typed contract method:
+- Encodes the contract call using the generated helper:
 ```go
-tx, err := token.Transfer(opts, to, amount)
+data := erc.PackTransfer(to, amount)
+```
+- builds a normal EIP-1559 transaction containing that calldata (your code constructs it using `PackTransfer`)
+- The transaction is then passed into your SignerFn, which sends the unsigned payload to Turnkey and returns a fully signed transaction.
+- You broadcast the signed tx using your JSON-RPC provider:
+
+```go
+rpc.SendTransaction(ctx, signedTx)
 ```
 
 Under the hood:
-- abigen builds the unsigned tx,
-- calls your SignerFn,
-- Turnkey signs it,
+- abigen v2 encodes the ABI call (`PackTransfer`),
+- you build the transaction (gas, nonce, to, value, data),
+- Turnkey signs it via your `SignerFn`,
 - you broadcast it normally.
 
 **About the ERC-20 binding:**
 
 The erc20.go file included in this directory was generated with:
 ```bash
-abigen --abi ERC20.abi --pkg erc20 --out erc20.go
+abigen --abi ERC20.abi --pkg erc20 --out erc20.go --v2
 ```
 You **do not** need to regenerate it to run this example.
 
@@ -122,7 +131,7 @@ Before running any of the examples, you’ll need:
   - and an Ethereum wallet account (the address you’ll sign with).
 - A working Ethereum JSON-RPC endpoint (e.g. Sepolia from Alchemy, Infura, etc.).
 
-Once you've gathered these values, add them to a new .env.local file. Notice that your private key should be securely managed and never be committed to git.
+Once you've gathered these values, add them to a new `.env` file. Notice that your private key should be securely managed and never be committed to git.
 
 ```bash
 cd go-sdk/examples/go-ethereum
