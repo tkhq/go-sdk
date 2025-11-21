@@ -1,4 +1,10 @@
 /.direnv/
 *.swp
 
+.env
+.env.*
+!.env.local.example
+!.env.test.example
+!.env.example
+
 dist/
