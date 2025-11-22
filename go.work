@@ -1,6 +1,7 @@
-go 1.21.1
+go 1.24.2
 
 use (
 	.
+	./examples/go-ethereum
 	./pkg/enclave_encrypt
 )
