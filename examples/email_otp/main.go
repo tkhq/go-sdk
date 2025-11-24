@@ -72,14 +72,16 @@ func initClient() {
 
 func sendOTP() (string, error) {
 	otpType := "OTP_TYPE_EMAIL"
+	appName := "Go SDK Email OTP Example"
 
 	params := user_verification.NewInitOtpParams().WithBody(&models.InitOtpRequest{
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(parentOrgID),
 		Type:           (*string)(models.ActivityTypeInitOtp.Pointer()),
-		Parameters: &models.InitOtpIntent{
+		Parameters: &models.InitOtpIntentV2{
 			Contact: util.StringPointer(emailAddress),
 			OtpType: &otpType,
+			AppName: &appName,
 		},
 	})
 
