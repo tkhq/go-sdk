@@ -12,7 +12,9 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/tkhq/go-sdk/pkg/apikey"
 	"github.com/tkhq/go-sdk/pkg/common"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 	"github.com/tkhq/go-sdk/pkg/store"
 )
 
@@ -39,15 +41,32 @@ type Store[T common.IKey[M], M common.IMetadata] struct {
 	// KeyDirectory is the directory in which all the keys and metadata are stored.
 	// Normally, this will simply be the user/system default.
 	KeyDirectory string
+
+	// factory is used to create keys from private key data
+	factory store.KeyFactory[T, M]
 }
 
-// New provides a new local API key store.
-// keyDirectory is optional, and if it is the empty string, the system default will be used.
-func New[T common.IKey[M], M common.IMetadata]() *Store[T, M] {
+// New provides a new local key store with the specified factory.
+func New[T common.IKey[M], M common.IMetadata](factory store.KeyFactory[T, M]) *Store[T, M] {
 	return &Store[T, M]{
 		DefaultKeyName: DefaultKeyName,
 		KeyDirectory:   DefaultAPIKeysDir(),
+		factory:        factory,
 	}
+}
+
+// NewAPIKeyStore provides a new local API key store.
+func NewAPIKeyStore() *Store[*apikey.Key, apikey.Metadata] {
+	factory := store.NewKeyFactory[*apikey.Key, apikey.Metadata](apikey.Factory{})
+	return New(factory)
+}
+
+// NewEncryptionKeyStore provides a new local encryption key store.
+func NewEncryptionKeyStore() *Store[*encryptionkey.Key, encryptionkey.Metadata] {
+	factory := store.NewKeyFactory[*encryptionkey.Key, encryptionkey.Metadata](encryptionkey.Factory{})
+	store := New(factory)
+	store.KeyDirectory = DefaultEncryptionKeysDir()
+	return store
 }
 
 // PublicKeyFile returns the filename for the public key of the given name.
@@ -239,9 +258,7 @@ func (s *Store[T, M]) Load(name string) (T, error) {
 		return *new(T), errors.Wrapf(err, "failed to load key bytes %q", name)
 	}
 
-	kf := store.KeyFactory[T, M]{}
-
-	key, err := kf.FromTurnkeyPrivateKey(string(keyBytes))
+	key, err := s.factory.FromTurnkeyPrivateKey(string(keyBytes))
 	if err != nil {
 		return *new(T), errors.Wrapf(err, "failed to recover key from private key file %q", keyPath)
 	}

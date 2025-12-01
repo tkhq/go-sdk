@@ -191,3 +191,16 @@ func (k *Key) MergeMetadata(md Metadata) error {
 
 	return nil
 }
+
+// Factory is a concrete implementation of TurnkeyKeyFactory for API keys.
+type Factory struct{}
+
+// FromTurnkeyPrivateKey implements the TurnkeyKeyFactory interface for API keys.
+func (f Factory) FromTurnkeyPrivateKey(data string) (*Key, error) {
+	keyWithoutSuffix, scheme, err := ExtractSignatureSchemeFromSuffixedPrivateKey(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return FromTurnkeyPrivateKey(keyWithoutSuffix, scheme)
+}

@@ -221,3 +221,11 @@ func (k *Key) MergeMetadata(md Metadata) error {
 
 	return nil
 }
+
+// Factory is a concrete implementation of TurnkeyKeyFactory for encryption keys.
+type Factory struct{}
+
+// FromTurnkeyPrivateKey implements the TurnkeyKeyFactory interface for encryption keys.
+func (f Factory) FromTurnkeyPrivateKey(data string) (*Key, error) {
+	return FromTurnkeyPrivateKey(data)
+}
