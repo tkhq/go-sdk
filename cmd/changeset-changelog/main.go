@@ -101,7 +101,7 @@ func buildReleaseSection(version, previousVersion, date string, changes []change
 	sb.WriteString("\n")
 
 	// Comparison link
-	fmt.Fprintf(&sb, "### [v%s](https://github.com/tkhq/go-sdk/compare/v%s...v%s)\n", version, previousVersion, version)
+	fmt.Fprintf(&sb, "### [v%s ... v%s](https://github.com/tkhq/go-sdk/compare/v%s...v%s)\n", previousVersion, version, previousVersion, version)
 
 	return sb.String()
 }

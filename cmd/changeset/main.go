@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"unicode"
 )
 
 const changesetDir = ".changesets"
@@ -152,10 +151,9 @@ func buildMarkdownFile(title, bump string, t time.Time, note string) string {
 
 	if strings.TrimSpace(note) != "" {
 		sb.WriteString(note)
-		sb.WriteString("\n")
-	} else {
-		sb.WriteString("_No additional notes._\n")
 	}
+
+	sb.WriteString("\n")
 
 	return sb.String()
 }
@@ -171,7 +169,7 @@ func slugify(s string) string {
 			prevDash = false
 			continue
 		}
-		if unicode.IsSpace(r) || r == '-' || r == '_' {
+		if strings.ContainsRune(" -_", r) {
 			if !prevDash {
 				b.WriteRune('-')
 				prevDash = true

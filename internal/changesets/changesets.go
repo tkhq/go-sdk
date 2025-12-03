@@ -225,10 +225,13 @@ func ReadVersion(path string) (string, error) {
 }
 
 func WriteVersion(path, version string) error {
+	// 0o644 => -rw-r--r-- : owner can read/write, group/others read-only.
 	return os.WriteFile(path, []byte(version+"\n"), 0o644)
 }
 
 func WriteReleaseMeta(dir string, meta ReleaseMeta) error {
+	// 0o755 => drwxr-xr-x : owner can read/write/enter, others can read/enter.
+	// Standard for non-sensitive directories so they’re traversable but not writable by others.
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
 	}
@@ -238,6 +241,7 @@ func WriteReleaseMeta(dir string, meta ReleaseMeta) error {
 		return err
 	}
 
+	// 0o644 => -rw-r--r-- : owner can read/write, group/others read-only.
 	return os.WriteFile(filepath.Join(dir, ReleaseMetaFile), data, 0o644)
 }
 
