@@ -32,7 +32,6 @@ func main() {
 
 	// API key used by the client
 	apiKey, err := apikey.FromTurnkeyPrivateKey("<api_private_key_here>", apikey.SchemeP256)
-
 	if err != nil {
 		log.Fatal("creating API key: %w", err)
 	}
@@ -64,6 +63,7 @@ func main() {
 
 	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
+
 	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
 	if err != nil {
 		log.Fatal("failed to decode encryption private key")

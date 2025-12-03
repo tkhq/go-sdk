@@ -19,7 +19,6 @@ import (
 )
 
 func main() {
-
 	organizationId := "<wallet_orgId>"
 	userId := "<user_from_orgId>"
 
@@ -64,6 +63,7 @@ func main() {
 
 	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
+
 	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
 	if err != nil {
 		log.Fatal("failed to decode encryption private key")
@@ -86,6 +86,7 @@ func main() {
 	if err != nil {
 		log.Fatal("failed to decrypt")
 	}
+
 	plaintext := string(plaintextBytes)
 
 	fmt.Println("Decrypted mnemonic:", plaintext)

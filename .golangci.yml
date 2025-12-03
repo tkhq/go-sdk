@@ -1,27 +1,20 @@
 version: "2"
+run:
+  go: "1.19"
+  build-tags:
+    - integration
+    - integration_api
+    - integration_cli
+    - integration_k8s
+    - integration_provision
+  issues-exit-code: 1
+  tests: true
 linters:
-  enable:
-    - govet
-    - errcheck
-    - govet
-    - unused
-    - ineffassign
-    - misspell
-    - gocyclo
-    - dupl
-    - revive
-    - goconst
-    - depguard
-    - lll
-    - unparam
-    - nakedret
-    - nolintlint
-    - prealloc
-    - cyclop
-    - gomoddirectives
+  default: all
   disable:
+    - dupword # too annoying
+    - err113
     - errorlint
-    - staticcheck
     - exhaustruct
     - forbidigo
     - forcetypeassert
@@ -30,128 +23,119 @@ linters:
     - gochecknoinits
     - gocognit
     - godox
+    - gosec
     - ireturn # we return interfaces
     - maintidx
+    - mnd
     - nestif
     - nilnil # we return "nil, nil"
-    - nonamedreturns
     - nolintlint
+    - nonamedreturns
     - paralleltest
     - promlinter # https://github.com/golangci/golangci-lint/issues/2222
+    - rowserrcheck 
+    - sqlclosecheck
     - tagliatelle # we have many different conventions
     - thelper
     - varnamelen # too annoying
-    - wrapcheck
-    - dupword # too annoying
-
-    # linters awaiting generics support: https://github.com/golangci/golangci-lint/issues/2649
-    - rowserrcheck
-    - sqlclosecheck
     - wastedassign
+    - wrapcheck
+    - godot # too annoying
+    - nlreturn # super nit picky
+    - noinlineerr # no need
+    - perfsprint # annoying
+    - recvcheck # false positives with interfaces
+    - staticcheck
+    - testifylint # too many issues
+    - unconvert
+    - usetesting
   settings:
-    errcheck:
-      # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
-      # default is false: such cases aren't reported by default.
-      check-type-assertions: false
-
-      # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
-      # default is false: such cases aren't reported by default.
-      check-blank: false
-
-      
-    exhaustive:
-      default-signifies-exhaustive: true
-    gocyclo:
-      # minimal code complexity to report, 30 by default (but we recommend 10-20)
-      min-complexity: 15
-    dupl:
-      # tokens count to trigger issue, 150 by default
-      threshold: 100
-    goconst:
-      # minimal length of string constant, 3 by default
-      min-len: 3
-      # minimal occurrences count to trigger, 3 by default
-      min-occurrences: 3
+    cyclop:
+      max-complexity: 20
     depguard:
       rules:
-        main: 
+        main:
           deny:
-            - pkg: "github.com/golang/protobuf/proto"
+            - pkg: github.com/golang/protobuf/proto
               desc: not allowed
-            - pkg: "google.golang.org/protobuf/proto"
+            - pkg: google.golang.org/protobuf/proto
               desc: not allowed
-    misspell:
-      # Correct spellings using locale preferences for US or UK.
-      # Default is to use a neutral variety of English.
-      # Setting locale to US will correct the British spelling of 'colour' to 'color'.
-      locale: US
+    dupl:
+      threshold: 100
+    errcheck:
+      check-type-assertions: false
+      check-blank: true
+    exhaustive:
+      default-signifies-exhaustive: true
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    gocyclo:
+      min-complexity: 15
+    gomoddirectives:
+      replace-allow-list:
+        - gopkg.in/yaml.v3
+        - inet.af/tcpproxy
+      replace-local: true
+      exclude-forbidden: true
+      retract-allow-no-explanation: false
     lll:
-      # max line length, lines longer will be reported. Default is 120.
-      # '\t' is counted as 1 character by default, and can be changed with the tab-width option
       line-length: 200
-      # tab width in spaces. Default to 1.
       tab-width: 1
+    misspell:
+      locale: US
+    nakedret:
+      max-func-lines: 30
+    nolintlint:
+      require-explanation: false
+      require-specific: true
+      allow-unused: false
+    prealloc:
+      simple: true
+      range-loops: true
+      for-loops: false
     revive:
       rules:
         - name: unexported-return
           disabled: true
     unparam:
-      # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
-      # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
-      # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
-      # with golangci-lint call it on a directory with the changed file.
       check-exported: false
-    nakedret:
-      # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
-      max-func-lines: 30
-    nolintlint:
-      allow-unused: false
-      allow-no-explanation: []
-      require-explanation: false
-      require-specific: true
-    prealloc:
-      # XXX: we don't recommend using this linter before doing performance profiling.
-      # For most programs usage of prealloc will be a premature optimization.
-
-      # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
-      # True by default.
-      simple: true
-      range-loops: true # Report preallocation suggestions on range loops, true by default
-      for-loops: false # Report preallocation suggestions on for loops, false by default
-    cyclop:
-      # the maximal code complexity to report
-      max-complexity: 20
-    gomoddirectives:
-      replace-local: true
-      replace-allow-list:
-        - gopkg.in/yaml.v3
-        - inet.af/tcpproxy
-      retract-allow-no-explanation: false
-      exclude-forbidden: true
   exclusions:
     generated: lax
-    presets:
-      - comments
-      - common-false-positives
-      - legacy
-      - std-error-handling
+    rules:
+      - linters:
+          - revive
+        path: pkg/api
+        text: should have a package comment
+      - path: (.+)\.go$
+        text: package comment should be of the form "Package services ..."
+      - path: (.+)\.go$
+        text: ^ST1000
     paths:
-      - pkg/api
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
 formatters:
   enable:
     - gci
+    - gofmt
+    - gofumpt
+    - goimports
   settings:
     gci:
       sections:
         - standard
         - default
         - prefix(github.com/tkhq)
-      custom-order: true
+    gofmt:
+      simplify: true
   exclusions:
     generated: lax
     paths:
-      - pkg/api
-issues:
-  max-issues-per-linter: 0
-  max-same-issues: 0
-  new: false
+      - third_party$
+      - builtin$
+      - examples$
