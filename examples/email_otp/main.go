@@ -38,7 +38,11 @@ func main() {
 	// Step 2: Prompt for OTP code
 	fmt.Print("Enter the OTP code: ")
 	reader := bufio.NewReader(os.Stdin)
-	code, _ := reader.ReadString('\n')
+	code, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("failed to read OTP code: %v", err)
+	}
+
 	code = strings.TrimSpace(code)
 
 	// Step 3: Verify OTP
@@ -53,7 +57,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Login with OTP failed: %v", err)
 	}
-	fmt.Println("OTP login successfull")
+	fmt.Println("OTP login successful")
 }
 
 func initClient() {

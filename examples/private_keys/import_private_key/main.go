@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/btcsuite/btcutil/base58"
+
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_keys"
 	"github.com/tkhq/go-sdk/pkg/api/models"

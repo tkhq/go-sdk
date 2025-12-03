@@ -12,7 +12,7 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --out-format=github-actions ./...
+	golangci-lint run --output.text.path=stdout ./...
 
 # Note: if you have multiple versions of swagger installed locally, point to the one located in your go path, 
 # e.g. /Users/<username>/go/bin/swagger
