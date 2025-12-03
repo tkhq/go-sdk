@@ -22,7 +22,8 @@ func main() {
 	timestamp := time.Now().UnixMilli()
 	timestampString := strconv.FormatInt(timestamp, 10)
 
-	var signWith string            // can be either a private key ID or a wallet account address
+	var signWith string // can be either a private key ID or a wallet account address
+
 	var unsignedTransaction string // no 0x prefix necessary
 
 	pkParams := signing.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{

@@ -16,7 +16,6 @@ import (
 )
 
 func main() {
-
 	// Insert the wallet mnemonic you want to import
 	mnemonic := "<your_mnemonic_here>"
 
@@ -27,41 +26,36 @@ func main() {
 
 	// Generate a new key pair used to encrypt the export bundle
 	encryptionKey, err := encryptionkey.New(userId, organizationId)
-
 	if err != nil {
 		log.Fatal("creating encryption key: %w", err)
 	}
 
 	// API key used by the client
 	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
-
 	if err != nil {
 		log.Fatal("creating API key: %w", err)
 	}
 
 	client, err := sdk.New(sdk.WithAPIKey(apiKey))
-
 	if err != nil {
 		log.Fatal("creating SDK client: %w", err)
 	}
 
 	signerKey, err := util.HexToPublicKey(encryptionkey.SignerProductionPublicKey)
-
 	if err != nil {
 		log.Fatal("failed to convert the public key")
 	}
 
 	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
-	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
 
+	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
 	if err != nil {
 		log.Fatal("failed to decode encryption private key")
 	}
 
 	// Set up enclave encrypt client
 	encryptClient, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(signerKey, *kemPrivateKey)
-
 	if err != nil {
 		log.Fatal("failed to setup enclave encrypt client")
 	}
@@ -78,7 +72,6 @@ func main() {
 	})
 
 	reply, err := client.V0().Wallets.InitImportWallet(initImportParams, client.Authenticator)
-
 	if err != nil {
 		log.Fatal("init import request failed: %w", err)
 	}
@@ -86,13 +79,11 @@ func main() {
 	importBundle := *reply.Payload.Activity.Result.InitImportWalletResult.ImportBundle
 
 	clientSendMsg, err := encryptClient.Encrypt([]byte(mnemonic), []byte(importBundle), organizationId, userId)
-
 	if err != nil {
 		log.Fatal("unable to encrypt wallet to target: %w", err)
 	}
 
 	encryptedBundle, err := json.Marshal(clientSendMsg)
-
 	if err != nil {
 		log.Fatal("failed to encrypt bundle: %w", err)
 	}
@@ -121,7 +112,6 @@ func main() {
 	})
 
 	importReply, err := client.V0().Wallets.ImportWallet(importParams, client.Authenticator)
-
 	if err != nil {
 		log.Fatal("import wallet request failed: %w", err)
 	}

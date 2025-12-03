@@ -19,7 +19,6 @@ import (
 )
 
 func main() {
-
 	// Parent organization API key used by the client to create the sub-organization
 	apiKey, err := apikey.FromTurnkeyPrivateKey("<private_key_here>", apikey.SchemeP256)
 	if err != nil {
@@ -53,7 +52,7 @@ func main() {
 	fmt.Println("🔑 P-256 Private:", hex.EncodeToString(privBytes))
 	fmt.Println("🔓 P-256 Public:", hex.EncodeToString(pubKey))
 
-	//API keypair used by the delegated user
+	// API keypair used by the delegated user
 	delegatedPrivateKey := hex.EncodeToString(privBytes)
 	delegatedPublicKey := hex.EncodeToString(pubKey)
 
@@ -164,8 +163,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Update root quorum request failed:", err)
 	}
-	fmt.Printf("Root Quorum updated! : %v\n", *updateRootQuorumReply.Payload.Activity.Status)
 
+	fmt.Printf("Root Quorum updated! : %v\n", *updateRootQuorumReply.Payload.Activity.Status)
 }
 
 // StringPointer returns a pointer to a string
@@ -181,9 +180,11 @@ func compressPubkey(pub *ecdsa.PublicKey) []byte {
 		copy(padded[32-len(x):], x)
 		x = padded
 	}
+
 	prefix := byte(0x02)
 	if pub.Y.Bit(0) == 1 {
 		prefix = 0x03
 	}
+
 	return append([]byte{prefix}, x...)
 }

@@ -24,7 +24,6 @@ var (
 )
 
 func main() {
-
 	// Initialize the Turnkey API client
 	initClient()
 
@@ -33,12 +32,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to send OTP: %v", err)
 	}
+
 	fmt.Println("OTP sent to your email.")
 
 	// Step 2: Prompt for OTP code
 	fmt.Print("Enter the OTP code: ")
+
 	reader := bufio.NewReader(os.Stdin)
-	code, _ := reader.ReadString('\n')
+
+	code, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("failed to read OTP code: %v", err)
+	}
+
 	code = strings.TrimSpace(code)
 
 	// Step 3: Verify OTP
@@ -46,6 +52,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Verification failed: %v", err)
 	}
+
 	fmt.Println("OTP verified successfully.")
 
 	// Step 4: Login using the verification token
@@ -53,7 +60,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Login with OTP failed: %v", err)
 	}
-	fmt.Println("OTP login successfull")
+
+	fmt.Println("OTP login successful")
 }
 
 func initClient() {
@@ -92,6 +100,7 @@ func sendOTP() (string, error) {
 	if otpID == nil {
 		return "", fmt.Errorf("otpID is nil in response")
 	}
+
 	return *otpID, nil
 }
 
@@ -117,11 +126,11 @@ func verifyOTP(id, code string) (string, error) {
 	}
 
 	fmt.Printf("Verification Token: %s\n", *token)
+
 	return *token, nil
 }
 
 func loginOTP(token string) error {
-
 	// Mock a client-side P256 API key, in reality this would be passed from your frontend
 	clientApiKey, err := apikey.New(parentOrgID)
 	if err != nil {
@@ -149,5 +158,6 @@ func loginOTP(token string) error {
 	}
 
 	fmt.Printf("Session jwt token: %s\n", *sessionJwt)
+
 	return nil
 }

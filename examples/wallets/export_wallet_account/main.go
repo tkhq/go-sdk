@@ -10,17 +10,15 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
-	"github.com/tkhq/go-sdk/pkg/encryptionkey"
-
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 )
 
 func main() {
-
 	organizationId := "<wallet_orgId>"
 	userId := "<user_from_orgId>"
 
@@ -34,7 +32,6 @@ func main() {
 
 	// API key used by the client
 	apiKey, err := apikey.FromTurnkeyPrivateKey("<api_private_key_here>", apikey.SchemeP256)
-
 	if err != nil {
 		log.Fatal("creating API key: %w", err)
 	}
@@ -66,6 +63,7 @@ func main() {
 
 	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
+
 	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
 	if err != nil {
 		log.Fatal("failed to decode encryption private key")
