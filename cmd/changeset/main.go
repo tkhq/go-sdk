@@ -58,12 +58,15 @@ func run() error {
 	filename := fmt.Sprintf("%s-%s.md", now.Format("20060102-150405"), slug)
 	path := filepath.Join(changesetDir, filename)
 
+	// 0o755 => drwxr-xr-x : owner can read/write/enter, others can read/enter.
+	// Standard for non-sensitive directories so they’re traversable but not writable by others.
 	if err := os.MkdirAll(changesetDir, 0o755); err != nil {
 		return fmt.Errorf("creating %s: %w", changesetDir, err)
 	}
 
 	content := buildMarkdownFile(title, bump, now, note)
 
+	// 0o644 => -rw-r--r-- : owner can read/write, group/others read-only.
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 		return fmt.Errorf("writing changeset file: %w", err)
 	}

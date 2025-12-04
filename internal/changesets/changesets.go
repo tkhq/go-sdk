@@ -14,7 +14,7 @@ import (
 
 const (
 	DefaultDir      = ".changesets"
-	ReleaseMetaFile = "_current-release.json"
+	ReleaseMetaFile = "current-release.json"
 	VersionFile     = "VERSION"
 	ChangelogFile   = "CHANGELOG.md"
 )
