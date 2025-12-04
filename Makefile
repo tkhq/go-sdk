@@ -1,4 +1,7 @@
 SWAGGER_VERSION := $(shell swagger version 2>/dev/null)
+VERSION_FILE := VERSION
+
+v ?= $(shell cat $(VERSION_FILE) 2>/dev/null)
 
 all: generate
 
@@ -26,35 +29,25 @@ generate: you-need-to-install-go-swagger-check-readme clean
 clean:
 	rm -rf pkg/api
 
+.PHONY: changeset
+changeset:
+	go run ./cmd/changeset
+
+.PHONY: version
+version:
+	go run ./cmd/changeset-version
+
 .PHONY: changelog
 changelog:
-	@if [ -f "CHANGELOG.md" ]; then \
-		mv CHANGELOG.md CHANGELOG.md.backup; \
-	fi
-	@git-chglog -o CHANGELOG.md
-	@echo "Generated CHANGELOG.md"
-	@echo "Review the changes and commit if satisfied:"
-	@echo "  git add CHANGELOG.md"
-	@echo "  git commit -m 'docs: update changelog'"
-
-.PHONY: changelog-next
-changelog-next:
-	@if [ "$(v)" = "" ]; then \
-		echo "Error: version number required. Use: make changelog-next v=1.0.0"; \
-		exit 1; \
-	fi
-	@echo "Previewing changes for v$(v)..."
-	@git-chglog --next-tag v$(v)
+	go run ./cmd/changeset-changelog
 
 .PHONY: prepare-release
 prepare-release:
-	@if [ "$(v)" = "" ]; then \
-		echo "Error: version number required. Use: make prepare-release v=1.0.0"; \
-		exit 1; \
-	fi
+	@echo "Versioning package..."
+	go run ./cmd/changeset-version
 
-	@echo "Generating changelog for v$(v)..."
-	@git-chglog --next-tag v$(v) -o CHANGELOG.md
+	@echo "Generating changelog..."
+	go run ./cmd/changeset-changelog
 
 	@echo "Generated CHANGELOG.md"
 	@echo "Review the changes and commit if satisfied:"
@@ -63,8 +56,13 @@ prepare-release:
 
 .PHONY: publish-release
 publish-release:
-	@if [ "$(v)" = "" ]; then \
-		echo "Error: version number required. Use: make publish-release v=1.0.0"; \
+	@if [ ! -f "$(VERSION_FILE)" ]; then \
+		echo "Error: VERSION file not found. Create a VERSION file first."; \
+		exit 1; \
+	fi
+
+	@if [ -z "$(v)" ]; then \
+		echo "Error: version number is empty. Ensure $(VERSION_FILE) contains something like '0.2.0'."; \
 		exit 1; \
 	fi
 
