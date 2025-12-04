@@ -38,6 +38,7 @@ func run() error {
 	existing, _ := os.ReadFile(changesets.ChangelogFile)
 	newContent := mergeChangelog(string(existing), section)
 
+	// 0o644 => -rw-r--r-- : owner can read/write, group/others read-only.
 	if err := os.WriteFile(changesets.ChangelogFile, []byte(newContent), 0o644); err != nil {
 		return fmt.Errorf("write changelog: %w", err)
 	}
