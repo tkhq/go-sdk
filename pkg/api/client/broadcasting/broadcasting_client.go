@@ -34,6 +34,10 @@ type ClientService interface {
 
 	EthSendTransaction(params *EthSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendTransactionOK, error)
 
+	GetGasUsage(params *GetGasUsageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetGasUsageOK, error)
+
+	GetNonces(params *GetNoncesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetNoncesOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -116,6 +120,88 @@ func (a *Client) EthSendTransaction(params *EthSendTransactionParams, authInfo r
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for EthSendTransaction: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetGasUsage gets gas usage and limits
+
+Get gas usage and gas limits for either the parent organization or a sub-organization.
+*/
+func (a *Client) GetGasUsage(params *GetGasUsageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetGasUsageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetGasUsageParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetGasUsage",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_gas_usage",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetGasUsageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetGasUsageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetGasUsage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetNonces gets nonces for an address
+
+Get nonce values for an address on a given network. Can fetch the standard on-chain nonce and/or the gas station nonce used for sponsored transactions.
+*/
+func (a *Client) GetNonces(params *GetNoncesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetNoncesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetNoncesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetNonces",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_nonces",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetNoncesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetNoncesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetNonces: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

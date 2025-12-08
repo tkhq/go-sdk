@@ -29,7 +29,7 @@ type AppProof struct {
 
 	// Scheme of signing key.
 	// Required: true
-	Scheme *SignatureScheme `json:"scheme"`
+	Scheme *DataV1SignatureScheme `json:"scheme"`
 
 	// Signature over hashed proof_payload.
 	// Required: true

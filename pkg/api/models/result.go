@@ -175,7 +175,7 @@ type Result struct {
 	EthSendRawTransactionResult *EthSendRawTransactionResult `json:"ethSendRawTransactionResult,omitempty"`
 
 	// eth send transaction result
-	EthSendTransactionResult EthSendTransactionResult `json:"ethSendTransactionResult,omitempty"`
+	EthSendTransactionResult *EthSendTransactionResult `json:"ethSendTransactionResult,omitempty"`
 
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
@@ -503,6 +503,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateEthSendRawTransactionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEthSendTransactionResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1633,6 +1637,25 @@ func (m *Result) validateEthSendRawTransactionResult(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Result) validateEthSendTransactionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendTransactionResult) { // not required
+		return nil
+	}
+
+	if m.EthSendTransactionResult != nil {
+		if err := m.EthSendTransactionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateExportPrivateKeyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyResult) { // not required
 		return nil
@@ -2560,6 +2583,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateEthSendRawTransactionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEthSendTransactionResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3784,6 +3811,27 @@ func (m *Result) contextValidateEthSendRawTransactionResult(ctx context.Context,
 				return ve.ValidateName("ethSendRawTransactionResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("ethSendRawTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateEthSendTransactionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendTransactionResult != nil {
+
+		if swag.IsZero(m.EthSendTransactionResult) { // not required
+			return nil
+		}
+
+		if err := m.EthSendTransactionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
 			}
 			return err
 		}

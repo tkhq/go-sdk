@@ -20,13 +20,16 @@ import (
 // swagger:model EmailAuthRequest
 type EmailAuthRequest struct {
 
+	// generate app proofs
+	GenerateAppProofs *bool `json:"generateAppProofs,omitempty"`
+
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`
 
 	// parameters
 	// Required: true
-	Parameters *EmailAuthIntentV2 `json:"parameters"`
+	Parameters *EmailAuthIntentV3 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,7 +37,7 @@ type EmailAuthRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_EMAIL_AUTH_V2]
+	// Enum: [ACTIVITY_TYPE_EMAIL_AUTH_V3]
 	Type *string `json:"type"`
 }
 
@@ -106,7 +109,7 @@ var emailAuthRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_EMAIL_AUTH_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_EMAIL_AUTH_V3"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -116,8 +119,8 @@ func init() {
 
 const (
 
-	// EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV2 captures enum value "ACTIVITY_TYPE_EMAIL_AUTH_V2"
-	EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV2 string = "ACTIVITY_TYPE_EMAIL_AUTH_V2"
+	// EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV3 captures enum value "ACTIVITY_TYPE_EMAIL_AUTH_V3"
+	EmailAuthRequestTypeACTIVITYTYPEEMAILAUTHV3 string = "ACTIVITY_TYPE_EMAIL_AUTH_V3"
 )
 
 // prop value enum
