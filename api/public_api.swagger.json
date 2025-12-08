@@ -221,6 +221,32 @@
         "tags": ["Boot Proof"]
       }
     },
+    "/public/v1/query/get_gas_usage": {
+      "post": {
+        "summary": "Get gas usage and limits.",
+        "description": "Get gas usage and gas limits for either the parent organization or a sub-organization.",
+        "operationId": "GetGasUsage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetGasUsageResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetGasUsageRequest"
+            }
+          }
+        ],
+        "tags": ["Broadcasting"]
+      }
+    },
     "/public/v1/query/get_latest_boot_proof": {
       "post": {
         "summary": "Get the latest boot proof for an app",
@@ -245,6 +271,32 @@
           }
         ],
         "tags": ["Boot Proof"]
+      }
+    },
+    "/public/v1/query/get_nonces": {
+      "post": {
+        "summary": "Get nonces for an address.",
+        "description": "Get nonce values for an address on a given network. Can fetch the standard on-chain nonce and/or the gas station nonce used for sponsored transactions.",
+        "operationId": "GetNonces",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetNoncesResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetNoncesRequest"
+            }
+          }
+        ],
+        "tags": ["Broadcasting"]
       }
     },
     "/public/v1/query/get_oauth2_credential": {
@@ -426,6 +478,32 @@
           }
         ],
         "tags": ["Private Keys"]
+      }
+    },
+    "/public/v1/query/get_send_transaction_status": {
+      "post": {
+        "summary": "Get send transaction status",
+        "description": "Get the status of a send transaction request.",
+        "operationId": "GetSendTransactionStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSendTransactionStatusResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetSendTransactionStatusRequest"
+            }
+          }
+        ],
+        "tags": ["Send Transactions"]
       }
     },
     "/public/v1/query/get_smart_contract_interface": {
@@ -3309,7 +3387,7 @@
       "type": "object",
       "properties": {
         "scheme": {
-          "$ref": "#/definitions/SignatureScheme",
+          "$ref": "#/definitions/data.v1.SignatureScheme",
           "description": "Scheme of signing key."
         },
         "publicKey": {
@@ -3354,6 +3432,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ApproveActivityIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3572,6 +3654,32 @@
       },
       "required": ["bootProof"]
     },
+    "ClientSignature": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "description": "The public component of a cryptographic key pair used to create the signature."
+        },
+        "scheme": {
+          "$ref": "#/definitions/ClientSignatureScheme",
+          "description": "The signature scheme used to generate the client signature."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message that was signed."
+        },
+        "signature": {
+          "type": "string",
+          "description": "The cryptographic signature over the message."
+        }
+      },
+      "required": ["publicKey", "scheme", "message", "signature"]
+    },
+    "ClientSignatureScheme": {
+      "type": "string",
+      "enum": ["CLIENT_SIGNATURE_SCHEME_API_P256"]
+    },
     "Config": {
       "type": "object",
       "properties": {
@@ -3640,6 +3748,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateApiKeysIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3737,6 +3849,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateAuthenticatorsIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3807,6 +3923,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateFiatOnRampCredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3852,6 +3972,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateInvitationsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3904,6 +4028,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateOauth2CredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -3953,6 +4081,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateOauthProvidersIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4057,6 +4189,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreatePoliciesIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4168,6 +4304,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreatePolicyIntentV3"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4216,6 +4356,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreatePrivateKeyTagIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4282,6 +4426,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreatePrivateKeysIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4333,6 +4481,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateReadOnlySessionIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4446,6 +4598,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateReadWriteSessionIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4571,6 +4727,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateSmartContractInterfaceIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4821,6 +4981,11 @@
           "type": "string",
           "x-nullable": true,
           "description": "Signed JWT containing a unique id, expiry, verification type, contact"
+        },
+        "clientSignature": {
+          "$ref": "#/definitions/ClientSignature",
+          "x-nullable": true,
+          "description": "Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step."
         }
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
@@ -4842,6 +5007,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateSubOrganizationIntentV7"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -4994,6 +5163,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateUserTagIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5074,6 +5247,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateUsersIntentV3"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5131,6 +5308,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateWalletAccountsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5189,6 +5370,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/CreateWalletIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5272,6 +5457,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteApiKeysIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5323,6 +5512,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteAuthenticatorsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5367,6 +5560,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteFiatOnRampCredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5408,6 +5605,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteInvitationIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5449,6 +5650,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteOauth2CredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5497,6 +5702,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteOauthProvidersIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5585,6 +5794,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeletePoliciesIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5629,6 +5842,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeletePolicyIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5673,6 +5890,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeletePrivateKeyTagsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5732,6 +5953,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeletePrivateKeysIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5776,6 +6001,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteSmartContractInterfaceIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5817,6 +6046,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteSubOrganizationIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5861,6 +6094,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteUserTagsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5915,6 +6152,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteUsersIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -5967,6 +6208,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteWalletAccountsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6019,6 +6264,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/DeleteWalletsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6234,6 +6483,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/EmailAuthIntentV3"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6332,6 +6585,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/EthSendRawTransactionIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6364,7 +6621,9 @@
             "eip155:1",
             "eip155:11155111",
             "eip155:8453",
-            "eip155:84532"
+            "eip155:84532",
+            "eip155:137",
+            "eip155:80002"
           ],
           "description": "CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet)."
         },
@@ -6402,15 +6661,10 @@
           "x-nullable": true,
           "description": "Maximum priority fee (tip) per gas unit in wei. Required for non-sponsored (EIP-1559) transactions. Not used for sponsored transactions."
         },
-        "deadline": {
-          "type": "string",
-          "x-nullable": true,
-          "description": "Unix timestamp after which the Gas Station meta-transaction is no longer valid. Only used when sponsor=true."
-        },
         "gasStationNonce": {
           "type": "string",
           "x-nullable": true,
-          "description": "The gas station delegate contract nonce. Only used when sponsor=true."
+          "description": "The gas station delegate contract nonce. Only used when sponsor=true. Include this if you want maximal security posture."
         }
       },
       "required": ["from", "caip2", "to"]
@@ -6432,12 +6686,33 @@
         },
         "parameters": {
           "$ref": "#/definitions/EthSendTransactionIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
     },
     "EthSendTransactionResult": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "sendTransactionStatusId": {
+          "type": "string",
+          "description": "The send_transaction_status ID associated with the transaction submission for sponsored transactions"
+        }
+      },
+      "required": ["sendTransactionStatusId"]
+    },
+    "EthSendTransactionStatus": {
+      "type": "object",
+      "properties": {
+        "txHash": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "The Ethereum transaction hash, if available."
+        }
+      }
     },
     "ExportPrivateKeyIntent": {
       "type": "object",
@@ -6470,6 +6745,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ExportPrivateKeyIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6519,6 +6798,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ExportWalletAccountIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6573,6 +6856,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ExportWalletIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -6954,6 +7241,35 @@
       },
       "required": ["organizationId", "ephemeralKey"]
     },
+    "GetGasUsageRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        }
+      },
+      "required": ["organizationId"]
+    },
+    "GetGasUsageResponse": {
+      "type": "object",
+      "properties": {
+        "windowDurationMinutes": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The window duration (in minutes) for the organization or sub-organization."
+        },
+        "windowLimitUsd": {
+          "type": "string",
+          "description": "The window limit (in USD) for the organization or sub-organization."
+        },
+        "usageUsd": {
+          "type": "string",
+          "description": "The total gas usage (in USD) of all sponsored transactions processed over the last `window_duration_minutes`"
+        }
+      },
+      "required": ["windowDurationMinutes", "windowLimitUsd", "usageUsd"]
+    },
     "GetLatestBootProofRequest": {
       "type": "object",
       "properties": {
@@ -6967,6 +7283,49 @@
         }
       },
       "required": ["organizationId", "appName"]
+    },
+    "GetNoncesRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given Organization."
+        },
+        "address": {
+          "type": "string",
+          "description": "The Ethereum address to query nonces for."
+        },
+        "caip2": {
+          "type": "string",
+          "description": "The network identifier in CAIP-2 format (e.g., 'eip155:1' for Ethereum mainnet)."
+        },
+        "nonce": {
+          "type": "boolean",
+          "description": "Whether to fetch the standard on-chain nonce."
+        },
+        "gasStationNonce": {
+          "type": "boolean",
+          "description": "Whether to fetch the gas station nonce used for sponsored transactions."
+        }
+      },
+      "required": ["organizationId", "address", "caip2"]
+    },
+    "GetNoncesResponse": {
+      "type": "object",
+      "properties": {
+        "nonce": {
+          "type": "string",
+          "format": "uint64",
+          "x-nullable": true,
+          "description": "The standard on-chain nonce for the address, if requested."
+        },
+        "gasStationNonce": {
+          "type": "string",
+          "format": "uint64",
+          "x-nullable": true,
+          "description": "The gas station nonce for sponsored transactions, if requested."
+        }
+      }
     },
     "GetOauth2CredentialRequest": {
       "type": "object",
@@ -7192,6 +7551,39 @@
       },
       "required": ["privateKeys"]
     },
+    "GetSendTransactionStatusRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given organization."
+        },
+        "sendTransactionStatusId": {
+          "type": "string",
+          "description": "The unique identifier of a send transaction request."
+        }
+      },
+      "required": ["organizationId", "sendTransactionStatusId"]
+    },
+    "GetSendTransactionStatusResponse": {
+      "type": "object",
+      "properties": {
+        "txStatus": {
+          "type": "string",
+          "description": "The current status of the send transaction."
+        },
+        "eth": {
+          "$ref": "#/definitions/EthSendTransactionStatus",
+          "description": "Ethereum-specific transaction status."
+        },
+        "txError": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "The error encountered when broadcasting or confirming the transaction, if any."
+        }
+      },
+      "required": ["txStatus"]
+    },
     "GetSmartContractInterfaceRequest": {
       "type": "object",
       "properties": {
@@ -7210,7 +7602,7 @@
       "type": "object",
       "properties": {
         "smartContractInterface": {
-          "$ref": "#/definitions/SmartContractInterface",
+          "$ref": "#/definitions/data.v1.SmartContractInterface",
           "description": "Object to be used in conjunction with policies to guard transaction signing."
         }
       },
@@ -7233,7 +7625,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/SmartContractInterface"
+            "$ref": "#/definitions/data.v1.SmartContractInterface"
           },
           "description": "A list of smart contract interfaces."
         }
@@ -7571,6 +7963,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ImportPrivateKeyIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -7636,6 +8032,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/ImportWalletIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -7736,6 +8136,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitFiatOnRampIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -7785,6 +8189,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitImportPrivateKeyIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -7826,6 +8234,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitImportWalletIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -8015,6 +8427,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitOtpAuthIntentV3"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -8180,6 +8596,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitOtpIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -8293,6 +8713,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/InitUserEmailRecoveryIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -8845,6 +9269,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/Oauth2AuthenticateIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -8973,6 +9401,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/OauthLoginIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9058,6 +9490,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/OauthIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9146,6 +9582,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/OtpAuthIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9190,9 +9630,9 @@
           "description": "Invalidate all other previously generated Login API keys"
         },
         "clientSignature": {
-          "type": "string",
+          "$ref": "#/definitions/ClientSignature",
           "x-nullable": true,
-          "description": "Optional signature associated with the public key passed into the verification step. This must be a hex-encoded ECDSA signature over the verification token. Only required if a public key was provided during the verification step."
+          "description": "Optional signature proving authorization for this login. The signature is over the verification token ID and the public key. Only required if a public key was provided during the verification step."
         }
       },
       "required": ["verificationToken", "publicKey"]
@@ -9214,6 +9654,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/OtpLoginIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9484,6 +9928,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/RecoverUserIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9528,6 +9976,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/RejectActivityIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -9559,6 +10011,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/RemoveOrganizationFeatureIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10077,6 +10533,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/SetOrganizationFeatureIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10229,6 +10689,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/SignRawPayloadIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10293,6 +10757,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/SignRawPayloadsIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10360,6 +10828,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/SignTransactionIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10372,10 +10844,6 @@
         }
       },
       "required": ["signedTransaction"]
-    },
-    "SignatureScheme": {
-      "type": "string",
-      "enum": ["SIGNATURE_SCHEME_EPHEMERAL_KEY_P256"]
     },
     "SimpleClientExtensionResults": {
       "type": "object",
@@ -10393,56 +10861,6 @@
           "x-nullable": true
         }
       }
-    },
-    "SmartContractInterface": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "The Organization the Smart Contract Interface belongs to."
-        },
-        "smartContractInterfaceId": {
-          "type": "string",
-          "description": "Unique identifier for a given Smart Contract Interface (ABI or IDL)."
-        },
-        "smartContractAddress": {
-          "type": "string",
-          "description": "The address corresponding to the Smart Contract or Program."
-        },
-        "smartContractInterface": {
-          "type": "string",
-          "description": "The JSON corresponding to the Smart Contract Interface (ABI or IDL)."
-        },
-        "type": {
-          "type": "string",
-          "description": "The type corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "label": {
-          "type": "string",
-          "description": "The label corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "notes": {
-          "type": "string",
-          "description": "The notes corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/external.data.v1.Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/external.data.v1.Timestamp"
-        }
-      },
-      "required": [
-        "organizationId",
-        "smartContractInterfaceId",
-        "smartContractAddress",
-        "smartContractInterface",
-        "type",
-        "label",
-        "notes",
-        "createdAt",
-        "updatedAt"
-      ]
     },
     "SmartContractInterfaceType": {
       "type": "string",
@@ -10498,6 +10916,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/StampLoginIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10716,6 +11138,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateFiatOnRampCredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10774,6 +11200,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateOauth2CredentialIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10875,6 +11305,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdatePolicyIntentV2"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10945,6 +11379,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdatePrivateKeyTagIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -10994,6 +11432,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateRootQuorumIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11037,6 +11479,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateUserEmailIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11114,6 +11560,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateUserNameIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11164,6 +11614,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateUserPhoneNumberIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11195,6 +11649,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateUserIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11255,6 +11713,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateUserTagIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11300,6 +11762,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/UpdateWalletIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11568,6 +12034,10 @@
         },
         "parameters": {
           "$ref": "#/definitions/VerifyOtpIntent"
+        },
+        "generateAppProofs": {
+          "type": "boolean",
+          "x-nullable": true
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
@@ -11898,6 +12368,60 @@
           "type": "string"
         }
       }
+    },
+    "data.v1.SignatureScheme": {
+      "type": "string",
+      "enum": ["SIGNATURE_SCHEME_EPHEMERAL_KEY_P256"]
+    },
+    "data.v1.SmartContractInterface": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "The Organization the Smart Contract Interface belongs to."
+        },
+        "smartContractInterfaceId": {
+          "type": "string",
+          "description": "Unique identifier for a given Smart Contract Interface (ABI or IDL)."
+        },
+        "smartContractAddress": {
+          "type": "string",
+          "description": "The address corresponding to the Smart Contract or Program."
+        },
+        "smartContractInterface": {
+          "type": "string",
+          "description": "The JSON corresponding to the Smart Contract Interface (ABI or IDL)."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "The notes corresponding to the Smart Contract Interface (either ETHEREUM or SOLANA)."
+        },
+        "createdAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/external.data.v1.Timestamp"
+        }
+      },
+      "required": [
+        "organizationId",
+        "smartContractInterfaceId",
+        "smartContractAddress",
+        "smartContractInterface",
+        "type",
+        "label",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
     },
     "external.data.v1.Credential": {
       "type": "object",
