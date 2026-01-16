@@ -11,8 +11,8 @@ import (
 	"strconv"
 
 	dcrec "github.com/decred/dcrd/dcrec/secp256k1/v4"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/sha3"
 )
 
 type ecdsaKey struct {
@@ -34,13 +34,14 @@ func (k *ecdsaKey) sign(msg []byte) (string, error) {
 }
 
 func (k *ecdsaEIP191Key) sign(msg []byte) (string, error) {
-	hash := crypto.Keccak256Hash(
-		[]byte("\x19Ethereum Signed Message:\n"),
-		[]byte(strconv.Itoa(len(msg))),
-		msg,
-	)
+	keccak256 := sha3.NewLegacyKeccak256()
+	keccak256.Write([]byte("\x19Ethereum Signed Message:\n"))
+	keccak256.Write([]byte(strconv.Itoa(len(msg))))
+	keccak256.Write(msg)
+	var hash [32]byte
+	keccak256.Sum(hash[:])
 
-	sigBytes, err := crypto.Sign(hash[:], k.privKey)
+	sigBytes, err := ecdsa.SignASN1(rand.Reader, k.privKey, hash[:])
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate signature")
 	}
