@@ -27,6 +27,8 @@ const (
 	SchemeP256 = signatureScheme("SIGNATURE_SCHEME_TK_API_P256")
 	// SchemeSECP256K1 is the API enum value for secp256k1 curve.
 	SchemeSECP256K1 = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1")
+	// SchemeSECP256K1EIP191 is the API enum value for secp256k1 curve with EIP-191 message signing.
+	SchemeSECP256K1EIP191 = signatureScheme("SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191")
 	// SchemeED25519 is the API enum value for ed25519 curve.
 	SchemeED25519 = signatureScheme("SIGNATURE_SCHEME_TK_API_ED25519")
 
