@@ -126,7 +126,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 	case SchemeP256:
 		curve = elliptic.P256()
 		x, y = elliptic.UnmarshalCompressed(curve, bytes)
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		curve = dcrec.S256()
 
 		pubkey, err := dcrec.ParsePubKey(bytes)
