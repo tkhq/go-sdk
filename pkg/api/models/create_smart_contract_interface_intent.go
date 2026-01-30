@@ -30,7 +30,7 @@ type CreateSmartContractInterfaceIntent struct {
 	// Required: true
 	SmartContractAddress *string `json:"smartContractAddress"`
 
-	// ABI/IDL as a JSON string
+	// ABI/IDL as a JSON string. Limited to 400kb
 	// Required: true
 	SmartContractInterface *string `json:"smartContractInterface"`
 

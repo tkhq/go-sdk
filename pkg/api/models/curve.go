@@ -35,6 +35,9 @@ const (
 
 	// CurveEd25519 captures enum value "CURVE_ED25519"
 	CurveEd25519 Curve = "CURVE_ED25519"
+
+	// CurveP256 captures enum value "CURVE_P256"
+	CurveP256 Curve = "CURVE_P256"
 )
 
 // for schema
@@ -42,7 +45,7 @@ var CurveEnum []Curve
 
 func init() {
 	var res []Curve
-	if err := json.Unmarshal([]byte(`["CURVE_SECP256K1","CURVE_ED25519"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CURVE_SECP256K1","CURVE_ED25519","CURVE_P256"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

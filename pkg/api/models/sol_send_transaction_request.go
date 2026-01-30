@@ -15,10 +15,13 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// EthSendRawTransactionRequest eth send raw transaction request
+// SolSendTransactionRequest sol send transaction request
 //
-// swagger:model EthSendRawTransactionRequest
-type EthSendRawTransactionRequest struct {
+// swagger:model SolSendTransactionRequest
+type SolSendTransactionRequest struct {
+
+	// generate app proofs
+	GenerateAppProofs *bool `json:"generateAppProofs,omitempty"`
 
 	// Unique identifier for a given Organization.
 	// Required: true
@@ -26,7 +29,7 @@ type EthSendRawTransactionRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *EthSendRawTransactionIntent `json:"parameters"`
+	Parameters *SolSendTransactionIntent `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -34,12 +37,12 @@ type EthSendRawTransactionRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION]
+	// Enum: [ACTIVITY_TYPE_SOL_SEND_TRANSACTION]
 	Type *string `json:"type"`
 }
 
-// Validate validates this eth send raw transaction request
-func (m *EthSendRawTransactionRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this sol send transaction request
+func (m *SolSendTransactionRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateOrganizationID(formats); err != nil {
@@ -64,7 +67,7 @@ func (m *EthSendRawTransactionRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EthSendRawTransactionRequest) validateOrganizationID(formats strfmt.Registry) error {
+func (m *SolSendTransactionRequest) validateOrganizationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organizationId", "body", m.OrganizationID); err != nil {
 		return err
@@ -73,7 +76,7 @@ func (m *EthSendRawTransactionRequest) validateOrganizationID(formats strfmt.Reg
 	return nil
 }
 
-func (m *EthSendRawTransactionRequest) validateParameters(formats strfmt.Registry) error {
+func (m *SolSendTransactionRequest) validateParameters(formats strfmt.Registry) error {
 
 	if err := validate.Required("parameters", "body", m.Parameters); err != nil {
 		return err
@@ -93,7 +96,7 @@ func (m *EthSendRawTransactionRequest) validateParameters(formats strfmt.Registr
 	return nil
 }
 
-func (m *EthSendRawTransactionRequest) validateTimestampMs(formats strfmt.Registry) error {
+func (m *SolSendTransactionRequest) validateTimestampMs(formats strfmt.Registry) error {
 
 	if err := validate.Required("timestampMs", "body", m.TimestampMs); err != nil {
 		return err
@@ -102,33 +105,33 @@ func (m *EthSendRawTransactionRequest) validateTimestampMs(formats strfmt.Regist
 	return nil
 }
 
-var ethSendRawTransactionRequestTypeTypePropEnum []interface{}
+var solSendTransactionRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_SOL_SEND_TRANSACTION"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
-		ethSendRawTransactionRequestTypeTypePropEnum = append(ethSendRawTransactionRequestTypeTypePropEnum, v)
+		solSendTransactionRequestTypeTypePropEnum = append(solSendTransactionRequestTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// EthSendRawTransactionRequestTypeACTIVITYTYPEETHSENDRAWTRANSACTION captures enum value "ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION"
-	EthSendRawTransactionRequestTypeACTIVITYTYPEETHSENDRAWTRANSACTION string = "ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION"
+	// SolSendTransactionRequestTypeACTIVITYTYPESOLSENDTRANSACTION captures enum value "ACTIVITY_TYPE_SOL_SEND_TRANSACTION"
+	SolSendTransactionRequestTypeACTIVITYTYPESOLSENDTRANSACTION string = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION"
 )
 
 // prop value enum
-func (m *EthSendRawTransactionRequest) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, ethSendRawTransactionRequestTypeTypePropEnum, true); err != nil {
+func (m *SolSendTransactionRequest) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, solSendTransactionRequestTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *EthSendRawTransactionRequest) validateType(formats strfmt.Registry) error {
+func (m *SolSendTransactionRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
@@ -142,8 +145,8 @@ func (m *EthSendRawTransactionRequest) validateType(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validate this eth send raw transaction request based on the context it is used
-func (m *EthSendRawTransactionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this sol send transaction request based on the context it is used
+func (m *SolSendTransactionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateParameters(ctx, formats); err != nil {
@@ -156,7 +159,7 @@ func (m *EthSendRawTransactionRequest) ContextValidate(ctx context.Context, form
 	return nil
 }
 
-func (m *EthSendRawTransactionRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
+func (m *SolSendTransactionRequest) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Parameters != nil {
 
@@ -174,7 +177,7 @@ func (m *EthSendRawTransactionRequest) contextValidateParameters(ctx context.Con
 }
 
 // MarshalBinary interface implementation
-func (m *EthSendRawTransactionRequest) MarshalBinary() ([]byte, error) {
+func (m *SolSendTransactionRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -182,8 +185,8 @@ func (m *EthSendRawTransactionRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *EthSendRawTransactionRequest) UnmarshalBinary(b []byte) error {
-	var res EthSendRawTransactionRequest
+func (m *SolSendTransactionRequest) UnmarshalBinary(b []byte) error {
+	var res SolSendTransactionRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
