@@ -20,6 +20,9 @@ import (
 // swagger:model CreateSubOrganizationIntentV7
 type CreateSubOrganizationIntentV7 struct {
 
+	// Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step.
+	ClientSignature *ClientSignature `json:"clientSignature,omitempty"`
+
 	// Disable email auth for the sub-organization
 	DisableEmailAuth *bool `json:"disableEmailAuth,omitempty"`
 
@@ -55,6 +58,10 @@ type CreateSubOrganizationIntentV7 struct {
 func (m *CreateSubOrganizationIntentV7) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClientSignature(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateRootQuorumThreshold(formats); err != nil {
 		res = append(res, err)
 	}
@@ -74,6 +81,25 @@ func (m *CreateSubOrganizationIntentV7) Validate(formats strfmt.Registry) error 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CreateSubOrganizationIntentV7) validateClientSignature(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClientSignature) { // not required
+		return nil
+	}
+
+	if m.ClientSignature != nil {
+		if err := m.ClientSignature.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clientSignature")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clientSignature")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -145,6 +171,10 @@ func (m *CreateSubOrganizationIntentV7) validateWallet(formats strfmt.Registry) 
 func (m *CreateSubOrganizationIntentV7) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateClientSignature(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateRootUsers(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -156,6 +186,27 @@ func (m *CreateSubOrganizationIntentV7) ContextValidate(ctx context.Context, for
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CreateSubOrganizationIntentV7) contextValidateClientSignature(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClientSignature != nil {
+
+		if swag.IsZero(m.ClientSignature) { // not required
+			return nil
+		}
+
+		if err := m.ClientSignature.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clientSignature")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clientSignature")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

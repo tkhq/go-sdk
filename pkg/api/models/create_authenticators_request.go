@@ -20,6 +20,9 @@ import (
 // swagger:model CreateAuthenticatorsRequest
 type CreateAuthenticatorsRequest struct {
 
+	// generate app proofs
+	GenerateAppProofs *bool `json:"generateAppProofs,omitempty"`
+
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`

@@ -45,7 +45,7 @@ type InitOtpAuthIntentV2 struct {
 	// Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'
 	SendFromEmailSenderName *string `json:"sendFromEmailSenderName,omitempty"`
 
-	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
+	// Optional parameters for customizing SMS message. If not provided, the default SMS message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
 	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.

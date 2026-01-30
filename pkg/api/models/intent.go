@@ -117,6 +117,15 @@ type Intent struct {
 	// create sub organization intent v7
 	CreateSubOrganizationIntentV7 *CreateSubOrganizationIntentV7 `json:"createSubOrganizationIntentV7,omitempty"`
 
+	// create tvc app intent
+	CreateTvcAppIntent *CreateTvcAppIntent `json:"createTvcAppIntent,omitempty"`
+
+	// create tvc deployment intent
+	CreateTvcDeploymentIntent *CreateTvcDeploymentIntent `json:"createTvcDeploymentIntent,omitempty"`
+
+	// create tvc manifest approvals intent
+	CreateTvcManifestApprovalsIntent *CreateTvcManifestApprovalsIntent `json:"createTvcManifestApprovalsIntent,omitempty"`
+
 	// create user tag intent
 	CreateUserTagIntent *CreateUserTagIntent `json:"createUserTagIntent,omitempty"`
 
@@ -306,6 +315,9 @@ type Intent struct {
 	// sign transaction intent v2
 	SignTransactionIntentV2 *SignTransactionIntentV2 `json:"signTransactionIntentV2,omitempty"`
 
+	// sol send transaction intent
+	SolSendTransactionIntent *SolSendTransactionIntent `json:"solSendTransactionIntent,omitempty"`
+
 	// stamp login intent
 	StampLoginIntent *StampLoginIntent `json:"stampLoginIntent,omitempty"`
 
@@ -350,6 +362,9 @@ type Intent struct {
 
 	// update wallet intent
 	UpdateWalletIntent *UpdateWalletIntent `json:"updateWalletIntent,omitempty"`
+
+	// upsert gas usage config intent
+	UpsertGasUsageConfigIntent *UpsertGasUsageConfigIntent `json:"upsertGasUsageConfigIntent,omitempty"`
 
 	// verify otp intent
 	VerifyOtpIntent *VerifyOtpIntent `json:"verifyOtpIntent,omitempty"`
@@ -484,6 +499,18 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreateSubOrganizationIntentV7(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateTvcAppIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateTvcDeploymentIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateTvcManifestApprovalsIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -731,6 +758,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSolSendTransactionIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateStampLoginIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -788,6 +819,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateWalletIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpsertGasUsageConfigIntent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1401,6 +1436,63 @@ func (m *Intent) validateCreateSubOrganizationIntentV7(formats strfmt.Registry) 
 				return ve.ValidateName("createSubOrganizationIntentV7")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateTvcAppIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcAppIntent) { // not required
+		return nil
+	}
+
+	if m.CreateTvcAppIntent != nil {
+		if err := m.CreateTvcAppIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcAppIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcAppIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateTvcDeploymentIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcDeploymentIntent) { // not required
+		return nil
+	}
+
+	if m.CreateTvcDeploymentIntent != nil {
+		if err := m.CreateTvcDeploymentIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcDeploymentIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcDeploymentIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateCreateTvcManifestApprovalsIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcManifestApprovalsIntent) { // not required
+		return nil
+	}
+
+	if m.CreateTvcManifestApprovalsIntent != nil {
+		if err := m.CreateTvcManifestApprovalsIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcManifestApprovalsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcManifestApprovalsIntent")
 			}
 			return err
 		}
@@ -2568,6 +2660,25 @@ func (m *Intent) validateSignTransactionIntentV2(formats strfmt.Registry) error 
 	return nil
 }
 
+func (m *Intent) validateSolSendTransactionIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.SolSendTransactionIntent) { // not required
+		return nil
+	}
+
+	if m.SolSendTransactionIntent != nil {
+		if err := m.SolSendTransactionIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("solSendTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("solSendTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateStampLoginIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.StampLoginIntent) { // not required
 		return nil
@@ -2853,6 +2964,25 @@ func (m *Intent) validateUpdateWalletIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateUpsertGasUsageConfigIntent(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpsertGasUsageConfigIntent) { // not required
+		return nil
+	}
+
+	if m.UpsertGasUsageConfigIntent != nil {
+		if err := m.UpsertGasUsageConfigIntent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("upsertGasUsageConfigIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("upsertGasUsageConfigIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateVerifyOtpIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.VerifyOtpIntent) { // not required
 		return nil
@@ -3001,6 +3131,18 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateCreateSubOrganizationIntentV7(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateTvcAppIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateTvcDeploymentIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateTvcManifestApprovalsIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3248,6 +3390,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateSolSendTransactionIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateStampLoginIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -3305,6 +3451,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateWalletIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpsertGasUsageConfigIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3982,6 +4132,69 @@ func (m *Intent) contextValidateCreateSubOrganizationIntentV7(ctx context.Contex
 				return ve.ValidateName("createSubOrganizationIntentV7")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationIntentV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateTvcAppIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcAppIntent != nil {
+
+		if swag.IsZero(m.CreateTvcAppIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcAppIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcAppIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcAppIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateTvcDeploymentIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcDeploymentIntent != nil {
+
+		if swag.IsZero(m.CreateTvcDeploymentIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcDeploymentIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcDeploymentIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcDeploymentIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateCreateTvcManifestApprovalsIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcManifestApprovalsIntent != nil {
+
+		if swag.IsZero(m.CreateTvcManifestApprovalsIntent) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcManifestApprovalsIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcManifestApprovalsIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcManifestApprovalsIntent")
 			}
 			return err
 		}
@@ -5271,6 +5484,27 @@ func (m *Intent) contextValidateSignTransactionIntentV2(ctx context.Context, for
 	return nil
 }
 
+func (m *Intent) contextValidateSolSendTransactionIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SolSendTransactionIntent != nil {
+
+		if swag.IsZero(m.SolSendTransactionIntent) { // not required
+			return nil
+		}
+
+		if err := m.SolSendTransactionIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("solSendTransactionIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("solSendTransactionIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateStampLoginIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.StampLoginIntent != nil {
@@ -5578,6 +5812,27 @@ func (m *Intent) contextValidateUpdateWalletIntent(ctx context.Context, formats 
 				return ve.ValidateName("updateWalletIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateWalletIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateUpsertGasUsageConfigIntent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpsertGasUsageConfigIntent != nil {
+
+		if swag.IsZero(m.UpsertGasUsageConfigIntent) { // not required
+			return nil
+		}
+
+		if err := m.UpsertGasUsageConfigIntent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("upsertGasUsageConfigIntent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("upsertGasUsageConfigIntent")
 			}
 			return err
 		}
