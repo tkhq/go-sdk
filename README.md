@@ -115,12 +115,25 @@ The SDK uses a custom changeset tooling for changelog management and publishes v
 
 #### Creating Releases
 
+Create a release branch named `release/v{ VERSION }`
+
 To prepare a new release:
 ```bash
 make prepare-release
 ```
 
 This will generate and update CHANGELOG.md & VERSION. Please review the changes and manually modify as needed.
+
+#### CI Driven Release:
+
+After getting the necessary approvals, merge the release branch into main, the tagging workflow will automatically run off this event.
+  This workflow will:
+    1. Create a git tag
+    2. Trigger pkg.go.dev indexing
+
+Review the draft and publish the new release.
+
+#### Manual Release:
 
 Commit and push the changes, get the PR approved, merge, and move to the next step.
 
