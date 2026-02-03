@@ -86,52 +86,60 @@ If no logger is provided, the SDK falls back to fmt.Printf("Turnkey API response
 
 ### Changelog and Releases
 
-The SDK uses [git-chglog](https://github.com/git-chglog/git-chglog) for changelog management and publishes versions to [pkg.go.dev](https://pkg.go.dev/github.com/tkhq/go-sdk).
-
-#### Commit Conventions
-
-Note: these are not strictly enforced yet, but rather offers general guidelines.
-
-To ensure your changes appear correctly in the changelog, use these commit prefixes:
-- `feat:` for new features
-- `fix:` for bug fixes
-- `perf:` for performance improvements
-- `refactor:` for code refactoring
-- `docs:`, `test:`, `ci:` (these are excluded from changelog)
-
-Example: `feat(api): add new wallet creation endpoint`
+The SDK uses a custom changeset tooling for changelog management and publishes versions to [pkg.go.dev](https://pkg.go.dev/github.com/tkhq/go-sdk).
 
 #### Managing Changes
 
-1. Install git-chglog:
-   ```bash
-   go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
-   ```
+1. Create a new change set:
+  ```bash
+  make changeset
+  ```
 
-2. Preview changelog for next version:
+2. Write your desired change set and push:
    ```bash
-   make changelog-next v=1.0.0
-   ```
+   $ make changeset
+    go run ./cmd/changeset
+    === Create Go Changeset ===
+    Select bump type:
+      1) patch
+      2) minor
+      3) major
+    Choice (1-3): 1
+    Short title for this change: This is my changeset title!
+    Enter a longer description (markdown allowed).
+    End input with a single '.' on its own line.
 
-3. Update changelog without releasing:
-   ```bash
-   make changelog
-   ```
+    This is my changeset description!
+    .
+    ```
 
 #### Creating Releases
 
+Create a release branch named `release/v{ VERSION }`
+
 To prepare a new release:
 ```bash
-make prepare-release v=1.0.0
+make prepare-release
 ```
 
-This will generate and update CHANGELOG.md. Please review the changes and manually modify as needed.
+This will generate and update CHANGELOG.md & VERSION. Please review the changes and manually modify as needed.
+
+#### CI Driven Release:
+
+After getting the necessary approvals, merge the release branch into main, the tagging workflow will automatically run off this event.
+  This workflow will:
+    1. Create a git tag
+    2. Trigger pkg.go.dev indexing
+
+Review the draft and publish the new release.
+
+#### Manual Release:
 
 Commit and push the changes, get the PR approved, merge, and move to the next step.
 
 To publish a new release (off of main):
 ```bash
-make publish-release v=1.0.0
+make publish-release
 ```
 
 This will:
