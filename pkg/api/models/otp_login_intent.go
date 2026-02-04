@@ -19,8 +19,8 @@ import (
 // swagger:model OtpLoginIntent
 type OtpLoginIntent struct {
 
-	// Optional signature associated with the public key passed into the verification step. This must be a hex-encoded ECDSA signature over the verification token. Only required if a public key was provided during the verification step.
-	ClientSignature *string `json:"clientSignature,omitempty"`
+	// Optional signature proving authorization for this login. The signature is over the verification token ID and the public key. Only required if a public key was provided during the verification step.
+	ClientSignature *ClientSignature `json:"clientSignature,omitempty"`
 
 	// Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
@@ -41,6 +41,10 @@ type OtpLoginIntent struct {
 func (m *OtpLoginIntent) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClientSignature(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePublicKey(formats); err != nil {
 		res = append(res, err)
 	}
@@ -52,6 +56,25 @@ func (m *OtpLoginIntent) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *OtpLoginIntent) validateClientSignature(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClientSignature) { // not required
+		return nil
+	}
+
+	if m.ClientSignature != nil {
+		if err := m.ClientSignature.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clientSignature")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clientSignature")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -73,8 +96,38 @@ func (m *OtpLoginIntent) validateVerificationToken(formats strfmt.Registry) erro
 	return nil
 }
 
-// ContextValidate validates this otp login intent based on context it is used
+// ContextValidate validate this otp login intent based on the context it is used
 func (m *OtpLoginIntent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateClientSignature(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OtpLoginIntent) contextValidateClientSignature(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClientSignature != nil {
+
+		if swag.IsZero(m.ClientSignature) { // not required
+			return nil
+		}
+
+		if err := m.ClientSignature.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clientSignature")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clientSignature")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

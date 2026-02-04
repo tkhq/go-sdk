@@ -22,16 +22,13 @@ type EmailAuthIntentV3 struct {
 	// Optional human-readable name for an API Key. If none provided, default to Email Auth - <Timestamp>
 	APIKeyName *string `json:"apiKeyName,omitempty"`
 
-	// The name of the application.
-	// Required: true
-	AppName *string `json:"appName"`
-
 	// Email of the authenticating user.
 	// Required: true
 	Email *string `json:"email"`
 
-	// Optional parameters for customizing emails. If not provided, the default email will be used.
-	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
+	// Parameters for customizing emails. If not provided, the default email will be used. Note that app_name is required.
+	// Required: true
+	EmailCustomization *EmailAuthCustomizationParams `json:"emailCustomization"`
 
 	// Expiration window (in seconds) indicating how long the API key is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
@@ -57,10 +54,6 @@ type EmailAuthIntentV3 struct {
 func (m *EmailAuthIntentV3) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateAppName(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateEmail(formats); err != nil {
 		res = append(res, err)
 	}
@@ -79,15 +72,6 @@ func (m *EmailAuthIntentV3) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *EmailAuthIntentV3) validateAppName(formats strfmt.Registry) error {
-
-	if err := validate.Required("appName", "body", m.AppName); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (m *EmailAuthIntentV3) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
@@ -98,8 +82,9 @@ func (m *EmailAuthIntentV3) validateEmail(formats strfmt.Registry) error {
 }
 
 func (m *EmailAuthIntentV3) validateEmailCustomization(formats strfmt.Registry) error {
-	if swag.IsZero(m.EmailCustomization) { // not required
-		return nil
+
+	if err := validate.Required("emailCustomization", "body", m.EmailCustomization); err != nil {
+		return err
 	}
 
 	if m.EmailCustomization != nil {
@@ -142,10 +127,6 @@ func (m *EmailAuthIntentV3) ContextValidate(ctx context.Context, formats strfmt.
 func (m *EmailAuthIntentV3) contextValidateEmailCustomization(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EmailCustomization != nil {
-
-		if swag.IsZero(m.EmailCustomization) { // not required
-			return nil
-		}
 
 		if err := m.EmailCustomization.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

@@ -21,7 +21,7 @@ type GetSmartContractInterfaceResponse struct {
 
 	// Object to be used in conjunction with policies to guard transaction signing.
 	// Required: true
-	SmartContractInterface *SmartContractInterface `json:"smartContractInterface"`
+	SmartContractInterface *DataV1SmartContractInterface `json:"smartContractInterface"`
 }
 
 // Validate validates this get smart contract interface response
