@@ -22,14 +22,11 @@ type EthSendTransactionIntent struct {
 
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	// Required: true
-	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532]
+	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532 eip155:137 eip155:80002]
 	Caip2 *string `json:"caip2"`
 
 	// Hex-encoded call data for contract interactions.
 	Data *string `json:"data,omitempty"`
-
-	// Unix timestamp after which the Gas Station meta-transaction is no longer valid. Only used when sponsor=true.
-	Deadline *string `json:"deadline,omitempty"`
 
 	// A wallet or private key address to sign with. This does not support private key IDs.
 	// Required: true
@@ -38,7 +35,7 @@ type EthSendTransactionIntent struct {
 	// Maximum amount of gas to use for this transaction, for EIP-1559 transactions.
 	GasLimit *string `json:"gasLimit,omitempty"`
 
-	// The gas station delegate contract nonce. Only used when sponsor=true.
+	// The gas station delegate contract nonce. Only used when sponsor=true. Include this if you want maximal security posture.
 	GasStationNonce *string `json:"gasStationNonce,omitempty"`
 
 	// Maximum total fee per gas unit (base fee + priority fee) in wei. Required for non-sponsored (EIP-1559) transactions. Not used for sponsored transactions.
@@ -87,7 +84,7 @@ var ethSendTransactionIntentTypeCaip2PropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532","eip155:137","eip155:80002"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -108,6 +105,12 @@ const (
 
 	// EthSendTransactionIntentCaip2Eip15584532 captures enum value "eip155:84532"
 	EthSendTransactionIntentCaip2Eip15584532 string = "eip155:84532"
+
+	// EthSendTransactionIntentCaip2Eip155137 captures enum value "eip155:137"
+	EthSendTransactionIntentCaip2Eip155137 string = "eip155:137"
+
+	// EthSendTransactionIntentCaip2Eip15580002 captures enum value "eip155:80002"
+	EthSendTransactionIntentCaip2Eip15580002 string = "eip155:80002"
 )
 
 // prop value enum

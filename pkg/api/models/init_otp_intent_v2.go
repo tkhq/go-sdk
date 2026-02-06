@@ -22,7 +22,7 @@ type InitOtpIntentV2 struct {
 	// Optional flag to specify if the OTP code should be alphanumeric (Crockford’s Base32). Default = true
 	Alphanumeric *bool `json:"alphanumeric,omitempty"`
 
-	// The name of the application.
+	// The name of the application. This field is required and will be used in email notifications if an email template is not provided.
 	// Required: true
 	AppName *string `json:"appName"`
 
@@ -31,7 +31,7 @@ type InitOtpIntentV2 struct {
 	Contact *string `json:"contact"`
 
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
-	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
+	EmailCustomization *EmailCustomizationParamsV2 `json:"emailCustomization,omitempty"`
 
 	// Expiration window (in seconds) indicating how long the OTP is valid for. If not provided, a default of 5 minutes will be used. Maximum value is 600 seconds (10 minutes)
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
@@ -52,7 +52,7 @@ type InitOtpIntentV2 struct {
 	// Optional custom sender name for use with sendFromEmailAddress; if left empty, will default to 'Notifications'
 	SendFromEmailSenderName *string `json:"sendFromEmailSenderName,omitempty"`
 
-	// Optional parameters for customizing SMS message. If not provided, the default sms message will be used.
+	// Optional parameters for customizing SMS message. If not provided, the default SMS message will be used.
 	SmsCustomization *SmsCustomizationParams `json:"smsCustomization,omitempty"`
 
 	// Optional client-generated user identifier to enable per-user rate limiting for SMS auth. We recommend using a hash of the client-side IP address.

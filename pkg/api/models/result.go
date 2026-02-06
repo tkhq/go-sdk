@@ -93,6 +93,15 @@ type Result struct {
 	// create sub organization result v7
 	CreateSubOrganizationResultV7 *CreateSubOrganizationResultV7 `json:"createSubOrganizationResultV7,omitempty"`
 
+	// create tvc app result
+	CreateTvcAppResult *CreateTvcAppResult `json:"createTvcAppResult,omitempty"`
+
+	// create tvc deployment result
+	CreateTvcDeploymentResult *CreateTvcDeploymentResult `json:"createTvcDeploymentResult,omitempty"`
+
+	// create tvc manifest approvals result
+	CreateTvcManifestApprovalsResult *CreateTvcManifestApprovalsResult `json:"createTvcManifestApprovalsResult,omitempty"`
+
 	// create user tag result
 	CreateUserTagResult *CreateUserTagResult `json:"createUserTagResult,omitempty"`
 
@@ -175,7 +184,7 @@ type Result struct {
 	EthSendRawTransactionResult *EthSendRawTransactionResult `json:"ethSendRawTransactionResult,omitempty"`
 
 	// eth send transaction result
-	EthSendTransactionResult EthSendTransactionResult `json:"ethSendTransactionResult,omitempty"`
+	EthSendTransactionResult *EthSendTransactionResult `json:"ethSendTransactionResult,omitempty"`
 
 	// export private key result
 	ExportPrivateKeyResult *ExportPrivateKeyResult `json:"exportPrivateKeyResult,omitempty"`
@@ -249,6 +258,9 @@ type Result struct {
 	// sign transaction result
 	SignTransactionResult *SignTransactionResult `json:"signTransactionResult,omitempty"`
 
+	// sol send transaction result
+	SolSendTransactionResult *SolSendTransactionResult `json:"solSendTransactionResult,omitempty"`
+
 	// stamp login result
 	StampLoginResult *StampLoginResult `json:"stampLoginResult,omitempty"`
 
@@ -293,6 +305,9 @@ type Result struct {
 
 	// update wallet result
 	UpdateWalletResult *UpdateWalletResult `json:"updateWalletResult,omitempty"`
+
+	// upsert gas usage config result
+	UpsertGasUsageConfigResult *UpsertGasUsageConfigResult `json:"upsertGasUsageConfigResult,omitempty"`
 
 	// verify otp result
 	VerifyOtpResult *VerifyOtpResult `json:"verifyOtpResult,omitempty"`
@@ -402,6 +417,18 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreateTvcAppResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateTvcDeploymentResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreateTvcManifestApprovalsResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCreateUserTagResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -506,6 +533,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateEthSendTransactionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateExportPrivateKeyResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -602,6 +633,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSolSendTransactionResult(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateStampLoginResult(formats); err != nil {
 		res = append(res, err)
 	}
@@ -651,6 +686,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpdateWalletResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpsertGasUsageConfigResult(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1131,6 +1170,63 @@ func (m *Result) validateCreateSubOrganizationResultV7(formats strfmt.Registry) 
 				return ve.ValidateName("createSubOrganizationResultV7")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationResultV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateTvcAppResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcAppResult) { // not required
+		return nil
+	}
+
+	if m.CreateTvcAppResult != nil {
+		if err := m.CreateTvcAppResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcAppResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcAppResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateTvcDeploymentResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcDeploymentResult) { // not required
+		return nil
+	}
+
+	if m.CreateTvcDeploymentResult != nil {
+		if err := m.CreateTvcDeploymentResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcDeploymentResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcDeploymentResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) validateCreateTvcManifestApprovalsResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreateTvcManifestApprovalsResult) { // not required
+		return nil
+	}
+
+	if m.CreateTvcManifestApprovalsResult != nil {
+		if err := m.CreateTvcManifestApprovalsResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcManifestApprovalsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcManifestApprovalsResult")
 			}
 			return err
 		}
@@ -1633,6 +1729,25 @@ func (m *Result) validateEthSendRawTransactionResult(formats strfmt.Registry) er
 	return nil
 }
 
+func (m *Result) validateEthSendTransactionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.EthSendTransactionResult) { // not required
+		return nil
+	}
+
+	if m.EthSendTransactionResult != nil {
+		if err := m.EthSendTransactionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateExportPrivateKeyResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.ExportPrivateKeyResult) { // not required
 		return nil
@@ -2089,6 +2204,25 @@ func (m *Result) validateSignTransactionResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateSolSendTransactionResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.SolSendTransactionResult) { // not required
+		return nil
+	}
+
+	if m.SolSendTransactionResult != nil {
+		if err := m.SolSendTransactionResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("solSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("solSendTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateStampLoginResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.StampLoginResult) { // not required
 		return nil
@@ -2336,6 +2470,25 @@ func (m *Result) validateUpdateWalletResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateUpsertGasUsageConfigResult(formats strfmt.Registry) error {
+	if swag.IsZero(m.UpsertGasUsageConfigResult) { // not required
+		return nil
+	}
+
+	if m.UpsertGasUsageConfigResult != nil {
+		if err := m.UpsertGasUsageConfigResult.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("upsertGasUsageConfigResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("upsertGasUsageConfigResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateVerifyOtpResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.VerifyOtpResult) { // not required
 		return nil
@@ -2459,6 +2612,18 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCreateTvcAppResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateTvcDeploymentResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateTvcManifestApprovalsResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCreateUserTagResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2563,6 +2728,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateEthSendTransactionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateExportPrivateKeyResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2659,6 +2828,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateSolSendTransactionResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateStampLoginResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -2708,6 +2881,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateUpdateWalletResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpsertGasUsageConfigResult(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3238,6 +3415,69 @@ func (m *Result) contextValidateCreateSubOrganizationResultV7(ctx context.Contex
 				return ve.ValidateName("createSubOrganizationResultV7")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("createSubOrganizationResultV7")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateTvcAppResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcAppResult != nil {
+
+		if swag.IsZero(m.CreateTvcAppResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcAppResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcAppResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcAppResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateTvcDeploymentResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcDeploymentResult != nil {
+
+		if swag.IsZero(m.CreateTvcDeploymentResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcDeploymentResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcDeploymentResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcDeploymentResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateCreateTvcManifestApprovalsResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateTvcManifestApprovalsResult != nil {
+
+		if swag.IsZero(m.CreateTvcManifestApprovalsResult) { // not required
+			return nil
+		}
+
+		if err := m.CreateTvcManifestApprovalsResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("createTvcManifestApprovalsResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("createTvcManifestApprovalsResult")
 			}
 			return err
 		}
@@ -3792,6 +4032,27 @@ func (m *Result) contextValidateEthSendRawTransactionResult(ctx context.Context,
 	return nil
 }
 
+func (m *Result) contextValidateEthSendTransactionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EthSendTransactionResult != nil {
+
+		if swag.IsZero(m.EthSendTransactionResult) { // not required
+			return nil
+		}
+
+		if err := m.EthSendTransactionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ethSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("ethSendTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateExportPrivateKeyResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ExportPrivateKeyResult != nil {
@@ -4296,6 +4557,27 @@ func (m *Result) contextValidateSignTransactionResult(ctx context.Context, forma
 	return nil
 }
 
+func (m *Result) contextValidateSolSendTransactionResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SolSendTransactionResult != nil {
+
+		if swag.IsZero(m.SolSendTransactionResult) { // not required
+			return nil
+		}
+
+		if err := m.SolSendTransactionResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("solSendTransactionResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("solSendTransactionResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) contextValidateStampLoginResult(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.StampLoginResult != nil {
@@ -4561,6 +4843,27 @@ func (m *Result) contextValidateUpdateWalletResult(ctx context.Context, formats 
 				return ve.ValidateName("updateWalletResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("updateWalletResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateUpsertGasUsageConfigResult(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpsertGasUsageConfigResult != nil {
+
+		if swag.IsZero(m.UpsertGasUsageConfigResult) { // not required
+			return nil
+		}
+
+		if err := m.UpsertGasUsageConfigResult.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("upsertGasUsageConfigResult")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("upsertGasUsageConfigResult")
 			}
 			return err
 		}
