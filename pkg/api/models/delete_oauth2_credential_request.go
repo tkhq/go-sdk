@@ -20,6 +20,9 @@ import (
 // swagger:model DeleteOauth2CredentialRequest
 type DeleteOauth2CredentialRequest struct {
 
+	// generate app proofs
+	GenerateAppProofs *bool `json:"generateAppProofs,omitempty"`
+
 	// Unique identifier for a given Organization.
 	// Required: true
 	OrganizationID *string `json:"organizationId"`

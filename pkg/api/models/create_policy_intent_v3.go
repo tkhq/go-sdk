@@ -29,8 +29,9 @@ type CreatePolicyIntentV3 struct {
 	// Required: true
 	Effect *Effect `json:"effect"`
 
-	// notes
-	Notes string `json:"notes,omitempty"`
+	// Notes for a Policy.
+	// Required: true
+	Notes *string `json:"notes"`
 
 	// Human-readable name for a Policy.
 	// Required: true
@@ -42,6 +43,10 @@ func (m *CreatePolicyIntentV3) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEffect(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNotes(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -74,6 +79,15 @@ func (m *CreatePolicyIntentV3) validateEffect(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *CreatePolicyIntentV3) validateNotes(formats strfmt.Registry) error {
+
+	if err := validate.Required("notes", "body", m.Notes); err != nil {
+		return err
 	}
 
 	return nil
