@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 0.15.0 — 2026-02-06
+### Minor Changes
+- Synced with Mono v2026.2.2
+
+> [!CAUTION]
+> **Breaking**:
+> - App name is now required in:
+>    - ACTIVITY_TYPE_EMAIL_AUTH_V3
+>    - ACTIVITY_TYPE_INIT_OTP_AUTH_V3
+>    - ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2
+>    - ACTIVITY_TYPE_INIT_OTP_V2
+> - Policy notes are now required at the SDK level
+
+### [v0.14.0 ... v0.15.0](https://github.com/tkhq/go-sdk/compare/v0.14.0...v0.15.0)
+
 ## 0.14.0 - 2025-11-14
 ### Minor Changes
 - Rolled back email-related activity versions
