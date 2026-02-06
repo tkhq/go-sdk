@@ -3,9 +3,11 @@ package sdk
 
 import (
 	"bytes"
+	_ "embed"
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -17,7 +19,9 @@ import (
 	"github.com/tkhq/go-sdk/pkg/store/local"
 )
 
-const DefaultClientVersion = "go-sdk"
+//go:embed VERSION
+var embeddedVersion string
+var DefaultClientVersion = "turnkey-go/" + strings.TrimSpace(embeddedVersion)
 
 type config struct {
 	apiKey          *apikey.Key
