@@ -137,7 +137,7 @@ func main() {
 			Effect:     models.EffectAllow.Pointer(),
 			Condition:  StringPointer(fmt.Sprintf("eth.tx.to == '%s'", recipientAddress)),
 			Consensus:  StringPointer(fmt.Sprintf("approvers.any(user, user.id == '%s')", delegatedUserId)),
-			Notes:      "Policy notes",
+			Notes:      StringPointer("Policy notes"),
 		},
 	})
 
