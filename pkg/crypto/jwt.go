@@ -113,6 +113,8 @@ func VerifySessionJwtSignature(jwtString string, dangerouslyOverrideNotarizerPub
 //   - Public key cannot be parsed
 //   - Signature is invalid
 //   - Required claims are missing (id, verification_type, contact)
+//
+//nolint:gocyclo // Complexity from thorough validation is intentional for security
 func VerifyOtpVerificationToken(tokenString string, dangerouslyOverrideOtpVerificationPublicKey ...string) error {
 	// Determine which public key to use
 	otpVerificationPublicKeyHex := ProductionOTPVerificationPublicKey
