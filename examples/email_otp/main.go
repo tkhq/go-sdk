@@ -12,6 +12,7 @@ import (
 	"github.com/tkhq/go-sdk/pkg/api/client/user_verification"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/crypto"
 	"github.com/tkhq/go-sdk/pkg/util"
 )
 
@@ -118,6 +119,13 @@ func verifyOTP(id, code string) (string, error) {
 	}
 
 	fmt.Printf("Verification Token: %s\n", *token)
+
+	// Verify the verification token JWT signature
+	if err := crypto.VerifyOtpVerificationToken(*token); err != nil {
+		return "", fmt.Errorf("failed to verify token signature: %w", err)
+	}
+	fmt.Println("✓ Verification token signature is valid")
+
 	return *token, nil
 }
 
@@ -150,5 +158,12 @@ func loginOTP(token string) error {
 	}
 
 	fmt.Printf("Session jwt token: %s\n", *sessionJwt)
+
+	// Verify the session JWT signature
+	if err := crypto.VerifySessionJwtSignature(*sessionJwt); err != nil {
+		return fmt.Errorf("failed to verify session JWT signature: %w", err)
+	}
+	fmt.Println("✓ Session JWT signature is valid")
+
 	return nil
 }
