@@ -40,7 +40,9 @@ func main() {
 
 	// Validate required flags
 	if apiPrivateKey == "" || parentOrgID == "" || subOrgID == "" || emailAddress == "" {
-		log.Fatal("Missing required flags: -api-private-key, -parent-org-id, -sub-org-id, and -email are required")
+		log.Println("Missing required flags: -api-private-key, -parent-org-id, -sub-org-id, and -email are required")
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	if err := run(); err != nil {

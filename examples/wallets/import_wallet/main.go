@@ -10,6 +10,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
@@ -99,7 +100,9 @@ func main() {
 
 	// Validate required flags
 	if mnemonic == "" || organizationID == "" || userID == "" || apiPrivateKey == "" {
-		log.Fatal("Missing required flags: -mnemonic, -org-id, -user-id, and -api-private-key are required")
+		log.Println("Missing required flags: -mnemonic, -org-id, -user-id, and -api-private-key are required")
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	if err := run(); err != nil {

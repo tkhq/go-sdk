@@ -15,6 +15,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/btcsuite/btcutil/base58"
 
@@ -49,7 +50,9 @@ func main() {
 
 	// Validate required flags
 	if organizationID == "" || userID == "" || apiPrivateKey == "" {
-		log.Fatal("Missing required flags: -org-id, -user-id, and -api-private-key are required")
+		log.Println("Missing required flags: -org-id, -user-id, and -api-private-key are required")
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
 	var addressFormat models.AddressFormat
