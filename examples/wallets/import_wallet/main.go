@@ -15,59 +15,34 @@ import (
 	"github.com/tkhq/go-sdk/pkg/util"
 )
 
-func main() {
-
-	// Insert the wallet mnemonic you want to import
-	mnemonic := "<your_mnemonic_here>"
-
-	// Organization ID, user ID and API private key
-	organizationId := "<orgId>"
-	userId := "<user_from_orgId>"
-	apiPrivateKey := "<private_key_here>"
-
-	// Generate a new key pair used to encrypt the export bundle
+// setupEncryptionClient sets up the encryption key and enclave encrypt client
+func setupEncryptionClient(userId, organizationId string) (*enclave_encrypt.EnclaveEncryptClient, error) {
 	encryptionKey, err := encryptionkey.New(userId, organizationId)
-
 	if err != nil {
-		log.Fatal("creating encryption key: %w", err)
-	}
-
-	// API key used by the client
-	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
-
-	if err != nil {
-		log.Fatal("creating API key: %w", err)
-	}
-
-	client, err := sdk.New(sdk.WithAPIKey(apiKey))
-
-	if err != nil {
-		log.Fatal("creating SDK client: %w", err)
+		return nil, fmt.Errorf("creating encryption key: %w", err)
 	}
 
 	signerKey, err := util.HexToPublicKey(encryptionkey.SignerProductionPublicKey)
-
 	if err != nil {
-		log.Fatal("failed to convert the public key")
+		return nil, fmt.Errorf("failed to convert the public key: %w", err)
 	}
 
-	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
 	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
-
 	if err != nil {
-		log.Fatal("failed to decode encryption private key")
+		return nil, fmt.Errorf("failed to decode encryption private key: %w", err)
 	}
 
-	// Set up enclave encrypt client
 	encryptClient, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(signerKey, *kemPrivateKey)
-
 	if err != nil {
-		log.Fatal("failed to setup enclave encrypt client")
+		return nil, fmt.Errorf("failed to setup enclave encrypt client: %w", err)
 	}
 
-	// Init import activity, this produces an import bundle, containing a public key and signature.
-	// These artifacts will be used in the next step to ensure that key material is only accessible by Turnkey, and cannot be extracted by any man-in-the-middle (MITM)
+	return encryptClient, nil
+}
+
+// initWalletImport initializes the wallet import and returns the import bundle
+func initWalletImport(client *sdk.Client, organizationId, userId string) (string, error) {
 	initImportParams := wallets.NewInitImportWalletParams().WithBody(&models.InitImportWalletRequest{
 		OrganizationID: &organizationId,
 		Parameters: &models.InitImportWalletIntent{
@@ -78,23 +53,63 @@ func main() {
 	})
 
 	reply, err := client.V0().Wallets.InitImportWallet(initImportParams, client.Authenticator)
-
 	if err != nil {
-		log.Fatal("init import request failed: %w", err)
+		return "", fmt.Errorf("init import request failed: %w", err)
 	}
 
-	importBundle := *reply.Payload.Activity.Result.InitImportWalletResult.ImportBundle
+	return *reply.Payload.Activity.Result.InitImportWalletResult.ImportBundle, nil
+}
 
+// encryptMnemonic encrypts the mnemonic and returns the encrypted bundle as a string
+func encryptMnemonic(encryptClient *enclave_encrypt.EnclaveEncryptClient, mnemonic, importBundle, organizationId, userId string) (string, error) {
 	clientSendMsg, err := encryptClient.Encrypt([]byte(mnemonic), []byte(importBundle), organizationId, userId)
-
 	if err != nil {
-		log.Fatal("unable to encrypt wallet to target: %w", err)
+		return "", fmt.Errorf("unable to encrypt wallet to target: %w", err)
 	}
 
 	encryptedBundle, err := json.Marshal(clientSendMsg)
-
 	if err != nil {
-		log.Fatal("failed to encrypt bundle: %w", err)
+		return "", fmt.Errorf("failed to encrypt bundle: %w", err)
+	}
+
+	return string(encryptedBundle), nil
+}
+
+func main() {
+	// Insert the wallet mnemonic you want to import
+	mnemonic := "<your_mnemonic_here>"
+
+	// Organization ID, user ID and API private key
+	organizationId := "<orgId>"
+	userId := "<user_from_orgId>"
+	apiPrivateKey := "<private_key_here>"
+
+	// API key used by the client
+	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
+	if err != nil {
+		log.Fatal("creating API key: %w", err)
+	}
+
+	client, err := sdk.New(sdk.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatal("creating SDK client: %w", err)
+	}
+
+	encryptClient, err := setupEncryptionClient(userId, organizationId)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Init import activity, this produces an import bundle, containing a public key and signature.
+	// These artifacts will be used in the next step to ensure that key material is only accessible by Turnkey, and cannot be extracted by any man-in-the-middle (MITM)
+	importBundle, err := initWalletImport(client, organizationId, userId)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	encryptedBundle, err := encryptMnemonic(encryptClient, mnemonic, importBundle, organizationId, userId)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// For other HD wallet paths see https://docs.turnkey.com/concepts/wallets#hd-wallet-default-paths
@@ -113,7 +128,7 @@ func main() {
 					PathFormat:    models.PathFormatBip32.Pointer(),
 				},
 			},
-			EncryptedBundle: util.StringPointer(string(encryptedBundle)),
+			EncryptedBundle: util.StringPointer(encryptedBundle),
 			WalletName:      util.StringPointer("New Test Wallet"),
 		},
 		TimestampMs: util.RequestTimestamp(),
@@ -121,7 +136,6 @@ func main() {
 	})
 
 	importReply, err := client.V0().Wallets.ImportWallet(importParams, client.Authenticator)
-
 	if err != nil {
 		log.Fatal("import wallet request failed: %w", err)
 	}

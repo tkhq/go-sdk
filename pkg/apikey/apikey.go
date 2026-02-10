@@ -89,9 +89,9 @@ func New(organizationID string, opts ...optionFunc) (*Key, error) {
 	}
 
 	// supply metadata
-	apiKey.Metadata.Organizations = append(apiKey.Metadata.Organizations, organizationID)
-	apiKey.Metadata.PublicKey = apiKey.PublicKey
-	apiKey.Metadata.Scheme = string(apiKey.scheme)
+	apiKey.Organizations = append(apiKey.Organizations, organizationID)
+	apiKey.PublicKey = apiKey.TkPublicKey
+	apiKey.Scheme = string(apiKey.scheme)
 
 	return apiKey, nil
 }
@@ -184,10 +184,10 @@ func (k *Key) MergeMetadata(md Metadata) error {
 		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
 	}
 
-	k.Metadata.Name = md.Name
-	k.Metadata.Organizations = md.Organizations
-	k.Metadata.PublicKey = md.PublicKey
-	k.Metadata.Scheme = md.Scheme
+	k.Name = md.Name
+	k.Organizations = md.Organizations
+	k.PublicKey = md.PublicKey
+	k.Scheme = md.Scheme
 
 	return nil
 }

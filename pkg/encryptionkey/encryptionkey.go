@@ -66,9 +66,12 @@ func New(userID string, organizationID string) (*Key, error) {
 		return nil, err
 	}
 
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	encryptionKey.Metadata.Organization = organizationID
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	encryptionKey.Metadata.User = userID
-	encryptionKey.Metadata.PublicKey = encryptionKey.PublicKey
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	encryptionKey.Metadata.PublicKey = encryptionKey.TkPublicKey
 
 	return encryptionKey, nil
 }
@@ -214,9 +217,13 @@ func (k *Key) MergeMetadata(md Metadata) error {
 		return errors.Errorf("metadata public key %q does not match encryption key public key %q", md.PublicKey, k.TkPublicKey)
 	}
 
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	k.Metadata.Name = md.Name
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	k.Metadata.Organization = md.Organization
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	k.Metadata.PublicKey = md.PublicKey
+	//nolint:staticcheck // QF1008: explicit Metadata field access
 	k.Metadata.User = md.User
 
 	return nil

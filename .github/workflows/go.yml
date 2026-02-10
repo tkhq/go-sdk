@@ -22,10 +22,10 @@ jobs:
       run: go get -v
 
     - name: lint
-      uses: golangci/golangci-lint-action@v3.4.0
+      uses: golangci/golangci-lint-action@v7
       with:
         args: ./...
-        version: v1.55.2
+        version: v2.2.2
 
     - name: Build
       run: go build -v ./...

@@ -245,7 +245,7 @@ type Authenticator struct {
 
 // AuthenticateRequest implements runtime.ClientAuthInfoWriter.
 // It adds the X-Stamp header to the request based by generating the Stamp with the request body and API key.
-func (auth *Authenticator) AuthenticateRequest(req runtime.ClientRequest, reg strfmt.Registry) (err error) { //nolint: revive
+func (auth *Authenticator) AuthenticateRequest(req runtime.ClientRequest, reg strfmt.Registry) (err error) {
 	stamp, err := apikey.Stamp(req.GetBody(), auth.Key)
 	if err != nil {
 		return errors.Wrap(err, "failed to generate API stamp")
