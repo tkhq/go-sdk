@@ -1,13 +1,24 @@
 // Package main demonstrates a Secp256k1 or Ed25519 private key import
+//
+// Usage:
+//
+//	Import an Ethereum private key:
+//	  go run main.go -ethereum-key "your_hex_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+//
+//	Import a Solana private key:
+//	  go run main.go -solana-key "your_base58_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 package main
 
 import (
 	"encoding/hex"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/btcsuite/btcutil/base58"
+
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/private_keys"
 	"github.com/tkhq/go-sdk/pkg/api/models"
@@ -17,11 +28,32 @@ import (
 	"github.com/tkhq/go-sdk/pkg/util"
 )
 
-func main() {
+var (
+	hexEncodedPrivateKey    string
+	solanaEncodedPrivateKey string
+	organizationID          string
+	userID                  string
+	apiPrivateKey           string
+)
 
+func init() {
 	// Only set one of the hexEncodedPrivateKey or solanaEncodedPrivateKey; the other should stay empty
-	hexEncodedPrivateKey := ""    // Ethereum
-	solanaEncodedPrivateKey := "" // Solana base58-encoded private key
+	flag.StringVar(&hexEncodedPrivateKey, "ethereum-key", "", "hex-encoded Ethereum private key to import")
+	flag.StringVar(&solanaEncodedPrivateKey, "solana-key", "", "base58-encoded Solana private key to import")
+	flag.StringVar(&organizationID, "org-id", "", "organization ID for the import")
+	flag.StringVar(&userID, "user-id", "", "user ID within the organization")
+	flag.StringVar(&apiPrivateKey, "api-private-key", "", "Turnkey API private key for authentication")
+}
+
+func main() {
+	flag.Parse()
+
+	// Validate required flags
+	if organizationID == "" || userID == "" || apiPrivateKey == "" {
+		log.Println("Missing required flags: -org-id, -user-id, and -api-private-key are required")
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
 
 	var addressFormat models.AddressFormat
 	var importedKey []byte
@@ -46,10 +78,10 @@ func main() {
 		importedKey = decoded[:32]
 
 	default:
-		log.Fatal("No private key provided")
+		log.Fatal("No private key provided: specify either -ethereum-key or -solana-key")
 	}
 
-	privateKeyID, err := ImportPrivateKey(importedKey, addressFormat)
+	privateKeyID, err := ImportPrivateKey(importedKey, addressFormat, organizationID, userID, apiPrivateKey)
 	if err != nil {
 		log.Fatalf("Failed to import private key: %v", err)
 	}
@@ -57,57 +89,49 @@ func main() {
 	fmt.Println("Private Key ID:", *privateKeyID)
 }
 
-// ImportPrivateKey is a helper that executes a private key import for a hex-encoded Ethereum or Solana private key in a compatible address format.
-// Returns the resulting private key ID
-func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*string, error) {
-
-	// Organization ID, user ID and API private key
-	organizationId := "<orgId>"
-	userId := "<user_from_orgId>"
-	apiPrivateKey := "<private_key_here>"
-
-	// Generate a new key pair used to encrypt the export bundle
-	encryptionKey, err := encryptionkey.New(userId, organizationId)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to create encryption key: %w", err)
-	}
-
-	// API key used by the client
+// setupClient creates and returns an SDK client
+func setupClient(apiPrivateKey string) (*sdk.Client, error) {
 	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API key: %w", err)
 	}
 
 	client, err := sdk.New(sdk.WithAPIKey(apiKey))
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to create SDK client: %w", err)
 	}
 
-	signerKey, err := util.HexToPublicKey(encryptionkey.SignerProductionPublicKey)
+	return client, nil
+}
 
+// setupEncryptClient creates and returns an enclave encrypt client
+func setupEncryptClient(userId, organizationId string) (*enclave_encrypt.EnclaveEncryptClient, error) {
+	encryptionKey, err := encryptionkey.New(userId, organizationId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create encryption key: %w", err)
+	}
+
+	signerKey, err := util.HexToPublicKey(encryptionkey.SignerProductionPublicKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert the public key: %w", err)
 	}
 
-	// Get the private key
 	tkPrivateKey := encryptionKey.GetPrivateKey()
 	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode encryption private key: %w", err)
 	}
 
-	// set up enclave encrypt client
 	encryptClient, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(signerKey, *kemPrivateKey)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to setup enclave encrypt client: %w", err)
 	}
 
-	// Init import
+	return encryptClient, nil
+}
+
+// getImportBundle initializes the import and returns the import bundle
+func getImportBundle(client *sdk.Client, organizationId, userId string) (string, error) {
 	initImportParams := private_keys.NewInitImportPrivateKeyParams().WithBody(&models.InitImportPrivateKeyRequest{
 		OrganizationID: &organizationId,
 		Parameters: &models.InitImportPrivateKeyIntent{
@@ -118,32 +142,67 @@ func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*
 	})
 
 	reply, err := client.V0().PrivateKeys.InitImportPrivateKey(initImportParams, client.Authenticator)
-
 	if err != nil {
-		return nil, fmt.Errorf("init import request failedt: %w", err)
+		return "", fmt.Errorf("init import request failed: %w", err)
 	}
 
-	importBundle := *reply.Payload.Activity.Result.InitImportPrivateKeyResult.ImportBundle
+	return *reply.Payload.Activity.Result.InitImportPrivateKeyResult.ImportBundle, nil
+}
 
-	clientSendMsg, err := encryptClient.Encrypt([]byte(importedKey), []byte(importBundle), organizationId, userId)
-
+// encryptPrivateKey encrypts the private key and returns the encrypted bundle
+func encryptPrivateKey(encryptClient *enclave_encrypt.EnclaveEncryptClient, importedKey []byte, importBundle, organizationId, userId string) (string, error) {
+	clientSendMsg, err := encryptClient.Encrypt(importedKey, []byte(importBundle), organizationId, userId)
 	if err != nil {
-		return nil, fmt.Errorf("unable to encrypt private key to target: %w", err)
+		return "", fmt.Errorf("unable to encrypt private key to target: %w", err)
 	}
 
 	encryptedBundle, err := json.Marshal(clientSendMsg)
-
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert clientSendMsg into encryptedBundle: %w", err)
+		return "", fmt.Errorf("failed to convert clientSendMsg into encryptedBundle: %w", err)
 	}
 
-	var curve *models.Curve
+	return string(encryptedBundle), nil
+}
 
-	if addressFormat == models.AddressFormatEthereum {
-		curve = models.CurveSecp256k1.Pointer()
-	} else if addressFormat == models.AddressFormatSolana {
-		curve = models.CurveEd25519.Pointer()
+// getCurveForAddressFormat returns the appropriate curve for the given address format
+func getCurveForAddressFormat(addressFormat models.AddressFormat) *models.Curve {
+	switch addressFormat {
+	case models.AddressFormatEthereum:
+		return models.CurveSecp256k1.Pointer()
+	case models.AddressFormatSolana:
+		return models.CurveEd25519.Pointer()
+	default:
+		return nil
 	}
+}
+
+// ImportPrivateKey is a helper that executes a private key import for a hex-encoded Ethereum or Solana private key in a compatible address format.
+// Returns the resulting private key ID
+func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat, organizationId, userId, apiPrivateKey string) (*string, error) {
+	client, err := setupClient(apiPrivateKey)
+	if err != nil {
+		return nil, err
+	}
+
+	encryptClient, err := setupEncryptClient(userId, organizationId)
+	if err != nil {
+		return nil, err
+	}
+
+	importBundle, err := getImportBundle(client, organizationId, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	encryptedBundle, err := encryptPrivateKey(encryptClient, importedKey, importBundle, organizationId, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	curve := getCurveForAddressFormat(addressFormat)
+
+	// Generate a unique name with timestamp
+	privateKeyName := fmt.Sprintf("Test Private Key %s", *util.RequestTimestamp())
 
 	// Perform import
 	importParams := private_keys.NewImportPrivateKeyParams().WithBody(&models.ImportPrivateKeyRequest{
@@ -151,20 +210,18 @@ func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*
 		Parameters: &models.ImportPrivateKeyIntent{
 			UserID:          &userId,
 			AddressFormats:  []models.AddressFormat{addressFormat},
-			EncryptedBundle: util.StringPointer(string(encryptedBundle)),
+			EncryptedBundle: util.StringPointer(encryptedBundle),
 			Curve:           curve,
-			PrivateKeyName:  util.StringPointer("New Test Private Key"),
+			PrivateKeyName:  util.StringPointer(privateKeyName),
 		},
 		TimestampMs: util.RequestTimestamp(),
 		Type:        (*string)(models.ActivityTypeImportPrivateKey.Pointer()),
 	})
 
 	importReply, err := client.V0().PrivateKeys.ImportPrivateKey(importParams, client.Authenticator)
-
 	if err != nil {
 		return nil, fmt.Errorf("import private key request failed: %w", err)
 	}
 
 	return importReply.Payload.Activity.Result.ImportPrivateKeyResult.PrivateKeyID, nil
-
 }

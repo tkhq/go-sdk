@@ -45,14 +45,22 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 		}
 		// Since T is an interface, we need to return the concrete type that implements T.
 		// The conversion to T happens automatically if the concrete type satisfies T.
-		return (interface{}(key).(T)), nil
+		result, ok := (interface{}(key)).(T)
+		if !ok {
+			return instance, errors.Errorf("failed to convert apikey.Key to %v", reflect.TypeOf(instance))
+		}
+		return result, nil
 	} else if typeOfT == reflect.TypeOf(encryptionkey.Key{}) {
 		key, err := encryptionkey.FromTurnkeyPrivateKey(data)
 		if err != nil {
 			return instance, err
 		}
 		// Same automatic conversion to T applies here.
-		return (interface{}(key).(T)), nil
+		result, ok := (interface{}(key)).(T)
+		if !ok {
+			return instance, errors.Errorf("failed to convert encryptionkey.Key to %v", reflect.TypeOf(instance))
+		}
+		return result, nil
 	}
 
 	return instance, errors.Errorf("unsupported key type: %v", reflect.TypeOf(instance))

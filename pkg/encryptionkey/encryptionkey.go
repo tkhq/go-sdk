@@ -66,9 +66,9 @@ func New(userID string, organizationID string) (*Key, error) {
 		return nil, err
 	}
 
-	encryptionKey.Metadata.Organization = organizationID
-	encryptionKey.Metadata.User = userID
-	encryptionKey.Metadata.PublicKey = encryptionKey.PublicKey
+	encryptionKey.Organization = organizationID
+	encryptionKey.User = userID
+	encryptionKey.PublicKey = encryptionKey.TkPublicKey
 
 	return encryptionKey, nil
 }
@@ -214,10 +214,10 @@ func (k *Key) MergeMetadata(md Metadata) error {
 		return errors.Errorf("metadata public key %q does not match encryption key public key %q", md.PublicKey, k.TkPublicKey)
 	}
 
-	k.Metadata.Name = md.Name
-	k.Metadata.Organization = md.Organization
-	k.Metadata.PublicKey = md.PublicKey
-	k.Metadata.User = md.User
+	k.Name = md.Name
+	k.Organization = md.Organization
+	k.PublicKey = md.PublicKey
+	k.User = md.User
 
 	return nil
 }

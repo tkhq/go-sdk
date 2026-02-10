@@ -35,7 +35,10 @@ func run() error {
 	date := changesets.TodayDate()
 	section := buildReleaseSection(meta.Version, meta.PreviousVersion, date, meta.Changes)
 
-	existing, _ := os.ReadFile(changesets.ChangelogFile)
+	existing, err := os.ReadFile(changesets.ChangelogFile)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("failed to read existing changelog: %w", err)
+	}
 	newContent := mergeChangelog(string(existing), section)
 
 	// 0o644 => -rw-r--r-- : owner can read/write, group/others read-only.

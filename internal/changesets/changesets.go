@@ -17,6 +17,10 @@ const (
 	ReleaseMetaFile = "current-release.json"
 	VersionFile     = "VERSION"
 	ChangelogFile   = "CHANGELOG.md"
+
+	BumpMajor = "major"
+	BumpMinor = "minor"
+	BumpPatch = "patch"
 )
 
 type Change struct {
@@ -45,7 +49,7 @@ func LoadPending(dir string) ([]Change, error) {
 		return nil, err
 	}
 
-	var out []Change
+	out := make([]Change, 0, len(entries))
 
 	for _, e := range entries {
 		if e.IsDir() {
@@ -72,6 +76,7 @@ func LoadPending(dir string) ([]Change, error) {
 	return out, nil
 }
 
+//nolint:gocyclo // parseChangeFile: frontmatter parsing requires sequential validation
 func parseChangeFile(path string) (Change, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -148,19 +153,19 @@ func MaxBump(changes []Change) string {
 
 	switch level {
 	case 3:
-		return "major"
+		return BumpMajor
 	case 2:
-		return "minor"
+		return BumpMinor
 	default:
-		return "patch"
+		return BumpPatch
 	}
 }
 
 func bumpLevel(b string) int {
 	switch b {
-	case "major":
+	case BumpMajor:
 		return 3
-	case "minor":
+	case BumpMinor:
 		return 2
 	default:
 		return 1
@@ -191,11 +196,11 @@ func NextVersion(current, bump string) (string, error) {
 	}
 
 	switch bump {
-	case "major":
+	case BumpMajor:
 		major++
 		minor = 0
 		patch = 0
-	case "minor":
+	case BumpMinor:
 		minor++
 		patch = 0
 	default: // patch

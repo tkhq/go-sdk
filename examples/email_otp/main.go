@@ -1,7 +1,13 @@
+// Package main demonstrates email OTP authentication flow
+//
+// Usage:
+//
+//	go run main.go -api-private-key "your_api_private_key" -parent-org-id "parent_org_id" -sub-org-id "sub_org_id" -email "user@example.com"
 package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -16,61 +22,89 @@ import (
 )
 
 var (
-	tkPrivateKey = "<private_key_here>"
-	parentOrgID  = "<parent_org_id>"
-	subOrgID     = "<sub_org_id>"
-	emailAddress = "<email_address>"
-	client       *sdk.Client
+	apiPrivateKey string
+	parentOrgID   string
+	subOrgID      string
+	emailAddress  string
 )
 
-func main() {
+func init() {
+	flag.StringVar(&apiPrivateKey, "api-private-key", "", "Turnkey API private key for authentication")
+	flag.StringVar(&parentOrgID, "parent-org-id", "", "parent organization ID")
+	flag.StringVar(&subOrgID, "sub-org-id", "", "sub-organization ID for login")
+	flag.StringVar(&emailAddress, "email", "", "email address to receive OTP")
+}
 
+func main() {
+	flag.Parse()
+
+	// Validate required flags
+	if apiPrivateKey == "" || parentOrgID == "" || subOrgID == "" || emailAddress == "" {
+		log.Println("Missing required flags: -api-private-key, -parent-org-id, -sub-org-id, and -email are required")
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
+
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	// Initialize the Turnkey API client
-	initClient()
+	client, err := initClient()
+	if err != nil {
+		return err
+	}
 
 	// Step 1: Send OTP
-	otpID, err := sendOTP()
+	otpID, err := sendOTP(client)
 	if err != nil {
-		log.Fatalf("failed to send OTP: %v", err)
+		return fmt.Errorf("failed to send OTP: %w", err)
 	}
 	fmt.Println("OTP sent to your email.")
 
 	// Step 2: Prompt for OTP code
 	fmt.Print("Enter the OTP code: ")
 	reader := bufio.NewReader(os.Stdin)
-	code, _ := reader.ReadString('\n')
+	code, err := reader.ReadString('\n')
+	if err != nil {
+		return fmt.Errorf("failed to read OTP code: %w", err)
+	}
 	code = strings.TrimSpace(code)
 
 	// Step 3: Verify OTP
-	token, err := verifyOTP(otpID, code)
+	token, err := verifyOTP(client, otpID, code)
 	if err != nil {
-		log.Fatalf("Verification failed: %v", err)
+		return fmt.Errorf("verification failed: %w", err)
 	}
 	fmt.Println("OTP verified successfully.")
 
 	// Step 4: Login using the verification token
-	err = loginOTP(token)
+	err = loginOTP(client, token)
 	if err != nil {
-		log.Fatalf("Login with OTP failed: %v", err)
+		return fmt.Errorf("login with OTP failed: %w", err)
 	}
-	fmt.Println("OTP login successfull")
+	fmt.Println("OTP login successful")
+
+	return nil
 }
 
-func initClient() {
-	apiKey, err := apikey.FromTurnkeyPrivateKey(tkPrivateKey, apikey.SchemeP256)
+func initClient() (*sdk.Client, error) {
+	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
 	if err != nil {
-		log.Fatalf("failed to create API key: %v", err)
+		return nil, fmt.Errorf("failed to create API key: %w", err)
 	}
 
-	c, err := sdk.New(sdk.WithAPIKey(apiKey))
+	client, err := sdk.New(sdk.WithAPIKey(apiKey))
 	if err != nil {
-		log.Fatalf("failed to create new SDK client: %v", err)
+		return nil, fmt.Errorf("failed to create new SDK client: %w", err)
 	}
 
-	client = c
+	return client, nil
 }
 
-func sendOTP() (string, error) {
+func sendOTP(client *sdk.Client) (string, error) {
 	otpType := "OTP_TYPE_EMAIL"
 
 	params := user_verification.NewInitOtpParams().WithBody(&models.InitOtpRequest{
@@ -96,7 +130,7 @@ func sendOTP() (string, error) {
 	return *otpID, nil
 }
 
-func verifyOTP(id, code string) (string, error) {
+func verifyOTP(client *sdk.Client, id, code string) (string, error) {
 	params := user_verification.NewVerifyOtpParams().WithBody(&models.VerifyOtpRequest{
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(parentOrgID),
@@ -121,12 +155,12 @@ func verifyOTP(id, code string) (string, error) {
 	return *token, nil
 }
 
-func loginOTP(token string) error {
+func loginOTP(client *sdk.Client, token string) error {
 
 	// Mock a client-side P256 API key, in reality this would be passed from your frontend
 	clientApiKey, err := apikey.New(parentOrgID)
 	if err != nil {
-		log.Fatalf("failed to generate user API key: %s", err)
+		return fmt.Errorf("failed to generate user API key: %w", err)
 	}
 
 	params := sessions.NewOtpLoginParams().WithBody(&models.OtpLoginRequest{

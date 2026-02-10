@@ -10,13 +10,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
-	"github.com/tkhq/go-sdk/pkg/encryptionkey"
-
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 	"github.com/tkhq/go-sdk/pkg/apikey"
+	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
+	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 )
 
 func main() {

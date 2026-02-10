@@ -59,7 +59,7 @@ func EncodePublicECDSAKey(publicKey *ecdsa.PublicKey) string {
 // FromECDSAPrivateKey takes an ECDSA keypair and forms a Turnkey API key from it.
 // Assumes that privateKey.PublicKey has already been derived.
 func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey, scheme signatureScheme) (*Key, error) {
-	if privateKey == nil || privateKey.PublicKey.X == nil {
+	if privateKey == nil || privateKey.X == nil {
 		return nil, errors.New("empty key")
 	}
 
@@ -170,8 +170,8 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 		return nil, fmt.Errorf("invalid signature scheme type: %s", scheme)
 	}
 
-	privateKey.PublicKey.Curve = curve
-	privateKey.PublicKey.X, privateKey.PublicKey.Y = privateKey.PublicKey.Curve.ScalarBaseMult(privateKey.D.Bytes())
+	privateKey.Curve = curve
+	privateKey.X, privateKey.Y = curve.ScalarBaseMult(privateKey.D.Bytes())
 
 	apiKey, err := FromECDSAPrivateKey(&privateKey, scheme)
 	if err != nil {
