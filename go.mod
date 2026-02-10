@@ -13,6 +13,7 @@ require (
 	github.com/go-openapi/strfmt v0.21.7
 	github.com/go-openapi/swag v0.22.4
 	github.com/go-openapi/validate v0.22.1
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/uuid v1.3.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4

@@ -22,11 +22,13 @@ Once you've gathered these values, update them in the main.go scripts, you'll se
 cd go-sdk/examples/email_otp
 
 # Run the script
-go run init_otp/main.go
+go run main.go
 ```
 
-The script with do the following:
+The script will do the following:
 - Send the OTP code to the specified email address
 - Wait for you to input the OTP code
 - Verify the OTP code and generate the verification token
-- Login into a suborganization using the verification token, client side API key and issue the user session jwt 
+- Verify the OTP verification token JWT signature using `crypto.VerifyOtpVerificationToken()` and the production OTP verification public key
+- Login into a suborganization using the verification token, client side API key and issue the user session jwt
+- Verify the session JWT signature using `crypto.VerifySessionJwtSignature()` and the production Notarizer public key
