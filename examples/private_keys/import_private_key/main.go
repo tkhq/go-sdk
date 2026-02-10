@@ -1,9 +1,17 @@
 // Package main demonstrates a Secp256k1 or Ed25519 private key import
+//
+// Usage:
+//   Import an Ethereum private key:
+//     go run main.go -ethereum-key "your_hex_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+//
+//   Import a Solana private key:
+//     go run main.go -solana-key "your_base58_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 package main
 
 import (
 	"encoding/hex"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 
@@ -18,11 +26,30 @@ import (
 	"github.com/tkhq/go-sdk/pkg/util"
 )
 
-func main() {
+var (
+	hexEncodedPrivateKey    string
+	solanaEncodedPrivateKey string
+	organizationID          string
+	userID                  string
+	apiPrivateKey           string
+)
 
+func init() {
 	// Only set one of the hexEncodedPrivateKey or solanaEncodedPrivateKey; the other should stay empty
-	hexEncodedPrivateKey := ""    // Ethereum
-	solanaEncodedPrivateKey := "" // Solana base58-encoded private key
+	flag.StringVar(&hexEncodedPrivateKey, "ethereum-key", "", "hex-encoded Ethereum private key to import")
+	flag.StringVar(&solanaEncodedPrivateKey, "solana-key", "", "base58-encoded Solana private key to import")
+	flag.StringVar(&organizationID, "org-id", "", "organization ID for the import")
+	flag.StringVar(&userID, "user-id", "", "user ID within the organization")
+	flag.StringVar(&apiPrivateKey, "api-private-key", "", "Turnkey API private key for authentication")
+}
+
+func main() {
+	flag.Parse()
+
+	// Validate required flags
+	if organizationID == "" || userID == "" || apiPrivateKey == "" {
+		log.Fatal("Missing required flags: -org-id, -user-id, and -api-private-key are required")
+	}
 
 	var addressFormat models.AddressFormat
 	var importedKey []byte
@@ -47,10 +74,10 @@ func main() {
 		importedKey = decoded[:32]
 
 	default:
-		log.Fatal("No private key provided")
+		log.Fatal("No private key provided: specify either -ethereum-key or -solana-key")
 	}
 
-	privateKeyID, err := ImportPrivateKey(importedKey, addressFormat)
+	privateKeyID, err := ImportPrivateKey(importedKey, addressFormat, organizationID, userID, apiPrivateKey)
 	if err != nil {
 		log.Fatalf("Failed to import private key: %v", err)
 	}
@@ -147,12 +174,7 @@ func getCurveForAddressFormat(addressFormat models.AddressFormat) *models.Curve 
 
 // ImportPrivateKey is a helper that executes a private key import for a hex-encoded Ethereum or Solana private key in a compatible address format.
 // Returns the resulting private key ID
-func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*string, error) {
-	// Organization ID, user ID and API private key
-	organizationId := "<orgId>"
-	userId := "<user_from_orgId>"
-	apiPrivateKey := "<private_key_here>"
-
+func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat, organizationId, userId, apiPrivateKey string) (*string, error) {
 	client, err := setupClient(apiPrivateKey)
 	if err != nil {
 		return nil, err
@@ -175,6 +197,9 @@ func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*
 
 	curve := getCurveForAddressFormat(addressFormat)
 
+	// Generate a unique name with timestamp
+	privateKeyName := fmt.Sprintf("Test Private Key %s", util.RequestTimestamp())
+
 	// Perform import
 	importParams := private_keys.NewImportPrivateKeyParams().WithBody(&models.ImportPrivateKeyRequest{
 		OrganizationID: &organizationId,
@@ -183,7 +208,7 @@ func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat) (*
 			AddressFormats:  []models.AddressFormat{addressFormat},
 			EncryptedBundle: util.StringPointer(encryptedBundle),
 			Curve:           curve,
-			PrivateKeyName:  util.StringPointer("New Test Private Key"),
+			PrivateKeyName:  util.StringPointer(privateKeyName),
 		},
 		TimestampMs: util.RequestTimestamp(),
 		Type:        (*string)(models.ActivityTypeImportPrivateKey.Pointer()),

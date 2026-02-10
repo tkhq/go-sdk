@@ -37,7 +37,7 @@ func run() error {
 
 	existing, err := os.ReadFile(changesets.ChangelogFile)
 	if err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("read existing changelog: %w", err)
+		return fmt.Errorf("failed to read existing changelog: %w", err)
 	}
 	newContent := mergeChangelog(string(existing), section)
 

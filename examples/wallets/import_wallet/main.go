@@ -1,8 +1,12 @@
 // Package main demonstrates a wallet import from menmonic
+//
+// Usage:
+//   go run main.go -mnemonic "your mnemonic phrase" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 
@@ -14,6 +18,20 @@ import (
 	"github.com/tkhq/go-sdk/pkg/encryptionkey"
 	"github.com/tkhq/go-sdk/pkg/util"
 )
+
+var (
+	mnemonic      string
+	organizationID string
+	userID         string
+	apiPrivateKey  string
+)
+
+func init() {
+	flag.StringVar(&mnemonic, "mnemonic", "", "wallet mnemonic to import")
+	flag.StringVar(&organizationID, "org-id", "", "organization ID for the wallet import")
+	flag.StringVar(&userID, "user-id", "", "user ID within the organization")
+	flag.StringVar(&apiPrivateKey, "api-private-key", "", "Turnkey API private key for authentication")
+}
 
 // setupEncryptionClient sets up the encryption key and enclave encrypt client
 func setupEncryptionClient(userId, organizationId string) (*enclave_encrypt.EnclaveEncryptClient, error) {
@@ -76,13 +94,12 @@ func encryptMnemonic(encryptClient *enclave_encrypt.EnclaveEncryptClient, mnemon
 }
 
 func main() {
-	// Insert the wallet mnemonic you want to import
-	mnemonic := "<your_mnemonic_here>"
+	flag.Parse()
 
-	// Organization ID, user ID and API private key
-	organizationId := "<orgId>"
-	userId := "<user_from_orgId>"
-	apiPrivateKey := "<private_key_here>"
+	// Validate required flags
+	if mnemonic == "" || organizationID == "" || userID == "" || apiPrivateKey == "" {
+		log.Fatal("Missing required flags: -mnemonic, -org-id, -user-id, and -api-private-key are required")
+	}
 
 	// API key used by the client
 	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
@@ -95,19 +112,19 @@ func main() {
 		log.Fatal("creating SDK client: %w", err)
 	}
 
-	encryptClient, err := setupEncryptionClient(userId, organizationId)
+	encryptClient, err := setupEncryptionClient(userID, organizationID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Init import activity, this produces an import bundle, containing a public key and signature.
 	// These artifacts will be used in the next step to ensure that key material is only accessible by Turnkey, and cannot be extracted by any man-in-the-middle (MITM)
-	importBundle, err := initWalletImport(client, organizationId, userId)
+	importBundle, err := initWalletImport(client, organizationID, userID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	encryptedBundle, err := encryptMnemonic(encryptClient, mnemonic, importBundle, organizationId, userId)
+	encryptedBundle, err := encryptMnemonic(encryptClient, mnemonic, importBundle, organizationID, userID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,11 +132,14 @@ func main() {
 	// For other HD wallet paths see https://docs.turnkey.com/concepts/wallets#hd-wallet-default-paths
 	path := "m/44'/60'/1'/0/0"
 
+	// Generate a unique name with timestamp
+	walletName := fmt.Sprintf("Test Wallet %s", util.RequestTimestamp())
+
 	// Perform import activity
 	importParams := wallets.NewImportWalletParams().WithBody(&models.ImportWalletRequest{
-		OrganizationID: &organizationId,
+		OrganizationID: &organizationID,
 		Parameters: &models.ImportWalletIntent{
-			UserID: &userId,
+			UserID: &userID,
 			Accounts: []*models.WalletAccountParams{
 				{
 					AddressFormat: models.AddressFormatSolana.Pointer(),
@@ -129,7 +149,7 @@ func main() {
 				},
 			},
 			EncryptedBundle: util.StringPointer(encryptedBundle),
-			WalletName:      util.StringPointer("New Test Wallet"),
+			WalletName:      util.StringPointer(walletName),
 		},
 		TimestampMs: util.RequestTimestamp(),
 		Type:        (*string)(models.ActivityTypeImportWallet.Pointer()),

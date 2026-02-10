@@ -47,7 +47,7 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 		// The conversion to T happens automatically if the concrete type satisfies T.
 		result, ok := (interface{}(key)).(T)
 		if !ok {
-			return instance, errors.Errorf("failed to convert apikey.Key to type T")
+			return instance, errors.Errorf("failed to convert apikey.Key to %v", reflect.TypeOf(instance))
 		}
 		return result, nil
 	} else if typeOfT == reflect.TypeOf(encryptionkey.Key{}) {
@@ -58,7 +58,7 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 		// Same automatic conversion to T applies here.
 		result, ok := (interface{}(key)).(T)
 		if !ok {
-			return instance, errors.Errorf("failed to convert encryptionkey.Key to type T")
+			return instance, errors.Errorf("failed to convert encryptionkey.Key to %v", reflect.TypeOf(instance))
 		}
 		return result, nil
 	}
