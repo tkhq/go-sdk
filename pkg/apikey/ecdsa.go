@@ -171,7 +171,7 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	}
 
 	privateKey.Curve = curve
-	privateKey.X, privateKey.Y = privateKey.Curve.ScalarBaseMult(privateKey.D.Bytes())
+	privateKey.X, privateKey.Y = curve.ScalarBaseMult(privateKey.D.Bytes())
 
 	apiKey, err := FromECDSAPrivateKey(&privateKey, scheme)
 	if err != nil {

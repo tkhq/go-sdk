@@ -1,7 +1,8 @@
 // Package main demonstrates a wallet import from menmonic
 //
 // Usage:
-//   go run main.go -mnemonic "your mnemonic phrase" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+//
+//	go run main.go -mnemonic "your mnemonic phrase" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 package main
 
 import (
@@ -20,7 +21,7 @@ import (
 )
 
 var (
-	mnemonic      string
+	mnemonic       string
 	organizationID string
 	userID         string
 	apiPrivateKey  string
@@ -101,39 +102,45 @@ func main() {
 		log.Fatal("Missing required flags: -mnemonic, -org-id, -user-id, and -api-private-key are required")
 	}
 
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	// API key used by the client
 	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
 	if err != nil {
-		log.Fatal("creating API key: %w", err)
+		return fmt.Errorf("creating API key: %w", err)
 	}
 
 	client, err := sdk.New(sdk.WithAPIKey(apiKey))
 	if err != nil {
-		log.Fatal("creating SDK client: %w", err)
+		return fmt.Errorf("creating SDK client: %w", err)
 	}
 
 	encryptClient, err := setupEncryptionClient(userID, organizationID)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// Init import activity, this produces an import bundle, containing a public key and signature.
 	// These artifacts will be used in the next step to ensure that key material is only accessible by Turnkey, and cannot be extracted by any man-in-the-middle (MITM)
 	importBundle, err := initWalletImport(client, organizationID, userID)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	encryptedBundle, err := encryptMnemonic(encryptClient, mnemonic, importBundle, organizationID, userID)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// For other HD wallet paths see https://docs.turnkey.com/concepts/wallets#hd-wallet-default-paths
 	path := "m/44'/60'/1'/0/0"
 
 	// Generate a unique name with timestamp
-	walletName := fmt.Sprintf("Test Wallet %s", util.RequestTimestamp())
+	walletName := fmt.Sprintf("Test Wallet %s", *util.RequestTimestamp())
 
 	// Perform import activity
 	importParams := wallets.NewImportWalletParams().WithBody(&models.ImportWalletRequest{
@@ -157,8 +164,9 @@ func main() {
 
 	importReply, err := client.V0().Wallets.ImportWallet(importParams, client.Authenticator)
 	if err != nil {
-		log.Fatal("import wallet request failed: %w", err)
+		return fmt.Errorf("import wallet request failed: %w", err)
 	}
 
 	fmt.Println("Imported walletId:", *importReply.Payload.Activity.Result.ImportWalletResult.WalletID)
+	return nil
 }

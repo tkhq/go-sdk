@@ -1,11 +1,12 @@
 // Package main demonstrates a Secp256k1 or Ed25519 private key import
 //
 // Usage:
-//   Import an Ethereum private key:
-//     go run main.go -ethereum-key "your_hex_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 //
-//   Import a Solana private key:
-//     go run main.go -solana-key "your_base58_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+//	Import an Ethereum private key:
+//	  go run main.go -ethereum-key "your_hex_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+//
+//	Import a Solana private key:
+//	  go run main.go -solana-key "your_base58_key" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
 package main
 
 import (
@@ -198,7 +199,7 @@ func ImportPrivateKey(importedKey []byte, addressFormat models.AddressFormat, or
 	curve := getCurveForAddressFormat(addressFormat)
 
 	// Generate a unique name with timestamp
-	privateKeyName := fmt.Sprintf("Test Private Key %s", util.RequestTimestamp())
+	privateKeyName := fmt.Sprintf("Test Private Key %s", *util.RequestTimestamp())
 
 	// Perform import
 	importParams := private_keys.NewImportPrivateKeyParams().WithBody(&models.ImportPrivateKeyRequest{
