@@ -11,28 +11,49 @@ run:
 
 linters:
   enable:
+    # Error detection
     - errcheck
-    - exhaustive
     - govet
+    - staticcheck
+
+    # Style & formatting
+    - misspell
+    - revive
+
+    # Complexity & maintainability
     - gocyclo
+    - cyclop
+    - nakedret
+
+    # Performance & correctness
+    - prealloc
+    - unconvert
+    - ineffassign
+
+    # Code quality
     - dupl
     - goconst
-    - misspell
+    - exhaustive
+    - depguard
+    - bodyclose
+    - durationcheck
+    - nilerr
+
+    # Go module directives
+    - gomoddirectives
+
+    # Line length
     - lll
-    - revive
-    - nakedret
+
+    # Linter enforcement
     - nolintlint
-    - prealloc
-    - cyclop
+
   settings:
     errcheck:
       check-type-assertions: true
       check-blank: true
     exhaustive:
       default-signifies-exhaustive: true
-    govet:
-      shadow:
-        strict: true
     gocyclo:
       min-complexity: 10
     dupl:
@@ -40,6 +61,16 @@ linters:
     goconst:
       min-len: 3
       min-occurrences: 3
+    depguard:
+      rules:
+        main:
+          deny:
+            - pkg: "github.com/golang/protobuf/proto"
+              desc: not allowed
+            - pkg: "google.golang.org/protobuf/proto"
+              desc: not allowed
+    misspell:
+      locale: US
     lll:
       line-length: 200
       tab-width: 1
@@ -59,19 +90,27 @@ linters:
       for-loops: false
     cyclop:
       max-complexity: 20
+    gomoddirectives:
+      replace-local: true
+      replace-allow-list:
+        - gopkg.in/yaml.v3
+        - inet.af/tcpproxy
+      retract-allow-no-explanation: false
+      exclude-forbidden: true
   exclusions:
     generated: lax
+    presets:
+      - comments
+      - common-false-positives
     paths:
       - pkg/api/client$
       - .*\.pb\.go$
-    text:
-      - "package comment should be of the form"
-      - "^ST1000"
 
 formatters:
   enable:
     - gci
     - gofmt
+    - goimports
   settings:
     gofmt:
       simplify: true
@@ -89,4 +128,3 @@ formatters:
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
-  exclude-use-default: false
