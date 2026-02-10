@@ -89,9 +89,12 @@ func New(organizationID string, opts ...optionFunc) (*Key, error) {
 	}
 
 	// supply metadata
-	apiKey.Organizations = append(apiKey.Organizations, organizationID)
-	apiKey.PublicKey = apiKey.TkPublicKey
-	apiKey.Scheme = string(apiKey.scheme)
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	apiKey.Metadata.Organizations = append(apiKey.Metadata.Organizations, organizationID)
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	apiKey.Metadata.PublicKey = apiKey.TkPublicKey
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	apiKey.Metadata.Scheme = string(apiKey.scheme)
 
 	return apiKey, nil
 }
@@ -184,10 +187,14 @@ func (k *Key) MergeMetadata(md Metadata) error {
 		return errors.Errorf("metadata public key %q does not match API key public key %q", md.PublicKey, k.TkPublicKey)
 	}
 
-	k.Name = md.Name
-	k.Organizations = md.Organizations
-	k.PublicKey = md.PublicKey
-	k.Scheme = md.Scheme
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	k.Metadata.Name = md.Name
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	k.Metadata.Organizations = md.Organizations
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	k.Metadata.PublicKey = md.PublicKey
+	//nolint:staticcheck // QF1008: explicit Metadata field access
+	k.Metadata.Scheme = md.Scheme
 
 	return nil
 }
