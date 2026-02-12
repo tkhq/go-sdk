@@ -42,9 +42,9 @@ type ClientService interface {
 }
 
 /*
-EthSendTransaction submits a transaction intent for broadcasting
+EthSendTransaction broadcasts e VM transaction
 
-Submit a transaction intent describing a transaction you would like to broadcast.
+Submit a transaction intent describing an EVM transaction you would like to broadcast.
 */
 func (a *Client) EthSendTransaction(params *EthSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendTransactionOK, error) {
 	// TODO: Validate the params before sending
@@ -83,7 +83,7 @@ func (a *Client) EthSendTransaction(params *EthSendTransactionParams, authInfo r
 }
 
 /*
-GetGasUsage gets gas usage and limits
+GetGasUsage gets gas usage
 
 Get gas usage and gas limits for either the parent organization or a sub-organization.
 */
@@ -124,7 +124,7 @@ func (a *Client) GetGasUsage(params *GetGasUsageParams, authInfo runtime.ClientA
 }
 
 /*
-GetNonces gets nonces for an address
+GetNonces gets nonces
 
 Get nonce values for an address on a given network. Can fetch the standard on-chain nonce and/or the gas station nonce used for sponsored transactions.
 */
@@ -165,9 +165,9 @@ func (a *Client) GetNonces(params *GetNoncesParams, authInfo runtime.ClientAuthI
 }
 
 /*
-SolSendTransaction submits a transaction intent for broadcasting
+SolSendTransaction broadcasts s VM transaction
 
-Submit a transaction intent describing a transaction you would like to broadcast.
+Submit a transaction intent describing an SVM transaction you would like to broadcast.
 */
 func (a *Client) SolSendTransaction(params *SolSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SolSendTransactionOK, error) {
 	// TODO: Validate the params before sending

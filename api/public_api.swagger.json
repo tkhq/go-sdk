@@ -223,7 +223,7 @@
     },
     "/public/v1/query/get_gas_usage": {
       "post": {
-        "summary": "Get gas usage and limits.",
+        "summary": "Get gas usage",
         "description": "Get gas usage and gas limits for either the parent organization or a sub-organization.",
         "operationId": "GetGasUsage",
         "responses": {
@@ -275,7 +275,7 @@
     },
     "/public/v1/query/get_nonces": {
       "post": {
-        "summary": "Get nonces for an address.",
+        "summary": "Get nonces",
         "description": "Get nonce values for an address on a given network. Can fetch the standard on-chain nonce and/or the gas station nonce used for sponsored transactions.",
         "operationId": "GetNonces",
         "responses": {
@@ -610,6 +610,32 @@
         "tags": ["Wallets"]
       }
     },
+    "/public/v1/query/get_wallet_address_balances": {
+      "post": {
+        "summary": "Get balances",
+        "description": "Get balances of supported assets for an address on the specified network. Only non-zero balances are returned. This feature is in beta - please contact support for access.",
+        "operationId": "GetWalletAddressBalances",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetWalletAddressBalancesResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetWalletAddressBalancesRequest"
+            }
+          }
+        ],
+        "tags": ["Wallets"]
+      }
+    },
     "/public/v1/query/list_activities": {
       "post": {
         "summary": "List activities",
@@ -842,6 +868,32 @@
           }
         ],
         "tags": ["Organizations"]
+      }
+    },
+    "/public/v1/query/list_supported_assets": {
+      "post": {
+        "summary": "List supported assets",
+        "description": "List supported assets for the specified network. This feature is in beta - please contact support for access.",
+        "operationId": "ListSupportedAssets",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListSupportedAssetsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ListSupportedAssetsRequest"
+            }
+          }
+        ],
+        "tags": ["Wallets"]
       }
     },
     "/public/v1/query/list_user_tags": {
@@ -1938,8 +1990,8 @@
     },
     "/public/v1/submit/eth_send_transaction": {
       "post": {
-        "summary": "Submit a transaction intent for broadcasting.",
-        "description": "Submit a transaction intent describing a transaction you would like to broadcast.",
+        "summary": "Broadcast EVM transaction",
+        "description": "Submit a transaction intent describing an EVM transaction you would like to broadcast.",
         "operationId": "EthSendTransaction",
         "responses": {
           "200": {
@@ -2562,8 +2614,8 @@
     },
     "/public/v1/submit/sol_send_transaction": {
       "post": {
-        "summary": "Submit a transaction intent for broadcasting.",
-        "description": "Submit a transaction intent describing a transaction you would like to broadcast.",
+        "summary": "Broadcast SVM transaction",
+        "description": "Submit a transaction intent describing an SVM transaction you would like to broadcast.",
         "operationId": "SolSendTransaction",
         "responses": {
           "200": {
@@ -3444,6 +3496,75 @@
         }
       },
       "required": ["type", "timestampMs", "organizationId", "parameters"]
+    },
+    "AssetBalance": {
+      "type": "object",
+      "properties": {
+        "caip19": {
+          "type": "string",
+          "description": "The caip-19 asset identifier"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "The asset symbol"
+        },
+        "balance": {
+          "type": "string",
+          "description": "The balance in atomic units"
+        },
+        "decimals": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of decimals this asset uses"
+        },
+        "display": {
+          "$ref": "#/definitions/AssetBalanceDisplay",
+          "description": "Normalized balance values for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise. Use the balance field instead."
+        },
+        "name": {
+          "type": "string",
+          "description": "The asset name"
+        }
+      }
+    },
+    "AssetBalanceDisplay": {
+      "type": "object",
+      "properties": {
+        "usd": {
+          "type": "string",
+          "description": "USD value for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise."
+        },
+        "crypto": {
+          "type": "string",
+          "description": "Normalized crypto value for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise."
+        }
+      }
+    },
+    "AssetMetadata": {
+      "type": "object",
+      "properties": {
+        "caip19": {
+          "type": "string",
+          "description": "The caip-19 asset identifier"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "The asset symbol"
+        },
+        "decimals": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of decimals this asset uses"
+        },
+        "logoUrl": {
+          "type": "string",
+          "description": "The url of the asset logo"
+        },
+        "name": {
+          "type": "string",
+          "description": "The asset name"
+        }
+      }
     },
     "Attestation": {
       "type": "object",
@@ -5255,6 +5376,16 @@
           "format": "int64",
           "x-nullable": true,
           "description": "Optional nonce to ensure uniqueness of the deployment manifest. If not provided, it defaults to the current Unix timestamp in seconds."
+        },
+        "pivotContainerEncryptedPullSecret": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Optional encrypted pull secret to authorize Turnkey to pull the pivot container image. If your image is public, leave this empty."
+        },
+        "hostContainerEncryptedPullSecret": {
+          "type": "string",
+          "x-nullable": true,
+          "description": "Optional encrypted pull secret to authorize Turnkey to pull the host container image. If your image is public, leave this empty."
         }
       },
       "required": [
@@ -6811,7 +6942,9 @@
             "eip155:1",
             "eip155:11155111",
             "eip155:8453",
-            "eip155:84532"
+            "eip155:84532",
+            "eip155:137",
+            "eip155:80002"
           ],
           "description": "CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet)."
         }
@@ -7522,7 +7655,15 @@
         },
         "caip2": {
           "type": "string",
-          "description": "The network identifier in CAIP-2 format (e.g., 'eip155:1' for Ethereum mainnet)."
+          "enum": [
+            "eip155:1",
+            "eip155:11155111",
+            "eip155:8453",
+            "eip155:84532",
+            "eip155:137",
+            "eip155:80002"
+          ],
+          "description": "CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet)."
         },
         "nonce": {
           "type": "boolean",
@@ -8051,6 +8192,45 @@
         }
       },
       "required": ["accounts"]
+    },
+    "GetWalletAddressBalancesRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given organization."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address corresponding to a wallet account."
+        },
+        "caip2": {
+          "type": "string",
+          "enum": [
+            "eip155:1",
+            "eip155:11155111",
+            "eip155:8453",
+            "eip155:84532",
+            "eip155:137",
+            "eip155:80002"
+          ],
+          "description": "CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet)."
+        }
+      },
+      "required": ["organizationId", "address", "caip2"]
+    },
+    "GetWalletAddressBalancesResponse": {
+      "type": "object",
+      "properties": {
+        "balances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AssetBalance"
+          },
+          "description": "List of asset balances"
+        }
+      }
     },
     "GetWalletRequest": {
       "type": "object",
@@ -9421,6 +9601,41 @@
         }
       },
       "required": ["privateKeyTags"]
+    },
+    "ListSupportedAssetsRequest": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string",
+          "description": "Unique identifier for a given organization."
+        },
+        "caip2": {
+          "type": "string",
+          "enum": [
+            "eip155:1",
+            "eip155:11155111",
+            "eip155:8453",
+            "eip155:84532",
+            "eip155:137",
+            "eip155:80002"
+          ],
+          "description": "CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet)."
+        }
+      },
+      "required": ["organizationId", "caip2"]
+    },
+    "ListSupportedAssetsResponse": {
+      "type": "object",
+      "properties": {
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/AssetMetadata"
+          },
+          "description": "List of asset metadata"
+        }
+      }
     },
     "ListUserTagsRequest": {
       "type": "object",
