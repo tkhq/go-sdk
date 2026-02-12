@@ -31,6 +31,10 @@ type CreateTvcDeploymentIntent struct {
 	// Required: true
 	HostArgs []string `json:"hostArgs"`
 
+	// Optional encrypted pull secret to authorize Turnkey to pull the host container image. If your image is public, leave this empty.
+	// Format: byte
+	HostContainerEncryptedPullSecret *strfmt.Base64 `json:"hostContainerEncryptedPullSecret,omitempty"`
+
 	// URL of the container containing the host binary
 	// Required: true
 	HostContainerImageURL *string `json:"hostContainerImageUrl"`
@@ -45,6 +49,10 @@ type CreateTvcDeploymentIntent struct {
 	// Arguments to pass to the pivot binary at startup. Encoded as a list of strings, for example ["--foo", "bar"]
 	// Required: true
 	PivotArgs []string `json:"pivotArgs"`
+
+	// Optional encrypted pull secret to authorize Turnkey to pull the pivot container image. If your image is public, leave this empty.
+	// Format: byte
+	PivotContainerEncryptedPullSecret *strfmt.Base64 `json:"pivotContainerEncryptedPullSecret,omitempty"`
 
 	// URL of the container containing the pivot binary
 	// Required: true

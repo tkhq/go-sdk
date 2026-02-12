@@ -48,11 +48,15 @@ type ClientService interface {
 
 	GetWalletAccounts(params *GetWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountsOK, error)
 
+	GetWalletAddressBalances(params *GetWalletAddressBalancesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAddressBalancesOK, error)
+
 	GetWallets(params *GetWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletsOK, error)
 
 	ImportWallet(params *ImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportWalletOK, error)
 
 	InitImportWallet(params *InitImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportWalletOK, error)
+
+	ListSupportedAssets(params *ListSupportedAssetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSupportedAssetsOK, error)
 
 	UpdateWallet(params *UpdateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWalletOK, error)
 
@@ -429,6 +433,47 @@ func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo run
 }
 
 /*
+GetWalletAddressBalances gets balances
+
+Get non-zero balances of supported assets for a single wallet account address on the specified network.
+*/
+func (a *Client) GetWalletAddressBalances(params *GetWalletAddressBalancesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAddressBalancesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetWalletAddressBalancesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetWalletAddressBalances",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/get_wallet_address_balances",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetWalletAddressBalancesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetWalletAddressBalancesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetWalletAddressBalances: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 GetWallets lists wallets
 
 List all wallets within an organization.
@@ -548,6 +593,47 @@ func (a *Client) InitImportWallet(params *InitImportWalletParams, authInfo runti
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for InitImportWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+ListSupportedAssets lists supported assets
+
+List supported assets for the specified network
+*/
+func (a *Client) ListSupportedAssets(params *ListSupportedAssetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSupportedAssetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSupportedAssetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "ListSupportedAssets",
+		Method:             "POST",
+		PathPattern:        "/public/v1/query/list_supported_assets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListSupportedAssetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSupportedAssetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ListSupportedAssets: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
