@@ -83,7 +83,7 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TKHQ_DEPLOY_ACCESS_TOKEN }}
 
       - name: Trigger pkg.go.dev update
         run: |
