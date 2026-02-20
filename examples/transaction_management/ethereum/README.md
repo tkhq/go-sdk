@@ -4,10 +4,10 @@ Demonstrates the Turnkey's sponsored [transaction management](https://docs.turnk
 
 ## Actions
 
-- **send** — Sponsored self-transfer of 0.0001 ETH
-- **swap** — Sponsored Uniswap V3 swap (ETH → USDC) via SwapRouter02
+- **send** — Self-transfer of 0.0001 ETH
+- **swap** — Uniswap V3 swap (ETH → USDC) via SwapRouter02
 
-Both actions use Turnkey Gas Station for gas sponsorship.
+Both actions use Turnkey Gas Station for gas sponsorship by default. Optionally, pass `-rpc-url` to provide your own on-chain nonce and use non-sponsored mode.
 
 ## Prerequisites
 
@@ -24,6 +24,7 @@ Both actions use Turnkey Gas Station for gas sponsorship.
 | `-sign-with` | Yes | | Wallet address to sign with (0x-prefixed) |
 | `-action` | No | `send` | Action to perform: `send` or `swap` |
 | `-caip2` | No | `eip155:11155111` | CAIP-2 chain ID |
+| `-rpc-url` | No | | RPC URL for on-chain nonce lookup (non-sponsored mode) |
 
 ## Usage
 
@@ -43,6 +44,14 @@ go run main.go \
   -organization-id "..." \
   -sign-with "0x..." \
   -action swap
+
+# Send with your own nonce via Alchemy (non-sponsored)
+go run main.go \
+  -api-private-key "..." \
+  -organization-id "..." \
+  -sign-with "0x..." \
+  -rpc-url "https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY" \
+  -action send
 ```
 
 ## Example output
@@ -75,3 +84,9 @@ Swap complete! Tx hash: 0xde41d1f35986f7f9a661afba568674d51a5913ba9f1c6d2391f99d
 4. Polls `GetSendTransactionStatus` until a tx hash is returned or an error occurs
 
 For the **swap** action, the calldata is ABI-encoded for Uniswap V3 [SwapRouter02](https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments)'s `exactInputSingle` (selector `0x04e45aaf`), targeting the WETH/USDC pool with a 0.3% fee tier on Sepolia.
+
+## Nonce handling
+
+By default, Turnkey resolves the on-chain transaction nonce automatically — you don't need to provide it. The `-rpc-url` flag is included for completeness, to demonstrate how you can fetch and supply your own nonce via an external RPC (e.g. Alchemy).
+
+**Important:** providing a custom nonce is not compatible with sponsored transactions (`sponsor: true`). When `-rpc-url` is set, the example switches to `sponsor: false` and uses the RPC-fetched nonce instead of the gas station nonce.

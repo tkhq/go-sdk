@@ -4,20 +4,26 @@
 //   - send: ETH self-transfer
 //   - swap: Uniswap V3 swap (ETH → USDC)
 //
-// Both actions use Turnkey Gas Station for gas sponsorship.
+// Both actions use Turnkey Gas Station for gas sponsorship by default.
+// Optionally, pass -rpc-url to use your own nonce from an external RPC (non-sponsored).
 //
 // Usage:
 //
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -action send
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -action swap
+//	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -rpc-url "https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY" -action send
 package main
 
 import (
+	"bytes"
 	"encoding/hex"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"math/big"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -44,6 +50,7 @@ var (
 	signWith       string
 	caip2          string
 	action         string
+	rpcURL         string
 )
 
 func init() {
@@ -52,6 +59,7 @@ func init() {
 	flag.StringVar(&signWith, "sign-with", "", "wallet address to sign with (0x-prefixed)")
 	flag.StringVar(&caip2, "caip2", "eip155:11155111", "CAIP-2 chain ID (default: Sepolia)")
 	flag.StringVar(&action, "action", "send", "action to perform: 'send' or 'swap'")
+	flag.StringVar(&rpcURL, "rpc-url", "", "Alchemy RPC URL (e.g. https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY)")
 }
 
 func main() {
@@ -103,24 +111,40 @@ func initClient() (*sdk.Client, error) {
 }
 
 // sendETH sends a sponsored self-transfer of 0.0001 ETH.
+// When -rpc-url is provided, uses the on-chain nonce directly (non-sponsored).
+// Otherwise, uses gas station sponsorship.
 func sendETH(client *sdk.Client) error {
 	fmt.Println("Action: send sponsored ETH self-transfer")
 
-	nonce, err := getGasStationNonce(client)
-	if err != nil {
-		return err
+	value := "100000000000000" // 0.0001 ETH in wei
+	intent := &models.EthSendTransactionIntent{
+		From:  &signWith,
+		To:    &signWith,
+		Value: &value,
+		Caip2: &caip2,
 	}
 
-	sponsor := true
-	value := "100000000000000" // 0.0001 ETH in wei
-
-	intent := &models.EthSendTransactionIntent{
-		From:            &signWith,
-		To:              &signWith,
-		Value:           &value,
-		Caip2:           &caip2,
-		Sponsor:         &sponsor,
-		GasStationNonce: nonce,
+	// When -rpc-url is provided, fetch the nonce from an external RPC (e.g. Alchemy)
+	// and use non-sponsored mode. The nonce is not strictly needed — Turnkey resolves it
+	// automatically — but is shown here for completeness. Note: custom nonces are not
+	// compatible with sponsored transactions.
+	if rpcURL != "" {
+		n, err := getTxNonce(signWith)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("Tx nonce from RPC provider: %s\n", n)
+		sponsor := false
+		intent.Nonce = &n
+		intent.Sponsor = &sponsor
+	} else {
+		nonce, err := getGasStationNonce(client)
+		if err != nil {
+			return err
+		}
+		sponsor := true
+		intent.Sponsor = &sponsor
+		intent.GasStationNonce = nonce
 	}
 
 	txHash, err := submitAndWait(client, intent)
@@ -133,13 +157,10 @@ func sendETH(client *sdk.Client) error {
 }
 
 // swapETH performs a sponsored Uniswap V3 swap of 0.0001 ETH → USDC.
+// When -rpc-url is provided, uses the on-chain nonce directly (non-sponsored).
+// Otherwise, uses gas station sponsorship.
 func swapETH(client *sdk.Client) error {
 	fmt.Println("Action: swap ETH → USDC via Uniswap V3 (sponsored)")
-
-	nonce, err := getGasStationNonce(client)
-	if err != nil {
-		return err
-	}
 
 	calldata, err := encodeExactInputSingle(
 		sepoliaWETH,
@@ -155,18 +176,38 @@ func swapETH(client *sdk.Client) error {
 	}
 
 	calldataHex := "0x" + hex.EncodeToString(calldata)
-	sponsor := true
 	value := "100000000000000" // msg.value for ETH→token swap
 	router := sepoliaSwapRouter02
 
 	intent := &models.EthSendTransactionIntent{
-		From:            &signWith,
-		To:              &router,
-		Value:           &value,
-		Data:            &calldataHex,
-		Caip2:           &caip2,
-		Sponsor:         &sponsor,
-		GasStationNonce: nonce,
+		From:  &signWith,
+		To:    &router,
+		Value: &value,
+		Data:  &calldataHex,
+		Caip2: &caip2,
+	}
+
+	// When -rpc-url is provided, fetch the nonce from an external RPC (e.g. Alchemy)
+	// and use non-sponsored mode. The nonce is not strictly needed — Turnkey resolves it
+	// automatically — but is shown here for completeness. Note: custom nonces are not
+	// compatible with sponsored transactions.
+	if rpcURL != "" {
+		n, err := getTxNonce(signWith)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("Tx nonce from RPC provider: %s\n", n)
+		sponsor := false
+		intent.Nonce = &n
+		intent.Sponsor = &sponsor
+	} else {
+		nonce, err := getGasStationNonce(client)
+		if err != nil {
+			return err
+		}
+		sponsor := true
+		intent.Sponsor = &sponsor
+		intent.GasStationNonce = nonce
 	}
 
 	txHash, err := submitAndWait(client, intent)
@@ -201,6 +242,57 @@ func getGasStationNonce(client *sdk.Client) (*string, error) {
 
 	fmt.Printf("Gas station nonce: %s\n", *nonce)
 	return nonce, nil
+}
+
+// getTxNonce fetches the on-chain transaction nonce via an Alchemy JSON-RPC call (eth_getTransactionCount).
+// This is not strictly needed — Turnkey resolves the nonce automatically when it's omitted.
+// It is included here for the sake of completeness, to show how you can provide your own nonce.
+// Note: providing a nonce is not compatible with sponsored transactions (sponsor=true).
+func getTxNonce(address string) (string, error) {
+	if rpcURL == "" {
+		return "", fmt.Errorf("rpc-url flag is required to fetch tx nonce")
+	}
+
+	reqBody, err := json.Marshal(map[string]interface{}{
+		"jsonrpc": "2.0",
+		"id":      1,
+		"method":  "eth_getTransactionCount",
+		"params":  []string{address, "latest"},
+	})
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal RPC request: %w", err)
+	}
+
+	resp, err := http.Post(rpcURL, "application/json", bytes.NewReader(reqBody))
+	if err != nil {
+		return "", fmt.Errorf("RPC request failed: %w", err)
+	}
+	body, err := io.ReadAll(resp.Body)
+	closeErr := resp.Body.Close()
+	if err != nil {
+		return "", fmt.Errorf("failed to read RPC response: %w", err)
+	}
+	if closeErr != nil {
+		return "", fmt.Errorf("failed to close RPC response body: %w", closeErr)
+	}
+
+	var rpcResp struct {
+		Result string `json:"result"`
+		Error  *struct {
+			Message string `json:"message"`
+		} `json:"error"`
+	}
+	if err := json.Unmarshal(body, &rpcResp); err != nil {
+		return "", fmt.Errorf("failed to parse RPC response: %w", err)
+	}
+	if rpcResp.Error != nil {
+		return "", fmt.Errorf("RPC error: %s", rpcResp.Error.Message)
+	}
+
+	// Convert hex nonce to decimal
+	nonce := new(big.Int)
+	nonce.SetString(strings.TrimPrefix(rpcResp.Result, "0x"), 16)
+	return nonce.String(), nil
 }
 
 func submitAndWait(client *sdk.Client, intent *models.EthSendTransactionIntent) (string, error) {
