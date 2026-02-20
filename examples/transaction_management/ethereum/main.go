@@ -281,20 +281,35 @@ func encodeExactInputSingle(
 	recipient string,
 	amountIn, amountOutMinimum, sqrtPriceLimitX96 *big.Int,
 ) ([]byte, error) {
-	selector, _ := hex.DecodeString("04e45aaf")
+	selector, err := hex.DecodeString("04e45aaf")
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode selector: %w", err)
+	}
 
 	data := make([]byte, 4+7*32) // selector + 7 ABI-encoded words
 	copy(data[0:4], selector)
 
 	// Word 0: tokenIn (address, left-padded to 32 bytes)
-	copy(data[4+12:4+32], addressToBytes(tokenIn))
+	tokenInBytes, err := addressToBytes(tokenIn)
+	if err != nil {
+		return nil, err
+	}
+	copy(data[4+12:4+32], tokenInBytes)
 	// Word 1: tokenOut
-	copy(data[4+32+12:4+64], addressToBytes(tokenOut))
+	tokenOutBytes, err := addressToBytes(tokenOut)
+	if err != nil {
+		return nil, err
+	}
+	copy(data[4+32+12:4+64], tokenOutBytes)
 	// Word 2: fee (uint24)
 	feeBig := new(big.Int).SetUint64(uint64(fee))
 	padBigInt(data[4+64:4+96], feeBig)
 	// Word 3: recipient
-	copy(data[4+96+12:4+128], addressToBytes(recipient))
+	recipientBytes, err := addressToBytes(recipient)
+	if err != nil {
+		return nil, err
+	}
+	copy(data[4+96+12:4+128], recipientBytes)
 	// Word 4: amountIn
 	padBigInt(data[4+128:4+160], amountIn)
 	// Word 5: amountOutMinimum
@@ -306,10 +321,13 @@ func encodeExactInputSingle(
 }
 
 // addressToBytes converts a 0x-prefixed hex address to a 20-byte slice.
-func addressToBytes(addr string) []byte {
+func addressToBytes(addr string) ([]byte, error) {
 	addr = strings.TrimPrefix(addr, "0x")
-	b, _ := hex.DecodeString(addr)
-	return b
+	b, err := hex.DecodeString(addr)
+	if err != nil {
+		return nil, fmt.Errorf("invalid address %q: %w", addr, err)
+	}
+	return b, nil
 }
 
 // padBigInt writes a big.Int right-aligned into a 32-byte slot.
