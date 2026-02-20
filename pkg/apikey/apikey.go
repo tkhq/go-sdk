@@ -74,7 +74,7 @@ func New(organizationID string, opts ...optionFunc) (*Key, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate p256 key pair: %s", err)
 		}
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		apiKey, err = newECDSAKey(apiKey.scheme)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate secp256k1 key pair: %s", err)
@@ -101,7 +101,7 @@ func FromTurnkeyPrivateKey(encodedPrivateKey string, scheme signatureScheme) (*K
 	switch scheme {
 	case SchemeP256:
 		return fromTurnkeyECDSAKey(encodedPrivateKey, scheme)
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		return fromTurnkeyECDSAKey(encodedPrivateKey, scheme)
 	case SchemeED25519:
 		return fromTurnkeyED25519Key(encodedPrivateKey)
@@ -151,7 +151,7 @@ func (k Key) GetMetadata() Metadata {
 // created before there were multiple supported types.
 func (k Key) GetCurve() string {
 	switch k.scheme {
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		return string(CurveSecp256k1)
 	case SchemeED25519:
 		return string(CurveEd25519)

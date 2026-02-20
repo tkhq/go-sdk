@@ -8,9 +8,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/big"
+	"strconv"
 
 	dcrec "github.com/decred/dcrd/dcrec/secp256k1/v4"
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/sha3"
 )
 
 type ecdsaKey struct {
@@ -18,8 +20,26 @@ type ecdsaKey struct {
 	pubKey  *ecdsa.PublicKey
 }
 
+type ecdsaEIP191Key ecdsaKey
+
 func (k *ecdsaKey) sign(msg []byte) (string, error) {
 	hash := sha256.Sum256(msg)
+
+	sigBytes, err := ecdsa.SignASN1(rand.Reader, k.privKey, hash[:])
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate signature")
+	}
+
+	return hex.EncodeToString(sigBytes), nil
+}
+
+func (k *ecdsaEIP191Key) sign(msg []byte) (string, error) {
+	keccak256 := sha3.NewLegacyKeccak256()
+	keccak256.Write([]byte("\x19Ethereum Signed Message:\n"))
+	keccak256.Write([]byte(strconv.Itoa(len(msg))))
+	keccak256.Write(msg)
+	var hash [32]byte
+	keccak256.Sum(hash[:0])
 
 	sigBytes, err := ecdsa.SignASN1(rand.Reader, k.privKey, hash[:])
 	if err != nil {
@@ -65,15 +85,24 @@ func FromECDSAPrivateKey(privateKey *ecdsa.PrivateKey, scheme signatureScheme) (
 
 	publicKey := &privateKey.PublicKey
 
-	uk := ecdsaKey{
-		pubKey:  publicKey,
-		privKey: privateKey,
+	var uk underlyingKey
+	switch scheme {
+	case SchemeSECP256K1EIP191:
+		uk = &ecdsaEIP191Key{
+			pubKey:  publicKey,
+			privKey: privateKey,
+		}
+	default:
+		uk = &ecdsaKey{
+			pubKey:  publicKey,
+			privKey: privateKey,
+		}
 	}
 
 	return &Key{
 		TkPrivateKey:  EncodePrivateECDSAKey(privateKey),
 		TkPublicKey:   EncodePublicECDSAKey(publicKey),
-		underlyingKey: &uk,
+		underlyingKey: uk,
 		scheme:        scheme,
 	}, nil
 }
@@ -98,7 +127,7 @@ func DecodeTurnkeyPublicECDSAKey(encodedPublicKey string, scheme signatureScheme
 	case SchemeP256:
 		curve = elliptic.P256()
 		x, y = elliptic.UnmarshalCompressed(curve, bytes)
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		curve = dcrec.S256()
 
 		pubkey, err := dcrec.ParsePubKey(bytes)
@@ -127,7 +156,7 @@ func newECDSAKey(scheme signatureScheme) (*Key, error) {
 	switch scheme {
 	case SchemeP256:
 		curve = elliptic.P256()
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		curve = dcrec.S256()
 	default:
 		// should be unreachable since scheme type is non-exported with discreet options
@@ -163,7 +192,7 @@ func fromTurnkeyECDSAKey(encodedPrivateKey string, scheme signatureScheme) (*Key
 	switch scheme {
 	case SchemeP256:
 		curve = elliptic.P256()
-	case SchemeSECP256K1:
+	case SchemeSECP256K1, SchemeSECP256K1EIP191:
 		curve = dcrec.S256()
 	default:
 		// should be unreachable since scheme type is non-exported with discreet options
