@@ -221,7 +221,14 @@ func swapETH(client *sdk.Client) error {
 
 // getGasStationNonce fetches the gas station delegate contract nonce.
 // This is optional when sponsor=true (Turnkey handles it internally if omitted),
-// but including it explicitly provides maximal security posture against replay attacks.
+// but including it explicitly provides maximal security posture against replay attacks:
+// it ensures that a signed request can only produce a single transaction, even if
+// infrastructure outside the enclave is compromised.
+// See: https://docs.turnkey.com/signing-automation/gas-station#security
+//
+// Note: if you run multiple transactions back-to-back, wait for the previous one to
+// confirm before sending the next — otherwise the gas station nonce may not have
+// incremented yet, causing an InvalidNonce error.
 func getGasStationNonce(client *sdk.Client) (*string, error) {
 	params := broadcasting.NewGetNoncesParams().WithBody(&models.GetNoncesRequest{
 		OrganizationID:  &organizationID,
