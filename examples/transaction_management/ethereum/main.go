@@ -1,8 +1,9 @@
 // Package main demonstrates transaction management with Turnkey.
 //
-// It supports two actions:
+// It supports three actions:
 //   - send: ETH self-transfer
 //   - swap: Uniswap V3 swap (ETH → USDC)
+//   - assets: list supported assets for the chain
 //
 // Both actions use Turnkey Gas Station for gas sponsorship by default.
 // Pass -sponsor=false to use non-sponsored mode.
@@ -13,6 +14,7 @@
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -action swap
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -sponsor=false -action send
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -sponsor=false -action swap
+//	go run main.go -api-private-key "..." -organization-id "..." -sign-with "0x..." -action assets
 
 package main
 
@@ -29,6 +31,7 @@ import (
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/broadcasting"
 	"github.com/tkhq/go-sdk/pkg/api/client/send_transactions"
+	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 	"github.com/tkhq/go-sdk/pkg/apikey"
 	"github.com/tkhq/go-sdk/pkg/util"
@@ -56,7 +59,7 @@ func init() {
 	flag.StringVar(&organizationID, "organization-id", "", "Turnkey organization ID")
 	flag.StringVar(&signWith, "sign-with", "", "wallet address to sign with (0x-prefixed)")
 	flag.StringVar(&caip2, "caip2", "eip155:11155111", "CAIP-2 chain ID (default: Sepolia)")
-	flag.StringVar(&action, "action", "send", "action to perform: 'send' or 'swap'")
+	flag.StringVar(&action, "action", "send", "action to perform: 'send', 'swap', or 'assets'")
 	flag.BoolVar(&sponsor, "sponsor", true, "use gas station sponsorship (default: true)")
 }
 
@@ -69,8 +72,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	if action != "send" && action != "swap" {
-		log.Fatalf("Invalid action %q: must be 'send' or 'swap'", action)
+	if action != "send" && action != "swap" && action != "assets" {
+		log.Fatalf("Invalid action %q: must be 'send', 'swap', or 'assets'", action)
 	}
 
 	if err := run(); err != nil {
@@ -84,14 +87,25 @@ func run() error {
 		return err
 	}
 
+	if err := printBalances(client); err != nil {
+		return err
+	}
+
 	switch action {
 	case "send":
-		return sendETH(client)
+		err = sendETH(client)
 	case "swap":
-		return swapETH(client)
+		err = swapETH(client)
+	case "assets":
+		return listSupportedAssets(client)
 	default:
 		return fmt.Errorf("unknown action: %s", action)
 	}
+	if err != nil {
+		return err
+	}
+
+	return printBalances(client)
 }
 
 func initClient() (*sdk.Client, error) {
@@ -106,6 +120,62 @@ func initClient() (*sdk.Client, error) {
 	}
 
 	return client, nil
+}
+
+// listSupportedAssets lists all supported assets for the configured chain.
+func listSupportedAssets(client *sdk.Client) error {
+	params := wallets.NewListSupportedAssetsParams().WithBody(&models.ListSupportedAssetsRequest{
+		OrganizationID: &organizationID,
+		Caip2:          &caip2,
+	})
+
+	resp, err := client.V0().Wallets.ListSupportedAssets(params, client.Authenticator)
+	if err != nil {
+		return fmt.Errorf("failed to list supported assets: %w", err)
+	}
+
+	fmt.Printf("Supported assets for %s:\n", caip2)
+	if len(resp.Payload.Assets) == 0 {
+		fmt.Println("  (none)")
+	}
+	for _, a := range resp.Payload.Assets {
+		fmt.Printf("  %s (decimals: %d, caip19: %s)\n", a.Symbol, a.Decimals, a.Caip19)
+	}
+
+	return nil
+}
+
+// printBalances fetches and displays the wallet's asset balances.
+func printBalances(client *sdk.Client) error {
+	params := wallets.NewGetWalletAddressBalancesParams().WithBody(&models.GetWalletAddressBalancesRequest{
+		OrganizationID: &organizationID,
+		Address:        &signWith,
+		Caip2:          &caip2,
+	})
+
+	resp, err := client.V0().Wallets.GetWalletAddressBalances(params, client.Authenticator)
+	if err != nil {
+		return fmt.Errorf("failed to get balances: %w", err)
+	}
+
+	fmt.Printf("Balances for %s:\n", signWith)
+	if len(resp.Payload.Balances) == 0 {
+		fmt.Println("  (no balances)")
+	}
+	for _, b := range resp.Payload.Balances {
+		if b.Display != nil && b.Display.Crypto != "" {
+			fmt.Printf("  %s %s", b.Display.Crypto, b.Symbol)
+			if b.Display.Usd != "" {
+				fmt.Printf(" ($%s)", b.Display.Usd)
+			}
+			fmt.Println()
+		} else {
+			fmt.Printf("  %s %s (raw: %s, decimals: %d)\n", b.Balance, b.Symbol, b.Balance, b.Decimals)
+		}
+	}
+	fmt.Println()
+
+	return nil
 }
 
 // sendETH sends a self-transfer of 0.0001 ETH.

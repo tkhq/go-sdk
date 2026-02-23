@@ -6,8 +6,9 @@ Demonstrates Turnkey's [transaction management](https://docs.turnkey.com/concept
 
 - **send** — Self-transfer of 0.0001 ETH
 - **swap** — Uniswap V3 swap (ETH → USDC) via SwapRouter02
+- **assets** — List supported assets for the chain
 
-Both actions use Turnkey Gas Station for gas sponsorship by default. Pass `-sponsor=false` to use non-sponsored mode.
+The send and swap actions use Turnkey Gas Station for gas sponsorship by default. Pass `-sponsor=false` to use non-sponsored mode.
 
 ## Prerequisites
 
@@ -22,7 +23,7 @@ Both actions use Turnkey Gas Station for gas sponsorship by default. Pass `-spon
 | `-api-private-key` | Yes | | Turnkey API private key |
 | `-organization-id` | Yes | | Turnkey organization ID |
 | `-sign-with` | Yes | | Wallet address to sign with (0x-prefixed) |
-| `-action` | No | `send` | Action to perform: `send` or `swap` |
+| `-action` | No | `send` | Action to perform: `send`, `swap`, or `assets` |
 | `-caip2` | No | `eip155:11155111` | CAIP-2 chain ID |
 | `-sponsor` | No | `true` | Use gas station sponsorship |
 
@@ -60,37 +61,60 @@ go run main.go \
   -sign-with "0x..." \
   -sponsor=false \
   -action swap
+
+# List supported assets
+go run main.go \
+  -api-private-key "..." \
+  -organization-id "..." \
+  -sign-with "0x..." \
+  -action assets
 ```
 
 ## Example output
 
 ```
 $ go run main.go -api-private-key ... -organization-id "7ff189fb-..." -sign-with "0xB2E8..." -action send
+Balances for 0xB2E8...:
+  0.05 ETH ($125.00)
+  10.0 USDC ($10.00)
+
 Action: send sponsored ETH self-transfer
 Gas station nonce: 5
 Transaction submitted, status ID: sha256:0e061f4b3fc0437e8c21dd7059ac05f6966af5d574456744cd48a6e22e2c40dd
 Polling for confirmation...
   Status: INITIALIZED
 Send complete! Tx hash: 0xda2a8c705f19d9f4e17ea354d213e50b7d38f76ccdce23f7c3492f87260e456d
+Balances for 0xB2E8...:
+  0.05 ETH ($125.00)
+  10.0 USDC ($10.00)
 ```
 
 ```
 $ go run main.go -api-private-key ... -organization-id "7ff189fb-..." -sign-with "0xB2E8..." -action swap
+Balances for 0xB2E8...:
+  0.05 ETH ($125.00)
+  10.0 USDC ($10.00)
+
 Action: swap ETH → USDC via Uniswap V3 (sponsored)
 Gas station nonce: 6
 Transaction submitted, status ID: sha256:bafb08367618c0e727c5b99f6ddc2f0cb05d5a81d723062af0cb8fc3c5018d08
 Polling for confirmation...
   Status: INITIALIZED
 Swap complete! Tx hash: 0xde41d1f35986f7f9a661afba568674d51a5913ba9f1c6d2391f99d6dd7a98e74
+Balances for 0xB2E8...:
+  0.0499 ETH ($124.75)
+  10.05 USDC ($10.05)
 ```
 
 ## How it works
 
 1. Creates a Turnkey SDK client using the provided API key
-2. **Sponsored mode** (`-sponsor=true`, default): fetches a gas station nonce via `GetNonces` for transaction ordering and replay protection
-3. **Non-sponsored mode** (`-sponsor=false`): Turnkey resolves the on-chain nonce automatically
-4. Submits the transaction via `EthSendTransaction`
-5. Polls `GetSendTransactionStatus` until a tx hash is returned or an error occurs
+2. Fetches and displays wallet balances via `GetWalletAddressBalances`
+3. **Sponsored mode** (`-sponsor=true`, default): fetches a gas station nonce via `GetNonces` for transaction ordering and replay protection
+4. **Non-sponsored mode** (`-sponsor=false`): Turnkey resolves the on-chain nonce automatically
+5. Submits the transaction via `EthSendTransaction`
+6. Polls `GetSendTransactionStatus` until a tx hash is returned or an error occurs
+7. Fetches and displays updated balances to show the difference
 
 For the **swap** action, the calldata is ABI-encoded for Uniswap V3 [SwapRouter02](https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments)'s `exactInputSingle` (selector `0x04e45aaf`), targeting the WETH/USDC pool with a 0.3% fee tier on Sepolia.
 
