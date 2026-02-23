@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.15.1 — 2026-02-20
+## 0.16.0 — 2026-02-20
 ### Patch Changes
 - Synced with Mono v2026.2.5
 
