@@ -1,17 +1,17 @@
 # Transaction Management Example
 
-Demonstrates the Turnkey's sponsored [transaction management](https://docs.turnkey.com/concepts/transaction-management) feature.
+Demonstrates Turnkey's [transaction management](https://docs.turnkey.com/concepts/transaction-management) feature with both sponsored and non-sponsored modes.
 
 ## Actions
 
 - **send** — Self-transfer of 0.0001 ETH
 - **swap** — Uniswap V3 swap (ETH → USDC) via SwapRouter02
 
-Both actions use Turnkey Gas Station for gas sponsorship by default. Optionally, pass `-rpc-url` to provide your own on-chain nonce and use non-sponsored mode.
+Both actions use Turnkey Gas Station for gas sponsorship by default. Pass `-sponsor=false` to use non-sponsored mode.
 
 ## Prerequisites
 
-- A Turnkey organization with Gas Station enabled on Sepolia
+- A Turnkey organization entitles to use the Transaction Management feature
 - A wallet with Sepolia ETH
 - A Turnkey API key (P-256)
 
@@ -24,7 +24,7 @@ Both actions use Turnkey Gas Station for gas sponsorship by default. Optionally,
 | `-sign-with` | Yes | | Wallet address to sign with (0x-prefixed) |
 | `-action` | No | `send` | Action to perform: `send` or `swap` |
 | `-caip2` | No | `eip155:11155111` | CAIP-2 chain ID |
-| `-rpc-url` | No | | RPC URL for on-chain nonce lookup (non-sponsored mode) |
+| `-sponsor` | No | `true` | Use gas station sponsorship |
 
 ## Usage
 
@@ -45,13 +45,21 @@ go run main.go \
   -sign-with "0x..." \
   -action swap
 
-# Send with your own nonce via Alchemy (non-sponsored)
+# Send 0.0001 ETH to self (non-sponsored)
 go run main.go \
   -api-private-key "..." \
   -organization-id "..." \
   -sign-with "0x..." \
-  -rpc-url "https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY" \
+  -sponsor=false \
   -action send
+
+# Swap 0.0001 ETH → USDC via Uniswap V3 (non-sponsored)
+go run main.go \
+  -api-private-key "..." \
+  -organization-id "..." \
+  -sign-with "0x..." \
+  -sponsor=false \
+  -action swap
 ```
 
 ## Example output
@@ -79,14 +87,37 @@ Swap complete! Tx hash: 0xde41d1f35986f7f9a661afba568674d51a5913ba9f1c6d2391f99d
 ## How it works
 
 1. Creates a Turnkey SDK client using the provided API key
-2. Fetches a gas station nonce via `GetNonces` for transaction ordering
-3. Submits the transaction via `EthSendTransaction` with `sponsor: true`
-4. Polls `GetSendTransactionStatus` until a tx hash is returned or an error occurs
+2. **Sponsored mode** (`-sponsor=true`, default): fetches a gas station nonce via `GetNonces` for transaction ordering and replay protection
+3. **Non-sponsored mode** (`-sponsor=false`): Turnkey resolves the on-chain nonce automatically
+4. Submits the transaction via `EthSendTransaction`
+5. Polls `GetSendTransactionStatus` until a tx hash is returned or an error occurs
 
 For the **swap** action, the calldata is ABI-encoded for Uniswap V3 [SwapRouter02](https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments)'s `exactInputSingle` (selector `0x04e45aaf`), targeting the WETH/USDC pool with a 0.3% fee tier on Sepolia.
 
 ## Nonce handling
 
-By default, Turnkey resolves the on-chain transaction nonce automatically — you don't need to provide it. The `-rpc-url` flag is included for completeness, to demonstrate how you can fetch and supply your own nonce via an external RPC (e.g. Alchemy).
+There are two distinct nonces involved in transaction management:
 
-**Important:** providing a custom nonce is not compatible with sponsored transactions (`sponsor: true`). When `-rpc-url` is set, the example switches to `sponsor: false` and uses the RPC-fetched nonce instead of the gas station nonce.
+- **On-chain nonce** — the standard Ethereum transaction nonce. Turnkey resolves this automatically in both sponsored and non-sponsored modes; you never need to provide it. If you want to manage it yourself, you can fetch it via `GetNonces` with `Nonce: true` and set `intent.Nonce` (see example below). Custom on-chain nonces are not compatible with sponsored transactions.
+
+- **Gas station nonce** — a nonce specific to the gas station delegate contract, only relevant for sponsored transactions (`sponsor: true`). Turnkey handles this internally if omitted, but passing it explicitly provides maximal security against replay attacks: it ensures a signed request can only produce a single transaction. See the [Gas Station security docs](https://docs.turnkey.com/signing-automation/gas-station#security). This example passes it explicitly.
+
+### Providing a custom on-chain nonce
+
+```go
+params := broadcasting.NewGetNoncesParams().WithBody(&models.GetNoncesRequest{
+    OrganizationID: &organizationID,
+    Address:        &signWith,
+    Caip2:          &caip2,
+    Nonce:          true,
+})
+
+resp, err := client.V0().Broadcasting.GetNonces(params, client.Authenticator)
+if err != nil {
+    return err
+}
+
+intent.Nonce = resp.Payload.Nonce
+```
+
+**Note:** if you run multiple sponsored transactions back-to-back, wait for the previous one to confirm before sending the next — otherwise the gas station nonce may not have incremented yet, causing an `InvalidNonce` error.
