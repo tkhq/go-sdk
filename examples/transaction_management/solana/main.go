@@ -1,16 +1,18 @@
 // Package main demonstrates Solana transaction management with Turnkey.
 //
-// It supports two actions:
+// It supports three actions:
 //   - send: SOL transfer (defaults to self-transfer if no destination)
 //   - send-token: SPL token transfer, e.g. USDC (defaults to self-transfer if no destination)
+//   - swap: SOL → USDC swap via Jupiter (mainnet only)
 //
-// Both actions use Turnkey Gas Station for gas sponsorship by default.
+// All actions use Turnkey Gas Station for gas sponsorship by default.
 // Pass -sponsor=false to use non-sponsored mode (requires -rpc-url).
 //
 // Usage:
 //
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action send
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action send-token -token-mint "..." -destination "..."
+//	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action swap -jupiter-api-key "..." -caip2 "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -sponsor=false -rpc-url "https://api.devnet.solana.com" -action send
 
 package main
@@ -19,10 +21,16 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
+	"math"
+	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gagliardetto/solana-go"
@@ -38,7 +46,15 @@ import (
 	"github.com/tkhq/go-sdk/pkg/util"
 )
 
-const actionSendToken = "send-token"
+const (
+	actionSendToken = "send-token"
+	actionSwap      = "swap"
+
+	// Jupiter swap constants (mainnet only).
+	jupiterBaseURL = "https://api.jup.ag"
+	solMint        = "So11111111111111111111111111111111111111112"
+	mainnetUSDC    = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+)
 
 var (
 	apiPrivateKey  string
@@ -54,6 +70,10 @@ var (
 	destination string
 	amount      uint64
 	decimals    uint
+
+	// Swap flags
+	jupiterAPIKey string
+	swapAmount    string
 )
 
 func init() {
@@ -61,7 +81,7 @@ func init() {
 	flag.StringVar(&organizationID, "organization-id", "", "Turnkey organization ID")
 	flag.StringVar(&signWith, "sign-with", "", "Solana wallet address (base58)")
 	flag.StringVar(&caip2, "caip2", "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1", "CAIP-2 chain ID (default: Solana devnet)")
-	flag.StringVar(&action, "action", "send", "action to perform: 'send' or 'send-token'")
+	flag.StringVar(&action, "action", "send", "action to perform: 'send', 'send-token', or 'swap'")
 	flag.BoolVar(&sponsor, "sponsor", true, "use gas station sponsorship (default: true)")
 	flag.StringVar(&rpcURL, "rpc-url", "", "Solana RPC URL (required for non-sponsored mode)")
 
@@ -70,6 +90,10 @@ func init() {
 	flag.StringVar(&destination, "destination", "", "destination wallet address (defaults to self-transfer)")
 	flag.Uint64Var(&amount, "amount", 1_000_000, "token amount in smallest units (default: 1000000 = 1 USDC)")
 	flag.UintVar(&decimals, "decimals", 6, "token decimals (default: 6 for USDC)")
+
+	// Swap flags
+	flag.StringVar(&jupiterAPIKey, "jupiter-api-key", "", "Jupiter API key (required for swap)")
+	flag.StringVar(&swapAmount, "swap-amount", "0.0001", "amount of SOL to swap (default: 0.0001)")
 }
 
 func main() {
@@ -91,12 +115,8 @@ func validateFlags() error {
 		return fmt.Errorf("missing required flags: -api-private-key, -organization-id, and -sign-with are required")
 	}
 
-	if action != "send" && action != actionSendToken {
-		return fmt.Errorf("invalid action %q: must be 'send' or 'send-token'", action)
-	}
-
-	if action == actionSendToken && tokenMint == "" {
-		return fmt.Errorf("send-token requires -token-mint flag")
+	if err := validateAction(); err != nil {
+		return err
 	}
 
 	if !sponsor && rpcURL == "" {
@@ -104,6 +124,25 @@ func validateFlags() error {
 	}
 
 	return nil
+}
+
+func validateAction() error {
+	switch action {
+	case "send":
+		return nil
+	case actionSendToken:
+		if tokenMint == "" {
+			return fmt.Errorf("send-token requires -token-mint flag")
+		}
+		return nil
+	case actionSwap:
+		if jupiterAPIKey == "" {
+			return fmt.Errorf("swap requires -jupiter-api-key flag")
+		}
+		return nil
+	default:
+		return fmt.Errorf("invalid action %q: must be 'send', 'send-token', or 'swap'", action)
+	}
 }
 
 func run() error {
@@ -117,6 +156,8 @@ func run() error {
 		err = sendSOL(client)
 	case actionSendToken:
 		err = sendToken(client)
+	case actionSwap:
+		err = swapSOL(client)
 	default:
 		return fmt.Errorf("unknown action: %s", action)
 	}
@@ -158,9 +199,9 @@ func sendSOL(client *sdk.Client) error {
 	// For non-sponsored mode, fetch a real blockhash from the Solana RPC.
 	var blockhash solana.Hash
 	if sponsor {
-		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (sponsored)\n", to)
+		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (sponsored, %s)\n", to, caip2)
 	} else {
-		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (non-sponsored)\n", to)
+		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (non-sponsored, %s)\n", to, caip2)
 
 		solClient := rpc.New(rpcURL)
 		result, err := solClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
@@ -246,9 +287,9 @@ func sendToken(client *sdk.Client) error {
 	// For non-sponsored mode, fetch a real blockhash from the Solana RPC.
 	var blockhash solana.Hash
 	if sponsor {
-		fmt.Printf("Action: send %d tokens (sponsored)\n", amount)
+		fmt.Printf("Action: send %d tokens (sponsored, %s)\n", amount, caip2)
 	} else {
-		fmt.Printf("Action: send %d tokens (non-sponsored)\n", amount)
+		fmt.Printf("Action: send %d tokens (non-sponsored, %s)\n", amount, caip2)
 
 		solClient := rpc.New(rpcURL)
 		result, err := solClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
@@ -309,6 +350,161 @@ func createIdempotentATAInstruction(payer, owner, mint, ataAddr solana.PublicKey
 		},
 		[]byte{1}, // instruction index 1 = CreateIdempotent
 	)
+}
+
+// swapSOL swaps SOL for USDC via Jupiter (mainnet only).
+// Jupiter builds the transaction; we just convert it to hex and submit to Turnkey.
+func swapSOL(client *sdk.Client) error {
+	lamports, err := solToLamports(swapAmount)
+	if err != nil {
+		return fmt.Errorf("invalid swap amount %q: %w", swapAmount, err)
+	}
+
+	mode := "sponsored"
+	if !sponsor {
+		mode = "non-sponsored"
+	}
+
+	fmt.Printf("Action: swap %s SOL → USDC via Jupiter (%s, %s)\n", swapAmount, mode, caip2)
+
+	// 1. Get a quote from Jupiter.
+	quoteBody, err := jupiterQuote(lamports)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Quote received from Jupiter")
+
+	// 2. Request the swap transaction from Jupiter.
+	swapTxB64, err := jupiterSwapTx(quoteBody)
+	if err != nil {
+		return err
+	}
+
+	// 3. Convert the base64 transaction to hex and submit via Turnkey.
+	txBytes, err := base64.StdEncoding.DecodeString(swapTxB64)
+	if err != nil {
+		return fmt.Errorf("failed to decode swap transaction: %w", err)
+	}
+
+	unsignedTxHex := hex.EncodeToString(txBytes)
+
+	intent := &models.SolSendTransactionIntent{
+		SignWith:            &signWith,
+		UnsignedTransaction: &unsignedTxHex,
+		Caip2:               &caip2,
+		Sponsor:             &sponsor,
+	}
+
+	txSig, err := submitAndWait(client, intent)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Swap complete! Tx signature: %s\n", txSig)
+	return nil
+}
+
+// jupiterQuote fetches a swap quote from Jupiter's API.
+func jupiterQuote(lamports uint64) ([]byte, error) {
+	quoteURL := fmt.Sprintf(
+		"%s/swap/v1/quote?inputMint=%s&outputMint=%s&amount=%d&slippageBps=50",
+		jupiterBaseURL, solMint, mainnetUSDC, lamports,
+	)
+
+	quoteReq, err := http.NewRequestWithContext(context.Background(), http.MethodGet, quoteURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create quote request: %w", err)
+	}
+
+	quoteReq.Header.Set("x-api-key", jupiterAPIKey)
+
+	quoteResp, err := http.DefaultClient.Do(quoteReq)
+	if err != nil {
+		return nil, fmt.Errorf("jupiter quote request failed: %w", err)
+	}
+	defer quoteResp.Body.Close() //nolint:errcheck // best-effort close
+
+	body, err := io.ReadAll(quoteResp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read quote response: %w", err)
+	}
+
+	if quoteResp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("jupiter quote failed (status %d): %s", quoteResp.StatusCode, body)
+	}
+
+	return body, nil
+}
+
+// jupiterSwapTx requests a swap transaction from Jupiter and returns the base64-encoded transaction.
+func jupiterSwapTx(quoteBody []byte) (string, error) {
+	reqBody, err := json.Marshal(map[string]any{
+		"quoteResponse":             json.RawMessage(quoteBody),
+		"userPublicKey":             signWith,
+		"wrapAndUnwrapSol":          true,
+		"dynamicComputeUnitLimit":   true,
+		"prioritizationFeeLamports": "auto",
+	})
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal swap request: %w", err)
+	}
+
+	swapReq, err := http.NewRequestWithContext(
+		context.Background(), http.MethodPost,
+		jupiterBaseURL+"/swap/v1/swap",
+		strings.NewReader(string(reqBody)),
+	)
+	if err != nil {
+		return "", fmt.Errorf("failed to create swap request: %w", err)
+	}
+
+	swapReq.Header.Set("Content-Type", "application/json")
+	swapReq.Header.Set("x-api-key", jupiterAPIKey)
+
+	swapResp, err := http.DefaultClient.Do(swapReq)
+	if err != nil {
+		return "", fmt.Errorf("jupiter swap request failed: %w", err)
+	}
+	defer swapResp.Body.Close() //nolint:errcheck // best-effort close
+
+	body, err := io.ReadAll(swapResp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read swap response: %w", err)
+	}
+
+	if swapResp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("jupiter swap failed (status %d): %s", swapResp.StatusCode, body)
+	}
+
+	var result struct {
+		SwapTransaction string `json:"swapTransaction"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return "", fmt.Errorf("failed to parse swap response: %w", err)
+	}
+
+	if result.SwapTransaction == "" {
+		return "", fmt.Errorf("jupiter did not return a swap transaction")
+	}
+
+	return result.SwapTransaction, nil
+}
+
+// solToLamports converts a decimal SOL string (e.g. "0.0001") to lamports.
+func solToLamports(sol string) (uint64, error) {
+	f, err := strconv.ParseFloat(sol, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	if f <= 0 {
+		return 0, fmt.Errorf("amount must be greater than zero")
+	}
+
+	lamports := uint64(math.Round(f * 1e9))
+
+	return lamports, nil
 }
 
 // serializeTxHex serializes a Solana transaction to a hex string.
