@@ -1,9 +1,10 @@
 // Package main demonstrates Solana transaction management with Turnkey.
 //
-// It supports three actions:
+// It supports four actions:
 //   - send: SOL transfer (defaults to self-transfer if no destination)
 //   - send-token: SPL token transfer, e.g. USDC (defaults to self-transfer if no destination)
 //   - swap: SOL → USDC swap via Jupiter (mainnet only)
+//   - assets: list supported assets for the chain
 //
 // All actions use Turnkey Gas Station for gas sponsorship by default.
 // Pass -sponsor=false to use non-sponsored mode (requires -rpc-url).
@@ -14,6 +15,7 @@
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action send-token -token-mint "..." -destination "..."
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action swap -jupiter-api-key "..." -caip2 "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
 //	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -sponsor=false -rpc-url "https://api.devnet.solana.com" -action send
+//	go run main.go -api-private-key "..." -organization-id "..." -sign-with "..." -action assets
 
 package main
 
@@ -41,6 +43,7 @@ import (
 	"github.com/tkhq/go-sdk"
 	"github.com/tkhq/go-sdk/pkg/api/client/broadcasting"
 	"github.com/tkhq/go-sdk/pkg/api/client/send_transactions"
+	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
 	"github.com/tkhq/go-sdk/pkg/api/models"
 	"github.com/tkhq/go-sdk/pkg/apikey"
 	"github.com/tkhq/go-sdk/pkg/util"
@@ -81,7 +84,7 @@ func init() {
 	flag.StringVar(&organizationID, "organization-id", "", "Turnkey organization ID")
 	flag.StringVar(&signWith, "sign-with", "", "Solana wallet address (base58)")
 	flag.StringVar(&caip2, "caip2", "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1", "CAIP-2 chain ID (default: Solana devnet)")
-	flag.StringVar(&action, "action", "send", "action to perform: 'send', 'send-token', or 'swap'")
+	flag.StringVar(&action, "action", "send", "action to perform: 'send', 'send-token', 'swap', or 'assets'")
 	flag.BoolVar(&sponsor, "sponsor", true, "use gas station sponsorship (default: true)")
 	flag.StringVar(&rpcURL, "rpc-url", "", "Solana RPC URL (required for non-sponsored mode)")
 
@@ -119,7 +122,7 @@ func validateFlags() error {
 		return err
 	}
 
-	if !sponsor && rpcURL == "" {
+	if action != "assets" && !sponsor && rpcURL == "" {
 		return fmt.Errorf("non-sponsored mode requires -rpc-url to fetch a recent blockhash")
 	}
 
@@ -140,8 +143,10 @@ func validateAction() error {
 			return fmt.Errorf("swap requires -jupiter-api-key flag")
 		}
 		return nil
+	case "assets":
+		return nil
 	default:
-		return fmt.Errorf("invalid action %q: must be 'send', 'send-token', or 'swap'", action)
+		return fmt.Errorf("invalid action %q: must be 'send', 'send-token', 'swap', or 'assets'", action)
 	}
 }
 
@@ -151,6 +156,17 @@ func run() error {
 		return err
 	}
 
+	if err := printBalances(client, signWith); err != nil {
+		return err
+	}
+
+	// If a different destination was specified, show its balances before the tx too.
+	if destination != "" && destination != signWith {
+		if err := printBalances(client, destination); err != nil {
+			return err
+		}
+	}
+
 	switch action {
 	case "send":
 		err = sendSOL(client)
@@ -158,11 +174,27 @@ func run() error {
 		err = sendToken(client)
 	case actionSwap:
 		err = swapSOL(client)
+	case "assets":
+		return listSupportedAssets(client)
 	default:
 		return fmt.Errorf("unknown action: %s", action)
 	}
+	if err != nil {
+		return err
+	}
 
-	return err
+	if err := printBalances(client, signWith); err != nil {
+		return err
+	}
+
+	// If a different destination was specified, also show its updated balances.
+	if destination != "" && destination != signWith {
+		if err := printBalances(client, destination); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func initClient() (*sdk.Client, error) {
@@ -177,6 +209,62 @@ func initClient() (*sdk.Client, error) {
 	}
 
 	return client, nil
+}
+
+// listSupportedAssets lists all supported assets for the configured chain.
+func listSupportedAssets(client *sdk.Client) error {
+	params := wallets.NewListSupportedAssetsParams().WithBody(&models.ListSupportedAssetsRequest{
+		OrganizationID: &organizationID,
+		Caip2:          &caip2,
+	})
+
+	resp, err := client.V0().Wallets.ListSupportedAssets(params, client.Authenticator)
+	if err != nil {
+		return fmt.Errorf("failed to list supported assets: %w", err)
+	}
+
+	fmt.Printf("Supported assets for %s:\n", caip2)
+	if len(resp.Payload.Assets) == 0 {
+		fmt.Println("  (none)")
+	}
+	for _, a := range resp.Payload.Assets {
+		fmt.Printf("  %s (decimals: %d, caip19: %s)\n", a.Symbol, a.Decimals, a.Caip19)
+	}
+
+	return nil
+}
+
+// printBalances fetches and displays the wallet's asset balances for the given address.
+func printBalances(client *sdk.Client, address string) error {
+	params := wallets.NewGetWalletAddressBalancesParams().WithBody(&models.GetWalletAddressBalancesRequest{
+		OrganizationID: &organizationID,
+		Address:        &address,
+		Caip2:          &caip2,
+	})
+
+	resp, err := client.V0().Wallets.GetWalletAddressBalances(params, client.Authenticator)
+	if err != nil {
+		return fmt.Errorf("failed to get balances: %w", err)
+	}
+
+	fmt.Printf("Balances for %s:\n", address)
+	if len(resp.Payload.Balances) == 0 {
+		fmt.Println("  (no balances)")
+	}
+	for _, b := range resp.Payload.Balances {
+		if b.Display != nil && b.Display.Crypto != "" {
+			fmt.Printf("  %s %s", b.Display.Crypto, b.Symbol)
+			if b.Display.Usd != "" {
+				fmt.Printf(" ($%s)", b.Display.Usd)
+			}
+			fmt.Println()
+		} else {
+			fmt.Printf("  %s %s (raw: %s, decimals: %d)\n", b.Balance, b.Symbol, b.Balance, b.Decimals)
+		}
+	}
+	fmt.Println()
+
+	return nil
 }
 
 // sendSOL sends 890,880 lamports (~0.00089 SOL) to the destination address.
