@@ -52,7 +52,7 @@ The `-caip2` flag identifies the Solana network. Per the [CAIP-2 spec](https://g
 | `-rpc-url` | When `-sponsor=false` | | Solana RPC URL for fetching blockhash |
 | `-token-mint` | When `send-token` | | SPL token mint address (base58). Must match the chain — devnet USDC: `4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU`, mainnet USDC: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v` |
 | `-destination` | No | self | Destination wallet address (base58). Defaults to self-transfer. |
-| `-amount` | No | `1000000` | Token amount in smallest units (1000000 = 1 USDC) |
+| `-amount` | No | `890880` | Amount in smallest units: lamports for `send` (default: 890,880 ~0.00089 SOL), token units for `send-token` (e.g. 1000000 = 1 USDC) |
 | `-decimals` | No | `6` | Token decimals (6 for USDC) |
 | `-jupiter-api-key` | When `swap` | | Jupiter API key |
 | `-swap-amount` | No | `0.0001` | Amount of SOL to swap (decimal) |

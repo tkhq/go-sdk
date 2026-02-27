@@ -93,7 +93,7 @@ func init() {
 	// Token / destination flags
 	flag.StringVar(&tokenMint, "token-mint", "", "SPL token mint address (required for send-token)")
 	flag.StringVar(&destination, "destination", "", "destination wallet address (defaults to self-transfer)")
-	flag.Uint64Var(&amount, "amount", 1_000_000, "token amount in smallest units (default: 1000000 = 1 USDC)")
+	flag.Uint64Var(&amount, "amount", 890_880, "amount in smallest units: lamports for send (default: 890880 ~0.00089 SOL), token units for send-token (e.g. 1000000 = 1 USDC)")
 	flag.UintVar(&decimals, "decimals", 6, "token decimals (default: 6 for USDC)")
 
 	// Swap flags
@@ -263,7 +263,7 @@ func printBalances(client *sdk.Client, address string) error {
 	return nil
 }
 
-// sendSOL sends 890,880 lamports (~0.00089 SOL) to the destination address.
+// sendSOL sends the specified number of lamports to the destination address.
 // If no destination is specified, defaults to a self-transfer.
 func sendSOL(client *sdk.Client) error {
 	from := solana.MustPublicKeyFromBase58(signWith)
@@ -274,7 +274,7 @@ func sendSOL(client *sdk.Client) error {
 	}
 
 	transferIx := system.NewTransferInstruction(
-		890_880, // ~0.00089 SOL — minimum rent-exempt balance for a new account
+		amount,
 		from,
 		to,
 	).Build()
@@ -283,9 +283,9 @@ func sendSOL(client *sdk.Client) error {
 	// For non-sponsored mode, fetch a real blockhash from the Solana RPC.
 	var blockhash solana.Hash
 	if sponsor {
-		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (sponsored, %s)\n", to, caip2)
+		fmt.Printf("Action: send %d lamports to %s (sponsored, %s)\n", amount, to, caip2)
 	} else {
-		fmt.Printf("Action: send 890,880 lamports (~0.00089 SOL) to %s (non-sponsored, %s)\n", to, caip2)
+		fmt.Printf("Action: send %d lamports to %s (non-sponsored, %s)\n", amount, to, caip2)
 
 		solClient := rpc.New(rpcURL)
 		result, err := solClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
