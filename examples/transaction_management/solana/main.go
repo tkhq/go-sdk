@@ -50,8 +50,10 @@ import (
 )
 
 const (
+	actionSend      = "send"
 	actionSendToken = "send-token"
 	actionSwap      = "swap"
+	actionAssets    = "assets"
 
 	// Jupiter swap constants (mainnet only).
 	jupiterBaseURL = "https://api.jup.ag"
@@ -122,7 +124,7 @@ func validateFlags() error {
 		return err
 	}
 
-	if action != "assets" && !sponsor && rpcURL == "" {
+	if action != actionAssets && !sponsor && rpcURL == "" {
 		return fmt.Errorf("non-sponsored mode requires -rpc-url to fetch a recent blockhash")
 	}
 
@@ -131,7 +133,7 @@ func validateFlags() error {
 
 func validateAction() error {
 	switch action {
-	case "send":
+	case actionSend:
 		return nil
 	case actionSendToken:
 		if tokenMint == "" {
@@ -143,7 +145,7 @@ func validateAction() error {
 			return fmt.Errorf("swap requires -jupiter-api-key flag")
 		}
 		return nil
-	case "assets":
+	case actionAssets:
 		return nil
 	default:
 		return fmt.Errorf("invalid action %q: must be 'send', 'send-token', 'swap', or 'assets'", action)
@@ -156,25 +158,18 @@ func run() error {
 		return err
 	}
 
-	if err := printBalances(client, signWith); err != nil {
+	if err := printRelevantBalances(client); err != nil {
 		return err
 	}
 
-	// If a different destination was specified, show its balances before the tx too.
-	if destination != "" && destination != signWith {
-		if err := printBalances(client, destination); err != nil {
-			return err
-		}
-	}
-
 	switch action {
-	case "send":
+	case actionSend:
 		err = sendSOL(client)
 	case actionSendToken:
 		err = sendToken(client)
 	case actionSwap:
 		err = swapSOL(client)
-	case "assets":
+	case actionAssets:
 		return listSupportedAssets(client)
 	default:
 		return fmt.Errorf("unknown action: %s", action)
@@ -183,17 +178,18 @@ func run() error {
 		return err
 	}
 
+	return printRelevantBalances(client)
+}
+
+// printRelevantBalances prints balances for the sender and, if a different
+// destination was specified, for the destination address as well.
+func printRelevantBalances(client *sdk.Client) error {
 	if err := printBalances(client, signWith); err != nil {
 		return err
 	}
-
-	// If a different destination was specified, also show its updated balances.
 	if destination != "" && destination != signWith {
-		if err := printBalances(client, destination); err != nil {
-			return err
-		}
+		return printBalances(client, destination)
 	}
-
 	return nil
 }
 
