@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -23,8 +24,9 @@ type GetNoncesRequest struct {
 	// Required: true
 	Address *string `json:"address"`
 
-	// The network identifier in CAIP-2 format (e.g., 'eip155:1' for Ethereum mainnet).
+	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	// Required: true
+	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532 eip155:137 eip155:80002]
 	Caip2 *string `json:"caip2"`
 
 	// Whether to fetch the gas station nonce used for sponsored transactions.
@@ -69,9 +71,55 @@ func (m *GetNoncesRequest) validateAddress(formats strfmt.Registry) error {
 	return nil
 }
 
+var getNoncesRequestTypeCaip2PropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532","eip155:137","eip155:80002"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		getNoncesRequestTypeCaip2PropEnum = append(getNoncesRequestTypeCaip2PropEnum, v)
+	}
+}
+
+const (
+
+	// GetNoncesRequestCaip2Eip1551 captures enum value "eip155:1"
+	GetNoncesRequestCaip2Eip1551 string = "eip155:1"
+
+	// GetNoncesRequestCaip2Eip15511155111 captures enum value "eip155:11155111"
+	GetNoncesRequestCaip2Eip15511155111 string = "eip155:11155111"
+
+	// GetNoncesRequestCaip2Eip1558453 captures enum value "eip155:8453"
+	GetNoncesRequestCaip2Eip1558453 string = "eip155:8453"
+
+	// GetNoncesRequestCaip2Eip15584532 captures enum value "eip155:84532"
+	GetNoncesRequestCaip2Eip15584532 string = "eip155:84532"
+
+	// GetNoncesRequestCaip2Eip155137 captures enum value "eip155:137"
+	GetNoncesRequestCaip2Eip155137 string = "eip155:137"
+
+	// GetNoncesRequestCaip2Eip15580002 captures enum value "eip155:80002"
+	GetNoncesRequestCaip2Eip15580002 string = "eip155:80002"
+)
+
+// prop value enum
+func (m *GetNoncesRequest) validateCaip2Enum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, getNoncesRequestTypeCaip2PropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *GetNoncesRequest) validateCaip2(formats strfmt.Registry) error {
 
 	if err := validate.Required("caip2", "body", m.Caip2); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateCaip2Enum("caip2", "body", *m.Caip2); err != nil {
 		return err
 	}
 

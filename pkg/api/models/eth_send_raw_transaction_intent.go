@@ -22,7 +22,7 @@ type EthSendRawTransactionIntent struct {
 
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	// Required: true
-	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532]
+	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532 eip155:137 eip155:80002]
 	Caip2 *string `json:"caip2"`
 
 	// The raw, signed transaction to be sent.
@@ -52,7 +52,7 @@ var ethSendRawTransactionIntentTypeCaip2PropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532","eip155:137","eip155:80002"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -73,6 +73,12 @@ const (
 
 	// EthSendRawTransactionIntentCaip2Eip15584532 captures enum value "eip155:84532"
 	EthSendRawTransactionIntentCaip2Eip15584532 string = "eip155:84532"
+
+	// EthSendRawTransactionIntentCaip2Eip155137 captures enum value "eip155:137"
+	EthSendRawTransactionIntentCaip2Eip155137 string = "eip155:137"
+
+	// EthSendRawTransactionIntentCaip2Eip15580002 captures enum value "eip155:80002"
+	EthSendRawTransactionIntentCaip2Eip15580002 string = "eip155:80002"
 )
 
 // prop value enum

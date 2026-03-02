@@ -23,25 +23,12 @@ type CreateTvcDeploymentIntent struct {
 	// Required: true
 	AppID *string `json:"appId"`
 
+	// Optional flag to indicate whether to deploy the TVC app in debug mode, which includes additional logging and debugging tools. Default is false.
+	DebugMode *bool `json:"debugMode,omitempty"`
+
 	// Digest of the pivot binary in the pivot container. This value will be inserted in the QOS manifest to ensure application integrity.
 	// Required: true
 	ExpectedPivotDigest *string `json:"expectedPivotDigest"`
-
-	// Arguments to pass to the host binary at startup. Encoded as a list of strings, for example ["--foo", "bar"]
-	// Required: true
-	HostArgs []string `json:"hostArgs"`
-
-	// Optional encrypted pull secret to authorize Turnkey to pull the host container image. If your image is public, leave this empty.
-	// Format: byte
-	HostContainerEncryptedPullSecret *strfmt.Base64 `json:"hostContainerEncryptedPullSecret,omitempty"`
-
-	// URL of the container containing the host binary
-	// Required: true
-	HostContainerImageURL *string `json:"hostContainerImageUrl"`
-
-	// Location of the binary inside the host container
-	// Required: true
-	HostPath *string `json:"hostPath"`
 
 	// Optional nonce to ensure uniqueness of the deployment manifest. If not provided, it defaults to the current Unix timestamp in seconds.
 	Nonce *int64 `json:"nonce,omitempty"`
@@ -50,9 +37,11 @@ type CreateTvcDeploymentIntent struct {
 	// Required: true
 	PivotArgs []string `json:"pivotArgs"`
 
+	// Address(es) on which the pivot binary listens. A bind address can be a port alone (e.g. "3000") or an ip:port (e.g. "127.0.0.1:3000"). If provided as a port alone, the IP is assumed to be 0.0.0.0
+	PivotBindAddresses []string `json:"pivotBindAddresses"`
+
 	// Optional encrypted pull secret to authorize Turnkey to pull the pivot container image. If your image is public, leave this empty.
-	// Format: byte
-	PivotContainerEncryptedPullSecret *strfmt.Base64 `json:"pivotContainerEncryptedPullSecret,omitempty"`
+	PivotContainerEncryptedPullSecret *string `json:"pivotContainerEncryptedPullSecret,omitempty"`
 
 	// URL of the container containing the pivot binary
 	// Required: true
@@ -76,18 +65,6 @@ func (m *CreateTvcDeploymentIntent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExpectedPivotDigest(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateHostArgs(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateHostContainerImageURL(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateHostPath(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -125,33 +102,6 @@ func (m *CreateTvcDeploymentIntent) validateAppID(formats strfmt.Registry) error
 func (m *CreateTvcDeploymentIntent) validateExpectedPivotDigest(formats strfmt.Registry) error {
 
 	if err := validate.Required("expectedPivotDigest", "body", m.ExpectedPivotDigest); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CreateTvcDeploymentIntent) validateHostArgs(formats strfmt.Registry) error {
-
-	if err := validate.Required("hostArgs", "body", m.HostArgs); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CreateTvcDeploymentIntent) validateHostContainerImageURL(formats strfmt.Registry) error {
-
-	if err := validate.Required("hostContainerImageUrl", "body", m.HostContainerImageURL); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *CreateTvcDeploymentIntent) validateHostPath(formats strfmt.Registry) error {
-
-	if err := validate.Required("hostPath", "body", m.HostPath); err != nil {
 		return err
 	}
 

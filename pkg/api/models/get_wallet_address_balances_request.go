@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -23,8 +24,9 @@ type GetWalletAddressBalancesRequest struct {
 	// Required: true
 	Address *string `json:"address"`
 
-	// The network identifier in CAIP-2 format (e.g., 'eip155:1' for Ethereum mainnet).
+	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet or 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	// Required: true
+	// Enum: [eip155:1 eip155:11155111 eip155:8453 eip155:84532 eip155:137 eip155:80002 solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1]
 	Caip2 *string `json:"caip2"`
 
 	// Unique identifier for a given organization.
@@ -63,9 +65,61 @@ func (m *GetWalletAddressBalancesRequest) validateAddress(formats strfmt.Registr
 	return nil
 }
 
+var getWalletAddressBalancesRequestTypeCaip2PropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["eip155:1","eip155:11155111","eip155:8453","eip155:84532","eip155:137","eip155:80002","solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp","solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		getWalletAddressBalancesRequestTypeCaip2PropEnum = append(getWalletAddressBalancesRequestTypeCaip2PropEnum, v)
+	}
+}
+
+const (
+
+	// GetWalletAddressBalancesRequestCaip2Eip1551 captures enum value "eip155:1"
+	GetWalletAddressBalancesRequestCaip2Eip1551 string = "eip155:1"
+
+	// GetWalletAddressBalancesRequestCaip2Eip15511155111 captures enum value "eip155:11155111"
+	GetWalletAddressBalancesRequestCaip2Eip15511155111 string = "eip155:11155111"
+
+	// GetWalletAddressBalancesRequestCaip2Eip1558453 captures enum value "eip155:8453"
+	GetWalletAddressBalancesRequestCaip2Eip1558453 string = "eip155:8453"
+
+	// GetWalletAddressBalancesRequestCaip2Eip15584532 captures enum value "eip155:84532"
+	GetWalletAddressBalancesRequestCaip2Eip15584532 string = "eip155:84532"
+
+	// GetWalletAddressBalancesRequestCaip2Eip155137 captures enum value "eip155:137"
+	GetWalletAddressBalancesRequestCaip2Eip155137 string = "eip155:137"
+
+	// GetWalletAddressBalancesRequestCaip2Eip15580002 captures enum value "eip155:80002"
+	GetWalletAddressBalancesRequestCaip2Eip15580002 string = "eip155:80002"
+
+	// GetWalletAddressBalancesRequestCaip2Solana5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp captures enum value "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+	GetWalletAddressBalancesRequestCaip2Solana5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp string = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+
+	// GetWalletAddressBalancesRequestCaip2SolanaEtWTRABZaYq6iMfeYKouRu166VU2xqa1 captures enum value "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+	GetWalletAddressBalancesRequestCaip2SolanaEtWTRABZaYq6iMfeYKouRu166VU2xqa1 string = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+)
+
+// prop value enum
+func (m *GetWalletAddressBalancesRequest) validateCaip2Enum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, getWalletAddressBalancesRequestTypeCaip2PropEnum, true); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *GetWalletAddressBalancesRequest) validateCaip2(formats strfmt.Registry) error {
 
 	if err := validate.Required("caip2", "body", m.Caip2); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateCaip2Enum("caip2", "body", *m.Caip2); err != nil {
 		return err
 	}
 

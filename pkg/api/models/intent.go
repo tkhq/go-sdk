@@ -261,6 +261,9 @@ type Intent struct {
 	// init otp intent v2
 	InitOtpIntentV2 *InitOtpIntentV2 `json:"initOtpIntentV2,omitempty"`
 
+	// init otp intent v3
+	InitOtpIntentV3 *InitOtpIntentV3 `json:"initOtpIntentV3,omitempty"`
+
 	// init user email recovery intent
 	InitUserEmailRecoveryIntent *InitUserEmailRecoveryIntent `json:"initUserEmailRecoveryIntent,omitempty"`
 
@@ -281,6 +284,9 @@ type Intent struct {
 
 	// otp login intent
 	OtpLoginIntent *OtpLoginIntent `json:"otpLoginIntent,omitempty"`
+
+	// otp login intent v2
+	OtpLoginIntentV2 *OtpLoginIntentV2 `json:"otpLoginIntentV2,omitempty"`
 
 	// recover user intent
 	RecoverUserIntent *RecoverUserIntent `json:"recoverUserIntent,omitempty"`
@@ -368,6 +374,9 @@ type Intent struct {
 
 	// verify otp intent
 	VerifyOtpIntent *VerifyOtpIntent `json:"verifyOtpIntent,omitempty"`
+
+	// verify otp intent v2
+	VerifyOtpIntentV2 *VerifyOtpIntentV2 `json:"verifyOtpIntentV2,omitempty"`
 }
 
 // Validate validates this intent
@@ -686,6 +695,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateInitOtpIntentV3(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateInitUserEmailRecoveryIntent(formats); err != nil {
 		res = append(res, err)
 	}
@@ -711,6 +724,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOtpLoginIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOtpLoginIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -827,6 +844,10 @@ func (m *Intent) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateVerifyOtpIntent(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVerifyOtpIntentV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2318,6 +2339,25 @@ func (m *Intent) validateInitOtpIntentV2(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateInitOtpIntentV3(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpIntentV3) { // not required
+		return nil
+	}
+
+	if m.InitOtpIntentV3 != nil {
+		if err := m.InitOtpIntentV3.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) validateInitUserEmailRecoveryIntent(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryIntent) { // not required
 		return nil
@@ -2443,6 +2483,25 @@ func (m *Intent) validateOtpLoginIntent(formats strfmt.Registry) error {
 				return ve.ValidateName("otpLoginIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("otpLoginIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) validateOtpLoginIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.OtpLoginIntentV2) { // not required
+		return nil
+	}
+
+	if m.OtpLoginIntentV2 != nil {
+		if err := m.OtpLoginIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpLoginIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpLoginIntentV2")
 			}
 			return err
 		}
@@ -3002,6 +3061,25 @@ func (m *Intent) validateVerifyOtpIntent(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Intent) validateVerifyOtpIntentV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.VerifyOtpIntentV2) { // not required
+		return nil
+	}
+
+	if m.VerifyOtpIntentV2 != nil {
+		if err := m.VerifyOtpIntentV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("verifyOtpIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("verifyOtpIntentV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this intent based on the context it is used
 func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -3318,6 +3396,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInitOtpIntentV3(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateInitUserEmailRecoveryIntent(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -3343,6 +3425,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateOtpLoginIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOtpLoginIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -3459,6 +3545,10 @@ func (m *Intent) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateVerifyOtpIntent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVerifyOtpIntentV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -5106,6 +5196,27 @@ func (m *Intent) contextValidateInitOtpIntentV2(ctx context.Context, formats str
 	return nil
 }
 
+func (m *Intent) contextValidateInitOtpIntentV3(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpIntentV3 != nil {
+
+		if swag.IsZero(m.InitOtpIntentV3) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpIntentV3.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpIntentV3")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpIntentV3")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Intent) contextValidateInitUserEmailRecoveryIntent(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InitUserEmailRecoveryIntent != nil {
@@ -5245,6 +5356,27 @@ func (m *Intent) contextValidateOtpLoginIntent(ctx context.Context, formats strf
 				return ve.ValidateName("otpLoginIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("otpLoginIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateOtpLoginIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OtpLoginIntentV2 != nil {
+
+		if swag.IsZero(m.OtpLoginIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.OtpLoginIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("otpLoginIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("otpLoginIntentV2")
 			}
 			return err
 		}
@@ -5854,6 +5986,27 @@ func (m *Intent) contextValidateVerifyOtpIntent(ctx context.Context, formats str
 				return ve.ValidateName("verifyOtpIntent")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("verifyOtpIntent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Intent) contextValidateVerifyOtpIntentV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.VerifyOtpIntentV2 != nil {
+
+		if swag.IsZero(m.VerifyOtpIntentV2) { // not required
+			return nil
+		}
+
+		if err := m.VerifyOtpIntentV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("verifyOtpIntentV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("verifyOtpIntentV2")
 			}
 			return err
 		}

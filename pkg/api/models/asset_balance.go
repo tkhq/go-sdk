@@ -30,6 +30,9 @@ type AssetBalance struct {
 	// Normalized balance values for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise. Use the balance field instead.
 	Display *AssetBalanceDisplay `json:"display,omitempty"`
 
+	// The asset name
+	Name string `json:"name,omitempty"`
+
 	// The asset symbol
 	Symbol string `json:"symbol,omitempty"`
 }

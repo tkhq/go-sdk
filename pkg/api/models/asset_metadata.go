@@ -17,16 +17,19 @@ import (
 // swagger:model AssetMetadata
 type AssetMetadata struct {
 
-	// caip19
+	// The caip-19 asset identifier
 	Caip19 string `json:"caip19,omitempty"`
 
-	// decimals
+	// The number of decimals this asset uses
 	Decimals int32 `json:"decimals,omitempty"`
 
-	// logo Url
+	// The url of the asset logo
 	LogoURL string `json:"logoUrl,omitempty"`
 
-	// symbol
+	// The asset name
+	Name string `json:"name,omitempty"`
+
+	// The asset symbol
 	Symbol string `json:"symbol,omitempty"`
 }
 

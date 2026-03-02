@@ -29,7 +29,7 @@ type OtpLoginRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *OtpLoginIntent `json:"parameters"`
+	Parameters *OtpLoginIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -37,7 +37,7 @@ type OtpLoginRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_OTP_LOGIN]
+	// Enum: [ACTIVITY_TYPE_OTP_LOGIN_V2]
 	Type *string `json:"type"`
 }
 
@@ -109,7 +109,7 @@ var otpLoginRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_OTP_LOGIN"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_OTP_LOGIN_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -119,8 +119,8 @@ func init() {
 
 const (
 
-	// OtpLoginRequestTypeACTIVITYTYPEOTPLOGIN captures enum value "ACTIVITY_TYPE_OTP_LOGIN"
-	OtpLoginRequestTypeACTIVITYTYPEOTPLOGIN string = "ACTIVITY_TYPE_OTP_LOGIN"
+	// OtpLoginRequestTypeACTIVITYTYPEOTPLOGINV2 captures enum value "ACTIVITY_TYPE_OTP_LOGIN_V2"
+	OtpLoginRequestTypeACTIVITYTYPEOTPLOGINV2 string = "ACTIVITY_TYPE_OTP_LOGIN_V2"
 )
 
 // prop value enum
