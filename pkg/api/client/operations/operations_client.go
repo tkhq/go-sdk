@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	GetOauth2Credential(params *GetOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOauth2CredentialOK, error)
 
+	NOOPCodegenAnchor(params *NOOPCodegenAnchorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*NOOPCodegenAnchorOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -73,6 +75,45 @@ func (a *Client) GetOauth2Credential(params *GetOauth2CredentialParams, authInfo
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetOauth2Credential: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+NOOPCodegenAnchor n o o p codegen anchor API
+*/
+func (a *Client) NOOPCodegenAnchor(params *NOOPCodegenAnchorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*NOOPCodegenAnchorOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewNOOPCodegenAnchorParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "NOOPCodegenAnchor",
+		Method:             "POST",
+		PathPattern:        "/tkhq/api/v1/noop-codegen-anchor",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &NOOPCodegenAnchorReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*NOOPCodegenAnchorOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for NOOPCodegenAnchor: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

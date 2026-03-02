@@ -435,7 +435,7 @@ func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo run
 /*
 GetWalletAddressBalances gets balances
 
-Get non-zero balances of supported assets for a single wallet account address on the specified network.
+Get balances of supported assets for an address on the specified network. Only non-zero balances are returned. This feature is in beta - please contact support for access.
 */
 func (a *Client) GetWalletAddressBalances(params *GetWalletAddressBalancesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAddressBalancesOK, error) {
 	// TODO: Validate the params before sending
@@ -599,7 +599,7 @@ func (a *Client) InitImportWallet(params *InitImportWalletParams, authInfo runti
 /*
 ListSupportedAssets lists supported assets
 
-List supported assets for the specified network
+List supported assets for the specified network. This feature is in beta - please contact support for access.
 */
 func (a *Client) ListSupportedAssets(params *ListSupportedAssetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSupportedAssetsOK, error) {
 	// TODO: Validate the params before sending

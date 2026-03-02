@@ -29,7 +29,7 @@ type InitOtpRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *InitOtpIntentV2 `json:"parameters"`
+	Parameters *InitOtpIntentV3 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -37,7 +37,7 @@ type InitOtpRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_INIT_OTP_V2]
+	// Enum: [ACTIVITY_TYPE_INIT_OTP_V3]
 	Type *string `json:"type"`
 }
 
@@ -109,7 +109,7 @@ var initOtpRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_INIT_OTP_V2"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_INIT_OTP_V3"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -119,8 +119,8 @@ func init() {
 
 const (
 
-	// InitOtpRequestTypeACTIVITYTYPEINITOTPV2 captures enum value "ACTIVITY_TYPE_INIT_OTP_V2"
-	InitOtpRequestTypeACTIVITYTYPEINITOTPV2 string = "ACTIVITY_TYPE_INIT_OTP_V2"
+	// InitOtpRequestTypeACTIVITYTYPEINITOTPV3 captures enum value "ACTIVITY_TYPE_INIT_OTP_V3"
+	InitOtpRequestTypeACTIVITYTYPEINITOTPV3 string = "ACTIVITY_TYPE_INIT_OTP_V3"
 )
 
 // prop value enum

@@ -19,7 +19,7 @@ import (
 // swagger:model ListSupportedAssetsResponse
 type ListSupportedAssetsResponse struct {
 
-	// assets
+	// List of asset metadata
 	Assets []*AssetMetadata `json:"assets"`
 }
 

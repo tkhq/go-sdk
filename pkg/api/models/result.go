@@ -219,6 +219,9 @@ type Result struct {
 	// init otp result
 	InitOtpResult *InitOtpResult `json:"initOtpResult,omitempty"`
 
+	// init otp result v2
+	InitOtpResultV2 *InitOtpResultV2 `json:"initOtpResultV2,omitempty"`
+
 	// init user email recovery result
 	InitUserEmailRecoveryResult *InitUserEmailRecoveryResult `json:"initUserEmailRecoveryResult,omitempty"`
 
@@ -578,6 +581,10 @@ func (m *Result) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInitOtpResult(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInitOtpResultV2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1957,6 +1964,25 @@ func (m *Result) validateInitOtpResult(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Result) validateInitOtpResultV2(formats strfmt.Registry) error {
+	if swag.IsZero(m.InitOtpResultV2) { // not required
+		return nil
+	}
+
+	if m.InitOtpResultV2 != nil {
+		if err := m.InitOtpResultV2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpResultV2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Result) validateInitUserEmailRecoveryResult(formats strfmt.Registry) error {
 	if swag.IsZero(m.InitUserEmailRecoveryResult) { // not required
 		return nil
@@ -2773,6 +2799,10 @@ func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	}
 
 	if err := m.contextValidateInitOtpResult(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInitOtpResultV2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -4276,6 +4306,27 @@ func (m *Result) contextValidateInitOtpResult(ctx context.Context, formats strfm
 				return ve.ValidateName("initOtpResult")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("initOtpResult")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Result) contextValidateInitOtpResultV2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InitOtpResultV2 != nil {
+
+		if swag.IsZero(m.InitOtpResultV2) { // not required
+			return nil
+		}
+
+		if err := m.InitOtpResultV2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("initOtpResultV2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("initOtpResultV2")
 			}
 			return err
 		}

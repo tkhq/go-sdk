@@ -58,7 +58,7 @@ func run() error {
 	}
 
 	// Step 1: Send OTP
-	otpID, encryptedOtpBundle, err := sendOTP(client)
+	otpID, err := sendOTP(client)
 	if err != nil {
 		return fmt.Errorf("failed to send OTP: %w", err)
 	}
@@ -71,13 +71,10 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("failed to read OTP code: %w", err)
 	}
-
-	// Not doing anything with this yet.
-	// TODO: use it to generate encryptedOtpBundle
-	_ = strings.TrimSpace(code)
+	code = strings.TrimSpace(code)
 
 	// Step 3: Verify OTP
-	token, err := verifyOTP(client, otpID, encryptedOtpBundle)
+	token, err := verifyOTP(client, otpID, code)
 	if err != nil {
 		return fmt.Errorf("verification failed: %w", err)
 	}
@@ -107,14 +104,14 @@ func initClient() (*sdk.Client, error) {
 	return client, nil
 }
 
-func sendOTP(client *sdk.Client) (string, string, error) {
+func sendOTP(client *sdk.Client) (string, error) {
 	otpType := "OTP_TYPE_EMAIL"
 
 	params := user_verification.NewInitOtpParams().WithBody(&models.InitOtpRequest{
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(parentOrgID),
 		Type:           (*string)(models.ActivityTypeInitOtp.Pointer()),
-		Parameters: &models.InitOtpIntentV3{
+		Parameters: &models.InitOtpIntentV2{
 			AppName: util.StringPointer("Example App"),
 			Contact: util.StringPointer(emailAddress),
 			OtpType: &otpType,
@@ -123,30 +120,24 @@ func sendOTP(client *sdk.Client) (string, string, error) {
 
 	reply, err := client.V0().UserVerification.InitOtp(params, client.Authenticator)
 	if err != nil {
-		return "", "", fmt.Errorf("send OTP request failed: %w", err)
+		return "", fmt.Errorf("send OTP request failed: %w", err)
 	}
 
-	otpID := reply.Payload.Activity.Result.InitOtpResultV2.OtpID
+	otpID := reply.Payload.Activity.Result.InitOtpResult.OtpID
 	if otpID == nil {
-		return "", "", fmt.Errorf("otpID is nil in response")
+		return "", fmt.Errorf("otpID is nil in response")
 	}
-
-	encryptedOtpBundle := reply.Payload.Activity.Result.InitOtpResultV2.OtpEncryptionTargetBundle
-	if encryptedOtpBundle == nil {
-		return "", "", fmt.Errorf("encryptedOtpBundle is nil in response")
-	}
-
-	return *otpID, *encryptedOtpBundle, nil
+	return *otpID, nil
 }
 
-func verifyOTP(client *sdk.Client, id, encryptedOtpBundle string) (string, error) {
+func verifyOTP(client *sdk.Client, id, code string) (string, error) {
 	params := user_verification.NewVerifyOtpParams().WithBody(&models.VerifyOtpRequest{
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(parentOrgID),
 		Type:           (*string)(models.ActivityTypeVerifyOtp.Pointer()),
-		Parameters: &models.VerifyOtpIntentV2{
-			EncryptedOtpBundle: &encryptedOtpBundle,
-			OtpID:              &id,
+		Parameters: &models.VerifyOtpIntent{
+			OtpCode: &code,
+			OtpID:   &id,
 		},
 	})
 
@@ -176,7 +167,7 @@ func loginOTP(client *sdk.Client, token string) error {
 		TimestampMs:    util.RequestTimestamp(),
 		OrganizationID: util.StringPointer(subOrgID), // target sub-org id
 		Type:           (*string)(models.ActivityTypeOtpLogin.Pointer()),
-		Parameters: &models.OtpLoginIntentV2{
+		Parameters: &models.OtpLoginIntent{
 			VerificationToken: &token,
 			PublicKey:         &clientApiKey.TkPublicKey,
 		},

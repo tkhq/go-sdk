@@ -29,7 +29,7 @@ type VerifyOtpRequest struct {
 
 	// parameters
 	// Required: true
-	Parameters *VerifyOtpIntent `json:"parameters"`
+	Parameters *VerifyOtpIntentV2 `json:"parameters"`
 
 	// Timestamp (in milliseconds) of the request, used to verify liveness of user requests.
 	// Required: true
@@ -37,7 +37,7 @@ type VerifyOtpRequest struct {
 
 	// type
 	// Required: true
-	// Enum: [ACTIVITY_TYPE_VERIFY_OTP]
+	// Enum: [ACTIVITY_TYPE_VERIFY_OTP_V2]
 	Type *string `json:"type"`
 }
 
@@ -109,7 +109,7 @@ var verifyOtpRequestTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_VERIFY_OTP"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ACTIVITY_TYPE_VERIFY_OTP_V2"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -119,8 +119,8 @@ func init() {
 
 const (
 
-	// VerifyOtpRequestTypeACTIVITYTYPEVERIFYOTP captures enum value "ACTIVITY_TYPE_VERIFY_OTP"
-	VerifyOtpRequestTypeACTIVITYTYPEVERIFYOTP string = "ACTIVITY_TYPE_VERIFY_OTP"
+	// VerifyOtpRequestTypeACTIVITYTYPEVERIFYOTPV2 captures enum value "ACTIVITY_TYPE_VERIFY_OTP_V2"
+	VerifyOtpRequestTypeACTIVITYTYPEVERIFYOTPV2 string = "ACTIVITY_TYPE_VERIFY_OTP_V2"
 )
 
 // prop value enum

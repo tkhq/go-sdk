@@ -57,6 +57,9 @@ type UpdateAuthProxyConfigIntent struct {
 	// Overrides for auth-related SMS content.
 	SmsCustomizationParams *SmsCustomizationParams `json:"smsCustomizationParams,omitempty"`
 
+	// Whitelisted OAuth client IDs for social account linking. When a user authenticates via a social provider with an email matching an existing account, the accounts will be linked if the client ID is in this list and the issuer is considered a trusted provider.
+	SocialLinkingClientIds []string `json:"socialLinkingClientIds"`
+
 	// Verification-token lifetime in seconds.
 	VerificationTokenExpirationSeconds *int32 `json:"verificationTokenExpirationSeconds,omitempty"`
 
