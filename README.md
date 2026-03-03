@@ -46,10 +46,11 @@ func main() {
 	fmt.Println("UserID: ", *resp.Payload.UserID)
 }
 ```
+
 ### Error Handling
 
 By default, the SDK will wrap Turnkey API error responses inside the returned error.
-You can inspect the raw API body by type-asserting the error to *runtime.APIError and reading the response body:
+You can inspect the raw API body by type-asserting the error to `*runtime.APIError` and reading the response body:
 ```go
 if err != nil {
   // log the high-level error using your preferred logger
@@ -68,7 +69,7 @@ if err != nil {
 ### Custom Logging
 
 By default, the SDK prints Turnkey API responses to stdout when requests fail.
-If you’d like to control this output (for example, to send logs to Zap, Logrus, or Datadog), you can provide your own logger:
+If you'd like to control this output (for example, to send logs to Zap, Logrus, or Datadog), you can provide your own logger:
 ```go
 type myLogger struct{}
 func (l *myLogger) Printf(format string, v ...interface{}) {
@@ -80,7 +81,7 @@ client, err := sdk.New(
     sdk.WithLogger(&myLogger{}), // plug in your logger
 )
 ```
-If no logger is provided, the SDK falls back to fmt.Printf("Turnkey API response: ...") to preserve current behavior.
+If no logger is provided, the SDK falls back to `fmt.Printf("Turnkey API response: ...")` to preserve current behavior.
 
 ## Development
 
@@ -88,56 +89,82 @@ If no logger is provided, the SDK falls back to fmt.Printf("Turnkey API response
 
 The SDK uses a custom changeset tooling for changelog management and publishes versions to [pkg.go.dev](https://pkg.go.dev/github.com/tkhq/go-sdk).
 
-#### Managing Changes
+> **Note:** Go modules on pkg.go.dev derive their versions from semver tags in the module's source repository (e.g., `v1.2.3`), which is why this release process only needs to push tags.
 
-1. Create a new change set:
-  ```bash
-  make changeset
-  ```
+#### Step 1 — Sync proto / generate client (if applicable)
 
-2. Write your desired change set and push:
-   ```bash
-   $ make changeset
-    go run ./cmd/changeset
-    === Create Go Changeset ===
-    Select bump type:
-      1) patch
-      2) minor
-      3) major
-    Choice (1-3): 1
-    Short title for this change: This is my changeset title!
-    Enter a longer description (markdown allowed).
-    End input with a single '.' on its own line.
+> **Note:** This step can be skipped if the client & types have already been generated, but it doesn't hurt to run it again just in case!
 
-    This is my changeset description!
-    .
-    ```
+Checkout the latest mono tag and run:
+```bash
+make -C proto sync/go-sdk
+```
+This ports the swagger files over to the `api/` directory. Then regenerate the client:
+```bash
+make generate
+```
 
-#### Creating Releases
+> **Note:** Make sure you are using **go-swagger v0.30.5**. Install it by following the [instructions below](#without-nix).
+> You can verify your version by running `swagger version`.
 
-Create a release branch named `release/v{ VERSION }`
+#### Step 2 — Create a changeset
 
-To prepare a new release:
+> **Note:** If you are just releasing and changesets have already been made, you can skip this step!
+
+Run `make changeset` in the repo root and follow the prompts:
+
+```bash
+$ make changeset
+go run ./cmd/changeset
+=== Create Go Changeset ===
+Select bump type:
+  1) patch
+  2) minor
+  3) major
+Choice (1-3): 1
+Short title for this change: This is my changeset title!
+Enter a longer description (markdown allowed).
+End input with a single '.' on its own line.
+
+This is my changeset description!
+.
+```
+
+> **Note:** The Go SDK is all one package, so you don't need to select package-specific bumps.
+> **Bump level guidance:** We minor-bump whenever we sync with Mono. If you patch-bumped by mistake, update the generated changeset in `.changesets/` and change the bump level from `patch` → `minor`.
+
+#### Step 3 — Prepare the release
+
+Run `make prepare-release` in the repo root:
 ```bash
 make prepare-release
 ```
 
-This will generate and update CHANGELOG.md & VERSION. Please review the changes and manually modify as needed.
+This versions the package using the assigned bump level (`patch` → `x.x.Y`, `minor` → `x.Y.0`, `major` → `Y.0.0`) and generates a changelog from the notes in the changeset(s). Review the generated `CHANGELOG.md` and `VERSION` and manually modify as needed.
 
-#### CI Driven Release:
+#### Step 4 — Create a release branch
 
-After getting the necessary approvals, merge the release branch into main, the tagging workflow will automatically run off this event.
-  This workflow will:
-    1. Create a git tag
-    2. Trigger pkg.go.dev indexing
+Create a release branch following this naming scheme:
 
-Review the draft and publish the new release.
+```
+release/vX.X.X
+```
 
-#### Manual Release:
+where the version matches the package version you are releasing (e.g., `release/v0.15.0`).
 
-Commit and push the changes, get the PR approved, merge, and move to the next step.
+> **Note on naming:** Because the Go SDK is a single package (not a mono repo with multiple packages), we name the release branch based on the SDK version being published — the same convention used for Ruby and Swift.
 
-To publish a new release (off of main):
+#### Step 5 — Open a PR and merge
+
+Open a PR against `main`. Once it has gone through review and been merged, the [release workflow](https://github.com/tkhq/go-sdk/actions) will kick off automatically. Kick back, relax, and wait for it to go green!
+
+Once CI has passed, head over to the [releases](https://github.com/tkhq/go-sdk/releases) page and verify the release was published correctly.
+
+---
+
+### Manual Release
+
+If you need to publish outside the CI workflow, commit and push changes to `main`, then run:
 ```bash
 make publish-release
 ```
@@ -147,13 +174,27 @@ This will:
 2. Push changes to GitHub
 3. Trigger pkg.go.dev indexing
 
-Note: 
-- Use semantic versioning (e.g., v1.0.0, v0.1.0-beta)
+**Notes:**
+- Use semantic versioning (e.g., `v1.0.0`, `v0.1.0-beta`)
 - New versions appear on pkg.go.dev within a few minutes
 - If needed, manually trigger pkg.go.dev indexing:
   ```bash
   GOPROXY=proxy.golang.org go list -m github.com/tkhq/go-sdk@v1.0.0
   ```
+
+---
+
+### Troubleshooting
+
+If the **Validate and Tag** workflow fails, check the error logs in CI, apply the fix, push the changes to `main`, and manually re-run the workflow:
+
+1. Head to the [Actions page](https://github.com/tkhq/go-sdk/actions)
+2. Select **Validate and Tag**
+3. Click **Run Workflow**
+
+> **Note:** This reruns the workflow against your selected branch. The tag that will be published is pulled from the `VERSION` file.
+
+---
 
 ### Updating the SDK
 
@@ -165,17 +206,17 @@ Note:
 
 #### Without Nix
 The following assumes you have Go 1.20 installed locally:
-1. Install [go-swagger](https://goswagger.io/install.html):
-```
+1. Install [go-swagger](https://goswagger.io/install.html) **v0.30.5**:
+```bash
 go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.5
 ```
 2. Update the swagger file in `api/` with a new one
 3. Run `make generate`
 
-Note: depending on how you downloaded, your `go-swagger` may be located in a few locations such as `/Users/<your username>/go/bin/swagger` or `/opt/homebrew/bin/swagger`. If both are present, we would recommend using the former, for better version granularity
+> **Note:** Depending on how you installed it, `go-swagger` may be located at `/Users/<username>/go/bin/swagger` or `/opt/homebrew/bin/swagger`. If both are present, we recommend using the former for better version granularity. Verify with `swagger version`.
 
 ### Custom Templates
-While custom templates should be avoided where possible, sometimes it's worth the extra maintenance burden to provide a more streamlined UX. To use a custom template, copy the original template from the [go-swagger repo](https://github.com/go-swagger/go-swagger) to the `templates` directory
+While custom templates should be avoided where possible, sometimes it's worth the extra maintenance burden to provide a more streamlined UX. To use a custom template, copy the original template from the [go-swagger repo](https://github.com/go-swagger/go-swagger) to the `templates` directory.
 
 #### Current Modifications
 
