@@ -162,32 +162,6 @@ Once CI has passed, head over to the [releases](https://github.com/tkhq/go-sdk/r
 
 ---
 
-### CI Workflow Reference
-
-The **Validate and Tag** workflow triggers on merged PRs from a `release/v*` branch, or via manual dispatch.
-
-#### Stage 1 — Validate & Build
-
-| Step | What it does |
-|---|---|
-| Checkout | Checks out the repo |
-| Extract and validate version | Gets the version from the branch name (`release/v1.2.3` → `v1.2.3`) or, on manual dispatch, reads from the `VERSION` file. Validates `vX.X.X` format. |
-| Set up Go | Installs Go 1.24.2 |
-| Get | Runs `go get -v` to fetch/resolve module dependencies |
-| Lint | Runs `golangci-lint` across the entire module (`./...`) |
-| Build | Compiles all packages with `go build -v ./...` |
-| Test | Runs the full test suite with `go test -v ./...` |
-
-#### Stage 2 — Publish (requires manual approval via the **Production** environment gate)
-
-| Step | What it does |
-|---|---|
-| Checkout | Checks out the repo |
-| Create GitHub Release | Creates a GitHub release + git tag at the extracted version with auto-generated release notes. Uses a deploy token (`TKHQ_DEPLOY_ACCESS_TOKEN`) rather than the default `GITHUB_TOKEN`. |
-| Trigger pkg.go.dev update | Hits `sum.golang.org/lookup` for the new version tag, nudging the Go module proxy and pkg.go.dev to index the release immediately. |
-
----
-
 ### Manual Release
 
 If you need to publish outside the CI workflow, commit and push changes to `main`, then run:
