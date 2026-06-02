@@ -43,9 +43,11 @@ RemoveOrganizationFeature removes organization feature
 Remove an organization feature. This activity must be approved by the current root quorum.
 */
 func (a *Client) RemoveOrganizationFeature(params *RemoveOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveOrganizationFeatureOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRemoveOrganizationFeatureParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "RemoveOrganizationFeature",
@@ -84,9 +86,11 @@ SetOrganizationFeature sets organization feature
 Set an organization feature. This activity must be approved by the current root quorum.
 */
 func (a *Client) SetOrganizationFeature(params *SetOrganizationFeatureParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SetOrganizationFeatureOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSetOrganizationFeatureParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "SetOrganizationFeature",

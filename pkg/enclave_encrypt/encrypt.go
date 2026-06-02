@@ -1,13 +1,13 @@
 package enclave_encrypt
 
 import (
+	"crypto/ecdh"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"math/big"
 
@@ -145,21 +145,18 @@ func P256Verify(publicKey *ecdsa.PublicKey, msg []byte, signature []byte) bool {
 
 // Takes a byte slice and returns a ECDSA public key
 func ToEcdsaPublic(publicBytes []byte) (*ecdsa.PublicKey, error) {
-	// init curve instance
-	curve := elliptic.P256()
-
-	// curve's bitsize converted to length in bytes
-	byteLen := (curve.Params().BitSize + 7) / 8
-
-	// ensure the public key bytes have the correct length
-	if len(publicBytes) != 1+2*byteLen {
-		return nil, errors.New("invalid enclave auth key length")
+	pub, err := ecdh.P256().NewPublicKey(publicBytes)
+	if err != nil {
+		return nil, fmt.Errorf("invalid enclave auth key: %w", err)
 	}
 
-	// extract X and Y coordinates from the public key bytes
-	// ignore first byte (prefix)
-	x := new(big.Int).SetBytes(publicBytes[1 : 1+byteLen])
-	y := new(big.Int).SetBytes(publicBytes[1+byteLen:])
+	// Convert back to ecdsa.PublicKey for compatibility
+	curve := elliptic.P256()
+	byteLen := (curve.Params().BitSize + 7) / 8
+	raw := pub.Bytes() // This is the uncompressed format [04 || X || Y]
+
+	x := new(big.Int).SetBytes(raw[1 : 1+byteLen])
+	y := new(big.Int).SetBytes(raw[1+byteLen:])
 
 	return &ecdsa.PublicKey{
 		Curve: curve,

@@ -43,9 +43,11 @@ GetBootProof gets a specific boot proof
 Get the boot proof for a given ephemeral key.
 */
 func (a *Client) GetBootProof(params *GetBootProofParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBootProofOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetBootProofParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetBootProof",
@@ -84,9 +86,11 @@ GetLatestBootProof gets the latest boot proof for an app
 Get the latest boot proof for a given enclave app name.
 */
 func (a *Client) GetLatestBootProof(params *GetLatestBootProofParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetLatestBootProofOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetLatestBootProofParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetLatestBootProof",

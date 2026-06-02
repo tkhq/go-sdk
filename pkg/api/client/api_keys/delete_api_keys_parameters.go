@@ -63,7 +63,8 @@ DeleteAPIKeysParams contains all the parameters to send to the API endpoint
 */
 type DeleteAPIKeysParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteAPIKeysRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteAPIKeysParams) WithDefaults() *DeleteAPIKeysParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteAPIKeysParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete Api keys params
@@ -128,6 +128,21 @@ func (o *DeleteAPIKeysParams) WithBody(body *models.DeleteAPIKeysRequest) *Delet
 // SetBody adds the body to the delete Api keys params
 func (o *DeleteAPIKeysParams) SetBody(body *models.DeleteAPIKeysRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete Api keys operation
+func (o *DeleteAPIKeysParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

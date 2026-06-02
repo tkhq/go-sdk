@@ -63,7 +63,8 @@ UpdateUserPhoneNumberParams contains all the parameters to send to the API endpo
 */
 type UpdateUserPhoneNumberParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateUserPhoneNumberRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateUserPhoneNumberParams) WithDefaults() *UpdateUserPhoneNumberParam
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateUserPhoneNumberParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update user phone number params
@@ -128,6 +128,21 @@ func (o *UpdateUserPhoneNumberParams) WithBody(body *models.UpdateUserPhoneNumbe
 // SetBody adds the body to the update user phone number params
 func (o *UpdateUserPhoneNumberParams) SetBody(body *models.UpdateUserPhoneNumberRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update user phone number operation
+func (o *UpdateUserPhoneNumberParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

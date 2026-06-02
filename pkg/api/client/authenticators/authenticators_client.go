@@ -47,9 +47,11 @@ CreateAuthenticators creates authenticators
 Create authenticators to authenticate requests to Turnkey.
 */
 func (a *Client) CreateAuthenticators(params *CreateAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateAuthenticatorsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateAuthenticatorsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateAuthenticators",
@@ -88,9 +90,11 @@ DeleteAuthenticators deletes authenticators
 Remove authenticators from a user.
 */
 func (a *Client) DeleteAuthenticators(params *DeleteAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAuthenticatorsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteAuthenticatorsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteAuthenticators",
@@ -129,9 +133,11 @@ GetAuthenticator gets authenticator
 Get details about an authenticator.
 */
 func (a *Client) GetAuthenticator(params *GetAuthenticatorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAuthenticatorParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetAuthenticator",
@@ -170,9 +176,11 @@ GetAuthenticators gets authenticators
 Get details about authenticators for a user.
 */
 func (a *Client) GetAuthenticators(params *GetAuthenticatorsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAuthenticatorsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAuthenticatorsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetAuthenticators",

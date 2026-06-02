@@ -63,7 +63,8 @@ ListOauth2CredentialsParams contains all the parameters to send to the API endpo
 */
 type ListOauth2CredentialsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ListOauth2CredentialsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ListOauth2CredentialsParams) WithDefaults() *ListOauth2CredentialsParam
 //
 // All values with no default are reset to their zero value.
 func (o *ListOauth2CredentialsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list oauth2 credentials params
@@ -128,6 +128,21 @@ func (o *ListOauth2CredentialsParams) WithBody(body *models.ListOauth2Credential
 // SetBody adds the body to the list oauth2 credentials params
 func (o *ListOauth2CredentialsParams) SetBody(body *models.ListOauth2CredentialsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the list oauth2 credentials operation
+func (o *ListOauth2CredentialsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

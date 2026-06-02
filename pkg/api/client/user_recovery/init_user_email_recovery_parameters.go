@@ -63,7 +63,8 @@ InitUserEmailRecoveryParams contains all the parameters to send to the API endpo
 */
 type InitUserEmailRecoveryParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.InitUserEmailRecoveryRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *InitUserEmailRecoveryParams) WithDefaults() *InitUserEmailRecoveryParam
 //
 // All values with no default are reset to their zero value.
 func (o *InitUserEmailRecoveryParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the init user email recovery params
@@ -128,6 +128,21 @@ func (o *InitUserEmailRecoveryParams) WithBody(body *models.InitUserEmailRecover
 // SetBody adds the body to the init user email recovery params
 func (o *InitUserEmailRecoveryParams) SetBody(body *models.InitUserEmailRecoveryRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the init user email recovery operation
+func (o *InitUserEmailRecoveryParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

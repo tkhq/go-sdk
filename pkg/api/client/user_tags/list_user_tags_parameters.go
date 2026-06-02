@@ -63,7 +63,8 @@ ListUserTagsParams contains all the parameters to send to the API endpoint
 */
 type ListUserTagsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ListUserTagsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ListUserTagsParams) WithDefaults() *ListUserTagsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ListUserTagsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list user tags params
@@ -128,6 +128,21 @@ func (o *ListUserTagsParams) WithBody(body *models.ListUserTagsRequest) *ListUse
 // SetBody adds the body to the list user tags params
 func (o *ListUserTagsParams) SetBody(body *models.ListUserTagsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the list user tags operation
+func (o *ListUserTagsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

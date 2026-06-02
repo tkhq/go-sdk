@@ -63,7 +63,8 @@ CreateSmartContractInterfaceParams contains all the parameters to send to the AP
 */
 type CreateSmartContractInterfaceParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateSmartContractInterfaceRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateSmartContractInterfaceParams) WithDefaults() *CreateSmartContract
 //
 // All values with no default are reset to their zero value.
 func (o *CreateSmartContractInterfaceParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create smart contract interface params
@@ -128,6 +128,21 @@ func (o *CreateSmartContractInterfaceParams) WithBody(body *models.CreateSmartCo
 // SetBody adds the body to the create smart contract interface params
 func (o *CreateSmartContractInterfaceParams) SetBody(body *models.CreateSmartContractInterfaceRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create smart contract interface operation
+func (o *CreateSmartContractInterfaceParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

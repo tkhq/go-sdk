@@ -69,9 +69,11 @@ CreateWallet creates wallet
 Create a wallet and derive addresses.
 */
 func (a *Client) CreateWallet(params *CreateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateWallet",
@@ -110,9 +112,11 @@ CreateWalletAccounts creates wallet accounts
 Derive additional addresses using an existing wallet.
 */
 func (a *Client) CreateWalletAccounts(params *CreateWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateWalletAccountsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateWalletAccountsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateWalletAccounts",
@@ -151,9 +155,11 @@ DeleteWalletAccounts deletes wallet accounts
 Delete wallet accounts for an organization.
 */
 func (a *Client) DeleteWalletAccounts(params *DeleteWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletAccountsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteWalletAccountsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteWalletAccounts",
@@ -192,9 +198,11 @@ DeleteWallets deletes wallets
 Delete wallets for an organization.
 */
 func (a *Client) DeleteWallets(params *DeleteWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteWalletsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteWalletsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteWallets",
@@ -233,9 +241,11 @@ ExportWallet exports wallet
 Export a wallet.
 */
 func (a *Client) ExportWallet(params *ExportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewExportWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ExportWallet",
@@ -274,9 +284,11 @@ ExportWalletAccount exports wallet account
 Export a wallet account.
 */
 func (a *Client) ExportWalletAccount(params *ExportWalletAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportWalletAccountOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewExportWalletAccountParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ExportWalletAccount",
@@ -315,9 +327,11 @@ GetWallet gets wallet
 Get details about a wallet.
 */
 func (a *Client) GetWallet(params *GetWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWallet",
@@ -356,9 +370,11 @@ GetWalletAccount gets wallet account
 Get a single wallet account.
 */
 func (a *Client) GetWalletAccount(params *GetWalletAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWalletAccountParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWalletAccount",
@@ -397,9 +413,11 @@ GetWalletAccounts lists wallets accounts
 List all accounts within a wallet.
 */
 func (a *Client) GetWalletAccounts(params *GetWalletAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAccountsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWalletAccountsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWalletAccounts",
@@ -438,9 +456,11 @@ GetWalletAddressBalances gets balances
 Get balances of supported assets for an address on the specified network. Only non-zero balances are returned. This feature is in beta - please contact support for access.
 */
 func (a *Client) GetWalletAddressBalances(params *GetWalletAddressBalancesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletAddressBalancesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWalletAddressBalancesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWalletAddressBalances",
@@ -479,9 +499,11 @@ GetWallets lists wallets
 List all wallets within an organization.
 */
 func (a *Client) GetWallets(params *GetWalletsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWalletsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWalletsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWallets",
@@ -520,9 +542,11 @@ ImportWallet imports wallet
 Import a wallet.
 */
 func (a *Client) ImportWallet(params *ImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewImportWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ImportWallet",
@@ -561,9 +585,11 @@ InitImportWallet inits import wallet
 Initialize a new wallet import.
 */
 func (a *Client) InitImportWallet(params *InitImportWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitImportWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitImportWallet",
@@ -602,9 +628,11 @@ ListSupportedAssets lists supported assets
 List supported assets for the specified network. This feature is in beta - please contact support for access.
 */
 func (a *Client) ListSupportedAssets(params *ListSupportedAssetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSupportedAssetsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListSupportedAssetsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ListSupportedAssets",
@@ -643,9 +671,11 @@ UpdateWallet updates wallet
 Update a wallet for an organization.
 */
 func (a *Client) UpdateWallet(params *UpdateWalletParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWalletOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateWalletParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdateWallet",

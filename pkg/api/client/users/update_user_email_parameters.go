@@ -63,7 +63,8 @@ UpdateUserEmailParams contains all the parameters to send to the API endpoint
 */
 type UpdateUserEmailParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateUserEmailRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateUserEmailParams) WithDefaults() *UpdateUserEmailParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateUserEmailParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update user email params
@@ -128,6 +128,21 @@ func (o *UpdateUserEmailParams) WithBody(body *models.UpdateUserEmailRequest) *U
 // SetBody adds the body to the update user email params
 func (o *UpdateUserEmailParams) SetBody(body *models.UpdateUserEmailRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update user email operation
+func (o *UpdateUserEmailParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

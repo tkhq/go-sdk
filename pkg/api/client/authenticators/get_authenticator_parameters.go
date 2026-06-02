@@ -63,7 +63,8 @@ GetAuthenticatorParams contains all the parameters to send to the API endpoint
 */
 type GetAuthenticatorParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetAuthenticatorRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetAuthenticatorParams) WithDefaults() *GetAuthenticatorParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetAuthenticatorParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get authenticator params
@@ -128,6 +128,21 @@ func (o *GetAuthenticatorParams) WithBody(body *models.GetAuthenticatorRequest) 
 // SetBody adds the body to the get authenticator params
 func (o *GetAuthenticatorParams) SetBody(body *models.GetAuthenticatorRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get authenticator operation
+func (o *GetAuthenticatorParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

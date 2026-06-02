@@ -63,7 +63,8 @@ GetOauthProvidersParams contains all the parameters to send to the API endpoint
 */
 type GetOauthProvidersParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetOauthProvidersRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetOauthProvidersParams) WithDefaults() *GetOauthProvidersParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetOauthProvidersParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get oauth providers params
@@ -128,6 +128,21 @@ func (o *GetOauthProvidersParams) WithBody(body *models.GetOauthProvidersRequest
 // SetBody adds the body to the get oauth providers params
 func (o *GetOauthProvidersParams) SetBody(body *models.GetOauthProvidersRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get oauth providers operation
+func (o *GetOauthProvidersParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ GetSendTransactionStatusParams contains all the parameters to send to the API en
 */
 type GetSendTransactionStatusParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetSendTransactionStatusRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetSendTransactionStatusParams) WithDefaults() *GetSendTransactionStatu
 //
 // All values with no default are reset to their zero value.
 func (o *GetSendTransactionStatusParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get send transaction status params
@@ -128,6 +128,21 @@ func (o *GetSendTransactionStatusParams) WithBody(body *models.GetSendTransactio
 // SetBody adds the body to the get send transaction status params
 func (o *GetSendTransactionStatusParams) SetBody(body *models.GetSendTransactionStatusRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get send transaction status operation
+func (o *GetSendTransactionStatusParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

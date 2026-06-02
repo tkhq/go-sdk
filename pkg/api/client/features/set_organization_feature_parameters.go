@@ -63,7 +63,8 @@ SetOrganizationFeatureParams contains all the parameters to send to the API endp
 */
 type SetOrganizationFeatureParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.SetOrganizationFeatureRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *SetOrganizationFeatureParams) WithDefaults() *SetOrganizationFeaturePar
 //
 // All values with no default are reset to their zero value.
 func (o *SetOrganizationFeatureParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the set organization feature params
@@ -128,6 +128,21 @@ func (o *SetOrganizationFeatureParams) WithBody(body *models.SetOrganizationFeat
 // SetBody adds the body to the set organization feature params
 func (o *SetOrganizationFeatureParams) SetBody(body *models.SetOrganizationFeatureRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the set organization feature operation
+func (o *SetOrganizationFeatureParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

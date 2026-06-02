@@ -47,9 +47,11 @@ CreatePrivateKeyTag creates private key tag
 Create a private key tag and add it to private keys.
 */
 func (a *Client) CreatePrivateKeyTag(params *CreatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeyTagOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePrivateKeyTagParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreatePrivateKeyTag",
@@ -88,9 +90,11 @@ DeletePrivateKeyTags deletes private key tags
 Delete private key tags within an organization.
 */
 func (a *Client) DeletePrivateKeyTags(params *DeletePrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeyTagsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePrivateKeyTagsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeletePrivateKeyTags",
@@ -129,9 +133,11 @@ ListPrivateKeyTags lists private key tags
 List all private key tags within an organization.
 */
 func (a *Client) ListPrivateKeyTags(params *ListPrivateKeyTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPrivateKeyTagsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListPrivateKeyTagsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ListPrivateKeyTags",
@@ -170,9 +176,11 @@ UpdatePrivateKeyTag updates private key tag
 Update human-readable name or associated private keys. Note that this activity is atomic: all of the updates will succeed at once, or all of them will fail.
 */
 func (a *Client) UpdatePrivateKeyTag(params *UpdatePrivateKeyTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePrivateKeyTagOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdatePrivateKeyTagParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdatePrivateKeyTag",

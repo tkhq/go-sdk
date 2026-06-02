@@ -63,7 +63,8 @@ GetGasUsageParams contains all the parameters to send to the API endpoint
 */
 type GetGasUsageParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetGasUsageRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetGasUsageParams) WithDefaults() *GetGasUsageParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetGasUsageParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get gas usage params
@@ -128,6 +128,21 @@ func (o *GetGasUsageParams) WithBody(body *models.GetGasUsageRequest) *GetGasUsa
 // SetBody adds the body to the get gas usage params
 func (o *GetGasUsageParams) SetBody(body *models.GetGasUsageRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get gas usage operation
+func (o *GetGasUsageParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

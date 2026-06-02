@@ -63,7 +63,8 @@ GetAPIKeyParams contains all the parameters to send to the API endpoint
 */
 type GetAPIKeyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetAPIKeyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetAPIKeyParams) WithDefaults() *GetAPIKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetAPIKeyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get Api key params
@@ -128,6 +128,21 @@ func (o *GetAPIKeyParams) WithBody(body *models.GetAPIKeyRequest) *GetAPIKeyPara
 // SetBody adds the body to the get Api key params
 func (o *GetAPIKeyParams) SetBody(body *models.GetAPIKeyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get Api key operation
+func (o *GetAPIKeyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -77,7 +77,6 @@ func (o *NOOPCodegenAnchorParams) WithDefaults() *NOOPCodegenAnchorParams {
 //
 // All values with no default are reset to their zero value.
 func (o *NOOPCodegenAnchorParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the n o o p codegen anchor params
@@ -111,6 +110,16 @@ func (o *NOOPCodegenAnchorParams) WithHTTPClient(client *http.Client) *NOOPCodeg
 // SetHTTPClient adds the HTTPClient to the n o o p codegen anchor params
 func (o *NOOPCodegenAnchorParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
+}
+
+// Validate validates the params of the n o o p codegen anchor operation
+func (o *NOOPCodegenAnchorParams) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

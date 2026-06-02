@@ -63,7 +63,8 @@ CreateReadWriteSessionParams contains all the parameters to send to the API endp
 */
 type CreateReadWriteSessionParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateReadWriteSessionRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateReadWriteSessionParams) WithDefaults() *CreateReadWriteSessionPar
 //
 // All values with no default are reset to their zero value.
 func (o *CreateReadWriteSessionParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create read write session params
@@ -128,6 +128,21 @@ func (o *CreateReadWriteSessionParams) WithBody(body *models.CreateReadWriteSess
 // SetBody adds the body to the create read write session params
 func (o *CreateReadWriteSessionParams) SetBody(body *models.CreateReadWriteSessionRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create read write session operation
+func (o *CreateReadWriteSessionParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

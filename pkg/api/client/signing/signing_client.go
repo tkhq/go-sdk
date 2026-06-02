@@ -45,9 +45,11 @@ SignRawPayload signs raw payload
 Sign a raw payload.
 */
 func (a *Client) SignRawPayload(params *SignRawPayloadParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSignRawPayloadParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "SignRawPayload",
@@ -86,9 +88,11 @@ SignRawPayloads signs raw payloads
 Sign multiple raw payloads with the same signing parameters.
 */
 func (a *Client) SignRawPayloads(params *SignRawPayloadsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignRawPayloadsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSignRawPayloadsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "SignRawPayloads",
@@ -127,9 +131,11 @@ SignTransaction signs transaction
 Sign a transaction.
 */
 func (a *Client) SignTransaction(params *SignTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignTransactionOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSignTransactionParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "SignTransaction",

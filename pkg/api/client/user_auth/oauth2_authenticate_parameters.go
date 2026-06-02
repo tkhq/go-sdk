@@ -63,7 +63,8 @@ Oauth2AuthenticateParams contains all the parameters to send to the API endpoint
 */
 type Oauth2AuthenticateParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.Oauth2AuthenticateRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *Oauth2AuthenticateParams) WithDefaults() *Oauth2AuthenticateParams {
 //
 // All values with no default are reset to their zero value.
 func (o *Oauth2AuthenticateParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the oauth2 authenticate params
@@ -128,6 +128,21 @@ func (o *Oauth2AuthenticateParams) WithBody(body *models.Oauth2AuthenticateReque
 // SetBody adds the body to the oauth2 authenticate params
 func (o *Oauth2AuthenticateParams) SetBody(body *models.Oauth2AuthenticateRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the oauth2 authenticate operation
+func (o *Oauth2AuthenticateParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ CreateUsersParams contains all the parameters to send to the API endpoint
 */
 type CreateUsersParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateUsersRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateUsersParams) WithDefaults() *CreateUsersParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreateUsersParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create users params
@@ -128,6 +128,21 @@ func (o *CreateUsersParams) WithBody(body *models.CreateUsersRequest) *CreateUse
 // SetBody adds the body to the create users params
 func (o *CreateUsersParams) SetBody(body *models.CreateUsersRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create users operation
+func (o *CreateUsersParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -45,9 +45,11 @@ GetActivities lists activities
 List all activities within an organization.
 */
 func (a *Client) GetActivities(params *GetActivitiesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivitiesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetActivitiesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetActivities",
@@ -86,9 +88,11 @@ GetActivity gets activity
 Get details about an activity.
 */
 func (a *Client) GetActivity(params *GetActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetActivityOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetActivityParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetActivity",
@@ -127,9 +131,11 @@ GetPolicyEvaluations gets policy evaluations
 Get the policy evaluations for an activity.
 */
 func (a *Client) GetPolicyEvaluations(params *GetPolicyEvaluationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyEvaluationsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPolicyEvaluationsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetPolicyEvaluations",

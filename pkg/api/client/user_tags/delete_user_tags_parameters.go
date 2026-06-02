@@ -63,7 +63,8 @@ DeleteUserTagsParams contains all the parameters to send to the API endpoint
 */
 type DeleteUserTagsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteUserTagsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteUserTagsParams) WithDefaults() *DeleteUserTagsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteUserTagsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete user tags params
@@ -128,6 +128,21 @@ func (o *DeleteUserTagsParams) WithBody(body *models.DeleteUserTagsRequest) *Del
 // SetBody adds the body to the delete user tags params
 func (o *DeleteUserTagsParams) SetBody(body *models.DeleteUserTagsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete user tags operation
+func (o *DeleteUserTagsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

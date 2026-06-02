@@ -51,9 +51,11 @@ CreateSubOrganization creates sub organization
 Create a new sub-organization.
 */
 func (a *Client) CreateSubOrganization(params *CreateSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubOrganizationOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateSubOrganizationParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateSubOrganization",
@@ -92,9 +94,11 @@ DeleteSubOrganization deletes sub organization
 Delete a sub-organization.
 */
 func (a *Client) DeleteSubOrganization(params *DeleteSubOrganizationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSubOrganizationOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteSubOrganizationParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteSubOrganization",
@@ -133,9 +137,11 @@ GetOrganizationConfigs gets configs
 Get quorum settings and features for an organization.
 */
 func (a *Client) GetOrganizationConfigs(params *GetOrganizationConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOrganizationConfigsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetOrganizationConfigsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetOrganizationConfigs",
@@ -174,9 +180,11 @@ GetSubOrgIds gets sub organizations
 Get all suborg IDs associated given a parent org ID and an optional filter.
 */
 func (a *Client) GetSubOrgIds(params *GetSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSubOrgIdsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetSubOrgIdsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetSubOrgIds",
@@ -215,9 +223,11 @@ GetVerifiedSubOrgIds gets verified sub organizations
 Get all email or phone verified suborg IDs associated given a parent org ID.
 */
 func (a *Client) GetVerifiedSubOrgIds(params *GetVerifiedSubOrgIdsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetVerifiedSubOrgIdsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetVerifiedSubOrgIdsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetVerifiedSubOrgIds",
@@ -256,9 +266,11 @@ UpdateRootQuorum updates root quorum
 Set the threshold and members of the root quorum. This activity must be approved by the current root quorum.
 */
 func (a *Client) UpdateRootQuorum(params *UpdateRootQuorumParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateRootQuorumOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateRootQuorumParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdateRootQuorum",

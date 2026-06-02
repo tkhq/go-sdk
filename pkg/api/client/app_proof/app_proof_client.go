@@ -41,9 +41,11 @@ GetAppProofs lists app proofs for an activity
 List the App Proofs for the given activity.
 */
 func (a *Client) GetAppProofs(params *GetAppProofsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAppProofsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAppProofsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetAppProofs",

@@ -63,7 +63,8 @@ ApproveActivityParams contains all the parameters to send to the API endpoint
 */
 type ApproveActivityParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ApproveActivityRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ApproveActivityParams) WithDefaults() *ApproveActivityParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ApproveActivityParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the approve activity params
@@ -128,6 +128,21 @@ func (o *ApproveActivityParams) WithBody(body *models.ApproveActivityRequest) *A
 // SetBody adds the body to the approve activity params
 func (o *ApproveActivityParams) SetBody(body *models.ApproveActivityRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the approve activity operation
+func (o *ApproveActivityParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

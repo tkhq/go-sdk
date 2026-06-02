@@ -43,9 +43,11 @@ InitUserEmailRecovery inits email recovery
 Initialize a new email recovery.
 */
 func (a *Client) InitUserEmailRecovery(params *InitUserEmailRecoveryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitUserEmailRecoveryOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitUserEmailRecoveryParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitUserEmailRecovery",
@@ -84,9 +86,11 @@ RecoverUser recovers a user
 Complete the process of recovering a user by adding an authenticator.
 */
 func (a *Client) RecoverUser(params *RecoverUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RecoverUserOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRecoverUserParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "RecoverUser",

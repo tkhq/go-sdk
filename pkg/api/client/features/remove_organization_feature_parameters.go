@@ -63,7 +63,8 @@ RemoveOrganizationFeatureParams contains all the parameters to send to the API e
 */
 type RemoveOrganizationFeatureParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.RemoveOrganizationFeatureRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *RemoveOrganizationFeatureParams) WithDefaults() *RemoveOrganizationFeat
 //
 // All values with no default are reset to their zero value.
 func (o *RemoveOrganizationFeatureParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the remove organization feature params
@@ -128,6 +128,21 @@ func (o *RemoveOrganizationFeatureParams) WithBody(body *models.RemoveOrganizati
 // SetBody adds the body to the remove organization feature params
 func (o *RemoveOrganizationFeatureParams) SetBody(body *models.RemoveOrganizationFeatureRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the remove organization feature operation
+func (o *RemoveOrganizationFeatureParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

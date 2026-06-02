@@ -63,7 +63,8 @@ OtpAuthParams contains all the parameters to send to the API endpoint
 */
 type OtpAuthParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.OtpAuthRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *OtpAuthParams) WithDefaults() *OtpAuthParams {
 //
 // All values with no default are reset to their zero value.
 func (o *OtpAuthParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the otp auth params
@@ -128,6 +128,21 @@ func (o *OtpAuthParams) WithBody(body *models.OtpAuthRequest) *OtpAuthParams {
 // SetBody adds the body to the otp auth params
 func (o *OtpAuthParams) SetBody(body *models.OtpAuthRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the otp auth operation
+func (o *OtpAuthParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

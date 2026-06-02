@@ -63,7 +63,8 @@ GetPoliciesParams contains all the parameters to send to the API endpoint
 */
 type GetPoliciesParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetPoliciesRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetPoliciesParams) WithDefaults() *GetPoliciesParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetPoliciesParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get policies params
@@ -128,6 +128,21 @@ func (o *GetPoliciesParams) WithBody(body *models.GetPoliciesRequest) *GetPolici
 // SetBody adds the body to the get policies params
 func (o *GetPoliciesParams) SetBody(body *models.GetPoliciesRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get policies operation
+func (o *GetPoliciesParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

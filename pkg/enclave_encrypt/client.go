@@ -229,9 +229,9 @@ func (c *EnclaveEncryptClient) AuthDecrypt(payload string) (plaintext []byte, er
 	compressedKey := payloadBytes[0:33]
 	ciphertext := payloadBytes[33:]
 
+	// FIXME: `elliptic.UnmarshalCompressed` and `elliptic.Marshal` are deprecated, but scm does not know how to replace them.
+	// nolint:staticcheck
 	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), compressedKey)
-
-	// FIXME: `elliptic.Unmarshal` is deprecated, but scm does not know how to replace it.
 	// nolint:staticcheck
 	encappedPublic := elliptic.Marshal(elliptic.P256(), x, y)
 

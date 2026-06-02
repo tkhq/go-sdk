@@ -61,9 +61,11 @@ CreatePolicies creates policies
 Create new policies.
 */
 func (a *Client) CreatePolicies(params *CreatePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePoliciesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePoliciesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreatePolicies",
@@ -102,9 +104,11 @@ CreatePolicy creates policy
 Create a new policy.
 */
 func (a *Client) CreatePolicy(params *CreatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePolicyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreatePolicy",
@@ -143,9 +147,11 @@ CreateSmartContractInterface creates smart contract interface
 Create an ABI/IDL in JSON.
 */
 func (a *Client) CreateSmartContractInterface(params *CreateSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSmartContractInterfaceOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateSmartContractInterfaceParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateSmartContractInterface",
@@ -184,9 +190,11 @@ DeletePolicies deletes policies
 Delete existing policies.
 */
 func (a *Client) DeletePolicies(params *DeletePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePoliciesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePoliciesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeletePolicies",
@@ -225,9 +233,11 @@ DeletePolicy deletes policy
 Delete an existing policy.
 */
 func (a *Client) DeletePolicy(params *DeletePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePolicyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeletePolicy",
@@ -266,9 +276,11 @@ DeleteSmartContractInterface deletes smart contract interface
 Delete a smart contract interface.
 */
 func (a *Client) DeleteSmartContractInterface(params *DeleteSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteSmartContractInterfaceOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteSmartContractInterfaceParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteSmartContractInterface",
@@ -307,9 +319,11 @@ GetPolicies lists policies
 List all policies within an organization.
 */
 func (a *Client) GetPolicies(params *GetPoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPoliciesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPoliciesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetPolicies",
@@ -348,9 +362,11 @@ GetPolicy gets policy
 Get details about a policy.
 */
 func (a *Client) GetPolicy(params *GetPolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPolicyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetPolicy",
@@ -389,9 +405,11 @@ GetSmartContractInterface gets smart contract interface
 Get details about a smart contract interface.
 */
 func (a *Client) GetSmartContractInterface(params *GetSmartContractInterfaceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfaceOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetSmartContractInterfaceParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetSmartContractInterface",
@@ -430,9 +448,11 @@ GetSmartContractInterfaces lists smart contract interfaces
 List all smart contract interfaces within an organization.
 */
 func (a *Client) GetSmartContractInterfaces(params *GetSmartContractInterfacesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSmartContractInterfacesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetSmartContractInterfacesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetSmartContractInterfaces",
@@ -471,9 +491,11 @@ UpdatePolicy updates policy
 Update an existing policy.
 */
 func (a *Client) UpdatePolicy(params *UpdatePolicyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdatePolicyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdatePolicyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdatePolicy",

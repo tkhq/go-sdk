@@ -63,7 +63,8 @@ GetBootProofParams contains all the parameters to send to the API endpoint
 */
 type GetBootProofParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetBootProofRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetBootProofParams) WithDefaults() *GetBootProofParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetBootProofParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get boot proof params
@@ -128,6 +128,21 @@ func (o *GetBootProofParams) WithBody(body *models.GetBootProofRequest) *GetBoot
 // SetBody adds the body to the get boot proof params
 func (o *GetBootProofParams) SetBody(body *models.GetBootProofRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get boot proof operation
+func (o *GetBootProofParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

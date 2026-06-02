@@ -43,9 +43,11 @@ ApproveActivity approves activity
 Approve an activity.
 */
 func (a *Client) ApproveActivity(params *ApproveActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ApproveActivityOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewApproveActivityParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ApproveActivity",
@@ -84,9 +86,11 @@ RejectActivity rejects activity
 Reject an activity.
 */
 func (a *Client) RejectActivity(params *RejectActivityParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RejectActivityOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRejectActivityParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "RejectActivity",

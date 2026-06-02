@@ -51,9 +51,11 @@ CreateReadOnlySession creates read only session
 Create a read only session for a user (valid for 1 hour).
 */
 func (a *Client) CreateReadOnlySession(params *CreateReadOnlySessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateReadOnlySessionOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateReadOnlySessionParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateReadOnlySession",
@@ -92,9 +94,11 @@ CreateReadWriteSession creates read write session
 Create a read write session for a user.
 */
 func (a *Client) CreateReadWriteSession(params *CreateReadWriteSessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateReadWriteSessionOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateReadWriteSessionParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateReadWriteSession",
@@ -133,9 +137,11 @@ GetWhoami whos am i
 Get basic information about your current API or WebAuthN user and their organization. Affords sub-organization look ups via parent organization for WebAuthN or API key users.
 */
 func (a *Client) GetWhoami(params *GetWhoamiParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetWhoamiOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetWhoamiParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetWhoami",
@@ -174,9 +180,11 @@ OauthLogin logins with oauth
 Create an Oauth session for a user.
 */
 func (a *Client) OauthLogin(params *OauthLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthLoginOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOauthLoginParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "OauthLogin",
@@ -215,9 +223,11 @@ OtpLogin logins with o t p
 Create an OTP session for a user.
 */
 func (a *Client) OtpLogin(params *OtpLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpLoginOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOtpLoginParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "OtpLogin",
@@ -256,9 +266,11 @@ StampLogin logins with a stamp
 Create a session for a user through stamping client side (API key, wallet client, or passkey client).
 */
 func (a *Client) StampLogin(params *StampLoginParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*StampLoginOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewStampLoginParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "StampLogin",

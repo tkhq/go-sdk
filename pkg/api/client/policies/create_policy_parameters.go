@@ -63,7 +63,8 @@ CreatePolicyParams contains all the parameters to send to the API endpoint
 */
 type CreatePolicyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreatePolicyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreatePolicyParams) WithDefaults() *CreatePolicyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreatePolicyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create policy params
@@ -128,6 +128,21 @@ func (o *CreatePolicyParams) WithBody(body *models.CreatePolicyRequest) *CreateP
 // SetBody adds the body to the create policy params
 func (o *CreatePolicyParams) SetBody(body *models.CreatePolicyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create policy operation
+func (o *CreatePolicyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ UpdatePolicyParams contains all the parameters to send to the API endpoint
 */
 type UpdatePolicyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdatePolicyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdatePolicyParams) WithDefaults() *UpdatePolicyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdatePolicyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update policy params
@@ -128,6 +128,21 @@ func (o *UpdatePolicyParams) WithBody(body *models.UpdatePolicyRequest) *UpdateP
 // SetBody adds the body to the update policy params
 func (o *UpdatePolicyParams) SetBody(body *models.UpdatePolicyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update policy operation
+func (o *UpdatePolicyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

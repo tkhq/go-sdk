@@ -63,7 +63,8 @@ DeleteSubOrganizationParams contains all the parameters to send to the API endpo
 */
 type DeleteSubOrganizationParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteSubOrganizationRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteSubOrganizationParams) WithDefaults() *DeleteSubOrganizationParam
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteSubOrganizationParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete sub organization params
@@ -128,6 +128,21 @@ func (o *DeleteSubOrganizationParams) WithBody(body *models.DeleteSubOrganizatio
 // SetBody adds the body to the delete sub organization params
 func (o *DeleteSubOrganizationParams) SetBody(body *models.DeleteSubOrganizationRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete sub organization operation
+func (o *DeleteSubOrganizationParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

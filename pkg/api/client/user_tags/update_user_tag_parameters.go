@@ -63,7 +63,8 @@ UpdateUserTagParams contains all the parameters to send to the API endpoint
 */
 type UpdateUserTagParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateUserTagRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateUserTagParams) WithDefaults() *UpdateUserTagParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateUserTagParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update user tag params
@@ -128,6 +128,21 @@ func (o *UpdateUserTagParams) WithBody(body *models.UpdateUserTagRequest) *Updat
 // SetBody adds the body to the update user tag params
 func (o *UpdateUserTagParams) SetBody(body *models.UpdateUserTagRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update user tag operation
+func (o *UpdateUserTagParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ GetOrganizationConfigsParams contains all the parameters to send to the API endp
 */
 type GetOrganizationConfigsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetOrganizationConfigsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetOrganizationConfigsParams) WithDefaults() *GetOrganizationConfigsPar
 //
 // All values with no default are reset to their zero value.
 func (o *GetOrganizationConfigsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get organization configs params
@@ -128,6 +128,21 @@ func (o *GetOrganizationConfigsParams) WithBody(body *models.GetOrganizationConf
 // SetBody adds the body to the get organization configs params
 func (o *GetOrganizationConfigsParams) SetBody(body *models.GetOrganizationConfigsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get organization configs operation
+func (o *GetOrganizationConfigsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ ListPrivateKeyTagsParams contains all the parameters to send to the API endpoint
 */
 type ListPrivateKeyTagsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ListPrivateKeyTagsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ListPrivateKeyTagsParams) WithDefaults() *ListPrivateKeyTagsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ListPrivateKeyTagsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list private key tags params
@@ -128,6 +128,21 @@ func (o *ListPrivateKeyTagsParams) WithBody(body *models.ListPrivateKeyTagsReque
 // SetBody adds the body to the list private key tags params
 func (o *ListPrivateKeyTagsParams) SetBody(body *models.ListPrivateKeyTagsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the list private key tags operation
+func (o *ListPrivateKeyTagsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

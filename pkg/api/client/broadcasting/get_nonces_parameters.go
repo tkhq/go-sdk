@@ -63,7 +63,8 @@ GetNoncesParams contains all the parameters to send to the API endpoint
 */
 type GetNoncesParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetNoncesRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetNoncesParams) WithDefaults() *GetNoncesParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetNoncesParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get nonces params
@@ -128,6 +128,21 @@ func (o *GetNoncesParams) WithBody(body *models.GetNoncesRequest) *GetNoncesPara
 // SetBody adds the body to the get nonces params
 func (o *GetNoncesParams) SetBody(body *models.GetNoncesRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get nonces operation
+func (o *GetNoncesParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

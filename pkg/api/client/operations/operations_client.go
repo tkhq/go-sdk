@@ -43,9 +43,11 @@ GetOauth2Credential gets o auth 2 0 credential
 Get details about an OAuth 2.0 credential.
 */
 func (a *Client) GetOauth2Credential(params *GetOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOauth2CredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetOauth2CredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetOauth2Credential",
@@ -82,9 +84,11 @@ func (a *Client) GetOauth2Credential(params *GetOauth2CredentialParams, authInfo
 NOOPCodegenAnchor n o o p codegen anchor API
 */
 func (a *Client) NOOPCodegenAnchor(params *NOOPCodegenAnchorParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*NOOPCodegenAnchorOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewNOOPCodegenAnchorParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "NOOPCodegenAnchor",

@@ -63,7 +63,8 @@ GetActivitiesParams contains all the parameters to send to the API endpoint
 */
 type GetActivitiesParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetActivitiesRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetActivitiesParams) WithDefaults() *GetActivitiesParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetActivitiesParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get activities params
@@ -128,6 +128,21 @@ func (o *GetActivitiesParams) WithBody(body *models.GetActivitiesRequest) *GetAc
 // SetBody adds the body to the get activities params
 func (o *GetActivitiesParams) SetBody(body *models.GetActivitiesRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get activities operation
+func (o *GetActivitiesParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ EthSendTransactionParams contains all the parameters to send to the API endpoint
 */
 type EthSendTransactionParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.EthSendTransactionRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *EthSendTransactionParams) WithDefaults() *EthSendTransactionParams {
 //
 // All values with no default are reset to their zero value.
 func (o *EthSendTransactionParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the eth send transaction params
@@ -128,6 +128,21 @@ func (o *EthSendTransactionParams) WithBody(body *models.EthSendTransactionReque
 // SetBody adds the body to the eth send transaction params
 func (o *EthSendTransactionParams) SetBody(body *models.EthSendTransactionRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the eth send transaction operation
+func (o *EthSendTransactionParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

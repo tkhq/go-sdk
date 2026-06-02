@@ -63,7 +63,8 @@ GetSmartContractInterfaceParams contains all the parameters to send to the API e
 */
 type GetSmartContractInterfaceParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetSmartContractInterfaceRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetSmartContractInterfaceParams) WithDefaults() *GetSmartContractInterf
 //
 // All values with no default are reset to their zero value.
 func (o *GetSmartContractInterfaceParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get smart contract interface params
@@ -128,6 +128,21 @@ func (o *GetSmartContractInterfaceParams) WithBody(body *models.GetSmartContract
 // SetBody adds the body to the get smart contract interface params
 func (o *GetSmartContractInterfaceParams) SetBody(body *models.GetSmartContractInterfaceRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get smart contract interface operation
+func (o *GetSmartContractInterfaceParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

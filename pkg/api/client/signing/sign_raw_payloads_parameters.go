@@ -63,7 +63,8 @@ SignRawPayloadsParams contains all the parameters to send to the API endpoint
 */
 type SignRawPayloadsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.SignRawPayloadsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *SignRawPayloadsParams) WithDefaults() *SignRawPayloadsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *SignRawPayloadsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the sign raw payloads params
@@ -128,6 +128,21 @@ func (o *SignRawPayloadsParams) WithBody(body *models.SignRawPayloadsRequest) *S
 // SetBody adds the body to the sign raw payloads params
 func (o *SignRawPayloadsParams) SetBody(body *models.SignRawPayloadsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the sign raw payloads operation
+func (o *SignRawPayloadsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

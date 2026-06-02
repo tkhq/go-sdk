@@ -305,9 +305,9 @@ func TestServerToClientE2eExistingTargetKey(t *testing.T) {
 	clientTarget, err := client.TargetPublic()
 	assert.Nil(t, err)
 
-	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	targetPublic, _, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
-	server, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(authKey, &targetPrivate, organizationId, nil)
+	server, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(authKey, targetPublic, organizationId, nil)
 	assert.Nil(t, err)
 	serverCiphertext, err := server.Encrypt(clientTarget, []byte("test message"))
 	assert.Nil(t, err)
@@ -432,6 +432,8 @@ func TestDeterministicDecryptEmailBundle(t *testing.T) {
 	// Get the sender public key from the payload
 	compressedKey := payloadBytes[0:33]
 	ciphertext := payloadBytes[33:]
+	// FIXME: `elliptic.UnmarshalCompressed` and `elliptic.Marshal` are deprecated, but scm does not know how to replace them.
+	// nolint:staticcheck
 	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), compressedKey)
 	// nolint:staticcheck
 	encappedPublic := elliptic.Marshal(elliptic.P256(), x, y)
@@ -475,12 +477,12 @@ func TestWalletExportWithV1BundlesEndToEnd(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Generate a new key pair for our client
-	_, iframeKey, err := KemId.Scheme().GenerateKeyPair()
+	iframeTargetPublic, iframeKey, err := KemId.Scheme().GenerateKeyPair()
 	assert.Nil(t, err)
 
 	// Generate the client used by the enclave to encrypt data
 	// (referencing the iframe target key)
-	enclave, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(enclaveKey, &iframeKey, organizationId, nil)
+	enclave, err := enclave_encrypt.NewEnclaveEncryptServerFromTargetKey(enclaveKey, iframeTargetPublic, organizationId, nil)
 	assert.Nil(t, err)
 
 	// Generate the client used by the enclave to encrypt data
@@ -488,10 +490,10 @@ func TestWalletExportWithV1BundlesEndToEnd(t *testing.T) {
 	iframe, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(&enclaveKey.PublicKey, iframeKey)
 	assert.Nil(t, err)
 
-	iframeTargetPublic, err := iframe.TargetPublic()
+	iframeTargetPublicBytes, err := iframe.TargetPublic()
 	assert.Nil(t, err)
 
-	bundleStruct, err := enclave.Encrypt(iframeTargetPublic, []byte("whatever mnemonic phrase goes here"))
+	bundleStruct, err := enclave.Encrypt(iframeTargetPublicBytes, []byte("whatever mnemonic phrase goes here"))
 	assert.Nil(t, err)
 
 	bundleJson, err := json.Marshal(bundleStruct)

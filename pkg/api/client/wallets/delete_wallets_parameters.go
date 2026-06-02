@@ -63,7 +63,8 @@ DeleteWalletsParams contains all the parameters to send to the API endpoint
 */
 type DeleteWalletsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteWalletsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteWalletsParams) WithDefaults() *DeleteWalletsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteWalletsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete wallets params
@@ -128,6 +128,21 @@ func (o *DeleteWalletsParams) WithBody(body *models.DeleteWalletsRequest) *Delet
 // SetBody adds the body to the delete wallets params
 func (o *DeleteWalletsParams) SetBody(body *models.DeleteWalletsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete wallets operation
+func (o *DeleteWalletsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

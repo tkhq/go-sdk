@@ -63,7 +63,8 @@ DeleteOauth2CredentialParams contains all the parameters to send to the API endp
 */
 type DeleteOauth2CredentialParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteOauth2CredentialRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteOauth2CredentialParams) WithDefaults() *DeleteOauth2CredentialPar
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteOauth2CredentialParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete oauth2 credential params
@@ -128,6 +128,21 @@ func (o *DeleteOauth2CredentialParams) WithBody(body *models.DeleteOauth2Credent
 // SetBody adds the body to the delete oauth2 credential params
 func (o *DeleteOauth2CredentialParams) SetBody(body *models.DeleteOauth2CredentialRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete oauth2 credential operation
+func (o *DeleteOauth2CredentialParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

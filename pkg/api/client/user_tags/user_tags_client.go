@@ -47,9 +47,11 @@ CreateUserTag creates user tag
 Create a user tag and add it to users.
 */
 func (a *Client) CreateUserTag(params *CreateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateUserTagOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateUserTagParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateUserTag",
@@ -88,9 +90,11 @@ DeleteUserTags deletes user tags
 Delete user tags within an organization.
 */
 func (a *Client) DeleteUserTags(params *DeleteUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteUserTagsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteUserTagsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteUserTags",
@@ -129,9 +133,11 @@ ListUserTags lists user tags
 List all user tags within an organization.
 */
 func (a *Client) ListUserTags(params *ListUserTagsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListUserTagsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListUserTagsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ListUserTags",
@@ -170,9 +176,11 @@ UpdateUserTag updates user tag
 Update human-readable name or associated users. Note that this activity is atomic: all of the updates will succeed at once, or all of them will fail.
 */
 func (a *Client) UpdateUserTag(params *UpdateUserTagParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateUserTagOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateUserTagParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdateUserTag",

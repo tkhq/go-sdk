@@ -63,7 +63,8 @@ DeleteInvitationParams contains all the parameters to send to the API endpoint
 */
 type DeleteInvitationParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteInvitationRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteInvitationParams) WithDefaults() *DeleteInvitationParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteInvitationParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete invitation params
@@ -128,6 +128,21 @@ func (o *DeleteInvitationParams) WithBody(body *models.DeleteInvitationRequest) 
 // SetBody adds the body to the delete invitation params
 func (o *DeleteInvitationParams) SetBody(body *models.DeleteInvitationRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete invitation operation
+func (o *DeleteInvitationParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request
