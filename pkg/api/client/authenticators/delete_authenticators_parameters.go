@@ -63,7 +63,8 @@ DeleteAuthenticatorsParams contains all the parameters to send to the API endpoi
 */
 type DeleteAuthenticatorsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteAuthenticatorsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteAuthenticatorsParams) WithDefaults() *DeleteAuthenticatorsParams 
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteAuthenticatorsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete authenticators params
@@ -128,6 +128,21 @@ func (o *DeleteAuthenticatorsParams) WithBody(body *models.DeleteAuthenticatorsR
 // SetBody adds the body to the delete authenticators params
 func (o *DeleteAuthenticatorsParams) SetBody(body *models.DeleteAuthenticatorsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete authenticators operation
+func (o *DeleteAuthenticatorsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

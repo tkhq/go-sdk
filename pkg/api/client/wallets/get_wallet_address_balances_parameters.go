@@ -63,7 +63,8 @@ GetWalletAddressBalancesParams contains all the parameters to send to the API en
 */
 type GetWalletAddressBalancesParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetWalletAddressBalancesRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetWalletAddressBalancesParams) WithDefaults() *GetWalletAddressBalance
 //
 // All values with no default are reset to their zero value.
 func (o *GetWalletAddressBalancesParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get wallet address balances params
@@ -128,6 +128,21 @@ func (o *GetWalletAddressBalancesParams) WithBody(body *models.GetWalletAddressB
 // SetBody adds the body to the get wallet address balances params
 func (o *GetWalletAddressBalancesParams) SetBody(body *models.GetWalletAddressBalancesRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get wallet address balances operation
+func (o *GetWalletAddressBalancesParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ UpdateUserNameParams contains all the parameters to send to the API endpoint
 */
 type UpdateUserNameParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateUserNameRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateUserNameParams) WithDefaults() *UpdateUserNameParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateUserNameParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update user name params
@@ -128,6 +128,21 @@ func (o *UpdateUserNameParams) WithBody(body *models.UpdateUserNameRequest) *Upd
 // SetBody adds the body to the update user name params
 func (o *UpdateUserNameParams) SetBody(body *models.UpdateUserNameRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update user name operation
+func (o *UpdateUserNameParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

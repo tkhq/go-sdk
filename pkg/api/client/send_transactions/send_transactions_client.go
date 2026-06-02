@@ -41,9 +41,11 @@ GetSendTransactionStatus gets send transaction status
 Get the status of a send transaction request.
 */
 func (a *Client) GetSendTransactionStatus(params *GetSendTransactionStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSendTransactionStatusOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetSendTransactionStatusParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetSendTransactionStatus",

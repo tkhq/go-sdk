@@ -63,7 +63,8 @@ UpdateWalletParams contains all the parameters to send to the API endpoint
 */
 type UpdateWalletParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateWalletRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateWalletParams) WithDefaults() *UpdateWalletParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateWalletParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update wallet params
@@ -128,6 +128,21 @@ func (o *UpdateWalletParams) WithBody(body *models.UpdateWalletRequest) *UpdateW
 // SetBody adds the body to the update wallet params
 func (o *UpdateWalletParams) SetBody(body *models.UpdateWalletRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update wallet operation
+func (o *UpdateWalletParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

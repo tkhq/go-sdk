@@ -43,9 +43,11 @@ InitOtp inits generic o t p
 Initiate a generic OTP activity.
 */
 func (a *Client) InitOtp(params *InitOtpParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitOtpParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitOtp",
@@ -84,9 +86,11 @@ VerifyOtp verifies generic o t p
 Verify a generic OTP.
 */
 func (a *Client) VerifyOtp(params *VerifyOtpParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*VerifyOtpOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewVerifyOtpParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "VerifyOtp",

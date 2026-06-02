@@ -47,9 +47,11 @@ CreateAPIKeys creates API keys
 Add API keys to an existing user.
 */
 func (a *Client) CreateAPIKeys(params *CreateAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateAPIKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateAPIKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateApiKeys",
@@ -88,9 +90,11 @@ DeleteAPIKeys deletes API keys
 Remove api keys from a user.
 */
 func (a *Client) DeleteAPIKeys(params *DeleteAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteAPIKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteAPIKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteApiKeys",
@@ -129,9 +133,11 @@ GetAPIKey gets API key
 Get details about an API key.
 */
 func (a *Client) GetAPIKey(params *GetAPIKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAPIKeyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetApiKey",
@@ -170,9 +176,11 @@ GetAPIKeys gets API keys
 Get details about API keys for a user.
 */
 func (a *Client) GetAPIKeys(params *GetAPIKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetAPIKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetAPIKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetApiKeys",

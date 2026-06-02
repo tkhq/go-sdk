@@ -63,7 +63,8 @@ GetOauth2CredentialParams contains all the parameters to send to the API endpoin
 */
 type GetOauth2CredentialParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetOauth2CredentialRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetOauth2CredentialParams) WithDefaults() *GetOauth2CredentialParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetOauth2CredentialParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get oauth2 credential params
@@ -128,6 +128,21 @@ func (o *GetOauth2CredentialParams) WithBody(body *models.GetOauth2CredentialReq
 // SetBody adds the body to the get oauth2 credential params
 func (o *GetOauth2CredentialParams) SetBody(body *models.GetOauth2CredentialRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get oauth2 credential operation
+func (o *GetOauth2CredentialParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

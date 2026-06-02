@@ -1,8 +1,8 @@
 package enclave_encrypt
 
 import (
+	"crypto/ecdh"
 	"crypto/ecdsa"
-	"crypto/elliptic"
 	"encoding/json"
 
 	"github.com/btcsuite/btcutil/base58"
@@ -11,7 +11,7 @@ import (
 
 type EnclaveEncryptServer struct {
 	enclaveAuthKey *ecdsa.PrivateKey
-	// TODO: this should not be `kem.PrivateKey`. The encrypting server only needs the target public key!
+	targetPublic   kem.PublicKey
 	targetPrivate  kem.PrivateKey
 	organizationId string
 	userId         *string
@@ -24,13 +24,14 @@ type EnclaveEncryptServerRecv struct {
 // This should be the quorum signing secret derived from the quorum
 // master seed.
 func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
-	_, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
+	targetPublic, targetPrivate, err := KemId.Scheme().GenerateKeyPair()
 	if err != nil {
 		return EnclaveEncryptServer{}, err
 	}
 
 	return EnclaveEncryptServer{
 		enclaveAuthKey,
+		targetPublic,
 		targetPrivate,
 		organizationId,
 		userId,
@@ -38,10 +39,29 @@ func NewEnclaveEncryptServer(enclaveAuthKey *ecdsa.PrivateKey, organizationId st
 }
 
 // Create a server from the enclave quorum public key and the target key.
-func NewEnclaveEncryptServerFromTargetKey(enclaveAuthKey *ecdsa.PrivateKey, targetPrivateKey *kem.PrivateKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
+func NewEnclaveEncryptServerFromTargetKey(enclaveAuthKey *ecdsa.PrivateKey, targetPublicKey kem.PublicKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
 	return EnclaveEncryptServer{
 		enclaveAuthKey,
-		*targetPrivateKey,
+		targetPublicKey,
+		nil,
+		organizationId,
+		userId,
+	}, nil
+}
+
+// Get the server receiving type.
+func (s *EnclaveEncryptServer) IntoEnclaveServerRecv() EnclaveEncryptServerRecv {
+	return EnclaveEncryptServerRecv{
+		targetPrivate: s.targetPrivate,
+	}
+}
+
+// Create a server from the enclave quorum public key and the target key.
+func NewEnclaveEncryptServerFromTargetKeyPair(enclaveAuthKey *ecdsa.PrivateKey, targetPrivateKey kem.PrivateKey, organizationId string, userId *string) (EnclaveEncryptServer, error) {
+	return EnclaveEncryptServer{
+		enclaveAuthKey,
+		targetPrivateKey.Public(),
+		targetPrivateKey,
 		organizationId,
 		userId,
 	}, nil
@@ -80,11 +100,11 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 
 	dataSig := Bytes(dataSignature)
 
-	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
-	// FIXME: `elliptic.Marshal` is deprecated,
-	// nolint:staticcheck
-	enclaveQuorumPublicBytes := elliptic.Marshal(elliptic.P256(), enclaveQuorumPublic.X, enclaveQuorumPublic.Y)
-	eqp := Bytes(enclaveQuorumPublicBytes)
+	ecdhPub, err := s.enclaveAuthKey.PublicKey.ECDH()
+	if err != nil {
+		return nil, err
+	}
+	eqp := Bytes(ecdhPub.Bytes())
 
 	return &ServerSendMsgV1{
 		Version:             DataVersion,
@@ -97,7 +117,7 @@ func (s *EnclaveEncryptServer) Encrypt(clientTarget []byte, plaintext []byte) (*
 // Return the servers encryption target key and a signature over it from
 // the quorum key.
 func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
-	targetPublic, err := s.targetPrivate.Public().MarshalBinary()
+	targetPublic, err := s.targetPublic.MarshalBinary()
 	if err != nil {
 		return nil, err
 	}
@@ -120,11 +140,11 @@ func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 
 	dataSig := Bytes(dataSignature)
 
-	enclaveQuorumPublic := s.enclaveAuthKey.PublicKey
-	// FIXME: `elliptic.Marshal` is deprecated,
-	// nolint:staticcheck
-	enclaveQuorumPublicBytes := elliptic.Marshal(elliptic.P256(), enclaveQuorumPublic.X, enclaveQuorumPublic.Y)
-	eqp := Bytes(enclaveQuorumPublicBytes)
+	ecdhPub, err := s.enclaveAuthKey.PublicKey.ECDH()
+	if err != nil {
+		return nil, err
+	}
+	eqp := Bytes(ecdhPub.Bytes())
 
 	return &ServerTargetMsgV1{
 		Version:             DataVersion,
@@ -134,12 +154,6 @@ func (s *EnclaveEncryptServer) PublishTarget() (*ServerTargetMsgV1, error) {
 	}, nil
 }
 
-// Get the server receiving type.
-func (s *EnclaveEncryptServer) IntoEnclaveServerRecv() EnclaveEncryptServerRecv {
-	return EnclaveEncryptServerRecv{
-		targetPrivate: s.targetPrivate,
-	}
-}
 
 // Relevant for usage with auth activities: Email Auth, Email Recovery.
 func (s *EnclaveEncryptServer) AuthEncrypt(clientTarget []byte, plaintext []byte) (string, error) {
@@ -156,11 +170,16 @@ func (s *EnclaveEncryptServer) AuthEncrypt(clientTarget []byte, plaintext []byte
 		return "", err
 	}
 
-	// FIXME: `elliptic.Unmarshal` is deprecated, but scm does not know how to replace it.
-	// nolint:staticcheck
-	x, y := elliptic.Unmarshal(elliptic.P256(), encappedPublic)
+	ecdhPub, err := ecdh.P256().NewPublicKey(encappedPublic)
+	if err != nil {
+		return "", err
+	}
 
-	compressedEncappedPublic := elliptic.MarshalCompressed(elliptic.P256(), x, y)
+	rawPub := ecdhPub.Bytes()
+	x := rawPub[1:33]
+	yLastByte := rawPub[64]
+	prefix := byte(0x02) | (yLastByte & 1)
+	compressedEncappedPublic := append([]byte{prefix}, x...)
 	payload := append(compressedEncappedPublic, ciphertext...)
 
 	checksum := checksum(payload)

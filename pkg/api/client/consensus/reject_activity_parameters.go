@@ -63,7 +63,8 @@ RejectActivityParams contains all the parameters to send to the API endpoint
 */
 type RejectActivityParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.RejectActivityRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *RejectActivityParams) WithDefaults() *RejectActivityParams {
 //
 // All values with no default are reset to their zero value.
 func (o *RejectActivityParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the reject activity params
@@ -128,6 +128,21 @@ func (o *RejectActivityParams) WithBody(body *models.RejectActivityRequest) *Rej
 // SetBody adds the body to the reject activity params
 func (o *RejectActivityParams) SetBody(body *models.RejectActivityRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the reject activity operation
+func (o *RejectActivityParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

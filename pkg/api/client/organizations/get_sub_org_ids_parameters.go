@@ -63,7 +63,8 @@ GetSubOrgIdsParams contains all the parameters to send to the API endpoint
 */
 type GetSubOrgIdsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetSubOrgIdsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetSubOrgIdsParams) WithDefaults() *GetSubOrgIdsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetSubOrgIdsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get sub org ids params
@@ -128,6 +128,21 @@ func (o *GetSubOrgIdsParams) WithBody(body *models.GetSubOrgIdsRequest) *GetSubO
 // SetBody adds the body to the get sub org ids params
 func (o *GetSubOrgIdsParams) SetBody(body *models.GetSubOrgIdsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get sub org ids operation
+func (o *GetSubOrgIdsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

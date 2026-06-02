@@ -63,7 +63,8 @@ GetWhoamiParams contains all the parameters to send to the API endpoint
 */
 type GetWhoamiParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetWhoamiRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetWhoamiParams) WithDefaults() *GetWhoamiParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetWhoamiParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get whoami params
@@ -128,6 +128,21 @@ func (o *GetWhoamiParams) WithBody(body *models.GetWhoamiRequest) *GetWhoamiPara
 // SetBody adds the body to the get whoami params
 func (o *GetWhoamiParams) SetBody(body *models.GetWhoamiRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get whoami operation
+func (o *GetWhoamiParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

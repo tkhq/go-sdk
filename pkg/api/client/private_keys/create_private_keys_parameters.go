@@ -63,7 +63,8 @@ CreatePrivateKeysParams contains all the parameters to send to the API endpoint
 */
 type CreatePrivateKeysParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreatePrivateKeysRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreatePrivateKeysParams) WithDefaults() *CreatePrivateKeysParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreatePrivateKeysParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create private keys params
@@ -128,6 +128,21 @@ func (o *CreatePrivateKeysParams) WithBody(body *models.CreatePrivateKeysRequest
 // SetBody adds the body to the create private keys params
 func (o *CreatePrivateKeysParams) SetBody(body *models.CreatePrivateKeysRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create private keys operation
+func (o *CreatePrivateKeysParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

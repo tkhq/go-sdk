@@ -63,7 +63,8 @@ CreatePrivateKeyTagParams contains all the parameters to send to the API endpoin
 */
 type CreatePrivateKeyTagParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreatePrivateKeyTagRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreatePrivateKeyTagParams) WithDefaults() *CreatePrivateKeyTagParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreatePrivateKeyTagParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create private key tag params
@@ -128,6 +128,21 @@ func (o *CreatePrivateKeyTagParams) WithBody(body *models.CreatePrivateKeyTagReq
 // SetBody adds the body to the create private key tag params
 func (o *CreatePrivateKeyTagParams) SetBody(body *models.CreatePrivateKeyTagRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create private key tag operation
+func (o *CreatePrivateKeyTagParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

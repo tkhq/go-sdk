@@ -63,7 +63,8 @@ OauthLoginParams contains all the parameters to send to the API endpoint
 */
 type OauthLoginParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.OauthLoginRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *OauthLoginParams) WithDefaults() *OauthLoginParams {
 //
 // All values with no default are reset to their zero value.
 func (o *OauthLoginParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the oauth login params
@@ -128,6 +128,21 @@ func (o *OauthLoginParams) WithBody(body *models.OauthLoginRequest) *OauthLoginP
 // SetBody adds the body to the oauth login params
 func (o *OauthLoginParams) SetBody(body *models.OauthLoginRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the oauth login operation
+func (o *OauthLoginParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ GetAppProofsParams contains all the parameters to send to the API endpoint
 */
 type GetAppProofsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetAppProofsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetAppProofsParams) WithDefaults() *GetAppProofsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetAppProofsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get app proofs params
@@ -128,6 +128,21 @@ func (o *GetAppProofsParams) WithBody(body *models.GetAppProofsRequest) *GetAppP
 // SetBody adds the body to the get app proofs params
 func (o *GetAppProofsParams) SetBody(body *models.GetAppProofsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get app proofs operation
+func (o *GetAppProofsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

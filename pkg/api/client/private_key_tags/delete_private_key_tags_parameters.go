@@ -63,7 +63,8 @@ DeletePrivateKeyTagsParams contains all the parameters to send to the API endpoi
 */
 type DeletePrivateKeyTagsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeletePrivateKeyTagsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeletePrivateKeyTagsParams) WithDefaults() *DeletePrivateKeyTagsParams 
 //
 // All values with no default are reset to their zero value.
 func (o *DeletePrivateKeyTagsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete private key tags params
@@ -128,6 +128,21 @@ func (o *DeletePrivateKeyTagsParams) WithBody(body *models.DeletePrivateKeyTagsR
 // SetBody adds the body to the delete private key tags params
 func (o *DeletePrivateKeyTagsParams) SetBody(body *models.DeletePrivateKeyTagsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete private key tags operation
+func (o *DeletePrivateKeyTagsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

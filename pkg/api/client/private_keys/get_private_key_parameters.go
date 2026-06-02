@@ -63,7 +63,8 @@ GetPrivateKeyParams contains all the parameters to send to the API endpoint
 */
 type GetPrivateKeyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetPrivateKeyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetPrivateKeyParams) WithDefaults() *GetPrivateKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetPrivateKeyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get private key params
@@ -128,6 +128,21 @@ func (o *GetPrivateKeyParams) WithBody(body *models.GetPrivateKeyRequest) *GetPr
 // SetBody adds the body to the get private key params
 func (o *GetPrivateKeyParams) SetBody(body *models.GetPrivateKeyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get private key operation
+func (o *GetPrivateKeyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

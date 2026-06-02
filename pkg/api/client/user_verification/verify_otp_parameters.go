@@ -63,7 +63,8 @@ VerifyOtpParams contains all the parameters to send to the API endpoint
 */
 type VerifyOtpParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.VerifyOtpRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *VerifyOtpParams) WithDefaults() *VerifyOtpParams {
 //
 // All values with no default are reset to their zero value.
 func (o *VerifyOtpParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the verify otp params
@@ -128,6 +128,21 @@ func (o *VerifyOtpParams) WithBody(body *models.VerifyOtpRequest) *VerifyOtpPara
 // SetBody adds the body to the verify otp params
 func (o *VerifyOtpParams) SetBody(body *models.VerifyOtpRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the verify otp operation
+func (o *VerifyOtpParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

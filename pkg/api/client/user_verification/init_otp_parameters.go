@@ -63,7 +63,8 @@ InitOtpParams contains all the parameters to send to the API endpoint
 */
 type InitOtpParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.InitOtpRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *InitOtpParams) WithDefaults() *InitOtpParams {
 //
 // All values with no default are reset to their zero value.
 func (o *InitOtpParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the init otp params
@@ -128,6 +128,21 @@ func (o *InitOtpParams) WithBody(body *models.InitOtpRequest) *InitOtpParams {
 // SetBody adds the body to the init otp params
 func (o *InitOtpParams) SetBody(body *models.InitOtpRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the init otp operation
+func (o *InitOtpParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

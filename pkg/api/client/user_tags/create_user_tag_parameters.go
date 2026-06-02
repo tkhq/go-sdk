@@ -63,7 +63,8 @@ CreateUserTagParams contains all the parameters to send to the API endpoint
 */
 type CreateUserTagParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateUserTagRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateUserTagParams) WithDefaults() *CreateUserTagParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreateUserTagParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create user tag params
@@ -128,6 +128,21 @@ func (o *CreateUserTagParams) WithBody(body *models.CreateUserTagRequest) *Creat
 // SetBody adds the body to the create user tag params
 func (o *CreateUserTagParams) SetBody(body *models.CreateUserTagRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create user tag operation
+func (o *CreateUserTagParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

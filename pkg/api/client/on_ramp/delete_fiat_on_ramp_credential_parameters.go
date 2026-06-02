@@ -63,7 +63,8 @@ DeleteFiatOnRampCredentialParams contains all the parameters to send to the API 
 */
 type DeleteFiatOnRampCredentialParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteFiatOnRampCredentialRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteFiatOnRampCredentialParams) WithDefaults() *DeleteFiatOnRampCrede
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteFiatOnRampCredentialParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete fiat on ramp credential params
@@ -128,6 +128,21 @@ func (o *DeleteFiatOnRampCredentialParams) WithBody(body *models.DeleteFiatOnRam
 // SetBody adds the body to the delete fiat on ramp credential params
 func (o *DeleteFiatOnRampCredentialParams) SetBody(body *models.DeleteFiatOnRampCredentialRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete fiat on ramp credential operation
+func (o *DeleteFiatOnRampCredentialParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

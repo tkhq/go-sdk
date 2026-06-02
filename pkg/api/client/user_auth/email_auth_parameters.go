@@ -63,7 +63,8 @@ EmailAuthParams contains all the parameters to send to the API endpoint
 */
 type EmailAuthParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.EmailAuthRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *EmailAuthParams) WithDefaults() *EmailAuthParams {
 //
 // All values with no default are reset to their zero value.
 func (o *EmailAuthParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the email auth params
@@ -128,6 +128,21 @@ func (o *EmailAuthParams) WithBody(body *models.EmailAuthRequest) *EmailAuthPara
 // SetBody adds the body to the email auth params
 func (o *EmailAuthParams) SetBody(body *models.EmailAuthRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the email auth operation
+func (o *EmailAuthParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

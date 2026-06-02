@@ -63,7 +63,8 @@ CreateSubOrganizationParams contains all the parameters to send to the API endpo
 */
 type CreateSubOrganizationParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateSubOrganizationRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateSubOrganizationParams) WithDefaults() *CreateSubOrganizationParam
 //
 // All values with no default are reset to their zero value.
 func (o *CreateSubOrganizationParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create sub organization params
@@ -128,6 +128,21 @@ func (o *CreateSubOrganizationParams) WithBody(body *models.CreateSubOrganizatio
 // SetBody adds the body to the create sub organization params
 func (o *CreateSubOrganizationParams) SetBody(body *models.CreateSubOrganizationRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create sub organization operation
+func (o *CreateSubOrganizationParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

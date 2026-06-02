@@ -63,7 +63,8 @@ StampLoginParams contains all the parameters to send to the API endpoint
 */
 type StampLoginParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.StampLoginRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *StampLoginParams) WithDefaults() *StampLoginParams {
 //
 // All values with no default are reset to their zero value.
 func (o *StampLoginParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the stamp login params
@@ -128,6 +128,21 @@ func (o *StampLoginParams) WithBody(body *models.StampLoginRequest) *StampLoginP
 // SetBody adds the body to the stamp login params
 func (o *StampLoginParams) SetBody(body *models.StampLoginRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the stamp login operation
+func (o *StampLoginParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

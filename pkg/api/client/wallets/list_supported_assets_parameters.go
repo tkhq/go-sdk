@@ -63,7 +63,8 @@ ListSupportedAssetsParams contains all the parameters to send to the API endpoin
 */
 type ListSupportedAssetsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ListSupportedAssetsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ListSupportedAssetsParams) WithDefaults() *ListSupportedAssetsParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ListSupportedAssetsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list supported assets params
@@ -128,6 +128,21 @@ func (o *ListSupportedAssetsParams) WithBody(body *models.ListSupportedAssetsReq
 // SetBody adds the body to the list supported assets params
 func (o *ListSupportedAssetsParams) SetBody(body *models.ListSupportedAssetsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the list supported assets operation
+func (o *ListSupportedAssetsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

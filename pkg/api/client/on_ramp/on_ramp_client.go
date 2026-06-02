@@ -51,9 +51,11 @@ CreateFiatOnRampCredential creates a fiat on ramp credential
 Create a fiat on ramp provider credential
 */
 func (a *Client) CreateFiatOnRampCredential(params *CreateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateFiatOnRampCredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateFiatOnRampCredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateFiatOnRampCredential",
@@ -92,9 +94,11 @@ DeleteFiatOnRampCredential deletes a fiat on ramp credential
 Delete a fiat on ramp provider credential
 */
 func (a *Client) DeleteFiatOnRampCredential(params *DeleteFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteFiatOnRampCredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteFiatOnRampCredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteFiatOnRampCredential",
@@ -133,9 +137,11 @@ GetOnRampTransactionStatus gets on ramp transaction status
 Get the status of an on ramp transaction.
 */
 func (a *Client) GetOnRampTransactionStatus(params *GetOnRampTransactionStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOnRampTransactionStatusOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetOnRampTransactionStatusParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetOnRampTransactionStatus",
@@ -174,9 +180,11 @@ InitFiatOnRamp inits fiat on ramp
 Initiate a fiat on ramp flow.
 */
 func (a *Client) InitFiatOnRamp(params *InitFiatOnRampParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitFiatOnRampOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitFiatOnRampParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitFiatOnRamp",
@@ -215,9 +223,11 @@ ListFiatOnRampCredentials lists fiat on ramp credentials
 List all fiat on ramp provider credentials within an organization.
 */
 func (a *Client) ListFiatOnRampCredentials(params *ListFiatOnRampCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListFiatOnRampCredentialsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListFiatOnRampCredentialsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ListFiatOnRampCredentials",
@@ -256,9 +266,11 @@ UpdateFiatOnRampCredential updates a fiat on ramp credential
 Update a fiat on ramp provider credential
 */
 func (a *Client) UpdateFiatOnRampCredential(params *UpdateFiatOnRampCredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateFiatOnRampCredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateFiatOnRampCredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdateFiatOnRampCredential",

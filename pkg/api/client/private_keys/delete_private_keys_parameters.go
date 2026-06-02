@@ -63,7 +63,8 @@ DeletePrivateKeysParams contains all the parameters to send to the API endpoint
 */
 type DeletePrivateKeysParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeletePrivateKeysRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeletePrivateKeysParams) WithDefaults() *DeletePrivateKeysParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeletePrivateKeysParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete private keys params
@@ -128,6 +128,21 @@ func (o *DeletePrivateKeysParams) WithBody(body *models.DeletePrivateKeysRequest
 // SetBody adds the body to the delete private keys params
 func (o *DeletePrivateKeysParams) SetBody(body *models.DeletePrivateKeysRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete private keys operation
+func (o *DeletePrivateKeysParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

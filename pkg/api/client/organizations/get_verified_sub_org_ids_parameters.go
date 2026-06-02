@@ -63,7 +63,8 @@ GetVerifiedSubOrgIdsParams contains all the parameters to send to the API endpoi
 */
 type GetVerifiedSubOrgIdsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetVerifiedSubOrgIdsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetVerifiedSubOrgIdsParams) WithDefaults() *GetVerifiedSubOrgIdsParams 
 //
 // All values with no default are reset to their zero value.
 func (o *GetVerifiedSubOrgIdsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get verified sub org ids params
@@ -128,6 +128,21 @@ func (o *GetVerifiedSubOrgIdsParams) WithBody(body *models.GetVerifiedSubOrgIdsR
 // SetBody adds the body to the get verified sub org ids params
 func (o *GetVerifiedSubOrgIdsParams) SetBody(body *models.GetVerifiedSubOrgIdsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get verified sub org ids operation
+func (o *GetVerifiedSubOrgIdsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ SignTransactionParams contains all the parameters to send to the API endpoint
 */
 type SignTransactionParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.SignTransactionRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *SignTransactionParams) WithDefaults() *SignTransactionParams {
 //
 // All values with no default are reset to their zero value.
 func (o *SignTransactionParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the sign transaction params
@@ -128,6 +128,21 @@ func (o *SignTransactionParams) WithBody(body *models.SignTransactionRequest) *S
 // SetBody adds the body to the sign transaction params
 func (o *SignTransactionParams) SetBody(body *models.SignTransactionRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the sign transaction operation
+func (o *SignTransactionParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

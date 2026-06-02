@@ -63,7 +63,8 @@ ListFiatOnRampCredentialsParams contains all the parameters to send to the API e
 */
 type ListFiatOnRampCredentialsParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ListFiatOnRampCredentialsRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ListFiatOnRampCredentialsParams) WithDefaults() *ListFiatOnRampCredenti
 //
 // All values with no default are reset to their zero value.
 func (o *ListFiatOnRampCredentialsParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list fiat on ramp credentials params
@@ -128,6 +128,21 @@ func (o *ListFiatOnRampCredentialsParams) WithBody(body *models.ListFiatOnRampCr
 // SetBody adds the body to the list fiat on ramp credentials params
 func (o *ListFiatOnRampCredentialsParams) SetBody(body *models.ListFiatOnRampCredentialsRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the list fiat on ramp credentials operation
+func (o *ListFiatOnRampCredentialsParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

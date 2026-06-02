@@ -63,7 +63,8 @@ InitFiatOnRampParams contains all the parameters to send to the API endpoint
 */
 type InitFiatOnRampParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.InitFiatOnRampRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *InitFiatOnRampParams) WithDefaults() *InitFiatOnRampParams {
 //
 // All values with no default are reset to their zero value.
 func (o *InitFiatOnRampParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the init fiat on ramp params
@@ -128,6 +128,21 @@ func (o *InitFiatOnRampParams) WithBody(body *models.InitFiatOnRampRequest) *Ini
 // SetBody adds the body to the init fiat on ramp params
 func (o *InitFiatOnRampParams) SetBody(body *models.InitFiatOnRampRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the init fiat on ramp operation
+func (o *InitFiatOnRampParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ ExportWalletAccountParams contains all the parameters to send to the API endpoin
 */
 type ExportWalletAccountParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ExportWalletAccountRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ExportWalletAccountParams) WithDefaults() *ExportWalletAccountParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ExportWalletAccountParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the export wallet account params
@@ -128,6 +128,21 @@ func (o *ExportWalletAccountParams) WithBody(body *models.ExportWalletAccountReq
 // SetBody adds the body to the export wallet account params
 func (o *ExportWalletAccountParams) SetBody(body *models.ExportWalletAccountRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the export wallet account operation
+func (o *ExportWalletAccountParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

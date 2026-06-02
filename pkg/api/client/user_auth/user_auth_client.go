@@ -63,9 +63,11 @@ CreateOauth2Credential creates an o auth 2 0 credential
 Enable authentication for end users with an OAuth 2.0 provider
 */
 func (a *Client) CreateOauth2Credential(params *CreateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauth2CredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateOauth2CredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateOauth2Credential",
@@ -104,9 +106,11 @@ CreateOauthProviders creates oauth providers
 Create Oauth providers for a specified user.
 */
 func (a *Client) CreateOauthProviders(params *CreateOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOauthProvidersOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateOauthProvidersParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateOauthProviders",
@@ -145,9 +149,11 @@ DeleteOauth2Credential deletes an o auth 2 0 credential
 Disable authentication for end users with an OAuth 2.0 provider
 */
 func (a *Client) DeleteOauth2Credential(params *DeleteOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauth2CredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteOauth2CredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteOauth2Credential",
@@ -186,9 +192,11 @@ DeleteOauthProviders deletes oauth providers
 Remove Oauth providers for a specified user.
 */
 func (a *Client) DeleteOauthProviders(params *DeleteOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteOauthProvidersOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteOauthProvidersParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteOauthProviders",
@@ -227,9 +235,11 @@ EmailAuth performs email auth
 Authenticate a user via email.
 */
 func (a *Client) EmailAuth(params *EmailAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EmailAuthOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewEmailAuthParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "EmailAuth",
@@ -268,9 +278,11 @@ GetOauthProviders gets oauth providers
 Get details about Oauth providers for a user.
 */
 func (a *Client) GetOauthProviders(params *GetOauthProvidersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOauthProvidersOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetOauthProvidersParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetOauthProviders",
@@ -309,9 +321,11 @@ InitOtpAuth inits o t p auth
 Initiate an OTP auth activity.
 */
 func (a *Client) InitOtpAuth(params *InitOtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitOtpAuthOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitOtpAuthParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitOtpAuth",
@@ -350,9 +364,11 @@ ListOauth2Credentials lists o auth 2 0 credentials
 List all OAuth 2.0 credentials within an organization.
 */
 func (a *Client) ListOauth2Credentials(params *ListOauth2CredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOauth2CredentialsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListOauth2CredentialsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ListOauth2Credentials",
@@ -391,9 +407,11 @@ Oauth oauths
 Authenticate a user with an OIDC token (Oauth).
 */
 func (a *Client) Oauth(params *OauthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OauthOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOauthParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "Oauth",
@@ -432,9 +450,11 @@ Oauth2Authenticate os auth 2 0 authentication
 Authenticate a user with an OAuth 2.0 provider and receive an OIDC token to use with the LoginWithOAuth or CreateSubOrganization activities
 */
 func (a *Client) Oauth2Authenticate(params *Oauth2AuthenticateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*Oauth2AuthenticateOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOauth2AuthenticateParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "Oauth2Authenticate",
@@ -473,9 +493,11 @@ OtpAuth os t p auth
 Authenticate a user with an OTP code sent via email or SMS.
 */
 func (a *Client) OtpAuth(params *OtpAuthParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*OtpAuthOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewOtpAuthParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "OtpAuth",
@@ -514,9 +536,11 @@ UpdateOauth2Credential updates an o auth 2 0 credential
 Update an OAuth 2.0 provider credential
 */
 func (a *Client) UpdateOauth2Credential(params *UpdateOauth2CredentialParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateOauth2CredentialOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateOauth2CredentialParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "UpdateOauth2Credential",

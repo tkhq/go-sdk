@@ -63,7 +63,8 @@ DeletePolicyParams contains all the parameters to send to the API endpoint
 */
 type DeletePolicyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeletePolicyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeletePolicyParams) WithDefaults() *DeletePolicyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *DeletePolicyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete policy params
@@ -128,6 +128,21 @@ func (o *DeletePolicyParams) WithBody(body *models.DeletePolicyRequest) *DeleteP
 // SetBody adds the body to the delete policy params
 func (o *DeletePolicyParams) SetBody(body *models.DeletePolicyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete policy operation
+func (o *DeletePolicyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

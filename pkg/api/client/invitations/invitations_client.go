@@ -43,9 +43,11 @@ CreateInvitations creates invitations
 Create invitations to join an existing organization.
 */
 func (a *Client) CreateInvitations(params *CreateInvitationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvitationsOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateInvitationsParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreateInvitations",
@@ -84,9 +86,11 @@ DeleteInvitation deletes invitation
 Delete an existing invitation.
 */
 func (a *Client) DeleteInvitation(params *DeleteInvitationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvitationOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteInvitationParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeleteInvitation",

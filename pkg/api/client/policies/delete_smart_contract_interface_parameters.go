@@ -63,7 +63,8 @@ DeleteSmartContractInterfaceParams contains all the parameters to send to the AP
 */
 type DeleteSmartContractInterfaceParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.DeleteSmartContractInterfaceRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *DeleteSmartContractInterfaceParams) WithDefaults() *DeleteSmartContract
 //
 // All values with no default are reset to their zero value.
 func (o *DeleteSmartContractInterfaceParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete smart contract interface params
@@ -128,6 +128,21 @@ func (o *DeleteSmartContractInterfaceParams) WithBody(body *models.DeleteSmartCo
 // SetBody adds the body to the delete smart contract interface params
 func (o *DeleteSmartContractInterfaceParams) SetBody(body *models.DeleteSmartContractInterfaceRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the delete smart contract interface operation
+func (o *DeleteSmartContractInterfaceParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

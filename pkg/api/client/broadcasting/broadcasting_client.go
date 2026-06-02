@@ -47,9 +47,11 @@ EthSendTransaction broadcasts e VM transaction
 Submit a transaction intent describing an EVM transaction you would like to broadcast.
 */
 func (a *Client) EthSendTransaction(params *EthSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*EthSendTransactionOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewEthSendTransactionParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "EthSendTransaction",
@@ -88,9 +90,11 @@ GetGasUsage gets gas usage
 Get gas usage and gas limits for either the parent organization or a sub-organization.
 */
 func (a *Client) GetGasUsage(params *GetGasUsageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetGasUsageOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetGasUsageParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetGasUsage",
@@ -129,9 +133,11 @@ GetNonces gets nonces
 Get nonce values for an address on a given network. Can fetch the standard on-chain nonce and/or the gas station nonce used for sponsored transactions.
 */
 func (a *Client) GetNonces(params *GetNoncesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetNoncesOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetNoncesParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetNonces",
@@ -170,9 +176,11 @@ SolSendTransaction broadcasts s VM transaction
 Submit a transaction intent describing an SVM transaction you would like to broadcast.
 */
 func (a *Client) SolSendTransaction(params *SolSendTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SolSendTransactionOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSolSendTransactionParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "SolSendTransaction",

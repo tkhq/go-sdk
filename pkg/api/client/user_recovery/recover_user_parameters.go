@@ -63,7 +63,8 @@ RecoverUserParams contains all the parameters to send to the API endpoint
 */
 type RecoverUserParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.RecoverUserRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *RecoverUserParams) WithDefaults() *RecoverUserParams {
 //
 // All values with no default are reset to their zero value.
 func (o *RecoverUserParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the recover user params
@@ -128,6 +128,21 @@ func (o *RecoverUserParams) WithBody(body *models.RecoverUserRequest) *RecoverUs
 // SetBody adds the body to the recover user params
 func (o *RecoverUserParams) SetBody(body *models.RecoverUserRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the recover user operation
+func (o *RecoverUserParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

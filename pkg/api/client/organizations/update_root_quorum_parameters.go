@@ -63,7 +63,8 @@ UpdateRootQuorumParams contains all the parameters to send to the API endpoint
 */
 type UpdateRootQuorumParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.UpdateRootQuorumRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *UpdateRootQuorumParams) WithDefaults() *UpdateRootQuorumParams {
 //
 // All values with no default are reset to their zero value.
 func (o *UpdateRootQuorumParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update root quorum params
@@ -128,6 +128,21 @@ func (o *UpdateRootQuorumParams) WithBody(body *models.UpdateRootQuorumRequest) 
 // SetBody adds the body to the update root quorum params
 func (o *UpdateRootQuorumParams) SetBody(body *models.UpdateRootQuorumRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the update root quorum operation
+func (o *UpdateRootQuorumParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

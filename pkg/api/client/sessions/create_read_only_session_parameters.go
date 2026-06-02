@@ -63,7 +63,8 @@ CreateReadOnlySessionParams contains all the parameters to send to the API endpo
 */
 type CreateReadOnlySessionParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateReadOnlySessionRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateReadOnlySessionParams) WithDefaults() *CreateReadOnlySessionParam
 //
 // All values with no default are reset to their zero value.
 func (o *CreateReadOnlySessionParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create read only session params
@@ -128,6 +128,21 @@ func (o *CreateReadOnlySessionParams) WithBody(body *models.CreateReadOnlySessio
 // SetBody adds the body to the create read only session params
 func (o *CreateReadOnlySessionParams) SetBody(body *models.CreateReadOnlySessionRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create read only session operation
+func (o *CreateReadOnlySessionParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

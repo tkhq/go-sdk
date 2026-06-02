@@ -63,7 +63,8 @@ GetUserParams contains all the parameters to send to the API endpoint
 */
 type GetUserParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetUserRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetUserParams) WithDefaults() *GetUserParams {
 //
 // All values with no default are reset to their zero value.
 func (o *GetUserParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get user params
@@ -128,6 +128,21 @@ func (o *GetUserParams) WithBody(body *models.GetUserRequest) *GetUserParams {
 // SetBody adds the body to the get user params
 func (o *GetUserParams) SetBody(body *models.GetUserRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get user operation
+func (o *GetUserParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

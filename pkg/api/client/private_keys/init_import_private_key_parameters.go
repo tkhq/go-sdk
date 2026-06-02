@@ -63,7 +63,8 @@ InitImportPrivateKeyParams contains all the parameters to send to the API endpoi
 */
 type InitImportPrivateKeyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.InitImportPrivateKeyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *InitImportPrivateKeyParams) WithDefaults() *InitImportPrivateKeyParams 
 //
 // All values with no default are reset to their zero value.
 func (o *InitImportPrivateKeyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the init import private key params
@@ -128,6 +128,21 @@ func (o *InitImportPrivateKeyParams) WithBody(body *models.InitImportPrivateKeyR
 // SetBody adds the body to the init import private key params
 func (o *InitImportPrivateKeyParams) SetBody(body *models.InitImportPrivateKeyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the init import private key operation
+func (o *InitImportPrivateKeyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

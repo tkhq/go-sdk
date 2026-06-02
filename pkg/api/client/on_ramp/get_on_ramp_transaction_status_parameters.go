@@ -63,7 +63,8 @@ GetOnRampTransactionStatusParams contains all the parameters to send to the API 
 */
 type GetOnRampTransactionStatusParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.GetOnRampTransactionStatusRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *GetOnRampTransactionStatusParams) WithDefaults() *GetOnRampTransactionS
 //
 // All values with no default are reset to their zero value.
 func (o *GetOnRampTransactionStatusParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get on ramp transaction status params
@@ -128,6 +128,21 @@ func (o *GetOnRampTransactionStatusParams) WithBody(body *models.GetOnRampTransa
 // SetBody adds the body to the get on ramp transaction status params
 func (o *GetOnRampTransactionStatusParams) SetBody(body *models.GetOnRampTransactionStatusRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the get on ramp transaction status operation
+func (o *GetOnRampTransactionStatusParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

@@ -63,7 +63,8 @@ CreateOauth2CredentialParams contains all the parameters to send to the API endp
 */
 type CreateOauth2CredentialParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateOauth2CredentialRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateOauth2CredentialParams) WithDefaults() *CreateOauth2CredentialPar
 //
 // All values with no default are reset to their zero value.
 func (o *CreateOauth2CredentialParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create oauth2 credential params
@@ -128,6 +128,21 @@ func (o *CreateOauth2CredentialParams) WithBody(body *models.CreateOauth2Credent
 // SetBody adds the body to the create oauth2 credential params
 func (o *CreateOauth2CredentialParams) SetBody(body *models.CreateOauth2CredentialRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create oauth2 credential operation
+func (o *CreateOauth2CredentialParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

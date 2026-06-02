@@ -63,7 +63,8 @@ InitImportWalletParams contains all the parameters to send to the API endpoint
 */
 type InitImportWalletParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.InitImportWalletRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *InitImportWalletParams) WithDefaults() *InitImportWalletParams {
 //
 // All values with no default are reset to their zero value.
 func (o *InitImportWalletParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the init import wallet params
@@ -128,6 +128,21 @@ func (o *InitImportWalletParams) WithBody(body *models.InitImportWalletRequest) 
 // SetBody adds the body to the init import wallet params
 func (o *InitImportWalletParams) SetBody(body *models.InitImportWalletRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the init import wallet operation
+func (o *InitImportWalletParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

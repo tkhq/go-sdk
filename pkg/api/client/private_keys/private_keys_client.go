@@ -53,9 +53,11 @@ CreatePrivateKeys creates private keys
 Create new private keys.
 */
 func (a *Client) CreatePrivateKeys(params *CreatePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePrivateKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePrivateKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "CreatePrivateKeys",
@@ -94,9 +96,11 @@ DeletePrivateKeys deletes private keys
 Delete private keys for an organization.
 */
 func (a *Client) DeletePrivateKeys(params *DeletePrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePrivateKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeletePrivateKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "DeletePrivateKeys",
@@ -135,9 +139,11 @@ ExportPrivateKey exports private key
 Export a private key.
 */
 func (a *Client) ExportPrivateKey(params *ExportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ExportPrivateKeyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewExportPrivateKeyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ExportPrivateKey",
@@ -176,9 +182,11 @@ GetPrivateKey gets private key
 Get details about a private key.
 */
 func (a *Client) GetPrivateKey(params *GetPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPrivateKeyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetPrivateKey",
@@ -217,9 +225,11 @@ GetPrivateKeys lists private keys
 List all private keys within an organization.
 */
 func (a *Client) GetPrivateKeys(params *GetPrivateKeysParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPrivateKeysOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPrivateKeysParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "GetPrivateKeys",
@@ -258,9 +268,11 @@ ImportPrivateKey imports private key
 Import a private key.
 */
 func (a *Client) ImportPrivateKey(params *ImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ImportPrivateKeyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewImportPrivateKeyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "ImportPrivateKey",
@@ -299,9 +311,11 @@ InitImportPrivateKey inits import private key
 Initialize a new private key import.
 */
 func (a *Client) InitImportPrivateKey(params *InitImportPrivateKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*InitImportPrivateKeyOK, error) {
-	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewInitImportPrivateKeyParams()
+	}
+	if err := params.Validate(a.formats); err != nil {
+		return nil, err
 	}
 	op := &runtime.ClientOperation{
 		ID:                 "InitImportPrivateKey",

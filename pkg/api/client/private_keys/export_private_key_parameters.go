@@ -63,7 +63,8 @@ ExportPrivateKeyParams contains all the parameters to send to the API endpoint
 */
 type ExportPrivateKeyParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.ExportPrivateKeyRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *ExportPrivateKeyParams) WithDefaults() *ExportPrivateKeyParams {
 //
 // All values with no default are reset to their zero value.
 func (o *ExportPrivateKeyParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the export private key params
@@ -128,6 +128,21 @@ func (o *ExportPrivateKeyParams) WithBody(body *models.ExportPrivateKeyRequest) 
 // SetBody adds the body to the export private key params
 func (o *ExportPrivateKeyParams) SetBody(body *models.ExportPrivateKeyRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the export private key operation
+func (o *ExportPrivateKeyParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request

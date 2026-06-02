@@ -63,7 +63,8 @@ CreateWalletParams contains all the parameters to send to the API endpoint
 */
 type CreateWalletParams struct {
 
-	// Body.
+	/* Body
+	 */
 	Body *models.CreateWalletRequest
 
 	timeout    time.Duration
@@ -83,7 +84,6 @@ func (o *CreateWalletParams) WithDefaults() *CreateWalletParams {
 //
 // All values with no default are reset to their zero value.
 func (o *CreateWalletParams) SetDefaults() {
-	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create wallet params
@@ -128,6 +128,21 @@ func (o *CreateWalletParams) WithBody(body *models.CreateWalletRequest) *CreateW
 // SetBody adds the body to the create wallet params
 func (o *CreateWalletParams) SetBody(body *models.CreateWalletRequest) {
 	o.Body = body
+}
+
+// Validate validates the params of the create wallet operation
+func (o *CreateWalletParams) Validate(formats strfmt.Registry) error {
+	var res []error
+	if o.Body != nil {
+		if err := o.Body.Validate(formats); err != nil {
+			res = append(res, err)
+		}
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
 }
 
 // WriteToRequest writes these params to a swagger request
