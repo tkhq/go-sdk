@@ -1,189 +1,151 @@
-// Package main demonstrates the delegated access setup
+// Package main demonstrates the delegated access setup.
 // For details check our docs https://docs.turnkey.com/concepts/policies/delegated-access
 package main
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/organizations"
-	"github.com/tkhq/go-sdk/pkg/api/client/policies"
-	"github.com/tkhq/go-sdk/pkg/api/models"
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/util"
+	"github.com/tkhq/go-sdk/crypto"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
+//nolint:gocyclo
 func main() {
+	ctx := context.Background()
 
-	// Parent organization API key used by the client to create the sub-organization
-	apiKey, err := apikey.FromTurnkeyPrivateKey("<private_key_here>", apikey.SchemeP256)
-	if err != nil {
-		log.Fatal("creating API key: %w", err)
+	apiPrivateKey := os.Getenv("TURNKEY_API_PRIVATE_KEY")
+	if apiPrivateKey == "" {
+		log.Fatal("TURNKEY_API_PRIVATE_KEY is required")
+	}
+	organizationID := os.Getenv("TURNKEY_ORGANIZATION_ID")
+	if organizationID == "" {
+		log.Fatal("TURNKEY_ORGANIZATION_ID is required")
+	}
+	delegatedUserEmail := os.Getenv("TURNKEY_DELEGATED_USER_EMAIL")
+	if delegatedUserEmail == "" {
+		log.Fatal("TURNKEY_DELEGATED_USER_EMAIL is required")
+	}
+	endUserEmail := os.Getenv("TURNKEY_END_USER_EMAIL")
+	if endUserEmail == "" {
+		log.Fatal("TURNKEY_END_USER_EMAIL is required")
+	}
+	recipientAddress := os.Getenv("TURNKEY_RECIPIENT_ADDRESS")
+	if recipientAddress == "" {
+		log.Fatal("TURNKEY_RECIPIENT_ADDRESS is required")
 	}
 
-	client, err := sdk.New(sdk.WithAPIKey(apiKey))
+	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
 	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+		log.Fatal("failed to create stamper:", err)
 	}
 
-	// Generate a new API keypair for the delegated user account
-	// If you genarate the keys outside of this script just assign them to delegatedPrivateKey and delegatedPublicKey variables
+	client, err := turnkey.NewClient(stamper, organizationID)
+	if err != nil {
+		log.Fatal("failed to create Turnkey client:", err)
+	}
+
 	privKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
-		panic(err)
+		log.Fatal("generating delegated API key:", err)
 	}
+	delegatedPrivateKey := crypto.EncodePrivateECDSAKey(privKey)
+	delegatedPublicKey := crypto.EncodePublicECDSAKey(&privKey.PublicKey)
 
-	// Private key bytes (32 bytes, padded if needed)
-	privBytes := privKey.D.Bytes()
-	if len(privBytes) < 32 {
-		padded := make([]byte, 32)
-		copy(padded[32-len(privBytes):], privBytes)
-		privBytes = padded
-	}
+	fmt.Println("P-256 Private:", delegatedPrivateKey)
+	fmt.Println("P-256 Public:", delegatedPublicKey)
 
-	// Public key bytes (compressed form: 0x02 or 0x03 + X)
-	pubKey := compressPubkey(&privKey.PublicKey)
-
-	// Output in hex
-	fmt.Println("🔑 P-256 Private:", hex.EncodeToString(privBytes))
-	fmt.Println("🔓 P-256 Public:", hex.EncodeToString(pubKey))
-
-	//API keypair used by the delegated user
-	delegatedPrivateKey := hex.EncodeToString(privBytes)
-	delegatedPublicKey := hex.EncodeToString(pubKey)
-
-	var quorumThreshold int32 = 1
-
-	createSubOrganizationParams := organizations.NewCreateSubOrganizationParams().WithBody(&models.CreateSubOrganizationRequest{
-		OrganizationID: StringPointer("<parent_org_id>"), // parent organization id
-		Parameters: &models.CreateSubOrganizationIntentV7{
-			SubOrganizationName: StringPointer("Sub Org - With Delegated"),
-			RootUsers: []*models.RootUserParamsV4{
-				{
-					UserName:  StringPointer("Delegated User"),
-					UserEmail: StringPointer("<email_address>"),
-					APIKeys: []*models.APIKeyParamsV2{
-						{
-							APIKeyName: StringPointer("Delegated - API Key"),
-							CurveType:  models.APIKeyCurveP256.Pointer(),
-							PublicKey:  &delegatedPublicKey,
-						},
-					},
-					Authenticators: []*models.AuthenticatorParamsV2{},
-					OauthProviders: []*models.OauthProviderParams{},
-				},
-				{
-					UserName:       StringPointer("End User"),
-					UserEmail:      StringPointer("<email_address>"),
-					APIKeys:        []*models.APIKeyParamsV2{},
-					Authenticators: []*models.AuthenticatorParamsV2{},
-					OauthProviders: []*models.OauthProviderParams{},
-				},
-			},
-			RootQuorumThreshold: &quorumThreshold,
-			Wallet: &models.WalletParams{
-				WalletName: StringPointer("Default ETH Wallet"),
-				Accounts: []*models.WalletAccountParams{
+	createSubOrganizationResult, err := client.CreateSubOrganization(ctx, turnkey.CreateSubOrganizationRequest{
+		OrganizationID:      organizationID,
+		SubOrganizationName: "Sub Org - With Delegated",
+		RootQuorumThreshold: 1,
+		VerificationToken:   nil,
+		ClientSignature:     nil,
+		RootUsers: []turnkey.RootUserParamsV5{
+			{
+				UserName:  "Delegated User",
+				UserEmail: &delegatedUserEmail,
+				APIKeys: []turnkey.APIKeyParamsV2{
 					{
-						AddressFormat: models.AddressFormatEthereum.Pointer(),
-						Curve:         models.CurveSecp256k1.Pointer(),
-						Path:          StringPointer("m/44'/60'/0'/0/0"),
-						PathFormat:    models.PathFormatBip32.Pointer(),
+						APIKeyName: "Delegated - API Key",
+						CurveType:  turnkey.APIKeyCurveP256,
+						PublicKey:  delegatedPublicKey,
 					},
+				},
+				Authenticators: []turnkey.AuthenticatorParamsV2{},
+				OAuthProviders: []turnkey.OAuthProviderParamsV2{},
+			},
+			{
+				UserName:       "End User",
+				UserEmail:      &endUserEmail,
+				APIKeys:        []turnkey.APIKeyParamsV2{},
+				Authenticators: []turnkey.AuthenticatorParamsV2{},
+				OAuthProviders: []turnkey.OAuthProviderParamsV2{},
+			},
+		},
+		Wallet: &turnkey.WalletParams{
+			WalletName: "Default ETH Wallet",
+			Accounts: []turnkey.WalletAccountParams{
+				{
+					AddressFormat: turnkey.AddressFormatEthereum,
+					Curve:         turnkey.CurveSecp256K1,
+					Path:          "m/44'/60'/0'/0/0",
+					PathFormat:    turnkey.PathFormatBip32,
 				},
 			},
 		},
-		TimestampMs: util.RequestTimestamp(),
-		Type:        StringPointer(string(models.ActivityTypeCreateSubOrganizationV7)),
 	})
-
-	resp, err := client.V0().Organizations.CreateSubOrganization(createSubOrganizationParams, client.Authenticator)
 	if err != nil {
-		log.Fatal("Create sub-organization request failed:", err)
+		log.Fatal("create sub-organization failed:", err)
+	}
+	if len(createSubOrganizationResult.RootUserIds) < 2 {
+		log.Fatalf("create sub-organization result included %d root user id(s), expected 2", len(createSubOrganizationResult.RootUserIds))
 	}
 
-	fmt.Printf("Sub-organization id : %v\n", *resp.Payload.Activity.Result.CreateSubOrganizationResultV7.SubOrganizationID)
-	subOrganizationId := *resp.Payload.Activity.Result.CreateSubOrganizationResultV7.SubOrganizationID
+	subOrganizationID := createSubOrganizationResult.SubOrganizationID
+	fmt.Printf("Sub-organization id: %s\n", subOrganizationID)
 
-	// Initializing a new Turnkey client used by the Delegated account activities
-	// Notice the subOrganizationId created above
-	delegatedApiKey, err := apikey.FromTurnkeyPrivateKey(delegatedPrivateKey, apikey.SchemeP256)
+	delegatedStamper, err := turnkey.NewAPIKeyStamper(delegatedPrivateKey)
 	if err != nil {
-		log.Fatal("creating API key: %w", err)
+		log.Fatal("failed to create delegated stamper:", err)
 	}
 
-	delegatedClient, err := sdk.New(sdk.WithAPIKey(delegatedApiKey))
+	delegatedClient, err := turnkey.NewClient(delegatedStamper, subOrganizationID)
 	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+		log.Fatal("failed to create delegated SDK client:", err)
 	}
 
-	// Creating a policy for the Delegated account
-	delegatedUserId := resp.Payload.Activity.Result.CreateSubOrganizationResultV7.RootUserIds[0]
-	endUserId := resp.Payload.Activity.Result.CreateSubOrganizationResultV7.RootUserIds[1]
+	delegatedUserID := createSubOrganizationResult.RootUserIds[0]
+	endUserID := createSubOrganizationResult.RootUserIds[1]
 
-	recipientAddress := "<ethereum_address>"
-
-	createPolicyParams := policies.NewCreatePolicyParams().WithBody(&models.CreatePolicyRequest{
-		OrganizationID: &subOrganizationId,
-		TimestampMs:    util.RequestTimestamp(),
-		Type:           (*string)(models.ActivityTypeCreatePolicyV3.Pointer()),
-		Parameters: &models.CreatePolicyIntentV3{
-			PolicyName: StringPointer("Allow Delegated Account to sign transactions to specific address"),
-			Effect:     models.EffectAllow.Pointer(),
-			Condition:  StringPointer(fmt.Sprintf("eth.tx.to == '%s'", recipientAddress)),
-			Consensus:  StringPointer(fmt.Sprintf("approvers.any(user, user.id == '%s')", delegatedUserId)),
-			Notes:      StringPointer("Policy notes"),
-		},
+	createPolicyResult, err := delegatedClient.CreatePolicy(ctx, turnkey.CreatePolicyRequest{
+		OrganizationID: subOrganizationID,
+		PolicyName:     "Allow Delegated Account to sign transactions to specific address",
+		Effect:         turnkey.EffectAllow,
+		Condition:      ptr(fmt.Sprintf("eth.tx.to == '%s'", recipientAddress)),
+		Consensus:      ptr(fmt.Sprintf("approvers.any(user, user.id == '%s')", delegatedUserID)),
+		Notes:          "Policy notes",
 	})
-
-	createPolicyReply, err := client.V0().Policies.CreatePolicy(createPolicyParams, delegatedClient.Authenticator)
 	if err != nil {
-		log.Fatal("Create policy request failed:", err)
+		log.Fatal("create policy failed:", err)
 	}
+	fmt.Printf("New policy created: %s\n", createPolicyResult.PolicyID)
 
-	fmt.Printf("New policy created!: %v\n", *createPolicyReply.Payload.Activity.Result.CreatePolicyResult.PolicyID)
-
-	// Remove the Delegated user from the root quorum
-	updateRootQuorumParams := organizations.NewUpdateRootQuorumParams()
-	updateRootQuorumParams.SetBody(&models.UpdateRootQuorumRequest{
-		OrganizationID: &subOrganizationId,
-		Parameters: &models.UpdateRootQuorumIntent{
-			UserIds:   []string{endUserId}, // Update to 1/1: only the end user is root
-			Threshold: &quorumThreshold,
-		},
-		TimestampMs: util.RequestTimestamp(),
-		Type:        StringPointer(string(models.ActivityTypeUpdateRootQuorum)),
-	})
-
-	updateRootQuorumReply, err := client.V0().Organizations.UpdateRootQuorum(updateRootQuorumParams, delegatedClient.Authenticator)
-	if err != nil {
-		log.Fatal("Update root quorum request failed:", err)
+	if _, err := delegatedClient.UpdateRootQuorum(ctx, turnkey.UpdateRootQuorumRequest{
+		OrganizationID: subOrganizationID,
+		UserIds:        []string{endUserID},
+		Threshold:      1,
+	}); err != nil {
+		log.Fatal("update root quorum failed:", err)
 	}
-	fmt.Printf("Root Quorum updated! : %v\n", *updateRootQuorumReply.Payload.Activity.Status)
-
+	fmt.Println("Root quorum updated")
 }
 
-// StringPointer returns a pointer to a string
-func StringPointer(s string) *string {
-	return &s
-}
-
-// compressPubkey takes an *ecdsa.PublicKey and returns the compressed form
-func compressPubkey(pub *ecdsa.PublicKey) []byte {
-	x := pub.X.Bytes()
-	if len(x) < 32 {
-		padded := make([]byte, 32)
-		copy(padded[32-len(x):], x)
-		x = padded
-	}
-	prefix := byte(0x02)
-	if pub.Y.Bit(0) == 1 {
-		prefix = 0x03
-	}
-	return append([]byte{prefix}, x...)
+func ptr[T any](value T) *T {
+	return &value
 }

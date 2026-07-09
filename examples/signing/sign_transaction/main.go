@@ -1,45 +1,53 @@
-// Package main demonstrates an API client which signs a transaction with a private key ID or wallet account.
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log"
-	"strconv"
-	"time"
+	"os"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/signing"
-	"github.com/tkhq/go-sdk/pkg/api/models"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
 func main() {
-	// NB: make sure to create and register an API key, first.
-	client, err := sdk.New(sdk.WithAPIKeyName("default"))
+	apiPrivateKey := os.Getenv("TURNKEY_API_PRIVATE_KEY")
+	if apiPrivateKey == "" {
+		log.Fatal("TURNKEY_API_PRIVATE_KEY is required")
+	}
+	organizationID := os.Getenv("TURNKEY_ORGANIZATION_ID")
+	if organizationID == "" {
+		log.Fatal("TURNKEY_ORGANIZATION_ID is required")
+	}
+	signWith := os.Getenv("TURNKEY_SIGN_WITH") // wallet address or key ID
+	if signWith == "" {
+		log.Fatal("TURNKEY_SIGN_WITH is required")
+	}
+	// EIP-1559 unsigned transaction sending 0 ETH to the zero address on mainnet.
+	unsignedTx := "02e8018084773594008506fc23ac0082520894e2e30c19e1a60db94926e9763074be21e7e4402a8080c0"
+
+	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
 	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+		log.Fatal("failed to create stamper:", err)
 	}
 
-	timestamp := time.Now().UnixMilli()
-	timestampString := strconv.FormatInt(timestamp, 10)
+	client, err := turnkey.NewClient(stamper, organizationID)
+	if err != nil {
+		log.Fatal("failed to create Turnkey client:", err)
+	}
 
-	var signWith string            // can be either a private key ID or a wallet account address
-	var unsignedTransaction string // no 0x prefix necessary
-
-	pkParams := signing.NewSignTransactionParams().WithBody(&models.SignTransactionRequest{
-		OrganizationID: client.DefaultOrganization(),
-		TimestampMs:    &timestampString,
-		Parameters: &models.SignTransactionIntentV2{
-			SignWith:            &signWith,
-			Type:                models.TransactionTypeEthereum.Pointer(),
-			UnsignedTransaction: &unsignedTransaction,
-		},
-		Type: (*string)(models.ActivityTypeSignTransactionV2.Pointer()),
+	result, err := client.SignTransaction(context.Background(), turnkey.SignTransactionRequest{
+		SignWith:            signWith,
+		TypeValue:           turnkey.TransactionTypeEthereum,
+		UnsignedTransaction: unsignedTx,
 	})
-
-	signResp, err := client.V0().Signing.SignTransaction(pkParams, client.Authenticator)
 	if err != nil {
-		log.Fatal("failed to make SignTransaction request:", err)
+		var reqErr *turnkey.RequestError
+		if errors.As(err, &reqErr) {
+			log.Fatalf("failed to sign transaction (status=%d): %s", reqErr.StatusCode, reqErr.Body)
+		}
+		log.Fatal("failed to sign transaction:", err)
 	}
 
-	fmt.Printf("Signed tx: %v\n", *signResp.Payload.Activity.Result.SignTransactionResult.SignedTransaction)
+	fmt.Printf("Signed transaction: %s\n", result.SignedTransaction)
 }

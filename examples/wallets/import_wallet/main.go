@@ -1,175 +1,87 @@
-// Package main demonstrates a wallet import from menmonic
-//
-// Usage:
-//
-//	go run main.go -mnemonic "your mnemonic phrase" -org-id "org_id" -user-id "user_id" -api-private-key "api_private_key"
+// Package main demonstrates importing a wallet from a mnemonic phrase.
 package main
 
 import (
-	"encoding/json"
-	"flag"
+	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/wallets"
-	"github.com/tkhq/go-sdk/pkg/api/models"
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/enclave_encrypt"
-	"github.com/tkhq/go-sdk/pkg/encryptionkey"
-	"github.com/tkhq/go-sdk/pkg/util"
+	"github.com/tkhq/go-sdk/crypto"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
-
-var (
-	mnemonic       string
-	organizationID string
-	userID         string
-	apiPrivateKey  string
-)
-
-func init() {
-	flag.StringVar(&mnemonic, "mnemonic", "", "wallet mnemonic to import")
-	flag.StringVar(&organizationID, "org-id", "", "organization ID for the wallet import")
-	flag.StringVar(&userID, "user-id", "", "user ID within the organization")
-	flag.StringVar(&apiPrivateKey, "api-private-key", "", "Turnkey API private key for authentication")
-}
-
-// setupEncryptionClient sets up the encryption key and enclave encrypt client
-func setupEncryptionClient(userId, organizationId string) (*enclave_encrypt.EnclaveEncryptClient, error) {
-	encryptionKey, err := encryptionkey.New(userId, organizationId)
-	if err != nil {
-		return nil, fmt.Errorf("creating encryption key: %w", err)
-	}
-
-	signerKey, err := util.HexToPublicKey(encryptionkey.SignerProductionPublicKey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to convert the public key: %w", err)
-	}
-
-	tkPrivateKey := encryptionKey.GetPrivateKey()
-	kemPrivateKey, err := encryptionkey.DecodeTurnkeyPrivateKey(tkPrivateKey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode encryption private key: %w", err)
-	}
-
-	encryptClient, err := enclave_encrypt.NewEnclaveEncryptClientFromTargetKey(signerKey, *kemPrivateKey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to setup enclave encrypt client: %w", err)
-	}
-
-	return encryptClient, nil
-}
-
-// initWalletImport initializes the wallet import and returns the import bundle
-func initWalletImport(client *sdk.Client, organizationId, userId string) (string, error) {
-	initImportParams := wallets.NewInitImportWalletParams().WithBody(&models.InitImportWalletRequest{
-		OrganizationID: &organizationId,
-		Parameters: &models.InitImportWalletIntent{
-			UserID: &userId,
-		},
-		TimestampMs: util.RequestTimestamp(),
-		Type:        (*string)(models.ActivityTypeInitImportWallet.Pointer()),
-	})
-
-	reply, err := client.V0().Wallets.InitImportWallet(initImportParams, client.Authenticator)
-	if err != nil {
-		return "", fmt.Errorf("init import request failed: %w", err)
-	}
-
-	return *reply.Payload.Activity.Result.InitImportWalletResult.ImportBundle, nil
-}
-
-// encryptMnemonic encrypts the mnemonic and returns the encrypted bundle as a string
-func encryptMnemonic(encryptClient *enclave_encrypt.EnclaveEncryptClient, mnemonic, importBundle, organizationId, userId string) (string, error) {
-	clientSendMsg, err := encryptClient.Encrypt([]byte(mnemonic), []byte(importBundle), organizationId, userId)
-	if err != nil {
-		return "", fmt.Errorf("unable to encrypt wallet to target: %w", err)
-	}
-
-	encryptedBundle, err := json.Marshal(clientSendMsg)
-	if err != nil {
-		return "", fmt.Errorf("failed to encrypt bundle: %w", err)
-	}
-
-	return string(encryptedBundle), nil
-}
 
 func main() {
-	flag.Parse()
+	apiPrivateKey := mustEnv("TURNKEY_API_PRIVATE_KEY")
+	organizationID := mustEnv("TURNKEY_ORGANIZATION_ID")
+	mnemonic := mustEnv("TURNKEY_MNEMONIC")
 
-	// Validate required flags
-	if mnemonic == "" || organizationID == "" || userID == "" || apiPrivateKey == "" {
-		log.Println("Missing required flags: -mnemonic, -org-id, -user-id, and -api-private-key are required")
-		flag.PrintDefaults()
-		os.Exit(1)
+	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
+	if err != nil {
+		log.Fatal("failed to create stamper:", err)
 	}
 
-	if err := run(); err != nil {
-		log.Fatal(err)
+	client, err := turnkey.NewClient(stamper, organizationID)
+	if err != nil {
+		log.Fatal("failed to create Turnkey client:", err)
 	}
+
+	ctx := context.Background()
+
+	whoami, err := client.GetWhoami(ctx, turnkey.GetWhoamiRequest{})
+	if err != nil {
+		log.Fatal("failed to get whoami:", err)
+	}
+
+	initResult, err := client.InitImportWallet(ctx, turnkey.InitImportWalletRequest{
+		UserID: whoami.UserID,
+	})
+	if err != nil {
+		fatalRequestError(err, "init import wallet")
+	}
+
+	encryptedBundle, err := crypto.EncryptWalletToBundle(mnemonic, initResult.ImportBundle, organizationID, whoami.UserID)
+	if err != nil {
+		log.Fatal("failed to encrypt mnemonic:", err)
+	}
+
+	walletName := fmt.Sprintf("Imported Wallet %d", time.Now().UnixMilli())
+
+	importResult, err := client.ImportWallet(ctx, turnkey.ImportWalletRequest{
+		UserID:          whoami.UserID,
+		WalletName:      walletName,
+		EncryptedBundle: encryptedBundle,
+		Accounts: []turnkey.WalletAccountParams{
+			{
+				AddressFormat: turnkey.AddressFormatEthereum,
+				Curve:         turnkey.CurveSecp256K1,
+				Path:          "m/44'/60'/0'/0/0",
+				PathFormat:    turnkey.PathFormatBip32,
+			},
+		},
+	})
+	if err != nil {
+		fatalRequestError(err, "import wallet")
+	}
+
+	fmt.Printf("Wallet ID: %s\n", importResult.WalletID)
+	fmt.Printf("Addresses: %v\n", importResult.Addresses)
 }
 
-func run() error {
-	// API key used by the client
-	apiKey, err := apikey.FromTurnkeyPrivateKey(apiPrivateKey, apikey.SchemeP256)
-	if err != nil {
-		return fmt.Errorf("creating API key: %w", err)
+func mustEnv(key string) string {
+	v := os.Getenv(key)
+	if v == "" {
+		log.Fatalf("%s is required", key)
 	}
+	return v
+}
 
-	client, err := sdk.New(sdk.WithAPIKey(apiKey))
-	if err != nil {
-		return fmt.Errorf("creating SDK client: %w", err)
+func fatalRequestError(err error, action string) {
+	var reqErr *turnkey.RequestError
+	if errors.As(err, &reqErr) {
+		log.Fatalf("failed to %s (status=%d): %s", action, reqErr.StatusCode, reqErr.Body)
 	}
-
-	encryptClient, err := setupEncryptionClient(userID, organizationID)
-	if err != nil {
-		return err
-	}
-
-	// Init import activity, this produces an import bundle, containing a public key and signature.
-	// These artifacts will be used in the next step to ensure that key material is only accessible by Turnkey, and cannot be extracted by any man-in-the-middle (MITM)
-	importBundle, err := initWalletImport(client, organizationID, userID)
-	if err != nil {
-		return err
-	}
-
-	encryptedBundle, err := encryptMnemonic(encryptClient, mnemonic, importBundle, organizationID, userID)
-	if err != nil {
-		return err
-	}
-
-	// For other HD wallet paths see https://docs.turnkey.com/concepts/wallets#hd-wallet-default-paths
-	path := "m/44'/60'/1'/0/0"
-
-	// Generate a unique name with timestamp
-	walletName := fmt.Sprintf("Test Wallet %s", *util.RequestTimestamp())
-
-	// Perform import activity
-	importParams := wallets.NewImportWalletParams().WithBody(&models.ImportWalletRequest{
-		OrganizationID: &organizationID,
-		Parameters: &models.ImportWalletIntent{
-			UserID: &userID,
-			Accounts: []*models.WalletAccountParams{
-				{
-					AddressFormat: models.AddressFormatSolana.Pointer(),
-					Curve:         models.CurveEd25519.Pointer(),
-					Path:          util.StringPointer(path),
-					PathFormat:    models.PathFormatBip32.Pointer(),
-				},
-			},
-			EncryptedBundle: util.StringPointer(encryptedBundle),
-			WalletName:      util.StringPointer(walletName),
-		},
-		TimestampMs: util.RequestTimestamp(),
-		Type:        (*string)(models.ActivityTypeImportWallet.Pointer()),
-	})
-
-	importReply, err := client.V0().Wallets.ImportWallet(importParams, client.Authenticator)
-	if err != nil {
-		return fmt.Errorf("import wallet request failed: %w", err)
-	}
-
-	fmt.Println("Imported walletId:", *importReply.Payload.Activity.Result.ImportWalletResult.WalletID)
-	return nil
+	log.Fatalf("failed to %s: %v", action, err)
 }

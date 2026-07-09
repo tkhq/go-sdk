@@ -2,29 +2,38 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/sessions"
-	"github.com/tkhq/go-sdk/pkg/api/models"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
 func main() {
-	// NB: make sure to create and register an API key, first.
-	client, err := sdk.New(sdk.WithAPIKeyName("default"))
-	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+	apiPrivateKey := os.Getenv("TURNKEY_API_PRIVATE_KEY")
+	if apiPrivateKey == "" {
+		log.Fatal("TURNKEY_API_PRIVATE_KEY is required")
+	}
+	organizationID := os.Getenv("TURNKEY_ORGANIZATION_ID")
+	if organizationID == "" {
+		log.Fatal("TURNKEY_ORGANIZATION_ID is required")
 	}
 
-	p := sessions.NewGetWhoamiParams().WithBody(&models.GetWhoamiRequest{
-		OrganizationID: client.DefaultOrganization(),
-	})
-
-	resp, err := client.V0().Sessions.GetWhoami(p, client.Authenticator)
+	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
 	if err != nil {
-		log.Fatal("failed to make WhoAmI request:", err)
+		log.Fatal("failed to create stamper:", err)
 	}
 
-	fmt.Println("UserID: ", *resp.Payload.UserID)
+	client, err := turnkey.NewClient(stamper, organizationID)
+	if err != nil {
+		log.Fatal("failed to create Turnkey client:", err)
+	}
+
+	resp, err := client.GetWhoami(context.Background(), turnkey.GetWhoamiRequest{})
+	if err != nil {
+		log.Fatal("failed to get whoami:", err)
+	}
+
+	fmt.Printf("UserID: %s\n", resp.UserID)
 }

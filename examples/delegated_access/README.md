@@ -8,20 +8,25 @@ A sample script that quickly configures a Delegated Access setup (see https://do
 
 **Note:** The end user is created without any authenticators, it will need to be updated during the sign-up flow
 
-### 1/ Setting up Turnkey
+### 1/ Setup
 
-The first step is to set up your Turnkey organization and account. By following the [Quickstart](https://docs.turnkey.com/getting-started/quickstart) guide, you should have:
-
-- A public/private API key pair for Turnkey parent organization
-- An organization ID
-
-Once you've gathered these values, update them in the main.go script, you'll see placeholders like this `<parent_org_id>`.
+Follow the [Quickstart](https://docs.turnkey.com/getting-started/quickstart) to get your API key and organization ID.
 
 ### 2/ Running the script
 
+Copy `.env.example` to `.env` and fill in the values:
+
 ```bash
-go run main.go
+cp examples/delegated_access/.env.example examples/delegated_access/.env
 ```
+
+Then run from the repo root:
+
+```bash
+set -a && source examples/delegated_access/.env && set +a && go run ./examples/delegated_access
+```
+
+`TURNKEY_RECIPIENT_ADDRESS` is the Ethereum address the delegated account will be allowed to sign transactions to.
 
 ### 3/ Testing the Delegated account permissions
 
