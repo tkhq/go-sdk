@@ -1,238 +1,249 @@
-# Turnkey GO SDK
-[![GoDocs](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/tkhq/go-sdk) 
+# Turnkey Go SDK
+[![GoDocs](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/tkhq/go-sdk/v2)
 
-The Turnkey Go SDK is an early tool for interacting with the Turnkey API.
+The Turnkey Go SDK is the official Go client for interacting with the Turnkey API.
 
-There is much work to be done, but it is completly usable in its current form.  The main thing to keep in mind is that each requests needs to be manually provided the client.Authenticator.
+> [!WARNING]
+>
+>  **Migrating from v1?** Update `github.com/tkhq/go-sdk` to the new module path:
+>
+> - `github.com/tkhq/go-sdk/v2` — API client and types
+> 
+> The v2 module will automatically pull in the required crypto and encoding dependencies 
+> - `github.com/tkhq/go-sdk/crypto` 
+> -  `github.com/tkhq/go-sdk/encoding`
+> 
 
-## Usage
+## Module Structure
 
-### API key
+The SDK has three importable Go modules:
+(one for the core API client and one for each major feature area)
 
-In order to use the SDK, you will need an API key. When creating API keys, the private key never leaves the local system, but the public key must be registered to your Turnkey account.
+| Module | Import Path | Purpose |
+|--------|-------------|---------|
+| Root | `github.com/tkhq/go-sdk/v2` | API client, generated request/response types |
+| Crypto | `github.com/tkhq/go-sdk/crypto` | API key generation, signing, encryption, attestation |
+| Encoding | `github.com/tkhq/go-sdk/encoding` | Hex, Base58, and JSON encoding utilities |
 
-The easiest way to manage your API keys is with the [Turnkey CLI](https://github.com/tkhq/tkcli), but you can also create one using this SDK. See [this example](./examples/apikey/).
+```
+go-sdk/
+├── client.go               # HTTP client 
+├── client_gen.go           # generated API methods
+├── client_extensions.go    # hand-written client helpers
+├── types_gen.go            # generated request/response types
+├── types_extensions.go     # hand-written type helpers
+├── stamper.go              # request signing (stamp) implementation
+├── crypto/                 # key generation, signing, encryption, attestation
+│   ├── apikey.go
+│   ├── apikey_ecdsa.go
+│   ├── apikey_ed25519.go
+│   ├── constants.go
+│   ├── enclave.go
+│   ├── encryptionkey.go
+│   ├── hpke.go
+│   ├── store.go
+│   └── verify.go
+├── encoding/               # hex, base58, JSON utilities
+│   ├── base58.go
+│   ├── hex.go
+│   └── json.go
+├── codegen/                # code generation tooling
+│   ├── main.go
+│   ├── generators/         # per-file code generators
+│   └── inputs/             # activities.json + swagger specs
+└── examples/
+    ├── apikey/
+    ├── delegated_access/
+    ├── otp/
+    ├── signing/
+    ├── wallets/
+    └── whoami/
+```
 
-### Example
+## Documentation
+
+- [Crypto README](./crypto/README.md)
+- [Encoding README](./encoding/README.md)
+
+## Installation
+
+```bash
+go get github.com/tkhq/go-sdk/v2
+```
+
+The root v2 module pulls in the crypto and encoding modules it needs. If you
+want to use those modules directly, install them explicitly:
+
+```bash
+go get github.com/tkhq/go-sdk/crypto
+go get github.com/tkhq/go-sdk/encoding
+```
+
+## Example
+
+In order to use the SDK, you first need to create and register an API key. When creating API keys, the private key never leaves the local system, but the public key must be registered to your Turnkey account.
+
+The easiest way to manage your API keys is with the [Turnkey CLI](https://github.com/tkhq/tkcli), but you can also create one using this SDK. See [this example](./examples/apikey/generate.go).
 
 ```go
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/sessions"
-	"github.com/tkhq/go-sdk/pkg/api/models"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
 func main() {
-	// NB: make sure to create and register an API key, first.
-	client, err := sdk.New("") // your local API key name
+	// NB: make sure to create and register an API key first.
+	stamper, err := turnkey.NewAPIKeyStamper(os.Getenv("TURNKEY_API_PRIVATE_KEY"))
 	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+		log.Fatal("failed to create stamper:", err)
 	}
 
-	p := sessions.NewGetWhoamiParams().WithBody(&models.GetWhoamiRequest{
-		OrganizationID: client.DefaultOrganization(),
-	})
-
-	resp, err := client.V0().Sessions.GetWhoami(p, client.Authenticator)
+	client, err := turnkey.NewClient(stamper, os.Getenv("TURNKEY_ORGANIZATION_ID"))
 	if err != nil {
-		log.Fatal("failed to make WhoAmI request:", err)
+		log.Fatal("failed to create SDK client:", err)
 	}
 
-	fmt.Println("UserID: ", *resp.Payload.UserID)
+	resp, err := client.GetWhoami(context.Background(), turnkey.GetWhoamiRequest{})
+	if err != nil {
+		log.Fatal("failed to get whoami:", err)
+	}
+
+	fmt.Printf("UserID: %s\n", resp.UserID)
 }
 ```
 
-### Error Handling
+## Custom Stampers
 
-By default, the SDK will wrap Turnkey API error responses inside the returned error.
-You can inspect the raw API body by type-asserting the error to `*runtime.APIError` and reading the response body:
+`NewAPIKeyStamper` is the built-in stamper and covers most use cases. If you need signing to happen elsewhere — a hardware security module, AWS KMS, or a remote signing service — implement the `Stamper` interface and pass it to `NewClient` identically:
+
 ```go
-if err != nil {
-  // log the high-level error using your preferred logger
-  log.Printf("failed to make request: %v", err)
-
-  // extract and inspect the raw API response
-  if apiErr, ok := err.(*runtime.APIError); ok && apiErr.Response != nil {
-    b, _ := io.ReadAll(apiErr.Response.Body())
-    log.Printf("Turnkey API raw response: %s", string(b))
-  }
-
-  return nil, err
+type Stamper interface {
+    Stamp(ctx context.Context, body []byte) (*Stamp, error)
 }
 ```
 
-### Custom Logging
+Any type that satisfies this interface works as a drop-in replacement without changing any other code.
 
-By default, the SDK prints Turnkey API responses to stdout when requests fail.
-If you'd like to control this output (for example, to send logs to Zap, Logrus, or Datadog), you can provide your own logger:
+## Error Handling
+
+API errors are returned as `*turnkey.RequestError`, which exposes the HTTP status code, parsed status message, and raw response body.
+
+```go
+result, err := client.CreateWallet(ctx, input)
+if err != nil {
+    log.Printf("failed to create wallet: %v", err)
+
+    if reqErr, ok := err.(*turnkey.RequestError); ok {
+        log.Printf("Turnkey API error (HTTP %d): %s", reqErr.StatusCode, reqErr.Body)
+    }
+
+    return nil, err
+}
+```
+
+For activity-specific flows, the SDK also returns `*turnkey.ActivityFailedError` (activity rejected or failed) and `*turnkey.ActivityRequiresApprovalError` (consensus required), type-assert these if you need to handle them explicitly.
+
+## Custom Logging
+
+By default, the SDK prints failed API responses to stdout via `fmt.Printf`. To route logs to Zap, Logrus, Datadog, or any other logger, implement the `turnkey.Logger` interface and pass it via `WithLogger`:
+
 ```go
 type myLogger struct{}
+
 func (l *myLogger) Printf(format string, v ...interface{}) {
-    log.Printf("[SDK] "+format, v...)
+    log.Printf("[turnkey] "+format, v...)
 }
 
-client, err := sdk.New(
-    sdk.WithAPIKeyName("default"),
-    sdk.WithLogger(&myLogger{}), // plug in your logger
+stamper, err := turnkey.NewAPIKeyStamper(os.Getenv("TURNKEY_API_PRIVATE_KEY"))
+if err != nil {
+    log.Fatal("failed to create stamper:", err)
+}
+
+client, err := turnkey.NewClient(
+    stamper,
+    os.Getenv("TURNKEY_ORGANIZATION_ID"),
+    turnkey.WithLogger(&myLogger{}),
 )
 ```
-If no logger is provided, the SDK falls back to `fmt.Printf("Turnkey API response: ...")` to preserve current behavior.
+
+## More Examples
+
+See this README in [examples](./examples/README.md) for more complete code samples, including:
+- [API key generation](./examples/apikey/generate.go)
+- [Wallets](./examples/wallets/)
+- [Delegated Access](./examples/delegated_access/)
+- [OTP Flows](./examples/otp/)
+- [Signing](./examples/signing/)
 
 ## Development
 
-### Changelog and Releases
+The SDK uses custom changeset tooling for changelog management. Each module (`root`, `crypto`, `encoding`) is versioned independently — a single release can bump any subset of them depending on which modules have pending changesets.
 
-The SDK uses a custom changeset tooling for changelog management and publishes versions to [pkg.go.dev](https://pkg.go.dev/github.com/tkhq/go-sdk).
+### Releasing
 
-> **Note:** Go modules on pkg.go.dev derive their versions from semver tags in the module's source repository (e.g., `v1.2.3`), which is why this release process only needs to push tags.
+**Step 1 — Create a changeset**
 
-#### Step 1 — Sync proto / generate client (if applicable)
+Add one markdown file under `.changesets/` for each releasable module change.
+Each file uses frontmatter to identify the module, bump type (`patch` / `minor`
+/ `major`), title, and date:
 
-> **Note:** This step can be skipped if the client & types have already been generated, but it doesn't hurt to run it again just in case!
-
-Checkout the latest mono tag and run:
-```bash
-make -C proto sync/go-sdk
-```
-This ports the swagger files over to the `api/` directory. Then regenerate the client:
-```bash
-make generate
-```
-
-> **Note:** Make sure you are using **go-swagger v0.30.5**. Install it by following the [instructions below](#without-nix).
-> You can verify your version by running `swagger version`.
-
-#### Step 2 — Create a changeset
-
-> **Note:** If you are just releasing and changesets have already been made, you can skip this step!
-
-Run `make changeset` in the repo root and follow the prompts:
-
-```bash
-$ make changeset
-go run ./cmd/changeset
-=== Create Go Changeset ===
-Select bump type:
-  1) patch
-  2) minor
-  3) major
-Choice (1-3): 1
-Short title for this change: This is my changeset title!
-Enter a longer description (markdown allowed).
-End input with a single '.' on its own line.
-
-This is my changeset description!
-.
-```
-
-> **Note:** The Go SDK is all one package, so you don't need to select package-specific bumps.
-> **Bump level guidance:** We minor-bump whenever we sync with Mono. If you patch-bumped by mistake, update the generated changeset in `.changesets/` and change the bump level from `patch` → `minor`.
-
-#### Step 3 — Prepare the release
-
-Run `make prepare-release` in the repo root:
-```bash
-make prepare-release
-```
-
-This versions the package using the assigned bump level (`patch` → `x.x.Y`, `minor` → `x.Y.0`, `major` → `Y.0.0`) and generates a changelog from the notes in the changeset(s). Review the generated `CHANGELOG.md` and `VERSION` and manually modify as needed.
-
-#### Step 4 — Create a release branch
-
-Create a release branch following this naming scheme:
-
-```
-release/vX.X.X
-```
-
-where the version matches the package version you are releasing (e.g., `release/v0.15.0`).
-
-> **Note on naming:** Because the Go SDK is a single package (not a mono repo with multiple packages), we name the release branch based on the SDK version being published — the same convention used for Ruby and Swift.
-
-#### Step 5 — Open a PR and merge
-
-Open a PR against `main`. Once it has gone through review and been merged, the [release workflow](https://github.com/tkhq/go-sdk/actions) will kick off automatically. Kick back, relax, and wait for it to go green!
-
-Once CI has passed, head over to the [releases](https://github.com/tkhq/go-sdk/releases) page and verify the release was published correctly.
-
+```markdown
+---
+module: "root"
+bump: "patch"
+title: "Short release note"
+date: "2026-07-09"
 ---
 
-### Manual Release
+Longer release note text.
+```
 
-If you need to publish outside the CI workflow, commit and push changes to `main`, then run:
+Use `module: "root"` for `github.com/tkhq/go-sdk/v2`, `module: "crypto"` for
+`github.com/tkhq/go-sdk/crypto`, and `module: "encoding"` for
+`github.com/tkhq/go-sdk/encoding`. Repeat once per logical change. Changesets
+accumulate in `.changesets/` and can land across multiple PRs before a release
+is cut.
+
+**Step 2 — Cut a release branch and open the PR**
+
 ```bash
-make publish-release
+make release-branch
 ```
 
-This will:
-1. Create a git tag
-2. Push changes to GitHub
-3. Trigger pkg.go.dev indexing
+Must be run from a clean `main`. For each module with pending changesets, this:
 
-**Notes:**
-- Use semantic versioning (e.g., `v1.0.0`, `v0.1.0-beta`)
-- New versions appear on pkg.go.dev within a few minutes
-- If needed, manually trigger pkg.go.dev indexing:
-  ```bash
-  GOPROXY=proxy.golang.org go list -m github.com/tkhq/go-sdk@v1.0.0
-  ```
+- Bumps the module's `VERSION` file (patch/minor/major from the highest bump across its changesets).
+- Prepends a release section to the module's `CHANGELOG.md`.
+- Deletes the consumed changeset files from `.changesets/`.
+- Rewrites inter-module `go.mod` requirements from local placeholder versions
+  to the release versions.
+- Rewrites matching `go.work` replaces so the release branch can build before
+  the new module tags exist.
+- Creates a `release/vYYYY-MM-N` branch (where `N` auto-increments per month), commits the changes, and optionally pushes + opens the PR via `gh`.
 
----
+Review the diff, then merge the PR into `main`.
 
-### Troubleshooting
+**Step 3 — Tag and publish (automatic)**
 
-If the **Validate and Tag** workflow fails, check the error logs in CI, apply the fix, push the changes to `main`, and manually re-run the workflow:
+Merging a `release/v*` PR triggers [.github/workflows/tag.yml](.github/workflows/tag.yml), which (after manual approval on the `Production` environment):
 
-1. Head to the [Actions page](https://github.com/tkhq/go-sdk/actions)
-2. Select **Validate and Tag**
-3. Click **Run Workflow**
+- Lints, builds, and tests.
+- Reads each module's `VERSION` and creates GitHub releases tagged `vX.Y.Z`, `crypto/vX.Y.Z`, `encoding/vX.Y.Z`.
+- Pings `sum.golang.org` so pkg.go.dev indexes the new versions.
 
-> **Note:** This reruns the workflow against your selected branch. The tag that will be published is pulled from the `VERSION` file.
+The workflow can also be triggered manually via `workflow_dispatch` with a `vYYYY-MM-N` release id.
 
----
+# Contributing + License
 
-### Updating the SDK
+Contributions are welcome! Please open an issue or submit a pull request with any improvements or bug fixes.
 
-#### With Nix
-1. Install Nix: https://nixos.org/download.html
-2. Run `nix develop` to get a new nix shell
-3. Update the swagger file in `api/` with a new one
-4. Run `make generate`
+This project is licensed under the Apache License 2.0. See the [LICENSE](./LICENSE) file for details.
 
-#### Without Nix
-The following assumes you have Go 1.20 installed locally:
-1. Install [go-swagger](https://goswagger.io/install.html) **v0.30.5**:
-```bash
-go install github.com/go-swagger/go-swagger/cmd/swagger@v0.30.5
-```
-2. Update the swagger file in `api/` with a new one
-3. Run `make generate`
 
-> **Note:** Depending on how you installed it, `go-swagger` may be located at `/Users/<username>/go/bin/swagger` or `/opt/homebrew/bin/swagger`. If both are present, we recommend using the former for better version granularity. Verify with `swagger version`.
 
-### Custom Templates
-While custom templates should be avoided where possible, sometimes it's worth the extra maintenance burden to provide a more streamlined UX. To use a custom template, copy the original template from the [go-swagger repo](https://github.com/go-swagger/go-swagger) to the `templates` directory.
-
-#### Current Modifications
-
-```
-// file: schemavalidator.gotmpl
-
-// mod: less verbose enum variants
-// note: seems strange, but there's an edgecase with the current logic where '_' is not supported leading to names like AllCapsALLCAPSALLTHETIME
--      {{- $variant := print $gotype (pascalize (cleanupEnumVariant .)) }}
-+      {{- $variant := print ( pascalize ( camelcase (printf "%q" . ))) }}
-
-// mod: typed and iterable enum variants
--var {{ camelize .Name }}Enum []interface{}
-+var {{ pascalize .Name }}Enum []{{ template "dereffedSchemaType" . }}
--    {{ camelize .Name }}Enum = append({{ camelize .Name }}Enum, v)
-+    {{ pascalize .Name }}Enum = append({{ pascalize .Name }}Enum, v)
--  if err := validate.EnumCase(path, location, value, {{ camelize .Name }}Enum, {{ if .IsEnumCI }}false{{ else }}true{{ end }}); err != nil {
-+  if err := validate.EnumCase(path, location, value, {{ pascalize .Name }}Enum, {{ if .IsEnumCI }}false{{ else }}true{{ end }}); err != nil {
-```

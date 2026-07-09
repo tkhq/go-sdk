@@ -5,37 +5,28 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/tkhq/go-sdk/pkg/apikey"
-	"github.com/tkhq/go-sdk/pkg/store/local"
+	"github.com/tkhq/go-sdk/crypto"
 )
 
-var (
-	keyName        string
-	organizationID string
-)
+var keyName string
 
 func init() {
 	flag.StringVar(&keyName, "name", "default", "name of API key")
-	flag.StringVar(&organizationID, "org", "", "organization ID of API key")
 }
 
 func main() {
 	flag.Parse()
 
-	if organizationID == "" {
-		log.Fatalln("organization ID must be set")
-	}
-
-	key, err := apikey.New(organizationID)
+	key, err := crypto.NewAPIKey()
 	if err != nil {
 		log.Fatalln("failed to generate API key:", err)
 	}
 
-	if err = local.New[*apikey.Key, apikey.Metadata]().Store(keyName, key); err != nil {
+	if err = crypto.NewLocal[*crypto.APIKey]().Store(keyName, key); err != nil {
 		log.Fatalln("failed to store new API key:", err)
 	}
 
-	if key, err = local.New[*apikey.Key, apikey.Metadata]().Load(keyName); err != nil {
+	if key, err = crypto.NewLocal[*crypto.APIKey]().Load(keyName); err != nil {
 		log.Fatalln("failed to load new API key:", err)
 	}
 

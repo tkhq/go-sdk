@@ -1,47 +1,55 @@
-// Package main demonstrates an API client which signs a raw payload with a wallet account
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log"
+	"os"
 
-	"github.com/tkhq/go-sdk"
-	"github.com/tkhq/go-sdk/pkg/api/client/signing"
-	"github.com/tkhq/go-sdk/pkg/api/models"
-	"github.com/tkhq/go-sdk/pkg/util"
+	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
 func main() {
-	// NB: make sure to create and register an API key, first.
-	client, err := sdk.New(sdk.WithAPIKeyName("default"))
-	if err != nil {
-		log.Fatal("failed to create new SDK client:", err)
+	apiPrivateKey := os.Getenv("TURNKEY_API_PRIVATE_KEY")
+	if apiPrivateKey == "" {
+		log.Fatal("TURNKEY_API_PRIVATE_KEY is required")
+	}
+	organizationID := os.Getenv("TURNKEY_ORGANIZATION_ID")
+	if organizationID == "" {
+		log.Fatal("TURNKEY_ORGANIZATION_ID is required")
+	}
+	signWith := os.Getenv("TURNKEY_SIGN_WITH") // wallet address or key ID
+	if signWith == "" {
+		log.Fatal("TURNKEY_SIGN_WITH is required")
 	}
 
-	// you could use https://build.tx.xyz/ to generate an Ethereum unsignedTransaction string
-	unsignedTransaction := "<unisgned_transaction_here>"
-	walletAccountAddress := "<account_address_here>"
+	// Example raw payload (hex for "hello world")
+	rawPayload := "68656c6c6f20776f726c64"
 
-	params := signing.NewSignRawPayloadParams().WithBody(&models.SignRawPayloadRequest{
-		OrganizationID: client.DefaultOrganization(),
-		TimestampMs:    util.RequestTimestamp(),
-		Parameters: &models.SignRawPayloadIntentV2{
-			Encoding:     models.PayloadEncodingHexadecimal.Pointer(),
-			HashFunction: models.HashFunctionKeccak256.Pointer(),
-			Payload:      &unsignedTransaction,
-			SignWith:     &walletAccountAddress,
-		},
-		Type: (*string)(models.ActivityTypeSignRawPayloadV2.Pointer()),
+	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
+	if err != nil {
+		log.Fatal("failed to create stamper:", err)
+	}
+
+	client, err := turnkey.NewClient(stamper, organizationID)
+	if err != nil {
+		log.Fatal("failed to create Turnkey client:", err)
+	}
+
+	result, err := client.SignRawPayload(context.Background(), turnkey.SignRawPayloadRequest{
+		Encoding:     turnkey.PayloadEncodingHexadecimal,
+		HashFunction: turnkey.HashFunctionKeccak256,
+		Payload:      rawPayload,
+		SignWith:     signWith,
 	})
-
-	signResp, err := client.V0().Signing.SignRawPayload(params, client.Authenticator)
 	if err != nil {
-		log.Fatal("failed to make Sign Raw Payload request:", err)
+		var reqErr *turnkey.RequestError
+		if errors.As(err, &reqErr) {
+			log.Fatalf("failed to sign transaction (status=%d): %s", reqErr.StatusCode, reqErr.Body)
+		}
+		log.Fatal("failed to sign transaction:", err)
 	}
 
-	fmt.Printf("Signed raw payload:\nR: %v\nS: %v\nV: %v\n",
-		*signResp.Payload.Activity.Result.SignRawPayloadResult.R,
-		*signResp.Payload.Activity.Result.SignRawPayloadResult.S,
-		*signResp.Payload.Activity.Result.SignRawPayloadResult.V,
-	)
+	fmt.Printf("Signature r=%s s=%s v=%s\n", result.R, result.S, result.V)
 }

@@ -1,9 +1,7 @@
-SWAGGER_VERSION := $(shell swagger version 2>/dev/null)
-VERSION_FILE := VERSION
-
-v ?= $(shell cat $(VERSION_FILE) 2>/dev/null)
-
-all: generate
+.PHONY: fmt
+fmt:
+	go tool gofumpt -w .
+	go tool gci write --skip-generated -s standard -s default -s "Prefix(github.com/tkhq)" .
 
 .PHONY: build
 build:
@@ -15,67 +13,39 @@ test:
 
 .PHONY: lint
 lint:
-	golangci-lint run --out-format=github-actions ./...
+	go tool golangci-lint run --fix ./... -v
 
-# Note: if you have multiple versions of swagger installed locally, point to the one located in your go path, 
-# e.g. /Users/<username>/go/bin/swagger
+.PHONY: check
+check: fmt lint build test
+
 .PHONY: generate
-generate: you-need-to-install-go-swagger-check-readme clean
-	mkdir -p pkg/api
-	swagger generate client -f api/public_api.swagger.json -t pkg/api -A TurnkeyAPI -T templates --allow-template-override
-	go mod tidy
+generate:
+	cd codegen && go run . --out ..
+	go tool golangci-lint run --fix ./... -v .
+	go tool gofumpt -w .
+	go tool gci write --skip-generated -s standard -s default -s "Prefix(github.com/tkhq)" .
 
-.PHONY: clean
-clean:
-	rm -rf pkg/api
+# Reconcile go.mod/go.sum across all modules after a dependency change.
+# tidy ignores go.work, so it would try to fetch the unpublished v0.0.0
+# inter-module versions from the proxy — temp go.mod replaces point them at
+# the local dirs during tidy, then get dropped so the published go.mod stays clean.
+.PHONY: tidy
+tidy:
+	go mod edit -replace github.com/tkhq/go-sdk/crypto=./crypto
+	go mod edit -replace github.com/tkhq/go-sdk/encoding=./encoding
+	cd crypto && go mod edit -replace github.com/tkhq/go-sdk/encoding=../encoding
+	GOWORK=off go mod tidy
+	cd crypto && GOWORK=off go mod tidy
+	cd encoding && GOWORK=off go mod tidy
+	go mod edit -dropreplace github.com/tkhq/go-sdk/crypto
+	go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
+	cd crypto && go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
+	go work sync
+	go mod edit -go=1.25
+	cd crypto && go mod edit -go=1.25
+	cd encoding && go mod edit -go=1.25
+	go work edit -go=1.25
 
-.PHONY: changeset
-changeset:
-	go run ./cmd/changeset
-
-.PHONY: version
-version:
-	go run ./cmd/changeset-version
-
-.PHONY: changelog
-changelog:
-	go run ./cmd/changeset-changelog
-
-.PHONY: prepare-release
-prepare-release:
-	@echo "Versioning package..."
-	go run ./cmd/changeset-version
-
-	@echo "Generating changelog..."
-	go run ./cmd/changeset-changelog
-
-	@echo "Generated CHANGELOG.md"
-	@echo "Review the changes and commit if satisfied:"
-	@echo "  git add CHANGELOG.md"
-	@echo "  git commit -m 'add changelog for v$(v)'"
-
-.PHONY: publish-release
-publish-release:
-	@if [ ! -f "$(VERSION_FILE)" ]; then \
-		echo "Error: VERSION file not found. Create a VERSION file first."; \
-		exit 1; \
-	fi
-
-	@if [ -z "$(v)" ]; then \
-		echo "Error: version number is empty. Ensure $(VERSION_FILE) contains something like '0.2.0'."; \
-		exit 1; \
-	fi
-
-	@echo "\nCreating and signing tag v$(v)..."
-	git config tag.forceSignAnnotated true
-	git tag -a v$(v) -m "Release v$(v)" -s
-
-	@echo "\nPushing changes..."
-	git push origin main
-	git push origin v$(v)
-	
-	@echo "\nTriggering pkg.go.dev update..."
-	@curl -s "https://sum.golang.org/lookup/github.com/tkhq/go-sdk@v$(v)" || true
-	@echo "\nRelease v$(v) complete. The package will be available on pkg.go.dev shortly."
-
-you-need-to-install-go-swagger-check-readme: ; @which swagger > /dev/null
+.PHONY: release-branch
+release-branch:
+	go run ./cmd/release-branch
