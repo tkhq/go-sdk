@@ -6,6 +6,6 @@ use (
 	./encoding
 )
 
-replace github.com/tkhq/go-sdk/crypto v0.0.0 => ./crypto
+replace github.com/tkhq/go-sdk/crypto v0.1.0 => ./crypto
 
-replace github.com/tkhq/go-sdk/encoding v0.0.0 => ./encoding
+replace github.com/tkhq/go-sdk/encoding v0.1.0 => ./encoding
