@@ -8,7 +8,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.2.0
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/tkhq/go-sdk/encoding v0.0.0
+	github.com/tkhq/go-sdk/encoding v0.1.0
 )
 
 require (
