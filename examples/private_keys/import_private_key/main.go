@@ -22,31 +22,9 @@ func main() {
 	apiPrivateKey := mustEnv("TURNKEY_API_PRIVATE_KEY")
 	organizationID := mustEnv("TURNKEY_ORGANIZATION_ID")
 
-	ethereumKey := os.Getenv("TURNKEY_ETHEREUM_PRIVATE_KEY")
-	solanaKey := os.Getenv("TURNKEY_SOLANA_PRIVATE_KEY")
-
-	// Select the key material and its matching curve / address / key format.
-	var (
-		privateKey    string
-		keyFormat     string
-		curve         turnkey.Curve
-		addressFormat turnkey.AddressFormat
-	)
-	switch {
-	case ethereumKey != "" && solanaKey != "":
-		log.Fatal("set only one of TURNKEY_ETHEREUM_PRIVATE_KEY or TURNKEY_SOLANA_PRIVATE_KEY")
-	case ethereumKey != "":
-		privateKey = ethereumKey
-		keyFormat = crypto.KeyFormatHexadecimal
-		curve = turnkey.CurveSecp256K1
-		addressFormat = turnkey.AddressFormatEthereum
-	case solanaKey != "":
-		privateKey = solanaKey
-		keyFormat = crypto.KeyFormatSolana
-		curve = turnkey.CurveEd25519
-		addressFormat = turnkey.AddressFormatSolana
-	default:
-		log.Fatal("set one of TURNKEY_ETHEREUM_PRIVATE_KEY or TURNKEY_SOLANA_PRIVATE_KEY")
+	sel, err := selectKey()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	stamper, err := turnkey.NewAPIKeyStamper(apiPrivateKey)
@@ -73,7 +51,7 @@ func main() {
 		fatalRequestError(err, "init import private key")
 	}
 
-	encryptedBundle, err := crypto.EncryptPrivateKeyToBundle(privateKey, keyFormat, initResult.ImportBundle, organizationID, whoami.UserID)
+	encryptedBundle, err := crypto.EncryptPrivateKeyToBundle(sel.privateKey, sel.keyFormat, initResult.ImportBundle, organizationID, whoami.UserID)
 	if err != nil {
 		log.Fatal("failed to encrypt private key:", err)
 	}
@@ -84,15 +62,58 @@ func main() {
 		UserID:          whoami.UserID,
 		PrivateKeyName:  privateKeyName,
 		EncryptedBundle: encryptedBundle,
-		Curve:           curve,
-		AddressFormats:  []turnkey.AddressFormat{addressFormat},
+		Curve:           sel.curve,
+		AddressFormats:  []turnkey.AddressFormat{sel.addressFormat},
 	})
 	if err != nil {
 		fatalRequestError(err, "import private key")
 	}
 
 	fmt.Printf("Private Key ID: %s\n", importResult.PrivateKeyID)
-	for _, addr := range importResult.Addresses {
+	printAddresses(importResult.Addresses)
+}
+
+// keySelection is the private key to import plus its matching curve, address,
+// and key format.
+type keySelection struct {
+	privateKey    string
+	keyFormat     string
+	curve         turnkey.Curve
+	addressFormat turnkey.AddressFormat
+}
+
+// selectKey reads the key from the environment and returns it with its matching
+// curve, address, and key format. Exactly one of TURNKEY_ETHEREUM_PRIVATE_KEY
+// (hex) or TURNKEY_SOLANA_PRIVATE_KEY (base58) must be set.
+func selectKey() (keySelection, error) {
+	ethereumKey := os.Getenv("TURNKEY_ETHEREUM_PRIVATE_KEY")
+	solanaKey := os.Getenv("TURNKEY_SOLANA_PRIVATE_KEY")
+
+	switch {
+	case ethereumKey != "" && solanaKey != "":
+		return keySelection{}, errors.New("set only one of TURNKEY_ETHEREUM_PRIVATE_KEY or TURNKEY_SOLANA_PRIVATE_KEY")
+	case ethereumKey != "":
+		return keySelection{
+			privateKey:    ethereumKey,
+			keyFormat:     crypto.KeyFormatHexadecimal,
+			curve:         turnkey.CurveSecp256K1,
+			addressFormat: turnkey.AddressFormatEthereum,
+		}, nil
+	case solanaKey != "":
+		return keySelection{
+			privateKey:    solanaKey,
+			keyFormat:     crypto.KeyFormatSolana,
+			curve:         turnkey.CurveEd25519,
+			addressFormat: turnkey.AddressFormatSolana,
+		}, nil
+	default:
+		return keySelection{}, errors.New("set one of TURNKEY_ETHEREUM_PRIVATE_KEY or TURNKEY_SOLANA_PRIVATE_KEY")
+	}
+}
+
+// printAddresses prints each imported address, skipping any without a value.
+func printAddresses(addresses []turnkey.Immutableactivityv1Address) {
+	for _, addr := range addresses {
 		if addr.Address == nil {
 			continue
 		}
