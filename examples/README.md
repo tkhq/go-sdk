@@ -26,6 +26,9 @@ Refer to each example's README for the exact commands.
 
 - [otp](./otp/): Example of using one-time password (OTP) flows for authentication.
 
+- [private_keys](./private_keys/): Shows how to manage standalone private keys.
+    - [import_private_key](./private_keys/import_private_key/): Example of importing a raw private key.
+
 - [signing](./signing/): Demonstrates how to sign messages and transactions using the SDK.
     - [sign_raw_payload](./signing/sign_raw_payload/): Example of signing a raw payload.
     - [sign_transaction](./signing/sign_transaction/): Example of signing a blockchain transaction.
