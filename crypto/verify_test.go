@@ -292,6 +292,15 @@ func TestVerify_WrongAttestationDoc(t *testing.T) {
 	assert.Error(t, err, "should fail when attestation docs don't match")
 }
 
+func TestVerify_MalformedCOSESign1(t *testing.T) {
+	bootProof := testBootProof1()
+	bootProof.AWSAttestationDocB64 = "gA==" // CBOR empty array
+
+	err := VerifyProofs(testAppProof1(), bootProof)
+	require.Error(t, err)
+	assert.ErrorContains(t, err, "invalid COSE Sign1")
+}
+
 func TestBootProofTimingMismatch(t *testing.T) {
 	// verifyBootProof uses the boot proof's own CreatedAt as the attestation
 	// certificate validity time, so if CreatedAt is outside the cert's NotBefore/NotAfter window,
