@@ -452,6 +452,9 @@ func parseAndVerifyAttestation(data []byte, validationTime time.Time) (map[strin
 	if err := cbor.Unmarshal(data, &coseSign1); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal COSE Sign1: %w", err)
 	}
+	if len(coseSign1) != 4 {
+		return nil, fmt.Errorf("invalid COSE Sign1: expected 4 elements, got %d", len(coseSign1))
+	}
 
 	protected, ok := coseSign1[0].([]byte)
 	if !ok {
