@@ -238,6 +238,18 @@ type BootProof struct {
 //     b. Verifies the QOS manifest hash matches the attestation document user_data
 //  3. Verifies the app proof / boot proof connection - that the app proof's ephemeral public key matches attestation document's public_key field
 //
+// WARNING: this function does NOT perform the full set of canonical verification
+// checks. In particular, it does NOT:
+//   - verify attestation document PCR values against expected values
+//   - compare QOS manifest contents against independently pinned, known-good values
+//   - verify the QOS manifest envelope or operator approvals (QosManifestEnvelopeB64 is unused)
+//
+// Passing verification establishes that the proofs are cryptographically
+// self-consistent and that the attestation document was produced by genuine AWS
+// Nitro hardware. It does NOT establish that the enclave is a trusted Turnkey
+// enclave running expected code. For canonical PCR, manifest, and attestation
+// verification checks, see https://github.com/tkhq/qos.
+//
 // To learn more about verifying app proofs and boot proofs, see:
 // https://whitepaper.turnkey.com/foundations/
 func VerifyProofs(appProof *AppProof, bootProof *BootProof) error {
@@ -266,6 +278,11 @@ func VerifyProofs(appProof *AppProof, bootProof *BootProof) error {
 }
 
 // VerifyAppProofSignature verifies the app proof's P-256 ECDSA signature.
+//
+// This only checks the signature against the public key embedded in the proof
+// itself; by itself it does not establish enclave provenance or trust. Use
+// VerifyProofs to verify the connected app proof / boot proof chain, and see
+// https://github.com/tkhq/qos for the canonical verification checks.
 //
 //nolint:gocyclo
 func VerifyAppProofSignature(appProof *AppProof) error {
