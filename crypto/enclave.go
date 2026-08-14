@@ -106,6 +106,9 @@ func DecryptCredentialBundle(credentialBundle string, kemPrivateKey kem.PrivateK
 	ciphertext := payloadBytes[33:]
 
 	x, y := elliptic.UnmarshalCompressed(elliptic.P256(), compressedKey)
+	if x == nil || y == nil {
+		return nil, errors.New("invalid compressed P-256 public key")
+	}
 
 	encappedPublic := make([]byte, 65)
 	encappedPublic[0] = 0x04
