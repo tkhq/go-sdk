@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
 	tkencoding "github.com/tkhq/go-sdk/encoding"
 )
 

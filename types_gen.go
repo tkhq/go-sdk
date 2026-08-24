@@ -179,12 +179,24 @@ const (
 	ActivityTypeEarnDeployWrapper            ActivityType = "ACTIVITY_TYPE_EARN_DEPLOY_WRAPPER"
 	ActivityTypeEarnDeposit                  ActivityType = "ACTIVITY_TYPE_EARN_DEPOSIT"
 	ActivityTypeEarnWithdraw                 ActivityType = "ACTIVITY_TYPE_EARN_WITHDRAW"
-	ActivityTypeUpsertEarnClientFeeConfig    ActivityType = "ACTIVITY_TYPE_UPSERT_EARN_CLIENT_FEE_CONFIG"
 	ActivityTypeExecuteSwap                  ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP"
 	ActivityTypeUpsertSwapConfig             ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG"
 	ActivityTypeCreateTVCOperator            ActivityType = "ACTIVITY_TYPE_CREATE_TVC_OPERATOR"
 	ActivityTypeCreateTVCQuorumKey           ActivityType = "ACTIVITY_TYPE_CREATE_TVC_QUORUM_KEY"
 	ActivityTypeReEncryptTVCQuorumKeyShare   ActivityType = "ACTIVITY_TYPE_RE_ENCRYPT_TVC_QUORUM_KEY_SHARE"
+	ActivityTypeInitImportSecrets            ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_SECRETS"
+	ActivityTypeSolSendTransactionV2         ActivityType = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2"
+	ActivityTypeClaimSwapFees                ActivityType = "ACTIVITY_TYPE_CLAIM_SWAP_FEES"
+	ActivityTypeEarnSetWrapperState          ActivityType = "ACTIVITY_TYPE_EARN_SET_WRAPPER_STATE"
+	ActivityTypeClaimEarnFees                ActivityType = "ACTIVITY_TYPE_CLAIM_EARN_FEES"
+	ActivityTypeUpdateWalletAccountName      ActivityType = "ACTIVITY_TYPE_UPDATE_WALLET_ACCOUNT_NAME"
+	ActivityTypeETHUndelegate7702            ActivityType = "ACTIVITY_TYPE_ETH_UNDELEGATE_7702"
+	ActivityTypeExecuteSwapV2                ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP_V2"
+	ActivityTypeCreateSwapQuote              ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE"
+	ActivityTypeImportSecrets                ActivityType = "ACTIVITY_TYPE_IMPORT_SECRETS"
+	ActivityTypeExportSecrets                ActivityType = "ACTIVITY_TYPE_EXPORT_SECRETS"
+	ActivityTypeCreateVelocityControl        ActivityType = "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
+	ActivityTypeDeleteVelocityControl        ActivityType = "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROL"
 )
 
 type AddressFormat string
@@ -286,6 +298,13 @@ const (
 	CurveSecp256K1 Curve = "CURVE_SECP256K1"
 	CurveEd25519   Curve = "CURVE_ED25519"
 	CurveP256      Curve = "CURVE_P256"
+)
+
+type EarnProvider string
+
+const (
+	EarnProviderMorpho EarnProvider = "EARN_PROVIDER_MORPHO"
+	EarnProviderAave   EarnProvider = "EARN_PROVIDER_AAVE"
 )
 
 type Effect string
@@ -449,6 +468,7 @@ const (
 	OutcomeRejected               Outcome = "OUTCOME_REJECTED"
 	OutcomeError                  Outcome = "OUTCOME_ERROR"
 	OutcomeRequiresAuthenticators Outcome = "OUTCOME_REQUIRES_AUTHENTICATORS"
+	OutcomeTimeInactive           Outcome = "OUTCOME_TIME_INACTIVE"
 )
 
 type PathFormat string
@@ -490,6 +510,12 @@ const (
 	TransactionTypeTempo    TransactionType = "TRANSACTION_TYPE_TEMPO"
 )
 
+type TransportEncryptionSuite string
+
+const (
+	TransportEncryptionSuiteEnclaveEncryptV1 TransportEncryptionSuite = "TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1"
+)
+
 type TVCHealthCheckType string
 
 const (
@@ -504,12 +530,29 @@ const (
 	UsageTypeLogin  UsageType = "USAGE_TYPE_LOGIN"
 )
 
+type VelocityControlAggregationMethod string
+
+const (
+	VelocityControlAggregationMethodSum   VelocityControlAggregationMethod = "VELOCITY_CONTROL_AGGREGATION_METHOD_SUM"
+	VelocityControlAggregationMethodCount VelocityControlAggregationMethod = "VELOCITY_CONTROL_AGGREGATION_METHOD_COUNT"
+)
+
+type VelocityControlAggregationOperator string
+
+const (
+	VelocityControlAggregationOperatorLessThan           VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN"
+	VelocityControlAggregationOperatorLessThanOrEqual    VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL"
+	VelocityControlAggregationOperatorEqual              VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_EQUAL"
+	VelocityControlAggregationOperatorGreaterThanOrEqual VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL"
+	VelocityControlAggregationOperatorGreaterThan        VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
+)
+
 type AuthProxyInitOTPRequest struct {
 	// Email or phone number to send the OTP code to
 	Contact string `json:"contact"`
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
 	EmailCustomization *AuthProxyProxyEmailCustomizationParams `json:"emailCustomization,omitempty"`
-	// Enum to specify whether to send OTP via SMS or email
+	// Enum to specify whether to send OTP via SMS, email, or WhatsApp
 	OTPType string `json:"otpType"`
 }
 
@@ -868,10 +911,14 @@ type AssetMetadata struct {
 	Caip19 *string `json:"caip19,omitempty"`
 	// The number of decimals this asset uses
 	Decimals *int `json:"decimals,omitempty"`
+	// Earn yield providers with vaults denominated in this asset. Empty when the asset is not supported by Earn.
+	EarnProviders []EarnProvider `json:"earnProviders,omitempty"`
 	// The url of the asset logo
 	LogoURL *string `json:"logoUrl,omitempty"`
 	// The asset name
 	Name *string `json:"name,omitempty"`
+	// Whether this asset is on Turnkey's stablecoin list (used for stablepair swap fee pricing).
+	Stable *bool `json:"stable,omitempty"`
 	// The asset symbol
 	Symbol *string `json:"symbol,omitempty"`
 }
@@ -969,6 +1016,23 @@ type BootProof struct {
 
 type BootProofResponse struct {
 	BootProof BootProof `json:"bootProof"`
+}
+
+type ClaimEarnFeesIntent struct {
+	// Address of the deployed Earn wrapper to claim fees for. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+type ClaimEarnFeesResult struct {
+	// Identifier to poll claim status and tx hash via GetClaimEarnFeesStatus.
+	ClaimRequestID string `json:"claimRequestId"`
+}
+
+type ClaimSwapFeesIntent map[string]any
+
+type ClaimSwapFeesResult struct {
+	// Relay claim request ID submitted through the permit endpoint.
+	RequestID string `json:"requestId"`
 }
 
 type ClientSignature struct {
@@ -1191,6 +1255,8 @@ type CreatePolicyIntentV3 struct {
 	Notes string `json:"notes"`
 	// Human-readable name for a Policy.
 	PolicyName string `json:"policyName"`
+	// The time expression that triggers the Effect
+	Time *string `json:"time,omitempty"`
 }
 
 type CreatePolicyResult struct {
@@ -1496,6 +1562,24 @@ type CreateSubOrganizationResultV8 struct {
 	Wallet            *WalletResult `json:"wallet,omitempty"`
 }
 
+type CreateSwapQuoteIntent struct {
+	// Base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
+	InputToken string `json:"inputToken"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Wallet account or Private Key address used to price the executable provider quote. Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Provider-neutral maximum allowed slippage in basis points. Turnkey converts this value to each provider's request format. When omitted, each provider applies its default slippage behavior.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
+type CreateSwapQuoteResult struct {
+	// One or more provider quotes for this request. Today this contains a single Relay quote; pass quotes[i].quoteId to execute_swap_v2 to bind execution.
+	Quotes []SwapQuote `json:"quotes"`
+}
+
 type CreateTVCAppIntent struct {
 	// When true, this app may create deployments in debug-mode. Debug-mode deployments expose logs and emit zero'd attestation PCRs, so remote attestation cannot succeed. Cannot be changed after app creation. Setting this true means the app's quorum key is considered permanently insecure, and a new app with a fresh quorum key must be created. Default if not provided: false.
 	EnableDebugModeDeployments *bool `json:"enableDebugModeDeployments,omitempty"`
@@ -1524,6 +1608,12 @@ type CreateTVCAppResult struct {
 	ManifestSetOperatorIds []string `json:"manifestSetOperatorIds"`
 	// The required number of approvals for the manifest set
 	ManifestSetThreshold int64 `json:"manifestSetThreshold"`
+	// The unique identifier for the TVC share set
+	ShareSetID string `json:"shareSetId"`
+	// The unique identifiers of the share set operators
+	ShareSetOperatorIds []string `json:"shareSetOperatorIds"`
+	// The required number of approvals for the share set
+	ShareSetThreshold int64 `json:"shareSetThreshold"`
 }
 
 type CreateTVCDeploymentIntent struct {
@@ -1551,6 +1641,8 @@ type CreateTVCDeploymentIntent struct {
 	PublicIngressPort int64 `json:"publicIngressPort"`
 	// The QuorumOS version to use to deploy this application
 	QosVersion string `json:"qosVersion"`
+	// Optional desired replica count for this deployment.
+	Replicas *int64 `json:"replicas,omitempty"`
 }
 
 type CreateTVCDeploymentResult struct {
@@ -1647,6 +1739,21 @@ type CreateUsersIntentV4 struct {
 type CreateUsersResult struct {
 	// A list of User IDs.
 	UserIds []string `json:"userIds"`
+}
+
+type CreateVelocityControlIntent struct {
+	// Aggregation expression that the Velocity Control evaluates.
+	Aggregation VelocityControlAggregation `json:"aggregation"`
+	// Data source for the Velocity Control.
+	DataSource VelocityControlDataSource `json:"dataSource"`
+	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
+	Identifier string `json:"identifier"`
+	// Human-readable name for the Velocity Control.
+	Name string `json:"name"`
+}
+
+type CreateVelocityControlResult struct {
+	VelocityControlID string `json:"velocityControlId"`
 }
 
 type CreateWalletAccountsIntent struct {
@@ -1900,6 +2007,14 @@ type DeleteUsersResult struct {
 	UserIds []string `json:"userIds"`
 }
 
+type DeleteVelocityControlIntent struct {
+	VelocityControlID string `json:"velocityControlId"`
+}
+
+type DeleteVelocityControlResult struct {
+	VelocityControlID string `json:"velocityControlId"`
+}
+
 type DeleteWalletAccountsIntent struct {
 	// Optional parameter for deleting the wallet accounts, even if any have not been previously exported. If they have been exported, this field is ignored.
 	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
@@ -1962,13 +2077,17 @@ type DisablePrivateKeyResult struct {
 type EarnDeployWrapperIntent struct {
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
 	ChainCaip2 string `json:"chainCaip2"`
-	// Address of the underlying yield vault to wrap (from the EarnVaults catalog).
+	// Your fee on gross yield, in basis points (e.g., '2000' for 20%). Maximum is 4000 (40%).
+	ClientFeeBps string `json:"clientFeeBps"`
+	// The wallet address that receives the client's fee payouts on-chain. Must be a Turnkey-managed wallet address.
+	ClientFeeWallet string `json:"clientFeeWallet"`
+	// Address of the underlying yield vault to wrap (from the ListEarnVaults catalog).
 	VaultAddress string `json:"vaultAddress"`
 }
 
 type EarnDeployWrapperResult struct {
-	// Transaction hash of the wrapper deployment.
-	DeployTxHash string `json:"deployTxHash"`
+	// Identifier to poll deploy status.
+	DeployRequestID string `json:"deployRequestId"`
 	// Address of the deployed fee splitter (PaymentSplitter for Morpho, RevenueSplitterOwner for Aave).
 	SplitterAddress string `json:"splitterAddress"`
 	// Address of the deployed fee wrapper (the deposit target).
@@ -1984,25 +2103,155 @@ type EarnDepositIntent struct {
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Address of the underlying yield vault to deposit into. The org must have an enabled wrapper for this vault.
-	VaultAddress string `json:"vaultAddress"`
-}
-
-type EarnDepositResult struct {
-	// Identifier to poll deposit status via EarnDepositStatus (for the async/sponsored path).
-	DepositRequestID string `json:"depositRequestId"`
-	// Transaction hash of the deposit.
-	DepositTxHash string `json:"depositTxHash"`
-	// Number of wrapper shares minted to the depositor, in raw on-chain units.
-	SharesMinted string `json:"sharesMinted"`
-	// Address of the fee wrapper the deposit was routed to.
+	// Address of the deployed Earn wrapper to deposit into, from ListEarnVaults/ListEarnPositions. Must be one of the org's deployed wrappers.
 	WrapperAddress string `json:"wrapperAddress"`
 }
 
+type EarnDepositResult struct {
+	// Identifier to poll deposit status and tx hash via GetEarnDepositStatus.
+	DepositRequestID string `json:"depositRequestId"`
+}
+
+type EarnEnabledVault struct {
+	// Gross annual percentage yield, expressed as a decimal fraction (before fees).
+	ApyPct *string `json:"apyPct,omitempty"`
+	// CAIP-19 asset ID of the vault's underlying asset (e.g. 'eip155:8453/erc20:0x833589...'); the chain is encoded in the identifier.
+	Caip19 *string `json:"caip19,omitempty"`
+	// The client's claimable fee (releasable now), in raw on-chain units of the underlying asset (the caip19 asset). Turnkey's fee is excluded. Only returned to the parent org; unset when a sub-org queries.
+	ClaimableClientFee *string `json:"claimableClientFee,omitempty"`
+	// Normalized claimable_client_fee for display only (usd + crypto). Do not do arithmetic with these; use claimable_client_fee. Unset when a sub-org queries.
+	ClaimableClientFeeDisplay *EarnValueDisplay `json:"claimableClientFeeDisplay,omitempty"`
+	// Client fee taken on yield, in basis points.
+	ClientFeeBps *string `json:"clientFeeBps,omitempty"`
+	// The wallet address that receives the client's fee payouts on-chain. Unset when a sub-org queries.
+	ClientFeeWallet *string `json:"clientFeeWallet,omitempty"`
+	// Vault curator name(s), comma-separated when a vault has multiple. Empty for providers without curators (e.g. Aave).
+	Curator *string `json:"curator,omitempty"`
+	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Toggled via EarnSetWrapperState.
+	DepositsDisabled *bool `json:"depositsDisabled,omitempty"`
+	// Normalized total-deposited values for display only (usd + crypto). Do not do arithmetic with these; use total_deposited instead.
+	Display *EarnValueDisplay `json:"display,omitempty"`
+	// The underlying markets the vault allocates into, ranked by supplied amount descending. Only populated when the request sets include_exposure, and only for providers that expose an allocation breakdown (Morpho).
+	Exposures []EarnVaultExposure `json:"exposures,omitempty"`
+	// Assets currently withdrawable from the underlying vault without a reallocation, in raw on-chain units of the underlying asset. This is the vault's liquidity, not the wrapper's balance. Empty when the provider does not report it.
+	Liquidity *string `json:"liquidity,omitempty"`
+	// Normalized liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use liquidity instead.
+	LiquidityDisplay *EarnValueDisplay `json:"liquidityDisplay,omitempty"`
+	// Human-readable vault name from the provider (e.g. 'Steakhouse Prime USDC' for Morpho; the reserve symbol for Aave).
+	Name *string `json:"name,omitempty"`
+	// Annual percentage yield net of fees, expressed as a decimal fraction.
+	NetApyPct *string `json:"netApyPct,omitempty"`
+	// Yield provider for the vault.
+	Provider *EarnProvider `json:"provider,omitempty"`
+	// Total deposited through this wrapper (wrapper TVL), in raw on-chain units of the underlying asset.
+	TotalDeposited *string `json:"totalDeposited,omitempty"`
+	// Address of the underlying yield vault.
+	VaultAddress *string `json:"vaultAddress,omitempty"`
+	// Address of the deployed fee wrapper (the deposit target).
+	WrapperAddress *string `json:"wrapperAddress,omitempty"`
+}
+
+type EarnPosition struct {
+	// CAIP-19 asset ID of the vault's underlying asset (e.g. 'eip155:8453/erc20:0x833589...'); the chain is encoded in the identifier.
+	Caip19 *string `json:"caip19,omitempty"`
+	// Current value of the position in the underlying asset, in raw on-chain units (already net of the wrapper fee).
+	CurrentValue *string `json:"currentValue,omitempty"`
+	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Toggled via EarnSetWrapperState.
+	DepositsDisabled *bool `json:"depositsDisabled,omitempty"`
+	// USD + crypto renderings for display only. Do not do arithmetic with these.
+	Display *EarnPositionDisplay `json:"display,omitempty"`
+	// Yield provider for the vault.
+	Provider *EarnProvider `json:"provider,omitempty"`
+	// Lifetime total deposited into this position, in raw on-chain units.
+	TotalDeposited *string `json:"totalDeposited,omitempty"`
+	// Lifetime total withdrawn from this position, in raw on-chain units.
+	TotalWithdrawn *string `json:"totalWithdrawn,omitempty"`
+	// Address of the underlying yield vault.
+	VaultAddress *string `json:"vaultAddress,omitempty"`
+	// Address of the fee wrapper holding the position.
+	WrapperAddress *string `json:"wrapperAddress,omitempty"`
+}
+
+type EarnPositionDisplay struct {
+	// Current value in the asset's own units, for display only.
+	CurrentValueCrypto *string `json:"currentValueCrypto,omitempty"`
+	// Current value in USD, for display only.
+	CurrentValueUsd *string `json:"currentValueUsd,omitempty"`
+	// Total deposited in the asset's own units, for display only.
+	TotalDepositedCrypto *string `json:"totalDepositedCrypto,omitempty"`
+	// Total deposited in USD, for display only.
+	TotalDepositedUsd *string `json:"totalDepositedUsd,omitempty"`
+	// Total withdrawn in the asset's own units, for display only.
+	TotalWithdrawnCrypto *string `json:"totalWithdrawnCrypto,omitempty"`
+	// Total withdrawn in USD, for display only.
+	TotalWithdrawnUsd *string `json:"totalWithdrawnUsd,omitempty"`
+}
+
+type EarnSetWrapperStateIntent struct {
+	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Set to false to re-enable deposits.
+	DepositsDisabled bool `json:"depositsDisabled"`
+	// Address of the deployed Earn wrapper to update, from ListEarnVaults/ListEarnPositions. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+type EarnSetWrapperStateResult struct {
+	// The wrapper's deposit state after this activity.
+	DepositsDisabled bool `json:"depositsDisabled"`
+	// Address of the updated Earn wrapper.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+type EarnValueDisplay struct {
+	// Normalized amount in the asset's own units, for display only.
+	Crypto *string `json:"crypto,omitempty"`
+	// USD value, for display only.
+	Usd *string `json:"usd,omitempty"`
+}
+
+type EarnVault struct {
+	// Current annual percentage yield, expressed as a decimal fraction (e.g., '0.0812' for 8.12%).
+	ApyPct *string `json:"apyPct,omitempty"`
+	// CAIP-19 asset ID of the vault's underlying asset (e.g. 'eip155:8453/erc20:0x833589...'); the chain is encoded in the identifier.
+	Caip19 *string `json:"caip19,omitempty"`
+	// Vault curator name(s), comma-separated when a vault has multiple. Empty for providers without curators (e.g. Aave).
+	Curator *string `json:"curator,omitempty"`
+	// Normalized TVL values for display purposes only (usd + crypto). Do not do arithmetic with these; use tvl instead.
+	Display *EarnValueDisplay `json:"display,omitempty"`
+	// Whether the organization has enabled this vault.
+	Enabled *bool `json:"enabled,omitempty"`
+	// Assets currently withdrawable from the vault without a reallocation, in raw on-chain units of the underlying asset. Empty when the provider does not report it.
+	Liquidity *string `json:"liquidity,omitempty"`
+	// Normalized liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use liquidity instead.
+	LiquidityDisplay *EarnValueDisplay `json:"liquidityDisplay,omitempty"`
+	// Human-readable vault name from the provider (e.g. 'Steakhouse Prime USDC' for Morpho; the reserve symbol for Aave).
+	Name *string `json:"name,omitempty"`
+	// Yield provider for the vault.
+	Provider *EarnProvider `json:"provider,omitempty"`
+	// Total value locked in the vault, in raw on-chain units of the underlying asset. The catalog is sorted by the USD value of this.
+	Tvl *string `json:"tvl,omitempty"`
+	// Address of the underlying yield vault.
+	VaultAddress *string `json:"vaultAddress,omitempty"`
+}
+
+type EarnVaultExposure struct {
+	// CAIP-19 asset ID of the market's collateral asset. Empty for an idle/uncollateralized market.
+	CollateralCaip19 *string `json:"collateralCaip19,omitempty"`
+	// Symbol of the market's collateral asset (e.g. 'cbBTC'). Empty for an idle/uncollateralized market.
+	CollateralSymbol *string `json:"collateralSymbol,omitempty"`
+	// Normalized supplied values for display purposes only (usd + crypto). Do not do arithmetic with these; use supplied instead.
+	Display *EarnValueDisplay `json:"display,omitempty"`
+	// The market's liquidation loan-to-value, expressed as a decimal fraction (e.g. '0.86' for 86%).
+	LltvPct *string `json:"lltvPct,omitempty"`
+	// Provider-specific identifier for the market (the Morpho Blue market id).
+	MarketID *string `json:"marketId,omitempty"`
+	// This market's share of the vault's supplied assets, as a decimal fraction (e.g. '0.997' for 99.7%).
+	SharePct *string `json:"sharePct,omitempty"`
+	// Assets the vault supplies to this market, in raw on-chain units of the underlying asset.
+	Supplied *string `json:"supplied,omitempty"`
+}
+
 type EarnWithdrawIntent struct {
-	// Whether amount_value is denominated in shares or assets. 'SHARES' redeems wrapper shares (calls redeem()); 'ASSETS' withdraws underlying assets (calls withdraw(), enabling yield-only claims).
-	AmountType string `json:"amountType"`
-	// The amount to withdraw, in raw on-chain units, interpreted according to amount_type.
+	// The amount of the underlying asset to withdraw, in raw on-chain units. Pass 'MAX' to withdraw the entire position.
 	AmountValue string `json:"amountValue"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
 	ChainCaip2 string `json:"chainCaip2"`
@@ -2010,19 +2259,13 @@ type EarnWithdrawIntent struct {
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Address of the underlying yield vault to withdraw from. The org must have an enabled wrapper for this vault.
-	VaultAddress string `json:"vaultAddress"`
+	// Address of the deployed Earn wrapper holding the position to withdraw from, from ListEarnPositions. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
 }
 
 type EarnWithdrawResult struct {
-	// Amount of the underlying asset received, in raw on-chain units.
-	AssetsReceived string `json:"assetsReceived"`
-	// Number of wrapper shares burned, in raw on-chain units.
-	SharesBurned string `json:"sharesBurned"`
-	// Identifier to poll withdrawal status via EarnWithdrawStatus.
+	// Identifier to poll withdrawal status and tx hash via GetEarnWithdrawStatus.
 	WithdrawRequestID string `json:"withdrawRequestId"`
-	// Transaction hash of the withdrawal.
-	WithdrawTxHash string `json:"withdrawTxHash"`
 }
 
 type EmailAuthCustomizationParams struct {
@@ -2160,6 +2403,8 @@ type EmailEventDetails struct {
 	BounceSubType *string `json:"bounceSubType,omitempty"`
 	// Bounce type for Bounce events
 	BounceType *string `json:"bounceType,omitempty"`
+	// Feedback type for Complaint events
+	ComplaintFeedbackType *string `json:"complaintFeedbackType,omitempty"`
 	// Delay type for DeliveryDelay events
 	DeliveryDelayType *string `json:"deliveryDelayType,omitempty"`
 	// Processing time in milliseconds for Delivery events
@@ -2241,7 +2486,7 @@ type ETHSendTransactionIntentV2 struct {
 	From string `json:"from"`
 	// Maximum amount of gas for the outer transaction. Omit to auto-estimate.
 	GasLimit *string `json:"gasLimit,omitempty"`
-	// The gas station delegate contract nonce. Only used when sponsor=true. Omit to auto-fetch.
+	// The gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored transactions and non-sponsored multi-call batches. Omit to auto-fetch. Use the nonces endpoint for replay protection.
 	GasStationNonce *string `json:"gasStationNonce,omitempty"`
 	// Maximum total fee per gas unit (base fee + priority fee) in wei. Omit to auto-estimate.
 	MaxFeePerGas *string `json:"maxFeePerGas,omitempty"`
@@ -2268,14 +2513,57 @@ type ETHSendTransactionStatus struct {
 	TxHash *string `json:"txHash,omitempty"`
 }
 
+type ETHTransactionHistoryItem struct {
+	// Block metadata for the transaction.
+	Block TransactionHistoryBlock `json:"block"`
+	// Transaction fee information.
+	Fee TransactionHistoryFee `json:"fee"`
+	// EVM sender address for the transaction.
+	From string `json:"from"`
+	// Origin of the transaction. Examples include TURNKEY.
+	Origin string `json:"origin"`
+	// Transaction confirmation status.
+	Status string `json:"status"`
+	// EVM transaction destination address, such as the called contract or EVM tx.to. Omitted for contract-creation transactions with no destination. Recipients and payers of value transfers are reflected in transfers[].counterparty.
+	To *string `json:"to,omitempty"`
+	// EVM transaction hash.
+	TransactionHash string `json:"transactionHash"`
+	// Asset transfers associated with the transaction.
+	Transfers []TransactionHistoryTransfer `json:"transfers"`
+	// Turnkey-specific metadata for transactions originated by Turnkey.
+	Turnkey *TransactionHistoryTurnkey `json:"turnkey,omitempty"`
+}
+
+type ETHUndelegate7702Intent struct {
+	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
+	Caip2 string `json:"caip2"`
+	// A wallet or private key address to undelegate. This does not support private key IDs.
+	From string `json:"from"`
+	// Maximum amount of gas for the undelegation transaction. Omit to use the fixed undelegation gas limit.
+	GasLimit *string `json:"gasLimit,omitempty"`
+	// Maximum total fee per gas unit (base fee + priority fee) in wei. Omit to auto-estimate.
+	MaxFeePerGas *string `json:"maxFeePerGas,omitempty"`
+	// Maximum priority fee (tip) per gas unit in wei. Omit to auto-estimate.
+	MaxPriorityFeePerGas *string `json:"maxPriorityFeePerGas,omitempty"`
+	// Outer transaction nonce. Omit to auto-fetch.
+	Nonce *string `json:"nonce,omitempty"`
+}
+
+type ETHUndelegate7702Result struct {
+	// The send_transaction_status ID associated with the undelegation transaction submission
+	SendTransactionStatusID string `json:"sendTransactionStatusId"`
+}
+
 type ExecuteSwapIntent struct {
 	// Base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
 	InputToken string `json:"inputToken"`
+	// Minimum acceptable base-unit amount of the output asset. Execution fails if the swap provider's quoted minimum output falls below this floor at execution time.
+	MinOutputAmount string `json:"minOutputAmount"`
 	// CAIP-19 asset ID for the output asset. May be on a different chain than `input_token` for cross-chain swaps.
 	OutputToken string `json:"outputToken"`
-	// Swap provider to execute with, as returned by get_swap_quote. When omitted, execution uses the default provider.
+	// Swap provider to execute with, as returned by create_swap_quote. When omitted, execution uses the default provider.
 	Provider *string `json:"provider,omitempty"`
 	// Maximum allowed slippage in basis points.
 	Slippage *string `json:"slippage,omitempty"`
@@ -2285,13 +2573,36 @@ type ExecuteSwapIntent struct {
 	WalletAccount string `json:"walletAccount"`
 }
 
+type ExecuteSwapIntentV2 struct {
+	// Exact EVM sender (EOA account) nonce. Valid only for a non-sponsored EVM swap. Honored for already-delegated (Type-2) batch swaps and single-call swaps; ignored for not-yet-delegated EIP-7702 (Type-4) batches where the outer nonce is derived from the authorization. Prefer gas_station_nonce for batch replay protection and use the nonces endpoint to fetch it. Omit to auto-fetch.
+	EvmNonce *string `json:"evmNonce,omitempty"`
+	// Exact gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored EVM swaps and non-sponsored EVM swaps that execute as a multi-call batch (for example ERC-20 approve + swap). This is the replay-protection nonce for gas-station batches; use the nonces endpoint to fetch it. Omit to auto-fetch.
+	GasStationNonce *string `json:"gasStationNonce,omitempty"`
+	// Exact base-unit amount of the input asset committed by the quote.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset.
+	InputToken string `json:"inputToken"`
+	// Exact minimum base-unit output committed by the quote.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Quote identifier returned by create_swap_quote. Execution is bound to this quote; the signer is derived from the quote and must not be resupplied.
+	QuoteID string `json:"quoteId"`
+	// Exact quoted base-unit output amount committed by the quote.
+	QuotedOutputAmount string `json:"quotedOutputAmount"`
+	// Exact Solana recent blockhash. Valid only for a Solana swap, including sponsored swaps. Omit to auto-fetch.
+	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
+	// Whether the quoted transaction is sponsored.
+	Sponsor bool `json:"sponsor"`
+}
+
 type ExecuteSwapResult struct {
 	// Swap provider used to build the transaction.
 	Provider *string `json:"provider,omitempty"`
 	// Quote identifier used for execution, if any.
 	QuoteID *string `json:"quoteId,omitempty"`
-	// The send_transaction_status ID associated with the swap transaction submission
-	SendTransactionStatusID string `json:"sendTransactionStatusId"`
+	// Identifier to poll swap status via GetSwapStatus.
+	SwapRequestID string `json:"swapRequestId"`
 }
 
 type ExportPrivateKeyIntent struct {
@@ -2306,6 +2617,25 @@ type ExportPrivateKeyResult struct {
 	ExportBundle string `json:"exportBundle"`
 	// Unique identifier for a given Private Key.
 	PrivateKeyID string `json:"privateKeyId"`
+}
+
+type ExportSecretParams struct {
+	// Transport encryption suite used for the exported secret.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// Unique identifier for the secret to export.
+	SecretID string `json:"secretId"`
+	// Client-side public key generated by the user, to which the exported secret will be encrypted.
+	TargetPublicKey string `json:"targetPublicKey"`
+}
+
+type ExportSecretsIntent struct {
+	// A list of secrets to export.
+	Secrets []ExportSecretParams `json:"secrets"`
+}
+
+type ExportSecretsResult struct {
+	// Encryption suite specific payload containing each secret ciphertext, in the order the params were specified. For enclave encrypt v1 each entry is a JSON-encoded ServerSendMsg.
+	SecretPayloads []string `json:"secretPayloads"`
 }
 
 type ExportWalletAccountIntent struct {
@@ -2480,6 +2810,70 @@ type GetBootProofRequest struct {
 	OrganizationID string `json:"organizationId"`
 }
 
+type GetClaimEarnFeesStatusRequest struct {
+	// The claim_request_id returned by ClaimEarnFees.
+	ClaimRequestID string `json:"claimRequestId"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetClaimEarnFeesStatusResponse struct {
+	// Transaction hash of the fee claim, once available.
+	ClaimTxHash *string `json:"claimTxHash,omitempty"`
+	// Reason the fee claim transaction failed, when status is FAILED.
+	Error *string `json:"error,omitempty"`
+	// Status of the fee claim.
+	Status string `json:"status"`
+}
+
+type GetEarnDeployStatusRequest struct {
+	// The deploy_request_id returned by EarnDeployWrapper.
+	DeployRequestID string `json:"deployRequestId"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetEarnDeployStatusResponse struct {
+	// Transaction hash of the deployment, once available.
+	DeployTxHash *string `json:"deployTxHash,omitempty"`
+	// Reason the deployment transaction failed, when status is FAILED.
+	Error *string `json:"error,omitempty"`
+	// Status of the wrapper deployment.
+	Status string `json:"status"`
+}
+
+type GetEarnDepositStatusRequest struct {
+	// The deposit_request_id returned by EarnDeposit.
+	DepositRequestID string `json:"depositRequestId"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetEarnDepositStatusResponse struct {
+	// Transaction hash of the deposit, once available.
+	DepositTxHash *string `json:"depositTxHash,omitempty"`
+	// Reason the deposit transaction failed, when status is FAILED.
+	Error *string `json:"error,omitempty"`
+	// Status of the deposit.
+	Status string `json:"status"`
+}
+
+type GetEarnWithdrawStatusRequest struct {
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// The withdraw_request_id returned by EarnWithdraw.
+	WithdrawRequestID string `json:"withdrawRequestId"`
+}
+
+type GetEarnWithdrawStatusResponse struct {
+	// Reason the withdrawal transaction failed, when status is FAILED.
+	Error *string `json:"error,omitempty"`
+	// Status of the withdrawal.
+	Status string `json:"status"`
+	// Transaction hash of the withdrawal, once available.
+	WithdrawTxHash *string `json:"withdrawTxHash,omitempty"`
+}
+
 type GetGasUsageRequest struct {
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -2506,7 +2900,7 @@ type GetIPAllowlistResponse struct {
 }
 
 type GetLatestBootProofRequest struct {
-	// Name of enclave app.
+	// Unique identifier (UUID) of the enclave app.
 	AppName string `json:"appName"`
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -2754,6 +3148,40 @@ type GetSubOrgIdsResponse struct {
 	OrganizationIds []string `json:"organizationIds"`
 }
 
+type GetSwapStatusRequest struct {
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// The swap_request_id returned by ExecuteSwap.
+	SwapRequestID string `json:"swapRequestId"`
+}
+
+type GetSwapStatusResponse struct {
+	// Provider-reported destination-chain transaction hashes; cross-chain COMPLETED only.
+	DestinationTxHashes []string `json:"destinationTxHashes,omitempty"`
+	// Normalized failure details, present whenever status is FAILED.
+	Error *SwapError `json:"error,omitempty"`
+	// Base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset.
+	InputToken string `json:"inputToken"`
+	// Final included origin-chain transaction hash, when known.
+	OriginTxHash *string `json:"originTxHash,omitempty"`
+	// Actual base-unit output amount on COMPLETED, when known. Unset on FAILED.
+	OutputAmount *string `json:"outputAmount,omitempty"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Swap provider that executed the swap.
+	Provider string `json:"provider"`
+	// Funds returned by the provider after a successful origin transfer and failed cross-chain fill. Omitted for origin transaction failures and same-chain swaps.
+	Refund *SwapRefund `json:"refund,omitempty"`
+	// Normalized swap status. One of PENDING, COMPLETED, FAILED.
+	Status string `json:"status"`
+	// SAME_CHAIN or CROSS_CHAIN.
+	SwapKind string `json:"swapKind"`
+	// Timestamp of the last swap status change, as millisecond epoch string.
+	UpdatedAt string `json:"updatedAt"`
+}
+
 type GetTVCAppDeploymentsRequest struct {
 	// Unique identifier for a given TVC App.
 	AppID string `json:"appId"`
@@ -2816,6 +3244,18 @@ type GetTVCDeploymentResponse struct {
 	TVCDeployment TVCDeployment `json:"tvcDeployment"`
 }
 
+type GetTVCQosVersionsRequest struct {
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetTVCQosVersionsResponse struct {
+	// QOS versions supported for new TVC deployments.
+	AvailableVersions []string `json:"availableVersions"`
+	// Latest recommended QOS version for new TVC deployments.
+	LatestVersion string `json:"latestVersion"`
+}
+
 type GetUserRequest struct {
 	// Unique identifier for a given organization.
 	OrganizationID string `json:"organizationId"`
@@ -2836,6 +3276,15 @@ type GetUsersRequest struct {
 type GetUsersResponse struct {
 	// A list of users.
 	Users []User `json:"users"`
+}
+
+type GetVelocityControlRequest struct {
+	OrganizationID    string `json:"organizationId"`
+	VelocityControlID string `json:"velocityControlId"`
+}
+
+type GetVelocityControlResponse struct {
+	VelocityControl VelocityControl `json:"velocityControl"`
 }
 
 type GetVerifiedSubOrgIdsRequest struct {
@@ -2898,6 +3347,13 @@ type GetWalletAddressBalancesRequest struct {
 type GetWalletAddressBalancesResponse struct {
 	// List of asset balances
 	Balances []AssetBalance `json:"balances,omitempty"`
+}
+
+type AuthProxyGetWalletKitClientParamsRequest map[string]any
+
+type AuthProxyGetWalletKitClientParamsResponse struct {
+	// Site key for Turnstile, used to protect WalletKit flows with bot detection.
+	TurnstileSiteKey *string `json:"turnstileSiteKey,omitempty"`
 }
 
 type AuthProxyGetWalletKitConfigRequest map[string]any
@@ -2975,6 +3431,29 @@ type ImportPrivateKeyResult struct {
 	PrivateKeyID string `json:"privateKeyId"`
 }
 
+type ImportSecretParams struct {
+	// Transport encryption suite used for the ingress secret.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// Optional human-readable name for the secret. Names must be unique within an organization when provided.
+	Name *string `json:"name,omitempty"`
+	// Encryption suite specific payload containing the secret ciphertext. For enclave encrypt v1 this is a JSON-encoded ClientSendMsg.
+	SecretPayload string `json:"secretPayload"`
+	// Policy-visible, static properties to permanently bind to the secret.
+	StaticProperties []KeyValue `json:"staticProperties,omitempty"`
+	// Targeted transport encryption public key, as returned by InitImportSecrets.
+	TargetPublicKey string `json:"targetPublicKey"`
+}
+
+type ImportSecretsIntent struct {
+	// A list of secrets to import.
+	Secrets []ImportSecretParams `json:"secrets"`
+}
+
+type ImportSecretsResult struct {
+	// Unique identifier for each imported secret, in the order the params were specified.
+	SecretIds []string `json:"secretIds"`
+}
+
 type ImportWalletIntent struct {
 	// A list of wallet Accounts.
 	Accounts []WalletAccountParams `json:"accounts"`
@@ -3037,6 +3516,18 @@ type InitImportPrivateKeyResult struct {
 	ImportBundle string `json:"importBundle"`
 }
 
+type InitImportSecretsIntent struct {
+	// Transport encryption suite used for ingress secrets.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// The number of secrets the user intends to import.
+	NumSecrets int `json:"numSecrets"`
+}
+
+type InitImportSecretsResult struct {
+	// Enclave ingress target keys along with metadata specific to the encryption suite. For enclave encrypt v1 this will be ServerTargetMsgV1.
+	EnclaveTargetMessages []string `json:"enclaveTargetMessages"`
+}
+
 type InitImportWalletIntent struct {
 	// The ID of the User importing a Wallet.
 	UserID string `json:"userId"`
@@ -3052,7 +3543,7 @@ type InitOTPAuthIntent struct {
 	Contact string `json:"contact"`
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
 	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
-	// Enum to specify whether to send OTP via SMS or email
+	// Enum to specify whether to send OTP via SMS, email, or WhatsApp
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3075,7 +3566,7 @@ type InitOTPAuthIntentV2 struct {
 	EmailCustomization *EmailCustomizationParams `json:"emailCustomization,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Enum to specify whether to send OTP via SMS or email
+	// Enum to specify whether to send OTP via SMS, email, or WhatsApp
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3102,7 +3593,7 @@ type InitOTPAuthIntentV3 struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3137,7 +3628,7 @@ type InitOTPIntent struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3164,7 +3655,7 @@ type InitOTPIntentV2 struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3191,7 +3682,7 @@ type InitOTPIntentV3 struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -3227,7 +3718,7 @@ type AuthProxyInitOTPV2Request struct {
 	Contact string `json:"contact"`
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
 	EmailCustomization *AuthProxyProxyEmailCustomizationParams `json:"emailCustomization,omitempty"`
-	// Enum to specify whether to send OTP code via SMS or email
+	// Enum to specify whether to send OTP code via SMS, email, or WhatsApp
 	OTPType string `json:"otpType"`
 }
 
@@ -3282,6 +3773,8 @@ type Intent struct {
 	AcceptInvitationIntentV2           *AcceptInvitationIntentV2           `json:"acceptInvitationIntentV2,omitempty"`
 	ActivateBillingTierIntent          *BillingActivateBillingTierIntent   `json:"activateBillingTierIntent,omitempty"`
 	ApproveActivityIntent              *ApproveActivityIntent              `json:"approveActivityIntent,omitempty"`
+	ClaimEarnFeesIntent                *ClaimEarnFeesIntent                `json:"claimEarnFeesIntent,omitempty"`
+	ClaimSwapFeesIntent                *ClaimSwapFeesIntent                `json:"claimSwapFeesIntent,omitempty"`
 	CreateAPIKeysIntent                *CreateAPIKeysIntent                `json:"createApiKeysIntent,omitempty"`
 	CreateAPIKeysIntentV2              *CreateAPIKeysIntentV2              `json:"createApiKeysIntentV2,omitempty"`
 	CreateAPIOnlyUsersIntent           *CreateAPIOnlyUsersIntent           `json:"createApiOnlyUsersIntent,omitempty"`
@@ -3315,6 +3808,7 @@ type Intent struct {
 	CreateSubOrganizationIntentV6      *CreateSubOrganizationIntentV6      `json:"createSubOrganizationIntentV6,omitempty"`
 	CreateSubOrganizationIntentV7      *CreateSubOrganizationIntentV7      `json:"createSubOrganizationIntentV7,omitempty"`
 	CreateSubOrganizationIntentV8      *CreateSubOrganizationIntentV8      `json:"createSubOrganizationIntentV8,omitempty"`
+	CreateSwapQuoteIntent              *CreateSwapQuoteIntent              `json:"createSwapQuoteIntent,omitempty"`
 	CreateTVCAppIntent                 *CreateTVCAppIntent                 `json:"createTvcAppIntent,omitempty"`
 	CreateTVCDeploymentIntent          *CreateTVCDeploymentIntent          `json:"createTvcDeploymentIntent,omitempty"`
 	CreateTVCManifestApprovalsIntent   *CreateTVCManifestApprovalsIntent   `json:"createTvcManifestApprovalsIntent,omitempty"`
@@ -3325,6 +3819,7 @@ type Intent struct {
 	CreateUsersIntentV2                *CreateUsersIntentV2                `json:"createUsersIntentV2,omitempty"`
 	CreateUsersIntentV3                *CreateUsersIntentV3                `json:"createUsersIntentV3,omitempty"`
 	CreateUsersIntentV4                *CreateUsersIntentV4                `json:"createUsersIntentV4,omitempty"`
+	CreateVelocityControlIntent        *CreateVelocityControlIntent        `json:"createVelocityControlIntent,omitempty"`
 	CreateWalletAccountsIntent         *CreateWalletAccountsIntent         `json:"createWalletAccountsIntent,omitempty"`
 	CreateWalletIntent                 *CreateWalletIntent                 `json:"createWalletIntent,omitempty"`
 	CreateWebhookEndpointIntent        *CreateWebhookEndpointIntent        `json:"createWebhookEndpointIntent,omitempty"`
@@ -3347,6 +3842,7 @@ type Intent struct {
 	DeleteTVCDeploymentIntent          *DeleteTVCDeploymentIntent          `json:"deleteTvcDeploymentIntent,omitempty"`
 	DeleteUserTagsIntent               *DeleteUserTagsIntent               `json:"deleteUserTagsIntent,omitempty"`
 	DeleteUsersIntent                  *DeleteUsersIntent                  `json:"deleteUsersIntent,omitempty"`
+	DeleteVelocityControlIntent        *DeleteVelocityControlIntent        `json:"deleteVelocityControlIntent,omitempty"`
 	DeleteWalletAccountsIntent         *DeleteWalletAccountsIntent         `json:"deleteWalletAccountsIntent,omitempty"`
 	DeleteWalletsIntent                *DeleteWalletsIntent                `json:"deleteWalletsIntent,omitempty"`
 	DeleteWebhookEndpointIntent        *DeleteWebhookEndpointIntent        `json:"deleteWebhookEndpointIntent,omitempty"`
@@ -3354,6 +3850,7 @@ type Intent struct {
 	DisablePrivateKeyIntent            *DisablePrivateKeyIntent            `json:"disablePrivateKeyIntent,omitempty"`
 	EarnDeployWrapperIntent            *EarnDeployWrapperIntent            `json:"earnDeployWrapperIntent,omitempty"`
 	EarnDepositIntent                  *EarnDepositIntent                  `json:"earnDepositIntent,omitempty"`
+	EarnSetWrapperStateIntent          *EarnSetWrapperStateIntent          `json:"earnSetWrapperStateIntent,omitempty"`
 	EarnWithdrawIntent                 *EarnWithdrawIntent                 `json:"earnWithdrawIntent,omitempty"`
 	EmailAuthIntent                    *EmailAuthIntent                    `json:"emailAuthIntent,omitempty"`
 	EmailAuthIntentV2                  *EmailAuthIntentV2                  `json:"emailAuthIntentV2,omitempty"`
@@ -3362,14 +3859,19 @@ type Intent struct {
 	ETHSendRawTransactionIntent        *ETHSendRawTransactionIntent        `json:"ethSendRawTransactionIntent,omitempty"`
 	ETHSendTransactionIntent           *ETHSendTransactionIntent           `json:"ethSendTransactionIntent,omitempty"`
 	ETHSendTransactionIntentV2         *ETHSendTransactionIntentV2         `json:"ethSendTransactionIntentV2,omitempty"`
+	ETHUndelegate7702Intent            *ETHUndelegate7702Intent            `json:"ethUndelegate7702Intent,omitempty"`
 	ExecuteSwapIntent                  *ExecuteSwapIntent                  `json:"executeSwapIntent,omitempty"`
+	ExecuteSwapIntentV2                *ExecuteSwapIntentV2                `json:"executeSwapIntentV2,omitempty"`
 	ExportPrivateKeyIntent             *ExportPrivateKeyIntent             `json:"exportPrivateKeyIntent,omitempty"`
+	ExportSecretsIntent                *ExportSecretsIntent                `json:"exportSecretsIntent,omitempty"`
 	ExportWalletAccountIntent          *ExportWalletAccountIntent          `json:"exportWalletAccountIntent,omitempty"`
 	ExportWalletIntent                 *ExportWalletIntent                 `json:"exportWalletIntent,omitempty"`
 	ImportPrivateKeyIntent             *ImportPrivateKeyIntent             `json:"importPrivateKeyIntent,omitempty"`
+	ImportSecretsIntent                *ImportSecretsIntent                `json:"importSecretsIntent,omitempty"`
 	ImportWalletIntent                 *ImportWalletIntent                 `json:"importWalletIntent,omitempty"`
 	InitFiatOnRampIntent               *InitFiatOnRampIntent               `json:"initFiatOnRampIntent,omitempty"`
 	InitImportPrivateKeyIntent         *InitImportPrivateKeyIntent         `json:"initImportPrivateKeyIntent,omitempty"`
+	InitImportSecretsIntent            *InitImportSecretsIntent            `json:"initImportSecretsIntent,omitempty"`
 	InitImportWalletIntent             *InitImportWalletIntent             `json:"initImportWalletIntent,omitempty"`
 	InitOTPAuthIntent                  *InitOTPAuthIntent                  `json:"initOtpAuthIntent,omitempty"`
 	InitOTPAuthIntentV2                *InitOTPAuthIntentV2                `json:"initOtpAuthIntentV2,omitempty"`
@@ -3402,6 +3904,7 @@ type Intent struct {
 	SignTransactionIntent              *SignTransactionIntent              `json:"signTransactionIntent,omitempty"`
 	SignTransactionIntentV2            *SignTransactionIntentV2            `json:"signTransactionIntentV2,omitempty"`
 	SolSendTransactionIntent           *SolSendTransactionIntent           `json:"solSendTransactionIntent,omitempty"`
+	SolSendTransactionIntentV2         *SolSendTransactionIntentV2         `json:"solSendTransactionIntentV2,omitempty"`
 	SparkClaimTransferIntent           *SparkClaimTransferIntent           `json:"sparkClaimTransferIntent,omitempty"`
 	SparkPrepareLightningReceiveIntent *SparkPrepareLightningReceiveIntent `json:"sparkPrepareLightningReceiveIntent,omitempty"`
 	SparkPrepareTransferIntent         *SparkPrepareTransferIntent         `json:"sparkPrepareTransferIntent,omitempty"`
@@ -3423,9 +3926,9 @@ type Intent struct {
 	UpdateUserNameIntent               *UpdateUserNameIntent               `json:"updateUserNameIntent,omitempty"`
 	UpdateUserPhoneNumberIntent        *UpdateUserPhoneNumberIntent        `json:"updateUserPhoneNumberIntent,omitempty"`
 	UpdateUserTagIntent                *UpdateUserTagIntent                `json:"updateUserTagIntent,omitempty"`
+	UpdateWalletAccountNameIntent      *UpdateWalletAccountNameIntent      `json:"updateWalletAccountNameIntent,omitempty"`
 	UpdateWalletIntent                 *UpdateWalletIntent                 `json:"updateWalletIntent,omitempty"`
 	UpdateWebhookEndpointIntent        *UpdateWebhookEndpointIntent        `json:"updateWebhookEndpointIntent,omitempty"`
-	UpsertEarnClientFeeConfigIntent    *UpsertEarnClientFeeConfigIntent    `json:"upsertEarnClientFeeConfigIntent,omitempty"`
 	UpsertGasUsageConfigIntent         *UpsertGasUsageConfigIntent         `json:"upsertGasUsageConfigIntent,omitempty"`
 	UpsertSwapConfigIntent             *UpsertSwapConfigIntent             `json:"upsertSwapConfigIntent,omitempty"`
 	VerifyOTPIntent                    *VerifyOTPIntent                    `json:"verifyOtpIntent,omitempty"`
@@ -3474,6 +3977,57 @@ type IPAllowlistRule struct {
 	Label *string `json:"label,omitempty"`
 }
 
+type KeyValue struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+type ListEarnEnabledVaultsRequest struct {
+	// Optional filter: only return enabled vaults whose underlying asset matches this CAIP-19 asset ID (e.g. 'eip155:8453/erc20:0x833589...'). The chain is taken from the CAIP-19 identifier.
+	Caip19 *string `json:"caip19,omitempty"`
+	// When true, populate each vault's exposures (the underlying markets it allocates into). This costs an extra provider query per vault, so leave it off for list views.
+	IncludeExposure *bool `json:"includeExposure,omitempty"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// Optional filter: only return enabled vaults from this provider. Leave EARN_PROVIDER_UNSPECIFIED to return all providers.
+	Provider *EarnProvider `json:"provider,omitempty"`
+}
+
+type ListEarnEnabledVaultsResponse struct {
+	// The organization's deployed wrappers.
+	EnabledVaults []EarnEnabledVault `json:"enabledVaults,omitempty"`
+}
+
+type ListEarnPositionsRequest struct {
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// The wallet address to return positions for.
+	WalletAddress string `json:"walletAddress"`
+}
+
+type ListEarnPositionsResponse struct {
+	// The wallet's active Earn positions.
+	Positions []EarnPosition `json:"positions,omitempty"`
+}
+
+type ListEarnVaultsRequest struct {
+	// CAIP-19 asset ID (e.g. 'eip155:8453/erc20:0x833589...') to return vaults for. Only vaults whose underlying asset matches are returned; the chain is taken from the CAIP-19 identifier.
+	Caip19 string `json:"caip19"`
+	// Unique identifier for a given Organization. Annotates which vaults the organization has already enabled.
+	OrganizationID string `json:"organizationId"`
+	// Pagination over the TVL-sorted catalog. before/after cursors are a vault_address from a prior page.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+	// Optional filter: only return vaults from this provider. Leave EARN_PROVIDER_UNSPECIFIED to return all providers.
+	Provider *EarnProvider `json:"provider,omitempty"`
+}
+
+type ListEarnVaultsResponse struct {
+	// Pagination metadata for the returned page. Pass end_cursor as the next request's after cursor (or start_cursor as the before cursor) to page through the catalog. Cursors are opaque; do not parse them.
+	PageInfo *PageInfo `json:"pageInfo,omitempty"`
+	// The catalog of wrappable vaults, sorted by TVL (USD) descending. To page, pass page_info.end_cursor as the pagination after cursor.
+	Vaults []EarnVault `json:"vaults,omitempty"`
+}
+
 type ListEmailEventsRequest struct {
 	// Recipient email address to list email events for
 	Email string `json:"email"`
@@ -3488,6 +4042,23 @@ type ListEmailEventsRequest struct {
 type ListEmailEventsResponse struct {
 	// Email events matching the requested filters, ordered by most recent event first.
 	EmailEvents []EmailEvent `json:"emailEvents"`
+}
+
+type ListETHTransactionHistoryRequest struct {
+	// Address corresponding to a wallet account. Private key addresses are not supported.
+	Address string `json:"address"`
+	// EVM CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
+	Caip2 string `json:"caip2"`
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+	// Cursor-based pagination options. Cursors are opaque and valid only for the same address and CAIP-2 query.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+}
+
+type ListETHTransactionHistoryResponse struct {
+	PageInfo *PageInfo `json:"pageInfo,omitempty"`
+	// EVM transactions for the requested address, ordered by most recent first.
+	Transactions []ETHTransactionHistoryItem `json:"transactions"`
 }
 
 type ListFiatOnRampCredentialsRequest struct {
@@ -3518,6 +4089,35 @@ type ListPrivateKeyTagsResponse struct {
 	PrivateKeyTags []DataV1Tag `json:"privateKeyTags"`
 }
 
+type ListSecretsRequest struct {
+	// Unique identifier for the organization or sub-organization whose secrets are listed.
+	OrganizationID string `json:"organizationId"`
+	// Parameters used for cursor-based pagination.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+}
+
+type ListSecretsResponse struct {
+	// Metadata for each secret in the organization, ordered by most recently created first.
+	Secrets []SecretMetadata `json:"secrets"`
+}
+
+type ListSolTransactionHistoryRequest struct {
+	// Address corresponding to a wallet account. Private key addresses are not supported.
+	Address string `json:"address"`
+	// Solana CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
+	Caip2 string `json:"caip2"`
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+	// Cursor-based pagination options. Cursors are opaque and valid only for the same address and CAIP-2 query.
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+}
+
+type ListSolTransactionHistoryResponse struct {
+	PageInfo *PageInfo `json:"pageInfo,omitempty"`
+	// Solana transactions for the requested address, ordered by most recent first.
+	Transactions []SolTransactionHistoryItem `json:"transactions"`
+}
+
 type ListSupportedAssetsRequest struct {
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet or 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
@@ -3538,6 +4138,16 @@ type ListUserTagsRequest struct {
 type ListUserTagsResponse struct {
 	// A list of user tags.
 	UserTags []DataV1Tag `json:"userTags"`
+}
+
+type ListVelocityControlsRequest struct {
+	OrganizationID    string      `json:"organizationId"`
+	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
+}
+
+type ListVelocityControlsResponse struct {
+	PageInfo         PageInfo          `json:"pageInfo"`
+	VelocityControls []VelocityControl `json:"velocityControls"`
 }
 
 type ListWebhookEndpointsRequest struct {
@@ -3838,6 +4448,13 @@ type AuthProxyOTPLoginV2Response struct {
 	Session string `json:"session"`
 }
 
+type PageInfo struct {
+	EndCursor       *string `json:"endCursor,omitempty"`
+	HasNextPage     *bool   `json:"hasNextPage,omitempty"`
+	HasPreviousPage *bool   `json:"hasPreviousPage,omitempty"`
+	StartCursor     *string `json:"startCursor,omitempty"`
+}
+
 type Pagination struct {
 	// A pagination cursor. This is an object ID that enables you to fetch all objects after this ID.
 	After *string `json:"after,omitempty"`
@@ -3860,8 +4477,10 @@ type Policy struct {
 	// Unique identifier for a given Policy.
 	PolicyID string `json:"policyId"`
 	// Human-readable name for a Policy.
-	PolicyName string                  `json:"policyName"`
-	UpdatedAt  ExternalDataV1Timestamp `json:"updatedAt"`
+	PolicyName string `json:"policyName"`
+	// A time expression that evalutes to true or false.
+	Time      *string                 `json:"time,omitempty"`
+	UpdatedAt ExternalDataV1Timestamp `json:"updatedAt"`
 }
 
 type PostTVCQuorumKeyShareIntent struct {
@@ -4015,6 +4634,8 @@ type RestoreTVCDeploymentResult struct {
 type Result struct {
 	AcceptInvitationResult             *AcceptInvitationResult             `json:"acceptInvitationResult,omitempty"`
 	ActivateBillingTierResult          *BillingActivateBillingTierResult   `json:"activateBillingTierResult,omitempty"`
+	ClaimEarnFeesResult                *ClaimEarnFeesResult                `json:"claimEarnFeesResult,omitempty"`
+	ClaimSwapFeesResult                *ClaimSwapFeesResult                `json:"claimSwapFeesResult,omitempty"`
 	CreateAPIKeysResult                *CreateAPIKeysResult                `json:"createApiKeysResult,omitempty"`
 	CreateAPIOnlyUsersResult           *CreateAPIOnlyUsersResult           `json:"createApiOnlyUsersResult,omitempty"`
 	CreateAuthenticatorsResult         *CreateAuthenticatorsResult         `json:"createAuthenticatorsResult,omitempty"`
@@ -4042,6 +4663,7 @@ type Result struct {
 	CreateSubOrganizationResultV6      *CreateSubOrganizationResultV6      `json:"createSubOrganizationResultV6,omitempty"`
 	CreateSubOrganizationResultV7      *CreateSubOrganizationResultV7      `json:"createSubOrganizationResultV7,omitempty"`
 	CreateSubOrganizationResultV8      *CreateSubOrganizationResultV8      `json:"createSubOrganizationResultV8,omitempty"`
+	CreateSwapQuoteResult              *CreateSwapQuoteResult              `json:"createSwapQuoteResult,omitempty"`
 	CreateTVCAppResult                 *CreateTVCAppResult                 `json:"createTvcAppResult,omitempty"`
 	CreateTVCDeploymentResult          *CreateTVCDeploymentResult          `json:"createTvcDeploymentResult,omitempty"`
 	CreateTVCManifestApprovalsResult   *CreateTVCManifestApprovalsResult   `json:"createTvcManifestApprovalsResult,omitempty"`
@@ -4049,6 +4671,7 @@ type Result struct {
 	CreateTVCQuorumKeyResult           *CreateTVCQuorumKeyResult           `json:"createTvcQuorumKeyResult,omitempty"`
 	CreateUserTagResult                *CreateUserTagResult                `json:"createUserTagResult,omitempty"`
 	CreateUsersResult                  *CreateUsersResult                  `json:"createUsersResult,omitempty"`
+	CreateVelocityControlResult        *CreateVelocityControlResult        `json:"createVelocityControlResult,omitempty"`
 	CreateWalletAccountsResult         *CreateWalletAccountsResult         `json:"createWalletAccountsResult,omitempty"`
 	CreateWalletResult                 *CreateWalletResult                 `json:"createWalletResult,omitempty"`
 	CreateWebhookEndpointResult        *CreateWebhookEndpointResult        `json:"createWebhookEndpointResult,omitempty"`
@@ -4071,6 +4694,7 @@ type Result struct {
 	DeleteTVCDeploymentResult          *DeleteTVCDeploymentResult          `json:"deleteTvcDeploymentResult,omitempty"`
 	DeleteUserTagsResult               *DeleteUserTagsResult               `json:"deleteUserTagsResult,omitempty"`
 	DeleteUsersResult                  *DeleteUsersResult                  `json:"deleteUsersResult,omitempty"`
+	DeleteVelocityControlResult        *DeleteVelocityControlResult        `json:"deleteVelocityControlResult,omitempty"`
 	DeleteWalletAccountsResult         *DeleteWalletAccountsResult         `json:"deleteWalletAccountsResult,omitempty"`
 	DeleteWalletsResult                *DeleteWalletsResult                `json:"deleteWalletsResult,omitempty"`
 	DeleteWebhookEndpointResult        *DeleteWebhookEndpointResult        `json:"deleteWebhookEndpointResult,omitempty"`
@@ -4078,20 +4702,25 @@ type Result struct {
 	DisablePrivateKeyResult            *DisablePrivateKeyResult            `json:"disablePrivateKeyResult,omitempty"`
 	EarnDeployWrapperResult            *EarnDeployWrapperResult            `json:"earnDeployWrapperResult,omitempty"`
 	EarnDepositResult                  *EarnDepositResult                  `json:"earnDepositResult,omitempty"`
+	EarnSetWrapperStateResult          *EarnSetWrapperStateResult          `json:"earnSetWrapperStateResult,omitempty"`
 	EarnWithdrawResult                 *EarnWithdrawResult                 `json:"earnWithdrawResult,omitempty"`
 	EmailAuthResult                    *EmailAuthResult                    `json:"emailAuthResult,omitempty"`
 	EnableAuthProxyResult              *EnableAuthProxyResult              `json:"enableAuthProxyResult,omitempty"`
 	ETHSendRawTransactionResult        *ETHSendRawTransactionResult        `json:"ethSendRawTransactionResult,omitempty"`
 	ETHSendTransactionResult           *ETHSendTransactionResult           `json:"ethSendTransactionResult,omitempty"`
 	ETHSendTransactionResultV2         *ETHSendTransactionResultV2         `json:"ethSendTransactionResultV2,omitempty"`
+	ETHUndelegate7702Result            *ETHUndelegate7702Result            `json:"ethUndelegate7702Result,omitempty"`
 	ExecuteSwapResult                  *ExecuteSwapResult                  `json:"executeSwapResult,omitempty"`
 	ExportPrivateKeyResult             *ExportPrivateKeyResult             `json:"exportPrivateKeyResult,omitempty"`
+	ExportSecretsResult                *ExportSecretsResult                `json:"exportSecretsResult,omitempty"`
 	ExportWalletAccountResult          *ExportWalletAccountResult          `json:"exportWalletAccountResult,omitempty"`
 	ExportWalletResult                 *ExportWalletResult                 `json:"exportWalletResult,omitempty"`
 	ImportPrivateKeyResult             *ImportPrivateKeyResult             `json:"importPrivateKeyResult,omitempty"`
+	ImportSecretsResult                *ImportSecretsResult                `json:"importSecretsResult,omitempty"`
 	ImportWalletResult                 *ImportWalletResult                 `json:"importWalletResult,omitempty"`
 	InitFiatOnRampResult               *InitFiatOnRampResult               `json:"initFiatOnRampResult,omitempty"`
 	InitImportPrivateKeyResult         *InitImportPrivateKeyResult         `json:"initImportPrivateKeyResult,omitempty"`
+	InitImportSecretsResult            *InitImportSecretsResult            `json:"initImportSecretsResult,omitempty"`
 	InitImportWalletResult             *InitImportWalletResult             `json:"initImportWalletResult,omitempty"`
 	InitOTPAuthResult                  *InitOTPAuthResult                  `json:"initOtpAuthResult,omitempty"`
 	InitOTPAuthResultV2                *InitOTPAuthResultV2                `json:"initOtpAuthResultV2,omitempty"`
@@ -4116,6 +4745,7 @@ type Result struct {
 	SignRawPayloadsResult              *SignRawPayloadsResult              `json:"signRawPayloadsResult,omitempty"`
 	SignTransactionResult              *SignTransactionResult              `json:"signTransactionResult,omitempty"`
 	SolSendTransactionResult           *SolSendTransactionResult           `json:"solSendTransactionResult,omitempty"`
+	SolSendTransactionResultV2         *SolSendTransactionResultV2         `json:"solSendTransactionResultV2,omitempty"`
 	SparkClaimTransferResult           *SparkClaimTransferResult           `json:"sparkClaimTransferResult,omitempty"`
 	SparkPrepareLightningReceiveResult *SparkPrepareLightningReceiveResult `json:"sparkPrepareLightningReceiveResult,omitempty"`
 	SparkPrepareTransferResult         *SparkPrepareTransferResult         `json:"sparkPrepareTransferResult,omitempty"`
@@ -4137,9 +4767,9 @@ type Result struct {
 	UpdateUserPhoneNumberResult        *UpdateUserPhoneNumberResult        `json:"updateUserPhoneNumberResult,omitempty"`
 	UpdateUserResult                   *UpdateUserResult                   `json:"updateUserResult,omitempty"`
 	UpdateUserTagResult                *UpdateUserTagResult                `json:"updateUserTagResult,omitempty"`
+	UpdateWalletAccountNameResult      *UpdateWalletAccountNameResult      `json:"updateWalletAccountNameResult,omitempty"`
 	UpdateWalletResult                 *UpdateWalletResult                 `json:"updateWalletResult,omitempty"`
 	UpdateWebhookEndpointResult        *UpdateWebhookEndpointResult        `json:"updateWebhookEndpointResult,omitempty"`
-	UpsertEarnClientFeeConfigResult    *UpsertEarnClientFeeConfigResult    `json:"upsertEarnClientFeeConfigResult,omitempty"`
 	UpsertGasUsageConfigResult         *UpsertGasUsageConfigResult         `json:"upsertGasUsageConfigResult,omitempty"`
 	UpsertSwapConfigResult             *UpsertSwapConfigResult             `json:"upsertSwapConfigResult,omitempty"`
 	VerifyOTPResult                    *VerifyOTPResult                    `json:"verifyOtpResult,omitempty"`
@@ -4225,6 +4855,17 @@ type RootUserParamsV5 struct {
 	UserName string `json:"userName"`
 	// The user's phone number in E.164 format e.g. +13214567890
 	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
+}
+
+type SecretMetadata struct {
+	// Unix timestamp in milliseconds for when the secret was created.
+	CreatedAtUnixMs string `json:"createdAtUnixMs"`
+	// Optional human-readable name for the secret.
+	Name *string `json:"name,omitempty"`
+	// Unique identifier for the secret.
+	SecretID string `json:"secretId"`
+	// Policy visible static properties bound to the secret at creation time.
+	StaticProperties []KeyValue `json:"staticProperties"`
 }
 
 type Selector struct {
@@ -4443,9 +5084,55 @@ type SolSendTransactionIntent struct {
 	UnsignedTransaction string `json:"unsignedTransaction"`
 }
 
+type SolSendTransactionIntentV2 struct {
+	// CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
+	Caip2 string `json:"caip2"`
+	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
+	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
+	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers. For sponsored transactions this must list every required signer of the transaction in transaction order.
+	SignWiths []string `json:"signWiths"`
+	// Whether to sponsor this transaction via Gas Station.
+	Sponsor *bool `json:"sponsor,omitempty"`
+	// Hex-encoded serialized unsigned Solana transaction (full wire format with zeroed signature placeholders)
+	UnsignedTransaction string `json:"unsignedTransaction"`
+}
+
 type SolSendTransactionResult struct {
 	// The send_transaction_status ID associated with the transaction submission
 	SendTransactionStatusID string `json:"sendTransactionStatusId"`
+}
+
+type SolSendTransactionResultV2 struct {
+	// The send_transaction_status ID associated with the transaction submission
+	SendTransactionStatusID string `json:"sendTransactionStatusId"`
+}
+
+type SolTransactionHistoryItem struct {
+	// Block metadata for the transaction.
+	Block TransactionHistoryBlock `json:"block"`
+	// Transaction fee information.
+	Fee TransactionHistoryFee `json:"fee"`
+	// Address that paid the Solana transaction fee. This is the first signer in the transaction message.
+	FeePayer string `json:"feePayer"`
+	// Origin of the transaction. Examples include TURNKEY.
+	Origin string `json:"origin"`
+	// Solana transaction signature.
+	Signature string `json:"signature"`
+	// Addresses that signed the Solana transaction, in message order.
+	Signers []SolTransactionHistorySigner `json:"signers"`
+	// Transaction confirmation status.
+	Status string `json:"status"`
+	// Asset transfers associated with the transaction.
+	Transfers []TransactionHistoryTransfer `json:"transfers"`
+	// Turnkey-specific metadata for transactions originated by Turnkey.
+	Turnkey *TransactionHistoryTurnkey `json:"turnkey,omitempty"`
+}
+
+type SolTransactionHistorySigner struct {
+	// Address of the Solana transaction signer.
+	Address string `json:"address"`
+	// Whether the signer account was writable in the Solana transaction message.
+	Writable bool `json:"writable"`
 }
 
 type SolanaConfig struct {
@@ -4685,6 +5372,45 @@ type StampLoginResult struct {
 	Session string `json:"session"`
 }
 
+type SwapError struct {
+	// Human-readable description of the swap failure.
+	Message string `json:"message"`
+	// Origin-chain transaction failure details, present when reason is ORIGIN_TRANSACTION_FAILED and details are available.
+	OriginTxError *TxError `json:"originTxError,omitempty"`
+	// Optional detail from the swap provider about why the fill did not complete, when available.
+	ProviderReason *string `json:"providerReason,omitempty"`
+	// Stable machine-readable failure reason. One of ORIGIN_TRANSACTION_FAILED or PROVIDER_FILL_FAILED.
+	Reason string `json:"reason"`
+}
+
+type SwapQuote struct {
+	// Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount.
+	ClientFeeBps string `json:"clientFeeBps"`
+	// Provider-estimated completion time in seconds, when available.
+	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
+	// Quote expiration as a millisecond epoch string.
+	ExpiresAt string `json:"expiresAt"`
+	// Minimum acceptable base-unit amount of the output asset after slippage.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// Estimated base-unit amount of the output asset.
+	OutputAmount string `json:"outputAmount"`
+	// Swap provider that produced this quote.
+	Provider string `json:"provider"`
+	// Identifier for this provider quote. Pass this value to execute_swap_v2 to bind execution to this exact quote. The signer is derived from the quote; clients do not resupply sign_with on execute.
+	QuoteID string `json:"quoteId"`
+	// Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
+type SwapRefund struct {
+	// Base-unit amount returned by the swap provider.
+	Amount string `json:"amount"`
+	// CAIP-19 asset returned by the swap provider after a failed cross-chain fill.
+	Asset string `json:"asset"`
+	// Transaction that delivered the provider refund, when applicable.
+	TxHash *string `json:"txHash,omitempty"`
+}
+
 type TokenUsage struct {
 	Login    *LoginUsage    `json:"login,omitempty"`
 	Signup   *SignupUsage   `json:"signup,omitempty"`
@@ -4693,6 +5419,62 @@ type TokenUsage struct {
 	TokenID string `json:"tokenId"`
 	// Type of token usage
 	TypeValue UsageType `json:"type"`
+}
+
+type TransactionHistoryAsset struct {
+	// The CAIP-19 asset identifier.
+	Caip19 string `json:"caip19"`
+	// The number of decimals this asset uses.
+	Decimals int `json:"decimals"`
+	// The asset name.
+	Name string `json:"name"`
+	// The asset symbol.
+	Symbol string `json:"symbol"`
+}
+
+type TransactionHistoryBlock struct {
+	// Block hash containing the transaction.
+	Hash string `json:"hash"`
+	// Block number containing the transaction.
+	Number string `json:"number"`
+	// Block timestamp in RFC 3339 format.
+	Timestamp string `json:"timestamp"`
+}
+
+type TransactionHistoryDisplay struct {
+	// Normalized crypto value for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise.
+	Crypto *string `json:"crypto,omitempty"`
+	// USD value for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise.
+	Usd *string `json:"usd,omitempty"`
+}
+
+type TransactionHistoryFee struct {
+	// Fee amount in atomic units.
+	Amount string `json:"amount"`
+	// The CAIP-19 asset identifier.
+	Caip19 string `json:"caip19"`
+}
+
+type TransactionHistoryTransfer struct {
+	// Transfer amount in atomic units.
+	Amount string `json:"amount"`
+	// Asset metadata for the transfer. Omitted when the asset cannot be determined.
+	Asset *TransactionHistoryAsset `json:"asset,omitempty"`
+	// Counterparty address for the transfer.
+	Counterparty string `json:"counterparty"`
+	// Transfer direction relative to the queried address.
+	Direction string `json:"direction"`
+	// Normalized transfer values for display purposes only. Do not do any arithmetic or calculations with these, as the results could be imprecise. Use the amount field instead.
+	Display *TransactionHistoryDisplay `json:"display,omitempty"`
+}
+
+type TransactionHistoryTurnkey struct {
+	// Fingerprint of the Turnkey activity that submitted the transaction.
+	ActivityFingerprint *string `json:"activityFingerprint,omitempty"`
+	// Whether the transaction fee was sponsored by Turnkey.
+	Sponsored bool `json:"sponsored"`
+	// Timestamp when Turnkey submitted the transaction, in RFC 3339 format.
+	SubmittedAt *string `json:"submittedAt,omitempty"`
 }
 
 type TVCApp struct {
@@ -4874,6 +5656,8 @@ type UpdateAuthProxyConfigIntent struct {
 	AllowedAuthMethods []string `json:"allowedAuthMethods,omitempty"`
 	// Updated list of allowed origins for CORS.
 	AllowedOrigins []string `json:"allowedOrigins,omitempty"`
+	// Whether captcha verification is required on sign up & otp init.
+	CaptchaEnabled *bool `json:"captchaEnabled,omitempty"`
 	// Template ID for email-auth messages.
 	EmailAuthTemplateID *string `json:"emailAuthTemplateId,omitempty"`
 	// Optional parameters for customizing emails. If not provided, the default email will be used.
@@ -5009,6 +5793,8 @@ type UpdatePolicyIntentV2 struct {
 	PolicyName *string `json:"policyName,omitempty"`
 	// Accompanying notes for a Policy (optional).
 	PolicyNotes *string `json:"policyNotes,omitempty"`
+	// The time expression that triggers the Effect (optional).
+	Time *string `json:"time,omitempty"`
 }
 
 type UpdatePolicyResult struct {
@@ -5127,6 +5913,18 @@ type UpdateUserTagResult struct {
 	UserTagID string `json:"userTagId"`
 }
 
+type UpdateWalletAccountNameIntent struct {
+	// Human-readable name for this Wallet Account.
+	Name string `json:"name"`
+	// Unique identifier for a given Wallet Account.
+	WalletAccountID string `json:"walletAccountId"`
+}
+
+type UpdateWalletAccountNameResult struct {
+	// Unique identifier for a given Wallet Account.
+	WalletAccountID string `json:"walletAccountId"`
+}
+
 type UpdateWalletIntent struct {
 	// Unique identifier for a given Wallet.
 	WalletID string `json:"walletId"`
@@ -5157,18 +5955,6 @@ type UpdateWebhookEndpointResult struct {
 	WebhookEndpoint WebhookEndpointData `json:"webhookEndpoint"`
 }
 
-type UpsertEarnClientFeeConfigIntent struct {
-	// Your performance fee on gross yield, in basis points (e.g., '2000' for 20%). Your fee plus Turnkey's fee cannot exceed 50% of yield.
-	ClientFeeBps string `json:"clientFeeBps"`
-	// The wallet address that receives the client's fee payouts on-chain. Must be a Turnkey-managed wallet address.
-	ClientFeeWallet string `json:"clientFeeWallet"`
-}
-
-type UpsertEarnClientFeeConfigResult struct {
-	// Async tracking ID for the fee-config update (which redeploys the org's wrappers); poll EarnClientFeeConfigStatus for status.
-	ConfigUpdateRequestID string `json:"configUpdateRequestId"`
-}
-
 type UpsertGasUsageConfigIntent struct {
 	// Whether gas sponsorship is enabled for the organization.
 	Enabled *bool `json:"enabled,omitempty"`
@@ -5188,14 +5974,17 @@ type UpsertGasUsageConfigResult struct {
 }
 
 type UpsertSwapConfigIntent struct {
+	// Client fee in basis points applied to swaps; used for all pairs unless stable_fee_bps is set.
 	FeeBps                   *string `json:"feeBps,omitempty"`
 	FeeReceiverWalletAddress *string `json:"feeReceiverWalletAddress,omitempty"`
-	Provider                 *string `json:"provider,omitempty"`
+	// Optional Enterprise-only override applied when both swap assets are stablecoins; falls back to fee_bps when unset. Non-Enterprise orgs may only set fee_bps.
+	StableFeeBps *string `json:"stableFeeBps,omitempty"`
 }
 
 type UpsertSwapConfigResult struct {
 	FeeBps                   *string `json:"feeBps,omitempty"`
 	FeeReceiverWalletAddress *string `json:"feeReceiverWalletAddress,omitempty"`
+	StableFeeBps             *string `json:"stableFeeBps,omitempty"`
 }
 
 type User struct {
@@ -5296,6 +6085,121 @@ type ValidateTVCImageResponse struct {
 	ResolvedImageDigest *string `json:"resolvedImageDigest,omitempty"`
 }
 
+type VelocityControl struct {
+	// Aggregation expression that the Velocity Control evaluates.
+	Aggregation VelocityControlAggregation `json:"aggregation"`
+	// Time when the Velocity Control was created.
+	CreatedAt ExternalDataV1Timestamp `json:"createdAt"`
+	// Data source for the Velocity Control.
+	DataSource VelocityControlDataSource `json:"dataSource"`
+	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
+	Identifier string `json:"identifier"`
+	// Human-readable name for the Velocity Control.
+	Name string `json:"name"`
+	// Identifier of the Organization that owns the Velocity Control.
+	OrganizationID string `json:"organizationId"`
+	// Time when the Velocity Control was last updated.
+	UpdatedAt ExternalDataV1Timestamp `json:"updatedAt"`
+	// Unique identifier for the Velocity Control.
+	VelocityControlID string `json:"velocityControlId"`
+}
+
+type VelocityControlAggregation struct {
+	// Scope that partitions matching data before aggregation.
+	GroupBy VelocityControlAggregationGroupBy `json:"groupBy"`
+	// Method that aggregates matching data points.
+	Method VelocityControlAggregationMethod `json:"method"`
+	// Comparison between the aggregate and the threshold.
+	Operator VelocityControlAggregationOperator `json:"operator"`
+	// Non-negative base-10 decimal string with at most 38 total digits and 18 fractional digits.
+	Threshold string `json:"threshold"`
+	// Time window for the aggregation.
+	Window VelocityControlAggregationWindow `json:"window"`
+}
+
+type VelocityControlAggregationGroupBy struct {
+	// Uses one shared bucket for the Organization.
+	Organization *VelocityControlAggregationGroupByOrganization `json:"organization,omitempty"`
+	// Uses one bucket for each User.
+	User *VelocityControlAggregationGroupByUser `json:"user,omitempty"`
+	// Uses one bucket for each Wallet.
+	Wallet *VelocityControlAggregationGroupByWallet `json:"wallet,omitempty"`
+}
+
+type VelocityControlAggregationGroupByOrganization map[string]any
+
+type VelocityControlAggregationGroupByUser map[string]any
+
+type VelocityControlAggregationGroupByWallet map[string]any
+
+type VelocityControlAggregationWindow struct {
+	// Uses all matching data without a time limit.
+	Infinite *VelocityControlAggregationWindowInfinite `json:"infinite,omitempty"`
+	// Uses a rolling time window.
+	Rolling *VelocityControlAggregationWindowRolling `json:"rolling,omitempty"`
+}
+
+type VelocityControlAggregationWindowInfinite map[string]any
+
+type VelocityControlAggregationWindowRolling struct {
+	// Duration of the rolling window, in seconds, as a base-10 integer string.
+	Duration string `json:"duration"`
+}
+
+type VelocityControlDataSource struct {
+	// Uses executed Turnkey activities as input data.
+	ActivityExecution *VelocityControlDataSourceActivityExecution `json:"activityExecution,omitempty"`
+	// Uses transfers of the listed on-chain assets as input data.
+	ChainAssetTransfer *VelocityControlDataSourceChainAssetTransfer `json:"chainAssetTransfer,omitempty"`
+}
+
+type VelocityControlDataSourceActivityExecution struct {
+	// Filters activity executions by type.
+	Filter *VelocityControlDataSourceActivityExecutionFilter `json:"filter,omitempty"`
+}
+
+type VelocityControlDataSourceActivityExecutionFilter struct {
+	// Activity types whose executions are included.
+	Activity []VelocityControlDataSourceFilterActivity `json:"activity,omitempty"`
+}
+
+type VelocityControlDataSourceChainAssetTransfer struct {
+	// Assets whose transfers are included in the data source.
+	Definition []VelocityControlDataSourceChainAssetTransferDefinition `json:"definition"`
+	// Filters asset transfers by activity type.
+	Filter *VelocityControlDataSourceChainAssetTransferFilter `json:"filter,omitempty"`
+	// Selects when to measure an asset transfer.
+	Phase *VelocityControlDataSourcePhase `json:"phase,omitempty"`
+}
+
+type VelocityControlDataSourceChainAssetTransferDefinition struct {
+	// CAIP-19 identifier for the asset.
+	Caip19 string `json:"caip19"`
+	// Base-10 integer string from 0 through 255 that specifies the number of decimal places for the asset.
+	Decimals string `json:"decimals"`
+}
+
+type VelocityControlDataSourceChainAssetTransferFilter struct {
+	// Activity types whose asset transfers are included.
+	Activity []VelocityControlDataSourceFilterActivity `json:"activity,omitempty"`
+}
+
+type VelocityControlDataSourceFilterActivity struct {
+	// Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`.
+	ActivityType string `json:"activityType"`
+}
+
+type VelocityControlDataSourcePhase struct {
+	// Measures the transfer when Turnkey signs the transaction and returns it to the user.
+	Signature *VelocityControlDataSourcePhaseSignature `json:"signature,omitempty"`
+	// Reserved for future use. Measures the transfer after the transaction lands on chain.
+	Submission *VelocityControlDataSourcePhaseSubmission `json:"submission,omitempty"`
+}
+
+type VelocityControlDataSourcePhaseSignature map[string]any
+
+type VelocityControlDataSourcePhaseSubmission map[string]any
+
 type VerifyOTPIntent struct {
 	// Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
@@ -5376,8 +6280,10 @@ type WalletAccount struct {
 	// Address generated using the Wallet seed and Account parameters.
 	Address string `json:"address"`
 	// Address format used to generate the Account.
-	AddressFormat AddressFormat           `json:"addressFormat"`
-	CreatedAt     ExternalDataV1Timestamp `json:"createdAt"`
+	AddressFormat AddressFormat `json:"addressFormat"`
+	// The CAIP-2 namespace shared by the chains supported by this account (for example, 'eip155' or 'solana').
+	Caip2Prefix *string                 `json:"caip2Prefix,omitempty"`
+	CreatedAt   ExternalDataV1Timestamp `json:"createdAt"`
 	// Cryptographic curve used to generate the Account.
 	Curve Curve `json:"curve"`
 	// Human-readable name for this Wallet Account, unique within the organization.
@@ -5484,6 +6390,36 @@ func (ApproveActivityRequest) ActivityType() string { return "ACTIVITY_TYPE_APPR
 
 type ApproveActivityResponse struct {
 	Activity Activity `json:"activity"`
+}
+
+type ClaimEarnFeesRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Address of the deployed Earn wrapper to claim fees for. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+func (ClaimEarnFeesRequest) ActivityType() string { return "ACTIVITY_TYPE_CLAIM_EARN_FEES" }
+
+type ClaimEarnFeesResponse struct {
+	Activity Activity `json:"activity"`
+	ClaimEarnFeesResult
+}
+
+type ClaimSwapFeesRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+}
+
+func (ClaimSwapFeesRequest) ActivityType() string { return "ACTIVITY_TYPE_CLAIM_SWAP_FEES" }
+
+type ClaimSwapFeesResponse struct {
+	Activity Activity `json:"activity"`
+	ClaimSwapFeesResult
 }
 
 type CreateAPIKeysRequest struct {
@@ -5667,6 +6603,8 @@ type CreatePolicyRequest struct {
 	Notes string `json:"notes"`
 	// Human-readable name for a Policy.
 	PolicyName string `json:"policyName"`
+	// The time expression that triggers the Effect
+	Time *string `json:"time,omitempty"`
 }
 
 func (CreatePolicyRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_POLICY_V3" }
@@ -5839,6 +6777,30 @@ type CreateSubOrganizationResponse struct {
 	CreateSubOrganizationResultV8
 }
 
+type CreateSwapQuoteRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
+	InputToken string `json:"inputToken"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Wallet account or Private Key address used to price the executable provider quote. Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Provider-neutral maximum allowed slippage in basis points. Turnkey converts this value to each provider's request format. When omitted, each provider applies its default slippage behavior.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
+func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE" }
+
+type CreateSwapQuoteResponse struct {
+	Activity Activity `json:"activity"`
+	CreateSwapQuoteResult
+}
+
 type CreateTVCAppRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -5898,6 +6860,8 @@ type CreateTVCDeploymentRequest struct {
 	PublicIngressPort int64 `json:"publicIngressPort"`
 	// The QuorumOS version to use to deploy this application
 	QosVersion string `json:"qosVersion"`
+	// Optional desired replica count for this deployment.
+	Replicas *int64 `json:"replicas,omitempty"`
 }
 
 func (CreateTVCDeploymentRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_TVC_DEPLOYMENT" }
@@ -5959,6 +6923,30 @@ func (CreateUsersRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_U
 type CreateUsersResponse struct {
 	Activity Activity `json:"activity"`
 	CreateUsersResult
+}
+
+type CreateVelocityControlRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Aggregation expression that the Velocity Control evaluates.
+	Aggregation VelocityControlAggregation `json:"aggregation"`
+	// Data source for the Velocity Control.
+	DataSource VelocityControlDataSource `json:"dataSource"`
+	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
+	Identifier string `json:"identifier"`
+	// Human-readable name for the Velocity Control.
+	Name string `json:"name"`
+}
+
+func (CreateVelocityControlRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
+}
+
+type CreateVelocityControlResponse struct {
+	Activity Activity `json:"activity"`
+	CreateVelocityControlResult
 }
 
 type CreateWalletRequest struct {
@@ -6323,6 +7311,23 @@ type DeleteUsersResponse struct {
 	DeleteUsersResult
 }
 
+type DeleteVelocityControlRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs       string `json:"timestampMs,omitempty"`
+	VelocityControlID string `json:"velocityControlId"`
+}
+
+func (DeleteVelocityControlRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROL"
+}
+
+type DeleteVelocityControlResponse struct {
+	Activity Activity `json:"activity"`
+	DeleteVelocityControlResult
+}
+
 type DeleteWalletAccountsRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -6394,7 +7399,7 @@ type ETHSendTransactionRequest struct {
 	From string `json:"from"`
 	// Maximum amount of gas for the outer transaction. Omit to auto-estimate.
 	GasLimit *string `json:"gasLimit,omitempty"`
-	// The gas station delegate contract nonce. Only used when sponsor=true. Omit to auto-fetch.
+	// The gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored transactions and non-sponsored multi-call batches. Omit to auto-fetch. Use the nonces endpoint for replay protection.
 	GasStationNonce *string `json:"gasStationNonce,omitempty"`
 	// Maximum total fee per gas unit (base fee + priority fee) in wei. Omit to auto-estimate.
 	MaxFeePerGas *string `json:"maxFeePerGas,omitempty"`
@@ -6413,6 +7418,122 @@ func (ETHSendTransactionRequest) ActivityType() string {
 type ETHSendTransactionResponse struct {
 	Activity Activity `json:"activity"`
 	ETHSendTransactionResultV2
+}
+
+type ETHUndelegate7702Request struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
+	Caip2 string `json:"caip2"`
+	// A wallet or private key address to undelegate. This does not support private key IDs.
+	From string `json:"from"`
+	// Maximum amount of gas for the undelegation transaction. Omit to use the fixed undelegation gas limit.
+	GasLimit *string `json:"gasLimit,omitempty"`
+	// Maximum total fee per gas unit (base fee + priority fee) in wei. Omit to auto-estimate.
+	MaxFeePerGas *string `json:"maxFeePerGas,omitempty"`
+	// Maximum priority fee (tip) per gas unit in wei. Omit to auto-estimate.
+	MaxPriorityFeePerGas *string `json:"maxPriorityFeePerGas,omitempty"`
+	// Outer transaction nonce. Omit to auto-fetch.
+	Nonce *string `json:"nonce,omitempty"`
+}
+
+func (ETHUndelegate7702Request) ActivityType() string { return "ACTIVITY_TYPE_ETH_UNDELEGATE_7702" }
+
+type ETHUndelegate7702Response struct {
+	Activity Activity `json:"activity"`
+	ETHUndelegate7702Result
+}
+
+type EarnDeployWrapperRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
+	ChainCaip2 string `json:"chainCaip2"`
+	// Your fee on gross yield, in basis points (e.g., '2000' for 20%). Maximum is 4000 (40%).
+	ClientFeeBps string `json:"clientFeeBps"`
+	// The wallet address that receives the client's fee payouts on-chain. Must be a Turnkey-managed wallet address.
+	ClientFeeWallet string `json:"clientFeeWallet"`
+	// Address of the underlying yield vault to wrap (from the ListEarnVaults catalog).
+	VaultAddress string `json:"vaultAddress"`
+}
+
+func (EarnDeployWrapperRequest) ActivityType() string { return "ACTIVITY_TYPE_EARN_DEPLOY_WRAPPER" }
+
+type EarnDeployWrapperResponse struct {
+	Activity Activity `json:"activity"`
+	EarnDeployWrapperResult
+}
+
+type EarnDepositRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Amount of the underlying asset to deposit, in raw on-chain units (e.g., '1000000' for 1 USDC at 6 decimals).
+	Assets string `json:"assets"`
+	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
+	ChainCaip2 string `json:"chainCaip2"`
+	// A Wallet account address or Private Key address to deposit from and sign with. Must be an on-chain address; Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Whether to sponsor this transaction via Gas Station.
+	Sponsor *bool `json:"sponsor,omitempty"`
+	// Address of the deployed Earn wrapper to deposit into, from ListEarnVaults/ListEarnPositions. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+func (EarnDepositRequest) ActivityType() string { return "ACTIVITY_TYPE_EARN_DEPOSIT" }
+
+type EarnDepositResponse struct {
+	Activity Activity `json:"activity"`
+	EarnDepositResult
+}
+
+type EarnSetWrapperStateRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Set to false to re-enable deposits.
+	DepositsDisabled bool `json:"depositsDisabled"`
+	// Address of the deployed Earn wrapper to update, from ListEarnVaults/ListEarnPositions. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+func (EarnSetWrapperStateRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_EARN_SET_WRAPPER_STATE"
+}
+
+type EarnSetWrapperStateResponse struct {
+	Activity Activity `json:"activity"`
+	EarnSetWrapperStateResult
+}
+
+type EarnWithdrawRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// The amount of the underlying asset to withdraw, in raw on-chain units. Pass 'MAX' to withdraw the entire position.
+	AmountValue string `json:"amountValue"`
+	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
+	ChainCaip2 string `json:"chainCaip2"`
+	// A Wallet account address or Private Key address to withdraw to and sign with. Must be an on-chain address; Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Whether to sponsor this transaction via Gas Station.
+	Sponsor *bool `json:"sponsor,omitempty"`
+	// Address of the deployed Earn wrapper holding the position to withdraw from, from ListEarnPositions. Must be one of the org's deployed wrappers.
+	WrapperAddress string `json:"wrapperAddress"`
+}
+
+func (EarnWithdrawRequest) ActivityType() string { return "ACTIVITY_TYPE_EARN_WITHDRAW" }
+
+type EarnWithdrawResponse struct {
+	Activity Activity `json:"activity"`
+	EarnWithdrawResult
 }
 
 type EmailAuthRequest struct {
@@ -6447,6 +7568,40 @@ type EmailAuthResponse struct {
 	EmailAuthResult
 }
 
+type ExecuteSwapRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Exact EVM sender (EOA account) nonce. Valid only for a non-sponsored EVM swap. Honored for already-delegated (Type-2) batch swaps and single-call swaps; ignored for not-yet-delegated EIP-7702 (Type-4) batches where the outer nonce is derived from the authorization. Prefer gas_station_nonce for batch replay protection and use the nonces endpoint to fetch it. Omit to auto-fetch.
+	EvmNonce *string `json:"evmNonce,omitempty"`
+	// Exact gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored EVM swaps and non-sponsored EVM swaps that execute as a multi-call batch (for example ERC-20 approve + swap). This is the replay-protection nonce for gas-station batches; use the nonces endpoint to fetch it. Omit to auto-fetch.
+	GasStationNonce *string `json:"gasStationNonce,omitempty"`
+	// Exact base-unit amount of the input asset committed by the quote.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset.
+	InputToken string `json:"inputToken"`
+	// Exact minimum base-unit output committed by the quote.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Quote identifier returned by create_swap_quote. Execution is bound to this quote; the signer is derived from the quote and must not be resupplied.
+	QuoteID string `json:"quoteId"`
+	// Exact quoted base-unit output amount committed by the quote.
+	QuotedOutputAmount string `json:"quotedOutputAmount"`
+	// Exact Solana recent blockhash. Valid only for a Solana swap, including sponsored swaps. Omit to auto-fetch.
+	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
+	// Whether the quoted transaction is sponsored.
+	Sponsor bool `json:"sponsor"`
+}
+
+func (ExecuteSwapRequest) ActivityType() string { return "ACTIVITY_TYPE_EXECUTE_SWAP_V2" }
+
+type ExecuteSwapResponse struct {
+	Activity Activity `json:"activity"`
+	ExecuteSwapResult
+}
+
 type ExportPrivateKeyRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -6463,6 +7618,22 @@ func (ExportPrivateKeyRequest) ActivityType() string { return "ACTIVITY_TYPE_EXP
 type ExportPrivateKeyResponse struct {
 	Activity Activity `json:"activity"`
 	ExportPrivateKeyResult
+}
+
+type ExportSecretsRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// A list of secrets to export.
+	Secrets []ExportSecretParams `json:"secrets"`
+}
+
+func (ExportSecretsRequest) ActivityType() string { return "ACTIVITY_TYPE_EXPORT_SECRETS" }
+
+type ExportSecretsResponse struct {
+	Activity Activity `json:"activity"`
+	ExportSecretsResult
 }
 
 type ExportWalletRequest struct {
@@ -6525,6 +7696,22 @@ func (ImportPrivateKeyRequest) ActivityType() string { return "ACTIVITY_TYPE_IMP
 type ImportPrivateKeyResponse struct {
 	Activity Activity `json:"activity"`
 	ImportPrivateKeyResult
+}
+
+type ImportSecretsRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// A list of secrets to import.
+	Secrets []ImportSecretParams `json:"secrets"`
+}
+
+func (ImportSecretsRequest) ActivityType() string { return "ACTIVITY_TYPE_IMPORT_SECRETS" }
+
+type ImportSecretsResponse struct {
+	Activity Activity `json:"activity"`
+	ImportSecretsResult
 }
 
 type ImportWalletRequest struct {
@@ -6603,6 +7790,24 @@ type InitImportPrivateKeyResponse struct {
 	InitImportPrivateKeyResult
 }
 
+type InitImportSecretsRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Transport encryption suite used for ingress secrets.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// The number of secrets the user intends to import.
+	NumSecrets int `json:"numSecrets"`
+}
+
+func (InitImportSecretsRequest) ActivityType() string { return "ACTIVITY_TYPE_INIT_IMPORT_SECRETS" }
+
+type InitImportSecretsResponse struct {
+	Activity Activity `json:"activity"`
+	InitImportSecretsResult
+}
+
 type InitImportWalletRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -6636,7 +7841,7 @@ type InitOTPRequest struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -6674,7 +7879,7 @@ type InitOTPAuthRequest struct {
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
 	// Optional length of the OTP code. Default = 9
 	OTPLength *int `json:"otpLength,omitempty"`
-	// Whether to send OTP via SMS or email. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL
+	// Whether to send OTP via SMS, email, or WhatsApp. Possible values: OTP_TYPE_SMS, OTP_TYPE_EMAIL, OTP_TYPE_WHATSAPP
 	OTPType string `json:"otpType"`
 	// Optional custom email address to use as reply-to
 	ReplyToEmailAddress *string `json:"replyToEmailAddress,omitempty"`
@@ -7048,21 +8253,23 @@ type SolSendTransactionRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
-	// user-provided blockhash for replay protection / deadline control. If omitted and sponsor=true, we fetch a fresh blockhash during execution
+	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
-	// A wallet or private key address to sign with. This does not support private key IDs.
-	SignWith string `json:"signWith"`
+	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers. For sponsored transactions this must list every required signer of the transaction in transaction order.
+	SignWiths []string `json:"signWiths"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Base64-encoded serialized unsigned Solana transaction
+	// Hex-encoded serialized unsigned Solana transaction (full wire format with zeroed signature placeholders)
 	UnsignedTransaction string `json:"unsignedTransaction"`
 }
 
-func (SolSendTransactionRequest) ActivityType() string { return "ACTIVITY_TYPE_SOL_SEND_TRANSACTION" }
+func (SolSendTransactionRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2"
+}
 
 type SolSendTransactionResponse struct {
 	Activity Activity `json:"activity"`
-	SolSendTransactionResult
+	SolSendTransactionResultV2
 }
 
 type SparkClaimTransferRequest struct {
@@ -7278,6 +8485,8 @@ type UpdatePolicyRequest struct {
 	PolicyName *string `json:"policyName,omitempty"`
 	// Accompanying notes for a Policy (optional).
 	PolicyNotes *string `json:"policyNotes,omitempty"`
+	// The time expression that triggers the Effect (optional).
+	Time *string `json:"time,omitempty"`
 }
 
 func (UpdatePolicyRequest) ActivityType() string { return "ACTIVITY_TYPE_UPDATE_POLICY_V2" }
@@ -7493,6 +8702,25 @@ func (UpdateWebhookEndpointRequest) ActivityType() string {
 type UpdateWebhookEndpointResponse struct {
 	Activity Activity `json:"activity"`
 	UpdateWebhookEndpointResult
+}
+
+type UpsertSwapConfigRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Client fee in basis points applied to swaps; used for all pairs unless stable_fee_bps is set.
+	FeeBps                   *string `json:"feeBps,omitempty"`
+	FeeReceiverWalletAddress *string `json:"feeReceiverWalletAddress,omitempty"`
+	// Optional Enterprise-only override applied when both swap assets are stablecoins; falls back to fee_bps when unset. Non-Enterprise orgs may only set fee_bps.
+	StableFeeBps *string `json:"stableFeeBps,omitempty"`
+}
+
+func (UpsertSwapConfigRequest) ActivityType() string { return "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG" }
+
+type UpsertSwapConfigResponse struct {
+	Activity Activity `json:"activity"`
+	UpsertSwapConfigResult
 }
 
 type VerifyOTPRequest struct {

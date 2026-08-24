@@ -11,17 +11,16 @@ import (
 const authProxyOnlyPrefix = "__authProxyOnly__"
 
 type generator struct {
-	specs              []*swaggerSpec
-	definitions        map[string]*schema
-	authProxyDefs      map[string]bool
-	authProxyRefRemap  map[string]string // original ref name → remapped key (for divergent shared defs)
-	nameByRef          map[string]string
-	rawByGoName        map[string]string // reverse of nameByRef: Go exported name → swagger raw key
-	usedNames          map[string]string
-	activityTypeByBase map[string]string
-	operations         []operationInfo
-	activitiesConfig   *activitiesConfig
-	allVersions        bool
+	specs             []*swaggerSpec
+	definitions       map[string]*schema
+	authProxyDefs     map[string]bool
+	authProxyRefRemap map[string]string // original ref name → remapped key (for divergent shared defs)
+	nameByRef         map[string]string
+	rawByGoName       map[string]string // reverse of nameByRef: Go exported name → swagger raw key
+	usedNames         map[string]string
+	operations        []operationInfo
+	activitiesConfig  *activitiesConfig
+	allVersions       bool
 }
 
 type operationInfo struct {
@@ -87,7 +86,6 @@ func newGenerator(specs []*swaggerSpec, cfg *activitiesConfig, allVersions bool)
 		}
 	}
 
-	g.activityTypeByBase = g.extractLatestActivityTypes()
 	g.buildNameMap()
 
 	return g
