@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.1 — 2026-08-25
+### Patch Changes
+- bumping x/crypto for https://nvd.nist.gov/vuln/detail/cve-2026-46595
+
+### [encoding/v0.1.0 ... encoding/v0.1.1](https://github.com/tkhq/go-sdk/compare/encoding/v0.1.0...encoding/v0.1.1)
+
 ## 0.1.0 — 2026-07-09
 ### Minor Changes
 - Initial public release of the encoding package: hex and base64 encoding/decoding utilities.
