@@ -46,6 +46,19 @@ func (c *Client) AuthProxyGetAccount(ctx context.Context, input AuthProxyGetAcco
 	return out, nil
 }
 
+// Get client parameters needed to initialize WalletKit flows, such as a client token for the calling organization.
+func (c *Client) AuthProxyGetWalletKitClientParams(ctx context.Context, input AuthProxyGetWalletKitClientParamsRequest) (*AuthProxyGetWalletKitClientParamsResponse, error) {
+	extraHeaders := map[string]string{}
+	if c.config.authProxyConfigID != "" {
+		extraHeaders["X-Auth-Proxy-Config-ID"] = c.config.authProxyConfigID
+	}
+	out := new(AuthProxyGetWalletKitClientParamsResponse)
+	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/wallet_kit_client_params", input, out, false, extraHeaders); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get wallet kit settings and feature toggles for the calling organization.
 func (c *Client) AuthProxyGetWalletKitConfig(ctx context.Context, input AuthProxyGetWalletKitConfigRequest) (*AuthProxyGetWalletKitConfigResponse, error) {
 	extraHeaders := map[string]string{}
@@ -187,6 +200,64 @@ func (c *Client) AuthProxyVerifyOTPV2(ctx context.Context, input AuthProxyVerify
 		return nil, err
 	}
 	return out, nil
+}
+
+// Claim earn fees through the activity pipeline.
+func (c *Client) ClaimEarnFees(ctx context.Context, input ClaimEarnFeesRequest) (*ClaimEarnFeesResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/claim_earn_fees", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ClaimEarnFeesResult])
+	if err := decodeActivityResponse(raw, "ClaimEarnFeesResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ClaimEarnFeesResult { return r.ClaimEarnFeesResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ClaimEarnFeesResponse{Activity: *activity, ClaimEarnFeesResult: *result}, nil
+}
+
+func (c *Client) StampClaimEarnFees(ctx context.Context, input ClaimEarnFeesRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/claim_earn_fees", body, true)
+}
+
+// Claim swap fees through the activity pipeline.
+func (c *Client) ClaimSwapFees(ctx context.Context, input ClaimSwapFeesRequest) (*ClaimSwapFeesResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/claim_swap_fees", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ClaimSwapFeesResult])
+	if err := decodeActivityResponse(raw, "ClaimSwapFeesResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ClaimSwapFeesResult { return r.ClaimSwapFeesResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ClaimSwapFeesResponse{Activity: *activity, ClaimSwapFeesResult: *result}, nil
+}
+
+func (c *Client) StampClaimSwapFees(ctx context.Context, input ClaimSwapFeesRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/claim_swap_fees", body, true)
 }
 
 // Add API keys to an existing user.
@@ -653,6 +724,35 @@ func (c *Client) StampCreateSubOrganization(ctx context.Context, input CreateSub
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_sub_organization", body, true)
 }
 
+// Get a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported.
+func (c *Client) CreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*CreateSwapQuoteResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_swap_quote", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateSwapQuoteResult])
+	if err := decodeActivityResponse(raw, "CreateSwapQuoteResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateSwapQuoteResult { return r.CreateSwapQuoteResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateSwapQuoteResponse{Activity: *activity, CreateSwapQuoteResult: *result}, nil
+}
+
+func (c *Client) StampCreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_swap_quote", body, true)
+}
+
 // Create a new TVC application
 func (c *Client) CreateTVCApp(ctx context.Context, input CreateTVCAppRequest) (*CreateTVCAppResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -796,6 +896,35 @@ func (c *Client) StampCreateUsers(ctx context.Context, input CreateUsersRequest)
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_users", body, true)
+}
+
+// Create a new velocity control.
+func (c *Client) CreateVelocityControl(ctx context.Context, input CreateVelocityControlRequest) (*CreateVelocityControlResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_velocity_control", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateVelocityControlResult])
+	if err := decodeActivityResponse(raw, "CreateVelocityControlResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateVelocityControlResult { return r.CreateVelocityControlResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateVelocityControlResponse{Activity: *activity, CreateVelocityControlResult: *result}, nil
+}
+
+func (c *Client) StampCreateVelocityControl(ctx context.Context, input CreateVelocityControlRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_velocity_control", body, true)
 }
 
 // Create a wallet and derive addresses.
@@ -1378,6 +1507,35 @@ func (c *Client) StampDeleteUsers(ctx context.Context, input DeleteUsersRequest)
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_users", body, true)
 }
 
+// Delete an existing velocity control.
+func (c *Client) DeleteVelocityControl(ctx context.Context, input DeleteVelocityControlRequest) (*DeleteVelocityControlResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_velocity_control", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[DeleteVelocityControlResult])
+	if err := decodeActivityResponse(raw, "DeleteVelocityControlResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *DeleteVelocityControlResult { return r.DeleteVelocityControlResult })
+	if err != nil {
+		return nil, err
+	}
+	return &DeleteVelocityControlResponse{Activity: *activity, DeleteVelocityControlResult: *result}, nil
+}
+
+func (c *Client) StampDeleteVelocityControl(ctx context.Context, input DeleteVelocityControlRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_velocity_control", body, true)
+}
+
 // Delete wallet accounts for an organization.
 func (c *Client) DeleteWalletAccounts(ctx context.Context, input DeleteWalletAccountsRequest) (*DeleteWalletAccountsResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -1494,6 +1652,151 @@ func (c *Client) StampETHSendTransaction(ctx context.Context, input ETHSendTrans
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/eth_send_transaction", body, true)
 }
 
+// Submit an EIP-7702 undelegation transaction.
+func (c *Client) ETHUndelegate7702(ctx context.Context, input ETHUndelegate7702Request) (*ETHUndelegate7702Response, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/eth_undelegate_7702", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ETHUndelegate7702Result])
+	if err := decodeActivityResponse(raw, "ETHUndelegate7702Result", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ETHUndelegate7702Result { return r.ETHUndelegate7702Result })
+	if err != nil {
+		return nil, err
+	}
+	return &ETHUndelegate7702Response{Activity: *activity, ETHUndelegate7702Result: *result}, nil
+}
+
+func (c *Client) StampETHUndelegate7702(ctx context.Context, input ETHUndelegate7702Request) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/eth_undelegate_7702", body, true)
+}
+
+// Enable a yield vault for an organization by deploying its fee wrapper. Must be called before any deposits into the vault.
+func (c *Client) EarnDeployWrapper(ctx context.Context, input EarnDeployWrapperRequest) (*EarnDeployWrapperResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_deploy_wrapper", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[EarnDeployWrapperResult])
+	if err := decodeActivityResponse(raw, "EarnDeployWrapperResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *EarnDeployWrapperResult { return r.EarnDeployWrapperResult })
+	if err != nil {
+		return nil, err
+	}
+	return &EarnDeployWrapperResponse{Activity: *activity, EarnDeployWrapperResult: *result}, nil
+}
+
+func (c *Client) StampEarnDeployWrapper(ctx context.Context, input EarnDeployWrapperRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_deploy_wrapper", body, true)
+}
+
+// Deposit assets from a wallet into an enabled yield vault.
+func (c *Client) EarnDeposit(ctx context.Context, input EarnDepositRequest) (*EarnDepositResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_deposit", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[EarnDepositResult])
+	if err := decodeActivityResponse(raw, "EarnDepositResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *EarnDepositResult { return r.EarnDepositResult })
+	if err != nil {
+		return nil, err
+	}
+	return &EarnDepositResponse{Activity: *activity, EarnDepositResult: *result}, nil
+}
+
+func (c *Client) StampEarnDeposit(ctx context.Context, input EarnDepositRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_deposit", body, true)
+}
+
+// Enable or disable deposits to a deployed Earn wrapper. Withdrawals are always allowed.
+func (c *Client) EarnSetWrapperState(ctx context.Context, input EarnSetWrapperStateRequest) (*EarnSetWrapperStateResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_set_wrapper_state", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[EarnSetWrapperStateResult])
+	if err := decodeActivityResponse(raw, "EarnSetWrapperStateResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *EarnSetWrapperStateResult { return r.EarnSetWrapperStateResult })
+	if err != nil {
+		return nil, err
+	}
+	return &EarnSetWrapperStateResponse{Activity: *activity, EarnSetWrapperStateResult: *result}, nil
+}
+
+func (c *Client) StampEarnSetWrapperState(ctx context.Context, input EarnSetWrapperStateRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_set_wrapper_state", body, true)
+}
+
+// Withdraw assets or redeem shares from an enabled yield vault.
+func (c *Client) EarnWithdraw(ctx context.Context, input EarnWithdrawRequest) (*EarnWithdrawResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_withdraw", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[EarnWithdrawResult])
+	if err := decodeActivityResponse(raw, "EarnWithdrawResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *EarnWithdrawResult { return r.EarnWithdrawResult })
+	if err != nil {
+		return nil, err
+	}
+	return &EarnWithdrawResponse{Activity: *activity, EarnWithdrawResult: *result}, nil
+}
+
+func (c *Client) StampEarnWithdraw(ctx context.Context, input EarnWithdrawRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_withdraw", body, true)
+}
+
 // Authenticate a user via email.
 func (c *Client) EmailAuth(ctx context.Context, input EmailAuthRequest) (*EmailAuthResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -1523,6 +1826,35 @@ func (c *Client) StampEmailAuth(ctx context.Context, input EmailAuthRequest) (*S
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/email_auth", body, true)
 }
 
+// Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V2.
+func (c *Client) ExecuteSwap(ctx context.Context, input ExecuteSwapRequest) (*ExecuteSwapResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/execute_swap", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ExecuteSwapResult])
+	if err := decodeActivityResponse(raw, "ExecuteSwapResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ExecuteSwapResult { return r.ExecuteSwapResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ExecuteSwapResponse{Activity: *activity, ExecuteSwapResult: *result}, nil
+}
+
+func (c *Client) StampExecuteSwap(ctx context.Context, input ExecuteSwapRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/execute_swap", body, true)
+}
+
 // Export a private key.
 func (c *Client) ExportPrivateKey(ctx context.Context, input ExportPrivateKeyRequest) (*ExportPrivateKeyResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -1550,6 +1882,35 @@ func (c *Client) StampExportPrivateKey(ctx context.Context, input ExportPrivateK
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/export_private_key", body, true)
+}
+
+// Export secrets encrypted to client-provided target public keys.
+func (c *Client) ExportSecrets(ctx context.Context, input ExportSecretsRequest) (*ExportSecretsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/export_secrets", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ExportSecretsResult])
+	if err := decodeActivityResponse(raw, "ExportSecretsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ExportSecretsResult { return r.ExportSecretsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ExportSecretsResponse{Activity: *activity, ExportSecretsResult: *result}, nil
+}
+
+func (c *Client) StampExportSecrets(ctx context.Context, input ExportSecretsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/export_secrets", body, true)
 }
 
 // Export a wallet.
@@ -1731,6 +2092,62 @@ func (c *Client) GetBootProof(ctx context.Context, input GetBootProofRequest) (*
 	input.OrganizationID = organizationID
 	out := new(BootProofResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_boot_proof", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Poll the status of a fee claim by its claim_request_id.
+func (c *Client) GetClaimEarnFeesStatus(ctx context.Context, input GetClaimEarnFeesStatusRequest) (*GetClaimEarnFeesStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetClaimEarnFeesStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_claim_earn_fees_status", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Poll the status of a wrapper deployment by its deploy_request_id.
+func (c *Client) GetEarnDeployStatus(ctx context.Context, input GetEarnDeployStatusRequest) (*GetEarnDeployStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetEarnDeployStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_earn_deploy_status", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Poll the status of a deposit by its deposit_request_id (for the async/sponsored deposit path).
+func (c *Client) GetEarnDepositStatus(ctx context.Context, input GetEarnDepositStatusRequest) (*GetEarnDepositStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetEarnDepositStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_earn_deposit_status", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Poll the status of a withdrawal by its withdraw_request_id.
+func (c *Client) GetEarnWithdrawStatus(ctx context.Context, input GetEarnWithdrawStatusRequest) (*GetEarnWithdrawStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetEarnWithdrawStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_earn_withdraw_status", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -2044,6 +2461,20 @@ func (c *Client) GetSubOrgIds(ctx context.Context, input GetSubOrgIdsRequest) (*
 	return out, nil
 }
 
+// Poll the status of a swap by its swap_request_id. Covers same-chain and cross-chain swaps.
+func (c *Client) GetSwapStatus(ctx context.Context, input GetSwapStatusRequest) (*GetSwapStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetSwapStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_swap_status", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get details about a single TVC App
 func (c *Client) GetTVCApp(ctx context.Context, input GetTVCAppRequest) (*GetTVCAppResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2114,6 +2545,20 @@ func (c *Client) GetTVCDeploymentDebugLogs(ctx context.Context, input GetTVCDepl
 	return out, nil
 }
 
+// List QOS versions supported for new TVC deployments and the latest recommended QOS version.
+func (c *Client) GetTVCQosVersions(ctx context.Context, input GetTVCQosVersionsRequest) (*GetTVCQosVersionsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetTVCQosVersionsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_tvc_qos_versions", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get details about a user.
 func (c *Client) GetUser(ctx context.Context, input GetUserRequest) (*GetUserResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2137,6 +2582,20 @@ func (c *Client) GetUsers(ctx context.Context, input GetUsersRequest) (*GetUsers
 	input.OrganizationID = organizationID
 	out := new(GetUsersResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_users", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Get details about a velocity control.
+func (c *Client) GetVelocityControl(ctx context.Context, input GetVelocityControlRequest) (*GetVelocityControlResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetVelocityControlResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_velocity_control", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -2269,6 +2728,35 @@ func (c *Client) StampImportPrivateKey(ctx context.Context, input ImportPrivateK
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/import_private_key", body, true)
 }
 
+// Import secrets encrypted to target keys returned from InitImportSecrets.
+func (c *Client) ImportSecrets(ctx context.Context, input ImportSecretsRequest) (*ImportSecretsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/import_secrets", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ImportSecretsResult])
+	if err := decodeActivityResponse(raw, "ImportSecretsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ImportSecretsResult { return r.ImportSecretsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ImportSecretsResponse{Activity: *activity, ImportSecretsResult: *result}, nil
+}
+
+func (c *Client) StampImportSecrets(ctx context.Context, input ImportSecretsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/import_secrets", body, true)
+}
+
 // Import a wallet.
 func (c *Client) ImportWallet(ctx context.Context, input ImportWalletRequest) (*ImportWalletResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -2354,6 +2842,35 @@ func (c *Client) StampInitImportPrivateKey(ctx context.Context, input InitImport
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/init_import_private_key", body, true)
+}
+
+// Initialize secret imports by generating Ingress Encryption Target Keys.
+func (c *Client) InitImportSecrets(ctx context.Context, input InitImportSecretsRequest) (*InitImportSecretsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/init_import_secrets", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[InitImportSecretsResult])
+	if err := decodeActivityResponse(raw, "InitImportSecretsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *InitImportSecretsResult { return r.InitImportSecretsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &InitImportSecretsResponse{Activity: *activity, InitImportSecretsResult: *result}, nil
+}
+
+func (c *Client) StampInitImportSecrets(ctx context.Context, input InitImportSecretsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/init_import_secrets", body, true)
 }
 
 // Initialize a new wallet import.
@@ -2472,6 +2989,62 @@ func (c *Client) StampInitUserEmailRecovery(ctx context.Context, input InitUserE
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/init_user_email_recovery", body, true)
 }
 
+// List Ethereum transaction history for a wallet address on the specified network.
+func (c *Client) ListETHTransactionHistory(ctx context.Context, input ListETHTransactionHistoryRequest) (*ListETHTransactionHistoryResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListETHTransactionHistoryResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_eth_transaction_history", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Get the organization's deployed wrappers with on-chain total deposited and live APY. The management view, distinct from per-wallet positions.
+func (c *Client) ListEarnEnabledVaults(ctx context.Context, input ListEarnEnabledVaultsRequest) (*ListEarnEnabledVaultsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListEarnEnabledVaultsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_earn_enabled_vaults", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Get the active Earn positions for a specific wallet, including current value, cost basis, yield, and projected fees.
+func (c *Client) ListEarnPositions(ctx context.Context, input ListEarnPositionsRequest) (*ListEarnPositionsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListEarnPositionsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_earn_positions", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Get the catalog of all wrappable yield vaults across supported chains, enriched with live TVL and APY. Annotates which vaults the organization has already enabled.
+func (c *Client) ListEarnVaults(ctx context.Context, input ListEarnVaultsRequest) (*ListEarnVaultsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListEarnVaultsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_earn_vaults", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // List email events for the organization.
 func (c *Client) ListEmailEvents(ctx context.Context, input ListEmailEventsRequest) (*ListEmailEventsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2528,6 +3101,34 @@ func (c *Client) ListPrivateKeyTags(ctx context.Context, input ListPrivateKeyTag
 	return out, nil
 }
 
+// List secret metadata for an organization.
+func (c *Client) ListSecrets(ctx context.Context, input ListSecretsRequest) (*ListSecretsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListSecretsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_secrets", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// List Solana transaction history for a wallet address on the specified network.
+func (c *Client) ListSolTransactionHistory(ctx context.Context, input ListSolTransactionHistoryRequest) (*ListSolTransactionHistoryResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListSolTransactionHistoryResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_sol_transaction_history", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // List supported assets for the specified network.
 func (c *Client) ListSupportedAssets(ctx context.Context, input ListSupportedAssetsRequest) (*ListSupportedAssetsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2551,6 +3152,20 @@ func (c *Client) ListUserTags(ctx context.Context, input ListUserTagsRequest) (*
 	input.OrganizationID = organizationID
 	out := new(ListUserTagsResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_user_tags", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// List all velocity controls within an organization.
+func (c *Client) ListVelocityControls(ctx context.Context, input ListVelocityControlsRequest) (*ListVelocityControlsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListVelocityControlsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_velocity_controls", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -3005,7 +3620,7 @@ func (c *Client) StampSignTransaction(ctx context.Context, input SignTransaction
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/sign_transaction", body, true)
 }
 
-// Submit a transaction intent describing an SVM transaction you would like to broadcast.
+// Submit a transaction intent describing an SVM transaction you would like to broadcast. Supports single- and multi-signer intents via activity type versioning.
 func (c *Client) SolSendTransaction(ctx context.Context, input SolSendTransactionRequest) (*SolSendTransactionResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3015,15 +3630,15 @@ func (c *Client) SolSendTransaction(ctx context.Context, input SolSendTransactio
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/sol_send_transaction", body, &raw, true, nil); err != nil {
 		return nil, err
 	}
-	out := new(ActivityResult[SolSendTransactionResult])
-	if err := decodeActivityResponse(raw, "SolSendTransactionResult", out); err != nil {
+	out := new(ActivityResult[SolSendTransactionResultV2])
+	if err := decodeActivityResponse(raw, "SolSendTransactionResultV2", out); err != nil {
 		return nil, err
 	}
-	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *SolSendTransactionResult { return r.SolSendTransactionResult })
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *SolSendTransactionResultV2 { return r.SolSendTransactionResultV2 })
 	if err != nil {
 		return nil, err
 	}
-	return &SolSendTransactionResponse{Activity: *activity, SolSendTransactionResult: *result}, nil
+	return &SolSendTransactionResponse{Activity: *activity, SolSendTransactionResultV2: *result}, nil
 }
 
 func (c *Client) StampSolSendTransaction(ctx context.Context, input SolSendTransactionRequest) (*SignedRequest, error) {
@@ -3612,6 +4227,35 @@ func (c *Client) StampUpdateWebhookEndpoint(ctx context.Context, input UpdateWeb
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/update_webhook_endpoint", body, true)
+}
+
+// Enable or disable swap configuration for an organization.
+func (c *Client) UpsertSwapConfig(ctx context.Context, input UpsertSwapConfigRequest) (*UpsertSwapConfigResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_config", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[UpsertSwapConfigResult])
+	if err := decodeActivityResponse(raw, "UpsertSwapConfigResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *UpsertSwapConfigResult { return r.UpsertSwapConfigResult })
+	if err != nil {
+		return nil, err
+	}
+	return &UpsertSwapConfigResponse{Activity: *activity, UpsertSwapConfigResult: *result}, nil
+}
+
+func (c *Client) StampUpsertSwapConfig(ctx context.Context, input UpsertSwapConfigRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_config", body, true)
 }
 
 // Validate a container image URL and pull secret for TVC deployment

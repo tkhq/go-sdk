@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -84,62 +83,6 @@ func isActivityWireBody(def *schema) bool {
 	return true
 }
 
-func (g *generator) extractLatestActivityTypes() map[string]string {
-	latest := map[string]string{}
-	latestVersion := map[string]int{}
-	g.collectActivityTypesFromIntentDefinitions(latest, latestVersion)
-
-	for _, def := range g.definitions {
-		walkSchemaStrings(def, func(value string) {
-			if !strings.HasPrefix(value, "ACTIVITY_TYPE_") {
-				return
-			}
-
-			setLatestActivityType(latest, latestVersion, value)
-		})
-	}
-
-	return latest
-}
-
-func (g *generator) collectActivityTypesFromIntentDefinitions(latest map[string]string, latestVersion map[string]int) {
-	re := regexp.MustCompile(`^v[0-9]+([A-Z][A-Za-z0-9]*?)Intent(V([0-9]+))?$`)
-	for raw := range g.definitions {
-		match := re.FindStringSubmatch(raw)
-		if match == nil {
-			continue
-		}
-
-		version := 1
-
-		if match[3] != "" {
-			parsed, err := strconv.Atoi(match[3])
-			if err == nil {
-				version = parsed
-			}
-		}
-
-		base := "ACTIVITY_TYPE_" + upperSnake(match[1])
-
-		activityType := base
-		if version > 1 {
-			activityType = fmt.Sprintf("%s_V%d", base, version)
-		}
-
-		setLatestActivityType(latest, latestVersion, activityType)
-	}
-}
-
-func setLatestActivityType(latest map[string]string, latestVersion map[string]int, activityType string) {
-	base := stripActivityVersion(activityType)
-
-	version := activityTypeVersion(activityType)
-	if existing, ok := latestVersion[base]; !ok || version >= existing {
-		latestVersion[base] = version
-		latest[base] = activityType
-	}
-}
-
 //nolint:gocyclo,cyclop // operation collection requires handling many endpoint shape variants
 func (g *generator) collectOperations() {
 	var operations []operationInfo
@@ -193,9 +136,13 @@ func (g *generator) collectOperations() {
 			}
 
 			// In --all mode, append the version suffix derived from the activity type so that
-			// the current method is named e.g. CreateUsersV4 instead of CreateUsers.
+			// the current method is named e.g. CreateUsersV4 / SolSendTransactionV2 instead of
+			// CreateUsers / SolSendTransaction. Skip when the operation name already ends with
+			// that suffix so we do not emit doubled names like CreateUsersV4V4.
 			if g.allVersions && (methodType == methodTypeCommand || methodType == methodTypeActivityDecision) && !authProxy {
-				methodName += activityVersionSuffix(activityType)
+				if suffix := activityVersionSuffix(activityType); suffix != "" && !strings.HasSuffix(methodName, suffix) {
+					methodName += suffix
+				}
 			}
 
 			operations = append(operations, operationInfo{
@@ -308,46 +255,15 @@ func (g *generator) activityType(operationName string, requestDef string) string
 		return baseActivityType
 	}
 
-	activityType := baseActivityType
+	// Prefer the request wire enum when present so shared endpoints such as
+	// eth_send_transaction / sol_send_transaction document the current activity
+	// version (e.g. ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2) while --all mode still
+	// remaps historical activity types onto the same path.
 	if typeProp := req.Properties["type"]; typeProp != nil && len(typeProp.Enum) > 0 {
-		activityType = typeProp.Enum[0]
+		return typeProp.Enum[0]
 	}
 
-	if latestActivityType, ok := g.activityTypeByBase[stripActivityVersion(activityType)]; ok {
-		return latestActivityType
-	}
-
-	return activityType
-}
-
-func activityTypeVersion(value string) int {
-	match := activityVersionGroupRE.FindStringSubmatch(value)
-	if match == nil {
-		return 1
-	}
-
-	version, err := strconv.Atoi(match[1])
-	if err != nil {
-		return 1
-	}
-
-	return version
-}
-
-func walkSchemaStrings(s *schema, visit func(string)) {
-	if s == nil {
-		return
-	}
-
-	for _, value := range s.Enum {
-		visit(value)
-	}
-
-	for _, prop := range s.Properties {
-		walkSchemaStrings(prop, visit)
-	}
-
-	walkSchemaStrings(s.Items, visit)
+	return baseActivityType
 }
 
 func (g *generator) methodType(op *operation, path string, responseDef string) string {
