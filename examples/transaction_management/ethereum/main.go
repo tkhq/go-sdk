@@ -31,8 +31,10 @@ const (
 	sepoliaWETH         = "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"
 	sepoliaUSDC         = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
 
-	// selfTransferValue is 0.0001 ETH in wei, used for both send and swap.
-	selfTransferValue = "100000000000000"
+	// selfTransferWei is 0.0001 ETH in wei: the amount the send action transfers
+	// and the swap action swaps. Both the string and big.Int forms are derived
+	// from this one constant so the two paths cannot drift apart.
+	selfTransferWei = 100_000_000_000_000
 )
 
 // config holds the example's runtime settings, read from the environment.
@@ -186,7 +188,7 @@ func sendETH(ctx context.Context, client *turnkey.Client, cfg config) error {
 
 	calls := []turnkey.ETHCallParams{{
 		To:    cfg.signWith,
-		Value: ptr(selfTransferValue),
+		Value: ptr(selfTransferValue()),
 	}}
 
 	txHash, err := submitAndWait(ctx, client, cfg, calls)
@@ -207,9 +209,9 @@ func swapETH(ctx context.Context, client *turnkey.Client, cfg config) error {
 		sepoliaUSDC,
 		3000, // 0.3% fee tier
 		cfg.signWith,
-		big.NewInt(100_000_000_000_000), // 0.0001 ETH
-		big.NewInt(0),                   // amountOutMinimum (0 for demo)
-		big.NewInt(0),                   // sqrtPriceLimitX96
+		big.NewInt(selfTransferWei),
+		big.NewInt(0), // amountOutMinimum (0 for demo)
+		big.NewInt(0), // sqrtPriceLimitX96
 	)
 	if err != nil {
 		return fmt.Errorf("failed to encode swap calldata: %w", err)
@@ -217,7 +219,7 @@ func swapETH(ctx context.Context, client *turnkey.Client, cfg config) error {
 
 	calls := []turnkey.ETHCallParams{{
 		To:    sepoliaSwapRouter02,
-		Value: ptr(selfTransferValue), // msg.value for ETH→token swap
+		Value: ptr(selfTransferValue()), // msg.value for ETH→token swap
 		Data:  ptr("0x" + hex.EncodeToString(calldata)),
 	}}
 
@@ -439,7 +441,9 @@ func encodeExactInputSingle(
 	}
 	copy(data[4+32+12:4+64], tokenOutBytes)
 	// Word 2: fee (uint24)
-	padBigInt(data[4+64:4+96], new(big.Int).SetUint64(uint64(fee)))
+	if err := padBigInt(data[4+64:4+96], new(big.Int).SetUint64(uint64(fee))); err != nil {
+		return nil, fmt.Errorf("fee: %w", err)
+	}
 	// Word 3: recipient
 	recipientBytes, err := addressToBytes(recipient)
 	if err != nil {
@@ -447,11 +451,17 @@ func encodeExactInputSingle(
 	}
 	copy(data[4+96+12:4+128], recipientBytes)
 	// Word 4: amountIn
-	padBigInt(data[4+128:4+160], amountIn)
+	if err := padBigInt(data[4+128:4+160], amountIn); err != nil {
+		return nil, fmt.Errorf("amountIn: %w", err)
+	}
 	// Word 5: amountOutMinimum
-	padBigInt(data[4+160:4+192], amountOutMinimum)
+	if err := padBigInt(data[4+160:4+192], amountOutMinimum); err != nil {
+		return nil, fmt.Errorf("amountOutMinimum: %w", err)
+	}
 	// Word 6: sqrtPriceLimitX96
-	padBigInt(data[4+192:4+224], sqrtPriceLimitX96)
+	if err := padBigInt(data[4+192:4+224], sqrtPriceLimitX96); err != nil {
+		return nil, fmt.Errorf("sqrtPriceLimitX96: %w", err)
+	}
 
 	return data, nil
 }
@@ -472,18 +482,29 @@ func addressToBytes(addr string) ([]byte, error) {
 	return b, nil
 }
 
-// padBigInt writes a big.Int right-aligned into a 32-byte slot.
+// padBigInt writes a non-negative big.Int right-aligned into an ABI word.
 //
-// Values are assumed to be non-negative and to fit in 32 bytes, which holds for
-// every field this example encodes. big.Int.Bytes returns the magnitude without
-// a sign, so a negative value would encode as its absolute value.
-func padBigInt(dst []byte, v *big.Int) {
-	b := v.Bytes()
-	if offset := 32 - len(b); offset > 0 {
-		copy(dst[offset:], b)
-	} else {
-		copy(dst, b[len(b)-32:])
+// It reports an error rather than truncating or taking an absolute value. This
+// is transaction calldata: a silently mangled amount would still encode as a
+// well-formed word and would be signed and broadcast as if correct.
+func padBigInt(dst []byte, v *big.Int) error {
+	if v.Sign() < 0 {
+		return fmt.Errorf("cannot encode negative value %s as an unsigned integer", v)
 	}
+
+	b := v.Bytes()
+	if len(b) > len(dst) {
+		return fmt.Errorf("value %s overflows a %d-byte ABI word (needs %d bytes)", v, len(dst), len(b))
+	}
+	copy(dst[len(dst)-len(b):], b)
+
+	return nil
+}
+
+// selfTransferValue renders selfTransferWei as the decimal string the
+// ETHCallParams value field expects.
+func selfTransferValue() string {
+	return strconv.FormatInt(selfTransferWei, 10)
 }
 
 // sponsorLabel returns a human-readable label for the sponsorship mode.
