@@ -69,7 +69,7 @@ func main() {
 // loadConfig reads settings from the environment and validates them.
 func loadConfig() (config, error) {
 	// Parse SPONSOR rather than comparing against "false", so that values like
-	// "False", "0" or "f" are honoured instead of silently sponsoring.
+	// "False", "0" or "f" are honored instead of silently sponsoring.
 	sponsorEnv := envOr("SPONSOR", "true")
 	sponsor, err := strconv.ParseBool(sponsorEnv)
 	if err != nil {
@@ -374,29 +374,35 @@ func formatTxError(resp *turnkey.GetSendTransactionStatusResponse) string {
 	return b.String()
 }
 
-// revertEntry renders a single frame of the revert chain, falling back through
-// the decoded error variants when no display message is provided.
+// revertEntry renders a single frame of the revert chain, appending the
+// contract address when the entry reports one.
 func revertEntry(e turnkey.RevertChainEntry) string {
 	desc := str(e.DisplayMessage)
 	if desc == "" {
-		switch {
-		case e.Native != nil && e.Native.Message != nil:
-			desc = *e.Native.Message
-		case e.Native != nil && e.Native.PanicCode != nil:
-			desc = fmt.Sprintf("panic(%s)", *e.Native.PanicCode)
-		case e.Custom != nil && e.Custom.ErrorName != nil:
-			desc = fmt.Sprintf("%s(%s)", *e.Custom.ErrorName, str(e.Custom.ParamsJSON))
-		case e.Unknown != nil && e.Unknown.Selector != nil:
-			desc = fmt.Sprintf("unrecognized revert, selector %s", *e.Unknown.Selector)
-		default:
-			desc = "unrecognized revert"
-		}
+		desc = revertDescription(e)
 	}
 	if addr := str(e.Address); addr != "" {
 		desc += fmt.Sprintf(" (at %s)", addr)
 	}
 
 	return desc
+}
+
+// revertDescription falls back through the decoded error variants, for entries
+// that carry no display message.
+func revertDescription(e turnkey.RevertChainEntry) string {
+	switch {
+	case e.Native != nil && e.Native.Message != nil:
+		return *e.Native.Message
+	case e.Native != nil && e.Native.PanicCode != nil:
+		return fmt.Sprintf("panic(%s)", *e.Native.PanicCode)
+	case e.Custom != nil && e.Custom.ErrorName != nil:
+		return fmt.Sprintf("%s(%s)", *e.Custom.ErrorName, str(e.Custom.ParamsJSON))
+	case e.Unknown != nil && e.Unknown.Selector != nil:
+		return fmt.Sprintf("unrecognized revert, selector %s", *e.Unknown.Selector)
+	default:
+		return "unrecognized revert"
+	}
 }
 
 // encodeExactInputSingle ABI-encodes a call to SwapRouter02.exactInputSingle.
