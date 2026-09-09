@@ -33,6 +33,9 @@ Refer to each example's README for the exact commands.
     - [sign_raw_payload](./signing/sign_raw_payload/): Example of signing a raw payload.
     - [sign_transaction](./signing/sign_transaction/): Example of signing a blockchain transaction.
 
+- [transaction_management](./transaction_management/): Demonstrates sending sponsored and non-sponsored transactions.
+    - [ethereum](./transaction_management/ethereum/): Send, swap, and list assets on Ethereum.
+
 - [wallets](./wallets/): Shows how to manage wallets and sign transactions with them.
     - [create_wallet](./wallets/create_wallet/): Example of creating a new wallet.
     - [create_wallet_accounts](./wallets/create_wallet_accounts/): Example of creating accounts within a wallet.
