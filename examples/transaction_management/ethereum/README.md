@@ -8,7 +8,7 @@ Select the action with the `ACTION` environment variable:
 
 - **send** (default) — self-transfer of 0.0001 ETH
 - **swap** — Uniswap V3 swap (ETH → USDC) via SwapRouter02
-- **assets** — list supported assets for the chain
+- **assets** — list supported assets for Ethereum Sepolia
 
 The `send` and `swap` actions use Turnkey Gas Station for gas sponsorship by default. Set `SPONSOR=false` to use non-sponsored mode (the EOA pays gas).
 
@@ -25,7 +25,6 @@ The `send` and `swap` actions use Turnkey Gas Station for gas sponsorship by def
 | `TURNKEY_API_PRIVATE_KEY` | Yes | | Turnkey API private key |
 | `TURNKEY_ORGANIZATION_ID` | Yes | | Turnkey organization ID |
 | `TURNKEY_SIGN_WITH` | Yes | | Wallet address to sign with (0x-prefixed) |
-| `TURNKEY_CAIP2` | No | `eip155:11155111` | CAIP-2 chain ID (Ethereum Sepolia testnet). The `swap` action is Ethereum Sepolia-only. |
 | `ACTION` | No | `send` | Action to perform: `send`, `swap`, or `assets` |
 | `SPONSOR` | No | `true` | Set to `false` for non-sponsored mode |
 
@@ -119,7 +118,7 @@ transaction failed: Pre-flight simulation failed: Too little received -> Executi
 6. Polls `GetSendTransactionStatus` until a tx hash is returned, an error occurs, or the example's 60-second timeout elapses. On failure, the structured error is rendered with the contract revert chain when one is available.
 7. Fetches and displays updated balances. In sponsored mode a self-transfer leaves the balance unchanged — that is the point: the value returns to the sender and Gas Station covers the fee.
 
-For the **swap** action, the calldata is ABI-encoded for Uniswap V3 [SwapRouter02](https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments)'s `exactInputSingle` (selector `0x04e45aaf`), targeting the WETH/USDC pool with a 0.3% fee tier on Ethereum Sepolia. These contract addresses are specific to Ethereum Sepolia; pointing `TURNKEY_CAIP2` at another chain will break the swap.
+For the **swap** action, the calldata is ABI-encoded for Uniswap V3 [SwapRouter02](https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments)'s `exactInputSingle` (selector `0x04e45aaf`), targeting the WETH/USDC pool with a 0.3% fee tier. Those contracts are Sepolia-only, so the chain (`eip155:11155111`) is hardcoded alongside them.
 
 **Warning:** the swap sets `amountOutMinimum` to `0`, so it accepts any output amount, however unfavourable. That keeps the example simple on a testnet with thin liquidity, but it must not be copied to mainnet, where it invites sandwich attacks. Derive a real minimum from a quote before adapting this code.
 
@@ -137,7 +136,7 @@ There are two distinct nonces involved in transaction management:
 resp, err := client.GetNonces(ctx, turnkey.GetNoncesRequest{
     OrganizationID: cfg.organizationID,
     Address:        cfg.signWith,
-    Caip2:          cfg.caip2,
+    Caip2:          sepoliaCaip2,
     Nonce:          ptr(true),
 })
 if err != nil {

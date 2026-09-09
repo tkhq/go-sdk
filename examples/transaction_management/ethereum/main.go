@@ -3,7 +3,7 @@
 // It supports three actions, selected via the ACTION environment variable:
 //   - send: ETH self-transfer (default)
 //   - swap: Uniswap V3 swap (ETH → USDC)
-//   - assets: list supported assets for the chain
+//   - assets: list supported assets for Ethereum Sepolia
 //
 // The send and swap actions use Turnkey Gas Station for gas sponsorship by
 // default. Set SPONSOR=false to use non-sponsored mode (the EOA pays gas).
@@ -24,9 +24,11 @@ import (
 	turnkey "github.com/tkhq/go-sdk/v2"
 )
 
-// Uniswap V3 SwapRouter02 and token addresses on Ethereum Sepolia.
+// Ethereum Sepolia chain ID, Uniswap V3 SwapRouter02 and token addresses.
+// The chain is hardcoded because the swap contracts below are Sepolia-only.
 // SwapRouter02 docs: https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments
 const (
+	sepoliaCaip2        = "eip155:11155111"
 	sepoliaSwapRouter02 = "0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E"
 	sepoliaWETH         = "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"
 	sepoliaUSDC         = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
@@ -42,7 +44,6 @@ type config struct {
 	apiPrivateKey  string
 	organizationID string
 	signWith       string
-	caip2          string
 	action         string
 	sponsor        bool
 }
@@ -82,7 +83,6 @@ func loadConfig() (config, error) {
 		apiPrivateKey:  os.Getenv("TURNKEY_API_PRIVATE_KEY"),
 		organizationID: os.Getenv("TURNKEY_ORGANIZATION_ID"),
 		signWith:       os.Getenv("TURNKEY_SIGN_WITH"),
-		caip2:          envOr("TURNKEY_CAIP2", "eip155:11155111"), // Ethereum Sepolia testnet
 		action:         envOr("ACTION", "send"),
 		sponsor:        sponsor,
 	}
@@ -124,17 +124,17 @@ func run(ctx context.Context, client *turnkey.Client, cfg config) error {
 	return printBalances(ctx, client, cfg)
 }
 
-// listSupportedAssets lists all supported assets for the configured chain.
+// listSupportedAssets lists all supported assets for Ethereum Sepolia.
 func listSupportedAssets(ctx context.Context, client *turnkey.Client, cfg config) error {
 	resp, err := client.ListSupportedAssets(ctx, turnkey.ListSupportedAssetsRequest{
 		OrganizationID: cfg.organizationID,
-		Caip2:          cfg.caip2,
+		Caip2:          sepoliaCaip2,
 	})
 	if err != nil {
 		return apiError("failed to list supported assets", err)
 	}
 
-	fmt.Printf("Supported assets for %s:\n", cfg.caip2)
+	fmt.Printf("Supported assets for %s:\n", sepoliaCaip2)
 	if len(resp.Assets) == 0 {
 		fmt.Println("  (none)")
 	}
@@ -150,7 +150,7 @@ func printBalances(ctx context.Context, client *turnkey.Client, cfg config) erro
 	resp, err := client.GetWalletAddressBalances(ctx, turnkey.GetWalletAddressBalancesRequest{
 		OrganizationID: cfg.organizationID,
 		Address:        cfg.signWith,
-		Caip2:          cfg.caip2,
+		Caip2:          sepoliaCaip2,
 	})
 	if err != nil {
 		return apiError("failed to get balances", err)
@@ -237,7 +237,7 @@ func submitAndWait(ctx context.Context, client *turnkey.Client, cfg config, call
 	req := turnkey.ETHSendTransactionRequest{
 		OrganizationID: cfg.organizationID,
 		From:           cfg.signWith,
-		Caip2:          cfg.caip2,
+		Caip2:          sepoliaCaip2,
 		Calls:          calls,
 		Sponsor:        ptr(cfg.sponsor),
 	}
@@ -280,7 +280,7 @@ func getGasStationNonce(ctx context.Context, client *turnkey.Client, cfg config)
 	resp, err := client.GetNonces(ctx, turnkey.GetNoncesRequest{
 		OrganizationID:  cfg.organizationID,
 		Address:         cfg.signWith,
-		Caip2:           cfg.caip2,
+		Caip2:           sepoliaCaip2,
 		GasStationNonce: ptr(true),
 	})
 	if err != nil {
