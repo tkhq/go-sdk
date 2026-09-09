@@ -325,15 +325,27 @@ func pollTransactionStatus(ctx context.Context, client *turnkey.Client, cfg conf
 	return "", fmt.Errorf("timed out waiting for transaction confirmation after %s", timeout)
 }
 
-// txResult reports whether a poll response is terminal, returning the tx hash on
-// success or an error on failure.
+// txResult reports whether a poll response is terminal, returning the tx hash
+// and, on failure, an error.
+//
+// The hash is read before the failure check because the two are not exclusive: a
+// transaction that is included on chain and then reverts reports both, and the
+// hash is what lets you look the revert up in an explorer.
 func txResult(resp *turnkey.GetSendTransactionStatusResponse) (hash string, done bool, err error) {
+	if resp.ETH != nil && resp.ETH.TxHash != nil {
+		hash = *resp.ETH.TxHash
+	}
+
 	if msg := formatTxError(resp); msg != "" {
+		if hash != "" {
+			return hash, true, fmt.Errorf("transaction failed (tx hash: %s): %s", hash, msg)
+		}
 		return "", true, fmt.Errorf("transaction failed: %s", msg)
 	}
-	if resp.ETH != nil && resp.ETH.TxHash != nil && *resp.ETH.TxHash != "" {
-		return *resp.ETH.TxHash, true, nil
+	if hash != "" {
+		return hash, true, nil
 	}
+
 	return "", false, nil
 }
 
