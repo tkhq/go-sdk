@@ -1557,7 +1557,7 @@ type CreateSubOrganizationIntentV7 struct {
 }
 
 type CreateSubOrganizationIntentV8 struct {
-	// Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step.
+	// Optional signature proving authorization for this sub-organization creation. The signature is over the full intent. Only required if a public key was provided during the verification step.
 	ClientSignature *ClientSignature `json:"clientSignature,omitempty"`
 	// Disable email auth for the sub-organization
 	DisableEmailAuth *bool `json:"disableEmailAuth,omitempty"`
@@ -4484,6 +4484,14 @@ type LoginUsage struct {
 	PublicKey string `json:"publicKey"`
 }
 
+type LoginUsageV2 struct {
+	ExpirationSeconds  *string `json:"expirationSeconds,omitempty"`
+	InvalidateExisting *bool   `json:"invalidateExisting,omitempty"`
+	OrganizationID     string  `json:"organizationId"`
+	PublicKey          string  `json:"publicKey"`
+	SessionProfileID   *string `json:"sessionProfileId,omitempty"`
+}
+
 type MfaPolicy struct {
 	// A condition expression that evaluates to true or false, determining when this MFA policy applies.
 	Condition string                  `json:"condition"`
@@ -4719,7 +4727,7 @@ type OTPLoginIntent struct {
 }
 
 type OTPLoginIntentV2 struct {
-	// Required signature proving authorization for this login. The signature is over the verification token ID and the public key. Required for secure OTP login process.
+	// Required signature proving authorization for this login. The signature is over the full login intent. Required for secure OTP login process.
 	ClientSignature ClientSignature `json:"clientSignature"`
 	// Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`
@@ -5350,6 +5358,18 @@ type SignupUsageV2 struct {
 	PhoneNumber    *string                 `json:"phoneNumber,omitempty"`
 }
 
+type SignupUsageV3 struct {
+	DisableEmailAuth     *bool              `json:"disableEmailAuth,omitempty"`
+	DisableEmailRecovery *bool              `json:"disableEmailRecovery,omitempty"`
+	DisableOTPEmailAuth  *bool              `json:"disableOtpEmailAuth,omitempty"`
+	DisableSmsAuth       *bool              `json:"disableSmsAuth,omitempty"`
+	ParentOrganizationID string             `json:"parentOrganizationId"`
+	RootQuorumThreshold  int                `json:"rootQuorumThreshold"`
+	RootUsers            []RootUserParamsV5 `json:"rootUsers"`
+	SubOrganizationName  string             `json:"subOrganizationName"`
+	Wallet               *WalletParams      `json:"wallet,omitempty"`
+}
+
 type AuthProxySignupV2Request struct {
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	APIKeys []APIKeyParamsV2 `json:"apiKeys"`
@@ -5778,8 +5798,10 @@ type SwapSponsorshipFeature struct {
 
 type TokenUsage struct {
 	Login    *LoginUsage    `json:"login,omitempty"`
+	LoginV2  *LoginUsageV2  `json:"loginV2,omitempty"`
 	Signup   *SignupUsage   `json:"signup,omitempty"`
 	SignupV2 *SignupUsageV2 `json:"signupV2,omitempty"`
+	SignupV3 *SignupUsageV3 `json:"signupV3,omitempty"`
 	// Unique identifier for the verification token
 	TokenID string `json:"tokenId"`
 	// Type of token usage
@@ -7141,7 +7163,7 @@ type CreateSubOrganizationRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step.
+	// Optional signature proving authorization for this sub-organization creation. The signature is over the full intent. Only required if a public key was provided during the verification step.
 	ClientSignature *ClientSignature `json:"clientSignature,omitempty"`
 	// Disable email auth for the sub-organization
 	DisableEmailAuth *bool `json:"disableEmailAuth,omitempty"`
@@ -8469,7 +8491,7 @@ type OTPLoginRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// Required signature proving authorization for this login. The signature is over the verification token ID and the public key. Required for secure OTP login process.
+	// Required signature proving authorization for this login. The signature is over the full login intent. Required for secure OTP login process.
 	ClientSignature ClientSignature `json:"clientSignature"`
 	// Expiration window (in seconds) indicating how long the Session is valid for. If not provided, a default of 15 minutes will be used.
 	ExpirationSeconds *string `json:"expirationSeconds,omitempty"`

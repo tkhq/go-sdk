@@ -24,7 +24,9 @@ Refer to each example's README for the exact commands.
 
 - [delegated_access](./delegated_access/): Shows how to set up delegated access for a sub-organization. 
 
-- [otp](./otp/): Example of using one-time password (OTP) flows for authentication.
+- [otp](otp-login/): Example of using one-time password (OTP) flows for authentication.
+
+- [otp-signup](./otp-signup/): Creates a sub-organization through the strict OTP signup flow.
 
 - [private_keys](./private_keys/): Shows how to manage standalone private keys.
     - [import_private_key](./private_keys/import_private_key/): Example of importing a raw private key.

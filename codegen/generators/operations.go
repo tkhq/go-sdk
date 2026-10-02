@@ -112,6 +112,7 @@ func (g *generator) collectOperations() {
 
 			operationName = strings.TrimPrefix(operationName, "AuthProxyService_")
 			operationName = strings.TrimPrefix(operationName, "ExternalSignerApiService_")
+
 			if operationName == "" || strings.Contains(operationName, "NOOP") {
 				continue
 			}

@@ -132,6 +132,7 @@ func canonicalizeAliasedDefs(spec *swaggerSpec, base *swaggerSpec) {
 			}
 
 			target := ""
+
 			for _, baseName := range sortedKeys(base.Definitions) {
 				if !schemasEqual(spec.Definitions[name], base.Definitions[baseName]) {
 					continue

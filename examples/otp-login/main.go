@@ -11,6 +11,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -119,40 +120,27 @@ func main() {
 		log.Fatal("id claim missing from verification token")
 	}
 
-	tokenUsage := turnkey.TokenUsage{
-		TokenID:   claims.ID,
-		TypeValue: turnkey.UsageTypeLogin,
-		Login: &turnkey.LoginUsage{
-			PublicKey: clientPubHex,
-		},
-	}
-	tokenUsageJSON, err := json.Marshal(tokenUsage)
-	if err != nil {
-		log.Fatal("failed to marshal TokenUsage:", err)
-	}
-
-	hash := sha256.Sum256(tokenUsageJSON)
-	r, s, err := ecdsa.Sign(rand.Reader, clientPrivKey, hash[:])
-	if err != nil {
-		log.Fatal("failed to sign message:", err)
-	}
-	rBytes, sBytes := r.Bytes(), s.Bytes()
-	rPadded, sPadded := make([]byte, 32), make([]byte, 32)
-	copy(rPadded[32-len(rBytes):], rBytes)
-	copy(sPadded[32-len(sBytes):], sBytes)
-	sigHex := fmt.Sprintf("%x%x", rPadded, sPadded)
-
-	loginResult, err := client.OTPLogin(ctx, turnkey.OTPLoginRequest{
+	loginRequest := turnkey.OTPLoginRequest{
 		OrganizationID:    subOrgID,
 		VerificationToken: verificationToken,
 		PublicKey:         clientPubHex,
-		ClientSignature: turnkey.ClientSignature{
-			Scheme:    turnkey.ClientSignatureSchemeApip256,
-			PublicKey: clientPubHex,
-			Message:   string(tokenUsageJSON),
-			Signature: sigHex,
-		},
-	})
+	}
+	tokenUsageJSON, sigHex, err := marshalAndSignTokenUsage(
+		rand.Reader,
+		clientPrivKey,
+		tokenUsageForOTPLogin(claims.ID, loginRequest),
+	)
+	if err != nil {
+		log.Fatal("failed to sign TokenUsage:", err)
+	}
+	loginRequest.ClientSignature = turnkey.ClientSignature{
+		Scheme:    turnkey.ClientSignatureSchemeApip256,
+		PublicKey: clientPubHex,
+		Message:   string(tokenUsageJSON),
+		Signature: sigHex,
+	}
+
+	loginResult, err := client.OTPLogin(ctx, loginRequest)
 	if err != nil {
 		log.Fatal("OTP_LOGIN failed:", err)
 	}
@@ -166,4 +154,43 @@ func main() {
 		log.Fatal("failed to verify session JWT signature:", err)
 	}
 	fmt.Println("Session JWT signature verified.")
+}
+
+// tokenUsageForOTPLogin binds an OTP login signature to the exact request fields.
+func tokenUsageForOTPLogin(tokenID string, request turnkey.OTPLoginRequest) turnkey.TokenUsage {
+	return turnkey.TokenUsage{
+		TokenID:   tokenID,
+		TypeValue: turnkey.UsageTypeLogin,
+		LoginV2: &turnkey.LoginUsageV2{
+			ExpirationSeconds:  request.ExpirationSeconds,
+			InvalidateExisting: request.InvalidateExisting,
+			OrganizationID:     request.OrganizationID,
+			PublicKey:          request.PublicKey,
+			SessionProfileID:   request.SessionProfileID,
+		},
+	}
+}
+
+// marshalAndSignTokenUsage signs the exact JSON message with a raw P-256 r||s signature.
+func marshalAndSignTokenUsage(
+	random io.Reader,
+	privateKey *ecdsa.PrivateKey,
+	tokenUsage turnkey.TokenUsage,
+) ([]byte, string, error) {
+	tokenUsageJSON, err := json.Marshal(tokenUsage)
+	if err != nil {
+		return nil, "", err
+	}
+
+	hash := sha256.Sum256(tokenUsageJSON)
+	r, s, err := ecdsa.Sign(random, privateKey, hash[:])
+	if err != nil {
+		return nil, "", err
+	}
+	rBytes, sBytes := r.Bytes(), s.Bytes()
+	rPadded, sPadded := make([]byte, 32), make([]byte, 32)
+	copy(rPadded[32-len(rBytes):], rBytes)
+	copy(sPadded[32-len(sBytes):], sBytes)
+
+	return tokenUsageJSON, fmt.Sprintf("%x%x", rPadded, sPadded), nil
 }

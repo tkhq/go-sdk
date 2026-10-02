@@ -45,7 +45,7 @@ Standalone functions for encrypting to and decrypting from Turnkey enclave bundl
 See the examples directory in the root SDK for runnable code:
 
 - [API key generation](../examples/apikey/generate.go)
-- [OTP flow](../examples/otp/main.go)
+- [OTP flow](../examples/otp-login/main.go)
 - [Import wallet](../examples/wallets/import_wallet/main.go)
 - [Export wallet](../examples/wallets/export_wallet/main.go)
 

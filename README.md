@@ -178,7 +178,7 @@ See this README in [examples](./examples/README.md) for more complete code sampl
 - [API key generation](./examples/apikey/generate.go)
 - [Wallets](./examples/wallets/)
 - [Delegated Access](./examples/delegated_access/)
-- [OTP Flows](./examples/otp/)
+- [OTP Flows](examples/otp-login/)
 - [Signing](./examples/signing/)
 
 ## Development

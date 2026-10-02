@@ -1,4 +1,4 @@
-# Example: `otp`
+# Example: `otp-login`
 
 A sample script demonstrating the OTP (one-time password) email authentication flow:
 
@@ -21,13 +21,13 @@ Follow the [Quickstart](https://docs.turnkey.com/getting-started/quickstart) to 
 Copy `.env.example` to `.env` and fill in the values:
 
 ```bash
-cp examples/otp/.env.example examples/otp/.env
+cp examples/otp-login/.env.example examples/otp-login/.env
 ```
 
 Then run from the repo root:
 
 ```bash
-set -a && source examples/otp/.env && set +a && go run ./examples/otp
+set -a && source examples/otp-login/.env && set +a && go run ./examples/otp-login
 ```
 
 The script will send an OTP to the email address, prompt you to enter the code, and print the session JWT on success.

@@ -8996,7 +8996,7 @@
         },
         "clientSignature": {
           "$ref": "#/definitions/v1ClientSignature",
-          "description": "Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step."
+          "description": "Optional signature proving authorization for this sub-organization creation. The signature is over the full intent. Only required if a public key was provided during the verification step."
         }
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
@@ -17028,6 +17028,27 @@
       },
       "required": ["publicKey"]
     },
+    "v1LoginUsageV2": {
+      "type": "object",
+      "properties": {
+        "organizationId": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "invalidateExisting": {
+          "type": "boolean"
+        },
+        "expirationSeconds": {
+          "type": "string"
+        },
+        "sessionProfileId": {
+          "type": "string"
+        }
+      },
+      "required": ["organizationId", "publicKey"]
+    },
     "v1MfaPolicy": {
       "type": "object",
       "properties": {
@@ -17624,7 +17645,7 @@
         },
         "clientSignature": {
           "$ref": "#/definitions/v1ClientSignature",
-          "description": "Required signature proving authorization for this login. The signature is over the verification token ID and the public key. Required for secure OTP login process."
+          "description": "Required signature proving authorization for this login. The signature is over the full login intent. Required for secure OTP login process."
         },
         "expirationSeconds": {
           "type": "string",
@@ -19455,6 +19476,49 @@
         }
       }
     },
+    "v1SignupUsageV3": {
+      "type": "object",
+      "properties": {
+        "parentOrganizationId": {
+          "type": "string"
+        },
+        "subOrganizationName": {
+          "type": "string"
+        },
+        "rootUsers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1RootUserParamsV5"
+          }
+        },
+        "rootQuorumThreshold": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "wallet": {
+          "$ref": "#/definitions/v1WalletParams"
+        },
+        "disableEmailRecovery": {
+          "type": "boolean"
+        },
+        "disableEmailAuth": {
+          "type": "boolean"
+        },
+        "disableSmsAuth": {
+          "type": "boolean"
+        },
+        "disableOtpEmailAuth": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "parentOrganizationId",
+        "subOrganizationName",
+        "rootUsers",
+        "rootQuorumThreshold"
+      ]
+    },
     "v1SimpleClientExtensionResults": {
       "type": "object",
       "properties": {
@@ -20558,6 +20622,12 @@
         },
         "signupV2": {
           "$ref": "#/definitions/v1SignupUsageV2"
+        },
+        "loginV2": {
+          "$ref": "#/definitions/v1LoginUsageV2"
+        },
+        "signupV3": {
+          "$ref": "#/definitions/v1SignupUsageV3"
         }
       },
       "required": ["type", "tokenId"]
