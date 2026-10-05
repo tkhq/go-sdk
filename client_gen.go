@@ -318,7 +318,7 @@ func (c *Client) StampCreateAuthenticators(ctx context.Context, input CreateAuth
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_authenticators", body, true)
 }
 
-// Create a fiat on ramp provider credential
+// Create a fiat on ramp provider credential.
 func (c *Client) CreateFiatOnRampCredential(ctx context.Context, input CreateFiatOnRampCredentialRequest) (*CreateFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -405,7 +405,7 @@ func (c *Client) StampCreateMfaPolicy(ctx context.Context, input CreateMfaPolicy
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_mfa_policy", body, true)
 }
 
-// Enable authentication for end users with an OAuth 2.0 provider
+// Enable authentication for end users with an OAuth 2.0 provider.
 func (c *Client) CreateOAuth2Credential(ctx context.Context, input CreateOAuth2CredentialRequest) (*CreateOAuth2CredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -724,7 +724,7 @@ func (c *Client) StampCreateSubOrganization(ctx context.Context, input CreateSub
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_sub_organization", body, true)
 }
 
-// Get a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported.
+// Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported.
 func (c *Client) CreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*CreateSwapQuoteResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -753,7 +753,7 @@ func (c *Client) StampCreateSwapQuote(ctx context.Context, input CreateSwapQuote
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_swap_quote", body, true)
 }
 
-// Create a new TVC application
+// Create a new TVC application.
 func (c *Client) CreateTVCApp(ctx context.Context, input CreateTVCAppRequest) (*CreateTVCAppResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -782,7 +782,7 @@ func (c *Client) StampCreateTVCApp(ctx context.Context, input CreateTVCAppReques
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_app", body, true)
 }
 
-// Create a new TVC Deployment
+// Create a new TVC deployment.
 func (c *Client) CreateTVCDeployment(ctx context.Context, input CreateTVCDeploymentRequest) (*CreateTVCDeploymentResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -811,7 +811,7 @@ func (c *Client) StampCreateTVCDeployment(ctx context.Context, input CreateTVCDe
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_deployment", body, true)
 }
 
-// Post one or more manifest approvals for a TVC Manifest
+// Post one or more manifest approvals for a TVC manifest.
 func (c *Client) CreateTVCManifestApprovals(ctx context.Context, input CreateTVCManifestApprovalsRequest) (*CreateTVCManifestApprovalsResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -838,6 +838,64 @@ func (c *Client) StampCreateTVCManifestApprovals(ctx context.Context, input Crea
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_manifest_approvals", body, true)
+}
+
+// Create a TVC operator backed by uncompressed P-256 Turnkey wallet accounts.
+func (c *Client) CreateTVCOperator(ctx context.Context, input CreateTVCOperatorRequest) (*CreateTVCOperatorResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_operator", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateTVCOperatorResult])
+	if err := decodeActivityResponse(raw, "CreateTVCOperatorResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateTVCOperatorResult { return r.CreateTVCOperatorResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateTVCOperatorResponse{Activity: *activity, CreateTVCOperatorResult: *result}, nil
+}
+
+func (c *Client) StampCreateTVCOperator(ctx context.Context, input CreateTVCOperatorRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_operator", body, true)
+}
+
+// Create a hosted TVC Quorum Key and encrypted shares.
+func (c *Client) CreateTVCQuorumKey(ctx context.Context, input CreateTVCQuorumKeyRequest) (*CreateTVCQuorumKeyResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_quorum_key", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateTVCQuorumKeyResult])
+	if err := decodeActivityResponse(raw, "CreateTVCQuorumKeyResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateTVCQuorumKeyResult { return r.CreateTVCQuorumKeyResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateTVCQuorumKeyResponse{Activity: *activity, CreateTVCQuorumKeyResult: *result}, nil
+}
+
+func (c *Client) StampCreateTVCQuorumKey(ctx context.Context, input CreateTVCQuorumKeyRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_tvc_quorum_key", body, true)
 }
 
 // Create a user tag and add it to users.
@@ -896,35 +954,6 @@ func (c *Client) StampCreateUsers(ctx context.Context, input CreateUsersRequest)
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_users", body, true)
-}
-
-// Create a new velocity control.
-func (c *Client) CreateVelocityControl(ctx context.Context, input CreateVelocityControlRequest) (*CreateVelocityControlResponse, error) {
-	body, err := c.activityEnvelope(input)
-	if err != nil {
-		return nil, err
-	}
-	var raw map[string]any
-	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_velocity_control", body, &raw, true, nil); err != nil {
-		return nil, err
-	}
-	out := new(ActivityResult[CreateVelocityControlResult])
-	if err := decodeActivityResponse(raw, "CreateVelocityControlResult", out); err != nil {
-		return nil, err
-	}
-	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateVelocityControlResult { return r.CreateVelocityControlResult })
-	if err != nil {
-		return nil, err
-	}
-	return &CreateVelocityControlResponse{Activity: *activity, CreateVelocityControlResult: *result}, nil
-}
-
-func (c *Client) StampCreateVelocityControl(ctx context.Context, input CreateVelocityControlRequest) (*SignedRequest, error) {
-	body, err := c.activityEnvelope(input)
-	if err != nil {
-		return nil, err
-	}
-	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_velocity_control", body, true)
 }
 
 // Create a wallet and derive addresses.
@@ -1014,7 +1043,7 @@ func (c *Client) StampCreateWebhookEndpoint(ctx context.Context, input CreateWeb
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_webhook_endpoint", body, true)
 }
 
-// Remove api keys from a user.
+// Remove API keys from a user.
 func (c *Client) DeleteAPIKeys(ctx context.Context, input DeleteAPIKeysRequest) (*DeleteAPIKeysResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -1072,7 +1101,7 @@ func (c *Client) StampDeleteAuthenticators(ctx context.Context, input DeleteAuth
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_authenticators", body, true)
 }
 
-// Delete a fiat on ramp provider credential
+// Delete a fiat on ramp provider credential.
 func (c *Client) DeleteFiatOnRampCredential(ctx context.Context, input DeleteFiatOnRampCredentialRequest) (*DeleteFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -1159,7 +1188,7 @@ func (c *Client) StampDeleteMfaPolicy(ctx context.Context, input DeleteMfaPolicy
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_mfa_policy", body, true)
 }
 
-// Disable authentication for end users with an OAuth 2.0 provider
+// Disable authentication for end users with an OAuth 2.0 provider.
 func (c *Client) DeleteOAuth2Credential(ctx context.Context, input DeleteOAuth2CredentialRequest) (*DeleteOAuth2CredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -1333,6 +1362,35 @@ func (c *Client) StampDeletePrivateKeys(ctx context.Context, input DeletePrivate
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_private_keys", body, true)
 }
 
+// Delete secrets by their unique identifiers. All secrets must belong to the organization.
+func (c *Client) DeleteSecrets(ctx context.Context, input DeleteSecretsRequest) (*DeleteSecretsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_secrets", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[DeleteSecretsResult])
+	if err := decodeActivityResponse(raw, "DeleteSecretsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *DeleteSecretsResult { return r.DeleteSecretsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &DeleteSecretsResponse{Activity: *activity, DeleteSecretsResult: *result}, nil
+}
+
+func (c *Client) StampDeleteSecrets(ctx context.Context, input DeleteSecretsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_secrets", body, true)
+}
+
 // Delete a smart contract interface.
 func (c *Client) DeleteSmartContractInterface(ctx context.Context, input DeleteSmartContractInterfaceRequest) (*DeleteSmartContractInterfaceResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -1391,7 +1449,7 @@ func (c *Client) StampDeleteSubOrganization(ctx context.Context, input DeleteSub
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_sub_organization", body, true)
 }
 
-// Delete a TVC App and all of its deployments
+// Delete a TVC app and all of its deployments.
 func (c *Client) DeleteTVCAppAndDeployments(ctx context.Context, input DeleteTVCAppAndDeploymentsRequest) (*DeleteTVCAppAndDeploymentsResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -1420,7 +1478,7 @@ func (c *Client) StampDeleteTVCAppAndDeployments(ctx context.Context, input Dele
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_tvc_app_and_deployments", body, true)
 }
 
-// Delete a TVC Deployment
+// Delete a TVC deployment.
 func (c *Client) DeleteTVCDeployment(ctx context.Context, input DeleteTVCDeploymentRequest) (*DeleteTVCDeploymentResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -1505,35 +1563,6 @@ func (c *Client) StampDeleteUsers(ctx context.Context, input DeleteUsersRequest)
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_users", body, true)
-}
-
-// Delete an existing velocity control.
-func (c *Client) DeleteVelocityControl(ctx context.Context, input DeleteVelocityControlRequest) (*DeleteVelocityControlResponse, error) {
-	body, err := c.activityEnvelope(input)
-	if err != nil {
-		return nil, err
-	}
-	var raw map[string]any
-	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_velocity_control", body, &raw, true, nil); err != nil {
-		return nil, err
-	}
-	out := new(ActivityResult[DeleteVelocityControlResult])
-	if err := decodeActivityResponse(raw, "DeleteVelocityControlResult", out); err != nil {
-		return nil, err
-	}
-	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *DeleteVelocityControlResult { return r.DeleteVelocityControlResult })
-	if err != nil {
-		return nil, err
-	}
-	return &DeleteVelocityControlResponse{Activity: *activity, DeleteVelocityControlResult: *result}, nil
-}
-
-func (c *Client) StampDeleteVelocityControl(ctx context.Context, input DeleteVelocityControlRequest) (*SignedRequest, error) {
-	body, err := c.activityEnvelope(input)
-	if err != nil {
-		return nil, err
-	}
-	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_velocity_control", body, true)
 }
 
 // Delete wallet accounts for an organization.
@@ -1679,6 +1708,35 @@ func (c *Client) StampETHUndelegate7702(ctx context.Context, input ETHUndelegate
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/eth_undelegate_7702", body, true)
+}
+
+// Claim the Merkl protocol rewards attributed to a wallet's Earn positions. The claim is signed by the wallet itself and every reward token is transferred to it; see ListEarnRewards for what is claimable.
+func (c *Client) EarnClaimRewards(ctx context.Context, input EarnClaimRewardsRequest) (*EarnClaimRewardsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_claim_rewards", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[EarnClaimRewardsResult])
+	if err := decodeActivityResponse(raw, "EarnClaimRewardsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *EarnClaimRewardsResult { return r.EarnClaimRewardsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &EarnClaimRewardsResponse{Activity: *activity, EarnClaimRewardsResult: *result}, nil
+}
+
+func (c *Client) StampEarnClaimRewards(ctx context.Context, input EarnClaimRewardsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/earn_claim_rewards", body, true)
 }
 
 // Enable a yield vault for an organization by deploying its fee wrapper. Must be called before any deposits into the vault.
@@ -1999,6 +2057,20 @@ func (c *Client) GetAPIKeys(ctx context.Context, input GetAPIKeysRequest) (*GetA
 	return out, nil
 }
 
+// For each policy in an organization, report whether it is currently active based on the enclave's trusted timestamp and the policy's time window (if any). Policies without a time field are always active.
+func (c *Client) GetActivePolicies(ctx context.Context, input GetActivePoliciesRequest) (*GetActivePoliciesResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetActivePoliciesResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_active_policies", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // List all activities within an organization.
 func (c *Client) GetActivities(ctx context.Context, input GetActivitiesRequest) (*GetActivitiesResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2041,7 +2113,7 @@ func (c *Client) GetAppProofs(ctx context.Context, input GetAppProofsRequest) (*
 	return out, nil
 }
 
-// Get live runtime status for a TVC App from the cluster.
+// Get live runtime status for a TVC app from the cluster.
 func (c *Client) GetAppStatus(ctx context.Context, input GetAppStatusRequest) (*GetAppStatusResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2083,7 +2155,7 @@ func (c *Client) GetAuthenticators(ctx context.Context, input GetAuthenticatorsR
 	return out, nil
 }
 
-// Get the boot proof for a given ephemeral key.
+// Get the Boot Proof for a given ephemeral key.
 func (c *Client) GetBootProof(ctx context.Context, input GetBootProofRequest) (*BootProofResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2106,6 +2178,20 @@ func (c *Client) GetClaimEarnFeesStatus(ctx context.Context, input GetClaimEarnF
 	input.OrganizationID = organizationID
 	out := new(GetClaimEarnFeesStatusResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_claim_earn_fees_status", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Poll the status of a rewards claim by its claim_request_id.
+func (c *Client) GetEarnClaimRewardsStatus(ctx context.Context, input GetEarnClaimRewardsStatusRequest) (*GetEarnClaimRewardsStatusResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetEarnClaimRewardsStatusResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_earn_claim_rewards_status", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -2153,6 +2239,20 @@ func (c *Client) GetEarnWithdrawStatus(ctx context.Context, input GetEarnWithdra
 	return out, nil
 }
 
+// Get a batch of external signer tasks.
+func (c *Client) GetExternalSignerTasks(ctx context.Context, input GetExternalSignerTasksRequest) (*GetExternalSignerTasksResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetExternalSignerTasksResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/external_signer/v1/query/get_external_signer_tasks", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get gas usage and gas limits for either the parent organization or a sub-organization.
 func (c *Client) GetGasUsage(ctx context.Context, input GetGasUsageRequest) (*GetGasUsageResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2181,7 +2281,7 @@ func (c *Client) GetIPAllowlist(ctx context.Context, input GetIPAllowlistRequest
 	return out, nil
 }
 
-// Get the latest boot proof for a given enclave app name.
+// Get the latest Boot Proof for a given enclave app name.
 func (c *Client) GetLatestBootProof(ctx context.Context, input GetLatestBootProofRequest) (*BootProofResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2447,7 +2547,7 @@ func (c *Client) GetSmartContractInterfaces(ctx context.Context, input GetSmartC
 	return out, nil
 }
 
-// Get all suborg IDs associated given a parent org ID and an optional filter.
+// Get all suborg IDs (verified and unverified) associated with a given parent organization ID and an optional filter.
 func (c *Client) GetSubOrgIds(ctx context.Context, input GetSubOrgIdsRequest) (*GetSubOrgIdsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2475,7 +2575,7 @@ func (c *Client) GetSwapStatus(ctx context.Context, input GetSwapStatusRequest) 
 	return out, nil
 }
 
-// Get details about a single TVC App
+// Get details about a single TVC app.
 func (c *Client) GetTVCApp(ctx context.Context, input GetTVCAppRequest) (*GetTVCAppResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2489,7 +2589,7 @@ func (c *Client) GetTVCApp(ctx context.Context, input GetTVCAppRequest) (*GetTVC
 	return out, nil
 }
 
-// List all deployments for a given TVC App
+// List all deployments for a given TVC app.
 func (c *Client) GetTVCAppDeployments(ctx context.Context, input GetTVCAppDeploymentsRequest) (*GetTVCAppDeploymentsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2503,7 +2603,7 @@ func (c *Client) GetTVCAppDeployments(ctx context.Context, input GetTVCAppDeploy
 	return out, nil
 }
 
-// List all TVC Apps within an organization.
+// List all TVC apps within an organization.
 func (c *Client) GetTVCApps(ctx context.Context, input GetTVCAppsRequest) (*GetTVCAppsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2517,7 +2617,7 @@ func (c *Client) GetTVCApps(ctx context.Context, input GetTVCAppsRequest) (*GetT
 	return out, nil
 }
 
-// Get details about a single TVC Deployment
+// Get details about a single TVC deployment.
 func (c *Client) GetTVCDeployment(ctx context.Context, input GetTVCDeploymentRequest) (*GetTVCDeploymentResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2545,6 +2645,34 @@ func (c *Client) GetTVCDeploymentDebugLogs(ctx context.Context, input GetTVCDepl
 	return out, nil
 }
 
+// Get the attestation document and manifest envelope of the provisioning enclave for a TVC deployment.
+func (c *Client) GetTVCDeploymentProvisioningDetails(ctx context.Context, input GetTVCDeploymentProvisioningDetailsRequest) (*GetTVCDeploymentProvisioningDetailsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetTVCDeploymentProvisioningDetailsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_tvc_deployment_provisioning_details", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// List all TVC operators within an organization, newest first.
+func (c *Client) GetTVCOperators(ctx context.Context, input GetTVCOperatorsRequest) (*GetTVCOperatorsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetTVCOperatorsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_tvc_operators", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // List QOS versions supported for new TVC deployments and the latest recommended QOS version.
 func (c *Client) GetTVCQosVersions(ctx context.Context, input GetTVCQosVersionsRequest) (*GetTVCQosVersionsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2554,6 +2682,20 @@ func (c *Client) GetTVCQosVersions(ctx context.Context, input GetTVCQosVersionsR
 	input.OrganizationID = organizationID
 	out := new(GetTVCQosVersionsResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_tvc_qos_versions", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// List all hosted TVC Quorum Keys within an organization, newest first.
+func (c *Client) GetTVCQuorumKeys(ctx context.Context, input GetTVCQuorumKeysRequest) (*GetTVCQuorumKeysResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetTVCQuorumKeysResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_tvc_quorum_keys", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -2587,21 +2729,7 @@ func (c *Client) GetUsers(ctx context.Context, input GetUsersRequest) (*GetUsers
 	return out, nil
 }
 
-// Get details about a velocity control.
-func (c *Client) GetVelocityControl(ctx context.Context, input GetVelocityControlRequest) (*GetVelocityControlResponse, error) {
-	organizationID, err := c.organizationID(input.OrganizationID)
-	if err != nil {
-		return nil, err
-	}
-	input.OrganizationID = organizationID
-	out := new(GetVelocityControlResponse)
-	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_velocity_control", input, out, true, nil); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// Get all email or phone verified suborg IDs associated given a parent org ID.
+// Get all verified suborg IDs associated with a given parent organization ID and an optional filter.
 func (c *Client) GetVerifiedSubOrgIds(ctx context.Context, input GetVerifiedSubOrgIdsRequest) (*GetVerifiedSubOrgIdsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -2685,7 +2813,7 @@ func (c *Client) GetWallets(ctx context.Context, input GetWalletsRequest) (*GetW
 	return out, nil
 }
 
-// Get basic information about your current API or WebAuthN user and their organization. Affords sub-organization look ups via parent organization for WebAuthN or API key users.
+// Get basic information about your current API or WebAuthn user and their organization. Affords sub-organization lookups via parent organization for WebAuthn or API key users.
 func (c *Client) GetWhoami(ctx context.Context, input GetWhoamiRequest) (*GetWhoamiResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
@@ -3031,6 +3159,20 @@ func (c *Client) ListEarnPositions(ctx context.Context, input ListEarnPositionsR
 	return out, nil
 }
 
+// List the protocol rewards (e.g. MORPHO and third-party campaign tokens, distributed off-chain via Merkl) attributed to a wallet: claimable, lifetime claimed, and pending amounts per reward token.
+func (c *Client) ListEarnRewards(ctx context.Context, input ListEarnRewardsRequest) (*ListEarnRewardsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(ListEarnRewardsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_earn_rewards", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get the catalog of all wrappable yield vaults across supported chains, enriched with live TVL and APY. Annotates which vaults the organization has already enabled.
 func (c *Client) ListEarnVaults(ctx context.Context, input ListEarnVaultsRequest) (*ListEarnVaultsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -3157,20 +3299,6 @@ func (c *Client) ListUserTags(ctx context.Context, input ListUserTagsRequest) (*
 	return out, nil
 }
 
-// List all velocity controls within an organization.
-func (c *Client) ListVelocityControls(ctx context.Context, input ListVelocityControlsRequest) (*ListVelocityControlsResponse, error) {
-	organizationID, err := c.organizationID(input.OrganizationID)
-	if err != nil {
-		return nil, err
-	}
-	input.OrganizationID = organizationID
-	out := new(ListVelocityControlsResponse)
-	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_velocity_controls", input, out, true, nil); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // List webhook endpoints within an organization.
 func (c *Client) ListWebhookEndpoints(ctx context.Context, input ListWebhookEndpointsRequest) (*ListWebhookEndpointsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -3214,7 +3342,7 @@ func (c *Client) StampOAuth(ctx context.Context, input OAuthRequest) (*SignedReq
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/oauth", body, true)
 }
 
-// Authenticate a user with an OAuth 2.0 provider and receive an OIDC token to use with the LoginWithOAuth or CreateSubOrganization activities
+// Authenticate a user with an OAuth 2.0 provider and receive an OIDC token to use with the LoginWithOAuth or CreateSubOrganization activities.
 func (c *Client) OAuth2Authenticate(ctx context.Context, input OAuth2AuthenticateRequest) (*OAuth2AuthenticateResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3328,6 +3456,64 @@ func (c *Client) StampOTPLogin(ctx context.Context, input OTPLoginRequest) (*Sig
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/otp_login", body, true)
+}
+
+// Post re-encrypted Quorum Key share for a TVC deployment.
+func (c *Client) PostTVCQuorumKeyShare(ctx context.Context, input PostTVCQuorumKeyShareRequest) (*PostTVCQuorumKeyShareResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/post_tvc_quorum_key_share", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[PostTVCQuorumKeyShareResult])
+	if err := decodeActivityResponse(raw, "PostTVCQuorumKeyShareResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *PostTVCQuorumKeyShareResult { return r.PostTVCQuorumKeyShareResult })
+	if err != nil {
+		return nil, err
+	}
+	return &PostTVCQuorumKeyShareResponse{Activity: *activity, PostTVCQuorumKeyShareResult: *result}, nil
+}
+
+func (c *Client) StampPostTVCQuorumKeyShare(ctx context.Context, input PostTVCQuorumKeyShareRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/post_tvc_quorum_key_share", body, true)
+}
+
+// Re-encrypt a hosted TVC Quorum Key share for a deployment.
+func (c *Client) ReEncryptTVCQuorumKeyShare(ctx context.Context, input ReEncryptTVCQuorumKeyShareRequest) (*ReEncryptTVCQuorumKeyShareResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/re_encrypt_tvc_quorum_key_share", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[ReEncryptTVCQuorumKeyShareResult])
+	if err := decodeActivityResponse(raw, "ReEncryptTVCQuorumKeyShareResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *ReEncryptTVCQuorumKeyShareResult { return r.ReEncryptTVCQuorumKeyShareResult })
+	if err != nil {
+		return nil, err
+	}
+	return &ReEncryptTVCQuorumKeyShareResponse{Activity: *activity, ReEncryptTVCQuorumKeyShareResult: *result}, nil
+}
+
+func (c *Client) StampReEncryptTVCQuorumKeyShare(ctx context.Context, input ReEncryptTVCQuorumKeyShareRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/re_encrypt_tvc_quorum_key_share", body, true)
 }
 
 // Complete the process of recovering a user by adding an authenticator.
@@ -3446,7 +3632,7 @@ func (c *Client) StampRemoveOrganizationFeature(ctx context.Context, input Remov
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/remove_organization_feature", body, true)
 }
 
-// Restore a deleted TVC Deployment
+// Restore a deleted TVC deployment.
 func (c *Client) RestoreTVCDeployment(ctx context.Context, input RestoreTVCDeploymentRequest) (*RestoreTVCDeploymentResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3794,7 +3980,7 @@ func (c *Client) StampStampLogin(ctx context.Context, input StampLoginRequest) (
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/stamp_login", body, true)
 }
 
-// Update a fiat on ramp provider credential
+// Update a fiat on ramp provider credential.
 func (c *Client) UpdateFiatOnRampCredential(ctx context.Context, input UpdateFiatOnRampCredentialRequest) (*UpdateFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3852,7 +4038,7 @@ func (c *Client) StampUpdateMfaPolicy(ctx context.Context, input UpdateMfaPolicy
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/update_mfa_policy", body, true)
 }
 
-// Update an OAuth 2.0 provider credential
+// Update an OAuth 2.0 provider credential.
 func (c *Client) UpdateOAuth2Credential(ctx context.Context, input UpdateOAuth2CredentialRequest) (*UpdateOAuth2CredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3997,7 +4183,7 @@ func (c *Client) StampUpdateRootQuorum(ctx context.Context, input UpdateRootQuor
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/update_root_quorum", body, true)
 }
 
-// Set the live deployment for a TVC App
+// Set the live deployment for a TVC app.
 func (c *Client) UpdateTVCAppLiveDeployment(ctx context.Context, input UpdateTVCAppLiveDeploymentRequest) (*UpdateTVCAppLiveDeploymentResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -4258,7 +4444,7 @@ func (c *Client) StampUpsertSwapConfig(ctx context.Context, input UpsertSwapConf
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_config", body, true)
 }
 
-// Validate a container image URL and pull secret for TVC deployment
+// Validate a container image URL and pull secret for TVC deployment.
 func (c *Client) ValidateTVCImage(ctx context.Context, input ValidateTVCImageRequest) (*ValidateTVCImageResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {

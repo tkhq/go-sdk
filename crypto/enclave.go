@@ -147,6 +147,40 @@ func EncryptPrivateKeyToBundle(privateKey, keyFormat, importBundle, organization
 	return encryptImportBundle(plaintext, []byte(importBundle), organizationID, userID, signerKey)
 }
 
+// EncryptSecretToBundle verifies the target's signature and org, then returns encrypted ClientSendMsg JSON and its hex target key.
+// dangerouslyOverrideSignerKey replaces the production quorum key (non-production only).
+func EncryptSecretToBundle(plaintext []byte, targetBundle, organizationID string, dangerouslyOverrideSignerKey ...*ecdsa.PublicKey) (string, string, error) {
+	signerKey, err := resolveSignerKey(dangerouslyOverrideSignerKey...)
+	if err != nil {
+		return "", "", err
+	}
+
+	var msg ServerTargetMsgV1
+	if err := json.Unmarshal([]byte(targetBundle), &msg); err != nil {
+		return "", "", err
+	}
+
+	if err := verifyEnclaveSignature(msg.EnclaveQuorumPublic, msg.DataSignature, msg.Data, signerKey); err != nil {
+		return "", "", err
+	}
+
+	var signedData ServerTargetData
+	if err := json.Unmarshal(msg.Data, &signedData); err != nil {
+		return "", "", err
+	}
+
+	if signedData.OrganizationID != organizationID {
+		return "", "", fmt.Errorf("organization id does not match expected value. Expected: %s. Found: %s", organizationID, signedData.OrganizationID)
+	}
+
+	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext)
+	if err != nil {
+		return "", "", err
+	}
+
+	return payload, hex.EncodeToString(signedData.TargetPublic), nil
+}
+
 // EncryptOtpCodeToBundle encrypts an OTP code and a client public key to the target bundle
 // returned by InitOtp. Verifies the enclave signature using ProductionTLSFetcherSigningPublicKey.
 // Pass dangerouslyOverrideSignerPublicKeyHex to use a custom signer key (non-production only).
