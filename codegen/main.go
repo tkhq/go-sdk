@@ -11,6 +11,9 @@ import (
 func main() {
 	publicSwagger := flag.String("swagger", defaultInputPath("codegen/inputs/public_api.swagger.json", "inputs/public_api.swagger.json"), "path to public API swagger")
 	authProxySwagger := flag.String("auth-proxy-swagger", defaultInputPath("codegen/inputs/auth_proxy.swagger.json", "inputs/auth_proxy.swagger.json"), "path to auth proxy swagger")
+	externalSignerSwagger := flag.String("external-signer-swagger",
+		defaultInputPath("codegen/inputs/external_signer_api.swagger.json", "inputs/external_signer_api.swagger.json"),
+		"path to external signer swagger")
 	activitiesPath := flag.String("activities", defaultInputPath("codegen/inputs/activities.json", "inputs/activities.json"), "path to activities config JSON")
 	outDir := flag.String("out", ".", "generated Go package output directory")
 	all := flag.Bool("all", false, "generate methods for all historical activity versions in addition to the current ones")
@@ -18,11 +21,12 @@ func main() {
 	flag.Parse()
 
 	written, err := generators.Generate(generators.Options{
-		PublicSwaggerPath:    *publicSwagger,
-		AuthProxySwaggerPath: *authProxySwagger,
-		ActivitiesPath:       *activitiesPath,
-		OutDir:               *outDir,
-		AllVersions:          *all,
+		PublicSwaggerPath:         *publicSwagger,
+		AuthProxySwaggerPath:      *authProxySwagger,
+		ExternalSignerSwaggerPath: *externalSignerSwagger,
+		ActivitiesPath:            *activitiesPath,
+		OutDir:                    *outDir,
+		AllVersions:               *all,
 	})
 	if err != nil {
 		fatal(err)

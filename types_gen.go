@@ -4,6 +4,14 @@ package turnkey
 
 import "encoding/json"
 
+type ExternalCryptoV1SignatureScheme string
+
+const (
+	ExternalCryptoV1SignatureSchemeSignatureSchemeTkApip256    ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_API_P256"
+	ExternalCryptoV1SignatureSchemeSignatureSchemeTkWebauthn   ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_WEBAUTHN"
+	ExternalCryptoV1SignatureSchemeSignatureSchemeTkQuorumP256 ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_QUORUM_P256"
+)
+
 type ExternalDataV1SignatureScheme string
 
 const (
@@ -33,170 +41,178 @@ const (
 type ActivityType string
 
 const (
-	ActivityTypeCreateAPIKeys                ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS"
-	ActivityTypeCreateUsers                  ActivityType = "ACTIVITY_TYPE_CREATE_USERS"
-	ActivityTypeCreatePrivateKeys            ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
-	ActivityTypeSignRawPayload               ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
-	ActivityTypeCreateInvitations            ActivityType = "ACTIVITY_TYPE_CREATE_INVITATIONS"
-	ActivityTypeAcceptInvitation             ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION"
-	ActivityTypeCreatePolicy                 ActivityType = "ACTIVITY_TYPE_CREATE_POLICY"
-	ActivityTypeDisablePrivateKey            ActivityType = "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
-	ActivityTypeDeleteUsers                  ActivityType = "ACTIVITY_TYPE_DELETE_USERS"
-	ActivityTypeDeleteAPIKeys                ActivityType = "ACTIVITY_TYPE_DELETE_API_KEYS"
-	ActivityTypeDeleteInvitation             ActivityType = "ACTIVITY_TYPE_DELETE_INVITATION"
-	ActivityTypeDeleteOrganization           ActivityType = "ACTIVITY_TYPE_DELETE_ORGANIZATION"
-	ActivityTypeDeletePolicy                 ActivityType = "ACTIVITY_TYPE_DELETE_POLICY"
-	ActivityTypeCreateUserTag                ActivityType = "ACTIVITY_TYPE_CREATE_USER_TAG"
-	ActivityTypeDeleteUserTags               ActivityType = "ACTIVITY_TYPE_DELETE_USER_TAGS"
-	ActivityTypeCreateOrganization           ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION"
-	ActivityTypeSignTransaction              ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION"
-	ActivityTypeApproveActivity              ActivityType = "ACTIVITY_TYPE_APPROVE_ACTIVITY"
-	ActivityTypeRejectActivity               ActivityType = "ACTIVITY_TYPE_REJECT_ACTIVITY"
-	ActivityTypeDeleteAuthenticators         ActivityType = "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
-	ActivityTypeCreateAuthenticators         ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
-	ActivityTypeCreatePrivateKeyTag          ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
-	ActivityTypeDeletePrivateKeyTags         ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
-	ActivityTypeSetPaymentMethod             ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
-	ActivityTypeActivateBillingTier          ActivityType = "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
-	ActivityTypeDeletePaymentMethod          ActivityType = "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
-	ActivityTypeCreatePolicyV2               ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V2"
-	ActivityTypeCreatePolicyV3               ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V3"
-	ActivityTypeCreateAPIOnlyUsers           ActivityType = "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
-	ActivityTypeUpdateRootQuorum             ActivityType = "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
-	ActivityTypeUpdateUserTag                ActivityType = "ACTIVITY_TYPE_UPDATE_USER_TAG"
-	ActivityTypeUpdatePrivateKeyTag          ActivityType = "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
-	ActivityTypeCreateAuthenticatorsV2       ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
-	ActivityTypeCreateOrganizationV2         ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
-	ActivityTypeCreateUsersV2                ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V2"
-	ActivityTypeAcceptInvitationV2           ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
-	ActivityTypeCreateSubOrganization        ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
-	ActivityTypeCreateSubOrganizationV2      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
-	ActivityTypeUpdateAllowedOrigins         ActivityType = "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
-	ActivityTypeCreatePrivateKeysV2          ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
-	ActivityTypeUpdateUser                   ActivityType = "ACTIVITY_TYPE_UPDATE_USER"
-	ActivityTypeUpdatePolicy                 ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY"
-	ActivityTypeSetPaymentMethodV2           ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
-	ActivityTypeCreateSubOrganizationV3      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
-	ActivityTypeCreateWallet                 ActivityType = "ACTIVITY_TYPE_CREATE_WALLET"
-	ActivityTypeCreateWalletAccounts         ActivityType = "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
-	ActivityTypeInitUserEmailRecovery        ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
-	ActivityTypeRecoverUser                  ActivityType = "ACTIVITY_TYPE_RECOVER_USER"
-	ActivityTypeSetOrganizationFeature       ActivityType = "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
-	ActivityTypeRemoveOrganizationFeature    ActivityType = "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
-	ActivityTypeSignRawPayloadV2             ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
-	ActivityTypeSignTransactionV2            ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
-	ActivityTypeExportPrivateKey             ActivityType = "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
-	ActivityTypeExportWallet                 ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET"
-	ActivityTypeCreateSubOrganizationV4      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
-	ActivityTypeEmailAuth                    ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH"
-	ActivityTypeExportWalletAccount          ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT"
-	ActivityTypeInitImportWallet             ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_WALLET"
-	ActivityTypeImportWallet                 ActivityType = "ACTIVITY_TYPE_IMPORT_WALLET"
-	ActivityTypeInitImportPrivateKey         ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY"
-	ActivityTypeImportPrivateKey             ActivityType = "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY"
-	ActivityTypeCreatePolicies               ActivityType = "ACTIVITY_TYPE_CREATE_POLICIES"
-	ActivityTypeSignRawPayloads              ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS"
-	ActivityTypeCreateReadOnlySession        ActivityType = "ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION"
-	ActivityTypeCreateOAuthProviders         ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS"
-	ActivityTypeDeleteOAuthProviders         ActivityType = "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS"
-	ActivityTypeCreateSubOrganizationV5      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5"
-	ActivityTypeOAuth                        ActivityType = "ACTIVITY_TYPE_OAUTH"
-	ActivityTypeCreateAPIKeysV2              ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
-	ActivityTypeCreateReadWriteSession       ActivityType = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
-	ActivityTypeEmailAuthV2                  ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH_V2"
-	ActivityTypeCreateSubOrganizationV6      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
-	ActivityTypeDeletePrivateKeys            ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEYS"
-	ActivityTypeDeleteWallets                ActivityType = "ACTIVITY_TYPE_DELETE_WALLETS"
-	ActivityTypeCreateReadWriteSessionV2     ActivityType = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2"
-	ActivityTypeDeleteSubOrganization        ActivityType = "ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION"
-	ActivityTypeInitOTPAuth                  ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH"
-	ActivityTypeOTPAuth                      ActivityType = "ACTIVITY_TYPE_OTP_AUTH"
-	ActivityTypeCreateSubOrganizationV7      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"
-	ActivityTypeUpdateWallet                 ActivityType = "ACTIVITY_TYPE_UPDATE_WALLET"
-	ActivityTypeUpdatePolicyV2               ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY_V2"
-	ActivityTypeCreateUsersV3                ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V3"
-	ActivityTypeInitOTPAuthV2                ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH_V2"
-	ActivityTypeInitOTP                      ActivityType = "ACTIVITY_TYPE_INIT_OTP"
-	ActivityTypeVerifyOTP                    ActivityType = "ACTIVITY_TYPE_VERIFY_OTP"
-	ActivityTypeOTPLogin                     ActivityType = "ACTIVITY_TYPE_OTP_LOGIN"
-	ActivityTypeStampLogin                   ActivityType = "ACTIVITY_TYPE_STAMP_LOGIN"
-	ActivityTypeOAuthLogin                   ActivityType = "ACTIVITY_TYPE_OAUTH_LOGIN"
-	ActivityTypeUpdateUserName               ActivityType = "ACTIVITY_TYPE_UPDATE_USER_NAME"
-	ActivityTypeUpdateUserEmail              ActivityType = "ACTIVITY_TYPE_UPDATE_USER_EMAIL"
-	ActivityTypeUpdateUserPhoneNumber        ActivityType = "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER"
-	ActivityTypeInitFiatOnRamp               ActivityType = "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP"
-	ActivityTypeCreateSmartContractInterface ActivityType = "ACTIVITY_TYPE_CREATE_SMART_CONTRACT_INTERFACE"
-	ActivityTypeDeleteSmartContractInterface ActivityType = "ACTIVITY_TYPE_DELETE_SMART_CONTRACT_INTERFACE"
-	ActivityTypeEnableAuthProxy              ActivityType = "ACTIVITY_TYPE_ENABLE_AUTH_PROXY"
-	ActivityTypeDisableAuthProxy             ActivityType = "ACTIVITY_TYPE_DISABLE_AUTH_PROXY"
-	ActivityTypeUpdateAuthProxyConfig        ActivityType = "ACTIVITY_TYPE_UPDATE_AUTH_PROXY_CONFIG"
-	ActivityTypeCreateOAuth2Credential       ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH2_CREDENTIAL"
-	ActivityTypeUpdateOAuth2Credential       ActivityType = "ACTIVITY_TYPE_UPDATE_OAUTH2_CREDENTIAL"
-	ActivityTypeDeleteOAuth2Credential       ActivityType = "ACTIVITY_TYPE_DELETE_OAUTH2_CREDENTIAL"
-	ActivityTypeOAuth2Authenticate           ActivityType = "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE"
-	ActivityTypeDeleteWalletAccounts         ActivityType = "ACTIVITY_TYPE_DELETE_WALLET_ACCOUNTS"
-	ActivityTypeDeletePolicies               ActivityType = "ACTIVITY_TYPE_DELETE_POLICIES"
-	ActivityTypeETHSendRawTransaction        ActivityType = "ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION"
-	ActivityTypeETHSendTransaction           ActivityType = "ACTIVITY_TYPE_ETH_SEND_TRANSACTION"
-	ActivityTypeCreateFiatOnRampCredential   ActivityType = "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_CREDENTIAL"
-	ActivityTypeUpdateFiatOnRampCredential   ActivityType = "ACTIVITY_TYPE_UPDATE_FIAT_ON_RAMP_CREDENTIAL"
-	ActivityTypeDeleteFiatOnRampCredential   ActivityType = "ACTIVITY_TYPE_DELETE_FIAT_ON_RAMP_CREDENTIAL"
-	ActivityTypeEmailAuthV3                  ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH_V3"
-	ActivityTypeInitUserEmailRecoveryV2      ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2"
-	ActivityTypeInitOTPAuthV3                ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH_V3"
-	ActivityTypeInitOtpv2                    ActivityType = "ACTIVITY_TYPE_INIT_OTP_V2"
-	ActivityTypeUpsertGasUsageConfig         ActivityType = "ACTIVITY_TYPE_UPSERT_GAS_USAGE_CONFIG"
-	ActivityTypeCreateTVCApp                 ActivityType = "ACTIVITY_TYPE_CREATE_TVC_APP"
-	ActivityTypeCreateTVCDeployment          ActivityType = "ACTIVITY_TYPE_CREATE_TVC_DEPLOYMENT"
-	ActivityTypeCreateTVCManifestApprovals   ActivityType = "ACTIVITY_TYPE_CREATE_TVC_MANIFEST_APPROVALS"
-	ActivityTypeSolSendTransaction           ActivityType = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION"
-	ActivityTypeInitOtpv3                    ActivityType = "ACTIVITY_TYPE_INIT_OTP_V3"
-	ActivityTypeVerifyOtpv2                  ActivityType = "ACTIVITY_TYPE_VERIFY_OTP_V2"
-	ActivityTypeOTPLoginV2                   ActivityType = "ACTIVITY_TYPE_OTP_LOGIN_V2"
-	ActivityTypeUpdateOrganizationName       ActivityType = "ACTIVITY_TYPE_UPDATE_ORGANIZATION_NAME"
-	ActivityTypeCreateSubOrganizationV8      ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V8"
-	ActivityTypeCreateOAuthProvidersV2       ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS_V2"
-	ActivityTypeCreateUsersV4                ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V4"
-	ActivityTypeCreateWebhookEndpoint        ActivityType = "ACTIVITY_TYPE_CREATE_WEBHOOK_ENDPOINT"
-	ActivityTypeUpdateWebhookEndpoint        ActivityType = "ACTIVITY_TYPE_UPDATE_WEBHOOK_ENDPOINT"
-	ActivityTypeDeleteWebhookEndpoint        ActivityType = "ACTIVITY_TYPE_DELETE_WEBHOOK_ENDPOINT"
-	ActivityTypeSetIPAllowlist               ActivityType = "ACTIVITY_TYPE_SET_IP_ALLOWLIST"
-	ActivityTypeRemoveIPAllowlist            ActivityType = "ACTIVITY_TYPE_REMOVE_IP_ALLOWLIST"
-	ActivityTypeUpdateTVCAppLiveDeployment   ActivityType = "ACTIVITY_TYPE_UPDATE_TVC_APP_LIVE_DEPLOYMENT"
-	ActivityTypeDeleteTVCDeployment          ActivityType = "ACTIVITY_TYPE_DELETE_TVC_DEPLOYMENT"
-	ActivityTypeDeleteTVCAppAndDeployments   ActivityType = "ACTIVITY_TYPE_DELETE_TVC_APP_AND_DEPLOYMENTS"
-	ActivityTypeRestoreTVCDeployment         ActivityType = "ACTIVITY_TYPE_RESTORE_TVC_DEPLOYMENT"
-	ActivityTypeSparkSignFrost               ActivityType = "ACTIVITY_TYPE_SPARK_SIGN_FROST"
-	ActivityTypeSparkPrepareTransfer         ActivityType = "ACTIVITY_TYPE_SPARK_PREPARE_TRANSFER"
-	ActivityTypeSparkClaimTransfer           ActivityType = "ACTIVITY_TYPE_SPARK_CLAIM_TRANSFER"
-	ActivityTypeSparkPrepareLightningReceive ActivityType = "ACTIVITY_TYPE_SPARK_PREPARE_LIGHTNING_RECEIVE"
-	ActivityTypePostTVCQuorumKeyShare        ActivityType = "ACTIVITY_TYPE_POST_TVC_QUORUM_KEY_SHARE"
-	ActivityTypeETHSendTransactionV2         ActivityType = "ACTIVITY_TYPE_ETH_SEND_TRANSACTION_V2"
-	ActivityTypeCreateMfaPolicy              ActivityType = "ACTIVITY_TYPE_CREATE_MFA_POLICY"
-	ActivityTypeUpdateMfaPolicy              ActivityType = "ACTIVITY_TYPE_UPDATE_MFA_POLICY"
-	ActivityTypeDeleteMfaPolicy              ActivityType = "ACTIVITY_TYPE_DELETE_MFA_POLICY"
-	ActivityTypeCreateSessionProfile         ActivityType = "ACTIVITY_TYPE_CREATE_SESSION_PROFILE"
-	ActivityTypeEarnDeployWrapper            ActivityType = "ACTIVITY_TYPE_EARN_DEPLOY_WRAPPER"
-	ActivityTypeEarnDeposit                  ActivityType = "ACTIVITY_TYPE_EARN_DEPOSIT"
-	ActivityTypeEarnWithdraw                 ActivityType = "ACTIVITY_TYPE_EARN_WITHDRAW"
-	ActivityTypeExecuteSwap                  ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP"
-	ActivityTypeUpsertSwapConfig             ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG"
-	ActivityTypeCreateTVCOperator            ActivityType = "ACTIVITY_TYPE_CREATE_TVC_OPERATOR"
-	ActivityTypeCreateTVCQuorumKey           ActivityType = "ACTIVITY_TYPE_CREATE_TVC_QUORUM_KEY"
-	ActivityTypeReEncryptTVCQuorumKeyShare   ActivityType = "ACTIVITY_TYPE_RE_ENCRYPT_TVC_QUORUM_KEY_SHARE"
-	ActivityTypeInitImportSecrets            ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_SECRETS"
-	ActivityTypeSolSendTransactionV2         ActivityType = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2"
-	ActivityTypeClaimSwapFees                ActivityType = "ACTIVITY_TYPE_CLAIM_SWAP_FEES"
-	ActivityTypeEarnSetWrapperState          ActivityType = "ACTIVITY_TYPE_EARN_SET_WRAPPER_STATE"
-	ActivityTypeClaimEarnFees                ActivityType = "ACTIVITY_TYPE_CLAIM_EARN_FEES"
-	ActivityTypeUpdateWalletAccountName      ActivityType = "ACTIVITY_TYPE_UPDATE_WALLET_ACCOUNT_NAME"
-	ActivityTypeETHUndelegate7702            ActivityType = "ACTIVITY_TYPE_ETH_UNDELEGATE_7702"
-	ActivityTypeExecuteSwapV2                ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP_V2"
-	ActivityTypeCreateSwapQuote              ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE"
-	ActivityTypeImportSecrets                ActivityType = "ACTIVITY_TYPE_IMPORT_SECRETS"
-	ActivityTypeExportSecrets                ActivityType = "ACTIVITY_TYPE_EXPORT_SECRETS"
-	ActivityTypeCreateVelocityControl        ActivityType = "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
-	ActivityTypeDeleteVelocityControl        ActivityType = "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROL"
+	ActivityTypeCreateAPIKeys                       ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS"
+	ActivityTypeCreateUsers                         ActivityType = "ACTIVITY_TYPE_CREATE_USERS"
+	ActivityTypeCreatePrivateKeys                   ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS"
+	ActivityTypeSignRawPayload                      ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD"
+	ActivityTypeCreateInvitations                   ActivityType = "ACTIVITY_TYPE_CREATE_INVITATIONS"
+	ActivityTypeAcceptInvitation                    ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION"
+	ActivityTypeCreatePolicy                        ActivityType = "ACTIVITY_TYPE_CREATE_POLICY"
+	ActivityTypeDisablePrivateKey                   ActivityType = "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY"
+	ActivityTypeDeleteUsers                         ActivityType = "ACTIVITY_TYPE_DELETE_USERS"
+	ActivityTypeDeleteAPIKeys                       ActivityType = "ACTIVITY_TYPE_DELETE_API_KEYS"
+	ActivityTypeDeleteInvitation                    ActivityType = "ACTIVITY_TYPE_DELETE_INVITATION"
+	ActivityTypeDeleteOrganization                  ActivityType = "ACTIVITY_TYPE_DELETE_ORGANIZATION"
+	ActivityTypeDeletePolicy                        ActivityType = "ACTIVITY_TYPE_DELETE_POLICY"
+	ActivityTypeCreateUserTag                       ActivityType = "ACTIVITY_TYPE_CREATE_USER_TAG"
+	ActivityTypeDeleteUserTags                      ActivityType = "ACTIVITY_TYPE_DELETE_USER_TAGS"
+	ActivityTypeCreateOrganization                  ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION"
+	ActivityTypeSignTransaction                     ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION"
+	ActivityTypeApproveActivity                     ActivityType = "ACTIVITY_TYPE_APPROVE_ACTIVITY"
+	ActivityTypeRejectActivity                      ActivityType = "ACTIVITY_TYPE_REJECT_ACTIVITY"
+	ActivityTypeDeleteAuthenticators                ActivityType = "ACTIVITY_TYPE_DELETE_AUTHENTICATORS"
+	ActivityTypeCreateAuthenticators                ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS"
+	ActivityTypeCreatePrivateKeyTag                 ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG"
+	ActivityTypeDeletePrivateKeyTags                ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS"
+	ActivityTypeSetPaymentMethod                    ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD"
+	ActivityTypeActivateBillingTier                 ActivityType = "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER"
+	ActivityTypeDeletePaymentMethod                 ActivityType = "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD"
+	ActivityTypeCreatePolicyV2                      ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V2"
+	ActivityTypeCreatePolicyV3                      ActivityType = "ACTIVITY_TYPE_CREATE_POLICY_V3"
+	ActivityTypeCreateAPIOnlyUsers                  ActivityType = "ACTIVITY_TYPE_CREATE_API_ONLY_USERS"
+	ActivityTypeUpdateRootQuorum                    ActivityType = "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM"
+	ActivityTypeUpdateUserTag                       ActivityType = "ACTIVITY_TYPE_UPDATE_USER_TAG"
+	ActivityTypeUpdatePrivateKeyTag                 ActivityType = "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG"
+	ActivityTypeCreateAuthenticatorsV2              ActivityType = "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2"
+	ActivityTypeCreateOrganizationV2                ActivityType = "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2"
+	ActivityTypeCreateUsersV2                       ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V2"
+	ActivityTypeAcceptInvitationV2                  ActivityType = "ACTIVITY_TYPE_ACCEPT_INVITATION_V2"
+	ActivityTypeCreateSubOrganization               ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION"
+	ActivityTypeCreateSubOrganizationV2             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2"
+	ActivityTypeUpdateAllowedOrigins                ActivityType = "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS"
+	ActivityTypeCreatePrivateKeysV2                 ActivityType = "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2"
+	ActivityTypeUpdateUser                          ActivityType = "ACTIVITY_TYPE_UPDATE_USER"
+	ActivityTypeUpdatePolicy                        ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY"
+	ActivityTypeSetPaymentMethodV2                  ActivityType = "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2"
+	ActivityTypeCreateSubOrganizationV3             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3"
+	ActivityTypeCreateWallet                        ActivityType = "ACTIVITY_TYPE_CREATE_WALLET"
+	ActivityTypeCreateWalletAccounts                ActivityType = "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS"
+	ActivityTypeInitUserEmailRecovery               ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY"
+	ActivityTypeRecoverUser                         ActivityType = "ACTIVITY_TYPE_RECOVER_USER"
+	ActivityTypeSetOrganizationFeature              ActivityType = "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE"
+	ActivityTypeRemoveOrganizationFeature           ActivityType = "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE"
+	ActivityTypeSignRawPayloadV2                    ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2"
+	ActivityTypeSignTransactionV2                   ActivityType = "ACTIVITY_TYPE_SIGN_TRANSACTION_V2"
+	ActivityTypeExportPrivateKey                    ActivityType = "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY"
+	ActivityTypeExportWallet                        ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET"
+	ActivityTypeCreateSubOrganizationV4             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4"
+	ActivityTypeEmailAuth                           ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH"
+	ActivityTypeExportWalletAccount                 ActivityType = "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT"
+	ActivityTypeInitImportWallet                    ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_WALLET"
+	ActivityTypeImportWallet                        ActivityType = "ACTIVITY_TYPE_IMPORT_WALLET"
+	ActivityTypeInitImportPrivateKey                ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY"
+	ActivityTypeImportPrivateKey                    ActivityType = "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY"
+	ActivityTypeCreatePolicies                      ActivityType = "ACTIVITY_TYPE_CREATE_POLICIES"
+	ActivityTypeSignRawPayloads                     ActivityType = "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS"
+	ActivityTypeCreateReadOnlySession               ActivityType = "ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION"
+	ActivityTypeCreateOAuthProviders                ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS"
+	ActivityTypeDeleteOAuthProviders                ActivityType = "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS"
+	ActivityTypeCreateSubOrganizationV5             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5"
+	ActivityTypeOAuth                               ActivityType = "ACTIVITY_TYPE_OAUTH"
+	ActivityTypeCreateAPIKeysV2                     ActivityType = "ACTIVITY_TYPE_CREATE_API_KEYS_V2"
+	ActivityTypeCreateReadWriteSession              ActivityType = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION"
+	ActivityTypeEmailAuthV2                         ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH_V2"
+	ActivityTypeCreateSubOrganizationV6             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6"
+	ActivityTypeDeletePrivateKeys                   ActivityType = "ACTIVITY_TYPE_DELETE_PRIVATE_KEYS"
+	ActivityTypeDeleteWallets                       ActivityType = "ACTIVITY_TYPE_DELETE_WALLETS"
+	ActivityTypeCreateReadWriteSessionV2            ActivityType = "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2"
+	ActivityTypeDeleteSubOrganization               ActivityType = "ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION"
+	ActivityTypeInitOTPAuth                         ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH"
+	ActivityTypeOTPAuth                             ActivityType = "ACTIVITY_TYPE_OTP_AUTH"
+	ActivityTypeCreateSubOrganizationV7             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7"
+	ActivityTypeUpdateWallet                        ActivityType = "ACTIVITY_TYPE_UPDATE_WALLET"
+	ActivityTypeUpdatePolicyV2                      ActivityType = "ACTIVITY_TYPE_UPDATE_POLICY_V2"
+	ActivityTypeCreateUsersV3                       ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V3"
+	ActivityTypeInitOTPAuthV2                       ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH_V2"
+	ActivityTypeInitOTP                             ActivityType = "ACTIVITY_TYPE_INIT_OTP"
+	ActivityTypeVerifyOTP                           ActivityType = "ACTIVITY_TYPE_VERIFY_OTP"
+	ActivityTypeOTPLogin                            ActivityType = "ACTIVITY_TYPE_OTP_LOGIN"
+	ActivityTypeStampLogin                          ActivityType = "ACTIVITY_TYPE_STAMP_LOGIN"
+	ActivityTypeOAuthLogin                          ActivityType = "ACTIVITY_TYPE_OAUTH_LOGIN"
+	ActivityTypeUpdateUserName                      ActivityType = "ACTIVITY_TYPE_UPDATE_USER_NAME"
+	ActivityTypeUpdateUserEmail                     ActivityType = "ACTIVITY_TYPE_UPDATE_USER_EMAIL"
+	ActivityTypeUpdateUserPhoneNumber               ActivityType = "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER"
+	ActivityTypeInitFiatOnRamp                      ActivityType = "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP"
+	ActivityTypeCreateSmartContractInterface        ActivityType = "ACTIVITY_TYPE_CREATE_SMART_CONTRACT_INTERFACE"
+	ActivityTypeDeleteSmartContractInterface        ActivityType = "ACTIVITY_TYPE_DELETE_SMART_CONTRACT_INTERFACE"
+	ActivityTypeEnableAuthProxy                     ActivityType = "ACTIVITY_TYPE_ENABLE_AUTH_PROXY"
+	ActivityTypeDisableAuthProxy                    ActivityType = "ACTIVITY_TYPE_DISABLE_AUTH_PROXY"
+	ActivityTypeUpdateAuthProxyConfig               ActivityType = "ACTIVITY_TYPE_UPDATE_AUTH_PROXY_CONFIG"
+	ActivityTypeCreateOAuth2Credential              ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH2_CREDENTIAL"
+	ActivityTypeUpdateOAuth2Credential              ActivityType = "ACTIVITY_TYPE_UPDATE_OAUTH2_CREDENTIAL"
+	ActivityTypeDeleteOAuth2Credential              ActivityType = "ACTIVITY_TYPE_DELETE_OAUTH2_CREDENTIAL"
+	ActivityTypeOAuth2Authenticate                  ActivityType = "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE"
+	ActivityTypeDeleteWalletAccounts                ActivityType = "ACTIVITY_TYPE_DELETE_WALLET_ACCOUNTS"
+	ActivityTypeDeletePolicies                      ActivityType = "ACTIVITY_TYPE_DELETE_POLICIES"
+	ActivityTypeETHSendRawTransaction               ActivityType = "ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION"
+	ActivityTypeETHSendTransaction                  ActivityType = "ACTIVITY_TYPE_ETH_SEND_TRANSACTION"
+	ActivityTypeCreateFiatOnRampCredential          ActivityType = "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_CREDENTIAL"
+	ActivityTypeUpdateFiatOnRampCredential          ActivityType = "ACTIVITY_TYPE_UPDATE_FIAT_ON_RAMP_CREDENTIAL"
+	ActivityTypeDeleteFiatOnRampCredential          ActivityType = "ACTIVITY_TYPE_DELETE_FIAT_ON_RAMP_CREDENTIAL"
+	ActivityTypeEmailAuthV3                         ActivityType = "ACTIVITY_TYPE_EMAIL_AUTH_V3"
+	ActivityTypeInitUserEmailRecoveryV2             ActivityType = "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2"
+	ActivityTypeInitOTPAuthV3                       ActivityType = "ACTIVITY_TYPE_INIT_OTP_AUTH_V3"
+	ActivityTypeInitOtpv2                           ActivityType = "ACTIVITY_TYPE_INIT_OTP_V2"
+	ActivityTypeUpsertGasUsageConfig                ActivityType = "ACTIVITY_TYPE_UPSERT_GAS_USAGE_CONFIG"
+	ActivityTypeCreateTVCApp                        ActivityType = "ACTIVITY_TYPE_CREATE_TVC_APP"
+	ActivityTypeCreateTVCDeployment                 ActivityType = "ACTIVITY_TYPE_CREATE_TVC_DEPLOYMENT"
+	ActivityTypeCreateTVCManifestApprovals          ActivityType = "ACTIVITY_TYPE_CREATE_TVC_MANIFEST_APPROVALS"
+	ActivityTypeSolSendTransaction                  ActivityType = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION"
+	ActivityTypeInitOtpv3                           ActivityType = "ACTIVITY_TYPE_INIT_OTP_V3"
+	ActivityTypeVerifyOtpv2                         ActivityType = "ACTIVITY_TYPE_VERIFY_OTP_V2"
+	ActivityTypeOTPLoginV2                          ActivityType = "ACTIVITY_TYPE_OTP_LOGIN_V2"
+	ActivityTypeUpdateOrganizationName              ActivityType = "ACTIVITY_TYPE_UPDATE_ORGANIZATION_NAME"
+	ActivityTypeCreateSubOrganizationV8             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V8"
+	ActivityTypeCreateOAuthProvidersV2              ActivityType = "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS_V2"
+	ActivityTypeCreateUsersV4                       ActivityType = "ACTIVITY_TYPE_CREATE_USERS_V4"
+	ActivityTypeCreateWebhookEndpoint               ActivityType = "ACTIVITY_TYPE_CREATE_WEBHOOK_ENDPOINT"
+	ActivityTypeUpdateWebhookEndpoint               ActivityType = "ACTIVITY_TYPE_UPDATE_WEBHOOK_ENDPOINT"
+	ActivityTypeDeleteWebhookEndpoint               ActivityType = "ACTIVITY_TYPE_DELETE_WEBHOOK_ENDPOINT"
+	ActivityTypeSetIPAllowlist                      ActivityType = "ACTIVITY_TYPE_SET_IP_ALLOWLIST"
+	ActivityTypeRemoveIPAllowlist                   ActivityType = "ACTIVITY_TYPE_REMOVE_IP_ALLOWLIST"
+	ActivityTypeUpdateTVCAppLiveDeployment          ActivityType = "ACTIVITY_TYPE_UPDATE_TVC_APP_LIVE_DEPLOYMENT"
+	ActivityTypeDeleteTVCDeployment                 ActivityType = "ACTIVITY_TYPE_DELETE_TVC_DEPLOYMENT"
+	ActivityTypeDeleteTVCAppAndDeployments          ActivityType = "ACTIVITY_TYPE_DELETE_TVC_APP_AND_DEPLOYMENTS"
+	ActivityTypeRestoreTVCDeployment                ActivityType = "ACTIVITY_TYPE_RESTORE_TVC_DEPLOYMENT"
+	ActivityTypeSparkSignFrost                      ActivityType = "ACTIVITY_TYPE_SPARK_SIGN_FROST"
+	ActivityTypeSparkPrepareTransfer                ActivityType = "ACTIVITY_TYPE_SPARK_PREPARE_TRANSFER"
+	ActivityTypeSparkClaimTransfer                  ActivityType = "ACTIVITY_TYPE_SPARK_CLAIM_TRANSFER"
+	ActivityTypeSparkPrepareLightningReceive        ActivityType = "ACTIVITY_TYPE_SPARK_PREPARE_LIGHTNING_RECEIVE"
+	ActivityTypePostTVCQuorumKeyShare               ActivityType = "ACTIVITY_TYPE_POST_TVC_QUORUM_KEY_SHARE"
+	ActivityTypeETHSendTransactionV2                ActivityType = "ACTIVITY_TYPE_ETH_SEND_TRANSACTION_V2"
+	ActivityTypeCreateMfaPolicy                     ActivityType = "ACTIVITY_TYPE_CREATE_MFA_POLICY"
+	ActivityTypeUpdateMfaPolicy                     ActivityType = "ACTIVITY_TYPE_UPDATE_MFA_POLICY"
+	ActivityTypeDeleteMfaPolicy                     ActivityType = "ACTIVITY_TYPE_DELETE_MFA_POLICY"
+	ActivityTypeCreateSessionProfile                ActivityType = "ACTIVITY_TYPE_CREATE_SESSION_PROFILE"
+	ActivityTypeEarnDeployWrapper                   ActivityType = "ACTIVITY_TYPE_EARN_DEPLOY_WRAPPER"
+	ActivityTypeEarnDeposit                         ActivityType = "ACTIVITY_TYPE_EARN_DEPOSIT"
+	ActivityTypeEarnWithdraw                        ActivityType = "ACTIVITY_TYPE_EARN_WITHDRAW"
+	ActivityTypeExecuteSwap                         ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP"
+	ActivityTypeUpsertSwapConfig                    ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG"
+	ActivityTypeCreateTVCOperator                   ActivityType = "ACTIVITY_TYPE_CREATE_TVC_OPERATOR"
+	ActivityTypeCreateTVCQuorumKey                  ActivityType = "ACTIVITY_TYPE_CREATE_TVC_QUORUM_KEY"
+	ActivityTypeReEncryptTVCQuorumKeyShare          ActivityType = "ACTIVITY_TYPE_RE_ENCRYPT_TVC_QUORUM_KEY_SHARE"
+	ActivityTypeInitImportSecrets                   ActivityType = "ACTIVITY_TYPE_INIT_IMPORT_SECRETS"
+	ActivityTypeSolSendTransactionV2                ActivityType = "ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2"
+	ActivityTypeClaimSwapFees                       ActivityType = "ACTIVITY_TYPE_CLAIM_SWAP_FEES"
+	ActivityTypeEarnSetWrapperState                 ActivityType = "ACTIVITY_TYPE_EARN_SET_WRAPPER_STATE"
+	ActivityTypeClaimEarnFees                       ActivityType = "ACTIVITY_TYPE_CLAIM_EARN_FEES"
+	ActivityTypeUpdateWalletAccountName             ActivityType = "ACTIVITY_TYPE_UPDATE_WALLET_ACCOUNT_NAME"
+	ActivityTypeETHUndelegate7702                   ActivityType = "ACTIVITY_TYPE_ETH_UNDELEGATE_7702"
+	ActivityTypeExecuteSwapV2                       ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP_V2"
+	ActivityTypeCreateSwapQuote                     ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE"
+	ActivityTypeImportSecrets                       ActivityType = "ACTIVITY_TYPE_IMPORT_SECRETS"
+	ActivityTypeExportSecrets                       ActivityType = "ACTIVITY_TYPE_EXPORT_SECRETS"
+	ActivityTypeCreateVelocityControl               ActivityType = "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
+	ActivityTypeDeleteVelocityControls              ActivityType = "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS"
+	ActivityTypeUpdatePaymentMethod                 ActivityType = "ACTIVITY_TYPE_UPDATE_PAYMENT_METHOD"
+	ActivityTypeCreateSwapQuoteV2                   ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2"
+	ActivityTypeExecuteSwapV3                       ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP_V3"
+	ActivityTypeDeleteSecrets                       ActivityType = "ACTIVITY_TYPE_DELETE_SECRETS"
+	ActivityTypeEarnClaimRewards                    ActivityType = "ACTIVITY_TYPE_EARN_CLAIM_REWARDS"
+	ActivityTypeCreateSwapQuoteV3                   ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3"
+	ActivityTypeUpsertSwapFeeSponsorshipLimitConfig ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG"
+	ActivityTypeUpsertSwapFixedRateLimitConfig      ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
 )
 
 type AddressFormat string
@@ -305,6 +321,7 @@ type EarnProvider string
 const (
 	EarnProviderMorpho EarnProvider = "EARN_PROVIDER_MORPHO"
 	EarnProviderAave   EarnProvider = "EARN_PROVIDER_AAVE"
+	EarnProviderKamino EarnProvider = "EARN_PROVIDER_KAMINO"
 )
 
 type Effect string
@@ -328,6 +345,8 @@ const (
 	FeatureNameSolanaRentPrefundEnabled FeatureName = "FEATURE_NAME_SOLANA_RENT_PREFUND_ENABLED"
 	FeatureNameSwapConfig               FeatureName = "FEATURE_NAME_SWAP_CONFIG"
 	FeatureNameEarnConfig               FeatureName = "FEATURE_NAME_EARN_CONFIG"
+	FeatureNameSwapFeeSponsorship       FeatureName = "FEATURE_NAME_SWAP_FEE_SPONSORSHIP"
+	FeatureNameSwapFixedRate            FeatureName = "FEATURE_NAME_SWAP_FIXED_RATE"
 )
 
 type FiatOnRampBlockchainNetwork string
@@ -649,6 +668,16 @@ type BillingSetPaymentMethodResult struct {
 	LastFour string `json:"lastFour"`
 }
 
+type BillingUpdatePaymentMethodIntent struct {
+	// The email that will receive invoices for the payment method.
+	PaymentEmail string `json:"paymentEmail"`
+}
+
+type BillingUpdatePaymentMethodResult struct {
+	// The email address associated with the payment method.
+	PaymentEmail string `json:"paymentEmail"`
+}
+
 type DataV1Tag struct {
 	CreatedAt ExternalDataV1Timestamp `json:"createdAt"`
 	// Unique identifier for a given Tag.
@@ -671,6 +700,13 @@ type ExternalActivityV1PolicyEvaluation struct {
 	PolicyEvaluations []ImmutablecommonV1PolicyEvaluation `json:"policyEvaluations"`
 	// Unique identifier for the Vote associated with this policy evaluation.
 	VoteID string `json:"voteId"`
+}
+
+type ExternalCryptoV1Signature struct {
+	Message   *string                          `json:"message,omitempty"`
+	PublicKey *string                          `json:"publicKey,omitempty"`
+	Scheme    *ExternalCryptoV1SignatureScheme `json:"scheme,omitempty"`
+	Signature *string                          `json:"signature,omitempty"`
 }
 
 type ExternalDataV1Address struct {
@@ -800,6 +836,19 @@ type AcceptInvitationResult struct {
 	UserID string `json:"userId"`
 }
 
+type ActivePolicyStatus struct {
+	// Whether the policy is currently active. A policy without a time window is always active.
+	Active bool `json:"active"`
+	// Set when the policy's time expression could not be evaluated; the policy is reported inactive.
+	Error *string `json:"error,omitempty"`
+	// Unique identifier for the organization the policy belongs to.
+	OrganizationID string `json:"organizationId"`
+	// Unique identifier for a given policy.
+	PolicyID string `json:"policyId"`
+	// The policy's time expression, absent when the policy has no time window.
+	TimeExpr *string `json:"timeExpr,omitempty"`
+}
+
 type Activity struct {
 	// A list of App Proofs generated by enclaves during activity execution, providing verifiable attestations of performed operations.
 	AppProofs  []AppProof              `json:"appProofs,omitempty"`
@@ -905,6 +954,8 @@ type AssetBalance struct {
 	Name *string `json:"name,omitempty"`
 	// The asset symbol
 	Symbol *string `json:"symbol,omitempty"`
+	// Solana token program address that owns this mint, inferred from getTokenAccountsByOwner. TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA for classic SPL Token, TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb for Token-2022. Empty for native SOL and non-Solana assets.
+	TokenProgram *string `json:"tokenProgram,omitempty"`
 }
 
 type AssetBalanceDisplay struct {
@@ -1583,9 +1634,45 @@ type CreateSwapQuoteIntent struct {
 	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
+type CreateSwapQuoteIntentV2 struct {
+	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	// Base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
+	InputToken string `json:"inputToken"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Wallet account address used to price the executable provider quote. Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Provider-neutral maximum allowed slippage in basis points. Turnkey converts this value to each provider's request format. When omitted, each provider applies its default slippage behavior.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
+type CreateSwapQuoteIntentV3 struct {
+	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	FeeSponsorship     *bool   `json:"feeSponsorship,omitempty"`
+	FixedRate          *bool   `json:"fixedRate,omitempty"`
+	// Base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
+	InputToken string `json:"inputToken"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Wallet account address used to price the executable provider quote. Private Key identifiers are not supported.
+	SignWith string `json:"signWith"`
+	// Provider-neutral maximum allowed slippage in basis points. Turnkey converts this value to each provider's request format. When omitted, each provider applies its default slippage behavior.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
 type CreateSwapQuoteResult struct {
 	// One or more provider quotes for this request. Today this contains a single Relay quote; pass quotes[i].quoteId to execute_swap_v2 to bind execution.
 	Quotes []SwapQuote `json:"quotes"`
+}
+
+type CreateSwapQuoteResultV2 struct {
+	Quotes []SwapQuoteV2 `json:"quotes,omitempty"`
 }
 
 type CreateTVCAppIntent struct {
@@ -1635,6 +1722,10 @@ type CreateTVCDeploymentIntent struct {
 	HealthCheckPort int64 `json:"healthCheckPort"`
 	// Health check type (TVC_HEALTH_CHECK_TYPE_HTTP or TVC_HEALTH_CHECK_TYPE_GRPC). HTTP health checks are made with a GET request on /health, and gRPC health checks follow the standard gRPC health checking protocol.
 	HealthCheckType TVCHealthCheckType `json:"healthCheckType"`
+	// Optional desired instance cpu count.
+	InstanceSizeCpus *int64 `json:"instanceSizeCpus,omitempty"`
+	// Optional desired instance memory size in GiB.
+	InstanceSizeRam *int64 `json:"instanceSizeRam,omitempty"`
 	// Optional nonce to ensure uniqueness of the deployment manifest. If not provided, it defaults to the current Unix timestamp in seconds.
 	Nonce *int64 `json:"nonce,omitempty"`
 	// Arguments to pass to the pivot binary at startup. Encoded as a list of strings, for example ["--foo", "bar"]
@@ -1953,6 +2044,16 @@ type DeletePrivateKeysResult struct {
 	PrivateKeyIds []string `json:"privateKeyIds"`
 }
 
+type DeleteSecretsIntent struct {
+	// Unique identifiers of the secrets to delete. Must contain between 1 and 32 distinct UUIDs. All secrets must belong to the organization.
+	SecretIds []string `json:"secretIds"`
+}
+
+type DeleteSecretsResult struct {
+	// Unique identifiers of the deleted secrets, in the order requested.
+	SecretIds []string `json:"secretIds"`
+}
+
 type DeleteSmartContractInterfaceIntent struct {
 	// The ID of a Smart Contract Interface intended for deletion.
 	SmartContractInterfaceID string `json:"smartContractInterfaceId"`
@@ -2015,12 +2116,14 @@ type DeleteUsersResult struct {
 	UserIds []string `json:"userIds"`
 }
 
-type DeleteVelocityControlIntent struct {
-	VelocityControlID string `json:"velocityControlId"`
+type DeleteVelocityControlsIntent struct {
+	// List of unique identifiers for Velocity Controls within an Organization.
+	VelocityControlIds []string `json:"velocityControlIds"`
 }
 
-type DeleteVelocityControlResult struct {
-	VelocityControlID string `json:"velocityControlId"`
+type DeleteVelocityControlsResult struct {
+	// A list of unique identifiers for the deleted Velocity Controls.
+	VelocityControlIds []string `json:"velocityControlIds"`
 }
 
 type DeleteWalletAccountsIntent struct {
@@ -2065,7 +2168,7 @@ type DeploymentStatus struct {
 	// Last time this deployment was updated
 	LastUpdatedTime ExternalDataV1Timestamp `json:"lastUpdatedTime"`
 	// Current quorum-key provisioning state for this deployment
-	ProvisioningState *ProvisioningState `json:"provisioningState,omitempty"`
+	ProvisioningState ProvisioningState `json:"provisioningState"`
 	// Number of ready replicas
 	ReadyReplicas int `json:"readyReplicas"`
 }
@@ -2084,9 +2187,23 @@ type DisablePrivateKeyResult struct {
 	PrivateKeyID string `json:"privateKeyId"`
 }
 
+type EarnClaimRewardsIntent struct {
+	// CAIP-2 chain to claim rewards on (e.g. 'eip155:8453'). Rewards accrue per chain; see ListEarnRewards.
+	Caip2 string `json:"caip2"`
+	// A Turnkey-managed wallet address the rewards are attributed to. The claim transaction is signed by this wallet and the Merkl Distributor transfers every reward token to it.
+	SignWith string `json:"signWith"`
+	// Whether to sponsor this transaction via Gas Station.
+	Sponsor *bool `json:"sponsor,omitempty"`
+}
+
+type EarnClaimRewardsResult struct {
+	// Identifier to poll claim status and tx hash via GetEarnClaimRewardsStatus.
+	ClaimRequestID string `json:"claimRequestId"`
+}
+
 type EarnDeployWrapperIntent struct {
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// Your fee on gross yield, in basis points (e.g., '2000' for 20%). Maximum is 4000 (40%).
 	ClientFeeBps string `json:"clientFeeBps"`
 	// The wallet address that receives the client's fee payouts on-chain. Must be a Turnkey-managed wallet address.
@@ -2108,7 +2225,7 @@ type EarnDepositIntent struct {
 	// Amount of the underlying asset to deposit, in raw on-chain units (e.g., '1000000' for 1 USDC at 6 decimals).
 	Assets string `json:"assets"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// A Wallet account address or Private Key address to deposit from and sign with. Must be an on-chain address; Private Key identifiers are not supported.
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
@@ -2137,12 +2254,22 @@ type EarnEnabledVault struct {
 	ClientFeeWallet *string `json:"clientFeeWallet,omitempty"`
 	// Vault curator name(s), comma-separated when a vault has multiple. Empty for providers without curators (e.g. Aave).
 	Curator *string `json:"curator,omitempty"`
+	// Failure detail when deploy_status is FAILED.
+	DeployError *string `json:"deployError,omitempty"`
+	// Request id of the wrapper's most recent deploy, for polling GetEarnDeployStatus. Empty when no deploy is recorded.
+	DeployRequestID *string `json:"deployRequestId,omitempty"`
+	// On-chain status of the wrapper deployment: PENDING, COMPLETED, or FAILED. Only a COMPLETED wrapper is usable. Empty when no deploy is recorded for the wrapper.
+	DeployStatus *string `json:"deployStatus,omitempty"`
 	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Toggled via EarnSetWrapperState.
 	DepositsDisabled *bool `json:"depositsDisabled,omitempty"`
 	// Normalized total-deposited values for display only (usd + crypto). Do not do arithmetic with these; use total_deposited instead.
 	Display *EarnValueDisplay `json:"display,omitempty"`
 	// The underlying markets the vault allocates into, ranked by supplied amount descending. Only populated when the request sets include_exposure, and only for providers that expose an allocation breakdown (Morpho).
 	Exposures []EarnVaultExposure `json:"exposures,omitempty"`
+	// Additional assets withdrawable from the underlying vault by force-deallocating its non-liquidity adapters at zero penalty, in raw on-chain units of the underlying asset. Additive to liquidity. Empty when the provider does not report it.
+	ForceDeallocatableLiquidity *string `json:"forceDeallocatableLiquidity,omitempty"`
+	// Normalized force-deallocatable liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use force_deallocatable_liquidity instead.
+	ForceDeallocatableLiquidityDisplay *EarnValueDisplay `json:"forceDeallocatableLiquidityDisplay,omitempty"`
 	// Assets currently withdrawable from the underlying vault without a reallocation, in raw on-chain units of the underlying asset. This is the vault's liquidity, not the wrapper's balance. Empty when the provider does not report it.
 	Liquidity *string `json:"liquidity,omitempty"`
 	// Normalized liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use liquidity instead.
@@ -2197,6 +2324,40 @@ type EarnPositionDisplay struct {
 	TotalWithdrawnUsd *string `json:"totalWithdrawnUsd,omitempty"`
 }
 
+type EarnReward struct {
+	// CAIP-19 asset ID of the reward token (e.g. 'eip155:8453/erc20:0xBAa5...'). Reward tokens are campaign-specific and unrelated to the position's underlying asset.
+	Caip19 *string `json:"caip19,omitempty"`
+	// CAIP-2 chain the reward is claimable on (e.g. 'eip155:8453').
+	Caip2 *string `json:"caip2,omitempty"`
+	// Amount claimable now, in raw on-chain units of the reward token.
+	Claimable *string `json:"claimable,omitempty"`
+	// Lifetime amount already claimed, in raw on-chain units of the reward token.
+	Claimed *string `json:"claimed,omitempty"`
+	// Decimals of the reward token.
+	Decimals *int `json:"decimals,omitempty"`
+	// USD + crypto renderings for display only. Do not do arithmetic with these.
+	Display *EarnRewardDisplay `json:"display,omitempty"`
+	// Amount accrued but not yet claimable (not yet in a live on-chain merkle root; roots update roughly every 8 hours), in raw on-chain units of the reward token.
+	Pending *string `json:"pending,omitempty"`
+	// Symbol of the reward token (e.g. 'MORPHO'), as reported by Merkl.
+	Symbol *string `json:"symbol,omitempty"`
+}
+
+type EarnRewardDisplay struct {
+	// Claimable amount in the reward token's own units, for display only.
+	ClaimableCrypto *string `json:"claimableCrypto,omitempty"`
+	// Claimable amount in USD, for display only. Empty when the token is unpriced.
+	ClaimableUsd *string `json:"claimableUsd,omitempty"`
+	// Lifetime claimed amount in the reward token's own units, for display only.
+	ClaimedCrypto *string `json:"claimedCrypto,omitempty"`
+	// Lifetime claimed amount in USD, for display only. Empty when the token is unpriced.
+	ClaimedUsd *string `json:"claimedUsd,omitempty"`
+	// Pending amount in the reward token's own units, for display only.
+	PendingCrypto *string `json:"pendingCrypto,omitempty"`
+	// Pending amount in USD, for display only. Empty when the token is unpriced.
+	PendingUsd *string `json:"pendingUsd,omitempty"`
+}
+
 type EarnSetWrapperStateIntent struct {
 	// When true, deposits to this wrapper are rejected; withdrawals are unaffected. Set to false to re-enable deposits.
 	DepositsDisabled bool `json:"depositsDisabled"`
@@ -2229,6 +2390,10 @@ type EarnVault struct {
 	Display *EarnValueDisplay `json:"display,omitempty"`
 	// Whether the organization has enabled this vault.
 	Enabled *bool `json:"enabled,omitempty"`
+	// Additional assets withdrawable from the vault by force-deallocating its non-liquidity adapters at zero penalty, in raw on-chain units of the underlying asset. Additive to liquidity. Empty when the provider does not report it.
+	ForceDeallocatableLiquidity *string `json:"forceDeallocatableLiquidity,omitempty"`
+	// Normalized force-deallocatable liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use force_deallocatable_liquidity instead.
+	ForceDeallocatableLiquidityDisplay *EarnValueDisplay `json:"forceDeallocatableLiquidityDisplay,omitempty"`
 	// Assets currently withdrawable from the vault without a reallocation, in raw on-chain units of the underlying asset. Empty when the provider does not report it.
 	Liquidity *string `json:"liquidity,omitempty"`
 	// Normalized liquidity values for display purposes only (usd + crypto). Do not do arithmetic with these; use liquidity instead.
@@ -2264,7 +2429,7 @@ type EarnWithdrawIntent struct {
 	// The amount of the underlying asset to withdraw, in raw on-chain units. Pass 'MAX' to withdraw the entire position.
 	AmountValue string `json:"amountValue"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// A Wallet account address or Private Key address to withdraw to and sign with. Must be an on-chain address; Private Key identifiers are not supported.
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
@@ -2526,6 +2691,8 @@ type ETHSendTransactionStatus struct {
 type ETHTransactionHistoryItem struct {
 	// Block metadata for the transaction.
 	Block TransactionHistoryBlock `json:"block"`
+	// Whether the transaction failed during on-chain execution. Omitted when execution outcome is unavailable.
+	ExecutionFailed *bool `json:"executionFailed,omitempty"`
 	// Transaction fee information.
 	Fee TransactionHistoryFee `json:"fee"`
 	// EVM sender address for the transaction.
@@ -2606,6 +2773,31 @@ type ExecuteSwapIntentV2 struct {
 	Sponsor bool `json:"sponsor"`
 }
 
+type ExecuteSwapIntentV3 struct {
+	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	// Exact EVM sender (EOA account) nonce. Valid only for a non-sponsored EVM swap. Honored for already-delegated (Type-2) batch swaps and single-call swaps; ignored for not-yet-delegated EIP-7702 (Type-4) batches where the outer nonce is derived from the authorization. Prefer gas_station_nonce for batch replay protection and use the nonces endpoint to fetch it. Omit to auto-fetch.
+	EvmNonce *string `json:"evmNonce,omitempty"`
+	// Exact gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored EVM swaps and non-sponsored EVM swaps that execute as a multi-call batch (for example ERC-20 approve + swap). This is the replay-protection nonce for gas-station batches; use the nonces endpoint to fetch it. Omit to auto-fetch.
+	GasStationNonce *string `json:"gasStationNonce,omitempty"`
+	// Exact base-unit amount of the input asset committed by the quote.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset.
+	InputToken string `json:"inputToken"`
+	// Exact minimum base-unit output committed by the quote.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Quote identifier returned by create_swap_quote. Execution is bound to this quote; the signer is derived from the quote and must not be resupplied.
+	QuoteID string `json:"quoteId"`
+	// Exact quoted base-unit output amount committed by the quote.
+	QuotedOutputAmount string `json:"quotedOutputAmount"`
+	// Exact Solana recent blockhash. Valid only for a Solana swap, including sponsored swaps. Omit to auto-fetch.
+	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
+	// Whether the quoted transaction is sponsored.
+	Sponsor bool `json:"sponsor"`
+}
+
 type ExecuteSwapResult struct {
 	// Swap provider used to build the transaction.
 	Provider *string `json:"provider,omitempty"`
@@ -2632,6 +2824,8 @@ type ExportPrivateKeyResult struct {
 type ExportSecretParams struct {
 	// Transport encryption suite used for the exported secret.
 	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// Bind metadata to the request.
+	RequestContext []KeyValue `json:"requestContext,omitempty"`
 	// Unique identifier for the secret to export.
 	SecretID string `json:"secretId"`
 	// Client-side public key generated by the user, to which the exported secret will be encrypted.
@@ -2678,6 +2872,19 @@ type ExportWalletResult struct {
 	WalletID string `json:"walletId"`
 }
 
+type ExternalSignerTask struct {
+	// The activity associated with the external signer task.
+	Activity Activity `json:"activity"`
+	// Unique identifier for the organization associated with the external signer task.
+	OrganizationID string `json:"organizationId"`
+	// Ump signature associated with the external signer task.
+	Signature ExternalCryptoV1Signature `json:"signature"`
+	// Unique identifier for a given external signer task.
+	TaskID string `json:"taskId"`
+	// Unique identifier for the user associated with the external signer task.
+	UserID string `json:"userId"`
+}
+
 type Feature struct {
 	Name  *FeatureName `json:"name,omitempty"`
 	Value *string      `json:"value,omitempty"`
@@ -2709,6 +2916,8 @@ type AuthProxyGetAccountRequest struct {
 	FilterType string `json:"filterType"`
 	// The value of the filter to apply for the specified type. For example, a specific email or name string.
 	FilterValue string `json:"filterValue"`
+	// Whether to include requires_social_linking in the response. Only applies when filter_type is 'OIDC_TOKEN'.
+	IncludeRequiresSocialLinking *bool `json:"includeRequiresSocialLinking,omitempty"`
 	// OIDC token to verify access to PII (email/phone number) when filter_type is 'EMAIL' or 'PHONE_NUMBER'. Needed for social linking when verification_token is not available.
 	OidcToken *string `json:"oidcToken,omitempty"`
 	// Signed JWT containing a unique id, expiry, verification type, contact. Used to verify access to PII (email/phone number) when filter_type is 'EMAIL' or 'PHONE_NUMBER'.
@@ -2717,6 +2926,20 @@ type AuthProxyGetAccountRequest struct {
 
 type AuthProxyGetAccountResponse struct {
 	OrganizationID *string `json:"organizationId,omitempty"`
+	// True when the organization was matched by verified email and the OIDC token is not yet a registered identity on it.
+	RequiresSocialLinking *bool `json:"requiresSocialLinking,omitempty"`
+}
+
+type GetActivePoliciesRequest struct {
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetActivePoliciesResponse struct {
+	// The enclave's trusted timestamp (Unix epoch milliseconds) used to evaluate every policy.
+	EvaluatedAtMs string `json:"evaluatedAtMs"`
+	// The active/inactive status of every policy in the organization.
+	Statuses []ActivePolicyStatus `json:"statuses"`
 }
 
 type GetActivitiesRequest struct {
@@ -2836,6 +3059,22 @@ type GetClaimEarnFeesStatusResponse struct {
 	Status string `json:"status"`
 }
 
+type GetEarnClaimRewardsStatusRequest struct {
+	// The claim_request_id returned by EarnClaimRewards.
+	ClaimRequestID string `json:"claimRequestId"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetEarnClaimRewardsStatusResponse struct {
+	// Transaction hash of the rewards claim, once available.
+	ClaimTxHash *string `json:"claimTxHash,omitempty"`
+	// Reason the rewards claim transaction failed, when status is FAILED.
+	Error *string `json:"error,omitempty"`
+	// Status of the rewards claim.
+	Status string `json:"status"`
+}
+
 type GetEarnDeployStatusRequest struct {
 	// The deploy_request_id returned by EarnDeployWrapper.
 	DeployRequestID string `json:"deployRequestId"`
@@ -2882,6 +3121,20 @@ type GetEarnWithdrawStatusResponse struct {
 	Status string `json:"status"`
 	// Transaction hash of the withdrawal, once available.
 	WithdrawTxHash *string `json:"withdrawTxHash,omitempty"`
+}
+
+type GetExternalSignerTasksRequest struct {
+	// Public key of the external signer.
+	ExternalSignerPublicKey string `json:"externalSignerPublicKey"`
+	// Maximum number of tasks to retrieve.
+	MaxTasks int64 `json:"maxTasks"`
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetExternalSignerTasksResponse struct {
+	// List of external signer tasks.
+	Tasks []ExternalSignerTask `json:"tasks"`
 }
 
 type GetGasUsageRequest struct {
@@ -3158,6 +3411,15 @@ type GetSubOrgIdsResponse struct {
 	OrganizationIds []string `json:"organizationIds"`
 }
 
+type GetSwapSponsorshipUsageRequest struct {
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetSwapSponsorshipUsageResponse struct {
+	FeeSponsorship SwapSponsorshipFeature `json:"feeSponsorship"`
+	FixedRate      SwapSponsorshipFeature `json:"fixedRate"`
+}
+
 type GetSwapStatusRequest struct {
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -3166,6 +3428,8 @@ type GetSwapStatusRequest struct {
 }
 
 type GetSwapStatusResponse struct {
+	// Address that receives the output asset.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
 	// Provider-reported destination-chain transaction hashes; cross-chain COMPLETED only.
 	DestinationTxHashes []string `json:"destinationTxHashes,omitempty"`
 	// Normalized failure details, present whenever status is FAILED.
@@ -3217,6 +3481,8 @@ type GetTVCAppResponse struct {
 }
 
 type GetTVCAppsRequest struct {
+	// Filter TVC Apps by whether they have a live deployment. If omitted, all TVC Apps are returned.
+	IsLive *bool `json:"isLive,omitempty"`
 	// Unique identifier for a given organization.
 	OrganizationID string `json:"organizationId"`
 }
@@ -3242,6 +3508,22 @@ type GetTVCDeploymentDebugLogsResponse struct {
 	Entries []TVCDeploymentDebugLogEntry `json:"entries"`
 }
 
+type GetTVCDeploymentProvisioningDetailsRequest struct {
+	// Unique identifier for a given TVC Deployment.
+	DeploymentID string `json:"deploymentId"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetTVCDeploymentProvisioningDetailsResponse struct {
+	// The attestation document of the provisioning enclave. Present only when a deployment is awaiting provisioning.
+	AttestationDocument *string `json:"attestationDocument,omitempty"`
+	// The manifest envelope containing the TVC deployment's manifest and signatures. Present only when a deployment is awaiting provisioning.
+	ManifestEnvelope *string `json:"manifestEnvelope,omitempty"`
+	// Current provisioning state.
+	ProvisioningState ProvisioningState `json:"provisioningState"`
+}
+
 type GetTVCDeploymentRequest struct {
 	// Unique identifier for a given TVC Deployment.
 	DeploymentID string `json:"deploymentId"`
@@ -3254,6 +3536,15 @@ type GetTVCDeploymentResponse struct {
 	TVCDeployment TVCDeployment `json:"tvcDeployment"`
 }
 
+type GetTVCOperatorsRequest struct {
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetTVCOperatorsResponse struct {
+	TVCOperators []TVCOperator `json:"tvcOperators"`
+}
+
 type GetTVCQosVersionsRequest struct {
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -3264,6 +3555,15 @@ type GetTVCQosVersionsResponse struct {
 	AvailableVersions []string `json:"availableVersions"`
 	// Latest recommended QOS version for new TVC deployments.
 	LatestVersion string `json:"latestVersion"`
+}
+
+type GetTVCQuorumKeysRequest struct {
+	// Unique identifier for a given organization.
+	OrganizationID string `json:"organizationId"`
+}
+
+type GetTVCQuorumKeysResponse struct {
+	TVCQuorumKeys []TVCQuorumKey `json:"tvcQuorumKeys"`
 }
 
 type GetUserRequest struct {
@@ -3288,17 +3588,8 @@ type GetUsersResponse struct {
 	Users []User `json:"users"`
 }
 
-type GetVelocityControlRequest struct {
-	OrganizationID    string `json:"organizationId"`
-	VelocityControlID string `json:"velocityControlId"`
-}
-
-type GetVelocityControlResponse struct {
-	VelocityControl VelocityControl `json:"velocityControl"`
-}
-
 type GetVerifiedSubOrgIdsRequest struct {
-	// Specifies the type of filter to apply, i.e 'EMAIL', 'PHONE_NUMBER'.
+	// Specifies the type of filter to apply, i.e 'EMAIL', 'PHONE_NUMBER', 'OIDC_TOKEN', 'OAUTH_CLAIM', or 'PUBLIC_KEY'
 	FilterType *string `json:"filterType,omitempty"`
 	// The value of the filter to apply for the specified type. For example, a specific email or phone number string.
 	FilterValue *string `json:"filterValue,omitempty"`
@@ -3779,170 +4070,178 @@ type InitUserEmailRecoveryResult struct {
 }
 
 type Intent struct {
-	AcceptInvitationIntent             *AcceptInvitationIntent             `json:"acceptInvitationIntent,omitempty"`
-	AcceptInvitationIntentV2           *AcceptInvitationIntentV2           `json:"acceptInvitationIntentV2,omitempty"`
-	ActivateBillingTierIntent          *BillingActivateBillingTierIntent   `json:"activateBillingTierIntent,omitempty"`
-	ApproveActivityIntent              *ApproveActivityIntent              `json:"approveActivityIntent,omitempty"`
-	ClaimEarnFeesIntent                *ClaimEarnFeesIntent                `json:"claimEarnFeesIntent,omitempty"`
-	ClaimSwapFeesIntent                *ClaimSwapFeesIntent                `json:"claimSwapFeesIntent,omitempty"`
-	CreateAPIKeysIntent                *CreateAPIKeysIntent                `json:"createApiKeysIntent,omitempty"`
-	CreateAPIKeysIntentV2              *CreateAPIKeysIntentV2              `json:"createApiKeysIntentV2,omitempty"`
-	CreateAPIOnlyUsersIntent           *CreateAPIOnlyUsersIntent           `json:"createApiOnlyUsersIntent,omitempty"`
-	CreateAuthenticatorsIntent         *CreateAuthenticatorsIntent         `json:"createAuthenticatorsIntent,omitempty"`
-	CreateAuthenticatorsIntentV2       *CreateAuthenticatorsIntentV2       `json:"createAuthenticatorsIntentV2,omitempty"`
-	CreateFiatOnRampCredentialIntent   *CreateFiatOnRampCredentialIntent   `json:"createFiatOnRampCredentialIntent,omitempty"`
-	CreateInvitationsIntent            *CreateInvitationsIntent            `json:"createInvitationsIntent,omitempty"`
-	CreateMfaPolicyIntent              *CreateMfaPolicyIntent              `json:"createMfaPolicyIntent,omitempty"`
-	CreateOAuth2CredentialIntent       *CreateOAuth2CredentialIntent       `json:"createOauth2CredentialIntent,omitempty"`
-	CreateOAuthProvidersIntent         *CreateOAuthProvidersIntent         `json:"createOauthProvidersIntent,omitempty"`
-	CreateOAuthProvidersIntentV2       *CreateOAuthProvidersIntentV2       `json:"createOauthProvidersIntentV2,omitempty"`
-	CreateOrganizationIntent           *CreateOrganizationIntent           `json:"createOrganizationIntent,omitempty"`
-	CreateOrganizationIntentV2         *CreateOrganizationIntentV2         `json:"createOrganizationIntentV2,omitempty"`
-	CreatePoliciesIntent               *CreatePoliciesIntent               `json:"createPoliciesIntent,omitempty"`
-	CreatePolicyIntent                 *CreatePolicyIntent                 `json:"createPolicyIntent,omitempty"`
-	CreatePolicyIntentV2               *CreatePolicyIntentV2               `json:"createPolicyIntentV2,omitempty"`
-	CreatePolicyIntentV3               *CreatePolicyIntentV3               `json:"createPolicyIntentV3,omitempty"`
-	CreatePrivateKeyTagIntent          *CreatePrivateKeyTagIntent          `json:"createPrivateKeyTagIntent,omitempty"`
-	CreatePrivateKeysIntent            *CreatePrivateKeysIntent            `json:"createPrivateKeysIntent,omitempty"`
-	CreatePrivateKeysIntentV2          *CreatePrivateKeysIntentV2          `json:"createPrivateKeysIntentV2,omitempty"`
-	CreateReadOnlySessionIntent        *CreateReadOnlySessionIntent        `json:"createReadOnlySessionIntent,omitempty"`
-	CreateReadWriteSessionIntent       *CreateReadWriteSessionIntent       `json:"createReadWriteSessionIntent,omitempty"`
-	CreateReadWriteSessionIntentV2     *CreateReadWriteSessionIntentV2     `json:"createReadWriteSessionIntentV2,omitempty"`
-	CreateSessionProfileIntent         *CreateSessionProfileIntent         `json:"createSessionProfileIntent,omitempty"`
-	CreateSmartContractInterfaceIntent *CreateSmartContractInterfaceIntent `json:"createSmartContractInterfaceIntent,omitempty"`
-	CreateSubOrganizationIntent        *CreateSubOrganizationIntent        `json:"createSubOrganizationIntent,omitempty"`
-	CreateSubOrganizationIntentV2      *CreateSubOrganizationIntentV2      `json:"createSubOrganizationIntentV2,omitempty"`
-	CreateSubOrganizationIntentV3      *CreateSubOrganizationIntentV3      `json:"createSubOrganizationIntentV3,omitempty"`
-	CreateSubOrganizationIntentV4      *CreateSubOrganizationIntentV4      `json:"createSubOrganizationIntentV4,omitempty"`
-	CreateSubOrganizationIntentV5      *CreateSubOrganizationIntentV5      `json:"createSubOrganizationIntentV5,omitempty"`
-	CreateSubOrganizationIntentV6      *CreateSubOrganizationIntentV6      `json:"createSubOrganizationIntentV6,omitempty"`
-	CreateSubOrganizationIntentV7      *CreateSubOrganizationIntentV7      `json:"createSubOrganizationIntentV7,omitempty"`
-	CreateSubOrganizationIntentV8      *CreateSubOrganizationIntentV8      `json:"createSubOrganizationIntentV8,omitempty"`
-	CreateSwapQuoteIntent              *CreateSwapQuoteIntent              `json:"createSwapQuoteIntent,omitempty"`
-	CreateTVCAppIntent                 *CreateTVCAppIntent                 `json:"createTvcAppIntent,omitempty"`
-	CreateTVCDeploymentIntent          *CreateTVCDeploymentIntent          `json:"createTvcDeploymentIntent,omitempty"`
-	CreateTVCManifestApprovalsIntent   *CreateTVCManifestApprovalsIntent   `json:"createTvcManifestApprovalsIntent,omitempty"`
-	CreateTVCOperatorIntent            *CreateTVCOperatorIntent            `json:"createTvcOperatorIntent,omitempty"`
-	CreateTVCQuorumKeyIntent           *CreateTVCQuorumKeyIntent           `json:"createTvcQuorumKeyIntent,omitempty"`
-	CreateUserTagIntent                *CreateUserTagIntent                `json:"createUserTagIntent,omitempty"`
-	CreateUsersIntent                  *CreateUsersIntent                  `json:"createUsersIntent,omitempty"`
-	CreateUsersIntentV2                *CreateUsersIntentV2                `json:"createUsersIntentV2,omitempty"`
-	CreateUsersIntentV3                *CreateUsersIntentV3                `json:"createUsersIntentV3,omitempty"`
-	CreateUsersIntentV4                *CreateUsersIntentV4                `json:"createUsersIntentV4,omitempty"`
-	CreateVelocityControlIntent        *CreateVelocityControlIntent        `json:"createVelocityControlIntent,omitempty"`
-	CreateWalletAccountsIntent         *CreateWalletAccountsIntent         `json:"createWalletAccountsIntent,omitempty"`
-	CreateWalletIntent                 *CreateWalletIntent                 `json:"createWalletIntent,omitempty"`
-	CreateWebhookEndpointIntent        *CreateWebhookEndpointIntent        `json:"createWebhookEndpointIntent,omitempty"`
-	DeleteAPIKeysIntent                *DeleteAPIKeysIntent                `json:"deleteApiKeysIntent,omitempty"`
-	DeleteAuthenticatorsIntent         *DeleteAuthenticatorsIntent         `json:"deleteAuthenticatorsIntent,omitempty"`
-	DeleteFiatOnRampCredentialIntent   *DeleteFiatOnRampCredentialIntent   `json:"deleteFiatOnRampCredentialIntent,omitempty"`
-	DeleteInvitationIntent             *DeleteInvitationIntent             `json:"deleteInvitationIntent,omitempty"`
-	DeleteMfaPolicyIntent              *DeleteMfaPolicyIntent              `json:"deleteMfaPolicyIntent,omitempty"`
-	DeleteOAuth2CredentialIntent       *DeleteOAuth2CredentialIntent       `json:"deleteOauth2CredentialIntent,omitempty"`
-	DeleteOAuthProvidersIntent         *DeleteOAuthProvidersIntent         `json:"deleteOauthProvidersIntent,omitempty"`
-	DeleteOrganizationIntent           *DeleteOrganizationIntent           `json:"deleteOrganizationIntent,omitempty"`
-	DeletePaymentMethodIntent          *BillingDeletePaymentMethodIntent   `json:"deletePaymentMethodIntent,omitempty"`
-	DeletePoliciesIntent               *DeletePoliciesIntent               `json:"deletePoliciesIntent,omitempty"`
-	DeletePolicyIntent                 *DeletePolicyIntent                 `json:"deletePolicyIntent,omitempty"`
-	DeletePrivateKeyTagsIntent         *DeletePrivateKeyTagsIntent         `json:"deletePrivateKeyTagsIntent,omitempty"`
-	DeletePrivateKeysIntent            *DeletePrivateKeysIntent            `json:"deletePrivateKeysIntent,omitempty"`
-	DeleteSmartContractInterfaceIntent *DeleteSmartContractInterfaceIntent `json:"deleteSmartContractInterfaceIntent,omitempty"`
-	DeleteSubOrganizationIntent        *DeleteSubOrganizationIntent        `json:"deleteSubOrganizationIntent,omitempty"`
-	DeleteTVCAppAndDeploymentsIntent   *DeleteTVCAppAndDeploymentsIntent   `json:"deleteTvcAppAndDeploymentsIntent,omitempty"`
-	DeleteTVCDeploymentIntent          *DeleteTVCDeploymentIntent          `json:"deleteTvcDeploymentIntent,omitempty"`
-	DeleteUserTagsIntent               *DeleteUserTagsIntent               `json:"deleteUserTagsIntent,omitempty"`
-	DeleteUsersIntent                  *DeleteUsersIntent                  `json:"deleteUsersIntent,omitempty"`
-	DeleteVelocityControlIntent        *DeleteVelocityControlIntent        `json:"deleteVelocityControlIntent,omitempty"`
-	DeleteWalletAccountsIntent         *DeleteWalletAccountsIntent         `json:"deleteWalletAccountsIntent,omitempty"`
-	DeleteWalletsIntent                *DeleteWalletsIntent                `json:"deleteWalletsIntent,omitempty"`
-	DeleteWebhookEndpointIntent        *DeleteWebhookEndpointIntent        `json:"deleteWebhookEndpointIntent,omitempty"`
-	DisableAuthProxyIntent             *DisableAuthProxyIntent             `json:"disableAuthProxyIntent,omitempty"`
-	DisablePrivateKeyIntent            *DisablePrivateKeyIntent            `json:"disablePrivateKeyIntent,omitempty"`
-	EarnDeployWrapperIntent            *EarnDeployWrapperIntent            `json:"earnDeployWrapperIntent,omitempty"`
-	EarnDepositIntent                  *EarnDepositIntent                  `json:"earnDepositIntent,omitempty"`
-	EarnSetWrapperStateIntent          *EarnSetWrapperStateIntent          `json:"earnSetWrapperStateIntent,omitempty"`
-	EarnWithdrawIntent                 *EarnWithdrawIntent                 `json:"earnWithdrawIntent,omitempty"`
-	EmailAuthIntent                    *EmailAuthIntent                    `json:"emailAuthIntent,omitempty"`
-	EmailAuthIntentV2                  *EmailAuthIntentV2                  `json:"emailAuthIntentV2,omitempty"`
-	EmailAuthIntentV3                  *EmailAuthIntentV3                  `json:"emailAuthIntentV3,omitempty"`
-	EnableAuthProxyIntent              *EnableAuthProxyIntent              `json:"enableAuthProxyIntent,omitempty"`
-	ETHSendRawTransactionIntent        *ETHSendRawTransactionIntent        `json:"ethSendRawTransactionIntent,omitempty"`
-	ETHSendTransactionIntent           *ETHSendTransactionIntent           `json:"ethSendTransactionIntent,omitempty"`
-	ETHSendTransactionIntentV2         *ETHSendTransactionIntentV2         `json:"ethSendTransactionIntentV2,omitempty"`
-	ETHUndelegate7702Intent            *ETHUndelegate7702Intent            `json:"ethUndelegate7702Intent,omitempty"`
-	ExecuteSwapIntent                  *ExecuteSwapIntent                  `json:"executeSwapIntent,omitempty"`
-	ExecuteSwapIntentV2                *ExecuteSwapIntentV2                `json:"executeSwapIntentV2,omitempty"`
-	ExportPrivateKeyIntent             *ExportPrivateKeyIntent             `json:"exportPrivateKeyIntent,omitempty"`
-	ExportSecretsIntent                *ExportSecretsIntent                `json:"exportSecretsIntent,omitempty"`
-	ExportWalletAccountIntent          *ExportWalletAccountIntent          `json:"exportWalletAccountIntent,omitempty"`
-	ExportWalletIntent                 *ExportWalletIntent                 `json:"exportWalletIntent,omitempty"`
-	ImportPrivateKeyIntent             *ImportPrivateKeyIntent             `json:"importPrivateKeyIntent,omitempty"`
-	ImportSecretsIntent                *ImportSecretsIntent                `json:"importSecretsIntent,omitempty"`
-	ImportWalletIntent                 *ImportWalletIntent                 `json:"importWalletIntent,omitempty"`
-	InitFiatOnRampIntent               *InitFiatOnRampIntent               `json:"initFiatOnRampIntent,omitempty"`
-	InitImportPrivateKeyIntent         *InitImportPrivateKeyIntent         `json:"initImportPrivateKeyIntent,omitempty"`
-	InitImportSecretsIntent            *InitImportSecretsIntent            `json:"initImportSecretsIntent,omitempty"`
-	InitImportWalletIntent             *InitImportWalletIntent             `json:"initImportWalletIntent,omitempty"`
-	InitOTPAuthIntent                  *InitOTPAuthIntent                  `json:"initOtpAuthIntent,omitempty"`
-	InitOTPAuthIntentV2                *InitOTPAuthIntentV2                `json:"initOtpAuthIntentV2,omitempty"`
-	InitOTPAuthIntentV3                *InitOTPAuthIntentV3                `json:"initOtpAuthIntentV3,omitempty"`
-	InitOTPIntent                      *InitOTPIntent                      `json:"initOtpIntent,omitempty"`
-	InitOTPIntentV2                    *InitOTPIntentV2                    `json:"initOtpIntentV2,omitempty"`
-	InitOTPIntentV3                    *InitOTPIntentV3                    `json:"initOtpIntentV3,omitempty"`
-	InitUserEmailRecoveryIntent        *InitUserEmailRecoveryIntent        `json:"initUserEmailRecoveryIntent,omitempty"`
-	InitUserEmailRecoveryIntentV2      *InitUserEmailRecoveryIntentV2      `json:"initUserEmailRecoveryIntentV2,omitempty"`
-	OAuth2AuthenticateIntent           *OAuth2AuthenticateIntent           `json:"oauth2AuthenticateIntent,omitempty"`
-	OAuthIntent                        *OAuthIntent                        `json:"oauthIntent,omitempty"`
-	OAuthLoginIntent                   *OAuthLoginIntent                   `json:"oauthLoginIntent,omitempty"`
-	OTPAuthIntent                      *OTPAuthIntent                      `json:"otpAuthIntent,omitempty"`
-	OTPLoginIntent                     *OTPLoginIntent                     `json:"otpLoginIntent,omitempty"`
-	OTPLoginIntentV2                   *OTPLoginIntentV2                   `json:"otpLoginIntentV2,omitempty"`
-	PostTVCQuorumKeyShareIntent        *PostTVCQuorumKeyShareIntent        `json:"postTvcQuorumKeyShareIntent,omitempty"`
-	ReEncryptTVCQuorumKeyShareIntent   *ReEncryptTVCQuorumKeyShareIntent   `json:"reEncryptTvcQuorumKeyShareIntent,omitempty"`
-	RecoverUserIntent                  *RecoverUserIntent                  `json:"recoverUserIntent,omitempty"`
-	RejectActivityIntent               *RejectActivityIntent               `json:"rejectActivityIntent,omitempty"`
-	RemoveIPAllowlistIntent            *RemoveIPAllowlistIntent            `json:"removeIpAllowlistIntent,omitempty"`
-	RemoveOrganizationFeatureIntent    *RemoveOrganizationFeatureIntent    `json:"removeOrganizationFeatureIntent,omitempty"`
-	RestoreTVCDeploymentIntent         *RestoreTVCDeploymentIntent         `json:"restoreTvcDeploymentIntent,omitempty"`
-	SetIPAllowlistIntent               *SetIPAllowlistIntent               `json:"setIpAllowlistIntent,omitempty"`
-	SetOrganizationFeatureIntent       *SetOrganizationFeatureIntent       `json:"setOrganizationFeatureIntent,omitempty"`
-	SetPaymentMethodIntent             *BillingSetPaymentMethodIntent      `json:"setPaymentMethodIntent,omitempty"`
-	SetPaymentMethodIntentV2           *BillingSetPaymentMethodIntentV2    `json:"setPaymentMethodIntentV2,omitempty"`
-	SignRawPayloadIntent               *SignRawPayloadIntent               `json:"signRawPayloadIntent,omitempty"`
-	SignRawPayloadIntentV2             *SignRawPayloadIntentV2             `json:"signRawPayloadIntentV2,omitempty"`
-	SignRawPayloadsIntent              *SignRawPayloadsIntent              `json:"signRawPayloadsIntent,omitempty"`
-	SignTransactionIntent              *SignTransactionIntent              `json:"signTransactionIntent,omitempty"`
-	SignTransactionIntentV2            *SignTransactionIntentV2            `json:"signTransactionIntentV2,omitempty"`
-	SolSendTransactionIntent           *SolSendTransactionIntent           `json:"solSendTransactionIntent,omitempty"`
-	SolSendTransactionIntentV2         *SolSendTransactionIntentV2         `json:"solSendTransactionIntentV2,omitempty"`
-	SparkClaimTransferIntent           *SparkClaimTransferIntent           `json:"sparkClaimTransferIntent,omitempty"`
-	SparkPrepareLightningReceiveIntent *SparkPrepareLightningReceiveIntent `json:"sparkPrepareLightningReceiveIntent,omitempty"`
-	SparkPrepareTransferIntent         *SparkPrepareTransferIntent         `json:"sparkPrepareTransferIntent,omitempty"`
-	SparkSignFrostIntent               *SparkSignFrostIntent               `json:"sparkSignFrostIntent,omitempty"`
-	StampLoginIntent                   *StampLoginIntent                   `json:"stampLoginIntent,omitempty"`
-	UpdateAllowedOriginsIntent         *UpdateAllowedOriginsIntent         `json:"updateAllowedOriginsIntent,omitempty"`
-	UpdateAuthProxyConfigIntent        *UpdateAuthProxyConfigIntent        `json:"updateAuthProxyConfigIntent,omitempty"`
-	UpdateFiatOnRampCredentialIntent   *UpdateFiatOnRampCredentialIntent   `json:"updateFiatOnRampCredentialIntent,omitempty"`
-	UpdateMfaPolicyIntent              *UpdateMfaPolicyIntent              `json:"updateMfaPolicyIntent,omitempty"`
-	UpdateOAuth2CredentialIntent       *UpdateOAuth2CredentialIntent       `json:"updateOauth2CredentialIntent,omitempty"`
-	UpdateOrganizationNameIntent       *UpdateOrganizationNameIntent       `json:"updateOrganizationNameIntent,omitempty"`
-	UpdatePolicyIntent                 *UpdatePolicyIntent                 `json:"updatePolicyIntent,omitempty"`
-	UpdatePolicyIntentV2               *UpdatePolicyIntentV2               `json:"updatePolicyIntentV2,omitempty"`
-	UpdatePrivateKeyTagIntent          *UpdatePrivateKeyTagIntent          `json:"updatePrivateKeyTagIntent,omitempty"`
-	UpdateRootQuorumIntent             *UpdateRootQuorumIntent             `json:"updateRootQuorumIntent,omitempty"`
-	UpdateTVCAppLiveDeploymentIntent   *UpdateTVCAppLiveDeploymentIntent   `json:"updateTvcAppLiveDeploymentIntent,omitempty"`
-	UpdateUserEmailIntent              *UpdateUserEmailIntent              `json:"updateUserEmailIntent,omitempty"`
-	UpdateUserIntent                   *UpdateUserIntent                   `json:"updateUserIntent,omitempty"`
-	UpdateUserNameIntent               *UpdateUserNameIntent               `json:"updateUserNameIntent,omitempty"`
-	UpdateUserPhoneNumberIntent        *UpdateUserPhoneNumberIntent        `json:"updateUserPhoneNumberIntent,omitempty"`
-	UpdateUserTagIntent                *UpdateUserTagIntent                `json:"updateUserTagIntent,omitempty"`
-	UpdateWalletAccountNameIntent      *UpdateWalletAccountNameIntent      `json:"updateWalletAccountNameIntent,omitempty"`
-	UpdateWalletIntent                 *UpdateWalletIntent                 `json:"updateWalletIntent,omitempty"`
-	UpdateWebhookEndpointIntent        *UpdateWebhookEndpointIntent        `json:"updateWebhookEndpointIntent,omitempty"`
-	UpsertGasUsageConfigIntent         *UpsertGasUsageConfigIntent         `json:"upsertGasUsageConfigIntent,omitempty"`
-	UpsertSwapConfigIntent             *UpsertSwapConfigIntent             `json:"upsertSwapConfigIntent,omitempty"`
-	VerifyOTPIntent                    *VerifyOTPIntent                    `json:"verifyOtpIntent,omitempty"`
-	VerifyOTPIntentV2                  *VerifyOTPIntentV2                  `json:"verifyOtpIntentV2,omitempty"`
+	AcceptInvitationIntent                    *AcceptInvitationIntent                    `json:"acceptInvitationIntent,omitempty"`
+	AcceptInvitationIntentV2                  *AcceptInvitationIntentV2                  `json:"acceptInvitationIntentV2,omitempty"`
+	ActivateBillingTierIntent                 *BillingActivateBillingTierIntent          `json:"activateBillingTierIntent,omitempty"`
+	ApproveActivityIntent                     *ApproveActivityIntent                     `json:"approveActivityIntent,omitempty"`
+	ClaimEarnFeesIntent                       *ClaimEarnFeesIntent                       `json:"claimEarnFeesIntent,omitempty"`
+	ClaimSwapFeesIntent                       *ClaimSwapFeesIntent                       `json:"claimSwapFeesIntent,omitempty"`
+	CreateAPIKeysIntent                       *CreateAPIKeysIntent                       `json:"createApiKeysIntent,omitempty"`
+	CreateAPIKeysIntentV2                     *CreateAPIKeysIntentV2                     `json:"createApiKeysIntentV2,omitempty"`
+	CreateAPIOnlyUsersIntent                  *CreateAPIOnlyUsersIntent                  `json:"createApiOnlyUsersIntent,omitempty"`
+	CreateAuthenticatorsIntent                *CreateAuthenticatorsIntent                `json:"createAuthenticatorsIntent,omitempty"`
+	CreateAuthenticatorsIntentV2              *CreateAuthenticatorsIntentV2              `json:"createAuthenticatorsIntentV2,omitempty"`
+	CreateFiatOnRampCredentialIntent          *CreateFiatOnRampCredentialIntent          `json:"createFiatOnRampCredentialIntent,omitempty"`
+	CreateInvitationsIntent                   *CreateInvitationsIntent                   `json:"createInvitationsIntent,omitempty"`
+	CreateMfaPolicyIntent                     *CreateMfaPolicyIntent                     `json:"createMfaPolicyIntent,omitempty"`
+	CreateOAuth2CredentialIntent              *CreateOAuth2CredentialIntent              `json:"createOauth2CredentialIntent,omitempty"`
+	CreateOAuthProvidersIntent                *CreateOAuthProvidersIntent                `json:"createOauthProvidersIntent,omitempty"`
+	CreateOAuthProvidersIntentV2              *CreateOAuthProvidersIntentV2              `json:"createOauthProvidersIntentV2,omitempty"`
+	CreateOrganizationIntent                  *CreateOrganizationIntent                  `json:"createOrganizationIntent,omitempty"`
+	CreateOrganizationIntentV2                *CreateOrganizationIntentV2                `json:"createOrganizationIntentV2,omitempty"`
+	CreatePoliciesIntent                      *CreatePoliciesIntent                      `json:"createPoliciesIntent,omitempty"`
+	CreatePolicyIntent                        *CreatePolicyIntent                        `json:"createPolicyIntent,omitempty"`
+	CreatePolicyIntentV2                      *CreatePolicyIntentV2                      `json:"createPolicyIntentV2,omitempty"`
+	CreatePolicyIntentV3                      *CreatePolicyIntentV3                      `json:"createPolicyIntentV3,omitempty"`
+	CreatePrivateKeyTagIntent                 *CreatePrivateKeyTagIntent                 `json:"createPrivateKeyTagIntent,omitempty"`
+	CreatePrivateKeysIntent                   *CreatePrivateKeysIntent                   `json:"createPrivateKeysIntent,omitempty"`
+	CreatePrivateKeysIntentV2                 *CreatePrivateKeysIntentV2                 `json:"createPrivateKeysIntentV2,omitempty"`
+	CreateReadOnlySessionIntent               *CreateReadOnlySessionIntent               `json:"createReadOnlySessionIntent,omitempty"`
+	CreateReadWriteSessionIntent              *CreateReadWriteSessionIntent              `json:"createReadWriteSessionIntent,omitempty"`
+	CreateReadWriteSessionIntentV2            *CreateReadWriteSessionIntentV2            `json:"createReadWriteSessionIntentV2,omitempty"`
+	CreateSessionProfileIntent                *CreateSessionProfileIntent                `json:"createSessionProfileIntent,omitempty"`
+	CreateSmartContractInterfaceIntent        *CreateSmartContractInterfaceIntent        `json:"createSmartContractInterfaceIntent,omitempty"`
+	CreateSubOrganizationIntent               *CreateSubOrganizationIntent               `json:"createSubOrganizationIntent,omitempty"`
+	CreateSubOrganizationIntentV2             *CreateSubOrganizationIntentV2             `json:"createSubOrganizationIntentV2,omitempty"`
+	CreateSubOrganizationIntentV3             *CreateSubOrganizationIntentV3             `json:"createSubOrganizationIntentV3,omitempty"`
+	CreateSubOrganizationIntentV4             *CreateSubOrganizationIntentV4             `json:"createSubOrganizationIntentV4,omitempty"`
+	CreateSubOrganizationIntentV5             *CreateSubOrganizationIntentV5             `json:"createSubOrganizationIntentV5,omitempty"`
+	CreateSubOrganizationIntentV6             *CreateSubOrganizationIntentV6             `json:"createSubOrganizationIntentV6,omitempty"`
+	CreateSubOrganizationIntentV7             *CreateSubOrganizationIntentV7             `json:"createSubOrganizationIntentV7,omitempty"`
+	CreateSubOrganizationIntentV8             *CreateSubOrganizationIntentV8             `json:"createSubOrganizationIntentV8,omitempty"`
+	CreateSwapQuoteIntent                     *CreateSwapQuoteIntent                     `json:"createSwapQuoteIntent,omitempty"`
+	CreateSwapQuoteIntentV2                   *CreateSwapQuoteIntentV2                   `json:"createSwapQuoteIntentV2,omitempty"`
+	CreateSwapQuoteIntentV3                   *CreateSwapQuoteIntentV3                   `json:"createSwapQuoteIntentV3,omitempty"`
+	CreateTVCAppIntent                        *CreateTVCAppIntent                        `json:"createTvcAppIntent,omitempty"`
+	CreateTVCDeploymentIntent                 *CreateTVCDeploymentIntent                 `json:"createTvcDeploymentIntent,omitempty"`
+	CreateTVCManifestApprovalsIntent          *CreateTVCManifestApprovalsIntent          `json:"createTvcManifestApprovalsIntent,omitempty"`
+	CreateTVCOperatorIntent                   *CreateTVCOperatorIntent                   `json:"createTvcOperatorIntent,omitempty"`
+	CreateTVCQuorumKeyIntent                  *CreateTVCQuorumKeyIntent                  `json:"createTvcQuorumKeyIntent,omitempty"`
+	CreateUserTagIntent                       *CreateUserTagIntent                       `json:"createUserTagIntent,omitempty"`
+	CreateUsersIntent                         *CreateUsersIntent                         `json:"createUsersIntent,omitempty"`
+	CreateUsersIntentV2                       *CreateUsersIntentV2                       `json:"createUsersIntentV2,omitempty"`
+	CreateUsersIntentV3                       *CreateUsersIntentV3                       `json:"createUsersIntentV3,omitempty"`
+	CreateUsersIntentV4                       *CreateUsersIntentV4                       `json:"createUsersIntentV4,omitempty"`
+	CreateVelocityControlIntent               *CreateVelocityControlIntent               `json:"createVelocityControlIntent,omitempty"`
+	CreateWalletAccountsIntent                *CreateWalletAccountsIntent                `json:"createWalletAccountsIntent,omitempty"`
+	CreateWalletIntent                        *CreateWalletIntent                        `json:"createWalletIntent,omitempty"`
+	CreateWebhookEndpointIntent               *CreateWebhookEndpointIntent               `json:"createWebhookEndpointIntent,omitempty"`
+	DeleteAPIKeysIntent                       *DeleteAPIKeysIntent                       `json:"deleteApiKeysIntent,omitempty"`
+	DeleteAuthenticatorsIntent                *DeleteAuthenticatorsIntent                `json:"deleteAuthenticatorsIntent,omitempty"`
+	DeleteFiatOnRampCredentialIntent          *DeleteFiatOnRampCredentialIntent          `json:"deleteFiatOnRampCredentialIntent,omitempty"`
+	DeleteInvitationIntent                    *DeleteInvitationIntent                    `json:"deleteInvitationIntent,omitempty"`
+	DeleteMfaPolicyIntent                     *DeleteMfaPolicyIntent                     `json:"deleteMfaPolicyIntent,omitempty"`
+	DeleteOAuth2CredentialIntent              *DeleteOAuth2CredentialIntent              `json:"deleteOauth2CredentialIntent,omitempty"`
+	DeleteOAuthProvidersIntent                *DeleteOAuthProvidersIntent                `json:"deleteOauthProvidersIntent,omitempty"`
+	DeleteOrganizationIntent                  *DeleteOrganizationIntent                  `json:"deleteOrganizationIntent,omitempty"`
+	DeletePaymentMethodIntent                 *BillingDeletePaymentMethodIntent          `json:"deletePaymentMethodIntent,omitempty"`
+	DeletePoliciesIntent                      *DeletePoliciesIntent                      `json:"deletePoliciesIntent,omitempty"`
+	DeletePolicyIntent                        *DeletePolicyIntent                        `json:"deletePolicyIntent,omitempty"`
+	DeletePrivateKeyTagsIntent                *DeletePrivateKeyTagsIntent                `json:"deletePrivateKeyTagsIntent,omitempty"`
+	DeletePrivateKeysIntent                   *DeletePrivateKeysIntent                   `json:"deletePrivateKeysIntent,omitempty"`
+	DeleteSecretsIntent                       *DeleteSecretsIntent                       `json:"deleteSecretsIntent,omitempty"`
+	DeleteSmartContractInterfaceIntent        *DeleteSmartContractInterfaceIntent        `json:"deleteSmartContractInterfaceIntent,omitempty"`
+	DeleteSubOrganizationIntent               *DeleteSubOrganizationIntent               `json:"deleteSubOrganizationIntent,omitempty"`
+	DeleteTVCAppAndDeploymentsIntent          *DeleteTVCAppAndDeploymentsIntent          `json:"deleteTvcAppAndDeploymentsIntent,omitempty"`
+	DeleteTVCDeploymentIntent                 *DeleteTVCDeploymentIntent                 `json:"deleteTvcDeploymentIntent,omitempty"`
+	DeleteUserTagsIntent                      *DeleteUserTagsIntent                      `json:"deleteUserTagsIntent,omitempty"`
+	DeleteUsersIntent                         *DeleteUsersIntent                         `json:"deleteUsersIntent,omitempty"`
+	DeleteVelocityControlsIntent              *DeleteVelocityControlsIntent              `json:"deleteVelocityControlsIntent,omitempty"`
+	DeleteWalletAccountsIntent                *DeleteWalletAccountsIntent                `json:"deleteWalletAccountsIntent,omitempty"`
+	DeleteWalletsIntent                       *DeleteWalletsIntent                       `json:"deleteWalletsIntent,omitempty"`
+	DeleteWebhookEndpointIntent               *DeleteWebhookEndpointIntent               `json:"deleteWebhookEndpointIntent,omitempty"`
+	DisableAuthProxyIntent                    *DisableAuthProxyIntent                    `json:"disableAuthProxyIntent,omitempty"`
+	DisablePrivateKeyIntent                   *DisablePrivateKeyIntent                   `json:"disablePrivateKeyIntent,omitempty"`
+	EarnClaimRewardsIntent                    *EarnClaimRewardsIntent                    `json:"earnClaimRewardsIntent,omitempty"`
+	EarnDeployWrapperIntent                   *EarnDeployWrapperIntent                   `json:"earnDeployWrapperIntent,omitempty"`
+	EarnDepositIntent                         *EarnDepositIntent                         `json:"earnDepositIntent,omitempty"`
+	EarnSetWrapperStateIntent                 *EarnSetWrapperStateIntent                 `json:"earnSetWrapperStateIntent,omitempty"`
+	EarnWithdrawIntent                        *EarnWithdrawIntent                        `json:"earnWithdrawIntent,omitempty"`
+	EmailAuthIntent                           *EmailAuthIntent                           `json:"emailAuthIntent,omitempty"`
+	EmailAuthIntentV2                         *EmailAuthIntentV2                         `json:"emailAuthIntentV2,omitempty"`
+	EmailAuthIntentV3                         *EmailAuthIntentV3                         `json:"emailAuthIntentV3,omitempty"`
+	EnableAuthProxyIntent                     *EnableAuthProxyIntent                     `json:"enableAuthProxyIntent,omitempty"`
+	ETHSendRawTransactionIntent               *ETHSendRawTransactionIntent               `json:"ethSendRawTransactionIntent,omitempty"`
+	ETHSendTransactionIntent                  *ETHSendTransactionIntent                  `json:"ethSendTransactionIntent,omitempty"`
+	ETHSendTransactionIntentV2                *ETHSendTransactionIntentV2                `json:"ethSendTransactionIntentV2,omitempty"`
+	ETHUndelegate7702Intent                   *ETHUndelegate7702Intent                   `json:"ethUndelegate7702Intent,omitempty"`
+	ExecuteSwapIntent                         *ExecuteSwapIntent                         `json:"executeSwapIntent,omitempty"`
+	ExecuteSwapIntentV2                       *ExecuteSwapIntentV2                       `json:"executeSwapIntentV2,omitempty"`
+	ExecuteSwapIntentV3                       *ExecuteSwapIntentV3                       `json:"executeSwapIntentV3,omitempty"`
+	ExportPrivateKeyIntent                    *ExportPrivateKeyIntent                    `json:"exportPrivateKeyIntent,omitempty"`
+	ExportSecretsIntent                       *ExportSecretsIntent                       `json:"exportSecretsIntent,omitempty"`
+	ExportWalletAccountIntent                 *ExportWalletAccountIntent                 `json:"exportWalletAccountIntent,omitempty"`
+	ExportWalletIntent                        *ExportWalletIntent                        `json:"exportWalletIntent,omitempty"`
+	ImportPrivateKeyIntent                    *ImportPrivateKeyIntent                    `json:"importPrivateKeyIntent,omitempty"`
+	ImportSecretsIntent                       *ImportSecretsIntent                       `json:"importSecretsIntent,omitempty"`
+	ImportWalletIntent                        *ImportWalletIntent                        `json:"importWalletIntent,omitempty"`
+	InitFiatOnRampIntent                      *InitFiatOnRampIntent                      `json:"initFiatOnRampIntent,omitempty"`
+	InitImportPrivateKeyIntent                *InitImportPrivateKeyIntent                `json:"initImportPrivateKeyIntent,omitempty"`
+	InitImportSecretsIntent                   *InitImportSecretsIntent                   `json:"initImportSecretsIntent,omitempty"`
+	InitImportWalletIntent                    *InitImportWalletIntent                    `json:"initImportWalletIntent,omitempty"`
+	InitOTPAuthIntent                         *InitOTPAuthIntent                         `json:"initOtpAuthIntent,omitempty"`
+	InitOTPAuthIntentV2                       *InitOTPAuthIntentV2                       `json:"initOtpAuthIntentV2,omitempty"`
+	InitOTPAuthIntentV3                       *InitOTPAuthIntentV3                       `json:"initOtpAuthIntentV3,omitempty"`
+	InitOTPIntent                             *InitOTPIntent                             `json:"initOtpIntent,omitempty"`
+	InitOTPIntentV2                           *InitOTPIntentV2                           `json:"initOtpIntentV2,omitempty"`
+	InitOTPIntentV3                           *InitOTPIntentV3                           `json:"initOtpIntentV3,omitempty"`
+	InitUserEmailRecoveryIntent               *InitUserEmailRecoveryIntent               `json:"initUserEmailRecoveryIntent,omitempty"`
+	InitUserEmailRecoveryIntentV2             *InitUserEmailRecoveryIntentV2             `json:"initUserEmailRecoveryIntentV2,omitempty"`
+	OAuth2AuthenticateIntent                  *OAuth2AuthenticateIntent                  `json:"oauth2AuthenticateIntent,omitempty"`
+	OAuthIntent                               *OAuthIntent                               `json:"oauthIntent,omitempty"`
+	OAuthLoginIntent                          *OAuthLoginIntent                          `json:"oauthLoginIntent,omitempty"`
+	OTPAuthIntent                             *OTPAuthIntent                             `json:"otpAuthIntent,omitempty"`
+	OTPLoginIntent                            *OTPLoginIntent                            `json:"otpLoginIntent,omitempty"`
+	OTPLoginIntentV2                          *OTPLoginIntentV2                          `json:"otpLoginIntentV2,omitempty"`
+	PostTVCQuorumKeyShareIntent               *PostTVCQuorumKeyShareIntent               `json:"postTvcQuorumKeyShareIntent,omitempty"`
+	ReEncryptTVCQuorumKeyShareIntent          *ReEncryptTVCQuorumKeyShareIntent          `json:"reEncryptTvcQuorumKeyShareIntent,omitempty"`
+	RecoverUserIntent                         *RecoverUserIntent                         `json:"recoverUserIntent,omitempty"`
+	RejectActivityIntent                      *RejectActivityIntent                      `json:"rejectActivityIntent,omitempty"`
+	RemoveIPAllowlistIntent                   *RemoveIPAllowlistIntent                   `json:"removeIpAllowlistIntent,omitempty"`
+	RemoveOrganizationFeatureIntent           *RemoveOrganizationFeatureIntent           `json:"removeOrganizationFeatureIntent,omitempty"`
+	RestoreTVCDeploymentIntent                *RestoreTVCDeploymentIntent                `json:"restoreTvcDeploymentIntent,omitempty"`
+	SetIPAllowlistIntent                      *SetIPAllowlistIntent                      `json:"setIpAllowlistIntent,omitempty"`
+	SetOrganizationFeatureIntent              *SetOrganizationFeatureIntent              `json:"setOrganizationFeatureIntent,omitempty"`
+	SetPaymentMethodIntent                    *BillingSetPaymentMethodIntent             `json:"setPaymentMethodIntent,omitempty"`
+	SetPaymentMethodIntentV2                  *BillingSetPaymentMethodIntentV2           `json:"setPaymentMethodIntentV2,omitempty"`
+	SignRawPayloadIntent                      *SignRawPayloadIntent                      `json:"signRawPayloadIntent,omitempty"`
+	SignRawPayloadIntentV2                    *SignRawPayloadIntentV2                    `json:"signRawPayloadIntentV2,omitempty"`
+	SignRawPayloadsIntent                     *SignRawPayloadsIntent                     `json:"signRawPayloadsIntent,omitempty"`
+	SignTransactionIntent                     *SignTransactionIntent                     `json:"signTransactionIntent,omitempty"`
+	SignTransactionIntentV2                   *SignTransactionIntentV2                   `json:"signTransactionIntentV2,omitempty"`
+	SolSendTransactionIntent                  *SolSendTransactionIntent                  `json:"solSendTransactionIntent,omitempty"`
+	SolSendTransactionIntentV2                *SolSendTransactionIntentV2                `json:"solSendTransactionIntentV2,omitempty"`
+	SparkClaimTransferIntent                  *SparkClaimTransferIntent                  `json:"sparkClaimTransferIntent,omitempty"`
+	SparkPrepareLightningReceiveIntent        *SparkPrepareLightningReceiveIntent        `json:"sparkPrepareLightningReceiveIntent,omitempty"`
+	SparkPrepareTransferIntent                *SparkPrepareTransferIntent                `json:"sparkPrepareTransferIntent,omitempty"`
+	SparkSignFrostIntent                      *SparkSignFrostIntent                      `json:"sparkSignFrostIntent,omitempty"`
+	StampLoginIntent                          *StampLoginIntent                          `json:"stampLoginIntent,omitempty"`
+	UpdateAllowedOriginsIntent                *UpdateAllowedOriginsIntent                `json:"updateAllowedOriginsIntent,omitempty"`
+	UpdateAuthProxyConfigIntent               *UpdateAuthProxyConfigIntent               `json:"updateAuthProxyConfigIntent,omitempty"`
+	UpdateFiatOnRampCredentialIntent          *UpdateFiatOnRampCredentialIntent          `json:"updateFiatOnRampCredentialIntent,omitempty"`
+	UpdateMfaPolicyIntent                     *UpdateMfaPolicyIntent                     `json:"updateMfaPolicyIntent,omitempty"`
+	UpdateOAuth2CredentialIntent              *UpdateOAuth2CredentialIntent              `json:"updateOauth2CredentialIntent,omitempty"`
+	UpdateOrganizationNameIntent              *UpdateOrganizationNameIntent              `json:"updateOrganizationNameIntent,omitempty"`
+	UpdatePaymentMethodIntent                 *BillingUpdatePaymentMethodIntent          `json:"updatePaymentMethodIntent,omitempty"`
+	UpdatePolicyIntent                        *UpdatePolicyIntent                        `json:"updatePolicyIntent,omitempty"`
+	UpdatePolicyIntentV2                      *UpdatePolicyIntentV2                      `json:"updatePolicyIntentV2,omitempty"`
+	UpdatePrivateKeyTagIntent                 *UpdatePrivateKeyTagIntent                 `json:"updatePrivateKeyTagIntent,omitempty"`
+	UpdateRootQuorumIntent                    *UpdateRootQuorumIntent                    `json:"updateRootQuorumIntent,omitempty"`
+	UpdateTVCAppLiveDeploymentIntent          *UpdateTVCAppLiveDeploymentIntent          `json:"updateTvcAppLiveDeploymentIntent,omitempty"`
+	UpdateUserEmailIntent                     *UpdateUserEmailIntent                     `json:"updateUserEmailIntent,omitempty"`
+	UpdateUserIntent                          *UpdateUserIntent                          `json:"updateUserIntent,omitempty"`
+	UpdateUserNameIntent                      *UpdateUserNameIntent                      `json:"updateUserNameIntent,omitempty"`
+	UpdateUserPhoneNumberIntent               *UpdateUserPhoneNumberIntent               `json:"updateUserPhoneNumberIntent,omitempty"`
+	UpdateUserTagIntent                       *UpdateUserTagIntent                       `json:"updateUserTagIntent,omitempty"`
+	UpdateWalletAccountNameIntent             *UpdateWalletAccountNameIntent             `json:"updateWalletAccountNameIntent,omitempty"`
+	UpdateWalletIntent                        *UpdateWalletIntent                        `json:"updateWalletIntent,omitempty"`
+	UpdateWebhookEndpointIntent               *UpdateWebhookEndpointIntent               `json:"updateWebhookEndpointIntent,omitempty"`
+	UpsertGasUsageConfigIntent                *UpsertGasUsageConfigIntent                `json:"upsertGasUsageConfigIntent,omitempty"`
+	UpsertSwapConfigIntent                    *UpsertSwapConfigIntent                    `json:"upsertSwapConfigIntent,omitempty"`
+	UpsertSwapFeeSponsorshipLimitConfigIntent *UpsertSwapFeeSponsorshipLimitConfigIntent `json:"upsertSwapFeeSponsorshipLimitConfigIntent,omitempty"`
+	UpsertSwapFixedRateLimitConfigIntent      *UpsertSwapFixedRateLimitConfigIntent      `json:"upsertSwapFixedRateLimitConfigIntent,omitempty"`
+	VerifyOTPIntent                           *VerifyOTPIntent                           `json:"verifyOtpIntent,omitempty"`
+	VerifyOTPIntentV2                         *VerifyOTPIntentV2                         `json:"verifyOtpIntentV2,omitempty"`
 }
 
 type InvitationParams struct {
@@ -4018,6 +4317,20 @@ type ListEarnPositionsRequest struct {
 type ListEarnPositionsResponse struct {
 	// The wallet's active Earn positions.
 	Positions []EarnPosition `json:"positions,omitempty"`
+}
+
+type ListEarnRewardsRequest struct {
+	// Optional filter: only return rewards on this chain (e.g. 'eip155:8453'). When unset, every chain the organization has deployed Earn wrappers on is queried.
+	Caip2 *string `json:"caip2,omitempty"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// The wallet address to return rewards for.
+	WalletAddress string `json:"walletAddress"`
+}
+
+type ListEarnRewardsResponse struct {
+	// The wallet's rewards, one entry per (chain, reward token), sorted by chain then token. Entries where every amount is zero are omitted.
+	Rewards []EarnReward `json:"rewards,omitempty"`
 }
 
 type ListEarnVaultsRequest struct {
@@ -4148,16 +4461,6 @@ type ListUserTagsRequest struct {
 type ListUserTagsResponse struct {
 	// A list of user tags.
 	UserTags []DataV1Tag `json:"userTags"`
-}
-
-type ListVelocityControlsRequest struct {
-	OrganizationID    string      `json:"organizationId"`
-	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
-}
-
-type ListVelocityControlsResponse struct {
-	PageInfo         PageInfo          `json:"pageInfo"`
-	VelocityControls []VelocityControl `json:"velocityControls"`
 }
 
 type ListWebhookEndpointsRequest struct {
@@ -4642,147 +4945,153 @@ type RestoreTVCDeploymentResult struct {
 }
 
 type Result struct {
-	AcceptInvitationResult             *AcceptInvitationResult             `json:"acceptInvitationResult,omitempty"`
-	ActivateBillingTierResult          *BillingActivateBillingTierResult   `json:"activateBillingTierResult,omitempty"`
-	ClaimEarnFeesResult                *ClaimEarnFeesResult                `json:"claimEarnFeesResult,omitempty"`
-	ClaimSwapFeesResult                *ClaimSwapFeesResult                `json:"claimSwapFeesResult,omitempty"`
-	CreateAPIKeysResult                *CreateAPIKeysResult                `json:"createApiKeysResult,omitempty"`
-	CreateAPIOnlyUsersResult           *CreateAPIOnlyUsersResult           `json:"createApiOnlyUsersResult,omitempty"`
-	CreateAuthenticatorsResult         *CreateAuthenticatorsResult         `json:"createAuthenticatorsResult,omitempty"`
-	CreateFiatOnRampCredentialResult   *CreateFiatOnRampCredentialResult   `json:"createFiatOnRampCredentialResult,omitempty"`
-	CreateInvitationsResult            *CreateInvitationsResult            `json:"createInvitationsResult,omitempty"`
-	CreateMfaPolicyResult              *CreateMfaPolicyResult              `json:"createMfaPolicyResult,omitempty"`
-	CreateOAuth2CredentialResult       *CreateOAuth2CredentialResult       `json:"createOauth2CredentialResult,omitempty"`
-	CreateOAuthProvidersResult         *CreateOAuthProvidersResult         `json:"createOauthProvidersResult,omitempty"`
-	CreateOAuthProvidersResultV2       *CreateOAuthProvidersResultV2       `json:"createOauthProvidersResultV2,omitempty"`
-	CreateOrganizationResult           *CreateOrganizationResult           `json:"createOrganizationResult,omitempty"`
-	CreatePoliciesResult               *CreatePoliciesResult               `json:"createPoliciesResult,omitempty"`
-	CreatePolicyResult                 *CreatePolicyResult                 `json:"createPolicyResult,omitempty"`
-	CreatePrivateKeyTagResult          *CreatePrivateKeyTagResult          `json:"createPrivateKeyTagResult,omitempty"`
-	CreatePrivateKeysResult            *CreatePrivateKeysResult            `json:"createPrivateKeysResult,omitempty"`
-	CreatePrivateKeysResultV2          *CreatePrivateKeysResultV2          `json:"createPrivateKeysResultV2,omitempty"`
-	CreateReadOnlySessionResult        *CreateReadOnlySessionResult        `json:"createReadOnlySessionResult,omitempty"`
-	CreateReadWriteSessionResult       *CreateReadWriteSessionResult       `json:"createReadWriteSessionResult,omitempty"`
-	CreateReadWriteSessionResultV2     *CreateReadWriteSessionResultV2     `json:"createReadWriteSessionResultV2,omitempty"`
-	CreateSessionProfileResult         *CreateSessionProfileResult         `json:"createSessionProfileResult,omitempty"`
-	CreateSmartContractInterfaceResult *CreateSmartContractInterfaceResult `json:"createSmartContractInterfaceResult,omitempty"`
-	CreateSubOrganizationResult        *CreateSubOrganizationResult        `json:"createSubOrganizationResult,omitempty"`
-	CreateSubOrganizationResultV3      *CreateSubOrganizationResultV3      `json:"createSubOrganizationResultV3,omitempty"`
-	CreateSubOrganizationResultV4      *CreateSubOrganizationResultV4      `json:"createSubOrganizationResultV4,omitempty"`
-	CreateSubOrganizationResultV5      *CreateSubOrganizationResultV5      `json:"createSubOrganizationResultV5,omitempty"`
-	CreateSubOrganizationResultV6      *CreateSubOrganizationResultV6      `json:"createSubOrganizationResultV6,omitempty"`
-	CreateSubOrganizationResultV7      *CreateSubOrganizationResultV7      `json:"createSubOrganizationResultV7,omitempty"`
-	CreateSubOrganizationResultV8      *CreateSubOrganizationResultV8      `json:"createSubOrganizationResultV8,omitempty"`
-	CreateSwapQuoteResult              *CreateSwapQuoteResult              `json:"createSwapQuoteResult,omitempty"`
-	CreateTVCAppResult                 *CreateTVCAppResult                 `json:"createTvcAppResult,omitempty"`
-	CreateTVCDeploymentResult          *CreateTVCDeploymentResult          `json:"createTvcDeploymentResult,omitempty"`
-	CreateTVCManifestApprovalsResult   *CreateTVCManifestApprovalsResult   `json:"createTvcManifestApprovalsResult,omitempty"`
-	CreateTVCOperatorResult            *CreateTVCOperatorResult            `json:"createTvcOperatorResult,omitempty"`
-	CreateTVCQuorumKeyResult           *CreateTVCQuorumKeyResult           `json:"createTvcQuorumKeyResult,omitempty"`
-	CreateUserTagResult                *CreateUserTagResult                `json:"createUserTagResult,omitempty"`
-	CreateUsersResult                  *CreateUsersResult                  `json:"createUsersResult,omitempty"`
-	CreateVelocityControlResult        *CreateVelocityControlResult        `json:"createVelocityControlResult,omitempty"`
-	CreateWalletAccountsResult         *CreateWalletAccountsResult         `json:"createWalletAccountsResult,omitempty"`
-	CreateWalletResult                 *CreateWalletResult                 `json:"createWalletResult,omitempty"`
-	CreateWebhookEndpointResult        *CreateWebhookEndpointResult        `json:"createWebhookEndpointResult,omitempty"`
-	DeleteAPIKeysResult                *DeleteAPIKeysResult                `json:"deleteApiKeysResult,omitempty"`
-	DeleteAuthenticatorsResult         *DeleteAuthenticatorsResult         `json:"deleteAuthenticatorsResult,omitempty"`
-	DeleteFiatOnRampCredentialResult   *DeleteFiatOnRampCredentialResult   `json:"deleteFiatOnRampCredentialResult,omitempty"`
-	DeleteInvitationResult             *DeleteInvitationResult             `json:"deleteInvitationResult,omitempty"`
-	DeleteMfaPolicyResult              *DeleteMfaPolicyResult              `json:"deleteMfaPolicyResult,omitempty"`
-	DeleteOAuth2CredentialResult       *DeleteOAuth2CredentialResult       `json:"deleteOauth2CredentialResult,omitempty"`
-	DeleteOAuthProvidersResult         *DeleteOAuthProvidersResult         `json:"deleteOauthProvidersResult,omitempty"`
-	DeleteOrganizationResult           *DeleteOrganizationResult           `json:"deleteOrganizationResult,omitempty"`
-	DeletePaymentMethodResult          *BillingDeletePaymentMethodResult   `json:"deletePaymentMethodResult,omitempty"`
-	DeletePoliciesResult               *DeletePoliciesResult               `json:"deletePoliciesResult,omitempty"`
-	DeletePolicyResult                 *DeletePolicyResult                 `json:"deletePolicyResult,omitempty"`
-	DeletePrivateKeyTagsResult         *DeletePrivateKeyTagsResult         `json:"deletePrivateKeyTagsResult,omitempty"`
-	DeletePrivateKeysResult            *DeletePrivateKeysResult            `json:"deletePrivateKeysResult,omitempty"`
-	DeleteSmartContractInterfaceResult *DeleteSmartContractInterfaceResult `json:"deleteSmartContractInterfaceResult,omitempty"`
-	DeleteSubOrganizationResult        *DeleteSubOrganizationResult        `json:"deleteSubOrganizationResult,omitempty"`
-	DeleteTVCAppAndDeploymentsResult   *DeleteTVCAppAndDeploymentsResult   `json:"deleteTvcAppAndDeploymentsResult,omitempty"`
-	DeleteTVCDeploymentResult          *DeleteTVCDeploymentResult          `json:"deleteTvcDeploymentResult,omitempty"`
-	DeleteUserTagsResult               *DeleteUserTagsResult               `json:"deleteUserTagsResult,omitempty"`
-	DeleteUsersResult                  *DeleteUsersResult                  `json:"deleteUsersResult,omitempty"`
-	DeleteVelocityControlResult        *DeleteVelocityControlResult        `json:"deleteVelocityControlResult,omitempty"`
-	DeleteWalletAccountsResult         *DeleteWalletAccountsResult         `json:"deleteWalletAccountsResult,omitempty"`
-	DeleteWalletsResult                *DeleteWalletsResult                `json:"deleteWalletsResult,omitempty"`
-	DeleteWebhookEndpointResult        *DeleteWebhookEndpointResult        `json:"deleteWebhookEndpointResult,omitempty"`
-	DisableAuthProxyResult             *DisableAuthProxyResult             `json:"disableAuthProxyResult,omitempty"`
-	DisablePrivateKeyResult            *DisablePrivateKeyResult            `json:"disablePrivateKeyResult,omitempty"`
-	EarnDeployWrapperResult            *EarnDeployWrapperResult            `json:"earnDeployWrapperResult,omitempty"`
-	EarnDepositResult                  *EarnDepositResult                  `json:"earnDepositResult,omitempty"`
-	EarnSetWrapperStateResult          *EarnSetWrapperStateResult          `json:"earnSetWrapperStateResult,omitempty"`
-	EarnWithdrawResult                 *EarnWithdrawResult                 `json:"earnWithdrawResult,omitempty"`
-	EmailAuthResult                    *EmailAuthResult                    `json:"emailAuthResult,omitempty"`
-	EnableAuthProxyResult              *EnableAuthProxyResult              `json:"enableAuthProxyResult,omitempty"`
-	ETHSendRawTransactionResult        *ETHSendRawTransactionResult        `json:"ethSendRawTransactionResult,omitempty"`
-	ETHSendTransactionResult           *ETHSendTransactionResult           `json:"ethSendTransactionResult,omitempty"`
-	ETHSendTransactionResultV2         *ETHSendTransactionResultV2         `json:"ethSendTransactionResultV2,omitempty"`
-	ETHUndelegate7702Result            *ETHUndelegate7702Result            `json:"ethUndelegate7702Result,omitempty"`
-	ExecuteSwapResult                  *ExecuteSwapResult                  `json:"executeSwapResult,omitempty"`
-	ExportPrivateKeyResult             *ExportPrivateKeyResult             `json:"exportPrivateKeyResult,omitempty"`
-	ExportSecretsResult                *ExportSecretsResult                `json:"exportSecretsResult,omitempty"`
-	ExportWalletAccountResult          *ExportWalletAccountResult          `json:"exportWalletAccountResult,omitempty"`
-	ExportWalletResult                 *ExportWalletResult                 `json:"exportWalletResult,omitempty"`
-	ImportPrivateKeyResult             *ImportPrivateKeyResult             `json:"importPrivateKeyResult,omitempty"`
-	ImportSecretsResult                *ImportSecretsResult                `json:"importSecretsResult,omitempty"`
-	ImportWalletResult                 *ImportWalletResult                 `json:"importWalletResult,omitempty"`
-	InitFiatOnRampResult               *InitFiatOnRampResult               `json:"initFiatOnRampResult,omitempty"`
-	InitImportPrivateKeyResult         *InitImportPrivateKeyResult         `json:"initImportPrivateKeyResult,omitempty"`
-	InitImportSecretsResult            *InitImportSecretsResult            `json:"initImportSecretsResult,omitempty"`
-	InitImportWalletResult             *InitImportWalletResult             `json:"initImportWalletResult,omitempty"`
-	InitOTPAuthResult                  *InitOTPAuthResult                  `json:"initOtpAuthResult,omitempty"`
-	InitOTPAuthResultV2                *InitOTPAuthResultV2                `json:"initOtpAuthResultV2,omitempty"`
-	InitOTPResult                      *InitOTPResult                      `json:"initOtpResult,omitempty"`
-	InitOTPResultV2                    *InitOTPResultV2                    `json:"initOtpResultV2,omitempty"`
-	InitUserEmailRecoveryResult        *InitUserEmailRecoveryResult        `json:"initUserEmailRecoveryResult,omitempty"`
-	OAuth2AuthenticateResult           *OAuth2AuthenticateResult           `json:"oauth2AuthenticateResult,omitempty"`
-	OAuthLoginResult                   *OAuthLoginResult                   `json:"oauthLoginResult,omitempty"`
-	OAuthResult                        *OAuthResult                        `json:"oauthResult,omitempty"`
-	OTPAuthResult                      *OTPAuthResult                      `json:"otpAuthResult,omitempty"`
-	OTPLoginResult                     *OTPLoginResult                     `json:"otpLoginResult,omitempty"`
-	PostTVCQuorumKeyShareResult        *PostTVCQuorumKeyShareResult        `json:"postTvcQuorumKeyShareResult,omitempty"`
-	ReEncryptTVCQuorumKeyShareResult   *ReEncryptTVCQuorumKeyShareResult   `json:"reEncryptTvcQuorumKeyShareResult,omitempty"`
-	RecoverUserResult                  *RecoverUserResult                  `json:"recoverUserResult,omitempty"`
-	RemoveIPAllowlistResult            *RemoveIPAllowlistResult            `json:"removeIpAllowlistResult,omitempty"`
-	RemoveOrganizationFeatureResult    *RemoveOrganizationFeatureResult    `json:"removeOrganizationFeatureResult,omitempty"`
-	RestoreTVCDeploymentResult         *RestoreTVCDeploymentResult         `json:"restoreTvcDeploymentResult,omitempty"`
-	SetIPAllowlistResult               *SetIPAllowlistResult               `json:"setIpAllowlistResult,omitempty"`
-	SetOrganizationFeatureResult       *SetOrganizationFeatureResult       `json:"setOrganizationFeatureResult,omitempty"`
-	SetPaymentMethodResult             *BillingSetPaymentMethodResult      `json:"setPaymentMethodResult,omitempty"`
-	SignRawPayloadResult               *SignRawPayloadResult               `json:"signRawPayloadResult,omitempty"`
-	SignRawPayloadsResult              *SignRawPayloadsResult              `json:"signRawPayloadsResult,omitempty"`
-	SignTransactionResult              *SignTransactionResult              `json:"signTransactionResult,omitempty"`
-	SolSendTransactionResult           *SolSendTransactionResult           `json:"solSendTransactionResult,omitempty"`
-	SolSendTransactionResultV2         *SolSendTransactionResultV2         `json:"solSendTransactionResultV2,omitempty"`
-	SparkClaimTransferResult           *SparkClaimTransferResult           `json:"sparkClaimTransferResult,omitempty"`
-	SparkPrepareLightningReceiveResult *SparkPrepareLightningReceiveResult `json:"sparkPrepareLightningReceiveResult,omitempty"`
-	SparkPrepareTransferResult         *SparkPrepareTransferResult         `json:"sparkPrepareTransferResult,omitempty"`
-	SparkSignFrostResult               *SparkSignFrostResult               `json:"sparkSignFrostResult,omitempty"`
-	StampLoginResult                   *StampLoginResult                   `json:"stampLoginResult,omitempty"`
-	UpdateAllowedOriginsResult         *UpdateAllowedOriginsResult         `json:"updateAllowedOriginsResult,omitempty"`
-	UpdateAuthProxyConfigResult        *UpdateAuthProxyConfigResult        `json:"updateAuthProxyConfigResult,omitempty"`
-	UpdateFiatOnRampCredentialResult   *UpdateFiatOnRampCredentialResult   `json:"updateFiatOnRampCredentialResult,omitempty"`
-	UpdateMfaPolicyResult              *UpdateMfaPolicyResult              `json:"updateMfaPolicyResult,omitempty"`
-	UpdateOAuth2CredentialResult       *UpdateOAuth2CredentialResult       `json:"updateOauth2CredentialResult,omitempty"`
-	UpdateOrganizationNameResult       *UpdateOrganizationNameResult       `json:"updateOrganizationNameResult,omitempty"`
-	UpdatePolicyResult                 *UpdatePolicyResult                 `json:"updatePolicyResult,omitempty"`
-	UpdatePolicyResultV2               *UpdatePolicyResultV2               `json:"updatePolicyResultV2,omitempty"`
-	UpdatePrivateKeyTagResult          *UpdatePrivateKeyTagResult          `json:"updatePrivateKeyTagResult,omitempty"`
-	UpdateRootQuorumResult             *UpdateRootQuorumResult             `json:"updateRootQuorumResult,omitempty"`
-	UpdateTVCAppLiveDeploymentResult   *UpdateTVCAppLiveDeploymentResult   `json:"updateTvcAppLiveDeploymentResult,omitempty"`
-	UpdateUserEmailResult              *UpdateUserEmailResult              `json:"updateUserEmailResult,omitempty"`
-	UpdateUserNameResult               *UpdateUserNameResult               `json:"updateUserNameResult,omitempty"`
-	UpdateUserPhoneNumberResult        *UpdateUserPhoneNumberResult        `json:"updateUserPhoneNumberResult,omitempty"`
-	UpdateUserResult                   *UpdateUserResult                   `json:"updateUserResult,omitempty"`
-	UpdateUserTagResult                *UpdateUserTagResult                `json:"updateUserTagResult,omitempty"`
-	UpdateWalletAccountNameResult      *UpdateWalletAccountNameResult      `json:"updateWalletAccountNameResult,omitempty"`
-	UpdateWalletResult                 *UpdateWalletResult                 `json:"updateWalletResult,omitempty"`
-	UpdateWebhookEndpointResult        *UpdateWebhookEndpointResult        `json:"updateWebhookEndpointResult,omitempty"`
-	UpsertGasUsageConfigResult         *UpsertGasUsageConfigResult         `json:"upsertGasUsageConfigResult,omitempty"`
-	UpsertSwapConfigResult             *UpsertSwapConfigResult             `json:"upsertSwapConfigResult,omitempty"`
-	VerifyOTPResult                    *VerifyOTPResult                    `json:"verifyOtpResult,omitempty"`
+	AcceptInvitationResult                    *AcceptInvitationResult                    `json:"acceptInvitationResult,omitempty"`
+	ActivateBillingTierResult                 *BillingActivateBillingTierResult          `json:"activateBillingTierResult,omitempty"`
+	ClaimEarnFeesResult                       *ClaimEarnFeesResult                       `json:"claimEarnFeesResult,omitempty"`
+	ClaimSwapFeesResult                       *ClaimSwapFeesResult                       `json:"claimSwapFeesResult,omitempty"`
+	CreateAPIKeysResult                       *CreateAPIKeysResult                       `json:"createApiKeysResult,omitempty"`
+	CreateAPIOnlyUsersResult                  *CreateAPIOnlyUsersResult                  `json:"createApiOnlyUsersResult,omitempty"`
+	CreateAuthenticatorsResult                *CreateAuthenticatorsResult                `json:"createAuthenticatorsResult,omitempty"`
+	CreateFiatOnRampCredentialResult          *CreateFiatOnRampCredentialResult          `json:"createFiatOnRampCredentialResult,omitempty"`
+	CreateInvitationsResult                   *CreateInvitationsResult                   `json:"createInvitationsResult,omitempty"`
+	CreateMfaPolicyResult                     *CreateMfaPolicyResult                     `json:"createMfaPolicyResult,omitempty"`
+	CreateOAuth2CredentialResult              *CreateOAuth2CredentialResult              `json:"createOauth2CredentialResult,omitempty"`
+	CreateOAuthProvidersResult                *CreateOAuthProvidersResult                `json:"createOauthProvidersResult,omitempty"`
+	CreateOAuthProvidersResultV2              *CreateOAuthProvidersResultV2              `json:"createOauthProvidersResultV2,omitempty"`
+	CreateOrganizationResult                  *CreateOrganizationResult                  `json:"createOrganizationResult,omitempty"`
+	CreatePoliciesResult                      *CreatePoliciesResult                      `json:"createPoliciesResult,omitempty"`
+	CreatePolicyResult                        *CreatePolicyResult                        `json:"createPolicyResult,omitempty"`
+	CreatePrivateKeyTagResult                 *CreatePrivateKeyTagResult                 `json:"createPrivateKeyTagResult,omitempty"`
+	CreatePrivateKeysResult                   *CreatePrivateKeysResult                   `json:"createPrivateKeysResult,omitempty"`
+	CreatePrivateKeysResultV2                 *CreatePrivateKeysResultV2                 `json:"createPrivateKeysResultV2,omitempty"`
+	CreateReadOnlySessionResult               *CreateReadOnlySessionResult               `json:"createReadOnlySessionResult,omitempty"`
+	CreateReadWriteSessionResult              *CreateReadWriteSessionResult              `json:"createReadWriteSessionResult,omitempty"`
+	CreateReadWriteSessionResultV2            *CreateReadWriteSessionResultV2            `json:"createReadWriteSessionResultV2,omitempty"`
+	CreateSessionProfileResult                *CreateSessionProfileResult                `json:"createSessionProfileResult,omitempty"`
+	CreateSmartContractInterfaceResult        *CreateSmartContractInterfaceResult        `json:"createSmartContractInterfaceResult,omitempty"`
+	CreateSubOrganizationResult               *CreateSubOrganizationResult               `json:"createSubOrganizationResult,omitempty"`
+	CreateSubOrganizationResultV3             *CreateSubOrganizationResultV3             `json:"createSubOrganizationResultV3,omitempty"`
+	CreateSubOrganizationResultV4             *CreateSubOrganizationResultV4             `json:"createSubOrganizationResultV4,omitempty"`
+	CreateSubOrganizationResultV5             *CreateSubOrganizationResultV5             `json:"createSubOrganizationResultV5,omitempty"`
+	CreateSubOrganizationResultV6             *CreateSubOrganizationResultV6             `json:"createSubOrganizationResultV6,omitempty"`
+	CreateSubOrganizationResultV7             *CreateSubOrganizationResultV7             `json:"createSubOrganizationResultV7,omitempty"`
+	CreateSubOrganizationResultV8             *CreateSubOrganizationResultV8             `json:"createSubOrganizationResultV8,omitempty"`
+	CreateSwapQuoteResult                     *CreateSwapQuoteResult                     `json:"createSwapQuoteResult,omitempty"`
+	CreateSwapQuoteResultV2                   *CreateSwapQuoteResultV2                   `json:"createSwapQuoteResultV2,omitempty"`
+	CreateTVCAppResult                        *CreateTVCAppResult                        `json:"createTvcAppResult,omitempty"`
+	CreateTVCDeploymentResult                 *CreateTVCDeploymentResult                 `json:"createTvcDeploymentResult,omitempty"`
+	CreateTVCManifestApprovalsResult          *CreateTVCManifestApprovalsResult          `json:"createTvcManifestApprovalsResult,omitempty"`
+	CreateTVCOperatorResult                   *CreateTVCOperatorResult                   `json:"createTvcOperatorResult,omitempty"`
+	CreateTVCQuorumKeyResult                  *CreateTVCQuorumKeyResult                  `json:"createTvcQuorumKeyResult,omitempty"`
+	CreateUserTagResult                       *CreateUserTagResult                       `json:"createUserTagResult,omitempty"`
+	CreateUsersResult                         *CreateUsersResult                         `json:"createUsersResult,omitempty"`
+	CreateVelocityControlResult               *CreateVelocityControlResult               `json:"createVelocityControlResult,omitempty"`
+	CreateWalletAccountsResult                *CreateWalletAccountsResult                `json:"createWalletAccountsResult,omitempty"`
+	CreateWalletResult                        *CreateWalletResult                        `json:"createWalletResult,omitempty"`
+	CreateWebhookEndpointResult               *CreateWebhookEndpointResult               `json:"createWebhookEndpointResult,omitempty"`
+	DeleteAPIKeysResult                       *DeleteAPIKeysResult                       `json:"deleteApiKeysResult,omitempty"`
+	DeleteAuthenticatorsResult                *DeleteAuthenticatorsResult                `json:"deleteAuthenticatorsResult,omitempty"`
+	DeleteFiatOnRampCredentialResult          *DeleteFiatOnRampCredentialResult          `json:"deleteFiatOnRampCredentialResult,omitempty"`
+	DeleteInvitationResult                    *DeleteInvitationResult                    `json:"deleteInvitationResult,omitempty"`
+	DeleteMfaPolicyResult                     *DeleteMfaPolicyResult                     `json:"deleteMfaPolicyResult,omitempty"`
+	DeleteOAuth2CredentialResult              *DeleteOAuth2CredentialResult              `json:"deleteOauth2CredentialResult,omitempty"`
+	DeleteOAuthProvidersResult                *DeleteOAuthProvidersResult                `json:"deleteOauthProvidersResult,omitempty"`
+	DeleteOrganizationResult                  *DeleteOrganizationResult                  `json:"deleteOrganizationResult,omitempty"`
+	DeletePaymentMethodResult                 *BillingDeletePaymentMethodResult          `json:"deletePaymentMethodResult,omitempty"`
+	DeletePoliciesResult                      *DeletePoliciesResult                      `json:"deletePoliciesResult,omitempty"`
+	DeletePolicyResult                        *DeletePolicyResult                        `json:"deletePolicyResult,omitempty"`
+	DeletePrivateKeyTagsResult                *DeletePrivateKeyTagsResult                `json:"deletePrivateKeyTagsResult,omitempty"`
+	DeletePrivateKeysResult                   *DeletePrivateKeysResult                   `json:"deletePrivateKeysResult,omitempty"`
+	DeleteSecretsResult                       *DeleteSecretsResult                       `json:"deleteSecretsResult,omitempty"`
+	DeleteSmartContractInterfaceResult        *DeleteSmartContractInterfaceResult        `json:"deleteSmartContractInterfaceResult,omitempty"`
+	DeleteSubOrganizationResult               *DeleteSubOrganizationResult               `json:"deleteSubOrganizationResult,omitempty"`
+	DeleteTVCAppAndDeploymentsResult          *DeleteTVCAppAndDeploymentsResult          `json:"deleteTvcAppAndDeploymentsResult,omitempty"`
+	DeleteTVCDeploymentResult                 *DeleteTVCDeploymentResult                 `json:"deleteTvcDeploymentResult,omitempty"`
+	DeleteUserTagsResult                      *DeleteUserTagsResult                      `json:"deleteUserTagsResult,omitempty"`
+	DeleteUsersResult                         *DeleteUsersResult                         `json:"deleteUsersResult,omitempty"`
+	DeleteVelocityControlsResult              *DeleteVelocityControlsResult              `json:"deleteVelocityControlsResult,omitempty"`
+	DeleteWalletAccountsResult                *DeleteWalletAccountsResult                `json:"deleteWalletAccountsResult,omitempty"`
+	DeleteWalletsResult                       *DeleteWalletsResult                       `json:"deleteWalletsResult,omitempty"`
+	DeleteWebhookEndpointResult               *DeleteWebhookEndpointResult               `json:"deleteWebhookEndpointResult,omitempty"`
+	DisableAuthProxyResult                    *DisableAuthProxyResult                    `json:"disableAuthProxyResult,omitempty"`
+	DisablePrivateKeyResult                   *DisablePrivateKeyResult                   `json:"disablePrivateKeyResult,omitempty"`
+	EarnClaimRewardsResult                    *EarnClaimRewardsResult                    `json:"earnClaimRewardsResult,omitempty"`
+	EarnDeployWrapperResult                   *EarnDeployWrapperResult                   `json:"earnDeployWrapperResult,omitempty"`
+	EarnDepositResult                         *EarnDepositResult                         `json:"earnDepositResult,omitempty"`
+	EarnSetWrapperStateResult                 *EarnSetWrapperStateResult                 `json:"earnSetWrapperStateResult,omitempty"`
+	EarnWithdrawResult                        *EarnWithdrawResult                        `json:"earnWithdrawResult,omitempty"`
+	EmailAuthResult                           *EmailAuthResult                           `json:"emailAuthResult,omitempty"`
+	EnableAuthProxyResult                     *EnableAuthProxyResult                     `json:"enableAuthProxyResult,omitempty"`
+	ETHSendRawTransactionResult               *ETHSendRawTransactionResult               `json:"ethSendRawTransactionResult,omitempty"`
+	ETHSendTransactionResult                  *ETHSendTransactionResult                  `json:"ethSendTransactionResult,omitempty"`
+	ETHSendTransactionResultV2                *ETHSendTransactionResultV2                `json:"ethSendTransactionResultV2,omitempty"`
+	ETHUndelegate7702Result                   *ETHUndelegate7702Result                   `json:"ethUndelegate7702Result,omitempty"`
+	ExecuteSwapResult                         *ExecuteSwapResult                         `json:"executeSwapResult,omitempty"`
+	ExportPrivateKeyResult                    *ExportPrivateKeyResult                    `json:"exportPrivateKeyResult,omitempty"`
+	ExportSecretsResult                       *ExportSecretsResult                       `json:"exportSecretsResult,omitempty"`
+	ExportWalletAccountResult                 *ExportWalletAccountResult                 `json:"exportWalletAccountResult,omitempty"`
+	ExportWalletResult                        *ExportWalletResult                        `json:"exportWalletResult,omitempty"`
+	ImportPrivateKeyResult                    *ImportPrivateKeyResult                    `json:"importPrivateKeyResult,omitempty"`
+	ImportSecretsResult                       *ImportSecretsResult                       `json:"importSecretsResult,omitempty"`
+	ImportWalletResult                        *ImportWalletResult                        `json:"importWalletResult,omitempty"`
+	InitFiatOnRampResult                      *InitFiatOnRampResult                      `json:"initFiatOnRampResult,omitempty"`
+	InitImportPrivateKeyResult                *InitImportPrivateKeyResult                `json:"initImportPrivateKeyResult,omitempty"`
+	InitImportSecretsResult                   *InitImportSecretsResult                   `json:"initImportSecretsResult,omitempty"`
+	InitImportWalletResult                    *InitImportWalletResult                    `json:"initImportWalletResult,omitempty"`
+	InitOTPAuthResult                         *InitOTPAuthResult                         `json:"initOtpAuthResult,omitempty"`
+	InitOTPAuthResultV2                       *InitOTPAuthResultV2                       `json:"initOtpAuthResultV2,omitempty"`
+	InitOTPResult                             *InitOTPResult                             `json:"initOtpResult,omitempty"`
+	InitOTPResultV2                           *InitOTPResultV2                           `json:"initOtpResultV2,omitempty"`
+	InitUserEmailRecoveryResult               *InitUserEmailRecoveryResult               `json:"initUserEmailRecoveryResult,omitempty"`
+	OAuth2AuthenticateResult                  *OAuth2AuthenticateResult                  `json:"oauth2AuthenticateResult,omitempty"`
+	OAuthLoginResult                          *OAuthLoginResult                          `json:"oauthLoginResult,omitempty"`
+	OAuthResult                               *OAuthResult                               `json:"oauthResult,omitempty"`
+	OTPAuthResult                             *OTPAuthResult                             `json:"otpAuthResult,omitempty"`
+	OTPLoginResult                            *OTPLoginResult                            `json:"otpLoginResult,omitempty"`
+	PostTVCQuorumKeyShareResult               *PostTVCQuorumKeyShareResult               `json:"postTvcQuorumKeyShareResult,omitempty"`
+	ReEncryptTVCQuorumKeyShareResult          *ReEncryptTVCQuorumKeyShareResult          `json:"reEncryptTvcQuorumKeyShareResult,omitempty"`
+	RecoverUserResult                         *RecoverUserResult                         `json:"recoverUserResult,omitempty"`
+	RemoveIPAllowlistResult                   *RemoveIPAllowlistResult                   `json:"removeIpAllowlistResult,omitempty"`
+	RemoveOrganizationFeatureResult           *RemoveOrganizationFeatureResult           `json:"removeOrganizationFeatureResult,omitempty"`
+	RestoreTVCDeploymentResult                *RestoreTVCDeploymentResult                `json:"restoreTvcDeploymentResult,omitempty"`
+	SetIPAllowlistResult                      *SetIPAllowlistResult                      `json:"setIpAllowlistResult,omitempty"`
+	SetOrganizationFeatureResult              *SetOrganizationFeatureResult              `json:"setOrganizationFeatureResult,omitempty"`
+	SetPaymentMethodResult                    *BillingSetPaymentMethodResult             `json:"setPaymentMethodResult,omitempty"`
+	SignRawPayloadResult                      *SignRawPayloadResult                      `json:"signRawPayloadResult,omitempty"`
+	SignRawPayloadsResult                     *SignRawPayloadsResult                     `json:"signRawPayloadsResult,omitempty"`
+	SignTransactionResult                     *SignTransactionResult                     `json:"signTransactionResult,omitempty"`
+	SolSendTransactionResult                  *SolSendTransactionResult                  `json:"solSendTransactionResult,omitempty"`
+	SolSendTransactionResultV2                *SolSendTransactionResultV2                `json:"solSendTransactionResultV2,omitempty"`
+	SparkClaimTransferResult                  *SparkClaimTransferResult                  `json:"sparkClaimTransferResult,omitempty"`
+	SparkPrepareLightningReceiveResult        *SparkPrepareLightningReceiveResult        `json:"sparkPrepareLightningReceiveResult,omitempty"`
+	SparkPrepareTransferResult                *SparkPrepareTransferResult                `json:"sparkPrepareTransferResult,omitempty"`
+	SparkSignFrostResult                      *SparkSignFrostResult                      `json:"sparkSignFrostResult,omitempty"`
+	StampLoginResult                          *StampLoginResult                          `json:"stampLoginResult,omitempty"`
+	UpdateAllowedOriginsResult                *UpdateAllowedOriginsResult                `json:"updateAllowedOriginsResult,omitempty"`
+	UpdateAuthProxyConfigResult               *UpdateAuthProxyConfigResult               `json:"updateAuthProxyConfigResult,omitempty"`
+	UpdateFiatOnRampCredentialResult          *UpdateFiatOnRampCredentialResult          `json:"updateFiatOnRampCredentialResult,omitempty"`
+	UpdateMfaPolicyResult                     *UpdateMfaPolicyResult                     `json:"updateMfaPolicyResult,omitempty"`
+	UpdateOAuth2CredentialResult              *UpdateOAuth2CredentialResult              `json:"updateOauth2CredentialResult,omitempty"`
+	UpdateOrganizationNameResult              *UpdateOrganizationNameResult              `json:"updateOrganizationNameResult,omitempty"`
+	UpdatePaymentMethodResult                 *BillingUpdatePaymentMethodResult          `json:"updatePaymentMethodResult,omitempty"`
+	UpdatePolicyResult                        *UpdatePolicyResult                        `json:"updatePolicyResult,omitempty"`
+	UpdatePolicyResultV2                      *UpdatePolicyResultV2                      `json:"updatePolicyResultV2,omitempty"`
+	UpdatePrivateKeyTagResult                 *UpdatePrivateKeyTagResult                 `json:"updatePrivateKeyTagResult,omitempty"`
+	UpdateRootQuorumResult                    *UpdateRootQuorumResult                    `json:"updateRootQuorumResult,omitempty"`
+	UpdateTVCAppLiveDeploymentResult          *UpdateTVCAppLiveDeploymentResult          `json:"updateTvcAppLiveDeploymentResult,omitempty"`
+	UpdateUserEmailResult                     *UpdateUserEmailResult                     `json:"updateUserEmailResult,omitempty"`
+	UpdateUserNameResult                      *UpdateUserNameResult                      `json:"updateUserNameResult,omitempty"`
+	UpdateUserPhoneNumberResult               *UpdateUserPhoneNumberResult               `json:"updateUserPhoneNumberResult,omitempty"`
+	UpdateUserResult                          *UpdateUserResult                          `json:"updateUserResult,omitempty"`
+	UpdateUserTagResult                       *UpdateUserTagResult                       `json:"updateUserTagResult,omitempty"`
+	UpdateWalletAccountNameResult             *UpdateWalletAccountNameResult             `json:"updateWalletAccountNameResult,omitempty"`
+	UpdateWalletResult                        *UpdateWalletResult                        `json:"updateWalletResult,omitempty"`
+	UpdateWebhookEndpointResult               *UpdateWebhookEndpointResult               `json:"updateWebhookEndpointResult,omitempty"`
+	UpsertGasUsageConfigResult                *UpsertGasUsageConfigResult                `json:"upsertGasUsageConfigResult,omitempty"`
+	UpsertSwapConfigResult                    *UpsertSwapConfigResult                    `json:"upsertSwapConfigResult,omitempty"`
+	UpsertSwapFeeSponsorshipLimitConfigResult *UpsertSwapFeeSponsorshipLimitConfigResult `json:"upsertSwapFeeSponsorshipLimitConfigResult,omitempty"`
+	UpsertSwapFixedRateLimitConfigResult      *UpsertSwapFixedRateLimitConfigResult      `json:"upsertSwapFixedRateLimitConfigResult,omitempty"`
+	VerifyOTPResult                           *VerifyOTPResult                           `json:"verifyOtpResult,omitempty"`
 }
 
 type RevertChainEntry struct {
@@ -4953,11 +5262,11 @@ type SignRawPayloadIntentV2 struct {
 }
 
 type SignRawPayloadResult struct {
-	// Component of an ECSDA signature.
+	// Component of a cryptographic signature, meaning varies based on signing scheme.
 	R string `json:"r"`
-	// Component of an ECSDA signature.
+	// Component of a cryptographic signature, meaning varies based on signing scheme.
 	S string `json:"s"`
-	// Component of an ECSDA signature.
+	// Recovery ID for ECDSA signatures, "00" otherwise.
 	V string `json:"v"`
 }
 
@@ -5090,7 +5399,7 @@ type SolSendTransactionIntent struct {
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Base64-encoded serialized unsigned Solana transaction
+	// Hex-encoded serialized unsigned Solana transaction in full wire format. Legacy/V0 transactions allow 1232 bytes. V1 allows 4096 bytes with up to 12 trailing 64-byte signature slots, including the paymaster for sponsored transactions. Fill unsigned slots with zeroes.
 	UnsignedTransaction string `json:"unsignedTransaction"`
 }
 
@@ -5099,11 +5408,11 @@ type SolSendTransactionIntentV2 struct {
 	Caip2 string `json:"caip2"`
 	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
-	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers. For sponsored transactions this must list every required signer of the transaction in transaction order.
+	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers for legacy/V0, or up to 12 for V1 (11 when sponsored). For sponsored transactions this must list every required signer of the transaction in transaction order.
 	SignWiths []string `json:"signWiths"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Hex-encoded serialized unsigned Solana transaction (full wire format with zeroed signature placeholders)
+	// Hex-encoded serialized unsigned Solana transaction in full wire format. Legacy/V0 transactions allow 1232 bytes. V1 allows 4096 bytes with up to 12 trailing 64-byte signature slots, including the paymaster for sponsored transactions. Fill unsigned slots with zeroes.
 	UnsignedTransaction string `json:"unsignedTransaction"`
 }
 
@@ -5120,6 +5429,8 @@ type SolSendTransactionResultV2 struct {
 type SolTransactionHistoryItem struct {
 	// Block metadata for the transaction.
 	Block TransactionHistoryBlock `json:"block"`
+	// Whether the transaction failed during on-chain execution. Omitted when execution outcome is unavailable.
+	ExecutionFailed *bool `json:"executionFailed,omitempty"`
 	// Transaction fee information.
 	Fee TransactionHistoryFee `json:"fee"`
 	// Address that paid the Solana transaction fee. This is the first signer in the transaction message.
@@ -5412,6 +5723,30 @@ type SwapQuote struct {
 	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
+type SwapQuoteV2 struct {
+	// Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount.
+	ClientFeeBps string `json:"clientFeeBps"`
+	// Provider-estimated completion time in seconds, when available.
+	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
+	// Quote expiration as a millisecond epoch string.
+	ExpiresAt      string `json:"expiresAt"`
+	FeeSponsorship *bool  `json:"feeSponsorship,omitempty"`
+	FixedRate      *bool  `json:"fixedRate,omitempty"`
+	// Minimum acceptable base-unit amount of the output asset after slippage.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// Estimated base-unit amount of the output asset.
+	OutputAmount string `json:"outputAmount"`
+	// Swap provider that produced this quote.
+	Provider string `json:"provider"`
+	// Identifier for this provider quote. Pass this value to execute_swap_v2 to bind execution to this exact quote. The signer is derived from the quote; clients do not resupply sign_with on execute.
+	QuoteID                string   `json:"quoteId"`
+	RemainingFeeComponents []string `json:"remainingFeeComponents,omitempty"`
+	// Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value.
+	SlippageBps            *string  `json:"slippageBps,omitempty"`
+	SponsoredFeeComponents []string `json:"sponsoredFeeComponents,omitempty"`
+	TurnkeyFeeCollection   *string  `json:"turnkeyFeeCollection,omitempty"`
+}
+
 type SwapRefund struct {
 	// Base-unit amount returned by the swap provider.
 	Amount string `json:"amount"`
@@ -5419,6 +5754,26 @@ type SwapRefund struct {
 	Asset string `json:"asset"`
 	// Transaction that delivered the provider refund, when applicable.
 	TxHash *string `json:"txHash,omitempty"`
+}
+
+type SwapSpendingWindow struct {
+	Enabled bool `json:"enabled"`
+	// Remaining spending capacity, clamped to zero. For children, also capped by remaining parent capacity. Zero when the window is disabled. This is not a reservation or a guarantee of feature eligibility.
+	RemainingUsd string `json:"remainingUsd"`
+	// Configured per-child limit. Returned only when querying the billing parent.
+	SubOrgWindowLimitUsd *string `json:"subOrgWindowLimitUsd,omitempty"`
+	// Settled spending in the current window. Fixed-rate usage stays zero until final fixed-rate costs are recorded.
+	UsageUsd              string `json:"usageUsd"`
+	WindowDurationMinutes int    `json:"windowDurationMinutes"`
+	// The parent's window limit, or the per-child limit when queried by a sub-organization.
+	WindowLimitUsd string `json:"windowLimitUsd"`
+}
+
+type SwapSponsorshipFeature struct {
+	// Whether the billing parent holds this feature's signed permission. Quotes can use the feature only when it is permitted and its window is enabled.
+	Permitted bool `json:"permitted"`
+	// Absent until the billing parent saves a spending window.
+	Window *SwapSpendingWindow `json:"window,omitempty"`
 }
 
 type TokenUsage struct {
@@ -5539,6 +5894,10 @@ type TVCDeployment struct {
 	Delete bool `json:"delete"`
 	// Unique Identifier for this TVC Deployment.
 	ID string `json:"id"`
+	// The instance cpu count for this enclave.
+	InstanceSizeCpus *int64 `json:"instanceSizeCpus,omitempty"`
+	// The instance memory size in GiB for this enclave.
+	InstanceSizeRam *int64 `json:"instanceSizeRam,omitempty"`
 	// The manifest used for this deployment
 	Manifest TVCManifest `json:"manifest"`
 	// List of operator approvals for this manifest
@@ -5581,13 +5940,19 @@ type TVCManifestApproval struct {
 
 type TVCOperator struct {
 	CreatedAt ExternalDataV1Timestamp `json:"createdAt"`
+	// Encryption public key for this TVC Operator.
+	EncryptPublicKey string `json:"encryptPublicKey"`
 	// Unique Identifier for this TVC Operator.
 	ID string `json:"id"`
+	// Source of the operator keys: EXTERNAL_KEY or ORG_WALLET_ACCOUNT. Absent for legacy operators whose source was not recorded.
+	KeySource *string `json:"keySource,omitempty"`
 	// Name of this TVC Operator.
 	Name string `json:"name"`
 	// Public key for this TVC Operator.
-	PublicKey string                  `json:"publicKey"`
-	UpdatedAt ExternalDataV1Timestamp `json:"updatedAt"`
+	PublicKey string `json:"publicKey"`
+	// Signing public key for this TVC Operator.
+	SignPublicKey string                  `json:"signPublicKey"`
+	UpdatedAt     ExternalDataV1Timestamp `json:"updatedAt"`
 }
 
 type TVCOperatorApproval struct {
@@ -5634,6 +5999,15 @@ type TVCOperatorSetParams struct {
 	NewOperators []TVCOperatorParams `json:"newOperators,omitempty"`
 	// The threshold of operators needed to reach consensus in this new Operator Set
 	Threshold int64 `json:"threshold"`
+}
+
+type TVCQuorumKey struct {
+	CreatedAt   ExternalDataV1Timestamp `json:"createdAt"`
+	ID          string                  `json:"id"`
+	OperatorIds []string                `json:"operatorIds"`
+	PublicKey   string                  `json:"publicKey"`
+	Threshold   int64                   `json:"threshold"`
+	UpdatedAt   ExternalDataV1Timestamp `json:"updatedAt"`
 }
 
 type TxError struct {
@@ -5997,6 +6371,36 @@ type UpsertSwapConfigResult struct {
 	StableFeeBps             *string `json:"stableFeeBps,omitempty"`
 }
 
+type UpsertSwapFeeSponsorshipLimitConfigIntent struct {
+	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	Enabled bool `json:"enabled"`
+	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
+	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
+	// Positive USD limit for each sub-organization, no greater than the parent limit.
+	SubOrgWindowLimitUsd string `json:"subOrgWindowLimitUsd"`
+	// Positive rolling window duration in minutes, at most 153722867.
+	WindowDurationMinutes string `json:"windowDurationMinutes"`
+}
+
+type UpsertSwapFeeSponsorshipLimitConfigResult struct {
+	OrganizationID string `json:"organizationId"`
+}
+
+type UpsertSwapFixedRateLimitConfigIntent struct {
+	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	Enabled bool `json:"enabled"`
+	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
+	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
+	// Positive USD limit for each sub-organization, no greater than the parent limit.
+	SubOrgWindowLimitUsd string `json:"subOrgWindowLimitUsd"`
+	// Positive rolling window duration in minutes, at most 153722867.
+	WindowDurationMinutes string `json:"windowDurationMinutes"`
+}
+
+type UpsertSwapFixedRateLimitConfigResult struct {
+	OrganizationID string `json:"organizationId"`
+}
+
 type User struct {
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	APIKeys []APIKey `json:"apiKeys"`
@@ -6095,25 +6499,6 @@ type ValidateTVCImageResponse struct {
 	ResolvedImageDigest *string `json:"resolvedImageDigest,omitempty"`
 }
 
-type VelocityControl struct {
-	// Aggregation expression that the Velocity Control evaluates.
-	Aggregation VelocityControlAggregation `json:"aggregation"`
-	// Time when the Velocity Control was created.
-	CreatedAt ExternalDataV1Timestamp `json:"createdAt"`
-	// Data source for the Velocity Control.
-	DataSource VelocityControlDataSource `json:"dataSource"`
-	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
-	Identifier string `json:"identifier"`
-	// Human-readable name for the Velocity Control.
-	Name string `json:"name"`
-	// Identifier of the Organization that owns the Velocity Control.
-	OrganizationID string `json:"organizationId"`
-	// Time when the Velocity Control was last updated.
-	UpdatedAt ExternalDataV1Timestamp `json:"updatedAt"`
-	// Unique identifier for the Velocity Control.
-	VelocityControlID string `json:"velocityControlId"`
-}
-
 type VelocityControlAggregation struct {
 	// Scope that partitions matching data before aggregation.
 	GroupBy VelocityControlAggregationGroupBy `json:"groupBy"`
@@ -6152,8 +6537,8 @@ type VelocityControlAggregationWindow struct {
 type VelocityControlAggregationWindowInfinite map[string]any
 
 type VelocityControlAggregationWindowRolling struct {
-	// Duration of the rolling window, in seconds, as a base-10 integer string.
-	Duration string `json:"duration"`
+	// Duration of the rolling window, in seconds.
+	Duration int64 `json:"duration"`
 }
 
 type VelocityControlDataSource struct {
@@ -6185,8 +6570,8 @@ type VelocityControlDataSourceChainAssetTransfer struct {
 type VelocityControlDataSourceChainAssetTransferDefinition struct {
 	// CAIP-19 identifier for the asset.
 	Caip19 string `json:"caip19"`
-	// Base-10 integer string from 0 through 255 that specifies the number of decimal places for the asset.
-	Decimals string `json:"decimals"`
+	// Integer between 0 and 255 (inclusive) that specifies the number of decimal places for the asset.
+	Decimals int64 `json:"decimals"`
 }
 
 type VelocityControlDataSourceChainAssetTransferFilter struct {
@@ -6856,6 +7241,10 @@ type CreateTVCDeploymentRequest struct {
 	HealthCheckPort int64 `json:"healthCheckPort"`
 	// Health check type (TVC_HEALTH_CHECK_TYPE_HTTP or TVC_HEALTH_CHECK_TYPE_GRPC). HTTP health checks are made with a GET request on /health, and gRPC health checks follow the standard gRPC health checking protocol.
 	HealthCheckType TVCHealthCheckType `json:"healthCheckType"`
+	// Optional desired instance cpu count.
+	InstanceSizeCpus *int64 `json:"instanceSizeCpus,omitempty"`
+	// Optional desired instance memory size in GiB.
+	InstanceSizeRam *int64 `json:"instanceSizeRam,omitempty"`
 	// Optional nonce to ensure uniqueness of the deployment manifest. If not provided, it defaults to the current Unix timestamp in seconds.
 	Nonce *int64 `json:"nonce,omitempty"`
 	// Arguments to pass to the pivot binary at startup. Encoded as a list of strings, for example ["--foo", "bar"]
@@ -6901,6 +7290,46 @@ type CreateTVCManifestApprovalsResponse struct {
 	CreateTVCManifestApprovalsResult
 }
 
+type CreateTVCOperatorRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Human-readable name for this new TVC operator
+	OperatorName string `json:"operatorName"`
+	// Base derivation path for creating TVC operator wallet accounts
+	Path string `json:"path"`
+	// Unique identifier for an existing wallet to reuse for this TVC operator
+	WalletID *string `json:"walletId,omitempty"`
+	// Human-readable name for a new wallet created for this TVC operator
+	WalletName *string `json:"walletName,omitempty"`
+}
+
+func (CreateTVCOperatorRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_TVC_OPERATOR" }
+
+type CreateTVCOperatorResponse struct {
+	Activity Activity `json:"activity"`
+	CreateTVCOperatorResult
+}
+
+type CreateTVCQuorumKeyRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Operator public keys used to encrypt and later approve the generated TVC quorum key shares
+	OperatorEncryptKeys []string `json:"operatorEncryptKeys"`
+	// The threshold of operators needed to reassemble this TVC quorum key
+	Threshold int64 `json:"threshold"`
+}
+
+func (CreateTVCQuorumKeyRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_TVC_QUORUM_KEY" }
+
+type CreateTVCQuorumKeyResponse struct {
+	Activity Activity `json:"activity"`
+	CreateTVCQuorumKeyResult
+}
+
 type CreateUserTagRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -6933,30 +7362,6 @@ func (CreateUsersRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_U
 type CreateUsersResponse struct {
 	Activity Activity `json:"activity"`
 	CreateUsersResult
-}
-
-type CreateVelocityControlRequest struct {
-	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
-	OrganizationID string `json:"organizationId,omitempty"`
-	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
-	TimestampMs string `json:"timestampMs,omitempty"`
-	// Aggregation expression that the Velocity Control evaluates.
-	Aggregation VelocityControlAggregation `json:"aggregation"`
-	// Data source for the Velocity Control.
-	DataSource VelocityControlDataSource `json:"dataSource"`
-	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
-	Identifier string `json:"identifier"`
-	// Human-readable name for the Velocity Control.
-	Name string `json:"name"`
-}
-
-func (CreateVelocityControlRequest) ActivityType() string {
-	return "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
-}
-
-type CreateVelocityControlResponse struct {
-	Activity Activity `json:"activity"`
-	CreateVelocityControlResult
 }
 
 type CreateWalletRequest struct {
@@ -7219,6 +7624,22 @@ type DeletePrivateKeysResponse struct {
 	DeletePrivateKeysResult
 }
 
+type DeleteSecretsRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Unique identifiers of the secrets to delete. Must contain between 1 and 32 distinct UUIDs. All secrets must belong to the organization.
+	SecretIds []string `json:"secretIds"`
+}
+
+func (DeleteSecretsRequest) ActivityType() string { return "ACTIVITY_TYPE_DELETE_SECRETS" }
+
+type DeleteSecretsResponse struct {
+	Activity Activity `json:"activity"`
+	DeleteSecretsResult
+}
+
 type DeleteSmartContractInterfaceRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -7319,23 +7740,6 @@ func (DeleteUsersRequest) ActivityType() string { return "ACTIVITY_TYPE_DELETE_U
 type DeleteUsersResponse struct {
 	Activity Activity `json:"activity"`
 	DeleteUsersResult
-}
-
-type DeleteVelocityControlRequest struct {
-	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
-	OrganizationID string `json:"organizationId,omitempty"`
-	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
-	TimestampMs       string `json:"timestampMs,omitempty"`
-	VelocityControlID string `json:"velocityControlId"`
-}
-
-func (DeleteVelocityControlRequest) ActivityType() string {
-	return "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROL"
-}
-
-type DeleteVelocityControlResponse struct {
-	Activity Activity `json:"activity"`
-	DeleteVelocityControlResult
 }
 
 type DeleteWalletAccountsRequest struct {
@@ -7456,13 +7860,33 @@ type ETHUndelegate7702Response struct {
 	ETHUndelegate7702Result
 }
 
+type EarnClaimRewardsRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// CAIP-2 chain to claim rewards on (e.g. 'eip155:8453'). Rewards accrue per chain; see ListEarnRewards.
+	Caip2 string `json:"caip2"`
+	// A Turnkey-managed wallet address the rewards are attributed to. The claim transaction is signed by this wallet and the Merkl Distributor transfers every reward token to it.
+	SignWith string `json:"signWith"`
+	// Whether to sponsor this transaction via Gas Station.
+	Sponsor *bool `json:"sponsor,omitempty"`
+}
+
+func (EarnClaimRewardsRequest) ActivityType() string { return "ACTIVITY_TYPE_EARN_CLAIM_REWARDS" }
+
+type EarnClaimRewardsResponse struct {
+	Activity Activity `json:"activity"`
+	EarnClaimRewardsResult
+}
+
 type EarnDeployWrapperRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// Your fee on gross yield, in basis points (e.g., '2000' for 20%). Maximum is 4000 (40%).
 	ClientFeeBps string `json:"clientFeeBps"`
 	// The wallet address that receives the client's fee payouts on-chain. Must be a Turnkey-managed wallet address.
@@ -7486,7 +7910,7 @@ type EarnDepositRequest struct {
 	// Amount of the underlying asset to deposit, in raw on-chain units (e.g., '1000000' for 1 USDC at 6 decimals).
 	Assets string `json:"assets"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// A Wallet account address or Private Key address to deposit from and sign with. Must be an on-chain address; Private Key identifiers are not supported.
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
@@ -7530,7 +7954,7 @@ type EarnWithdrawRequest struct {
 	// The amount of the underlying asset to withdraw, in raw on-chain units. Pass 'MAX' to withdraw the entire position.
 	AmountValue string `json:"amountValue"`
 	// CAIP-2 chain ID the vault lives on (e.g., 'eip155:8453' for Base).
-	ChainCaip2 string `json:"chainCaip2"`
+	Caip2 string `json:"caip2"`
 	// A Wallet account address or Private Key address to withdraw to and sign with. Must be an on-chain address; Private Key identifiers are not supported.
 	SignWith string `json:"signWith"`
 	// Whether to sponsor this transaction via Gas Station.
@@ -8066,6 +8490,56 @@ type OTPLoginResponse struct {
 	OTPLoginResult
 }
 
+type PostTVCQuorumKeyShareRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Unique identifier of the TVC deployment receiving quorum key share
+	DeploymentID string `json:"deploymentId"`
+	// Hex-encoded ephemeral public key used to encrypt the quorum key share
+	EphemeralPublicKeyHex string `json:"ephemeralPublicKeyHex"`
+	// Re-encrypted quorum key share and approval
+	ShareApprovalBundle QuorumKeyShareApprovalBundle `json:"shareApprovalBundle"`
+}
+
+func (PostTVCQuorumKeyShareRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_POST_TVC_QUORUM_KEY_SHARE"
+}
+
+type PostTVCQuorumKeyShareResponse struct {
+	Activity Activity `json:"activity"`
+	PostTVCQuorumKeyShareResult
+}
+
+type ReEncryptTVCQuorumKeyShareRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Quorum key for the TVC application
+	AppQuorumKey string `json:"appQuorumKey"`
+	// Base64-encoded attestation document for the TVC deployment provisioning enclave
+	AttestationDocB64 string `json:"attestationDocB64"`
+	// Unique identifier of the TVC deployment receiving the re-encrypted quorum key share
+	DeploymentID string `json:"deploymentId"`
+	// Base64-encoded manifest for the TVC deployment
+	ManifestB64 string `json:"manifestB64"`
+	// Operator encryption public key used to encrypt the hosted TVC quorum key share
+	OperatorEncryptKey string `json:"operatorEncryptKey"`
+	// Operator signing public key used to approve the TVC manifest
+	OperatorSignKey string `json:"operatorSignKey"`
+}
+
+func (ReEncryptTVCQuorumKeyShareRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_RE_ENCRYPT_TVC_QUORUM_KEY_SHARE"
+}
+
+type ReEncryptTVCQuorumKeyShareResponse struct {
+	Activity Activity `json:"activity"`
+	ReEncryptTVCQuorumKeyShareResult
+}
+
 type RecoverUserRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -8265,11 +8739,11 @@ type SolSendTransactionRequest struct {
 	Caip2 string `json:"caip2"`
 	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
-	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers. For sponsored transactions this must list every required signer of the transaction in transaction order.
+	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers for legacy/V0, or up to 12 for V1 (11 when sponsored). For sponsored transactions this must list every required signer of the transaction in transaction order.
 	SignWiths []string `json:"signWiths"`
 	// Whether to sponsor this transaction via Gas Station.
 	Sponsor *bool `json:"sponsor,omitempty"`
-	// Hex-encoded serialized unsigned Solana transaction (full wire format with zeroed signature placeholders)
+	// Hex-encoded serialized unsigned Solana transaction in full wire format. Legacy/V0 transactions allow 1232 bytes. V1 allows 4096 bytes with up to 12 trailing 64-byte signature slots, including the paymaster for sponsored transactions. Fill unsigned slots with zeroes.
 	UnsignedTransaction string `json:"unsignedTransaction"`
 }
 

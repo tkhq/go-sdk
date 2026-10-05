@@ -7,12 +7,8 @@ import (
 	"strings"
 )
 
-func (g *generator) remapAuthProxyRef(authProxy bool, ref string) string {
-	if !authProxy || ref == "" {
-		return ref
-	}
-
-	if remapped, ok := g.authProxyRefRemap[ref]; ok {
+func remapSecondaryRef(remap map[string]string, ref string) string {
+	if remapped, ok := remap[ref]; ok {
 		return remapped
 	}
 
@@ -23,20 +19,18 @@ var activityWireBodyRE = regexp.MustCompile(`Request(V\d+)?$`)
 
 const typeObject = "object"
 
-//nolint:gocyclo // name-deduplication logic requires tracking several concurrent states
 func (g *generator) buildNameMap() {
 	names := sortedKeys(g.definitions)
 	for _, raw := range names {
 		nameSource := strings.TrimPrefix(raw, authProxyOnlyPrefix)
+		nameSource = strings.TrimPrefix(nameSource, externalSignerOnlyPrefix)
 
 		base := exportedName(stripLeadingVersion(normalizeProtoPackagePrefixes(nameSource)))
 		if base == "" {
 			continue
 		}
 
-		if g.authProxyDefs[raw] {
-			base = "AuthProxy" + base
-		}
+		base = g.defNamePrefix[raw] + base
 		// Activity wire envelopes (type + timestampMs + organizationId + parameters)
 		// get a Body suffix so they don't collide with the sugared XxxRequest
 		// method-input types emitted by writeActivityInput.
@@ -46,10 +40,7 @@ func (g *generator) buildNameMap() {
 
 		name := base
 		if owner, exists := g.usedNames[name]; exists && owner != raw {
-			name = exportedName(stripLeadingVersion(nameSource))
-			if g.authProxyDefs[raw] {
-				name = "AuthProxy" + name
-			}
+			name = g.defNamePrefix[raw] + exportedName(stripLeadingVersion(nameSource))
 
 			for i := 2; ; i++ {
 				if _, taken := g.usedNames[name]; !taken {
@@ -98,7 +89,18 @@ func (g *generator) collectOperations() {
 	// Activity types emitted from swagger endpoints (current versions).
 	currentActivityTypes := map[string]bool{}
 
-	for _, spec := range g.specs {
+	for specIndex, spec := range g.specs {
+		// Operation-level refs from a secondary spec must resolve to that spec's
+		// internally-remapped keys for definitions that diverge from the public spec.
+		refRemap := map[string]string{}
+
+		switch specIndex {
+		case 1:
+			refRemap = g.authProxyRefRemap
+		case 2:
+			refRemap = g.externalSignerRefRemap
+		}
+
 		for _, path := range sortedKeys(spec.Paths) {
 			item := spec.Paths[path]
 			if item.Post == nil {
@@ -109,13 +111,14 @@ func (g *generator) collectOperations() {
 			operationName := strings.TrimPrefix(op.OperationID, "PublicApiService_")
 
 			operationName = strings.TrimPrefix(operationName, "AuthProxyService_")
+			operationName = strings.TrimPrefix(operationName, "ExternalSignerApiService_")
 			if operationName == "" || strings.Contains(operationName, "NOOP") {
 				continue
 			}
 
 			authProxy := strings.HasPrefix(op.OperationID, "AuthProxyService_")
-			requestDef := g.remapAuthProxyRef(authProxy, requestDefinition(op))
-			responseDef := g.remapAuthProxyRef(authProxy, responseDefinition(op))
+			requestDef := remapSecondaryRef(refRemap, requestDefinition(op))
+			responseDef := remapSecondaryRef(refRemap, responseDefinition(op))
 			methodType := g.methodType(op, path, responseDef)
 			activityType := g.activityType(operationName, requestDef)
 			// activities.json is the authoritative source for intent/result types.
