@@ -10,16 +10,17 @@ import (
 
 // Options configures SDK code generation.
 type Options struct {
-	PublicSwaggerPath    string
-	AuthProxySwaggerPath string
-	ActivitiesPath       string
-	OutDir               string
-	AllVersions          bool
+	PublicSwaggerPath         string
+	AuthProxySwaggerPath      string
+	ExternalSignerSwaggerPath string
+	ActivitiesPath            string
+	OutDir                    string
+	AllVersions               bool
 }
 
 // Generate writes generated SDK client and type files.
 func Generate(opts Options) ([]string, error) {
-	specs, err := readSpecs([]string{opts.PublicSwaggerPath, opts.AuthProxySwaggerPath})
+	specs, err := readSpecs([]string{opts.PublicSwaggerPath, opts.AuthProxySwaggerPath, opts.ExternalSignerSwaggerPath})
 	if err != nil {
 		return nil, err
 	}

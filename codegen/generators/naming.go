@@ -149,6 +149,8 @@ func normalizeProtoPackagePrefixes(raw string) string {
 		"externalDataV1", "external_data_v1_",
 		"externaldatav1", "external_data_v1_",
 		"externalactivityv1", "external_activity_v1_",
+		"externalCryptoV1", "external_crypto_v1_",
+		"externalcryptov1", "external_crypto_v1_",
 		"commonV1", "common_v1_",
 		"commonv1", "common_v1_",
 		"dataV1", "data_v1_",
