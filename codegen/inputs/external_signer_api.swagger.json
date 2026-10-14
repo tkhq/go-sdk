@@ -77,32 +77,12 @@
       },
       "required": ["productId"]
     },
-    "billingActivateBillingTierResult": {
-      "type": "object",
-      "properties": {
-        "productId": {
-          "type": "string",
-          "description": "The id of the product being subscribed to."
-        }
-      },
-      "required": ["productId"]
-    },
     "billingDeletePaymentMethodIntent": {
       "type": "object",
       "properties": {
         "paymentMethodId": {
           "type": "string",
           "description": "The payment method that the customer wants to remove."
-        }
-      },
-      "required": ["paymentMethodId"]
-    },
-    "billingDeletePaymentMethodResult": {
-      "type": "object",
-      "properties": {
-        "paymentMethodId": {
-          "type": "string",
-          "description": "The payment method that was removed."
         }
       },
       "required": ["paymentMethodId"]
@@ -162,24 +142,6 @@
       },
       "required": ["paymentMethodId", "cardHolderEmail", "cardHolderName"]
     },
-    "billingSetPaymentMethodResult": {
-      "type": "object",
-      "properties": {
-        "lastFour": {
-          "type": "string",
-          "description": "The last four digits of the credit card added."
-        },
-        "cardHolderName": {
-          "type": "string",
-          "description": "The name associated with the payment method."
-        },
-        "cardHolderEmail": {
-          "type": "string",
-          "description": "The email address associated with the payment method."
-        }
-      },
-      "required": ["lastFour", "cardHolderName", "cardHolderEmail"]
-    },
     "billingUpdatePaymentMethodIntent": {
       "type": "object",
       "properties": {
@@ -189,103 +151,6 @@
         }
       },
       "required": ["paymentEmail"]
-    },
-    "billingUpdatePaymentMethodResult": {
-      "type": "object",
-      "properties": {
-        "paymentEmail": {
-          "type": "string",
-          "description": "The email address associated with the payment method."
-        }
-      },
-      "required": ["paymentEmail"]
-    },
-    "externalcryptov1Signature": {
-      "type": "object",
-      "properties": {
-        "scheme": {
-          "$ref": "#/definitions/externalcryptov1SignatureScheme"
-        },
-        "publicKey": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "signature": {
-          "type": "string"
-        }
-      }
-    },
-    "externalcryptov1SignatureScheme": {
-      "type": "string",
-      "enum": [
-        "SIGNATURE_SCHEME_TK_API_P256",
-        "SIGNATURE_SCHEME_TK_WEBAUTHN",
-        "SIGNATURE_SCHEME_TK_QUORUM_P256"
-      ]
-    },
-    "externaldatav1Credential": {
-      "type": "object",
-      "properties": {
-        "publicKey": {
-          "type": "string",
-          "description": "The public component of a cryptographic key pair used to sign messages and transactions."
-        },
-        "type": {
-          "$ref": "#/definitions/v1CredentialType"
-        },
-        "sessionProfileId": {
-          "type": "string",
-          "description": "The session profile associated with this credential, if any. This field is only applicable for credentials of type CREDENTIAL_TYPE_LOGIN."
-        }
-      },
-      "required": ["publicKey", "type"]
-    },
-    "externaldatav1SignatureScheme": {
-      "type": "string",
-      "enum": ["SIGNATURE_SCHEME_EPHEMERAL_KEY_P256"]
-    },
-    "externaldatav1Timestamp": {
-      "type": "object",
-      "properties": {
-        "seconds": {
-          "type": "string"
-        },
-        "nanos": {
-          "type": "string"
-        }
-      },
-      "required": ["seconds", "nanos"]
-    },
-    "immutableactivityv1Address": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "$ref": "#/definitions/v1AddressFormat"
-        },
-        "address": {
-          "type": "string"
-        }
-      }
-    },
-    "immutablecommonv1HashFunction": {
-      "type": "string",
-      "enum": [
-        "HASH_FUNCTION_NO_OP",
-        "HASH_FUNCTION_SHA256",
-        "HASH_FUNCTION_KECCAK256",
-        "HASH_FUNCTION_NOT_APPLICABLE"
-      ]
-    },
-    "immutablecommonv1PayloadEncoding": {
-      "type": "string",
-      "enum": [
-        "PAYLOAD_ENCODING_HEXADECIMAL",
-        "PAYLOAD_ENCODING_TEXT_UTF8",
-        "PAYLOAD_ENCODING_EIP712",
-        "PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"
-      ]
     },
     "protobufAny": {
       "type": "object",
@@ -351,291 +216,9 @@
       },
       "required": ["invitationId", "userId", "authenticator"]
     },
-    "v1AcceptInvitationResult": {
-      "type": "object",
-      "properties": {
-        "invitationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Invitation."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        }
-      },
-      "required": ["invitationId", "userId"]
-    },
     "v1AccessType": {
       "type": "string",
       "enum": ["ACCESS_TYPE_WEB", "ACCESS_TYPE_API", "ACCESS_TYPE_ALL"]
-    },
-    "v1Activity": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for a given Activity object."
-        },
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        },
-        "status": {
-          "$ref": "#/definitions/v1ActivityStatus",
-          "description": "The current processing status of a specified Activity."
-        },
-        "type": {
-          "$ref": "#/definitions/v1ActivityType",
-          "description": "Type of Activity, such as Add User, or Sign Transaction."
-        },
-        "intent": {
-          "$ref": "#/definitions/v1Intent",
-          "description": "Intent object crafted by Turnkey based on the user request, used to assess the permissibility of an action."
-        },
-        "result": {
-          "$ref": "#/definitions/v1Result",
-          "description": "Result of the intended action."
-        },
-        "votes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Vote"
-          },
-          "description": "A list of objects representing a particular User's approval or rejection of a Consensus request, including all relevant metadata."
-        },
-        "appProofs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1AppProof"
-          },
-          "description": "A list of App Proofs generated by enclaves during activity execution, providing verifiable attestations of performed operations."
-        },
-        "fingerprint": {
-          "type": "string",
-          "description": "An artifact verifying a User's action."
-        },
-        "canApprove": {
-          "type": "boolean"
-        },
-        "canReject": {
-          "type": "boolean"
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "failure": {
-          "$ref": "#/definitions/rpcStatus",
-          "description": "Failure reason of the intended action."
-        }
-      },
-      "required": [
-        "id",
-        "organizationId",
-        "status",
-        "type",
-        "intent",
-        "result",
-        "votes",
-        "fingerprint",
-        "canApprove",
-        "canReject",
-        "createdAt",
-        "updatedAt"
-      ]
-    },
-    "v1ActivityStatus": {
-      "type": "string",
-      "enum": [
-        "ACTIVITY_STATUS_CREATED",
-        "ACTIVITY_STATUS_PENDING",
-        "ACTIVITY_STATUS_COMPLETED",
-        "ACTIVITY_STATUS_FAILED",
-        "ACTIVITY_STATUS_CONSENSUS_NEEDED",
-        "ACTIVITY_STATUS_REJECTED",
-        "ACTIVITY_STATUS_AUTHENTICATORS_NEEDED"
-      ]
-    },
-    "v1ActivityType": {
-      "type": "string",
-      "enum": [
-        "ACTIVITY_TYPE_CREATE_API_KEYS",
-        "ACTIVITY_TYPE_CREATE_USERS",
-        "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS",
-        "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD",
-        "ACTIVITY_TYPE_CREATE_INVITATIONS",
-        "ACTIVITY_TYPE_ACCEPT_INVITATION",
-        "ACTIVITY_TYPE_CREATE_POLICY",
-        "ACTIVITY_TYPE_DISABLE_PRIVATE_KEY",
-        "ACTIVITY_TYPE_DELETE_USERS",
-        "ACTIVITY_TYPE_DELETE_API_KEYS",
-        "ACTIVITY_TYPE_DELETE_INVITATION",
-        "ACTIVITY_TYPE_DELETE_ORGANIZATION",
-        "ACTIVITY_TYPE_DELETE_POLICY",
-        "ACTIVITY_TYPE_CREATE_USER_TAG",
-        "ACTIVITY_TYPE_DELETE_USER_TAGS",
-        "ACTIVITY_TYPE_CREATE_ORGANIZATION",
-        "ACTIVITY_TYPE_SIGN_TRANSACTION",
-        "ACTIVITY_TYPE_APPROVE_ACTIVITY",
-        "ACTIVITY_TYPE_REJECT_ACTIVITY",
-        "ACTIVITY_TYPE_DELETE_AUTHENTICATORS",
-        "ACTIVITY_TYPE_CREATE_AUTHENTICATORS",
-        "ACTIVITY_TYPE_CREATE_PRIVATE_KEY_TAG",
-        "ACTIVITY_TYPE_DELETE_PRIVATE_KEY_TAGS",
-        "ACTIVITY_TYPE_SET_PAYMENT_METHOD",
-        "ACTIVITY_TYPE_ACTIVATE_BILLING_TIER",
-        "ACTIVITY_TYPE_DELETE_PAYMENT_METHOD",
-        "ACTIVITY_TYPE_CREATE_POLICY_V2",
-        "ACTIVITY_TYPE_CREATE_POLICY_V3",
-        "ACTIVITY_TYPE_CREATE_API_ONLY_USERS",
-        "ACTIVITY_TYPE_UPDATE_ROOT_QUORUM",
-        "ACTIVITY_TYPE_UPDATE_USER_TAG",
-        "ACTIVITY_TYPE_UPDATE_PRIVATE_KEY_TAG",
-        "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2",
-        "ACTIVITY_TYPE_CREATE_ORGANIZATION_V2",
-        "ACTIVITY_TYPE_CREATE_USERS_V2",
-        "ACTIVITY_TYPE_ACCEPT_INVITATION_V2",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V2",
-        "ACTIVITY_TYPE_UPDATE_ALLOWED_ORIGINS",
-        "ACTIVITY_TYPE_CREATE_PRIVATE_KEYS_V2",
-        "ACTIVITY_TYPE_UPDATE_USER",
-        "ACTIVITY_TYPE_UPDATE_POLICY",
-        "ACTIVITY_TYPE_SET_PAYMENT_METHOD_V2",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V3",
-        "ACTIVITY_TYPE_CREATE_WALLET",
-        "ACTIVITY_TYPE_CREATE_WALLET_ACCOUNTS",
-        "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY",
-        "ACTIVITY_TYPE_RECOVER_USER",
-        "ACTIVITY_TYPE_SET_ORGANIZATION_FEATURE",
-        "ACTIVITY_TYPE_REMOVE_ORGANIZATION_FEATURE",
-        "ACTIVITY_TYPE_SIGN_RAW_PAYLOAD_V2",
-        "ACTIVITY_TYPE_SIGN_TRANSACTION_V2",
-        "ACTIVITY_TYPE_EXPORT_PRIVATE_KEY",
-        "ACTIVITY_TYPE_EXPORT_WALLET",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V4",
-        "ACTIVITY_TYPE_EMAIL_AUTH",
-        "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
-        "ACTIVITY_TYPE_INIT_IMPORT_WALLET",
-        "ACTIVITY_TYPE_IMPORT_WALLET",
-        "ACTIVITY_TYPE_INIT_IMPORT_PRIVATE_KEY",
-        "ACTIVITY_TYPE_IMPORT_PRIVATE_KEY",
-        "ACTIVITY_TYPE_CREATE_POLICIES",
-        "ACTIVITY_TYPE_SIGN_RAW_PAYLOADS",
-        "ACTIVITY_TYPE_CREATE_READ_ONLY_SESSION",
-        "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
-        "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V5",
-        "ACTIVITY_TYPE_OAUTH",
-        "ACTIVITY_TYPE_CREATE_API_KEYS_V2",
-        "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION",
-        "ACTIVITY_TYPE_EMAIL_AUTH_V2",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V6",
-        "ACTIVITY_TYPE_DELETE_PRIVATE_KEYS",
-        "ACTIVITY_TYPE_DELETE_WALLETS",
-        "ACTIVITY_TYPE_CREATE_READ_WRITE_SESSION_V2",
-        "ACTIVITY_TYPE_DELETE_SUB_ORGANIZATION",
-        "ACTIVITY_TYPE_INIT_OTP_AUTH",
-        "ACTIVITY_TYPE_OTP_AUTH",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7",
-        "ACTIVITY_TYPE_UPDATE_WALLET",
-        "ACTIVITY_TYPE_UPDATE_POLICY_V2",
-        "ACTIVITY_TYPE_CREATE_USERS_V3",
-        "ACTIVITY_TYPE_INIT_OTP_AUTH_V2",
-        "ACTIVITY_TYPE_INIT_OTP",
-        "ACTIVITY_TYPE_VERIFY_OTP",
-        "ACTIVITY_TYPE_OTP_LOGIN",
-        "ACTIVITY_TYPE_STAMP_LOGIN",
-        "ACTIVITY_TYPE_OAUTH_LOGIN",
-        "ACTIVITY_TYPE_UPDATE_USER_NAME",
-        "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
-        "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
-        "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP",
-        "ACTIVITY_TYPE_CREATE_SMART_CONTRACT_INTERFACE",
-        "ACTIVITY_TYPE_DELETE_SMART_CONTRACT_INTERFACE",
-        "ACTIVITY_TYPE_ENABLE_AUTH_PROXY",
-        "ACTIVITY_TYPE_DISABLE_AUTH_PROXY",
-        "ACTIVITY_TYPE_UPDATE_AUTH_PROXY_CONFIG",
-        "ACTIVITY_TYPE_CREATE_OAUTH2_CREDENTIAL",
-        "ACTIVITY_TYPE_UPDATE_OAUTH2_CREDENTIAL",
-        "ACTIVITY_TYPE_DELETE_OAUTH2_CREDENTIAL",
-        "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE",
-        "ACTIVITY_TYPE_DELETE_WALLET_ACCOUNTS",
-        "ACTIVITY_TYPE_DELETE_POLICIES",
-        "ACTIVITY_TYPE_ETH_SEND_RAW_TRANSACTION",
-        "ACTIVITY_TYPE_ETH_SEND_TRANSACTION",
-        "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_CREDENTIAL",
-        "ACTIVITY_TYPE_UPDATE_FIAT_ON_RAMP_CREDENTIAL",
-        "ACTIVITY_TYPE_DELETE_FIAT_ON_RAMP_CREDENTIAL",
-        "ACTIVITY_TYPE_EMAIL_AUTH_V3",
-        "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2",
-        "ACTIVITY_TYPE_INIT_OTP_AUTH_V3",
-        "ACTIVITY_TYPE_INIT_OTP_V2",
-        "ACTIVITY_TYPE_UPSERT_GAS_USAGE_CONFIG",
-        "ACTIVITY_TYPE_CREATE_TVC_APP",
-        "ACTIVITY_TYPE_CREATE_TVC_DEPLOYMENT",
-        "ACTIVITY_TYPE_CREATE_TVC_MANIFEST_APPROVALS",
-        "ACTIVITY_TYPE_SOL_SEND_TRANSACTION",
-        "ACTIVITY_TYPE_INIT_OTP_V3",
-        "ACTIVITY_TYPE_VERIFY_OTP_V2",
-        "ACTIVITY_TYPE_OTP_LOGIN_V2",
-        "ACTIVITY_TYPE_UPDATE_ORGANIZATION_NAME",
-        "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V8",
-        "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS_V2",
-        "ACTIVITY_TYPE_CREATE_USERS_V4",
-        "ACTIVITY_TYPE_CREATE_WEBHOOK_ENDPOINT",
-        "ACTIVITY_TYPE_UPDATE_WEBHOOK_ENDPOINT",
-        "ACTIVITY_TYPE_DELETE_WEBHOOK_ENDPOINT",
-        "ACTIVITY_TYPE_SET_IP_ALLOWLIST",
-        "ACTIVITY_TYPE_REMOVE_IP_ALLOWLIST",
-        "ACTIVITY_TYPE_UPDATE_TVC_APP_LIVE_DEPLOYMENT",
-        "ACTIVITY_TYPE_DELETE_TVC_DEPLOYMENT",
-        "ACTIVITY_TYPE_DELETE_TVC_APP_AND_DEPLOYMENTS",
-        "ACTIVITY_TYPE_RESTORE_TVC_DEPLOYMENT",
-        "ACTIVITY_TYPE_SPARK_SIGN_FROST",
-        "ACTIVITY_TYPE_SPARK_PREPARE_TRANSFER",
-        "ACTIVITY_TYPE_SPARK_CLAIM_TRANSFER",
-        "ACTIVITY_TYPE_SPARK_PREPARE_LIGHTNING_RECEIVE",
-        "ACTIVITY_TYPE_POST_TVC_QUORUM_KEY_SHARE",
-        "ACTIVITY_TYPE_ETH_SEND_TRANSACTION_V2",
-        "ACTIVITY_TYPE_CREATE_MFA_POLICY",
-        "ACTIVITY_TYPE_UPDATE_MFA_POLICY",
-        "ACTIVITY_TYPE_DELETE_MFA_POLICY",
-        "ACTIVITY_TYPE_CREATE_SESSION_PROFILE",
-        "ACTIVITY_TYPE_EARN_DEPLOY_WRAPPER",
-        "ACTIVITY_TYPE_EARN_DEPOSIT",
-        "ACTIVITY_TYPE_EARN_WITHDRAW",
-        "ACTIVITY_TYPE_EXECUTE_SWAP",
-        "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG",
-        "ACTIVITY_TYPE_CREATE_TVC_OPERATOR",
-        "ACTIVITY_TYPE_CREATE_TVC_QUORUM_KEY",
-        "ACTIVITY_TYPE_RE_ENCRYPT_TVC_QUORUM_KEY_SHARE",
-        "ACTIVITY_TYPE_INIT_IMPORT_SECRETS",
-        "ACTIVITY_TYPE_SOL_SEND_TRANSACTION_V2",
-        "ACTIVITY_TYPE_CLAIM_SWAP_FEES",
-        "ACTIVITY_TYPE_EARN_SET_WRAPPER_STATE",
-        "ACTIVITY_TYPE_CLAIM_EARN_FEES",
-        "ACTIVITY_TYPE_UPDATE_WALLET_ACCOUNT_NAME",
-        "ACTIVITY_TYPE_ETH_UNDELEGATE_7702",
-        "ACTIVITY_TYPE_EXECUTE_SWAP_V2",
-        "ACTIVITY_TYPE_CREATE_SWAP_QUOTE",
-        "ACTIVITY_TYPE_IMPORT_SECRETS",
-        "ACTIVITY_TYPE_EXPORT_SECRETS",
-        "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL",
-        "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS",
-        "ACTIVITY_TYPE_UPDATE_PAYMENT_METHOD",
-        "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2",
-        "ACTIVITY_TYPE_EXECUTE_SWAP_V3",
-        "ACTIVITY_TYPE_DELETE_SECRETS",
-        "ACTIVITY_TYPE_EARN_CLAIM_REWARDS",
-        "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3",
-        "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG",
-        "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
-      ]
     },
     "v1AddressFormat": {
       "type": "string",
@@ -678,41 +261,6 @@
         "ADDRESS_FORMAT_XRP",
         "ADDRESS_FORMAT_SPARK_MAINNET",
         "ADDRESS_FORMAT_SPARK_REGTEST"
-      ]
-    },
-    "v1ApiKey": {
-      "type": "object",
-      "properties": {
-        "credential": {
-          "$ref": "#/definitions/externaldatav1Credential",
-          "description": "A User credential that can be used to authenticate to Turnkey."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for a given API Key."
-        },
-        "apiKeyName": {
-          "type": "string",
-          "description": "Human-readable name for an API Key."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "expirationSeconds": {
-          "type": "string",
-          "format": "uint64",
-          "description": "Optional window (in seconds) indicating how long the API Key should last."
-        }
-      },
-      "required": [
-        "credential",
-        "apiKeyId",
-        "apiKeyName",
-        "createdAt",
-        "updatedAt"
       ]
     },
     "v1ApiKeyCurve": {
@@ -774,28 +322,6 @@
       },
       "required": ["userName", "userTags", "apiKeys"]
     },
-    "v1AppProof": {
-      "type": "object",
-      "properties": {
-        "scheme": {
-          "$ref": "#/definitions/externaldatav1SignatureScheme",
-          "description": "Scheme of signing key."
-        },
-        "publicKey": {
-          "type": "string",
-          "description": "Ephemeral public key."
-        },
-        "proofPayload": {
-          "type": "string",
-          "description": "JSON serialized AppProofPayload."
-        },
-        "signature": {
-          "type": "string",
-          "description": "Signature over hashed proof_payload."
-        }
-      },
-      "required": ["scheme", "publicKey", "proofPayload", "signature"]
-    },
     "v1ApproveActivityIntent": {
       "type": "object",
       "properties": {
@@ -836,20 +362,6 @@
         "transports"
       ]
     },
-    "v1AuthenticationMethod": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/v1AuthenticationType",
-          "description": "The type of authenticator (e.g., AUTHENTICATION_TYPE_EMAIL, AUTHENTICATION_TYPE_SESSION) required for this MFA step."
-        },
-        "id": {
-          "type": "string",
-          "description": "Optional specific authenticator ID required (e.g., for requiring a specific session profile id)"
-        }
-      },
-      "required": ["type"]
-    },
     "v1AuthenticationMethodParams": {
       "type": "object",
       "properties": {
@@ -873,63 +385,6 @@
         "AUTHENTICATION_TYPE_API_KEY",
         "AUTHENTICATION_TYPE_OAUTH",
         "AUTHENTICATION_TYPE_SESSION"
-      ]
-    },
-    "v1Authenticator": {
-      "type": "object",
-      "properties": {
-        "transports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1AuthenticatorTransport"
-          },
-          "description": "Types of transports that may be used by an Authenticator (e.g., USB, NFC, BLE)."
-        },
-        "attestationType": {
-          "type": "string"
-        },
-        "aaguid": {
-          "type": "string",
-          "description": "Identifier indicating the type of the Security Key."
-        },
-        "credentialId": {
-          "type": "string",
-          "description": "Unique identifier for a WebAuthn credential."
-        },
-        "model": {
-          "type": "string",
-          "description": "The type of Authenticator device."
-        },
-        "credential": {
-          "$ref": "#/definitions/externaldatav1Credential",
-          "description": "A User credential that can be used to authenticate to Turnkey."
-        },
-        "authenticatorId": {
-          "type": "string",
-          "description": "Unique identifier for a given Authenticator."
-        },
-        "authenticatorName": {
-          "type": "string",
-          "description": "Human-readable name for an Authenticator."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        }
-      },
-      "required": [
-        "transports",
-        "attestationType",
-        "aaguid",
-        "credentialId",
-        "model",
-        "credential",
-        "authenticatorId",
-        "authenticatorName",
-        "createdAt",
-        "updatedAt"
       ]
     },
     "v1AuthenticatorAttestationResponse": {
@@ -1014,28 +469,8 @@
       },
       "required": ["wrapperAddress"]
     },
-    "v1ClaimEarnFeesResult": {
-      "type": "object",
-      "properties": {
-        "claimRequestId": {
-          "type": "string",
-          "description": "Identifier to poll claim status and tx hash via GetClaimEarnFeesStatus."
-        }
-      },
-      "required": ["claimRequestId"]
-    },
     "v1ClaimSwapFeesIntent": {
       "type": "object"
-    },
-    "v1ClaimSwapFeesResult": {
-      "type": "object",
-      "properties": {
-        "requestId": {
-          "type": "string",
-          "description": "Relay claim request ID submitted through the permit endpoint."
-        }
-      },
-      "required": ["requestId"]
     },
     "v1ClientSignature": {
       "type": "object",
@@ -1099,19 +534,6 @@
       },
       "required": ["apiKeys", "userId"]
     },
-    "v1CreateApiKeysResult": {
-      "type": "object",
-      "properties": {
-        "apiKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of API Key IDs."
-        }
-      },
-      "required": ["apiKeyIds"]
-    },
     "v1CreateApiOnlyUsersIntent": {
       "type": "object",
       "properties": {
@@ -1125,19 +547,6 @@
         }
       },
       "required": ["apiOnlyUsers"]
-    },
-    "v1CreateApiOnlyUsersResult": {
-      "type": "object",
-      "properties": {
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of API-only User IDs."
-        }
-      },
-      "required": ["userIds"]
     },
     "v1CreateAuthenticatorsIntent": {
       "type": "object",
@@ -1175,19 +584,6 @@
       },
       "required": ["authenticators", "userId"]
     },
-    "v1CreateAuthenticatorsResult": {
-      "type": "object",
-      "properties": {
-        "authenticatorIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Authenticator IDs."
-        }
-      },
-      "required": ["authenticatorIds"]
-    },
     "v1CreateFiatOnRampCredentialIntent": {
       "type": "object",
       "properties": {
@@ -1222,15 +618,19 @@
         "encryptedSecretApiKey"
       ]
     },
-    "v1CreateFiatOnRampCredentialResult": {
+    "v1CreateFiatOnRampSessionIntent": {
       "type": "object",
       "properties": {
-        "fiatOnRampCredentialId": {
+        "quoteId": {
           "type": "string",
-          "description": "Unique identifier of the Fiat On-Ramp credential that was created"
+          "description": "Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuote."
+        },
+        "walletAddress": {
+          "type": "string",
+          "description": "Destination wallet address for the buy transaction."
         }
       },
-      "required": ["fiatOnRampCredentialId"]
+      "required": ["quoteId", "walletAddress"]
     },
     "v1CreateInvitationsIntent": {
       "type": "object",
@@ -1245,19 +645,6 @@
         }
       },
       "required": ["invitations"]
-    },
-    "v1CreateInvitationsResult": {
-      "type": "object",
-      "properties": {
-        "invitationIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Invitation IDs"
-        }
-      },
-      "required": ["invitationIds"]
     },
     "v1CreateMfaPolicyIntent": {
       "type": "object",
@@ -1300,16 +687,6 @@
         "order"
       ]
     },
-    "v1CreateMfaPolicyResult": {
-      "type": "object",
-      "properties": {
-        "mfaPolicyId": {
-          "type": "string",
-          "description": "Unique identifier for a given MFA Policy."
-        }
-      },
-      "required": ["mfaPolicyId"]
-    },
     "v1CreateOauth2CredentialIntent": {
       "type": "object",
       "properties": {
@@ -1327,16 +704,6 @@
         }
       },
       "required": ["provider", "clientId", "encryptedClientSecret"]
-    },
-    "v1CreateOauth2CredentialResult": {
-      "type": "object",
-      "properties": {
-        "oauth2CredentialId": {
-          "type": "string",
-          "description": "Unique identifier of the OAuth 2.0 credential that was created"
-        }
-      },
-      "required": ["oauth2CredentialId"]
     },
     "v1CreateOauthProvidersIntent": {
       "type": "object",
@@ -1373,32 +740,6 @@
         }
       },
       "required": ["userId", "oauthProviders"]
-    },
-    "v1CreateOauthProvidersResult": {
-      "type": "object",
-      "properties": {
-        "providerIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for Oauth Providers"
-        }
-      },
-      "required": ["providerIds"]
-    },
-    "v1CreateOauthProvidersResultV2": {
-      "type": "object",
-      "properties": {
-        "providerIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for Oauth Providers"
-        }
-      },
-      "required": ["providerIds"]
     },
     "v1CreateOrganizationIntent": {
       "type": "object",
@@ -1444,16 +785,6 @@
       },
       "required": ["organizationName", "rootEmail", "rootAuthenticator"]
     },
-    "v1CreateOrganizationResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        }
-      },
-      "required": ["organizationId"]
-    },
     "v1CreatePoliciesIntent": {
       "type": "object",
       "properties": {
@@ -1467,19 +798,6 @@
         }
       },
       "required": ["policies"]
-    },
-    "v1CreatePoliciesResult": {
-      "type": "object",
-      "properties": {
-        "policyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for the created policies."
-        }
-      },
-      "required": ["policyIds"]
     },
     "v1CreatePolicyIntent": {
       "type": "object",
@@ -1561,16 +879,6 @@
       },
       "required": ["policyName", "effect", "notes"]
     },
-    "v1CreatePolicyResult": {
-      "type": "object",
-      "properties": {
-        "policyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Policy."
-        }
-      },
-      "required": ["policyId"]
-    },
     "v1CreatePrivateKeyTagIntent": {
       "type": "object",
       "properties": {
@@ -1587,23 +895,6 @@
         }
       },
       "required": ["privateKeyTagName", "privateKeyIds"]
-    },
-    "v1CreatePrivateKeyTagResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyTagId": {
-          "type": "string",
-          "description": "Unique identifier for a given Private Key Tag."
-        },
-        "privateKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Private Key IDs."
-        }
-      },
-      "required": ["privateKeyTagId", "privateKeyIds"]
     },
     "v1CreatePrivateKeysIntent": {
       "type": "object",
@@ -1629,77 +920,16 @@
             "$ref": "#/definitions/v1PrivateKeyParams"
           },
           "description": "A list of Private Keys."
-        }
-      },
-      "required": ["privateKeys"]
-    },
-    "v1CreatePrivateKeysResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Private Key IDs."
-        }
-      },
-      "required": ["privateKeyIds"]
-    },
-    "v1CreatePrivateKeysResultV2": {
-      "type": "object",
-      "properties": {
-        "privateKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PrivateKeyResult"
-          },
-          "description": "A list of Private Key IDs and addresses."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for creating the private keys."
         }
       },
       "required": ["privateKeys"]
     },
     "v1CreateReadOnlySessionIntent": {
       "type": "object"
-    },
-    "v1CreateReadOnlySessionResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization. If the request is being made by a user and their Sub-Organization ID is unknown, this can be the Parent Organization ID. However, using the Sub-Organization ID is preferred due to performance reasons."
-        },
-        "organizationName": {
-          "type": "string",
-          "description": "Human-readable name for an Organization."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        },
-        "username": {
-          "type": "string",
-          "description": "Human-readable name for a User."
-        },
-        "session": {
-          "type": "string",
-          "description": "String representing a read only session"
-        },
-        "sessionExpiry": {
-          "type": "string",
-          "format": "uint64",
-          "description": "UTC timestamp in seconds representing the expiry time for the read only session."
-        }
-      },
-      "required": [
-        "organizationId",
-        "organizationName",
-        "userId",
-        "username",
-        "session",
-        "sessionExpiry"
-      ]
     },
     "v1CreateReadWriteSessionIntent": {
       "type": "object",
@@ -1749,80 +979,6 @@
       },
       "required": ["targetPublicKey"]
     },
-    "v1CreateReadWriteSessionResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization. If the request is being made by a user and their Sub-Organization ID is unknown, this can be the Parent Organization ID. However, using the Sub-Organization ID is preferred due to performance reasons."
-        },
-        "organizationName": {
-          "type": "string",
-          "description": "Human-readable name for an Organization."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        },
-        "username": {
-          "type": "string",
-          "description": "Human-readable name for a User."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for the created API key."
-        },
-        "credentialBundle": {
-          "type": "string",
-          "description": "HPKE encrypted credential bundle"
-        }
-      },
-      "required": [
-        "organizationId",
-        "organizationName",
-        "userId",
-        "username",
-        "apiKeyId",
-        "credentialBundle"
-      ]
-    },
-    "v1CreateReadWriteSessionResultV2": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization. If the request is being made by a user and their Sub-Organization ID is unknown, this can be the Parent Organization ID. However, using the Sub-Organization ID is preferred due to performance reasons."
-        },
-        "organizationName": {
-          "type": "string",
-          "description": "Human-readable name for an Organization."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        },
-        "username": {
-          "type": "string",
-          "description": "Human-readable name for a User."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for the created API key."
-        },
-        "credentialBundle": {
-          "type": "string",
-          "description": "HPKE encrypted credential bundle"
-        }
-      },
-      "required": [
-        "organizationId",
-        "organizationName",
-        "userId",
-        "username",
-        "apiKeyId",
-        "credentialBundle"
-      ]
-    },
     "v1CreateSessionProfileIntent": {
       "type": "object",
       "properties": {
@@ -1844,16 +1000,6 @@
         }
       },
       "required": ["sessionProfileName", "scope"]
-    },
-    "v1CreateSessionProfileResult": {
-      "type": "object",
-      "properties": {
-        "sessionProfileId": {
-          "type": "string",
-          "description": "Unique identifier for a given Session Profile."
-        }
-      },
-      "required": ["sessionProfileId"]
     },
     "v1CreateSmartContractInterfaceIntent": {
       "type": "object",
@@ -1884,16 +1030,6 @@
         "type",
         "label"
       ]
-    },
-    "v1CreateSmartContractInterfaceResult": {
-      "type": "object",
-      "properties": {
-        "smartContractInterfaceId": {
-          "type": "string",
-          "description": "The ID of the created Smart Contract Interface."
-        }
-      },
-      "required": ["smartContractInterfaceId"]
     },
     "v1CreateSubOrganizationIntent": {
       "type": "object",
@@ -2175,134 +1311,6 @@
       },
       "required": ["subOrganizationName", "rootUsers", "rootQuorumThreshold"]
     },
-    "v1CreateSubOrganizationResult": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
-    "v1CreateSubOrganizationResultV3": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "privateKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1PrivateKeyResult"
-          },
-          "description": "A list of Private Key IDs and addresses."
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId", "privateKeys"]
-    },
-    "v1CreateSubOrganizationResultV4": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1WalletResult"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
-    "v1CreateSubOrganizationResultV5": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1WalletResult"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
-    "v1CreateSubOrganizationResultV6": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1WalletResult"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
-    "v1CreateSubOrganizationResultV7": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1WalletResult"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
-    "v1CreateSubOrganizationResultV8": {
-      "type": "object",
-      "properties": {
-        "subOrganizationId": {
-          "type": "string"
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1WalletResult"
-        },
-        "rootUserIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["subOrganizationId"]
-    },
     "v1CreateSwapQuoteIntent": {
       "type": "object",
       "properties": {
@@ -2387,39 +1395,15 @@
           "description": "Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported."
         },
         "feeSponsorship": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
         },
         "fixedRate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false."
         }
       },
       "required": ["signWith", "inputToken", "outputToken", "inputAmount"]
-    },
-    "v1CreateSwapQuoteResult": {
-      "type": "object",
-      "properties": {
-        "quotes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SwapQuote"
-          },
-          "description": "One or more provider quotes for this request. Today this contains a single Relay quote; pass quotes[i].quoteId to execute_swap_v2 to bind execution."
-        }
-      },
-      "required": ["quotes"]
-    },
-    "v1CreateSwapQuoteResultV2": {
-      "type": "object",
-      "properties": {
-        "quotes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SwapQuoteV2"
-          }
-        }
-      }
     },
     "v1CreateTvcAppIntent": {
       "type": "object",
@@ -2458,56 +1442,6 @@
         }
       },
       "required": ["name", "quorumPublicKey"]
-    },
-    "v1CreateTvcAppResult": {
-      "type": "object",
-      "properties": {
-        "appId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC application"
-        },
-        "manifestSetId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC manifest set"
-        },
-        "manifestSetOperatorIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The unique identifier(s) of the manifest set operators"
-        },
-        "manifestSetThreshold": {
-          "type": "integer",
-          "format": "int64",
-          "description": "The required number of approvals for the manifest set"
-        },
-        "shareSetId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC share set"
-        },
-        "shareSetOperatorIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The unique identifiers of the share set operators"
-        },
-        "shareSetThreshold": {
-          "type": "integer",
-          "format": "int64",
-          "description": "The required number of approvals for the share set"
-        }
-      },
-      "required": [
-        "appId",
-        "manifestSetId",
-        "manifestSetOperatorIds",
-        "manifestSetThreshold",
-        "shareSetId",
-        "shareSetOperatorIds",
-        "shareSetThreshold"
-      ]
     },
     "v1CreateTvcDeploymentIntent": {
       "type": "object",
@@ -2594,20 +1528,6 @@
         "publicIngressPort"
       ]
     },
-    "v1CreateTvcDeploymentResult": {
-      "type": "object",
-      "properties": {
-        "deploymentId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC deployment"
-        },
-        "manifestId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC manifest"
-        }
-      },
-      "required": ["deploymentId", "manifestId"]
-    },
     "v1CreateTvcManifestApprovalsIntent": {
       "type": "object",
       "properties": {
@@ -2625,19 +1545,6 @@
         }
       },
       "required": ["manifestId", "approvals"]
-    },
-    "v1CreateTvcManifestApprovalsResult": {
-      "type": "object",
-      "properties": {
-        "approvalIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The unique identifier(s) for the manifest approvals"
-        }
-      },
-      "required": ["approvalIds"]
     },
     "v1CreateTvcOperatorIntent": {
       "type": "object",
@@ -2661,33 +1568,6 @@
       },
       "required": ["path", "operatorName"]
     },
-    "v1CreateTvcOperatorResult": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "The unique identifier for the wallet containing TVC operator accounts"
-        },
-        "operatorId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC operator"
-        },
-        "encryptPublicKey": {
-          "type": "string",
-          "description": "Public encryption key for this TVC operator"
-        },
-        "signPublicKey": {
-          "type": "string",
-          "description": "Public signing key for this TVC operator"
-        }
-      },
-      "required": [
-        "walletId",
-        "operatorId",
-        "encryptPublicKey",
-        "signPublicKey"
-      ]
-    },
     "v1CreateTvcQuorumKeyIntent": {
       "type": "object",
       "properties": {
@@ -2706,27 +1586,6 @@
       },
       "required": ["threshold", "operatorEncryptKeys"]
     },
-    "v1CreateTvcQuorumKeyResult": {
-      "type": "object",
-      "properties": {
-        "quorumKeyId": {
-          "type": "string",
-          "description": "The unique identifier for the TVC quorum key"
-        },
-        "quorumPublicKey": {
-          "type": "string",
-          "description": "Public key for the generated TVC quorum key"
-        },
-        "shareIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The unique identifier(s) for the generated TVC quorum key shares"
-        }
-      },
-      "required": ["quorumKeyId", "quorumPublicKey", "shareIds"]
-    },
     "v1CreateUserTagIntent": {
       "type": "object",
       "properties": {
@@ -2743,23 +1602,6 @@
         }
       },
       "required": ["userTagName", "userIds"]
-    },
-    "v1CreateUserTagResult": {
-      "type": "object",
-      "properties": {
-        "userTagId": {
-          "type": "string",
-          "description": "Unique identifier for a given User Tag."
-        },
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User IDs."
-        }
-      },
-      "required": ["userTagId", "userIds"]
     },
     "v1CreateUsersIntent": {
       "type": "object",
@@ -2817,19 +1659,6 @@
       },
       "required": ["users"]
     },
-    "v1CreateUsersResult": {
-      "type": "object",
-      "properties": {
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User IDs."
-        }
-      },
-      "required": ["userIds"]
-    },
     "v1CreateVelocityControlIntent": {
       "type": "object",
       "properties": {
@@ -2852,15 +1681,6 @@
       },
       "required": ["name", "dataSource", "aggregation", "identifier"]
     },
-    "v1CreateVelocityControlResult": {
-      "type": "object",
-      "properties": {
-        "velocityControlId": {
-          "type": "string"
-        }
-      },
-      "required": ["velocityControlId"]
-    },
     "v1CreateWalletAccountsIntent": {
       "type": "object",
       "properties": {
@@ -2882,19 +1702,6 @@
         }
       },
       "required": ["walletId", "accounts"]
-    },
-    "v1CreateWalletAccountsResult": {
-      "type": "object",
-      "properties": {
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of derived addresses."
-        }
-      },
-      "required": ["addresses"]
     },
     "v1CreateWalletIntent": {
       "type": "object",
@@ -2919,23 +1726,6 @@
       },
       "required": ["walletName", "accounts"]
     },
-    "v1CreateWalletResult": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "Unique identifier for a Wallet."
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of account addresses."
-        }
-      },
-      "required": ["walletId", "addresses"]
-    },
     "v1CreateWebhookEndpointIntent": {
       "type": "object",
       "properties": {
@@ -2958,20 +1748,6 @@
       },
       "required": ["url", "name"]
     },
-    "v1CreateWebhookEndpointResult": {
-      "type": "object",
-      "properties": {
-        "endpointId": {
-          "type": "string",
-          "description": "Unique identifier of the created webhook endpoint."
-        },
-        "webhookEndpoint": {
-          "$ref": "#/definitions/v1WebhookEndpointData",
-          "description": "The created webhook endpoint data."
-        }
-      },
-      "required": ["endpointId", "webhookEndpoint"]
-    },
     "v1CredPropsAuthenticationExtensionsClientOutputs": {
       "type": "object",
       "properties": {
@@ -2980,21 +1756,6 @@
         }
       },
       "required": ["rk"]
-    },
-    "v1CredentialType": {
-      "type": "string",
-      "enum": [
-        "CREDENTIAL_TYPE_WEBAUTHN_AUTHENTICATOR",
-        "CREDENTIAL_TYPE_API_KEY_P256",
-        "CREDENTIAL_TYPE_RECOVER_USER_KEY_P256",
-        "CREDENTIAL_TYPE_API_KEY_SECP256K1",
-        "CREDENTIAL_TYPE_EMAIL_AUTH_KEY_P256",
-        "CREDENTIAL_TYPE_API_KEY_ED25519",
-        "CREDENTIAL_TYPE_OTP_AUTH_KEY_P256",
-        "CREDENTIAL_TYPE_READ_WRITE_SESSION_KEY_P256",
-        "CREDENTIAL_TYPE_OAUTH_KEY_P256",
-        "CREDENTIAL_TYPE_LOGIN"
-      ]
     },
     "v1Curve": {
       "type": "string",
@@ -3017,19 +1778,6 @@
       },
       "required": ["userId", "apiKeyIds"]
     },
-    "v1DeleteApiKeysResult": {
-      "type": "object",
-      "properties": {
-        "apiKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of API Key IDs."
-        }
-      },
-      "required": ["apiKeyIds"]
-    },
     "v1DeleteAuthenticatorsIntent": {
       "type": "object",
       "properties": {
@@ -3047,19 +1795,6 @@
       },
       "required": ["userId", "authenticatorIds"]
     },
-    "v1DeleteAuthenticatorsResult": {
-      "type": "object",
-      "properties": {
-        "authenticatorIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Unique identifier for a given Authenticator."
-        }
-      },
-      "required": ["authenticatorIds"]
-    },
     "v1DeleteFiatOnRampCredentialIntent": {
       "type": "object",
       "properties": {
@@ -3070,32 +1805,12 @@
       },
       "required": ["fiatOnrampCredentialId"]
     },
-    "v1DeleteFiatOnRampCredentialResult": {
-      "type": "object",
-      "properties": {
-        "fiatOnRampCredentialId": {
-          "type": "string",
-          "description": "Unique identifier of the Fiat On-Ramp credential that was deleted"
-        }
-      },
-      "required": ["fiatOnRampCredentialId"]
-    },
     "v1DeleteInvitationIntent": {
       "type": "object",
       "properties": {
         "invitationId": {
           "type": "string",
           "description": "Unique identifier for a given Invitation object."
-        }
-      },
-      "required": ["invitationId"]
-    },
-    "v1DeleteInvitationResult": {
-      "type": "object",
-      "properties": {
-        "invitationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Invitation."
         }
       },
       "required": ["invitationId"]
@@ -3114,32 +1829,12 @@
       },
       "required": ["userId", "mfaPolicyId"]
     },
-    "v1DeleteMfaPolicyResult": {
-      "type": "object",
-      "properties": {
-        "mfaPolicyId": {
-          "type": "string",
-          "description": "Unique identifier for a given MFA Policy."
-        }
-      },
-      "required": ["mfaPolicyId"]
-    },
     "v1DeleteOauth2CredentialIntent": {
       "type": "object",
       "properties": {
         "oauth2CredentialId": {
           "type": "string",
           "description": "The ID of the OAuth 2.0 credential to delete"
-        }
-      },
-      "required": ["oauth2CredentialId"]
-    },
-    "v1DeleteOauth2CredentialResult": {
-      "type": "object",
-      "properties": {
-        "oauth2CredentialId": {
-          "type": "string",
-          "description": "Unique identifier of the OAuth 2.0 credential that was deleted"
         }
       },
       "required": ["oauth2CredentialId"]
@@ -3161,30 +1856,7 @@
       },
       "required": ["userId", "providerIds"]
     },
-    "v1DeleteOauthProvidersResult": {
-      "type": "object",
-      "properties": {
-        "providerIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for Oauth Providers"
-        }
-      },
-      "required": ["providerIds"]
-    },
     "v1DeleteOrganizationIntent": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        }
-      },
-      "required": ["organizationId"]
-    },
-    "v1DeleteOrganizationResult": {
       "type": "object",
       "properties": {
         "organizationId": {
@@ -3207,30 +1879,7 @@
       },
       "required": ["policyIds"]
     },
-    "v1DeletePoliciesResult": {
-      "type": "object",
-      "properties": {
-        "policyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for the deleted policies."
-        }
-      },
-      "required": ["policyIds"]
-    },
     "v1DeletePolicyIntent": {
-      "type": "object",
-      "properties": {
-        "policyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Policy."
-        }
-      },
-      "required": ["policyId"]
-    },
-    "v1DeletePolicyResult": {
       "type": "object",
       "properties": {
         "policyId": {
@@ -3253,26 +1902,6 @@
       },
       "required": ["privateKeyTagIds"]
     },
-    "v1DeletePrivateKeyTagsResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyTagIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Private Key Tag IDs."
-        },
-        "privateKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of Private Key IDs."
-        }
-      },
-      "required": ["privateKeyTagIds", "privateKeyIds"]
-    },
     "v1DeletePrivateKeysIntent": {
       "type": "object",
       "properties": {
@@ -3290,19 +1919,6 @@
       },
       "required": ["privateKeyIds"]
     },
-    "v1DeletePrivateKeysResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of private key unique identifiers that were removed"
-        }
-      },
-      "required": ["privateKeyIds"]
-    },
     "v1DeleteSecretsIntent": {
       "type": "object",
       "properties": {
@@ -3312,19 +1928,6 @@
             "type": "string"
           },
           "description": "Unique identifiers of the secrets to delete. Must contain between 1 and 32 distinct UUIDs. All secrets must belong to the organization."
-        }
-      },
-      "required": ["secretIds"]
-    },
-    "v1DeleteSecretsResult": {
-      "type": "object",
-      "properties": {
-        "secretIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Unique identifiers of the deleted secrets, in the order requested."
         }
       },
       "required": ["secretIds"]
@@ -3339,16 +1942,6 @@
       },
       "required": ["smartContractInterfaceId"]
     },
-    "v1DeleteSmartContractInterfaceResult": {
-      "type": "object",
-      "properties": {
-        "smartContractInterfaceId": {
-          "type": "string",
-          "description": "The ID of the deleted Smart Contract Interface."
-        }
-      },
-      "required": ["smartContractInterfaceId"]
-    },
     "v1DeleteSubOrganizationIntent": {
       "type": "object",
       "properties": {
@@ -3357,16 +1950,6 @@
           "description": "Sub-organization deletion, by default, requires associated wallets and private keys to be exported for security reasons. Set this boolean to true to force sub-organization deletion even if some wallets or private keys within it have not been exported yet. Default: false."
         }
       }
-    },
-    "v1DeleteSubOrganizationResult": {
-      "type": "object",
-      "properties": {
-        "subOrganizationUuid": {
-          "type": "string",
-          "description": "Unique identifier of the sub organization that was removed"
-        }
-      },
-      "required": ["subOrganizationUuid"]
     },
     "v1DeleteTvcAppAndDeploymentsIntent": {
       "type": "object",
@@ -3378,32 +1961,12 @@
       },
       "required": ["appId"]
     },
-    "v1DeleteTvcAppAndDeploymentsResult": {
-      "type": "object",
-      "properties": {
-        "appId": {
-          "type": "string",
-          "description": "The unique identifier of the deleted TVC app."
-        }
-      },
-      "required": ["appId"]
-    },
     "v1DeleteTvcDeploymentIntent": {
       "type": "object",
       "properties": {
         "deploymentId": {
           "type": "string",
           "description": "The unique identifier of the TVC deployment to delete."
-        }
-      },
-      "required": ["deploymentId"]
-    },
-    "v1DeleteTvcDeploymentResult": {
-      "type": "object",
-      "properties": {
-        "deploymentId": {
-          "type": "string",
-          "description": "The unique identifier of the deleted TVC deployment."
         }
       },
       "required": ["deploymentId"]
@@ -3421,40 +1984,7 @@
       },
       "required": ["userTagIds"]
     },
-    "v1DeleteUserTagsResult": {
-      "type": "object",
-      "properties": {
-        "userTagIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User Tag IDs."
-        },
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User IDs."
-        }
-      },
-      "required": ["userTagIds", "userIds"]
-    },
     "v1DeleteUsersIntent": {
-      "type": "object",
-      "properties": {
-        "userIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User IDs."
-        }
-      },
-      "required": ["userIds"]
-    },
-    "v1DeleteUsersResult": {
       "type": "object",
       "properties": {
         "userIds": {
@@ -3475,20 +2005,7 @@
           "items": {
             "type": "string"
           },
-          "description": "List of unique identifiers for Velocity Controls within an Organization."
-        }
-      },
-      "required": ["velocityControlIds"]
-    },
-    "v1DeleteVelocityControlsResult": {
-      "type": "object",
-      "properties": {
-        "velocityControlIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of unique identifiers for the deleted Velocity Controls."
+          "description": "List of 1 to 32 unique identifiers for Velocity Controls within an Organization."
         }
       },
       "required": ["velocityControlIds"]
@@ -3510,19 +2027,6 @@
       },
       "required": ["walletAccountIds"]
     },
-    "v1DeleteWalletAccountsResult": {
-      "type": "object",
-      "properties": {
-        "walletAccountIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of wallet account unique identifiers that were removed"
-        }
-      },
-      "required": ["walletAccountIds"]
-    },
     "v1DeleteWalletsIntent": {
       "type": "object",
       "properties": {
@@ -3540,19 +2044,6 @@
       },
       "required": ["walletIds"]
     },
-    "v1DeleteWalletsResult": {
-      "type": "object",
-      "properties": {
-        "walletIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of wallet unique identifiers that were removed"
-        }
-      },
-      "required": ["walletIds"]
-    },
     "v1DeleteWebhookEndpointIntent": {
       "type": "object",
       "properties": {
@@ -3563,33 +2054,10 @@
       },
       "required": ["endpointId"]
     },
-    "v1DeleteWebhookEndpointResult": {
-      "type": "object",
-      "properties": {
-        "endpointId": {
-          "type": "string",
-          "description": "Unique identifier of the deleted webhook endpoint."
-        }
-      },
-      "required": ["endpointId"]
-    },
     "v1DisableAuthProxyIntent": {
       "type": "object"
     },
-    "v1DisableAuthProxyResult": {
-      "type": "object"
-    },
     "v1DisablePrivateKeyIntent": {
-      "type": "object",
-      "properties": {
-        "privateKeyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Private Key."
-        }
-      },
-      "required": ["privateKeyId"]
-    },
-    "v1DisablePrivateKeyResult": {
       "type": "object",
       "properties": {
         "privateKeyId": {
@@ -3616,16 +2084,6 @@
         }
       },
       "required": ["signWith", "caip2"]
-    },
-    "v1EarnClaimRewardsResult": {
-      "type": "object",
-      "properties": {
-        "claimRequestId": {
-          "type": "string",
-          "description": "Identifier to poll claim status and tx hash via GetEarnClaimRewardsStatus."
-        }
-      },
-      "required": ["claimRequestId"]
     },
     "v1EarnDeployWrapperIntent": {
       "type": "object",
@@ -3660,24 +2118,6 @@
         }
       },
       "required": ["vaultAddress", "caip2", "clientFeeBps", "clientFeeWallet"]
-    },
-    "v1EarnDeployWrapperResult": {
-      "type": "object",
-      "properties": {
-        "wrapperAddress": {
-          "type": "string",
-          "description": "Address of the deployed fee wrapper (the deposit target)."
-        },
-        "splitterAddress": {
-          "type": "string",
-          "description": "Address of the deployed fee splitter (PaymentSplitter for Morpho, RevenueSplitterOwner for Aave)."
-        },
-        "deployRequestId": {
-          "type": "string",
-          "description": "Identifier to poll deploy status."
-        }
-      },
-      "required": ["wrapperAddress", "splitterAddress", "deployRequestId"]
     },
     "v1EarnDepositIntent": {
       "type": "object",
@@ -3717,16 +2157,6 @@
       },
       "required": ["wrapperAddress", "signWith", "assets", "caip2"]
     },
-    "v1EarnDepositResult": {
-      "type": "object",
-      "properties": {
-        "depositRequestId": {
-          "type": "string",
-          "description": "Identifier to poll deposit status and tx hash via GetEarnDepositStatus."
-        }
-      },
-      "required": ["depositRequestId"]
-    },
     "v1EarnSetWrapperStateIntent": {
       "type": "object",
       "properties": {
@@ -3737,20 +2167,6 @@
         "depositsDisabled": {
           "type": "boolean",
           "description": "When true, deposits to this wrapper are rejected; withdrawals are unaffected. Set to false to re-enable deposits."
-        }
-      },
-      "required": ["wrapperAddress", "depositsDisabled"]
-    },
-    "v1EarnSetWrapperStateResult": {
-      "type": "object",
-      "properties": {
-        "wrapperAddress": {
-          "type": "string",
-          "description": "Address of the updated Earn wrapper."
-        },
-        "depositsDisabled": {
-          "type": "boolean",
-          "description": "The wrapper's deposit state after this activity."
         }
       },
       "required": ["wrapperAddress", "depositsDisabled"]
@@ -3792,16 +2208,6 @@
         }
       },
       "required": ["wrapperAddress", "signWith", "caip2", "amountValue"]
-    },
-    "v1EarnWithdrawResult": {
-      "type": "object",
-      "properties": {
-        "withdrawRequestId": {
-          "type": "string",
-          "description": "Identifier to poll withdrawal status and tx hash via GetEarnWithdrawStatus."
-        }
-      },
-      "required": ["withdrawRequestId"]
     },
     "v1Effect": {
       "type": "string",
@@ -3959,20 +2365,6 @@
       },
       "required": ["email", "targetPublicKey", "emailCustomization"]
     },
-    "v1EmailAuthResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for the authenticating User."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for the created API key."
-        }
-      },
-      "required": ["userId", "apiKeyId"]
-    },
     "v1EmailCustomizationParams": {
       "type": "object",
       "properties": {
@@ -4021,16 +2413,6 @@
     },
     "v1EnableAuthProxyIntent": {
       "type": "object"
-    },
-    "v1EnableAuthProxyResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "A User ID with permission to initiate authentication."
-        }
-      },
-      "required": ["userId"]
     },
     "v1EthCallParams": {
       "type": "object",
@@ -4085,16 +2467,6 @@
         }
       },
       "required": ["signedTransaction", "caip2"]
-    },
-    "v1EthSendRawTransactionResult": {
-      "type": "object",
-      "properties": {
-        "transactionHash": {
-          "type": "string",
-          "description": "The transaction hash of the sent transaction"
-        }
-      },
-      "required": ["transactionHash"]
     },
     "v1EthSendTransactionIntent": {
       "type": "object",
@@ -4244,26 +2616,6 @@
       },
       "required": ["from", "caip2", "calls"]
     },
-    "v1EthSendTransactionResult": {
-      "type": "object",
-      "properties": {
-        "sendTransactionStatusId": {
-          "type": "string",
-          "description": "The send_transaction_status ID associated with the transaction submission"
-        }
-      },
-      "required": ["sendTransactionStatusId"]
-    },
-    "v1EthSendTransactionResultV2": {
-      "type": "object",
-      "properties": {
-        "sendTransactionStatusId": {
-          "type": "string",
-          "description": "The send_transaction_status ID associated with the transaction submission"
-        }
-      },
-      "required": ["sendTransactionStatusId"]
-    },
     "v1EthUndelegate7702Intent": {
       "type": "object",
       "properties": {
@@ -4313,16 +2665,6 @@
         }
       },
       "required": ["from", "caip2"]
-    },
-    "v1EthUndelegate7702Result": {
-      "type": "object",
-      "properties": {
-        "sendTransactionStatusId": {
-          "type": "string",
-          "description": "The send_transaction_status ID associated with the undelegation transaction submission"
-        }
-      },
-      "required": ["sendTransactionStatusId"]
     },
     "v1ExecuteSwapIntent": {
       "type": "object",
@@ -4480,24 +2822,6 @@
         "sponsor"
       ]
     },
-    "v1ExecuteSwapResult": {
-      "type": "object",
-      "properties": {
-        "swapRequestId": {
-          "type": "string",
-          "description": "Identifier to poll swap status via GetSwapStatus."
-        },
-        "provider": {
-          "type": "string",
-          "description": "Swap provider used to build the transaction."
-        },
-        "quoteId": {
-          "type": "string",
-          "description": "Quote identifier used for execution, if any."
-        }
-      },
-      "required": ["swapRequestId"]
-    },
     "v1ExportPrivateKeyIntent": {
       "type": "object",
       "properties": {
@@ -4511,20 +2835,6 @@
         }
       },
       "required": ["privateKeyId", "targetPublicKey"]
-    },
-    "v1ExportPrivateKeyResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Private Key."
-        },
-        "exportBundle": {
-          "type": "string",
-          "description": "Export bundle containing a private key encrypted to the client's target public key."
-        }
-      },
-      "required": ["privateKeyId", "exportBundle"]
     },
     "v1ExportSecretParams": {
       "type": "object",
@@ -4566,19 +2876,6 @@
       },
       "required": ["secrets"]
     },
-    "v1ExportSecretsResult": {
-      "type": "object",
-      "properties": {
-        "secretPayloads": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Encryption suite specific payload containing each secret ciphertext, in the order the params were specified. For enclave encrypt v1 each entry is a JSON-encoded ServerSendMsg."
-        }
-      },
-      "required": ["secretPayloads"]
-    },
     "v1ExportWalletAccountIntent": {
       "type": "object",
       "properties": {
@@ -4592,20 +2889,6 @@
         }
       },
       "required": ["address", "targetPublicKey"]
-    },
-    "v1ExportWalletAccountResult": {
-      "type": "object",
-      "properties": {
-        "address": {
-          "type": "string",
-          "description": "Address to identify Wallet Account."
-        },
-        "exportBundle": {
-          "type": "string",
-          "description": "Export bundle containing a private key encrypted by the client's target public key."
-        }
-      },
-      "required": ["address", "exportBundle"]
     },
     "v1ExportWalletIntent": {
       "type": "object",
@@ -4625,59 +2908,39 @@
       },
       "required": ["walletId", "targetPublicKey"]
     },
-    "v1ExportWalletResult": {
+    "v1ExternalSignerProof": {
       "type": "object",
       "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "Unique identifier for a given Wallet."
-        },
-        "exportBundle": {
-          "type": "string",
-          "description": "Export bundle containing a wallet mnemonic + optional newline passphrase encrypted by the client's target public key."
-        }
-      },
-      "required": ["walletId", "exportBundle"]
-    },
-    "v1ExternalSignerTask": {
-      "type": "object",
-      "properties": {
-        "taskId": {
-          "type": "string",
-          "description": "Unique identifier for a given external signer task."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for the user associated with the external signer task."
-        },
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for the organization associated with the external signer task."
-        },
-        "activity": {
-          "$ref": "#/definitions/v1Activity",
-          "description": "The activity associated with the external signer task."
+        "payload": {
+          "$ref": "#/definitions/v1ExternalSignerProofPayloadV1",
+          "description": "ExternalSignerPayloadV1."
         },
         "signature": {
-          "$ref": "#/definitions/externalcryptov1Signature",
-          "description": "Ump signature associated with the external signer task."
+          "$ref": "#/definitions/v1Signature"
         }
       },
-      "required": [
-        "taskId",
-        "userId",
-        "organizationId",
-        "activity",
-        "signature"
-      ]
+      "required": ["payload"]
     },
-    "v1Feature": {
+    "v1ExternalSignerProofPayloadV1": {
       "type": "object",
       "properties": {
-        "name": {
-          "$ref": "#/definitions/v1FeatureName"
+        "intent": {
+          "$ref": "#/definitions/v1Intent"
         },
-        "value": {
+        "timestamp": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "organizationDigest": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "string"
+        },
+        "externalSignerPubkey": {
+          "type": "string"
+        },
+        "taskId": {
           "type": "string"
         }
       }
@@ -4703,7 +2966,6 @@
     "v1FiatOnRampBlockchainNetwork": {
       "type": "string",
       "enum": [
-        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BITCOIN",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_ETHEREUM",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_SOLANA",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BASE"
@@ -4796,7 +3058,7 @@
         "maxTasks": {
           "type": "integer",
           "format": "int64",
-          "description": "Maximum number of tasks to retrieve."
+          "description": "Maximum number of tasks to retrieve. (Maximum 10)"
         }
       },
       "required": ["organizationId", "externalSignerPublicKey", "maxTasks"]
@@ -4808,12 +3070,21 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1ExternalSignerTask"
+            "$ref": "#/definitions/v1ExternalSignerProof"
           },
           "description": "List of external signer tasks."
         }
       },
       "required": ["tasks"]
+    },
+    "v1HashFunction": {
+      "type": "string",
+      "enum": [
+        "HASH_FUNCTION_NO_OP",
+        "HASH_FUNCTION_SHA256",
+        "HASH_FUNCTION_KECCAK256",
+        "HASH_FUNCTION_NOT_APPLICABLE"
+      ]
     },
     "v1ImportPrivateKeyIntent": {
       "type": "object",
@@ -4849,24 +3120,6 @@
         "curve",
         "addressFormats"
       ]
-    },
-    "v1ImportPrivateKeyResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyId": {
-          "type": "string",
-          "description": "Unique identifier for a Private Key."
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/immutableactivityv1Address"
-          },
-          "description": "A list of addresses."
-        }
-      },
-      "required": ["privateKeyId", "addresses"]
     },
     "v1ImportSecretParams": {
       "type": "object",
@@ -4912,19 +3165,6 @@
       },
       "required": ["secrets"]
     },
-    "v1ImportSecretsResult": {
-      "type": "object",
-      "properties": {
-        "secretIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Unique identifier for each imported secret, in the order the params were specified."
-        }
-      },
-      "required": ["secretIds"]
-    },
     "v1ImportWalletIntent": {
       "type": "object",
       "properties": {
@@ -4950,23 +3190,6 @@
         }
       },
       "required": ["userId", "walletName", "encryptedBundle", "accounts"]
-    },
-    "v1ImportWalletResult": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "Unique identifier for a Wallet."
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of account addresses."
-        }
-      },
-      "required": ["walletId", "addresses"]
     },
     "v1InitFiatOnRampIntent": {
       "type": "object",
@@ -5023,24 +3246,6 @@
         "cryptoCurrencyCode"
       ]
     },
-    "v1InitFiatOnRampResult": {
-      "type": "object",
-      "properties": {
-        "onRampUrl": {
-          "type": "string",
-          "description": "Unique URL for a given fiat on-ramp flow."
-        },
-        "onRampTransactionId": {
-          "type": "string",
-          "description": "Unique identifier used to retrieve transaction statuses for a given fiat on-ramp flow."
-        },
-        "onRampUrlSignature": {
-          "type": "string",
-          "description": "Optional signature of the MoonPay Widget URL. The signature is generated if the Init Fiat On Ramp intent includes the urlForSignature field. The signature can be used to initialize the MoonPay SDKs when URL signing is enabled for your project."
-        }
-      },
-      "required": ["onRampUrl", "onRampTransactionId"]
-    },
     "v1InitImportPrivateKeyIntent": {
       "type": "object",
       "properties": {
@@ -5050,16 +3255,6 @@
         }
       },
       "required": ["userId"]
-    },
-    "v1InitImportPrivateKeyResult": {
-      "type": "object",
-      "properties": {
-        "importBundle": {
-          "type": "string",
-          "description": "Import bundle containing a public key and signature to use for importing client data."
-        }
-      },
-      "required": ["importBundle"]
     },
     "v1InitImportSecretsIntent": {
       "type": "object",
@@ -5076,19 +3271,6 @@
       },
       "required": ["encryptionSuite", "numSecrets"]
     },
-    "v1InitImportSecretsResult": {
-      "type": "object",
-      "properties": {
-        "enclaveTargetMessages": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Enclave ingress target keys along with metadata specific to the encryption suite. For enclave encrypt v1 this will be ServerTargetMsgV1."
-        }
-      },
-      "required": ["enclaveTargetMessages"]
-    },
     "v1InitImportWalletIntent": {
       "type": "object",
       "properties": {
@@ -5098,16 +3280,6 @@
         }
       },
       "required": ["userId"]
-    },
-    "v1InitImportWalletResult": {
-      "type": "object",
-      "properties": {
-        "importBundle": {
-          "type": "string",
-          "description": "Import bundle containing a public key and signature to use for importing client data."
-        }
-      },
-      "required": ["importBundle"]
     },
     "v1InitOtpAuthIntent": {
       "type": "object",
@@ -5248,26 +3420,6 @@
         }
       },
       "required": ["otpType", "contact", "appName"]
-    },
-    "v1InitOtpAuthResult": {
-      "type": "object",
-      "properties": {
-        "otpId": {
-          "type": "string",
-          "description": "Unique identifier for an OTP authentication"
-        }
-      },
-      "required": ["otpId"]
-    },
-    "v1InitOtpAuthResultV2": {
-      "type": "object",
-      "properties": {
-        "otpId": {
-          "type": "string",
-          "description": "Unique identifier for an OTP authentication"
-        }
-      },
-      "required": ["otpId"]
     },
     "v1InitOtpIntent": {
       "type": "object",
@@ -5430,30 +3582,6 @@
       },
       "required": ["otpType", "contact", "appName"]
     },
-    "v1InitOtpResult": {
-      "type": "object",
-      "properties": {
-        "otpId": {
-          "type": "string",
-          "description": "Unique identifier for an OTP authentication"
-        }
-      },
-      "required": ["otpId"]
-    },
-    "v1InitOtpResultV2": {
-      "type": "object",
-      "properties": {
-        "otpId": {
-          "type": "string",
-          "description": "Unique identifier for an OTP flow"
-        },
-        "otpEncryptionTargetBundle": {
-          "type": "string",
-          "description": "Signed bundle containing a target encryption key to use when submitting OTP codes."
-        }
-      },
-      "required": ["otpId", "otpEncryptionTargetBundle"]
-    },
     "v1InitUserEmailRecoveryIntent": {
       "type": "object",
       "properties": {
@@ -5521,16 +3649,6 @@
         }
       },
       "required": ["email", "targetPublicKey", "emailCustomization"]
-    },
-    "v1InitUserEmailRecoveryResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for the user being recovered."
-        }
-      },
-      "required": ["userId"]
     },
     "v1Intent": {
       "type": "object",
@@ -6050,6 +4168,9 @@
         },
         "upsertSwapFixedRateLimitConfigIntent": {
           "$ref": "#/definitions/v1UpsertSwapFixedRateLimitConfigIntent"
+        },
+        "createFiatOnRampSessionIntent": {
+          "$ref": "#/definitions/v1CreateFiatOnRampSessionIntent"
         }
       }
     },
@@ -6113,55 +4234,6 @@
         }
       }
     },
-    "v1MfaPolicy": {
-      "type": "object",
-      "properties": {
-        "mfaPolicyId": {
-          "type": "string",
-          "description": "Unique identifier for a given MFA Policy."
-        },
-        "mfaPolicyName": {
-          "type": "string",
-          "description": "Human-readable name for an MFA Policy."
-        },
-        "condition": {
-          "type": "string",
-          "description": "A condition expression that evaluates to true or false, determining when this MFA policy applies."
-        },
-        "requiredAuthenticationMethods": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1RequiredAuthenticationMethod"
-          },
-          "description": "An ordered list of authentication requirements. Each requirement must be satisfied sequentially to complete MFA."
-        },
-        "order": {
-          "type": "integer",
-          "format": "int64",
-          "description": "The order in which this policy is evaluated relative to other MFA policies."
-        },
-        "notes": {
-          "type": "string",
-          "description": "Optional human-readable notes added by a User to describe a particular MFA policy."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        }
-      },
-      "required": [
-        "mfaPolicyId",
-        "mfaPolicyName",
-        "condition",
-        "requiredAuthenticationMethods",
-        "order",
-        "createdAt",
-        "updatedAt"
-      ]
-    },
     "v1MnemonicLanguage": {
       "type": "string",
       "enum": [
@@ -6211,16 +4283,6 @@
         "codeVerifier",
         "nonce"
       ]
-    },
-    "v1Oauth2AuthenticateResult": {
-      "type": "object",
-      "properties": {
-        "oidcToken": {
-          "type": "string",
-          "description": "Base64 encoded OIDC token issued by Turnkey to be used with the LoginWithOAuth activity"
-        }
-      },
-      "required": ["oidcToken"]
     },
     "v1Oauth2Provider": {
       "type": "string",
@@ -6278,56 +4340,6 @@
       },
       "required": ["oidcToken", "publicKey"]
     },
-    "v1OauthLoginResult": {
-      "type": "object",
-      "properties": {
-        "session": {
-          "type": "string",
-          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
-        }
-      },
-      "required": ["session"]
-    },
-    "v1OauthProvider": {
-      "type": "object",
-      "properties": {
-        "providerId": {
-          "type": "string",
-          "description": "Unique identifier for an OAuth Provider"
-        },
-        "providerName": {
-          "type": "string",
-          "description": "Human-readable name to identify a Provider."
-        },
-        "issuer": {
-          "type": "string",
-          "description": "The issuer of the token, typically a URL indicating the authentication server, e.g https://accounts.google.com"
-        },
-        "audience": {
-          "type": "string",
-          "description": "Expected audience ('aud' attribute of the signed token) which represents the app ID"
-        },
-        "subject": {
-          "type": "string",
-          "description": "Expected subject ('sub' attribute of the signed token) which represents the user ID"
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        }
-      },
-      "required": [
-        "providerId",
-        "providerName",
-        "issuer",
-        "audience",
-        "subject",
-        "createdAt",
-        "updatedAt"
-      ]
-    },
     "v1OauthProviderParams": {
       "type": "object",
       "properties": {
@@ -6359,24 +4371,6 @@
         }
       },
       "required": ["providerName"]
-    },
-    "v1OauthResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for the authenticating User."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for the created API key."
-        },
-        "credentialBundle": {
-          "type": "string",
-          "description": "HPKE encrypted credential bundle"
-        }
-      },
-      "required": ["userId", "apiKeyId", "credentialBundle"]
     },
     "v1OidcClaims": {
       "type": "object",
@@ -6442,24 +4436,6 @@
       },
       "required": ["otpId", "otpCode", "targetPublicKey"]
     },
-    "v1OtpAuthResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for the authenticating User."
-        },
-        "apiKeyId": {
-          "type": "string",
-          "description": "Unique identifier for the created API key."
-        },
-        "credentialBundle": {
-          "type": "string",
-          "description": "HPKE encrypted credential bundle"
-        }
-      },
-      "required": ["userId"]
-    },
     "v1OtpLoginIntent": {
       "type": "object",
       "properties": {
@@ -6520,19 +4496,18 @@
       },
       "required": ["verificationToken", "publicKey", "clientSignature"]
     },
-    "v1OtpLoginResult": {
-      "type": "object",
-      "properties": {
-        "session": {
-          "type": "string",
-          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
-        }
-      },
-      "required": ["session"]
-    },
     "v1PathFormat": {
       "type": "string",
       "enum": ["PATH_FORMAT_BIP32"]
+    },
+    "v1PayloadEncoding": {
+      "type": "string",
+      "enum": [
+        "PAYLOAD_ENCODING_HEXADECIMAL",
+        "PAYLOAD_ENCODING_TEXT_UTF8",
+        "PAYLOAD_ENCODING_EIP712",
+        "PAYLOAD_ENCODING_EIP7702_AUTHORIZATION"
+      ]
     },
     "v1PostTvcQuorumKeyShareIntent": {
       "type": "object",
@@ -6555,16 +4530,6 @@
         "ephemeralPublicKeyHex",
         "shareApprovalBundle"
       ]
-    },
-    "v1PostTvcQuorumKeyShareResult": {
-      "type": "object",
-      "properties": {
-        "provisioningShareId": {
-          "type": "string",
-          "description": "The unique identifier for the provisioning quorum key share"
-        }
-      },
-      "required": ["provisioningShareId"]
     },
     "v1PrivateKeyParams": {
       "type": "object",
@@ -6598,21 +4563,6 @@
         "privateKeyTags",
         "addressFormats"
       ]
-    },
-    "v1PrivateKeyResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyId": {
-          "type": "string"
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/immutableactivityv1Address"
-          }
-        }
-      }
     },
     "v1PublicKeyCredentialWithAttestation": {
       "type": "object",
@@ -6696,16 +4646,6 @@
         "appQuorumKey"
       ]
     },
-    "v1ReEncryptTvcQuorumKeyShareResult": {
-      "type": "object",
-      "properties": {
-        "provisioningShareId": {
-          "type": "string",
-          "description": "The unique identifier for the provisioning quorum key share"
-        }
-      },
-      "required": ["provisioningShareId"]
-    },
     "v1RecoverUserIntent": {
       "type": "object",
       "properties": {
@@ -6719,19 +4659,6 @@
         }
       },
       "required": ["authenticator", "userId"]
-    },
-    "v1RecoverUserResult": {
-      "type": "object",
-      "properties": {
-        "authenticatorId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "ID of the authenticator created."
-        }
-      },
-      "required": ["authenticatorId"]
     },
     "v1RejectActivityIntent": {
       "type": "object",
@@ -6752,9 +4679,6 @@
         }
       }
     },
-    "v1RemoveIpAllowlistResult": {
-      "type": "object"
-    },
     "v1RemoveOrganizationFeatureIntent": {
       "type": "object",
       "properties": {
@@ -6764,34 +4688,6 @@
         }
       },
       "required": ["name"]
-    },
-    "v1RemoveOrganizationFeatureResult": {
-      "type": "object",
-      "properties": {
-        "features": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Feature"
-          },
-          "description": "Resulting list of organization features."
-        }
-      },
-      "required": ["features"]
-    },
-    "v1RequiredAuthenticationMethod": {
-      "type": "object",
-      "properties": {
-        "any": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1AuthenticationMethod"
-          },
-          "description": "A list of authentication methods for this MFA step. If only one method is provided, it is required. If multiple are provided, the user must satisfy ANY one of them."
-        }
-      },
-      "required": ["any"]
     },
     "v1RequiredAuthenticationMethodParams": {
       "type": "object",
@@ -6816,462 +4712,6 @@
         }
       },
       "required": ["deploymentId"]
-    },
-    "v1RestoreTvcDeploymentResult": {
-      "type": "object",
-      "properties": {
-        "deploymentId": {
-          "type": "string",
-          "description": "The unique identifier of the restored TVC deployment."
-        }
-      },
-      "required": ["deploymentId"]
-    },
-    "v1Result": {
-      "type": "object",
-      "properties": {
-        "createOrganizationResult": {
-          "$ref": "#/definitions/v1CreateOrganizationResult"
-        },
-        "createAuthenticatorsResult": {
-          "$ref": "#/definitions/v1CreateAuthenticatorsResult"
-        },
-        "createUsersResult": {
-          "$ref": "#/definitions/v1CreateUsersResult"
-        },
-        "createPrivateKeysResult": {
-          "$ref": "#/definitions/v1CreatePrivateKeysResult"
-        },
-        "createInvitationsResult": {
-          "$ref": "#/definitions/v1CreateInvitationsResult"
-        },
-        "acceptInvitationResult": {
-          "$ref": "#/definitions/v1AcceptInvitationResult"
-        },
-        "signRawPayloadResult": {
-          "$ref": "#/definitions/v1SignRawPayloadResult"
-        },
-        "createPolicyResult": {
-          "$ref": "#/definitions/v1CreatePolicyResult"
-        },
-        "disablePrivateKeyResult": {
-          "$ref": "#/definitions/v1DisablePrivateKeyResult"
-        },
-        "deleteUsersResult": {
-          "$ref": "#/definitions/v1DeleteUsersResult"
-        },
-        "deleteAuthenticatorsResult": {
-          "$ref": "#/definitions/v1DeleteAuthenticatorsResult"
-        },
-        "deleteInvitationResult": {
-          "$ref": "#/definitions/v1DeleteInvitationResult"
-        },
-        "deleteOrganizationResult": {
-          "$ref": "#/definitions/v1DeleteOrganizationResult"
-        },
-        "deletePolicyResult": {
-          "$ref": "#/definitions/v1DeletePolicyResult"
-        },
-        "createUserTagResult": {
-          "$ref": "#/definitions/v1CreateUserTagResult"
-        },
-        "deleteUserTagsResult": {
-          "$ref": "#/definitions/v1DeleteUserTagsResult"
-        },
-        "signTransactionResult": {
-          "$ref": "#/definitions/v1SignTransactionResult"
-        },
-        "deleteApiKeysResult": {
-          "$ref": "#/definitions/v1DeleteApiKeysResult"
-        },
-        "createApiKeysResult": {
-          "$ref": "#/definitions/v1CreateApiKeysResult"
-        },
-        "createPrivateKeyTagResult": {
-          "$ref": "#/definitions/v1CreatePrivateKeyTagResult"
-        },
-        "deletePrivateKeyTagsResult": {
-          "$ref": "#/definitions/v1DeletePrivateKeyTagsResult"
-        },
-        "setPaymentMethodResult": {
-          "$ref": "#/definitions/billingSetPaymentMethodResult"
-        },
-        "activateBillingTierResult": {
-          "$ref": "#/definitions/billingActivateBillingTierResult"
-        },
-        "deletePaymentMethodResult": {
-          "$ref": "#/definitions/billingDeletePaymentMethodResult"
-        },
-        "createApiOnlyUsersResult": {
-          "$ref": "#/definitions/v1CreateApiOnlyUsersResult"
-        },
-        "updateRootQuorumResult": {
-          "$ref": "#/definitions/v1UpdateRootQuorumResult"
-        },
-        "updateUserTagResult": {
-          "$ref": "#/definitions/v1UpdateUserTagResult"
-        },
-        "updatePrivateKeyTagResult": {
-          "$ref": "#/definitions/v1UpdatePrivateKeyTagResult"
-        },
-        "createSubOrganizationResult": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResult"
-        },
-        "updateAllowedOriginsResult": {
-          "$ref": "#/definitions/v1UpdateAllowedOriginsResult"
-        },
-        "createPrivateKeysResultV2": {
-          "$ref": "#/definitions/v1CreatePrivateKeysResultV2"
-        },
-        "updateUserResult": {
-          "$ref": "#/definitions/v1UpdateUserResult"
-        },
-        "updatePolicyResult": {
-          "$ref": "#/definitions/v1UpdatePolicyResult"
-        },
-        "createSubOrganizationResultV3": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV3"
-        },
-        "createWalletResult": {
-          "$ref": "#/definitions/v1CreateWalletResult"
-        },
-        "createWalletAccountsResult": {
-          "$ref": "#/definitions/v1CreateWalletAccountsResult"
-        },
-        "initUserEmailRecoveryResult": {
-          "$ref": "#/definitions/v1InitUserEmailRecoveryResult"
-        },
-        "recoverUserResult": {
-          "$ref": "#/definitions/v1RecoverUserResult"
-        },
-        "setOrganizationFeatureResult": {
-          "$ref": "#/definitions/v1SetOrganizationFeatureResult"
-        },
-        "removeOrganizationFeatureResult": {
-          "$ref": "#/definitions/v1RemoveOrganizationFeatureResult"
-        },
-        "exportPrivateKeyResult": {
-          "$ref": "#/definitions/v1ExportPrivateKeyResult"
-        },
-        "exportWalletResult": {
-          "$ref": "#/definitions/v1ExportWalletResult"
-        },
-        "createSubOrganizationResultV4": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV4"
-        },
-        "emailAuthResult": {
-          "$ref": "#/definitions/v1EmailAuthResult"
-        },
-        "exportWalletAccountResult": {
-          "$ref": "#/definitions/v1ExportWalletAccountResult"
-        },
-        "initImportWalletResult": {
-          "$ref": "#/definitions/v1InitImportWalletResult"
-        },
-        "importWalletResult": {
-          "$ref": "#/definitions/v1ImportWalletResult"
-        },
-        "initImportPrivateKeyResult": {
-          "$ref": "#/definitions/v1InitImportPrivateKeyResult"
-        },
-        "importPrivateKeyResult": {
-          "$ref": "#/definitions/v1ImportPrivateKeyResult"
-        },
-        "createPoliciesResult": {
-          "$ref": "#/definitions/v1CreatePoliciesResult"
-        },
-        "signRawPayloadsResult": {
-          "$ref": "#/definitions/v1SignRawPayloadsResult"
-        },
-        "createReadOnlySessionResult": {
-          "$ref": "#/definitions/v1CreateReadOnlySessionResult"
-        },
-        "createOauthProvidersResult": {
-          "$ref": "#/definitions/v1CreateOauthProvidersResult"
-        },
-        "deleteOauthProvidersResult": {
-          "$ref": "#/definitions/v1DeleteOauthProvidersResult"
-        },
-        "createSubOrganizationResultV5": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV5"
-        },
-        "oauthResult": {
-          "$ref": "#/definitions/v1OauthResult"
-        },
-        "createReadWriteSessionResult": {
-          "$ref": "#/definitions/v1CreateReadWriteSessionResult"
-        },
-        "createSubOrganizationResultV6": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV6"
-        },
-        "deletePrivateKeysResult": {
-          "$ref": "#/definitions/v1DeletePrivateKeysResult"
-        },
-        "deleteWalletsResult": {
-          "$ref": "#/definitions/v1DeleteWalletsResult"
-        },
-        "createReadWriteSessionResultV2": {
-          "$ref": "#/definitions/v1CreateReadWriteSessionResultV2"
-        },
-        "deleteSubOrganizationResult": {
-          "$ref": "#/definitions/v1DeleteSubOrganizationResult"
-        },
-        "initOtpAuthResult": {
-          "$ref": "#/definitions/v1InitOtpAuthResult"
-        },
-        "otpAuthResult": {
-          "$ref": "#/definitions/v1OtpAuthResult"
-        },
-        "createSubOrganizationResultV7": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV7"
-        },
-        "updateWalletResult": {
-          "$ref": "#/definitions/v1UpdateWalletResult"
-        },
-        "updatePolicyResultV2": {
-          "$ref": "#/definitions/v1UpdatePolicyResultV2"
-        },
-        "initOtpAuthResultV2": {
-          "$ref": "#/definitions/v1InitOtpAuthResultV2"
-        },
-        "initOtpResult": {
-          "$ref": "#/definitions/v1InitOtpResult"
-        },
-        "verifyOtpResult": {
-          "$ref": "#/definitions/v1VerifyOtpResult"
-        },
-        "otpLoginResult": {
-          "$ref": "#/definitions/v1OtpLoginResult"
-        },
-        "stampLoginResult": {
-          "$ref": "#/definitions/v1StampLoginResult"
-        },
-        "oauthLoginResult": {
-          "$ref": "#/definitions/v1OauthLoginResult"
-        },
-        "updateUserNameResult": {
-          "$ref": "#/definitions/v1UpdateUserNameResult"
-        },
-        "updateUserEmailResult": {
-          "$ref": "#/definitions/v1UpdateUserEmailResult"
-        },
-        "updateUserPhoneNumberResult": {
-          "$ref": "#/definitions/v1UpdateUserPhoneNumberResult"
-        },
-        "initFiatOnRampResult": {
-          "$ref": "#/definitions/v1InitFiatOnRampResult"
-        },
-        "createSmartContractInterfaceResult": {
-          "$ref": "#/definitions/v1CreateSmartContractInterfaceResult"
-        },
-        "deleteSmartContractInterfaceResult": {
-          "$ref": "#/definitions/v1DeleteSmartContractInterfaceResult"
-        },
-        "enableAuthProxyResult": {
-          "$ref": "#/definitions/v1EnableAuthProxyResult"
-        },
-        "disableAuthProxyResult": {
-          "$ref": "#/definitions/v1DisableAuthProxyResult"
-        },
-        "updateAuthProxyConfigResult": {
-          "$ref": "#/definitions/v1UpdateAuthProxyConfigResult"
-        },
-        "createOauth2CredentialResult": {
-          "$ref": "#/definitions/v1CreateOauth2CredentialResult"
-        },
-        "updateOauth2CredentialResult": {
-          "$ref": "#/definitions/v1UpdateOauth2CredentialResult"
-        },
-        "deleteOauth2CredentialResult": {
-          "$ref": "#/definitions/v1DeleteOauth2CredentialResult"
-        },
-        "oauth2AuthenticateResult": {
-          "$ref": "#/definitions/v1Oauth2AuthenticateResult"
-        },
-        "deleteWalletAccountsResult": {
-          "$ref": "#/definitions/v1DeleteWalletAccountsResult"
-        },
-        "deletePoliciesResult": {
-          "$ref": "#/definitions/v1DeletePoliciesResult"
-        },
-        "ethSendRawTransactionResult": {
-          "$ref": "#/definitions/v1EthSendRawTransactionResult"
-        },
-        "createFiatOnRampCredentialResult": {
-          "$ref": "#/definitions/v1CreateFiatOnRampCredentialResult"
-        },
-        "updateFiatOnRampCredentialResult": {
-          "$ref": "#/definitions/v1UpdateFiatOnRampCredentialResult"
-        },
-        "deleteFiatOnRampCredentialResult": {
-          "$ref": "#/definitions/v1DeleteFiatOnRampCredentialResult"
-        },
-        "ethSendTransactionResult": {
-          "$ref": "#/definitions/v1EthSendTransactionResult"
-        },
-        "upsertGasUsageConfigResult": {
-          "$ref": "#/definitions/v1UpsertGasUsageConfigResult"
-        },
-        "createTvcAppResult": {
-          "$ref": "#/definitions/v1CreateTvcAppResult"
-        },
-        "createTvcDeploymentResult": {
-          "$ref": "#/definitions/v1CreateTvcDeploymentResult"
-        },
-        "createTvcManifestApprovalsResult": {
-          "$ref": "#/definitions/v1CreateTvcManifestApprovalsResult"
-        },
-        "solSendTransactionResult": {
-          "$ref": "#/definitions/v1SolSendTransactionResult"
-        },
-        "initOtpResultV2": {
-          "$ref": "#/definitions/v1InitOtpResultV2"
-        },
-        "updateOrganizationNameResult": {
-          "$ref": "#/definitions/v1UpdateOrganizationNameResult"
-        },
-        "createSubOrganizationResultV8": {
-          "$ref": "#/definitions/v1CreateSubOrganizationResultV8"
-        },
-        "createOauthProvidersResultV2": {
-          "$ref": "#/definitions/v1CreateOauthProvidersResultV2"
-        },
-        "createWebhookEndpointResult": {
-          "$ref": "#/definitions/v1CreateWebhookEndpointResult"
-        },
-        "updateWebhookEndpointResult": {
-          "$ref": "#/definitions/v1UpdateWebhookEndpointResult"
-        },
-        "deleteWebhookEndpointResult": {
-          "$ref": "#/definitions/v1DeleteWebhookEndpointResult"
-        },
-        "setIpAllowlistResult": {
-          "$ref": "#/definitions/v1SetIpAllowlistResult"
-        },
-        "removeIpAllowlistResult": {
-          "$ref": "#/definitions/v1RemoveIpAllowlistResult"
-        },
-        "updateTvcAppLiveDeploymentResult": {
-          "$ref": "#/definitions/v1UpdateTvcAppLiveDeploymentResult"
-        },
-        "deleteTvcDeploymentResult": {
-          "$ref": "#/definitions/v1DeleteTvcDeploymentResult"
-        },
-        "deleteTvcAppAndDeploymentsResult": {
-          "$ref": "#/definitions/v1DeleteTvcAppAndDeploymentsResult"
-        },
-        "restoreTvcDeploymentResult": {
-          "$ref": "#/definitions/v1RestoreTvcDeploymentResult"
-        },
-        "sparkSignFrostResult": {
-          "$ref": "#/definitions/v1SparkSignFrostResult"
-        },
-        "sparkPrepareTransferResult": {
-          "$ref": "#/definitions/v1SparkPrepareTransferResult"
-        },
-        "sparkClaimTransferResult": {
-          "$ref": "#/definitions/v1SparkClaimTransferResult"
-        },
-        "sparkPrepareLightningReceiveResult": {
-          "$ref": "#/definitions/v1SparkPrepareLightningReceiveResult"
-        },
-        "postTvcQuorumKeyShareResult": {
-          "$ref": "#/definitions/v1PostTvcQuorumKeyShareResult"
-        },
-        "ethSendTransactionResultV2": {
-          "$ref": "#/definitions/v1EthSendTransactionResultV2"
-        },
-        "createMfaPolicyResult": {
-          "$ref": "#/definitions/v1CreateMfaPolicyResult"
-        },
-        "updateMfaPolicyResult": {
-          "$ref": "#/definitions/v1UpdateMfaPolicyResult"
-        },
-        "deleteMfaPolicyResult": {
-          "$ref": "#/definitions/v1DeleteMfaPolicyResult"
-        },
-        "createSessionProfileResult": {
-          "$ref": "#/definitions/v1CreateSessionProfileResult"
-        },
-        "earnDeployWrapperResult": {
-          "$ref": "#/definitions/v1EarnDeployWrapperResult"
-        },
-        "earnDepositResult": {
-          "$ref": "#/definitions/v1EarnDepositResult"
-        },
-        "earnWithdrawResult": {
-          "$ref": "#/definitions/v1EarnWithdrawResult"
-        },
-        "executeSwapResult": {
-          "$ref": "#/definitions/v1ExecuteSwapResult"
-        },
-        "upsertSwapConfigResult": {
-          "$ref": "#/definitions/v1UpsertSwapConfigResult"
-        },
-        "createTvcOperatorResult": {
-          "$ref": "#/definitions/v1CreateTvcOperatorResult"
-        },
-        "createTvcQuorumKeyResult": {
-          "$ref": "#/definitions/v1CreateTvcQuorumKeyResult"
-        },
-        "reEncryptTvcQuorumKeyShareResult": {
-          "$ref": "#/definitions/v1ReEncryptTvcQuorumKeyShareResult"
-        },
-        "initImportSecretsResult": {
-          "$ref": "#/definitions/v1InitImportSecretsResult"
-        },
-        "solSendTransactionResultV2": {
-          "$ref": "#/definitions/v1SolSendTransactionResultV2"
-        },
-        "claimSwapFeesResult": {
-          "$ref": "#/definitions/v1ClaimSwapFeesResult"
-        },
-        "earnSetWrapperStateResult": {
-          "$ref": "#/definitions/v1EarnSetWrapperStateResult"
-        },
-        "claimEarnFeesResult": {
-          "$ref": "#/definitions/v1ClaimEarnFeesResult"
-        },
-        "updateWalletAccountNameResult": {
-          "$ref": "#/definitions/v1UpdateWalletAccountNameResult"
-        },
-        "ethUndelegate7702Result": {
-          "$ref": "#/definitions/v1EthUndelegate7702Result"
-        },
-        "createSwapQuoteResult": {
-          "$ref": "#/definitions/v1CreateSwapQuoteResult"
-        },
-        "importSecretsResult": {
-          "$ref": "#/definitions/v1ImportSecretsResult"
-        },
-        "exportSecretsResult": {
-          "$ref": "#/definitions/v1ExportSecretsResult"
-        },
-        "createVelocityControlResult": {
-          "$ref": "#/definitions/v1CreateVelocityControlResult"
-        },
-        "deleteVelocityControlsResult": {
-          "$ref": "#/definitions/v1DeleteVelocityControlsResult"
-        },
-        "updatePaymentMethodResult": {
-          "$ref": "#/definitions/billingUpdatePaymentMethodResult"
-        },
-        "deleteSecretsResult": {
-          "$ref": "#/definitions/v1DeleteSecretsResult"
-        },
-        "earnClaimRewardsResult": {
-          "$ref": "#/definitions/v1EarnClaimRewardsResult"
-        },
-        "createSwapQuoteResultV2": {
-          "$ref": "#/definitions/v1CreateSwapQuoteResultV2"
-        },
-        "upsertSwapFeeSponsorshipLimitConfigResult": {
-          "$ref": "#/definitions/v1UpsertSwapFeeSponsorshipLimitConfigResult"
-        },
-        "upsertSwapFixedRateLimitConfigResult": {
-          "$ref": "#/definitions/v1UpsertSwapFixedRateLimitConfigResult"
-        }
-      }
     },
     "v1RootUserParams": {
       "type": "object",
@@ -7519,9 +4959,6 @@
         }
       }
     },
-    "v1SetIpAllowlistResult": {
-      "type": "object"
-    },
     "v1SetOrganizationFeatureIntent": {
       "type": "object",
       "properties": {
@@ -7536,20 +4973,6 @@
       },
       "required": ["name", "value"]
     },
-    "v1SetOrganizationFeatureResult": {
-      "type": "object",
-      "properties": {
-        "features": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Feature"
-          },
-          "description": "Resulting list of organization features."
-        }
-      },
-      "required": ["features"]
-    },
     "v1SignRawPayloadIntent": {
       "type": "object",
       "properties": {
@@ -7562,11 +4985,11 @@
           "description": "Raw unsigned payload to be signed."
         },
         "encoding": {
-          "$ref": "#/definitions/immutablecommonv1PayloadEncoding",
+          "$ref": "#/definitions/v1PayloadEncoding",
           "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
         },
         "hashFunction": {
-          "$ref": "#/definitions/immutablecommonv1HashFunction",
+          "$ref": "#/definitions/v1HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
         }
       },
@@ -7584,33 +5007,19 @@
           "description": "Raw unsigned payload to be signed."
         },
         "encoding": {
-          "$ref": "#/definitions/immutablecommonv1PayloadEncoding",
+          "$ref": "#/definitions/v1PayloadEncoding",
           "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
         },
         "hashFunction": {
-          "$ref": "#/definitions/immutablecommonv1HashFunction",
+          "$ref": "#/definitions/v1HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing the payload."
         }
       },
       "required": ["signWith", "payload", "encoding", "hashFunction"]
-    },
-    "v1SignRawPayloadResult": {
-      "type": "object",
-      "properties": {
-        "r": {
-          "type": "string",
-          "description": "Component of a cryptographic signature, meaning varies based on signing scheme."
-        },
-        "s": {
-          "type": "string",
-          "description": "Component of a cryptographic signature, meaning varies based on signing scheme."
-        },
-        "v": {
-          "type": "string",
-          "description": "Recovery ID for ECDSA signatures, \"00\" otherwise."
-        }
-      },
-      "required": ["r", "s", "v"]
     },
     "v1SignRawPayloadsIntent": {
       "type": "object",
@@ -7627,27 +5036,19 @@
           "description": "An array of raw unsigned payloads to be signed."
         },
         "encoding": {
-          "$ref": "#/definitions/immutablecommonv1PayloadEncoding",
+          "$ref": "#/definitions/v1PayloadEncoding",
           "description": "Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8)."
         },
         "hashFunction": {
-          "$ref": "#/definitions/immutablecommonv1HashFunction",
+          "$ref": "#/definitions/v1HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing the payloads."
         }
       },
       "required": ["signWith", "payloads", "encoding", "hashFunction"]
-    },
-    "v1SignRawPayloadsResult": {
-      "type": "object",
-      "properties": {
-        "signatures": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SignRawPayloadResult"
-          }
-        }
-      }
     },
     "v1SignTransactionIntent": {
       "type": "object",
@@ -7679,18 +5080,43 @@
         },
         "type": {
           "$ref": "#/definitions/v1TransactionType"
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing this transaction."
         }
       },
       "required": ["signWith", "unsignedTransaction", "type"]
     },
-    "v1SignTransactionResult": {
+    "v1Signature": {
       "type": "object",
       "properties": {
-        "signedTransaction": {
+        "scheme": {
+          "$ref": "#/definitions/v1SignatureScheme"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "signature": {
           "type": "string"
         }
-      },
-      "required": ["signedTransaction"]
+      }
+    },
+    "v1SignatureScheme": {
+      "type": "string",
+      "enum": [
+        "SIGNATURE_SCHEME_TK_API_P256",
+        "SIGNATURE_SCHEME_TK_WEBAUTHN",
+        "SIGNATURE_SCHEME_TK_QUORUM_P256",
+        "SIGNATURE_SCHEME_TK_API_SECP256K1",
+        "SIGNATURE_SCHEME_TK_API_ED25519",
+        "SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191",
+        "SIGNATURE_SCHEME_TK_ATTESTED_P256",
+        "SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY"
+      ]
     },
     "v1SimpleClientExtensionResults": {
       "type": "object",
@@ -7793,26 +5219,6 @@
       },
       "required": ["unsignedTransaction", "signWiths", "caip2"]
     },
-    "v1SolSendTransactionResult": {
-      "type": "object",
-      "properties": {
-        "sendTransactionStatusId": {
-          "type": "string",
-          "description": "The send_transaction_status ID associated with the transaction submission"
-        }
-      },
-      "required": ["sendTransactionStatusId"]
-    },
-    "v1SolSendTransactionResultV2": {
-      "type": "object",
-      "properties": {
-        "sendTransactionStatusId": {
-          "type": "string",
-          "description": "The send_transaction_status ID associated with the transaction submission"
-        }
-      },
-      "required": ["sendTransactionStatusId"]
-    },
     "v1SolanaConfig": {
       "type": "object",
       "properties": {
@@ -7895,44 +5301,8 @@
       },
       "required": ["signWith", "claim"]
     },
-    "v1SparkClaimTransferResult": {
-      "type": "object",
-      "properties": {
-        "operatorPackages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkEncryptedOperatorPackage"
-          },
-          "description": "Per-operator ECIES-encrypted packages."
-        },
-        "newLeafPublicKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkLeafPublicKey"
-          },
-          "description": "Newly-derived SigningLeaf public keys, one per leaf, in input order."
-        }
-      },
-      "required": ["operatorPackages", "newLeafPublicKeys"]
-    },
     "v1SparkDepositDerivation": {
       "type": "object"
-    },
-    "v1SparkEncryptedOperatorPackage": {
-      "type": "object",
-      "properties": {
-        "operatorId": {
-          "type": "string",
-          "description": "Spark operator identifier (UUID)."
-        },
-        "encryptedPackage": {
-          "type": "string",
-          "description": "ECIES ciphertext (hex-encoded) opaque to Turnkey after emission."
-        }
-      },
-      "required": ["operatorId", "encryptedPackage"]
     },
     "v1SparkFrostCommitment": {
       "type": "object",
@@ -7983,20 +5353,6 @@
         }
       }
     },
-    "v1SparkLeafPublicKey": {
-      "type": "object",
-      "properties": {
-        "leafId": {
-          "type": "string",
-          "description": "The Spark leaf_id this public key was derived for."
-        },
-        "publicKey": {
-          "type": "string",
-          "description": "Hex-encoded compressed secp256k1 point (33 bytes) for the SigningLeaf derivation at leaf_id."
-        }
-      },
-      "required": ["leafId", "publicKey"]
-    },
     "v1SparkLightningReceivePackage": {
       "type": "object",
       "properties": {
@@ -8030,24 +5386,6 @@
       },
       "required": ["operatorId", "encryptionPublicKey"]
     },
-    "v1SparkPartialSignature": {
-      "type": "object",
-      "properties": {
-        "signatureShare": {
-          "type": "string",
-          "description": "Hex-encoded FROST partial signature."
-        },
-        "hiding": {
-          "type": "string",
-          "description": "Turnkey's hiding commitment D (hex-encoded compressed secp256k1 point). Forward to the Spark Operator."
-        },
-        "binding": {
-          "type": "string",
-          "description": "Turnkey's binding commitment E (hex-encoded compressed secp256k1 point). Forward to the Spark Operator."
-        }
-      },
-      "required": ["signatureShare", "hiding", "binding"]
-    },
     "v1SparkPrepareLightningReceiveIntent": {
       "type": "object",
       "properties": {
@@ -8062,24 +5400,6 @@
       },
       "required": ["signWith", "lightningReceive"]
     },
-    "v1SparkPrepareLightningReceiveResult": {
-      "type": "object",
-      "properties": {
-        "operatorPackages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkEncryptedOperatorPackage"
-          },
-          "description": "Per-operator ECIES-encrypted Feldman share packages."
-        },
-        "paymentHash": {
-          "type": "string",
-          "description": "Hex-encoded SHA256(preimage). Forward to the Lightning node."
-        }
-      },
-      "required": ["operatorPackages", "paymentHash"]
-    },
     "v1SparkPrepareTransferIntent": {
       "type": "object",
       "properties": {
@@ -8093,36 +5413,6 @@
         }
       },
       "required": ["signWith", "transfer"]
-    },
-    "v1SparkPrepareTransferResult": {
-      "type": "object",
-      "properties": {
-        "operatorPackages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkEncryptedOperatorPackage"
-          },
-          "description": "Per-operator ECIES-encrypted packages."
-        },
-        "transferUserSignature": {
-          "type": "string",
-          "description": "Hex-encoded ECDSA-DER signature of the TransferPackage signing payload, signed with the wallet's IDENTITY key."
-        },
-        "newLeafPublicKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkLeafPublicKey"
-          },
-          "description": "Newly-derived SigningLeaf public keys, one per leaf, in input order."
-        }
-      },
-      "required": [
-        "operatorPackages",
-        "transferUserSignature",
-        "newLeafPublicKeys"
-      ]
     },
     "v1SparkSignFrostIntent": {
       "type": "object",
@@ -8141,20 +5431,6 @@
         }
       },
       "required": ["signWith", "signatures"]
-    },
-    "v1SparkSignFrostResult": {
-      "type": "object",
-      "properties": {
-        "signatures": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1SparkPartialSignature"
-          },
-          "description": "Partial signatures plus Turnkey commitments, one per request, in order."
-        }
-      },
-      "required": ["signatures"]
     },
     "v1SparkSignatureRequest": {
       "type": "object",
@@ -8305,127 +5581,6 @@
       },
       "required": ["publicKey"]
     },
-    "v1StampLoginResult": {
-      "type": "object",
-      "properties": {
-        "session": {
-          "type": "string",
-          "description": "Signed JWT containing an expiry, public key, session type, user id, and organization id"
-        }
-      },
-      "required": ["session"]
-    },
-    "v1SwapQuote": {
-      "type": "object",
-      "properties": {
-        "quoteId": {
-          "type": "string",
-          "description": "Identifier for this provider quote. Pass this value to execute_swap_v2 to bind execution to this exact quote. The signer is derived from the quote; clients do not resupply sign_with on execute."
-        },
-        "provider": {
-          "type": "string",
-          "description": "Swap provider that produced this quote."
-        },
-        "outputAmount": {
-          "type": "string",
-          "description": "Estimated base-unit amount of the output asset."
-        },
-        "minOutputAmount": {
-          "type": "string",
-          "description": "Minimum acceptable base-unit amount of the output asset after slippage."
-        },
-        "expiresAt": {
-          "type": "string",
-          "description": "Quote expiration as a millisecond epoch string."
-        },
-        "slippageBps": {
-          "type": "string",
-          "description": "Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value."
-        },
-        "clientFeeBps": {
-          "type": "string",
-          "description": "Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount."
-        },
-        "estimatedTimeSeconds": {
-          "type": "string",
-          "description": "Provider-estimated completion time in seconds, when available."
-        }
-      },
-      "required": [
-        "quoteId",
-        "provider",
-        "outputAmount",
-        "minOutputAmount",
-        "expiresAt",
-        "clientFeeBps"
-      ]
-    },
-    "v1SwapQuoteV2": {
-      "type": "object",
-      "properties": {
-        "quoteId": {
-          "type": "string",
-          "description": "Identifier for this provider quote. Pass this value to execute_swap_v2 to bind execution to this exact quote. The signer is derived from the quote; clients do not resupply sign_with on execute."
-        },
-        "provider": {
-          "type": "string",
-          "description": "Swap provider that produced this quote."
-        },
-        "outputAmount": {
-          "type": "string",
-          "description": "Estimated base-unit amount of the output asset."
-        },
-        "minOutputAmount": {
-          "type": "string",
-          "description": "Minimum acceptable base-unit amount of the output asset after slippage."
-        },
-        "expiresAt": {
-          "type": "string",
-          "description": "Quote expiration as a millisecond epoch string."
-        },
-        "slippageBps": {
-          "type": "string",
-          "description": "Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value."
-        },
-        "clientFeeBps": {
-          "type": "string",
-          "description": "Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount."
-        },
-        "estimatedTimeSeconds": {
-          "type": "string",
-          "description": "Provider-estimated completion time in seconds, when available."
-        },
-        "feeSponsorship": {
-          "type": "boolean"
-        },
-        "fixedRate": {
-          "type": "boolean"
-        },
-        "turnkeyFeeCollection": {
-          "type": "string"
-        },
-        "sponsoredFeeComponents": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "remainingFeeComponents": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [
-        "quoteId",
-        "provider",
-        "outputAmount",
-        "minOutputAmount",
-        "expiresAt",
-        "clientFeeBps"
-      ]
-    },
     "v1TransactionType": {
       "type": "string",
       "enum": [
@@ -8514,9 +5669,6 @@
         }
       },
       "required": ["allowedOrigins"]
-    },
-    "v1UpdateAllowedOriginsResult": {
-      "type": "object"
     },
     "v1UpdateAuthProxyConfigIntent": {
       "type": "object",
@@ -8608,15 +5760,6 @@
         }
       }
     },
-    "v1UpdateAuthProxyConfigResult": {
-      "type": "object",
-      "properties": {
-        "configId": {
-          "type": "string",
-          "description": "Unique identifier for a given User. (representing the turnkey signer user id)"
-        }
-      }
-    },
     "v1UpdateFiatOnRampCredentialIntent": {
       "type": "object",
       "properties": {
@@ -8651,16 +5794,6 @@
         "publishableApiKey",
         "encryptedSecretApiKey"
       ]
-    },
-    "v1UpdateFiatOnRampCredentialResult": {
-      "type": "object",
-      "properties": {
-        "fiatOnRampCredentialId": {
-          "type": "string",
-          "description": "Unique identifier of the Fiat On-Ramp credential that was updated"
-        }
-      },
-      "required": ["fiatOnRampCredentialId"]
     },
     "v1UpdateMfaPolicyIntent": {
       "type": "object",
@@ -8701,16 +5834,6 @@
       },
       "required": ["userId", "mfaPolicyId"]
     },
-    "v1UpdateMfaPolicyResult": {
-      "type": "object",
-      "properties": {
-        "mfaPolicyId": {
-          "type": "string",
-          "description": "Unique identifier for a given MFA Policy."
-        }
-      },
-      "required": ["mfaPolicyId"]
-    },
     "v1UpdateOauth2CredentialIntent": {
       "type": "object",
       "properties": {
@@ -8738,16 +5861,6 @@
         "encryptedClientSecret"
       ]
     },
-    "v1UpdateOauth2CredentialResult": {
-      "type": "object",
-      "properties": {
-        "oauth2CredentialId": {
-          "type": "string",
-          "description": "Unique identifier of the OAuth 2.0 credential that was updated"
-        }
-      },
-      "required": ["oauth2CredentialId"]
-    },
     "v1UpdateOrganizationNameIntent": {
       "type": "object",
       "properties": {
@@ -8757,20 +5870,6 @@
         }
       },
       "required": ["organizationName"]
-    },
-    "v1UpdateOrganizationNameResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for the Organization."
-        },
-        "organizationName": {
-          "type": "string",
-          "description": "The updated organization name."
-        }
-      },
-      "required": ["organizationId", "organizationName"]
     },
     "v1UpdatePolicyIntent": {
       "type": "object",
@@ -8836,26 +5935,6 @@
       },
       "required": ["policyId"]
     },
-    "v1UpdatePolicyResult": {
-      "type": "object",
-      "properties": {
-        "policyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Policy."
-        }
-      },
-      "required": ["policyId"]
-    },
-    "v1UpdatePolicyResultV2": {
-      "type": "object",
-      "properties": {
-        "policyId": {
-          "type": "string",
-          "description": "Unique identifier for a given Policy."
-        }
-      },
-      "required": ["policyId"]
-    },
     "v1UpdatePrivateKeyTagIntent": {
       "type": "object",
       "properties": {
@@ -8884,16 +5963,6 @@
       },
       "required": ["privateKeyTagId", "addPrivateKeyIds", "removePrivateKeyIds"]
     },
-    "v1UpdatePrivateKeyTagResult": {
-      "type": "object",
-      "properties": {
-        "privateKeyTagId": {
-          "type": "string",
-          "description": "Unique identifier for a given Private Key Tag."
-        }
-      },
-      "required": ["privateKeyTagId"]
-    },
     "v1UpdateRootQuorumIntent": {
       "type": "object",
       "properties": {
@@ -8912,9 +5981,6 @@
       },
       "required": ["threshold", "userIds"]
     },
-    "v1UpdateRootQuorumResult": {
-      "type": "object"
-    },
     "v1UpdateTvcAppLiveDeploymentIntent": {
       "type": "object",
       "properties": {
@@ -8924,9 +5990,6 @@
         }
       },
       "required": ["deploymentId"]
-    },
-    "v1UpdateTvcAppLiveDeploymentResult": {
-      "type": "object"
     },
     "v1UpdateUserEmailIntent": {
       "type": "object",
@@ -8945,16 +6008,6 @@
         }
       },
       "required": ["userId", "userEmail"]
-    },
-    "v1UpdateUserEmailResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier of the User whose email was updated."
-        }
-      },
-      "required": ["userId"]
     },
     "v1UpdateUserIntent": {
       "type": "object",
@@ -8999,16 +6052,6 @@
       },
       "required": ["userId", "userName"]
     },
-    "v1UpdateUserNameResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier of the User whose name was updated."
-        }
-      },
-      "required": ["userId"]
-    },
     "v1UpdateUserPhoneNumberIntent": {
       "type": "object",
       "properties": {
@@ -9026,26 +6069,6 @@
         }
       },
       "required": ["userId", "userPhoneNumber"]
-    },
-    "v1UpdateUserPhoneNumberResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier of the User whose phone number was updated."
-        }
-      },
-      "required": ["userId"]
-    },
-    "v1UpdateUserResult": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "A User ID."
-        }
-      },
-      "required": ["userId"]
     },
     "v1UpdateUserTagIntent": {
       "type": "object",
@@ -9075,16 +6098,6 @@
       },
       "required": ["userTagId", "addUserIds", "removeUserIds"]
     },
-    "v1UpdateUserTagResult": {
-      "type": "object",
-      "properties": {
-        "userTagId": {
-          "type": "string",
-          "description": "Unique identifier for a given User Tag."
-        }
-      },
-      "required": ["userTagId"]
-    },
     "v1UpdateWalletAccountNameIntent": {
       "type": "object",
       "properties": {
@@ -9099,16 +6112,6 @@
       },
       "required": ["walletAccountId", "name"]
     },
-    "v1UpdateWalletAccountNameResult": {
-      "type": "object",
-      "properties": {
-        "walletAccountId": {
-          "type": "string",
-          "description": "Unique identifier for a given Wallet Account."
-        }
-      },
-      "required": ["walletAccountId"]
-    },
     "v1UpdateWalletIntent": {
       "type": "object",
       "properties": {
@@ -9119,16 +6122,6 @@
         "walletName": {
           "type": "string",
           "description": "Human-readable name for a Wallet."
-        }
-      },
-      "required": ["walletId"]
-    },
-    "v1UpdateWalletResult": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string",
-          "description": "A Wallet ID."
         }
       },
       "required": ["walletId"]
@@ -9154,20 +6147,6 @@
         }
       },
       "required": ["endpointId"]
-    },
-    "v1UpdateWebhookEndpointResult": {
-      "type": "object",
-      "properties": {
-        "endpointId": {
-          "type": "string",
-          "description": "Unique identifier of the updated webhook endpoint."
-        },
-        "webhookEndpoint": {
-          "$ref": "#/definitions/v1WebhookEndpointData",
-          "description": "The updated webhook endpoint data."
-        }
-      },
-      "required": ["endpointId", "webhookEndpoint"]
     },
     "v1UpsertGasUsageConfigIntent": {
       "type": "object",
@@ -9199,21 +6178,12 @@
         "windowDurationMinutes"
       ]
     },
-    "v1UpsertGasUsageConfigResult": {
-      "type": "object",
-      "properties": {
-        "gasUsageConfigId": {
-          "type": "string",
-          "description": "Unique identifier for the gas usage configuration that was created or updated."
-        }
-      },
-      "required": ["gasUsageConfigId"]
-    },
     "v1UpsertSwapConfigIntent": {
       "type": "object",
       "properties": {
         "feeReceiverWalletAddress": {
-          "type": "string"
+          "type": "string",
+          "description": "Organization-owned wallet account that receives swap fees. Required when fee_bps is set. Omit together with fee_bps to clear swap fees."
         },
         "feeBps": {
           "type": "string",
@@ -9222,20 +6192,6 @@
         "stableFeeBps": {
           "type": "string",
           "description": "Optional Enterprise-only override applied when both swap assets are stablecoins; falls back to fee_bps when unset. Non-Enterprise orgs may only set fee_bps."
-        }
-      }
-    },
-    "v1UpsertSwapConfigResult": {
-      "type": "object",
-      "properties": {
-        "feeReceiverWalletAddress": {
-          "type": "string"
-        },
-        "feeBps": {
-          "type": "string"
-        },
-        "stableFeeBps": {
-          "type": "string"
         }
       }
     },
@@ -9256,7 +6212,7 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission."
+          "description": "Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum."
         }
       },
       "required": [
@@ -9265,15 +6221,6 @@
         "windowDurationMinutes",
         "enabled"
       ]
-    },
-    "v1UpsertSwapFeeSponsorshipLimitConfigResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string"
-        }
-      },
-      "required": ["organizationId"]
     },
     "v1UpsertSwapFixedRateLimitConfigIntent": {
       "type": "object",
@@ -9292,7 +6239,7 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission."
+          "description": "Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum."
         }
       },
       "required": [
@@ -9300,92 +6247,6 @@
         "subOrgWindowLimitUsd",
         "windowDurationMinutes",
         "enabled"
-      ]
-    },
-    "v1UpsertSwapFixedRateLimitConfigResult": {
-      "type": "object",
-      "properties": {
-        "organizationId": {
-          "type": "string"
-        }
-      },
-      "required": ["organizationId"]
-    },
-    "v1User": {
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        },
-        "userName": {
-          "type": "string",
-          "description": "Human-readable name for a User."
-        },
-        "userEmail": {
-          "type": "string",
-          "description": "The user's email address."
-        },
-        "userPhoneNumber": {
-          "type": "string",
-          "description": "The user's phone number in E.164 format e.g. +13214567890"
-        },
-        "authenticators": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Authenticator"
-          },
-          "description": "A list of Authenticator parameters."
-        },
-        "apiKeys": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1ApiKey"
-          },
-          "description": "A list of API Key parameters. This field, if not needed, should be an empty array in your request body."
-        },
-        "userTags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of User Tag IDs."
-        },
-        "oauthProviders": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1OauthProvider"
-          },
-          "description": "A list of Oauth Providers."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "updatedAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        },
-        "mfaPolicies": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1MfaPolicy"
-          },
-          "description": "A list of MFA Policies that define multi-factor authentication requirements for this user."
-        }
-      },
-      "required": [
-        "userId",
-        "userName",
-        "authenticators",
-        "apiKeys",
-        "userTags",
-        "oauthProviders",
-        "createdAt",
-        "updatedAt",
-        "mfaPolicies"
       ]
     },
     "v1UserParams": {
@@ -9832,72 +6693,6 @@
       },
       "required": ["otpId", "encryptedOtpBundle"]
     },
-    "v1VerifyOtpResult": {
-      "type": "object",
-      "properties": {
-        "verificationToken": {
-          "type": "string",
-          "description": "Signed JWT containing a unique id, expiry, verification type, contact. Verification status of a user is updated when the token is consumed (in OTP_LOGIN requests)"
-        }
-      },
-      "required": ["verificationToken"]
-    },
-    "v1Vote": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for a given Vote object."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Unique identifier for a given User."
-        },
-        "user": {
-          "$ref": "#/definitions/v1User",
-          "description": "Web and/or API user within your Organization."
-        },
-        "activityId": {
-          "type": "string",
-          "description": "Unique identifier for a given Activity object."
-        },
-        "selection": {
-          "type": "string",
-          "enum": ["VOTE_SELECTION_APPROVED", "VOTE_SELECTION_REJECTED"]
-        },
-        "message": {
-          "type": "string",
-          "description": "The raw message being signed within a Vote."
-        },
-        "publicKey": {
-          "type": "string",
-          "description": "The public component of a cryptographic key pair used to sign messages and transactions."
-        },
-        "signature": {
-          "type": "string",
-          "description": "The signature applied to a particular vote."
-        },
-        "scheme": {
-          "type": "string",
-          "description": "Method used to produce a signature."
-        },
-        "createdAt": {
-          "$ref": "#/definitions/externaldatav1Timestamp"
-        }
-      },
-      "required": [
-        "id",
-        "userId",
-        "user",
-        "activityId",
-        "selection",
-        "message",
-        "publicKey",
-        "signature",
-        "scheme",
-        "createdAt"
-      ]
-    },
     "v1WalletAccountParams": {
       "type": "object",
       "properties": {
@@ -9972,56 +6767,6 @@
         }
       },
       "required": ["walletName", "accounts"]
-    },
-    "v1WalletResult": {
-      "type": "object",
-      "properties": {
-        "walletId": {
-          "type": "string"
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of account addresses."
-        }
-      },
-      "required": ["walletId", "addresses"]
-    },
-    "v1WebhookEndpointData": {
-      "type": "object",
-      "properties": {
-        "endpointId": {
-          "type": "string",
-          "description": "Unique identifier of the webhook endpoint."
-        },
-        "organizationId": {
-          "type": "string",
-          "description": "Unique identifier for a given Organization."
-        },
-        "url": {
-          "type": "string",
-          "description": "The destination URL for webhook delivery."
-        },
-        "name": {
-          "type": "string",
-          "description": "Human-readable name for this webhook endpoint."
-        },
-        "isActive": {
-          "type": "boolean",
-          "description": "Whether this webhook endpoint is active."
-        },
-        "subscriptions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1WebhookSubscriptionParams"
-          },
-          "description": "Current subscriptions attached to this endpoint."
-        }
-      },
-      "required": ["endpointId", "organizationId", "url", "name", "isActive"]
     },
     "v1WebhookSubscriptionParams": {
       "type": "object",

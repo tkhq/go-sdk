@@ -2,6 +2,7 @@ package generators
 
 import (
 	"encoding/json"
+	"maps"
 )
 
 // authProxyOnlyPrefix is used internally to disambiguate auth-proxy versions of
@@ -66,9 +67,7 @@ func newGenerator(specs []*swaggerSpec, cfg *activitiesConfig, allVersions bool)
 		allVersions:            allVersions,
 	}
 	// Load public spec first; it wins for identically-shaped shared definitions.
-	for name, def := range specs[0].Definitions {
-		g.definitions[name] = def
-	}
+	maps.Copy(g.definitions, specs[0].Definitions)
 
 	// auth proxy spec
 	g.authProxyRefRemap = g.mergeSecondarySpec(specs[1], "AuthProxy", authProxyOnlyPrefix, true)
@@ -132,6 +131,7 @@ func canonicalizeAliasedDefs(spec *swaggerSpec, base *swaggerSpec) {
 			}
 
 			target := ""
+
 			for _, baseName := range sortedKeys(base.Definitions) {
 				if !schemasEqual(spec.Definitions[name], base.Definitions[baseName]) {
 					continue

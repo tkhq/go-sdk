@@ -312,6 +312,10 @@
       "intentType": "CreateFiatOnRampCredentialIntent",
       "resultType": "CreateFiatOnRampCredentialResult"
     },
+    "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION": {
+      "intentType": "CreateFiatOnRampSessionIntent",
+      "resultType": "CreateFiatOnRampSessionResult"
+    },
     "ACTIVITY_TYPE_DELETE_FIAT_ON_RAMP_CREDENTIAL": {
       "intentType": "DeleteFiatOnRampCredentialIntent",
       "resultType": "DeleteFiatOnRampCredentialResult"
@@ -698,18 +702,15 @@
     },
     "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3": {
       "intentType": "CreateSwapQuoteIntentV3",
-      "resultType": "CreateSwapQuoteResultV2",
-      "internal": true
+      "resultType": "CreateSwapQuoteResultV2"
     },
     "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG": {
       "intentType": "UpsertSwapFeeSponsorshipLimitConfigIntent",
-      "resultType": "UpsertSwapFeeSponsorshipLimitConfigResult",
-      "internal": true
+      "resultType": "UpsertSwapFeeSponsorshipLimitConfigResult"
     },
     "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG": {
       "intentType": "UpsertSwapFixedRateLimitConfigIntent",
-      "resultType": "UpsertSwapFixedRateLimitConfigResult",
-      "internal": true
+      "resultType": "UpsertSwapFixedRateLimitConfigResult"
     }
   }
 }

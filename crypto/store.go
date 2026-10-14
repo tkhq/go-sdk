@@ -41,7 +41,7 @@ type Store[T Key[M], M Metadata] interface {
 }
 
 // Metadata defines an interface for the metadata on keys.
-type Metadata interface{}
+type Metadata any
 
 // KeyFactory generic struct to select the correct FromTurnkeyPrivateKey function.
 type KeyFactory[T Key[M], M Metadata] struct{}
@@ -51,11 +51,11 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	var instance T
 
 	typeOfT := reflect.TypeOf(instance)
-	if typeOfT.Kind() == reflect.Ptr {
+	if typeOfT.Kind() == reflect.Pointer {
 		typeOfT = typeOfT.Elem()
 	}
 
-	if typeOfT == reflect.TypeOf(APIKey{}) {
+	if typeOfT == reflect.TypeFor[APIKey]() {
 		keyWithoutSuffix, scheme, err := extractSignatureSchemeFromSuffixedPrivateKey(data)
 		if err != nil {
 			return instance, err
@@ -66,19 +66,19 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 			return instance, err
 		}
 
-		result, ok := interface{}(key).(T)
+		result, ok := any(key).(T)
 		if !ok {
 			return instance, fmt.Errorf("failed to convert crypto.APIKey to %v", reflect.TypeOf(instance))
 		}
 
 		return result, nil
-	} else if typeOfT == reflect.TypeOf(EncryptionKey{}) {
+	} else if typeOfT == reflect.TypeFor[EncryptionKey]() {
 		key, err := FromTurnkeyEncryptionPrivateKey(data)
 		if err != nil {
 			return instance, err
 		}
 
-		result, ok := interface{}(key).(T)
+		result, ok := any(key).(T)
 		if !ok {
 			return instance, fmt.Errorf("failed to convert crypto.EncryptionKey to %v", reflect.TypeOf(instance))
 		}
