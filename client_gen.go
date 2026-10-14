@@ -1884,7 +1884,7 @@ func (c *Client) StampEmailAuth(ctx context.Context, input EmailAuthRequest) (*S
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/email_auth", body, true)
 }
 
-// Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V2.
+// Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V3.
 func (c *Client) ExecuteSwap(ctx context.Context, input ExecuteSwapRequest) (*ExecuteSwapResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -4456,6 +4456,66 @@ func (c *Client) StampUpsertSwapConfig(ctx context.Context, input UpsertSwapConf
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_config", body, true)
+}
+
+// Replace this feature's spending window. Requires the billing parent's signed permission and activity authorization.
+func (c *Client) UpsertSwapFeeSponsorshipLimitConfig(ctx context.Context, input UpsertSwapFeeSponsorshipLimitConfigRequest) (*UpsertSwapFeeSponsorshipLimitConfigResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_fee_sponsorship_limit_config", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[UpsertSwapFeeSponsorshipLimitConfigResult])
+	if err := decodeActivityResponse(raw, "UpsertSwapFeeSponsorshipLimitConfigResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *UpsertSwapFeeSponsorshipLimitConfigResult {
+		return r.UpsertSwapFeeSponsorshipLimitConfigResult
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &UpsertSwapFeeSponsorshipLimitConfigResponse{Activity: *activity, UpsertSwapFeeSponsorshipLimitConfigResult: *result}, nil
+}
+
+func (c *Client) StampUpsertSwapFeeSponsorshipLimitConfig(ctx context.Context, input UpsertSwapFeeSponsorshipLimitConfigRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_fee_sponsorship_limit_config", body, true)
+}
+
+// Replace this feature's spending window. Requires the billing parent's signed permission and activity authorization.
+func (c *Client) UpsertSwapFixedRateLimitConfig(ctx context.Context, input UpsertSwapFixedRateLimitConfigRequest) (*UpsertSwapFixedRateLimitConfigResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_fixed_rate_limit_config", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[UpsertSwapFixedRateLimitConfigResult])
+	if err := decodeActivityResponse(raw, "UpsertSwapFixedRateLimitConfigResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *UpsertSwapFixedRateLimitConfigResult { return r.UpsertSwapFixedRateLimitConfigResult })
+	if err != nil {
+		return nil, err
+	}
+	return &UpsertSwapFixedRateLimitConfigResponse{Activity: *activity, UpsertSwapFixedRateLimitConfigResult: *result}, nil
+}
+
+func (c *Client) StampUpsertSwapFixedRateLimitConfig(ctx context.Context, input UpsertSwapFixedRateLimitConfigRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/upsert_swap_fixed_rate_limit_config", body, true)
 }
 
 // Validate a container image URL and pull secret for TVC deployment.
