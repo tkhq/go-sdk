@@ -213,6 +213,7 @@ const (
 	ActivityTypeCreateSwapQuoteV3                   ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3"
 	ActivityTypeUpsertSwapFeeSponsorshipLimitConfig ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG"
 	ActivityTypeUpsertSwapFixedRateLimitConfig      ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
+	ActivityTypeCreateFiatOnRampSession             ActivityType = "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION"
 )
 
 type AddressFormat string
@@ -352,7 +353,6 @@ const (
 type FiatOnRampBlockchainNetwork string
 
 const (
-	FiatOnRampBlockchainNetworkBitcoin  FiatOnRampBlockchainNetwork = "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BITCOIN"
 	FiatOnRampBlockchainNetworkEthereum FiatOnRampBlockchainNetwork = "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_ETHEREUM"
 	FiatOnRampBlockchainNetworkSolana   FiatOnRampBlockchainNetwork = "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_SOLANA"
 	FiatOnRampBlockchainNetworkBase     FiatOnRampBlockchainNetwork = "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BASE"
@@ -1178,6 +1178,20 @@ type CreateFiatOnRampCredentialResult struct {
 	FiatOnRampCredentialID string `json:"fiatOnRampCredentialId"`
 }
 
+type CreateFiatOnRampSessionIntent struct {
+	// Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuote.
+	QuoteID string `json:"quoteId"`
+	// Destination wallet address for the buy transaction.
+	WalletAddress string `json:"walletAddress"`
+}
+
+type CreateFiatOnRampSessionResult struct {
+	// Unique identifier used to retrieve transaction statuses for a given fiat on-ramp flow.
+	OnRampTransactionID string `json:"onRampTransactionId"`
+	// URL of the fiat on-ramp session for the saved quote.
+	OnRampURL string `json:"onRampUrl"`
+}
+
 type CreateInvitationsIntent struct {
 	// A list of Invitations.
 	Invitations []InvitationParams `json:"invitations"`
@@ -1343,6 +1357,8 @@ type CreatePrivateKeysIntent struct {
 }
 
 type CreatePrivateKeysIntentV2 struct {
+	// The public key of the external signer to use for creating the private keys.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A list of Private Keys.
 	PrivateKeys []PrivateKeyParams `json:"privateKeys"`
 }
@@ -2117,7 +2133,7 @@ type DeleteUsersResult struct {
 }
 
 type DeleteVelocityControlsIntent struct {
-	// List of unique identifiers for Velocity Controls within an Organization.
+	// List of 1 to 32 unique identifiers for Velocity Controls within an Organization.
 	VelocityControlIds []string `json:"velocityControlIds"`
 }
 
@@ -4082,6 +4098,7 @@ type Intent struct {
 	CreateAuthenticatorsIntent                *CreateAuthenticatorsIntent                `json:"createAuthenticatorsIntent,omitempty"`
 	CreateAuthenticatorsIntentV2              *CreateAuthenticatorsIntentV2              `json:"createAuthenticatorsIntentV2,omitempty"`
 	CreateFiatOnRampCredentialIntent          *CreateFiatOnRampCredentialIntent          `json:"createFiatOnRampCredentialIntent,omitempty"`
+	CreateFiatOnRampSessionIntent             *CreateFiatOnRampSessionIntent             `json:"createFiatOnRampSessionIntent,omitempty"`
 	CreateInvitationsIntent                   *CreateInvitationsIntent                   `json:"createInvitationsIntent,omitempty"`
 	CreateMfaPolicyIntent                     *CreateMfaPolicyIntent                     `json:"createMfaPolicyIntent,omitempty"`
 	CreateOAuth2CredentialIntent              *CreateOAuth2CredentialIntent              `json:"createOauth2CredentialIntent,omitempty"`
@@ -4953,6 +4970,7 @@ type Result struct {
 	CreateAPIOnlyUsersResult                  *CreateAPIOnlyUsersResult                  `json:"createApiOnlyUsersResult,omitempty"`
 	CreateAuthenticatorsResult                *CreateAuthenticatorsResult                `json:"createAuthenticatorsResult,omitempty"`
 	CreateFiatOnRampCredentialResult          *CreateFiatOnRampCredentialResult          `json:"createFiatOnRampCredentialResult,omitempty"`
+	CreateFiatOnRampSessionResult             *CreateFiatOnRampSessionResult             `json:"createFiatOnRampSessionResult,omitempty"`
 	CreateInvitationsResult                   *CreateInvitationsResult                   `json:"createInvitationsResult,omitempty"`
 	CreateMfaPolicyResult                     *CreateMfaPolicyResult                     `json:"createMfaPolicyResult,omitempty"`
 	CreateOAuth2CredentialResult              *CreateOAuth2CredentialResult              `json:"createOauth2CredentialResult,omitempty"`
@@ -5253,6 +5271,8 @@ type SignRawPayloadIntent struct {
 type SignRawPayloadIntentV2 struct {
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
+	// The public key of the external signer to use for signing the payload.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
 	// Raw unsigned payload to be signed.
@@ -5273,6 +5293,8 @@ type SignRawPayloadResult struct {
 type SignRawPayloadsIntent struct {
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
+	// The public key of the external signer to use for signing the payloads.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
 	// An array of raw unsigned payloads to be signed.
@@ -5294,6 +5316,8 @@ type SignTransactionIntent struct {
 }
 
 type SignTransactionIntentV2 struct {
+	// The public key of the external signer to use for signing this transaction.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A Wallet account address, Private Key address, or Private Key identifier.
 	SignWith  string          `json:"signWith"`
 	TypeValue TransactionType `json:"type"`
@@ -5726,6 +5750,8 @@ type SwapQuote struct {
 type SwapQuoteV2 struct {
 	// Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount.
 	ClientFeeBps string `json:"clientFeeBps"`
+	// Estimated USD adjustment for the fixed rate. Present only for fixed-rate quotes. Positive is a cost billed to you; negative is an earning credited against your transaction management charges at the end of the billing period. Informational; the final amount is settled after execution.
+	EstimatedFixedRateAdjustmentUsd *string `json:"estimatedFixedRateAdjustmentUsd,omitempty"`
 	// Provider-estimated completion time in seconds, when available.
 	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
 	// Quote expiration as a millisecond epoch string.
@@ -5739,12 +5765,9 @@ type SwapQuoteV2 struct {
 	// Swap provider that produced this quote.
 	Provider string `json:"provider"`
 	// Identifier for this provider quote. Pass this value to execute_swap_v2 to bind execution to this exact quote. The signer is derived from the quote; clients do not resupply sign_with on execute.
-	QuoteID                string   `json:"quoteId"`
-	RemainingFeeComponents []string `json:"remainingFeeComponents,omitempty"`
+	QuoteID string `json:"quoteId"`
 	// Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value.
-	SlippageBps            *string  `json:"slippageBps,omitempty"`
-	SponsoredFeeComponents []string `json:"sponsoredFeeComponents,omitempty"`
-	TurnkeyFeeCollection   *string  `json:"turnkeyFeeCollection,omitempty"`
+	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
 type SwapRefund struct {
@@ -5762,7 +5785,7 @@ type SwapSpendingWindow struct {
 	RemainingUsd string `json:"remainingUsd"`
 	// Configured per-child limit. Returned only when querying the billing parent.
 	SubOrgWindowLimitUsd *string `json:"subOrgWindowLimitUsd,omitempty"`
-	// Settled spending in the current window. Fixed-rate usage stays zero until final fixed-rate costs are recorded.
+	// Settled spending in the current window. Fixed-rate earnings offset fixed-rate costs, and usage never goes below zero. Fixed-rate usage stays zero until final fixed-rate costs are recorded.
 	UsageUsd              string `json:"usageUsd"`
 	WindowDurationMinutes int    `json:"windowDurationMinutes"`
 	// The parent's window limit, or the per-child limit when queried by a sub-organization.
@@ -6359,7 +6382,8 @@ type UpsertGasUsageConfigResult struct {
 
 type UpsertSwapConfigIntent struct {
 	// Client fee in basis points applied to swaps; used for all pairs unless stable_fee_bps is set.
-	FeeBps                   *string `json:"feeBps,omitempty"`
+	FeeBps *string `json:"feeBps,omitempty"`
+	// Organization-owned wallet account that receives swap fees. Required when fee_bps is set. Omit together with fee_bps to clear swap fees.
 	FeeReceiverWalletAddress *string `json:"feeReceiverWalletAddress,omitempty"`
 	// Optional Enterprise-only override applied when both swap assets are stablecoins; falls back to fee_bps when unset. Non-Enterprise orgs may only set fee_bps.
 	StableFeeBps *string `json:"stableFeeBps,omitempty"`
@@ -7034,6 +7058,8 @@ type CreatePrivateKeysRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
+	// The public key of the external signer to use for creating the private keys.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A list of Private Keys.
 	PrivateKeys []PrivateKeyParams `json:"privateKeys"`
 }
@@ -7177,19 +7203,21 @@ type CreateSwapQuoteRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
+	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
 	// Base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
 	InputToken string `json:"inputToken"`
 	// CAIP-19 asset ID for the output asset.
 	OutputToken string `json:"outputToken"`
-	// Wallet account or Private Key address used to price the executable provider quote. Private Key identifiers are not supported.
+	// Wallet account address used to price the executable provider quote. Private Key identifiers are not supported.
 	SignWith string `json:"signWith"`
 	// Provider-neutral maximum allowed slippage in basis points. Turnkey converts this value to each provider's request format. When omitted, each provider applies its default slippage behavior.
 	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
-func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE" }
+func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2" }
 
 type CreateSwapQuoteResponse struct {
 	Activity Activity `json:"activity"`
@@ -8007,6 +8035,8 @@ type ExecuteSwapRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
+	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
 	// Exact EVM sender (EOA account) nonce. Valid only for a non-sponsored EVM swap. Honored for already-delegated (Type-2) batch swaps and single-call swaps; ignored for not-yet-delegated EIP-7702 (Type-4) batches where the outer nonce is derived from the authorization. Prefer gas_station_nonce for batch replay protection and use the nonces endpoint to fetch it. Omit to auto-fetch.
 	EvmNonce *string `json:"evmNonce,omitempty"`
 	// Exact gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored EVM swaps and non-sponsored EVM swaps that execute as a multi-call batch (for example ERC-20 approve + swap). This is the replay-protection nonce for gas-station batches; use the nonces endpoint to fetch it. Omit to auto-fetch.
@@ -8029,7 +8059,7 @@ type ExecuteSwapRequest struct {
 	Sponsor bool `json:"sponsor"`
 }
 
-func (ExecuteSwapRequest) ActivityType() string { return "ACTIVITY_TYPE_EXECUTE_SWAP_V2" }
+func (ExecuteSwapRequest) ActivityType() string { return "ACTIVITY_TYPE_EXECUTE_SWAP_V3" }
 
 type ExecuteSwapResponse struct {
 	Activity Activity `json:"activity"`
@@ -8674,6 +8704,8 @@ type SignRawPayloadRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
+	// The public key of the external signer to use for signing the payload.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
 	// Raw unsigned payload to be signed.
@@ -8696,6 +8728,8 @@ type SignRawPayloadsRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
+	// The public key of the external signer to use for signing the payloads.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
 	// An array of raw unsigned payloads to be signed.
@@ -8716,6 +8750,8 @@ type SignTransactionRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
+	// The public key of the external signer to use for signing this transaction.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A Wallet account address, Private Key address, or Private Key identifier.
 	SignWith  string          `json:"signWith"`
 	TypeValue TransactionType `json:"type"`
@@ -9194,7 +9230,8 @@ type UpsertSwapConfigRequest struct {
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Client fee in basis points applied to swaps; used for all pairs unless stable_fee_bps is set.
-	FeeBps                   *string `json:"feeBps,omitempty"`
+	FeeBps *string `json:"feeBps,omitempty"`
+	// Organization-owned wallet account that receives swap fees. Required when fee_bps is set. Omit together with fee_bps to clear swap fees.
 	FeeReceiverWalletAddress *string `json:"feeReceiverWalletAddress,omitempty"`
 	// Optional Enterprise-only override applied when both swap assets are stablecoins; falls back to fee_bps when unset. Non-Enterprise orgs may only set fee_bps.
 	StableFeeBps *string `json:"stableFeeBps,omitempty"`
@@ -9205,6 +9242,54 @@ func (UpsertSwapConfigRequest) ActivityType() string { return "ACTIVITY_TYPE_UPS
 type UpsertSwapConfigResponse struct {
 	Activity Activity `json:"activity"`
 	UpsertSwapConfigResult
+}
+
+type UpsertSwapFeeSponsorshipLimitConfigRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	Enabled bool `json:"enabled"`
+	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
+	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
+	// Positive USD limit for each sub-organization, no greater than the parent limit.
+	SubOrgWindowLimitUsd string `json:"subOrgWindowLimitUsd"`
+	// Positive rolling window duration in minutes, at most 153722867.
+	WindowDurationMinutes string `json:"windowDurationMinutes"`
+}
+
+func (UpsertSwapFeeSponsorshipLimitConfigRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG"
+}
+
+type UpsertSwapFeeSponsorshipLimitConfigResponse struct {
+	Activity Activity `json:"activity"`
+	UpsertSwapFeeSponsorshipLimitConfigResult
+}
+
+type UpsertSwapFixedRateLimitConfigRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	Enabled bool `json:"enabled"`
+	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
+	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
+	// Positive USD limit for each sub-organization, no greater than the parent limit.
+	SubOrgWindowLimitUsd string `json:"subOrgWindowLimitUsd"`
+	// Positive rolling window duration in minutes, at most 153722867.
+	WindowDurationMinutes string `json:"windowDurationMinutes"`
+}
+
+func (UpsertSwapFixedRateLimitConfigRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
+}
+
+type UpsertSwapFixedRateLimitConfigResponse struct {
+	Activity Activity `json:"activity"`
+	UpsertSwapFixedRateLimitConfigResult
 }
 
 type VerifyOTPRequest struct {

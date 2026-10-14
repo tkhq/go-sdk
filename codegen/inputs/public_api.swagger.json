@@ -4275,7 +4275,7 @@
     "/public/v1/submit/execute_swap": {
       "post": {
         "summary": "Execute Swap",
-        "description": "Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V2.",
+        "description": "Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V3.",
         "operationId": "PublicApiService_ExecuteSwap",
         "responses": {
           "200": {
@@ -6854,7 +6854,8 @@
         "ACTIVITY_TYPE_EARN_CLAIM_REWARDS",
         "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3",
         "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG",
-        "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
+        "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG",
+        "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION"
       ]
     },
     "v1AddressFormat": {
@@ -7776,6 +7777,34 @@
       },
       "required": ["fiatOnRampCredentialId"]
     },
+    "v1CreateFiatOnRampSessionIntent": {
+      "type": "object",
+      "properties": {
+        "quoteId": {
+          "type": "string",
+          "description": "Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuote."
+        },
+        "walletAddress": {
+          "type": "string",
+          "description": "Destination wallet address for the buy transaction."
+        }
+      },
+      "required": ["quoteId", "walletAddress"]
+    },
+    "v1CreateFiatOnRampSessionResult": {
+      "type": "object",
+      "properties": {
+        "onRampUrl": {
+          "type": "string",
+          "description": "URL of the fiat on-ramp session for the saved quote."
+        },
+        "onRampTransactionId": {
+          "type": "string",
+          "description": "Unique identifier used to retrieve transaction statuses for a given fiat on-ramp flow."
+        }
+      },
+      "required": ["onRampUrl", "onRampTransactionId"]
+    },
     "v1CreateInvitationsIntent": {
       "type": "object",
       "properties": {
@@ -8338,6 +8367,10 @@
             "$ref": "#/definitions/v1PrivateKeyParams"
           },
           "description": "A list of Private Keys."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for creating the private keys."
         }
       },
       "required": ["privateKeys"]
@@ -9250,7 +9283,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SWAP_QUOTE"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2"]
         },
         "timestampMs": {
           "type": "string",
@@ -9261,7 +9294,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/v1CreateSwapQuoteIntent"
+          "$ref": "#/definitions/v1CreateSwapQuoteIntentV2"
         },
         "generateAppProofs": {
           "type": "boolean"
@@ -11019,7 +11052,7 @@
           "items": {
             "type": "string"
           },
-          "description": "List of unique identifiers for Velocity Controls within an Organization."
+          "description": "List of 1 to 32 unique identifiers for Velocity Controls within an Organization."
         }
       },
       "required": ["velocityControlIds"]
@@ -12847,7 +12880,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_EXECUTE_SWAP_V2"]
+          "enum": ["ACTIVITY_TYPE_EXECUTE_SWAP_V3"]
         },
         "timestampMs": {
           "type": "string",
@@ -12858,7 +12891,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/v1ExecuteSwapIntentV2"
+          "$ref": "#/definitions/v1ExecuteSwapIntentV3"
         },
         "generateAppProofs": {
           "type": "boolean"
@@ -13150,7 +13183,6 @@
     "v1FiatOnRampBlockchainNetwork": {
       "type": "string",
       "enum": [
-        "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BITCOIN",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_ETHEREUM",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_SOLANA",
         "FIAT_ON_RAMP_BLOCKCHAIN_NETWORK_BASE"
@@ -16427,6 +16459,9 @@
         },
         "upsertSwapFixedRateLimitConfigIntent": {
           "$ref": "#/definitions/v1UpsertSwapFixedRateLimitConfigIntent"
+        },
+        "createFiatOnRampSessionIntent": {
+          "$ref": "#/definitions/v1CreateFiatOnRampSessionIntent"
         }
       }
     },
@@ -18755,6 +18790,9 @@
         },
         "upsertSwapFixedRateLimitConfigResult": {
           "$ref": "#/definitions/v1UpsertSwapFixedRateLimitConfigResult"
+        },
+        "createFiatOnRampSessionResult": {
+          "$ref": "#/definitions/v1CreateFiatOnRampSessionResult"
         }
       }
     },
@@ -19217,6 +19255,10 @@
         "hashFunction": {
           "$ref": "#/definitions/v1HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing the payload."
         }
       },
       "required": ["signWith", "payload", "encoding", "hashFunction"]
@@ -19284,6 +19326,10 @@
         "hashFunction": {
           "$ref": "#/definitions/v1HashFunction",
           "description": "Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032."
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing the payloads."
         }
       },
       "required": ["signWith", "payloads", "encoding", "hashFunction"]
@@ -19354,6 +19400,10 @@
         },
         "type": {
           "$ref": "#/definitions/v1TransactionType"
+        },
+        "externalSignerPubkey": {
+          "type": "string",
+          "description": "The public key of the external signer to use for signing this transaction."
         }
       },
       "required": ["signWith", "unsignedTransaction", "type"]
@@ -20443,20 +20493,9 @@
         "fixedRate": {
           "type": "boolean"
         },
-        "turnkeyFeeCollection": {
-          "type": "string"
-        },
-        "sponsoredFeeComponents": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "remainingFeeComponents": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "estimatedFixedRateAdjustmentUsd": {
+          "type": "string",
+          "description": "Estimated USD adjustment for the fixed rate. Present only for fixed-rate quotes. Positive is a cost billed to you; negative is an earning credited against your transaction management charges at the end of the billing period. Informational; the final amount is settled after execution."
         }
       },
       "required": [
@@ -20499,7 +20538,7 @@
         },
         "usageUsd": {
           "type": "string",
-          "description": "Settled spending in the current window. Fixed-rate usage stays zero until final fixed-rate costs are recorded."
+          "description": "Settled spending in the current window. Fixed-rate earnings offset fixed-rate costs, and usage never goes below zero. Fixed-rate usage stays zero until final fixed-rate costs are recorded."
         },
         "remainingUsd": {
           "type": "string",
@@ -22248,7 +22287,8 @@
       "type": "object",
       "properties": {
         "feeReceiverWalletAddress": {
-          "type": "string"
+          "type": "string",
+          "description": "Organization-owned wallet account that receives swap fees. Required when fee_bps is set. Omit together with fee_bps to clear swap fees."
         },
         "feeBps": {
           "type": "string",

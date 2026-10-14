@@ -51,7 +51,7 @@ func (kf KeyFactory[T, M]) FromTurnkeyPrivateKey(data string) (T, error) {
 	var instance T
 
 	typeOfT := reflect.TypeOf(instance)
-	if typeOfT.Kind() == reflect.Ptr {
+	if typeOfT.Kind() == reflect.Pointer {
 		typeOfT = typeOfT.Elem()
 	}
 
