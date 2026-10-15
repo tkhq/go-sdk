@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.2.0 — 2026-10-15
+### Patch Changes
+- golang was updated to v1.27 with lots of deprecations and crypto changes.  Functionally a no-op.
+### Minor Changes
+- Adds `EncryptSecretToBundle`, which verifies and HPKE-encrypts a secret plaintext to an `InitImportSecrets` target bundle.
+
+### [crypto/v0.1.1 ... crypto/v0.2.0](https://github.com/tkhq/go-sdk/compare/crypto/v0.1.1...crypto/v0.2.0)
+
 ## 0.1.1 — 2026-08-25
 ### Patch Changes
 - bumping x/crypto for https://nvd.nist.gov/vuln/detail/cve-2026-46595
