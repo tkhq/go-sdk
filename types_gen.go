@@ -1668,8 +1668,10 @@ type CreateSwapQuoteIntentV2 struct {
 type CreateSwapQuoteIntentV3 struct {
 	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
-	FeeSponsorship     *bool   `json:"feeSponsorship,omitempty"`
-	FixedRate          *bool   `json:"fixedRate,omitempty"`
+	// When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
+	// When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
+	FixedRate *bool `json:"fixedRate,omitempty"`
 	// Base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
@@ -1688,7 +1690,8 @@ type CreateSwapQuoteResult struct {
 }
 
 type CreateSwapQuoteResultV2 struct {
-	Quotes []SwapQuoteV2 `json:"quotes,omitempty"`
+	// One or more provider quotes for this request. Today this contains a single Relay quote; pass quotes[i].quoteId to execute_swap to bind execution.
+	Quotes []SwapQuoteV2 `json:"quotes"`
 }
 
 type CreateTVCAppIntent struct {
@@ -2947,7 +2950,7 @@ type AuthProxyGetAccountResponse struct {
 }
 
 type GetActivePoliciesRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -2963,7 +2966,7 @@ type GetActivitiesRequest struct {
 	FilterByStatus []ActivityStatus `json:"filterByStatus,omitempty"`
 	// Array of activity types filtering which activities will be listed in the response.
 	FilterByType []ActivityType `json:"filterByType,omitempty"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Parameters used for cursor-based pagination.
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
@@ -2977,14 +2980,14 @@ type GetActivitiesResponse struct {
 type GetActivityRequest struct {
 	// Unique identifier for a given activity object.
 	ActivityID string `json:"activityId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
 type GetAPIKeyRequest struct {
 	// Unique identifier for a given API key.
 	APIKeyID string `json:"apiKeyId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -2994,7 +2997,7 @@ type GetAPIKeyResponse struct {
 }
 
 type GetAPIKeysRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID *string `json:"userId,omitempty"`
@@ -3031,7 +3034,7 @@ type GetAppStatusResponse struct {
 type GetAuthenticatorRequest struct {
 	// Unique identifier for a given authenticator.
 	AuthenticatorID string `json:"authenticatorId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3041,7 +3044,7 @@ type GetAuthenticatorResponse struct {
 }
 
 type GetAuthenticatorsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID string `json:"userId"`
@@ -3168,7 +3171,7 @@ type GetGasUsageResponse struct {
 }
 
 type GetIPAllowlistRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// If provided, return only the allowlist for this specific API key.
 	PublicKey *string `json:"publicKey,omitempty"`
@@ -3186,7 +3189,7 @@ type GetLatestBootProofRequest struct {
 }
 
 type GetMfaPoliciesRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID string `json:"userId"`
@@ -3200,7 +3203,7 @@ type GetMfaPoliciesResponse struct {
 type GetMfaPolicyRequest struct {
 	// Unique identifier for a given MFA policy.
 	MfaPolicyID string `json:"mfaPolicyId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID string `json:"userId"`
@@ -3214,7 +3217,7 @@ type GetMfaPolicyResponse struct {
 type GetMfaStatusRequest struct {
 	// The unique identifier of the activity to get MFA status for.
 	ActivityID string `json:"activityId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Optional user ID to filter MFA status for a specific user.
 	UserID *string `json:"userId,omitempty"`
@@ -3257,7 +3260,7 @@ type GetOAuth2CredentialResponse struct {
 }
 
 type GetOAuthProvidersRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID *string `json:"userId,omitempty"`
@@ -3269,7 +3272,7 @@ type GetOAuthProvidersResponse struct {
 }
 
 type GetOnRampTransactionStatusRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Optional flag to specify if the transaction status should be refreshed from the fiat on ramp provider. Default = false.
 	Refresh *bool `json:"refresh,omitempty"`
@@ -3283,7 +3286,7 @@ type GetOnRampTransactionStatusResponse struct {
 }
 
 type GetOrganizationConfigsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3293,7 +3296,7 @@ type GetOrganizationConfigsResponse struct {
 }
 
 type GetPoliciesRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3305,7 +3308,7 @@ type GetPoliciesResponse struct {
 type GetPolicyEvaluationsRequest struct {
 	// Unique identifier for a given activity.
 	ActivityID string `json:"activityId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3314,7 +3317,7 @@ type GetPolicyEvaluationsResponse struct {
 }
 
 type GetPolicyRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given policy.
 	PolicyID string `json:"policyId"`
@@ -3326,7 +3329,7 @@ type GetPolicyResponse struct {
 }
 
 type GetPrivateKeyRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given private key.
 	PrivateKeyID string `json:"privateKeyId"`
@@ -3338,7 +3341,7 @@ type GetPrivateKeyResponse struct {
 }
 
 type GetPrivateKeysRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3348,7 +3351,7 @@ type GetPrivateKeysResponse struct {
 }
 
 type GetSendTransactionStatusRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// The unique identifier of a send transaction request.
 	SendTransactionStatusID string `json:"sendTransactionStatusId"`
@@ -3368,7 +3371,7 @@ type GetSendTransactionStatusResponse struct {
 }
 
 type GetSessionProfileRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a session profile.
 	SessionProfileID string `json:"sessionProfileId"`
@@ -3380,7 +3383,7 @@ type GetSessionProfileResponse struct {
 }
 
 type GetSessionProfilesRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3390,7 +3393,7 @@ type GetSessionProfilesResponse struct {
 }
 
 type GetSmartContractInterfaceRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given smart contract interface.
 	SmartContractInterfaceID string `json:"smartContractInterfaceId"`
@@ -3402,7 +3405,7 @@ type GetSmartContractInterfaceResponse struct {
 }
 
 type GetSmartContractInterfacesRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3428,6 +3431,7 @@ type GetSubOrgIdsResponse struct {
 }
 
 type GetSwapSponsorshipUsageRequest struct {
+	// Unique identifier for a given organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3475,7 +3479,7 @@ type GetSwapStatusResponse struct {
 type GetTVCAppDeploymentsRequest struct {
 	// Unique identifier for a given TVC App.
 	AppID string `json:"appId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3485,7 +3489,7 @@ type GetTVCAppDeploymentsResponse struct {
 }
 
 type GetTVCAppRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given TVC App.
 	TVCAppID string `json:"tvcAppId"`
@@ -3499,7 +3503,7 @@ type GetTVCAppResponse struct {
 type GetTVCAppsRequest struct {
 	// Filter TVC Apps by whether they have a live deployment. If omitted, all TVC Apps are returned.
 	IsLive *bool `json:"isLive,omitempty"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3543,7 +3547,7 @@ type GetTVCDeploymentProvisioningDetailsResponse struct {
 type GetTVCDeploymentRequest struct {
 	// Unique identifier for a given TVC Deployment.
 	DeploymentID string `json:"deploymentId"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3553,7 +3557,7 @@ type GetTVCDeploymentResponse struct {
 }
 
 type GetTVCOperatorsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3574,7 +3578,7 @@ type GetTVCQosVersionsResponse struct {
 }
 
 type GetTVCQuorumKeysRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3583,7 +3587,7 @@ type GetTVCQuorumKeysResponse struct {
 }
 
 type GetUserRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given user.
 	UserID string `json:"userId"`
@@ -3595,7 +3599,7 @@ type GetUserResponse struct {
 }
 
 type GetUsersRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3623,7 +3627,7 @@ type GetVerifiedSubOrgIdsResponse struct {
 type GetWalletAccountRequest struct {
 	// Address corresponding to a wallet account.
 	Address *string `json:"address,omitempty"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Path corresponding to a wallet account.
 	Path *string `json:"path,omitempty"`
@@ -3639,7 +3643,7 @@ type GetWalletAccountResponse struct {
 type GetWalletAccountsRequest struct {
 	// Optional flag to specify if the wallet details should be included in the response. Default = false.
 	IncludeWalletDetails *bool `json:"includeWalletDetails,omitempty"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Parameters used for cursor-based pagination.
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
@@ -3657,7 +3661,7 @@ type GetWalletAddressBalancesRequest struct {
 	Address string `json:"address"`
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet or 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3691,7 +3695,7 @@ type AuthProxyGetWalletKitConfigResponse struct {
 }
 
 type GetWalletRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Unique identifier for a given wallet.
 	WalletID string `json:"walletId"`
@@ -3703,7 +3707,7 @@ type GetWalletResponse struct {
 }
 
 type GetWalletsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -3718,7 +3722,7 @@ type GetWhoamiRequest struct {
 }
 
 type GetWhoamiResponse struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Human-readable name for an organization.
 	OrganizationName string `json:"organizationName"`
@@ -4389,7 +4393,7 @@ type ListETHTransactionHistoryRequest struct {
 	Address string `json:"address"`
 	// EVM CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet).
 	Caip2 string `json:"caip2"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Cursor-based pagination options. Cursors are opaque and valid only for the same address and CAIP-2 query.
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
@@ -4420,7 +4424,7 @@ type ListOAuth2CredentialsResponse struct {
 }
 
 type ListPrivateKeyTagsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -4446,7 +4450,7 @@ type ListSolTransactionHistoryRequest struct {
 	Address string `json:"address"`
 	// Solana CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 	// Cursor-based pagination options. Cursors are opaque and valid only for the same address and CAIP-2 query.
 	PaginationOptions *Pagination `json:"paginationOptions,omitempty"`
@@ -4461,7 +4465,7 @@ type ListSolTransactionHistoryResponse struct {
 type ListSupportedAssetsRequest struct {
 	// CAIP-2 chain ID (e.g., 'eip155:1' for Ethereum mainnet or 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -4471,7 +4475,7 @@ type ListSupportedAssetsResponse struct {
 }
 
 type ListUserTagsRequest struct {
-	// Unique identifier for a given organization.
+	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -5755,9 +5759,11 @@ type SwapQuoteV2 struct {
 	// Provider-estimated completion time in seconds, when available.
 	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
 	// Quote expiration as a millisecond epoch string.
-	ExpiresAt      string `json:"expiresAt"`
-	FeeSponsorship *bool  `json:"feeSponsorship,omitempty"`
-	FixedRate      *bool  `json:"fixedRate,omitempty"`
+	ExpiresAt string `json:"expiresAt"`
+	// Whether Turnkey pays the provider fees for this quote.
+	FeeSponsorship bool `json:"feeSponsorship"`
+	// Whether this quote uses a 1:1 fixed rate.
+	FixedRate bool `json:"fixedRate"`
 	// Minimum acceptable base-unit amount of the output asset after slippage.
 	MinOutputAmount string `json:"minOutputAmount"`
 	// Estimated base-unit amount of the output asset.
@@ -5780,14 +5786,16 @@ type SwapRefund struct {
 }
 
 type SwapSpendingWindow struct {
+	// Whether the saved spending window permits new swaps.
 	Enabled bool `json:"enabled"`
 	// Remaining spending capacity, clamped to zero. For children, also capped by remaining parent capacity. Zero when the window is disabled. This is not a reservation or a guarantee of feature eligibility.
 	RemainingUsd string `json:"remainingUsd"`
 	// Configured per-child limit. Returned only when querying the billing parent.
 	SubOrgWindowLimitUsd *string `json:"subOrgWindowLimitUsd,omitempty"`
 	// Settled spending in the current window. Fixed-rate earnings offset fixed-rate costs, and usage never goes below zero. Fixed-rate usage stays zero until final fixed-rate costs are recorded.
-	UsageUsd              string `json:"usageUsd"`
-	WindowDurationMinutes int    `json:"windowDurationMinutes"`
+	UsageUsd string `json:"usageUsd"`
+	// Rolling window duration in minutes.
+	WindowDurationMinutes int `json:"windowDurationMinutes"`
 	// The parent's window limit, or the per-child limit when queried by a sub-organization.
 	WindowLimitUsd string `json:"windowLimitUsd"`
 }
@@ -6407,6 +6415,7 @@ type UpsertSwapFeeSponsorshipLimitConfigIntent struct {
 }
 
 type UpsertSwapFeeSponsorshipLimitConfigResult struct {
+	// Unique identifier of the organization the limit config was saved for.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -6422,6 +6431,7 @@ type UpsertSwapFixedRateLimitConfigIntent struct {
 }
 
 type UpsertSwapFixedRateLimitConfigResult struct {
+	// Unique identifier of the organization the limit config was saved for.
 	OrganizationID string `json:"organizationId"`
 }
 
@@ -7205,6 +7215,10 @@ type CreateSwapQuoteRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	// When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
+	// When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
+	FixedRate *bool `json:"fixedRate,omitempty"`
 	// Base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
@@ -7217,11 +7231,11 @@ type CreateSwapQuoteRequest struct {
 	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
-func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2" }
+func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3" }
 
 type CreateSwapQuoteResponse struct {
 	Activity Activity `json:"activity"`
-	CreateSwapQuoteResult
+	CreateSwapQuoteResultV2
 }
 
 type CreateTVCAppRequest struct {

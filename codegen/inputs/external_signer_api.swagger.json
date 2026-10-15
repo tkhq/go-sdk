@@ -2420,10 +2420,12 @@
           "description": "Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported."
         },
         "feeSponsorship": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
         },
         "fixedRate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false."
         }
       },
       "required": ["signWith", "inputToken", "outputToken", "inputAmount"]
@@ -2450,9 +2452,11 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1SwapQuoteV2"
-          }
+          },
+          "description": "One or more provider quotes for this request. Today this contains a single Relay quote; pass quotes[i].quoteId to execute_swap to bind execution."
         }
-      }
+      },
+      "required": ["quotes"]
     },
     "v1CreateTvcAppIntent": {
       "type": "object",
@@ -8446,10 +8450,12 @@
           "description": "Provider-estimated completion time in seconds, when available."
         },
         "feeSponsorship": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether Turnkey pays the provider fees for this quote."
         },
         "fixedRate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether this quote uses a 1:1 fixed rate."
         },
         "estimatedFixedRateAdjustmentUsd": {
           "type": "string",
@@ -8462,7 +8468,9 @@
         "outputAmount",
         "minOutputAmount",
         "expiresAt",
-        "clientFeeBps"
+        "clientFeeBps",
+        "feeSponsorship",
+        "fixedRate"
       ]
     },
     "v1TransactionType": {
@@ -9310,7 +9318,8 @@
       "type": "object",
       "properties": {
         "organizationId": {
-          "type": "string"
+          "type": "string",
+          "description": "Unique identifier of the organization the limit config was saved for."
         }
       },
       "required": ["organizationId"]
@@ -9346,7 +9355,8 @@
       "type": "object",
       "properties": {
         "organizationId": {
-          "type": "string"
+          "type": "string",
+          "description": "Unique identifier of the organization the limit config was saved for."
         }
       },
       "required": ["organizationId"]

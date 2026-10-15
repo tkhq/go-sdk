@@ -724,7 +724,7 @@ func (c *Client) StampCreateSubOrganization(ctx context.Context, input CreateSub
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_sub_organization", body, true)
 }
 
-// Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported.
+// Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported. Requests must use ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3.
 func (c *Client) CreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*CreateSwapQuoteResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -734,15 +734,15 @@ func (c *Client) CreateSwapQuote(ctx context.Context, input CreateSwapQuoteReque
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_swap_quote", body, &raw, true, nil); err != nil {
 		return nil, err
 	}
-	out := new(ActivityResult[CreateSwapQuoteResult])
-	if err := decodeActivityResponse(raw, "CreateSwapQuoteResult", out); err != nil {
+	out := new(ActivityResult[CreateSwapQuoteResultV2])
+	if err := decodeActivityResponse(raw, "CreateSwapQuoteResultV2", out); err != nil {
 		return nil, err
 	}
-	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateSwapQuoteResult { return r.CreateSwapQuoteResult })
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateSwapQuoteResultV2 { return r.CreateSwapQuoteResultV2 })
 	if err != nil {
 		return nil, err
 	}
-	return &CreateSwapQuoteResponse{Activity: *activity, CreateSwapQuoteResult: *result}, nil
+	return &CreateSwapQuoteResponse{Activity: *activity, CreateSwapQuoteResultV2: *result}, nil
 }
 
 func (c *Client) StampCreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*SignedRequest, error) {
