@@ -7205,6 +7205,8 @@ type CreateSwapQuoteRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	FeeSponsorship     *bool   `json:"feeSponsorship,omitempty"`
+	FixedRate          *bool   `json:"fixedRate,omitempty"`
 	// Base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset. The chain is derived from this value.
@@ -7217,11 +7219,11 @@ type CreateSwapQuoteRequest struct {
 	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
-func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2" }
+func (CreateSwapQuoteRequest) ActivityType() string { return "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3" }
 
 type CreateSwapQuoteResponse struct {
 	Activity Activity `json:"activity"`
-	CreateSwapQuoteResult
+	CreateSwapQuoteResultV2
 }
 
 type CreateTVCAppRequest struct {

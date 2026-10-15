@@ -2995,7 +2995,7 @@
     "/public/v1/submit/create_swap_quote": {
       "post": {
         "summary": "Create Swap quote",
-        "description": "Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported.",
+        "description": "Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported. Requests must use ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3.",
         "operationId": "PublicApiService_CreateSwapQuote",
         "responses": {
           "200": {
@@ -9283,7 +9283,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2"]
+          "enum": ["ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3"]
         },
         "timestampMs": {
           "type": "string",
@@ -9294,7 +9294,7 @@
           "description": "Unique identifier for a given Organization."
         },
         "parameters": {
-          "$ref": "#/definitions/v1CreateSwapQuoteIntentV2"
+          "$ref": "#/definitions/v1CreateSwapQuoteIntentV3"
         },
         "generateAppProofs": {
           "type": "boolean"
