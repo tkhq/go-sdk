@@ -61,13 +61,13 @@ type activityTyper interface {
 
 type defaultLogger struct{}
 
-func (d *defaultLogger) Printf(format string, v ...interface{}) {
+func (d *defaultLogger) Printf(format string, v ...any) {
 	fmt.Printf(format+"\n", v...)
 }
 
 // Logger defines a minimal logging interface.
 type Logger interface {
-	Printf(format string, v ...interface{})
+	Printf(format string, v ...any)
 }
 
 type loggingRoundTripper struct {

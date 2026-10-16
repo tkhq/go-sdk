@@ -112,7 +112,7 @@ func VerifyLegacyVerificationToken(tokenString, dangerouslyOverridePublicKey str
 
 	parser := jwt.NewParser(parserOpts...)
 
-	token, err := parser.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+	token, err := parser.Parse(tokenString, func(t *jwt.Token) (any, error) {
 		if t.Method != jwt.SigningMethodES256 {
 			return nil, fmt.Errorf("unexpected signing method: %v (expected ES256)", t.Method.Alg())
 		}
@@ -346,7 +346,7 @@ func VerifyAppProofSignature(appProof *AppProof) error {
 	return nil
 }
 
-func verifyBootProof(bootProof *BootProof) (map[string]interface{}, error) {
+func verifyBootProof(bootProof *BootProof) (map[string]any, error) {
 	if bootProof == nil {
 		return nil, errors.New("missing boot proof")
 	}
@@ -398,7 +398,7 @@ func verifyBootProof(bootProof *BootProof) (map[string]interface{}, error) {
 	return attestationDoc, nil
 }
 
-func verifyEphemeralKeysMatch(appProof *AppProof, bootProof *BootProof, attestationDoc map[string]interface{}) error {
+func verifyEphemeralKeysMatch(appProof *AppProof, bootProof *BootProof, attestationDoc map[string]any) error {
 	if bootProof.EphemeralPublicKeyHex == "" {
 		return errors.New("missing boot proof ephemeral public key")
 	}
@@ -447,8 +447,8 @@ func GetBootProofTime(bootProof *BootProof) (time.Time, error) {
 // parseAndVerifyAttestation parses a COSE Sign1 attestation document and verifies its signature.
 //
 //nolint:gocyclo
-func parseAndVerifyAttestation(data []byte, validationTime time.Time) (map[string]interface{}, error) {
-	var coseSign1 []interface{}
+func parseAndVerifyAttestation(data []byte, validationTime time.Time) (map[string]any, error) {
+	var coseSign1 []any
 	if err := cbor.Unmarshal(data, &coseSign1); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal COSE Sign1: %w", err)
 	}
@@ -472,12 +472,12 @@ func parseAndVerifyAttestation(data []byte, validationTime time.Time) (map[strin
 		return nil, errors.New("invalid COSE Sign1: signature is not a byte array")
 	}
 
-	var doc map[string]interface{}
+	var doc map[string]any
 	if err := cbor.Unmarshal(payload, &doc); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal document: %w", err)
 	}
 
-	cabundle, ok := doc["cabundle"].([]interface{})
+	cabundle, ok := doc["cabundle"].([]any)
 	if !ok {
 		return nil, errors.New("invalid attestation document: cabundle is not an array")
 	}
@@ -511,7 +511,7 @@ func parseAndVerifyAttestation(data []byte, validationTime time.Time) (map[strin
 		return nil, fmt.Errorf("expected P-384 curve, got %s", pubKey.Curve.Params().Name)
 	}
 
-	sigStructure := []interface{}{
+	sigStructure := []any{
 		"Signature1",
 		protected,
 		[]byte{},
