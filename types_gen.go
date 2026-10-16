@@ -4,14 +4,6 @@ package turnkey
 
 import "encoding/json"
 
-type ExternalCryptoV1SignatureScheme string
-
-const (
-	ExternalCryptoV1SignatureSchemeSignatureSchemeTkApip256    ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_API_P256"
-	ExternalCryptoV1SignatureSchemeSignatureSchemeTkWebauthn   ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_WEBAUTHN"
-	ExternalCryptoV1SignatureSchemeSignatureSchemeTkQuorumP256 ExternalCryptoV1SignatureScheme = "SIGNATURE_SCHEME_TK_QUORUM_P256"
-)
-
 type ExternalDataV1SignatureScheme string
 
 const (
@@ -513,6 +505,19 @@ const (
 	ProvisioningStateProvisioned       ProvisioningState = "PROVISIONING_STATE_PROVISIONED"
 )
 
+type SignatureScheme string
+
+const (
+	SignatureSchemeTkApip256              SignatureScheme = "SIGNATURE_SCHEME_TK_API_P256"
+	SignatureSchemeTkWebauthn             SignatureScheme = "SIGNATURE_SCHEME_TK_WEBAUTHN"
+	SignatureSchemeTkQuorumP256           SignatureScheme = "SIGNATURE_SCHEME_TK_QUORUM_P256"
+	SignatureSchemeTkAPISecp256K1         SignatureScheme = "SIGNATURE_SCHEME_TK_API_SECP256K1"
+	SignatureSchemeTkAPIEd25519           SignatureScheme = "SIGNATURE_SCHEME_TK_API_ED25519"
+	SignatureSchemeTkAPISecp256K1Eip191   SignatureScheme = "SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191"
+	SignatureSchemeTkAttestedP256         SignatureScheme = "SIGNATURE_SCHEME_TK_ATTESTED_P256"
+	SignatureSchemeTkQuorumP256SigningKey SignatureScheme = "SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY"
+)
+
 type SmartContractInterfaceType string
 
 const (
@@ -700,13 +705,6 @@ type ExternalActivityV1PolicyEvaluation struct {
 	PolicyEvaluations []ImmutablecommonV1PolicyEvaluation `json:"policyEvaluations"`
 	// Unique identifier for the Vote associated with this policy evaluation.
 	VoteID string `json:"voteId"`
-}
-
-type ExternalCryptoV1Signature struct {
-	Message   *string                          `json:"message,omitempty"`
-	PublicKey *string                          `json:"publicKey,omitempty"`
-	Scheme    *ExternalCryptoV1SignatureScheme `json:"scheme,omitempty"`
-	Signature *string                          `json:"signature,omitempty"`
 }
 
 type ExternalDataV1Address struct {
@@ -2891,17 +2889,19 @@ type ExportWalletResult struct {
 	WalletID string `json:"walletId"`
 }
 
-type ExternalSignerTask struct {
-	// The activity associated with the external signer task.
-	Activity Activity `json:"activity"`
-	// Unique identifier for the organization associated with the external signer task.
-	OrganizationID string `json:"organizationId"`
-	// Ump signature associated with the external signer task.
-	Signature ExternalCryptoV1Signature `json:"signature"`
-	// Unique identifier for a given external signer task.
-	TaskID string `json:"taskId"`
-	// Unique identifier for the user associated with the external signer task.
-	UserID string `json:"userId"`
+type ExternalSignerProof struct {
+	// ExternalSignerPayloadV1.
+	Payload   ExternalSignerProofPayloadV1 `json:"payload"`
+	Signature *Signature                   `json:"signature,omitempty"`
+}
+
+type ExternalSignerProofPayloadV1 struct {
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
+	Intent               *Intent `json:"intent,omitempty"`
+	OrganizationDigest   *string `json:"organizationDigest,omitempty"`
+	OrganizationID       *string `json:"organizationId,omitempty"`
+	TaskID               *string `json:"taskId,omitempty"`
+	Timestamp            *string `json:"timestamp,omitempty"`
 }
 
 type Feature struct {
@@ -3145,7 +3145,7 @@ type GetEarnWithdrawStatusResponse struct {
 type GetExternalSignerTasksRequest struct {
 	// Public key of the external signer.
 	ExternalSignerPublicKey string `json:"externalSignerPublicKey"`
-	// Maximum number of tasks to retrieve.
+	// Maximum number of tasks to retrieve. (Maximum 10)
 	MaxTasks int64 `json:"maxTasks"`
 	// Unique identifier for a given organization.
 	OrganizationID string `json:"organizationId"`
@@ -3153,7 +3153,7 @@ type GetExternalSignerTasksRequest struct {
 
 type GetExternalSignerTasksResponse struct {
 	// List of external signer tasks.
-	Tasks []ExternalSignerTask `json:"tasks"`
+	Tasks []ExternalSignerProof `json:"tasks"`
 }
 
 type GetGasUsageRequest struct {
@@ -5333,6 +5333,13 @@ type SignTransactionResult struct {
 	SignedTransaction string `json:"signedTransaction"`
 }
 
+type Signature struct {
+	Message   *string          `json:"message,omitempty"`
+	PublicKey *string          `json:"publicKey,omitempty"`
+	Scheme    *SignatureScheme `json:"scheme,omitempty"`
+	Signature *string          `json:"signature,omitempty"`
+}
+
 type AuthProxySignupRequest struct {
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	APIKeys []APIKeyParamsV2 `json:"apiKeys"`
@@ -5801,7 +5808,7 @@ type SwapSpendingWindow struct {
 }
 
 type SwapSponsorshipFeature struct {
-	// Whether the billing parent holds this feature's signed permission. Quotes can use the feature only when it is permitted and its window is enabled.
+	// Whether the billing parent holds this feature's signed permission, which enabling its spending window grants. Quotes can use the feature only when it is permitted and its window is enabled.
 	Permitted bool `json:"permitted"`
 	// Absent until the billing parent saves a spending window.
 	Window *SwapSpendingWindow `json:"window,omitempty"`
@@ -6404,7 +6411,7 @@ type UpsertSwapConfigResult struct {
 }
 
 type UpsertSwapFeeSponsorshipLimitConfigIntent struct {
-	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	// Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum.
 	Enabled bool `json:"enabled"`
 	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
 	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
@@ -6420,7 +6427,7 @@ type UpsertSwapFeeSponsorshipLimitConfigResult struct {
 }
 
 type UpsertSwapFixedRateLimitConfigIntent struct {
-	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	// Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum.
 	Enabled bool `json:"enabled"`
 	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
 	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
@@ -9263,7 +9270,7 @@ type UpsertSwapFeeSponsorshipLimitConfigRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	// Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum.
 	Enabled bool `json:"enabled"`
 	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
 	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
@@ -9287,7 +9294,7 @@ type UpsertSwapFixedRateLimitConfigRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission.
+	// Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum.
 	Enabled bool `json:"enabled"`
 	// Positive USD limit shared by the billing parent and its sub-organizations. At most 18 integer and 12 fractional digits.
 	OrgWindowLimitUsd string `json:"orgWindowLimitUsd"`
