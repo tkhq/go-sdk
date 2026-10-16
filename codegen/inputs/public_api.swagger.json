@@ -20576,7 +20576,7 @@
       "properties": {
         "permitted": {
           "type": "boolean",
-          "description": "Whether the billing parent holds this feature's signed permission. Quotes can use the feature only when it is permitted and its window is enabled."
+          "description": "Whether the billing parent holds this feature's signed permission, which enabling its spending window grants. Quotes can use the feature only when it is permitted and its window is enabled."
         },
         "window": {
           "$ref": "#/definitions/v1SwapSpendingWindow",
@@ -22366,7 +22366,7 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission."
+          "description": "Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum."
         }
       },
       "required": [
@@ -22424,7 +22424,7 @@
         },
         "enabled": {
           "type": "boolean",
-          "description": "Whether this spending window permits new swaps. Setting false only turns the saved window off and keeps its limits; it doesn't require the signed permission. This does not grant or remove the signed organization permission."
+          "description": "Whether this spending window permits new swaps. True also grants the billing parent's signed permission for the feature. False turns the saved window off, keeps its limits, and removes the permission. Granting or removing the permission needs root quorum."
         }
       },
       "required": [
