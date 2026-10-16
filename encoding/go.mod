@@ -1,6 +1,6 @@
 module github.com/tkhq/go-sdk/encoding
 
-go 1.25
+go 1.27.1
 
 require (
 	github.com/btcsuite/btcutil v1.0.2
