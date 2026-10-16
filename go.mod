@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/stretchr/testify v1.11.1
-	github.com/tkhq/go-sdk/crypto v0.1.1
+	github.com/tkhq/go-sdk/crypto v0.2.0
 )
 
 require (

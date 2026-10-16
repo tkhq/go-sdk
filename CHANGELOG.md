@@ -1,5 +1,58 @@
 # CHANGELOG
 
+## 2.2.0 — 2026-10-15
+### Patch Changes
+- Document `destination_address` as a raw public address for the output token protocol.
+- Rename CreateSwapQuoteV2 and ExecuteSwapV3 `destinationWalletAccount` to `destinationAddress`. The value is still a raw public address for the output token protocol.
+- Add `forceDeallocatableLiquidity` and `forceDeallocatableLiquidityDisplay` to EarnVault and EarnEnabledVault: the additional assets withdrawable from a Morpho vault by force-deallocating its non-liquidity adapters at zero penalty, additive to `liquidity`. Empty when the provider does not report it (Aave).
+- Remove the unreleased velocity control client methods and request and response types from the Go SDK.
+- Add `deployStatus`, `deployRequestId` and `deployError` to EarnEnabledVault. A wrapper's entry is written before its deploy transaction lands, so `deployStatus` reports whether that deploy is PENDING, COMPLETED or FAILED; only a COMPLETED wrapper is usable. `deployRequestId` polls `GetEarnDeployStatus` and `deployError` carries the failure detail. All three are empty for wrappers deployed before deploy statuses were recorded.
+- Add optional request_context key-value pairs to ExportSecretParams.
+- Clarify the hex-encoded transaction input format for SolSendTransaction and SolSendTransactionV2, including V1 trailing signature slots, transaction size limits, and signer limits for sponsored transactions.
+- Bug fix for enclave size info used for creating new deployments from existing ones. This change fixes the functionality to not lose the instance size information.
+- Use numeric types for velocity controls activities instead of their string representations
+- Add `EARN_PROVIDER_KAMINO` to `EarnProvider` and Solana chain ids to the Earn intent `chainCaip2` enums.
+- Make `ProvisioningState` required on `DeploymentStatus` and `GetTVCDeploymentProvisioningDetailsResponse`. Both fields now use `ProvisioningState` instead of `*ProvisioningState` and are always included when marshaling JSON.
+
+Callers must replace pointer assignments, dereferences, and nil checks with direct enum values and comparisons.
+- The r/s/v fields of `SignRawPayloadResult` were inaccurately described. They are now more explicit, especially with regards to `v` in EdDSA signatures.
+- Correct OpenAPI tags, summaries, and descriptions for several public API operations (doc comments only, no behavior change).
+- The CreateSwapQuote and ExecuteSwap RPC doc comments are on CreateSwapQuoteV2 and ExecuteSwapV3, the methods that match the CreateSwapQuoteRequest and ExecuteSwapRequest API messages. Method signatures are unchanged.
+- `SwapSpendingWindow.UsageUsd` for fixed rate now nets fixed-rate earnings against fixed-rate costs in the window and never goes below zero, so earnings restore spending capacity up to the configured limit.
+- Swap quotes that request a fixed rate or fee sponsorship the provider cannot honor now fail with the `SWAP_FIXED_RATE_UNAVAILABLE`, `SWAP_FIXED_RATE_PAIR_NOT_ELIGIBLE`, or `SWAP_FEE_SPONSORSHIP_UNAVAILABLE` Turnkey error code.
+- Restrict DeleteVelocityControls activity input size (`velocity_control_ids`) to a maximum of 32 items
+- `UpsertSwapConfig` no longer creates a fee receiver wallet when `feeBps` is set and `feeReceiverWalletAddress` is omitted. The address is required whenever a fee is set, and it must be an organization wallet account. Omit both fields to clear swap fees.
+- `CreateSwapQuoteResultV2.Quotes` is always serialized, and `SwapQuoteV2.FeeSponsorship` and `FixedRate` are now `bool` instead of `*bool`, matching what the API always returns.
+### Minor Changes
+- Introduces a new dashboard only activity for updating payment method invoice email.
+- Add the `GetActivePolicies` query to the Go SDK client, along with the `GetActivePoliciesRequest`, `GetActivePoliciesResponse`, and `ActivePolicyStatus` types. For each policy in an organization, the query reports whether it is currently active based on the enclave's trusted timestamp and the policy's time window; policies without a time field are always active.
+- Adds single-secret lifecycle wrappers `Client.ImportSecret` and `Client.ExportSecret`.
+- Adds Go SDK request types and client methods for CreateSwapQuoteV2 and ExecuteSwapV3.
+- Add destinationAddress to GetSwapStatusResponse so clients can identify the receiver for same-chain and cross-chain swaps.
+- Add support for deleting stored secrets by ID with DeleteSecrets.
+- Adds enclave resource size options for CPU count and memory in Gi.
+- Add `executionFailed` to Ethereum and Solana transaction history items so clients can distinguish successful transactions from transactions that failed during on-chain execution.
+- Add ListEarnRewards, which returns the Merkl rewards (claimable, claimed, pending per token and chain) attributed to a wallet's Earn positions.
+- Add the EarnClaimRewards activity, which claims every currently claimable Merkl reward attributed to a wallet on one chain in a single Distributor transaction, and GetEarnClaimRewardsStatus to poll the claim by its claim_request_id.
+- Add an optional `tokenProgram` field on `AssetBalance` returned by `GetWalletAddressBalances`. For Solana token balances it is the SPL Token or Token-2022 program address that owns the mint, so clients can construct transfers without a separate chain lookup. It is omitted for native SOL and non-Solana assets.
+- Add `GetTVCOperators` and `GetTVCQuorumKeys` queries and their request and response types. Expose encryption and signing public keys and the optional key source on `TVCOperator`, and add the `TVCQuorumKey` type.
+
+Add `CreateTVCOperator` and `CreateTVCQuorumKey` methods, their stamping helpers, and their request and response types.
+- Add generated types for CreateSwapQuoteIntentV3, CreateSwapQuoteResultV2, and the swap fee sponsorship and fixed-rate feature names.
+- Add an optional `isLive` filter to `GetTVCApps` requests so callers can limit results based on whether an app has a live deployment.
+- Renames the `ChainCaip2` field to `Caip2` on the EarnDeployWrapper, EarnDeposit, EarnWithdraw and EarnClaimRewards intent types, matching the chain field name used by the other transaction activities.
+- Add `IncludeRequiresSocialLinking` to `AuthProxyGetAccountRequest` and `RequiresSocialLinking` to `AuthProxyGetAccountResponse`. When a request opts in, the response reports whether the organization was matched by a sub-organization's verified email rather than by a registered OIDC identity, so callers can tell an ordinary login apart from one that first requires social linking.
+- Add a swap sponsorship usage query that returns each feature's spending window, settled spending, and remaining capacity.
+- Add the `GetExternalSignerTasks` query to the Go SDK client, along with the `GetExternalSignerTasksRequest`, `GetExternalSignerTasksResponse`, `ExternalSignerTask`, `ExternalCryptoV1Signature`, and `ExternalCryptoV1SignatureScheme` types. The query lets an external signer daemon poll the coordinator for a batch of pending signing tasks keyed by its public key.
+- Renames the `ACTIVITY_TYPE_DELETE_VELOCITY_CONTROL` activity type to `ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS` (the `ActivityTypeDeleteVelocityControl` constant becomes `ActivityTypeDeleteVelocityControls`), and the `DeleteVelocityControlIntent` and `DeleteVelocityControlResult` types to `DeleteVelocityControlsIntent` and `DeleteVelocityControlsResult`. The intent and result now take a `VelocityControlIds` list instead of a single `VelocityControlID`, matching the other bulk delete activities.
+- Add the `GetFiatOnRampQuote` query and the `CreateFiatOnRampSession` activity to the Go SDK client. The query returns Coinbase and MoonPay buy quotes for a fiat amount, asset, and network. The activity takes a saved quote id and wallet address and returns the provider session URL and on-ramp transaction id.
+- Adds ExternalSignerPubkey parameter to CreatePrivateKeysV2, SignRawPayloadV2, SignRawPayloads and SignTransactionV2 calls.
+- Adds `EstimatedFixedRateAdjustmentUsd` to `SwapQuoteV2`, returned by `ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3` on fixed-rate quotes: the estimated USD adjustment for the fixed rate, where positive is a cost and negative an earning. Removes `TurnkeyFeeCollection`, `SponsoredFeeComponents`, and `RemainingFeeComponents` from `SwapQuoteV2`, which restated `FeeSponsorship` and `ClientFeeBps`. The activity is not yet released.
+- Adds `Client.UpsertSwapFeeSponsorshipLimitConfig` and `Client.UpsertSwapFixedRateLimitConfig`, which set the fee sponsorship and fixed-rate spending windows, along with their `Stamp` variants and request and response types. Use `Client.GetSwapSponsorshipUsage` to read window usage.
+- `CreateSwapQuote` now sends `ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3`. Its parameters gain optional `feeSponsorship` and `fixedRate`, and each returned quote gains `feeSponsorship`, `fixedRate`, and `estimatedFixedRateAdjustmentUsd`. Every V2 field is unchanged, so existing calls behave the same. Code that names the V2 intent or result types directly should use the V3 types.
+
+### [v2.1.0 ... v2.2.0](https://github.com/tkhq/go-sdk/compare/v2.1.0...v2.2.0)
+
 ## 2.1.0 — 2026-08-25
 ### Patch Changes
 - Added captcha enabled flag to the auth proxy config and a new GetWalletKitParams endpoint to the Auth Proxy
