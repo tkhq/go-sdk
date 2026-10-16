@@ -1,6 +1,7 @@
 package turnkey
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -83,4 +84,24 @@ func ActivityFromApprovalError(err error) (Activity, bool) {
 	}
 
 	return Activity{}, false
+}
+
+// MarshalJSON omits the feature value when it is empty.
+//
+// The API spec lists value as required while its own description calls it
+// optional, so the generated struct tags it `json:"value"` and every request
+// sends `"value": ""`. Features that take no value reject that:
+//
+//	status 400: invalid value for feature (FEATURE_NAME_OTP_EMAIL_AUTH): Some("")
+func (r SetOrganizationFeatureRequest) MarshalJSON() ([]byte, error) {
+	type alias SetOrganizationFeatureRequest
+
+	if r.Value != "" {
+		return json.Marshal(alias(r))
+	}
+
+	return json.Marshal(struct {
+		alias
+		Value *string `json:"value,omitempty"`
+	}{alias: alias(r)})
 }
