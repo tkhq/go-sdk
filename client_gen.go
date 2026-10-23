@@ -695,7 +695,7 @@ func (c *Client) StampCreateSmartContractInterface(ctx context.Context, input Cr
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_smart_contract_interface", body, true)
 }
 
-// Create a new sub-organization. Each root user must have at least one valid credential: an API key, an authenticator, an OAuth provider, or an email or phone number with a login method enabled on the sub-organization (email, email OTP, or SMS).
+// Create a new sub-organization. Each root user must have at least one valid credential: an API key, an authenticator, an OAuth provider, a wallet authenticator, or an email or phone number with a login method enabled on the sub-organization (email, email OTP, or SMS).
 func (c *Client) CreateSubOrganization(ctx context.Context, input CreateSubOrganizationRequest) (*CreateSubOrganizationResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -724,7 +724,7 @@ func (c *Client) StampCreateSubOrganization(ctx context.Context, input CreateSub
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_sub_organization", body, true)
 }
 
-// Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported. Requests must use ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3.
+// Create a swap quote. Asset chains are derived from CAIP-19 asset IDs; cross-chain quotes are supported. Requests must use ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3, which returns its quotes in createSwapQuoteResultV2.
 func (c *Client) CreateSwapQuote(ctx context.Context, input CreateSwapQuoteRequest) (*CreateSwapQuoteResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -2668,6 +2668,20 @@ func (c *Client) GetTVCDeploymentProvisioningDetails(ctx context.Context, input 
 	input.OrganizationID = organizationID
 	out := new(GetTVCDeploymentProvisioningDetailsResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_tvc_deployment_provisioning_details", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Get default values for creating a QOS manifest. Relevant for client manifest generation.
+func (c *Client) GetTVCManifestGenerationInfo(ctx context.Context, input GetTVCManifestGenerationInfoRequest) (*GetTVCManifestGenerationInfoResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetTVCManifestGenerationInfoResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_tvc_manifest_generation_info", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil

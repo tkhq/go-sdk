@@ -148,9 +148,9 @@
       "intentType": "UpdateWalletAccountNameIntent",
       "resultType": "UpdateWalletAccountNameResult"
     },
-    "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V8": {
-      "intentType": "CreateSubOrganizationIntentV8",
-      "resultType": "CreateSubOrganizationResultV8"
+    "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V9": {
+      "intentType": "CreateSubOrganizationIntentV9",
+      "resultType": "CreateSubOrganizationResultV9"
     },
     "ACTIVITY_TYPE_INIT_USER_EMAIL_RECOVERY_V2": {
       "intentType": "InitUserEmailRecoveryIntentV2",
@@ -187,6 +187,10 @@
     "ACTIVITY_TYPE_INIT_FIAT_ON_RAMP": {
       "intentType": "InitFiatOnRampIntent",
       "resultType": "InitFiatOnRampResult"
+    },
+    "ACTIVITY_TYPE_CREATE_FIAT_OFF_RAMP_SESSION": {
+      "intentType": "CreateFiatOffRampSessionIntent",
+      "resultType": "CreateFiatOffRampSessionResult"
     },
     "ACTIVITY_TYPE_INIT_IMPORT_WALLET": {
       "intentType": "InitImportWalletIntent",
@@ -531,6 +535,10 @@
     "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V7": {
       "intentType": "CreateSubOrganizationIntentV7",
       "resultType": "CreateSubOrganizationResultV7"
+    },
+    "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V8": {
+      "intentType": "CreateSubOrganizationIntentV8",
+      "resultType": "CreateSubOrganizationResultV8"
     },
     "ACTIVITY_TYPE_CREATE_USERS": {
       "intentType": "CreateUsersIntent",
