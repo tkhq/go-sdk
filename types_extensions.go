@@ -77,8 +77,7 @@ func (e *ActivityRequiresApprovalError) Error() string {
 
 // ActivityFromApprovalError returns the activity attached to an approval-required error.
 func ActivityFromApprovalError(err error) (Activity, bool) {
-	var approvalErr *ActivityRequiresApprovalError
-	if errors.As(err, &approvalErr) {
+	if approvalErr, ok := errors.AsType[*ActivityRequiresApprovalError](err); ok {
 		return approvalErr.Activity, true
 	}
 

@@ -203,9 +203,11 @@ const (
 	ActivityTypeDeleteSecrets                       ActivityType = "ACTIVITY_TYPE_DELETE_SECRETS"
 	ActivityTypeEarnClaimRewards                    ActivityType = "ACTIVITY_TYPE_EARN_CLAIM_REWARDS"
 	ActivityTypeCreateSwapQuoteV3                   ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3"
+	ActivityTypeCreateSubOrganizationV9             ActivityType = "ACTIVITY_TYPE_CREATE_SUB_ORGANIZATION_V9"
 	ActivityTypeUpsertSwapFeeSponsorshipLimitConfig ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FEE_SPONSORSHIP_LIMIT_CONFIG"
 	ActivityTypeUpsertSwapFixedRateLimitConfig      ActivityType = "ACTIVITY_TYPE_UPSERT_SWAP_FIXED_RATE_LIMIT_CONFIG"
 	ActivityTypeCreateFiatOnRampSession             ActivityType = "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION"
+	ActivityTypeCreateFiatOffRampSession            ActivityType = "ACTIVITY_TYPE_CREATE_FIAT_OFF_RAMP_SESSION"
 )
 
 type AddressFormat string
@@ -268,6 +270,7 @@ const (
 	AuthenticationTypeAPIKey   AuthenticationType = "AUTHENTICATION_TYPE_API_KEY"
 	AuthenticationTypeOAuth    AuthenticationType = "AUTHENTICATION_TYPE_OAUTH"
 	AuthenticationTypeSession  AuthenticationType = "AUTHENTICATION_TYPE_SESSION"
+	AuthenticationTypeWallet   AuthenticationType = "AUTHENTICATION_TYPE_WALLET"
 )
 
 type AuthenticatorTransport string
@@ -577,6 +580,13 @@ const (
 	VelocityControlAggregationOperatorEqual              VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_EQUAL"
 	VelocityControlAggregationOperatorGreaterThanOrEqual VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL"
 	VelocityControlAggregationOperatorGreaterThan        VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
+)
+
+type WalletAuthenticatorType string
+
+const (
+	WalletAuthenticatorTypeEthereum WalletAuthenticatorType = "WALLET_AUTHENTICATOR_TYPE_ETHEREUM"
+	WalletAuthenticatorTypeSolana   WalletAuthenticatorType = "WALLET_AUTHENTICATOR_TYPE_SOLANA"
 )
 
 type AuthProxyInitOTPRequest struct {
@@ -1156,6 +1166,22 @@ type CreateAuthenticatorsResult struct {
 	AuthenticatorIds []string `json:"authenticatorIds"`
 }
 
+type CreateFiatOffRampSessionIntent struct {
+	// Identifier of a saved fiat off-ramp quote. Returned by GetFiatOffRampQuotes.
+	QuoteID string `json:"quoteId"`
+	// URL Coinbase redirects to after the user submits the sell. Required when the saved quote is from Coinbase. Coinbase buy does not use this field. MoonPay ignores it.
+	RedirectURL *string `json:"redirectUrl,omitempty"`
+	// Wallet address for this sale. Coinbase uses it as the source address. MoonPay uses it as the refund address; the user deposits the crypto to MoonPay separately.
+	WalletAddress string `json:"walletAddress"`
+}
+
+type CreateFiatOffRampSessionResult struct {
+	// Unique identifier used to retrieve transaction statuses for a given fiat off-ramp flow.
+	OffRampTransactionID string `json:"offRampTransactionId"`
+	// URL of the fiat off-ramp session for the saved quote.
+	OffRampURL string `json:"offRampUrl"`
+}
+
 type CreateFiatOnRampCredentialIntent struct {
 	// Private API key for the on-ramp provider encrypted to our on-ramp encryption public key. Some providers, like Coinbase, require this additional key.
 	EncryptedPrivateAPIKey *string `json:"encryptedPrivateApiKey,omitempty"`
@@ -1177,7 +1203,7 @@ type CreateFiatOnRampCredentialResult struct {
 }
 
 type CreateFiatOnRampSessionIntent struct {
-	// Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuote.
+	// Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuotes.
 	QuoteID string `json:"quoteId"`
 	// Destination wallet address for the buy transaction.
 	WalletAddress string `json:"walletAddress"`
@@ -1355,8 +1381,10 @@ type CreatePrivateKeysIntent struct {
 }
 
 type CreatePrivateKeysIntentV2 struct {
-	// The public key of the external signer to use for creating the private keys.
+	// The public key of the external signer to use for creating the private keys. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
+	// The object ID of the wrapping key the external signer will use when creating the private keys. Only needed for external signer requests.
+	ExternalSignerWrappingKeyID *string `json:"externalSignerWrappingKeyId,omitempty"`
 	// A list of Private Keys.
 	PrivateKeys []PrivateKeyParams `json:"privateKeys"`
 }
@@ -1593,6 +1621,29 @@ type CreateSubOrganizationIntentV8 struct {
 	Wallet *WalletParams `json:"wallet,omitempty"`
 }
 
+type CreateSubOrganizationIntentV9 struct {
+	// Optional signature proving authorization for this sub-organization creation. The signature is over the verification token ID and the root user parameters for the root user associated with the verification token. Only required if a public key was provided during the verification step.
+	ClientSignature *ClientSignature `json:"clientSignature,omitempty"`
+	// Disable email auth for the sub-organization
+	DisableEmailAuth *bool `json:"disableEmailAuth,omitempty"`
+	// Disable email recovery for the sub-organization
+	DisableEmailRecovery *bool `json:"disableEmailRecovery,omitempty"`
+	// Disable OTP email auth for the sub-organization
+	DisableOTPEmailAuth *bool `json:"disableOtpEmailAuth,omitempty"`
+	// Disable OTP SMS auth for the sub-organization
+	DisableSmsAuth *bool `json:"disableSmsAuth,omitempty"`
+	// The threshold of unique approvals to reach root quorum. This value must be less than or equal to the number of root users
+	RootQuorumThreshold int `json:"rootQuorumThreshold"`
+	// Root users to create within this sub-organization
+	RootUsers []RootUserParamsV6 `json:"rootUsers"`
+	// Name for this sub-organization
+	SubOrganizationName string `json:"subOrganizationName"`
+	// Signed JWT containing a unique id, expiry, verification type, contact
+	VerificationToken *string `json:"verificationToken,omitempty"`
+	// The wallet to create for the sub-organization
+	Wallet *WalletParams `json:"wallet,omitempty"`
+}
+
 type CreateSubOrganizationResult struct {
 	RootUserIds       []string `json:"rootUserIds,omitempty"`
 	SubOrganizationID string   `json:"subOrganizationId"`
@@ -1630,6 +1681,12 @@ type CreateSubOrganizationResultV7 struct {
 }
 
 type CreateSubOrganizationResultV8 struct {
+	RootUserIds       []string      `json:"rootUserIds,omitempty"`
+	SubOrganizationID string        `json:"subOrganizationId"`
+	Wallet            *WalletResult `json:"wallet,omitempty"`
+}
+
+type CreateSubOrganizationResultV9 struct {
 	RootUserIds       []string      `json:"rootUserIds,omitempty"`
 	SubOrganizationID string        `json:"subOrganizationId"`
 	Wallet            *WalletResult `json:"wallet,omitempty"`
@@ -1755,6 +1812,8 @@ type CreateTVCDeploymentIntent struct {
 	PivotPath string `json:"pivotPath"`
 	// Port to use for public ingress.
 	PublicIngressPort int64 `json:"publicIngressPort"`
+	// Optional client-generated QOS manifest.
+	QosManifest *string `json:"qosManifest,omitempty"`
 	// The QuorumOS version to use to deploy this application
 	QosVersion string `json:"qosVersion"`
 	// Optional desired replica count for this deployment.
@@ -3556,6 +3615,24 @@ type GetTVCDeploymentResponse struct {
 	TVCDeployment TVCDeployment `json:"tvcDeployment"`
 }
 
+type GetTVCManifestGenerationInfoRequest struct {
+	AppID          string `json:"appId"`
+	OrganizationID string `json:"organizationId"`
+	// QOS version of the deployment. Defaults to the latest recommended TVC QOS version.
+	QosVersion *string `json:"qosVersion,omitempty"`
+}
+
+type GetTVCManifestGenerationInfoResponse struct {
+	DefaultDnsResolvers []string `json:"defaultDnsResolvers,omitempty"`
+	Namespace           string   `json:"namespace"`
+	Nonce               int64    `json:"nonce"`
+	Pcr0                string   `json:"pcr0"`
+	Pcr1                string   `json:"pcr1"`
+	Pcr2                string   `json:"pcr2"`
+	Pcr3                string   `json:"pcr3"`
+	QosVersion          string   `json:"qosVersion"`
+}
+
 type GetTVCOperatorsRequest struct {
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -4101,6 +4178,7 @@ type Intent struct {
 	CreateAPIOnlyUsersIntent                  *CreateAPIOnlyUsersIntent                  `json:"createApiOnlyUsersIntent,omitempty"`
 	CreateAuthenticatorsIntent                *CreateAuthenticatorsIntent                `json:"createAuthenticatorsIntent,omitempty"`
 	CreateAuthenticatorsIntentV2              *CreateAuthenticatorsIntentV2              `json:"createAuthenticatorsIntentV2,omitempty"`
+	CreateFiatOffRampSessionIntent            *CreateFiatOffRampSessionIntent            `json:"createFiatOffRampSessionIntent,omitempty"`
 	CreateFiatOnRampCredentialIntent          *CreateFiatOnRampCredentialIntent          `json:"createFiatOnRampCredentialIntent,omitempty"`
 	CreateFiatOnRampSessionIntent             *CreateFiatOnRampSessionIntent             `json:"createFiatOnRampSessionIntent,omitempty"`
 	CreateInvitationsIntent                   *CreateInvitationsIntent                   `json:"createInvitationsIntent,omitempty"`
@@ -4130,6 +4208,7 @@ type Intent struct {
 	CreateSubOrganizationIntentV6             *CreateSubOrganizationIntentV6             `json:"createSubOrganizationIntentV6,omitempty"`
 	CreateSubOrganizationIntentV7             *CreateSubOrganizationIntentV7             `json:"createSubOrganizationIntentV7,omitempty"`
 	CreateSubOrganizationIntentV8             *CreateSubOrganizationIntentV8             `json:"createSubOrganizationIntentV8,omitempty"`
+	CreateSubOrganizationIntentV9             *CreateSubOrganizationIntentV9             `json:"createSubOrganizationIntentV9,omitempty"`
 	CreateSwapQuoteIntent                     *CreateSwapQuoteIntent                     `json:"createSwapQuoteIntent,omitempty"`
 	CreateSwapQuoteIntentV2                   *CreateSwapQuoteIntentV2                   `json:"createSwapQuoteIntentV2,omitempty"`
 	CreateSwapQuoteIntentV3                   *CreateSwapQuoteIntentV3                   `json:"createSwapQuoteIntentV3,omitempty"`
@@ -4973,6 +5052,7 @@ type Result struct {
 	CreateAPIKeysResult                       *CreateAPIKeysResult                       `json:"createApiKeysResult,omitempty"`
 	CreateAPIOnlyUsersResult                  *CreateAPIOnlyUsersResult                  `json:"createApiOnlyUsersResult,omitempty"`
 	CreateAuthenticatorsResult                *CreateAuthenticatorsResult                `json:"createAuthenticatorsResult,omitempty"`
+	CreateFiatOffRampSessionResult            *CreateFiatOffRampSessionResult            `json:"createFiatOffRampSessionResult,omitempty"`
 	CreateFiatOnRampCredentialResult          *CreateFiatOnRampCredentialResult          `json:"createFiatOnRampCredentialResult,omitempty"`
 	CreateFiatOnRampSessionResult             *CreateFiatOnRampSessionResult             `json:"createFiatOnRampSessionResult,omitempty"`
 	CreateInvitationsResult                   *CreateInvitationsResult                   `json:"createInvitationsResult,omitempty"`
@@ -4998,6 +5078,7 @@ type Result struct {
 	CreateSubOrganizationResultV6             *CreateSubOrganizationResultV6             `json:"createSubOrganizationResultV6,omitempty"`
 	CreateSubOrganizationResultV7             *CreateSubOrganizationResultV7             `json:"createSubOrganizationResultV7,omitempty"`
 	CreateSubOrganizationResultV8             *CreateSubOrganizationResultV8             `json:"createSubOrganizationResultV8,omitempty"`
+	CreateSubOrganizationResultV9             *CreateSubOrganizationResultV9             `json:"createSubOrganizationResultV9,omitempty"`
 	CreateSwapQuoteResult                     *CreateSwapQuoteResult                     `json:"createSwapQuoteResult,omitempty"`
 	CreateSwapQuoteResultV2                   *CreateSwapQuoteResultV2                   `json:"createSwapQuoteResultV2,omitempty"`
 	CreateTVCAppResult                        *CreateTVCAppResult                        `json:"createTvcAppResult,omitempty"`
@@ -5198,6 +5279,23 @@ type RootUserParamsV5 struct {
 	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
 }
 
+type RootUserParamsV6 struct {
+	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
+	APIKeys []APIKeyParamsV2 `json:"apiKeys"`
+	// A list of Authenticator parameters. This field, if not needed, should be an empty array in your request body.
+	Authenticators []AuthenticatorParamsV2 `json:"authenticators"`
+	// A list of Oauth providers. This field, if not needed, should be an empty array in your request body.
+	OAuthProviders []OAuthProviderParamsV2 `json:"oauthProviders"`
+	// The user's email address.
+	UserEmail *string `json:"userEmail,omitempty"`
+	// Human-readable name for a User.
+	UserName string `json:"userName"`
+	// The user's phone number in E.164 format e.g. +13214567890
+	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
+	// A list of wallet authenticators. This field, if not needed, should be an empty array in your request body.
+	WalletAuthenticators []WalletAuthenticatorParams `json:"walletAuthenticators"`
+}
+
 type SecretMetadata struct {
 	// Unix timestamp in milliseconds for when the secret was created.
 	CreatedAtUnixMs string `json:"createdAtUnixMs"`
@@ -5275,7 +5373,7 @@ type SignRawPayloadIntent struct {
 type SignRawPayloadIntentV2 struct {
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
-	// The public key of the external signer to use for signing the payload.
+	// The public key of the external signer to use for signing the payload. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
@@ -5297,7 +5395,7 @@ type SignRawPayloadResult struct {
 type SignRawPayloadsIntent struct {
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
-	// The public key of the external signer to use for signing the payloads.
+	// The public key of the external signer to use for signing the payloads. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
@@ -5320,7 +5418,7 @@ type SignTransactionIntent struct {
 }
 
 type SignTransactionIntentV2 struct {
-	// The public key of the external signer to use for signing this transaction.
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A Wallet account address, Private Key address, or Private Key identifier.
 	SignWith  string          `json:"signWith"`
@@ -5383,6 +5481,15 @@ type SignupUsageV2 struct {
 	Email          *string                 `json:"email,omitempty"`
 	OAuthProviders []OAuthProviderParamsV2 `json:"oauthProviders,omitempty"`
 	PhoneNumber    *string                 `json:"phoneNumber,omitempty"`
+}
+
+type SignupUsageV3 struct {
+	APIKeys              []APIKeyParamsV2            `json:"apiKeys,omitempty"`
+	Authenticators       []AuthenticatorParamsV2     `json:"authenticators,omitempty"`
+	Email                *string                     `json:"email,omitempty"`
+	OAuthProviders       []OAuthProviderParamsV2     `json:"oauthProviders,omitempty"`
+	PhoneNumber          *string                     `json:"phoneNumber,omitempty"`
+	WalletAuthenticators []WalletAuthenticatorParams `json:"walletAuthenticators,omitempty"`
 }
 
 type AuthProxySignupV2Request struct {
@@ -5818,6 +5925,7 @@ type TokenUsage struct {
 	Login    *LoginUsage    `json:"login,omitempty"`
 	Signup   *SignupUsage   `json:"signup,omitempty"`
 	SignupV2 *SignupUsageV2 `json:"signupV2,omitempty"`
+	SignupV3 *SignupUsageV3 `json:"signupV3,omitempty"`
 	// Unique identifier for the verification token
 	TokenID string `json:"tokenId"`
 	// Type of token usage
@@ -5896,7 +6004,7 @@ type TVCApp struct {
 	Name string `json:"name"`
 	// Unique Identifier of the Organization for this TVC App
 	OrganizationID string `json:"organizationId"`
-	// The public domain for ingress to this TVC App (in the format "app-<ID>.turnkey.cloud").
+	// The public domain for ingress to this TVC App (in the format "app-<ID>.app.turnkey.cloud"). May contain multiple comma-separated hostnames.
 	PublicDomain string `json:"publicDomain"`
 	// Public key for the Quorum Key associated with this TVC App
 	QuorumPublicKey string `json:"quorumPublicKey"`
@@ -6463,6 +6571,8 @@ type User struct {
 	UserPhoneNumber *string `json:"userPhoneNumber,omitempty"`
 	// A list of User Tag IDs.
 	UserTags []string `json:"userTags"`
+	// A list of wallet authenticators (externally-owned Ethereum or Solana accounts used to authenticate). If not needed, this should be an empty array.
+	WalletAuthenticators []WalletAuthenticator `json:"walletAuthenticators"`
 }
 
 type UserParams struct {
@@ -6547,7 +6657,7 @@ type VelocityControlAggregation struct {
 	Method VelocityControlAggregationMethod `json:"method"`
 	// Comparison between the aggregate and the threshold.
 	Operator VelocityControlAggregationOperator `json:"operator"`
-	// Non-negative base-10 decimal string with at most 38 total digits and 18 fractional digits.
+	// Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits.
 	Threshold string `json:"threshold"`
 	// Time window for the aggregation.
 	Window VelocityControlAggregationWindow `json:"window"`
@@ -6611,7 +6721,7 @@ type VelocityControlDataSourceChainAssetTransfer struct {
 type VelocityControlDataSourceChainAssetTransferDefinition struct {
 	// CAIP-19 identifier for the asset.
 	Caip19 string `json:"caip19"`
-	// Integer between 0 and 255 (inclusive) that specifies the number of decimal places for the asset.
+	// Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.
 	Decimals int64 `json:"decimals"`
 }
 
@@ -6752,6 +6862,28 @@ type WalletAccountParams struct {
 	Path string `json:"path"`
 	// Path format used to generate a wallet Account.
 	PathFormat PathFormat `json:"pathFormat"`
+}
+
+type WalletAuthenticator struct {
+	// Normalized account address.
+	Address   string                  `json:"address"`
+	CreatedAt ExternalDataV1Timestamp `json:"createdAt"`
+	// SIWE/SIWS domain this authenticator is bound to.
+	Domain string `json:"domain"`
+	// Network this authenticator belongs to.
+	TypeValue WalletAuthenticatorType `json:"type"`
+	UpdatedAt ExternalDataV1Timestamp `json:"updatedAt"`
+	// Unique identifier for a wallet authenticator.
+	WalletAuthenticatorID string `json:"walletAuthenticatorId"`
+}
+
+type WalletAuthenticatorParams struct {
+	// Account address. Ethereum addresses are stored lowercase with a 0x prefix. Solana addresses are canonical base58.
+	Address string `json:"address"`
+	// SIWE/SIWS domain this authenticator is bound to. Host only, lowercased.
+	Domain string `json:"domain"`
+	// Network this authenticator belongs to.
+	TypeValue WalletAuthenticatorType `json:"type"`
 }
 
 type WalletKitSettingsParams struct {
@@ -7075,8 +7207,10 @@ type CreatePrivateKeysRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// The public key of the external signer to use for creating the private keys.
+	// The public key of the external signer to use for creating the private keys. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
+	// The object ID of the wrapping key the external signer will use when creating the private keys. Only needed for external signer requests.
+	ExternalSignerWrappingKeyID *string `json:"externalSignerWrappingKeyId,omitempty"`
 	// A list of Private Keys.
 	PrivateKeys []PrivateKeyParams `json:"privateKeys"`
 }
@@ -7306,6 +7440,8 @@ type CreateTVCDeploymentRequest struct {
 	PivotPath string `json:"pivotPath"`
 	// Port to use for public ingress.
 	PublicIngressPort int64 `json:"publicIngressPort"`
+	// Optional client-generated QOS manifest.
+	QosManifest *string `json:"qosManifest,omitempty"`
 	// The QuorumOS version to use to deploy this application
 	QosVersion string `json:"qosVersion"`
 	// Optional desired replica count for this deployment.
@@ -8725,7 +8861,7 @@ type SignRawPayloadRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
-	// The public key of the external signer to use for signing the payload.
+	// The public key of the external signer to use for signing the payload. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
@@ -8749,7 +8885,7 @@ type SignRawPayloadsRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Encoding of the `payload` string. Turnkey uses this information to convert `payload` into bytes with the correct decoder (e.g. hex, utf8).
 	Encoding PayloadEncoding `json:"encoding"`
-	// The public key of the external signer to use for signing the payloads.
+	// The public key of the external signer to use for signing the payloads. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// Hash function to apply to payload bytes before signing. This field must be set to HASH_FUNCTION_NOT_APPLICABLE for EdDSA/ed25519 signature requests; configurable payload hashing is not supported by RFC 8032.
 	HashFunction HashFunction `json:"hashFunction"`
@@ -8771,7 +8907,7 @@ type SignTransactionRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// The public key of the external signer to use for signing this transaction.
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
 	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A Wallet account address, Private Key address, or Private Key identifier.
 	SignWith  string          `json:"signWith"`
