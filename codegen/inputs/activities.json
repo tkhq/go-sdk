@@ -192,6 +192,14 @@
       "intentType": "CreateFiatOffRampSessionIntent",
       "resultType": "CreateFiatOffRampSessionResult"
     },
+    "ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1": {
+      "intentType": "CreateExternalSignerIntentV1",
+      "resultType": "CreateExternalSignerResultV1"
+    },
+    "ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1": {
+      "intentType": "DeleteExternalSignerIntentV1",
+      "resultType": "DeleteExternalSignerResultV1"
+    },
     "ACTIVITY_TYPE_INIT_IMPORT_WALLET": {
       "intentType": "InitImportWalletIntent",
       "resultType": "InitImportWalletResult"
@@ -256,6 +264,18 @@
       "intentType": "VerifyOtpIntentV2",
       "resultType": "VerifyOtpResult"
     },
+    "ACTIVITY_TYPE_VERIFY_WALLET_AUTHENTICATOR": {
+      "intentType": "VerifyWalletAuthenticatorIntent",
+      "resultType": "VerifyWalletAuthenticatorResult"
+    },
+    "ACTIVITY_TYPE_CREATE_WALLET_AUTHENTICATORS": {
+      "intentType": "CreateWalletAuthenticatorsIntent",
+      "resultType": "CreateWalletAuthenticatorsResult"
+    },
+    "ACTIVITY_TYPE_DELETE_WALLET_AUTHENTICATORS": {
+      "intentType": "DeleteWalletAuthenticatorsIntent",
+      "resultType": "DeleteWalletAuthenticatorsResult"
+    },
     "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS_V2": {
       "intentType": "CreateOauthProvidersIntentV2",
       "resultType": "CreateOauthProvidersResultV2"
@@ -316,6 +336,10 @@
       "intentType": "CreateFiatOnRampCredentialIntent",
       "resultType": "CreateFiatOnRampCredentialResult"
     },
+    "ACTIVITY_TYPE_CREATE_FIAT_RAMP_CREDENTIAL": {
+      "intentType": "CreateFiatRampCredentialIntent",
+      "resultType": "CreateFiatRampCredentialResult"
+    },
     "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION": {
       "intentType": "CreateFiatOnRampSessionIntent",
       "resultType": "CreateFiatOnRampSessionResult"
@@ -327,6 +351,10 @@
     "ACTIVITY_TYPE_UPDATE_FIAT_ON_RAMP_CREDENTIAL": {
       "intentType": "UpdateFiatOnRampCredentialIntent",
       "resultType": "UpdateFiatOnRampCredentialResult"
+    },
+    "ACTIVITY_TYPE_UPDATE_FIAT_RAMP_CREDENTIAL": {
+      "intentType": "UpdateFiatRampCredentialIntent",
+      "resultType": "UpdateFiatRampCredentialResult"
     },
     "ACTIVITY_TYPE_ETH_SEND_TRANSACTION": {
       "intentType": "EthSendTransactionIntent",
@@ -391,6 +419,11 @@
     "ACTIVITY_TYPE_EXECUTE_SWAP_V3": {
       "intentType": "ExecuteSwapIntentV3",
       "resultType": "ExecuteSwapResult"
+    },
+    "ACTIVITY_TYPE_EXECUTE_SWAP_V4": {
+      "intentType": "ExecuteSwapIntentV4",
+      "resultType": "ExecuteSwapResult",
+      "internal": true
     },
     "ACTIVITY_TYPE_UPSERT_SWAP_CONFIG": {
       "intentType": "UpsertSwapConfigIntent",
@@ -664,6 +697,14 @@
       "intentType": "DisableAuthProxyIntent",
       "resultType": "DisableAuthProxyResult",
       "internal": true
+    },
+    "ACTIVITY_TYPE_ENABLE_SMS_FOR_COUNTRIES": {
+      "intentType": "EnableSmsForCountriesIntent",
+      "resultType": "EnableSmsForCountriesResult"
+    },
+    "ACTIVITY_TYPE_DISABLE_SMS_FOR_COUNTRIES": {
+      "intentType": "DisableSmsForCountriesIntent",
+      "resultType": "DisableSmsForCountriesResult"
     },
     "ACTIVITY_TYPE_UPDATE_AUTH_PROXY_CONFIG": {
       "intentType": "UpdateAuthProxyConfigIntent",
