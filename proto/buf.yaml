@@ -1,0 +1,6 @@
+# The schema/ directory is synced from the mono repo (make sync/go-sdk there);
+# do not edit the proto files here. Linting and breaking-change checks run in
+# mono, where these files are authored.
+version: v2
+modules:
+  - path: schema

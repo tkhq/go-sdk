@@ -642,16 +642,6 @@ const (
 	UsageControlAggregationMethodCount UsageControlAggregationMethod = "USAGE_CONTROL_AGGREGATION_METHOD_COUNT"
 )
 
-type UsageControlAggregationOperator string
-
-const (
-	UsageControlAggregationOperatorLessThan           UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN"
-	UsageControlAggregationOperatorLessThanOrEqual    UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL"
-	UsageControlAggregationOperatorEqual              UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_EQUAL"
-	UsageControlAggregationOperatorGreaterThanOrEqual UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL"
-	UsageControlAggregationOperatorGreaterThan        UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
-)
-
 type UsageType string
 
 const (
@@ -1995,7 +1985,7 @@ type CreateTVCQuorumKeyResult struct {
 
 type CreateUsageControlIntent struct {
 	// Aggregation expression that the Usage Control evaluates.
-	Aggregation UsageControlAggregation `json:"aggregation"`
+	Budget UsageControlBudget `json:"budget"`
 	// Data source for the Usage Control.
 	DataSource UsageControlDataSource `json:"dataSource"`
 	// Identifier for the Usage Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
@@ -2928,8 +2918,19 @@ type ETHSendTransactionResultV2 struct {
 }
 
 type ETHSendTransactionStatus struct {
+	// Fee the landed transaction paid, including when it reverted, when available.
+	Fee *ETHTransactionFee `json:"fee,omitempty"`
 	// The Ethereum transaction hash, if available.
 	TxHash *string `json:"txHash,omitempty"`
+}
+
+type ETHTransactionFee struct {
+	// Effective gas price paid per gas unit, in wei (decimal string). On OP Stack chains, gasUsed multiplied by this price excludes the L1 data and operator fees.
+	EffectiveGasPrice *string `json:"effectiveGasPrice,omitempty"`
+	// Gas units consumed by the landed transaction (receipt.gasUsed).
+	GasUsed *string `json:"gasUsed,omitempty"`
+	// Sponsored cost recorded for this transaction, in USD, at the token price used for billing. Unset for non-sponsored and testnet transactions, and until the cost is recorded.
+	TotalCostUsd *string `json:"totalCostUsd,omitempty"`
 }
 
 type ETHTransactionHistoryItem struct {
@@ -6086,8 +6087,23 @@ type SolanaFailureDetails struct {
 }
 
 type SolanaSendTransactionStatus struct {
+	// Fee the landed transaction paid, including when it failed on chain, when available.
+	Fee *SolanaTransactionFee `json:"fee,omitempty"`
 	// The Solana transaction signature, if available.
 	Signature *string `json:"signature,omitempty"`
+}
+
+type SolanaTransactionFee struct {
+	// The transaction fee portion of total_cost_usd, in USD.
+	FeeCostUsd *string `json:"feeCostUsd,omitempty"`
+	// Total fee the landed transaction paid, in lamports (meta.fee). Excludes rent.
+	FeeLamports *string `json:"feeLamports,omitempty"`
+	// The sponsored rent portion of total_cost_usd, in USD. Unset when no rent was sponsored.
+	RentCostUsd *string `json:"rentCostUsd,omitempty"`
+	// Rent the paymaster covered for accounts this transaction created, in lamports, net of any rent swept back in the same transaction. Unset when none was sponsored. Not reduced if an account is later closed.
+	SponsoredRentLamports *string `json:"sponsoredRentLamports,omitempty"`
+	// Sponsored cost recorded for this transaction, in USD, at the token price used for billing: fee_cost_usd plus rent_cost_usd. Unset for non-sponsored and testnet transactions, and until the cost is recorded.
+	TotalCostUsd *string `json:"totalCostUsd,omitempty"`
 }
 
 type SparkClaimLeaf struct {
@@ -7044,34 +7060,6 @@ type UpsertSwapFixedRateLimitConfigResult struct {
 	OrganizationID string `json:"organizationId"`
 }
 
-type UsageControlAggregation struct {
-	// Scope that partitions matching data before aggregation.
-	GroupBy UsageControlAggregationGroupBy `json:"groupBy"`
-	// Method that aggregates matching data points.
-	Method UsageControlAggregationMethod `json:"method"`
-	// Comparison between the aggregate and the threshold.
-	Operator UsageControlAggregationOperator `json:"operator"`
-	// Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits.
-	Threshold string `json:"threshold"`
-	// Time window for the aggregation.
-	Window UsageControlAggregationWindow `json:"window"`
-}
-
-type UsageControlAggregationGroupBy struct {
-	// Uses one shared bucket for the Organization.
-	Organization *UsageControlAggregationGroupByOrganization `json:"organization,omitempty"`
-	// Uses one bucket for each User.
-	User *UsageControlAggregationGroupByUser `json:"user,omitempty"`
-	// Uses one bucket for each Wallet.
-	Wallet *UsageControlAggregationGroupByWallet `json:"wallet,omitempty"`
-}
-
-type UsageControlAggregationGroupByOrganization map[string]any
-
-type UsageControlAggregationGroupByUser map[string]any
-
-type UsageControlAggregationGroupByWallet map[string]any
-
 type UsageControlAggregationWindow struct {
 	// Uses all matching data without a time limit.
 	Infinite *UsageControlAggregationWindowInfinite `json:"infinite,omitempty"`
@@ -7086,6 +7074,15 @@ type UsageControlAggregationWindowRolling struct {
 	Duration int64 `json:"duration"`
 }
 
+type UsageControlBudget struct {
+	// Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits.
+	Limit string `json:"limit"`
+	// Method that aggregates matching data points.
+	Method UsageControlAggregationMethod `json:"method"`
+	// Time window for the aggregation.
+	Window UsageControlAggregationWindow `json:"window"`
+}
+
 type UsageControlDataSource struct {
 	// Uses executed Turnkey activities as input data.
 	ActivityExecution *UsageControlDataSourceActivityExecution `json:"activityExecution,omitempty"`
@@ -7093,23 +7090,11 @@ type UsageControlDataSource struct {
 	ChainAssetTransfer *UsageControlDataSourceChainAssetTransfer `json:"chainAssetTransfer,omitempty"`
 }
 
-type UsageControlDataSourceActivityExecution struct {
-	// Filters activity executions by type.
-	Filter *UsageControlDataSourceActivityExecutionFilter `json:"filter,omitempty"`
-}
-
-type UsageControlDataSourceActivityExecutionFilter struct {
-	// Activity types whose executions are included.
-	Activity []UsageControlDataSourceFilterActivity `json:"activity,omitempty"`
-}
+type UsageControlDataSourceActivityExecution map[string]any
 
 type UsageControlDataSourceChainAssetTransfer struct {
 	// Assets whose transfers are included in the data source.
 	Definition []UsageControlDataSourceChainAssetTransferDefinition `json:"definition"`
-	// Filters asset transfers by activity type.
-	Filter *UsageControlDataSourceChainAssetTransferFilter `json:"filter,omitempty"`
-	// Selects when to measure an asset transfer.
-	Phase *UsageControlDataSourcePhase `json:"phase,omitempty"`
 }
 
 type UsageControlDataSourceChainAssetTransferDefinition struct {
@@ -7118,27 +7103,6 @@ type UsageControlDataSourceChainAssetTransferDefinition struct {
 	// Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.
 	Decimals int64 `json:"decimals"`
 }
-
-type UsageControlDataSourceChainAssetTransferFilter struct {
-	// Activity types whose asset transfers are included.
-	Activity []UsageControlDataSourceFilterActivity `json:"activity,omitempty"`
-}
-
-type UsageControlDataSourceFilterActivity struct {
-	// Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`.
-	ActivityType string `json:"activityType"`
-}
-
-type UsageControlDataSourcePhase struct {
-	// Measures the transfer when Turnkey signs the transaction and returns it to the user.
-	Signature *UsageControlDataSourcePhaseSignature `json:"signature,omitempty"`
-	// Reserved for future use. Measures the transfer after the transaction lands on chain.
-	Submission *UsageControlDataSourcePhaseSubmission `json:"submission,omitempty"`
-}
-
-type UsageControlDataSourcePhaseSignature map[string]any
-
-type UsageControlDataSourcePhaseSubmission map[string]any
 
 type User struct {
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
