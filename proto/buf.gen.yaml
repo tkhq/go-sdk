@@ -1,0 +1,29 @@
+# Generates Go types for the protobuf wire format of Turnkey messages that are
+# signed and verified as raw bytes (e.g. the Ump enclave's ExternalSignerProof
+# payload). The JSON-facing SDK types in the root module are generated from
+# swagger and carry no wire-format information, so verification code needs
+# these packages instead.
+#
+# Managed mode rewrites each file's go_package (which points at mono's internal
+# gen tree) to live under this module. The vendored annotation protos are
+# generated too, so the output is self-contained and adds no dependencies
+# beyond google.golang.org/protobuf.
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/tkhq/go-sdk/proto/gen
+    # Go treats any import path containing "vendor/" as a vendored package, so
+    # the vendored annotation protos get an explicit path under thirdparty/.
+    - file_option: go_package
+      path: vendor/google/api
+      value: github.com/tkhq/go-sdk/proto/gen/thirdparty/google/api
+    - file_option: go_package
+      path: vendor/protoc-gen-openapiv2/options
+      value: github.com/tkhq/go-sdk/proto/gen/thirdparty/protoc-gen-openapiv2/options
+plugins:
+  - local: ["go", "tool", "protoc-gen-go"]
+    out: gen
+    opt: module=github.com/tkhq/go-sdk/proto/gen
