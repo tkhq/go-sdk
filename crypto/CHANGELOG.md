@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0 — 2026-10-30
+### Patch Changes
+- Run the `modernize` linter to replace legacy constructs with modern Go stylings
+### Minor Changes
+- Raises the minimum Go version in `go.mod` to 1.27.1.
+
+### [crypto/v0.2.0 ... crypto/v0.3.0](https://github.com/tkhq/go-sdk/compare/crypto/v0.2.0...crypto/v0.3.0)
+
 ## 0.2.0 — 2026-10-15
 ### Patch Changes
 - golang was updated to v1.27 with lots of deprecations and crypto changes.  Functionally a no-op.
