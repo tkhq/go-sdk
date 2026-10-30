@@ -33,7 +33,7 @@ func (c *Client) StampApproveActivity(ctx context.Context, input ApproveActivity
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/approve_activity", body, true)
 }
 
-// Return organization id associated with a given phone number, email, public key, credential ID or OIDC token.
+// Return organization id associated with a given phone number, email, public key, credential ID, OIDC token, or wallet authenticator.
 func (c *Client) AuthProxyGetAccount(ctx context.Context, input AuthProxyGetAccountRequest) (*AuthProxyGetAccountResponse, error) {
 	extraHeaders := map[string]string{}
 	if c.config.authProxyConfigID != "" {
@@ -176,6 +176,19 @@ func (c *Client) AuthProxySignupV2(ctx context.Context, input AuthProxySignupV2R
 	return out, nil
 }
 
+// Onboard a new user.
+func (c *Client) AuthProxySignupV3(ctx context.Context, input AuthProxySignupV3Request) (*AuthProxySignupV3Response, error) {
+	extraHeaders := map[string]string{}
+	if c.config.authProxyConfigID != "" {
+		extraHeaders["X-Auth-Proxy-Config-ID"] = c.config.authProxyConfigID
+	}
+	out := new(AuthProxySignupV3Response)
+	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/signup_v3", input, out, false, extraHeaders); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Verify the OTP code previously sent to the user's contact and return a verification token.
 func (c *Client) AuthProxyVerifyOTP(ctx context.Context, input AuthProxyVerifyOTPRequest) (*AuthProxyVerifyOTPResponse, error) {
 	extraHeaders := map[string]string{}
@@ -197,6 +210,19 @@ func (c *Client) AuthProxyVerifyOTPV2(ctx context.Context, input AuthProxyVerify
 	}
 	out := new(AuthProxyVerifyOTPV2Response)
 	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/otp_verify_v2", input, out, false, extraHeaders); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Verify a SIWE or SIWS login and return an enclave-signed wallet verification token.
+func (c *Client) AuthProxyVerifyWalletAuthenticator(ctx context.Context, input AuthProxyVerifyWalletAuthenticatorRequest) (*AuthProxyVerifyWalletAuthenticatorResponse, error) {
+	extraHeaders := map[string]string{}
+	if c.config.authProxyConfigID != "" {
+		extraHeaders["X-Auth-Proxy-Config-ID"] = c.config.authProxyConfigID
+	}
+	out := new(AuthProxyVerifyWalletAuthenticatorResponse)
+	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/verify_wallet_authenticator", input, out, false, extraHeaders); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -318,6 +344,35 @@ func (c *Client) StampCreateAuthenticators(ctx context.Context, input CreateAuth
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_authenticators", body, true)
 }
 
+// Register an external signer with the organization.
+func (c *Client) CreateExternalSigner(ctx context.Context, input CreateExternalSignerRequest) (*CreateExternalSignerResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_external_signer", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateExternalSignerResultV1])
+	if err := decodeActivityResponse(raw, "CreateExternalSignerResultV1", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateExternalSignerResultV1 { return r.CreateExternalSignerResultV1 })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateExternalSignerResponse{Activity: *activity, CreateExternalSignerResultV1: *result}, nil
+}
+
+func (c *Client) StampCreateExternalSigner(ctx context.Context, input CreateExternalSignerRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_external_signer", body, true)
+}
+
 // Create a fiat on ramp provider credential.
 func (c *Client) CreateFiatOnRampCredential(ctx context.Context, input CreateFiatOnRampCredentialRequest) (*CreateFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -345,6 +400,35 @@ func (c *Client) StampCreateFiatOnRampCredential(ctx context.Context, input Crea
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_on_ramp_credential", body, true)
+}
+
+// Create a fiat ramp provider credential.
+func (c *Client) CreateFiatRampCredential(ctx context.Context, input CreateFiatRampCredentialRequest) (*CreateFiatRampCredentialResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_ramp_credential", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateFiatRampCredentialResult])
+	if err := decodeActivityResponse(raw, "CreateFiatRampCredentialResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateFiatRampCredentialResult { return r.CreateFiatRampCredentialResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateFiatRampCredentialResponse{Activity: *activity, CreateFiatRampCredentialResult: *result}, nil
+}
+
+func (c *Client) StampCreateFiatRampCredential(ctx context.Context, input CreateFiatRampCredentialRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_ramp_credential", body, true)
 }
 
 // Create invitations to join an existing organization.
@@ -1014,6 +1098,35 @@ func (c *Client) StampCreateWalletAccounts(ctx context.Context, input CreateWall
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_wallet_accounts", body, true)
 }
 
+// Add wallet authenticators to an existing user. Omit verification_token to attach unverified.
+func (c *Client) CreateWalletAuthenticators(ctx context.Context, input CreateWalletAuthenticatorsRequest) (*CreateWalletAuthenticatorsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_wallet_authenticators", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateWalletAuthenticatorsResult])
+	if err := decodeActivityResponse(raw, "CreateWalletAuthenticatorsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateWalletAuthenticatorsResult { return r.CreateWalletAuthenticatorsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateWalletAuthenticatorsResponse{Activity: *activity, CreateWalletAuthenticatorsResult: *result}, nil
+}
+
+func (c *Client) StampCreateWalletAuthenticators(ctx context.Context, input CreateWalletAuthenticatorsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_wallet_authenticators", body, true)
+}
+
 // Create a webhook endpoint for an organization.
 func (c *Client) CreateWebhookEndpoint(ctx context.Context, input CreateWebhookEndpointRequest) (*CreateWebhookEndpointResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -1099,6 +1212,35 @@ func (c *Client) StampDeleteAuthenticators(ctx context.Context, input DeleteAuth
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_authenticators", body, true)
+}
+
+// Remove an external signer from the organization by its public key.
+func (c *Client) DeleteExternalSigner(ctx context.Context, input DeleteExternalSignerRequest) (*DeleteExternalSignerResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_external_signer", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[DeleteExternalSignerResultV1])
+	if err := decodeActivityResponse(raw, "DeleteExternalSignerResultV1", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *DeleteExternalSignerResultV1 { return r.DeleteExternalSignerResultV1 })
+	if err != nil {
+		return nil, err
+	}
+	return &DeleteExternalSignerResponse{Activity: *activity, DeleteExternalSignerResultV1: *result}, nil
+}
+
+func (c *Client) StampDeleteExternalSigner(ctx context.Context, input DeleteExternalSignerRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_external_signer", body, true)
 }
 
 // Delete a fiat on ramp provider credential.
@@ -1592,6 +1734,35 @@ func (c *Client) StampDeleteWalletAccounts(ctx context.Context, input DeleteWall
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_wallet_accounts", body, true)
+}
+
+// Remove wallet authenticators from a user.
+func (c *Client) DeleteWalletAuthenticators(ctx context.Context, input DeleteWalletAuthenticatorsRequest) (*DeleteWalletAuthenticatorsResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_wallet_authenticators", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[DeleteWalletAuthenticatorsResult])
+	if err := decodeActivityResponse(raw, "DeleteWalletAuthenticatorsResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *DeleteWalletAuthenticatorsResult { return r.DeleteWalletAuthenticatorsResult })
+	if err != nil {
+		return nil, err
+	}
+	return &DeleteWalletAuthenticatorsResponse{Activity: *activity, DeleteWalletAuthenticatorsResult: *result}, nil
+}
+
+func (c *Client) StampDeleteWalletAuthenticators(ctx context.Context, input DeleteWalletAuthenticatorsRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/delete_wallet_authenticators", body, true)
 }
 
 // Delete wallets for an organization.
@@ -2827,6 +2998,20 @@ func (c *Client) GetWalletAddressBalances(ctx context.Context, input GetWalletAd
 	return out, nil
 }
 
+// Get wallet authenticators for a user.
+func (c *Client) GetWalletAuthenticators(ctx context.Context, input GetWalletAuthenticatorsRequest) (*GetWalletAuthenticatorsResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetWalletAuthenticatorsResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_wallet_authenticators", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // List all wallets within an organization.
 func (c *Client) GetWallets(ctx context.Context, input GetWalletsRequest) (*GetWalletsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -4037,6 +4222,35 @@ func (c *Client) StampUpdateFiatOnRampCredential(ctx context.Context, input Upda
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/update_fiat_on_ramp_credential", body, true)
 }
 
+// Update a fiat ramp provider credential.
+func (c *Client) UpdateFiatRampCredential(ctx context.Context, input UpdateFiatRampCredentialRequest) (*UpdateFiatRampCredentialResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/update_fiat_ramp_credential", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[UpdateFiatRampCredentialResult])
+	if err := decodeActivityResponse(raw, "UpdateFiatRampCredentialResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *UpdateFiatRampCredentialResult { return r.UpdateFiatRampCredentialResult })
+	if err != nil {
+		return nil, err
+	}
+	return &UpdateFiatRampCredentialResponse{Activity: *activity, UpdateFiatRampCredentialResult: *result}, nil
+}
+
+func (c *Client) StampUpdateFiatRampCredential(ctx context.Context, input UpdateFiatRampCredentialRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/update_fiat_ramp_credential", body, true)
+}
+
 // Update an MFA policy for a user.
 func (c *Client) UpdateMfaPolicy(ctx context.Context, input UpdateMfaPolicyRequest) (*UpdateMfaPolicyResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -4573,4 +4787,33 @@ func (c *Client) StampVerifyOTP(ctx context.Context, input VerifyOTPRequest) (*S
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/verify_otp", body, true)
+}
+
+// Verify a SIWE or SIWS login and return an enclave-signed wallet verification token.
+func (c *Client) VerifyWalletAuthenticator(ctx context.Context, input VerifyWalletAuthenticatorRequest) (*VerifyWalletAuthenticatorResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/verify_wallet_authenticator", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[VerifyWalletAuthenticatorResult])
+	if err := decodeActivityResponse(raw, "VerifyWalletAuthenticatorResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *VerifyWalletAuthenticatorResult { return r.VerifyWalletAuthenticatorResult })
+	if err != nil {
+		return nil, err
+	}
+	return &VerifyWalletAuthenticatorResponse{Activity: *activity, VerifyWalletAuthenticatorResult: *result}, nil
+}
+
+func (c *Client) StampVerifyWalletAuthenticator(ctx context.Context, input VerifyWalletAuthenticatorRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/verify_wallet_authenticator", body, true)
 }
