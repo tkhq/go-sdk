@@ -195,8 +195,8 @@ const (
 	ActivityTypeCreateSwapQuote                     ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE"
 	ActivityTypeImportSecrets                       ActivityType = "ACTIVITY_TYPE_IMPORT_SECRETS"
 	ActivityTypeExportSecrets                       ActivityType = "ACTIVITY_TYPE_EXPORT_SECRETS"
-	ActivityTypeCreateVelocityControl               ActivityType = "ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL"
-	ActivityTypeDeleteVelocityControls              ActivityType = "ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS"
+	ActivityTypeCreateUsageControl                  ActivityType = "ACTIVITY_TYPE_CREATE_USAGE_CONTROL"
+	ActivityTypeDeleteUsageControls                 ActivityType = "ACTIVITY_TYPE_DELETE_USAGE_CONTROLS"
 	ActivityTypeUpdatePaymentMethod                 ActivityType = "ACTIVITY_TYPE_UPDATE_PAYMENT_METHOD"
 	ActivityTypeCreateSwapQuoteV2                   ActivityType = "ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V2"
 	ActivityTypeExecuteSwapV3                       ActivityType = "ACTIVITY_TYPE_EXECUTE_SWAP_V3"
@@ -218,6 +218,7 @@ const (
 	ActivityTypeUpdateFiatRampCredential            ActivityType = "ACTIVITY_TYPE_UPDATE_FIAT_RAMP_CREDENTIAL"
 	ActivityTypeCreateExternalSignerV1              ActivityType = "ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1"
 	ActivityTypeDeleteExternalSignerV1              ActivityType = "ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1"
+	ActivityTypeMintJWT                             ActivityType = "ACTIVITY_TYPE_MINT_JWT"
 )
 
 type AddressFormat string
@@ -435,7 +436,65 @@ type FiatOnRampProvider string
 const (
 	FiatOnRampProviderCoinbase FiatOnRampProvider = "FIAT_ON_RAMP_PROVIDER_COINBASE"
 	FiatOnRampProviderMoonpay  FiatOnRampProvider = "FIAT_ON_RAMP_PROVIDER_MOONPAY"
-	FiatOnRampProviderMeld     FiatOnRampProvider = "FIAT_ON_RAMP_PROVIDER_MELD"
+)
+
+type FiatRampCurrency string
+
+const (
+	FiatRampCurrencyAud FiatRampCurrency = "FIAT_RAMP_CURRENCY_AUD"
+	FiatRampCurrencyBgn FiatRampCurrency = "FIAT_RAMP_CURRENCY_BGN"
+	FiatRampCurrencyBrl FiatRampCurrency = "FIAT_RAMP_CURRENCY_BRL"
+	FiatRampCurrencyCad FiatRampCurrency = "FIAT_RAMP_CURRENCY_CAD"
+	FiatRampCurrencyChf FiatRampCurrency = "FIAT_RAMP_CURRENCY_CHF"
+	FiatRampCurrencyCop FiatRampCurrency = "FIAT_RAMP_CURRENCY_COP"
+	FiatRampCurrencyCzk FiatRampCurrency = "FIAT_RAMP_CURRENCY_CZK"
+	FiatRampCurrencyDkk FiatRampCurrency = "FIAT_RAMP_CURRENCY_DKK"
+	FiatRampCurrencyDop FiatRampCurrency = "FIAT_RAMP_CURRENCY_DOP"
+	FiatRampCurrencyEgp FiatRampCurrency = "FIAT_RAMP_CURRENCY_EGP"
+	FiatRampCurrencyEur FiatRampCurrency = "FIAT_RAMP_CURRENCY_EUR"
+	FiatRampCurrencyGbp FiatRampCurrency = "FIAT_RAMP_CURRENCY_GBP"
+	FiatRampCurrencyHkd FiatRampCurrency = "FIAT_RAMP_CURRENCY_HKD"
+	FiatRampCurrencyIdr FiatRampCurrency = "FIAT_RAMP_CURRENCY_IDR"
+	FiatRampCurrencyIls FiatRampCurrency = "FIAT_RAMP_CURRENCY_ILS"
+	FiatRampCurrencyJod FiatRampCurrency = "FIAT_RAMP_CURRENCY_JOD"
+	FiatRampCurrencyKes FiatRampCurrency = "FIAT_RAMP_CURRENCY_KES"
+	FiatRampCurrencyKwd FiatRampCurrency = "FIAT_RAMP_CURRENCY_KWD"
+	FiatRampCurrencyLkr FiatRampCurrency = "FIAT_RAMP_CURRENCY_LKR"
+	FiatRampCurrencyMxn FiatRampCurrency = "FIAT_RAMP_CURRENCY_MXN"
+	FiatRampCurrencyNgn FiatRampCurrency = "FIAT_RAMP_CURRENCY_NGN"
+	FiatRampCurrencyNok FiatRampCurrency = "FIAT_RAMP_CURRENCY_NOK"
+	FiatRampCurrencyNzd FiatRampCurrency = "FIAT_RAMP_CURRENCY_NZD"
+	FiatRampCurrencyOmr FiatRampCurrency = "FIAT_RAMP_CURRENCY_OMR"
+	FiatRampCurrencyPen FiatRampCurrency = "FIAT_RAMP_CURRENCY_PEN"
+	FiatRampCurrencyPln FiatRampCurrency = "FIAT_RAMP_CURRENCY_PLN"
+	FiatRampCurrencyRon FiatRampCurrency = "FIAT_RAMP_CURRENCY_RON"
+	FiatRampCurrencySek FiatRampCurrency = "FIAT_RAMP_CURRENCY_SEK"
+	FiatRampCurrencyThb FiatRampCurrency = "FIAT_RAMP_CURRENCY_THB"
+	FiatRampCurrencyTry FiatRampCurrency = "FIAT_RAMP_CURRENCY_TRY"
+	FiatRampCurrencyTwd FiatRampCurrency = "FIAT_RAMP_CURRENCY_TWD"
+	FiatRampCurrencyUsd FiatRampCurrency = "FIAT_RAMP_CURRENCY_USD"
+	FiatRampCurrencyVnd FiatRampCurrency = "FIAT_RAMP_CURRENCY_VND"
+	FiatRampCurrencyZar FiatRampCurrency = "FIAT_RAMP_CURRENCY_ZAR"
+)
+
+type FiatRampPaymentMethod string
+
+const (
+	FiatRampPaymentMethodCreditDebitCard FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_CREDIT_DEBIT_CARD"
+	FiatRampPaymentMethodApplePay        FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_APPLE_PAY"
+	FiatRampPaymentMethodGooglePay       FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_GOOGLE_PAY"
+	FiatRampPaymentMethodPaypal          FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_PAYPAL"
+	FiatRampPaymentMethodMoonpayBalance  FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_MOONPAY_BALANCE"
+	FiatRampPaymentMethodFiatWallet      FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_FIAT_WALLET"
+	FiatRampPaymentMethodAchBankAccount  FiatRampPaymentMethod = "FIAT_RAMP_PAYMENT_METHOD_ACH_BANK_ACCOUNT"
+)
+
+type FiatRampProvider string
+
+const (
+	FiatRampProviderCoinbase FiatRampProvider = "FIAT_RAMP_PROVIDER_COINBASE"
+	FiatRampProviderMoonpay  FiatRampProvider = "FIAT_RAMP_PROVIDER_MOONPAY"
+	FiatRampProviderMeld     FiatRampProvider = "FIAT_RAMP_PROVIDER_MELD"
 )
 
 type HashFunction string
@@ -445,6 +504,12 @@ const (
 	HashFunctionSha256        HashFunction = "HASH_FUNCTION_SHA256"
 	HashFunctionKeccak256     HashFunction = "HASH_FUNCTION_KECCAK256"
 	HashFunctionNotApplicable HashFunction = "HASH_FUNCTION_NOT_APPLICABLE"
+)
+
+type JWTProfile string
+
+const (
+	JWTProfileHTTPAuthzV1 JWTProfile = "JWT_PROFILE_HTTP_AUTHZ_V1"
 )
 
 type MnemonicLanguage string
@@ -570,28 +635,28 @@ const (
 	TVCHealthCheckTypeGrpc TVCHealthCheckType = "TVC_HEALTH_CHECK_TYPE_GRPC"
 )
 
+type UsageControlAggregationMethod string
+
+const (
+	UsageControlAggregationMethodSum   UsageControlAggregationMethod = "USAGE_CONTROL_AGGREGATION_METHOD_SUM"
+	UsageControlAggregationMethodCount UsageControlAggregationMethod = "USAGE_CONTROL_AGGREGATION_METHOD_COUNT"
+)
+
+type UsageControlAggregationOperator string
+
+const (
+	UsageControlAggregationOperatorLessThan           UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN"
+	UsageControlAggregationOperatorLessThanOrEqual    UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL"
+	UsageControlAggregationOperatorEqual              UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_EQUAL"
+	UsageControlAggregationOperatorGreaterThanOrEqual UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL"
+	UsageControlAggregationOperatorGreaterThan        UsageControlAggregationOperator = "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
+)
+
 type UsageType string
 
 const (
 	UsageTypeSignup UsageType = "USAGE_TYPE_SIGNUP"
 	UsageTypeLogin  UsageType = "USAGE_TYPE_LOGIN"
-)
-
-type VelocityControlAggregationMethod string
-
-const (
-	VelocityControlAggregationMethodSum   VelocityControlAggregationMethod = "VELOCITY_CONTROL_AGGREGATION_METHOD_SUM"
-	VelocityControlAggregationMethodCount VelocityControlAggregationMethod = "VELOCITY_CONTROL_AGGREGATION_METHOD_COUNT"
-)
-
-type VelocityControlAggregationOperator string
-
-const (
-	VelocityControlAggregationOperatorLessThan           VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN"
-	VelocityControlAggregationOperatorLessThanOrEqual    VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL"
-	VelocityControlAggregationOperatorEqual              VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_EQUAL"
-	VelocityControlAggregationOperatorGreaterThanOrEqual VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL"
-	VelocityControlAggregationOperatorGreaterThan        VelocityControlAggregationOperator = "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
 )
 
 type WalletAuthenticatorType string
@@ -1255,7 +1320,7 @@ type CreateFiatRampCredentialIntent struct {
 	// Secret half of the provider credential, encrypted to our on-ramp encryption public key. MoonPay: secret key (sk_test_ or sk_live_). Coinbase: Ed25519 private key
 	EncryptedSecret string `json:"encryptedSecret"`
 	// The fiat ramp provider
-	Provider FiatOnRampProvider `json:"provider"`
+	Provider FiatRampProvider `json:"provider"`
 	// If the credential is a sandbox credential
 	SandboxMode *bool `json:"sandboxMode,omitempty"`
 }
@@ -1772,7 +1837,7 @@ type CreateSwapQuoteIntentV2 struct {
 type CreateSwapQuoteIntentV3 struct {
 	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
-	// When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	// When true, Turnkey pays the execution costs for this swap and invoices them to the billing parent organization as Swap Execution. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
 	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
 	// When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
 	FixedRate *bool `json:"fixedRate,omitempty"`
@@ -1928,6 +1993,21 @@ type CreateTVCQuorumKeyResult struct {
 	ShareIds []string `json:"shareIds"`
 }
 
+type CreateUsageControlIntent struct {
+	// Aggregation expression that the Usage Control evaluates.
+	Aggregation UsageControlAggregation `json:"aggregation"`
+	// Data source for the Usage Control.
+	DataSource UsageControlDataSource `json:"dataSource"`
+	// Identifier for the Usage Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
+	Identifier string `json:"identifier"`
+	// Human-readable name for the Usage Control.
+	Name string `json:"name"`
+}
+
+type CreateUsageControlResult struct {
+	UsageControlID string `json:"usageControlId"`
+}
+
 type CreateUserTagIntent struct {
 	// A list of User IDs.
 	UserIds []string `json:"userIds"`
@@ -1965,21 +2045,6 @@ type CreateUsersIntentV4 struct {
 type CreateUsersResult struct {
 	// A list of User IDs.
 	UserIds []string `json:"userIds"`
-}
-
-type CreateVelocityControlIntent struct {
-	// Aggregation expression that the Velocity Control evaluates.
-	Aggregation VelocityControlAggregation `json:"aggregation"`
-	// Data source for the Velocity Control.
-	DataSource VelocityControlDataSource `json:"dataSource"`
-	// Identifier for the Velocity Control. Policies reference it as `controls.<identifier>`. It must be unique within the Organization.
-	Identifier string `json:"identifier"`
-	// Human-readable name for the Velocity Control.
-	Name string `json:"name"`
-}
-
-type CreateVelocityControlResult struct {
-	VelocityControlID string `json:"velocityControlId"`
 }
 
 type CreateWalletAccountsIntent struct {
@@ -2243,6 +2308,16 @@ type DeleteTVCDeploymentResult struct {
 	DeploymentID string `json:"deploymentId"`
 }
 
+type DeleteUsageControlsIntent struct {
+	// List of 1 to 32 unique identifiers for Usage Controls within an Organization.
+	UsageControlIds []string `json:"usageControlIds"`
+}
+
+type DeleteUsageControlsResult struct {
+	// A list of unique identifiers for the deleted Usage Controls.
+	UsageControlIds []string `json:"usageControlIds"`
+}
+
 type DeleteUserTagsIntent struct {
 	// A list of User Tag IDs.
 	UserTagIds []string `json:"userTagIds"`
@@ -2263,16 +2338,6 @@ type DeleteUsersIntent struct {
 type DeleteUsersResult struct {
 	// A list of User IDs.
 	UserIds []string `json:"userIds"`
-}
-
-type DeleteVelocityControlsIntent struct {
-	// List of 1 to 32 unique identifiers for Velocity Controls within an Organization.
-	VelocityControlIds []string `json:"velocityControlIds"`
-}
-
-type DeleteVelocityControlsResult struct {
-	// A list of unique identifiers for the deleted Velocity Controls.
-	VelocityControlIds []string `json:"velocityControlIds"`
 }
 
 type DeleteWalletAccountsIntent struct {
@@ -2408,7 +2473,7 @@ type EarnDepositResult struct {
 }
 
 type EarnEnabledVault struct {
-	// Gross annual percentage yield, expressed as a decimal fraction (before fees).
+	// Gross annual percentage yield including protocol rewards, expressed as a decimal fraction (before fees).
 	ApyPct *string `json:"apyPct,omitempty"`
 	// CAIP-19 asset ID of the vault's underlying asset (e.g. 'eip155:8453/erc20:0x833589...'); the chain is encoded in the identifier.
 	Caip19 *string `json:"caip19,omitempty"`
@@ -2444,10 +2509,12 @@ type EarnEnabledVault struct {
 	LiquidityDisplay *EarnValueDisplay `json:"liquidityDisplay,omitempty"`
 	// Human-readable vault name from the provider (e.g. 'Steakhouse Prime USDC' for Morpho; the reserve symbol for Aave).
 	Name *string `json:"name,omitempty"`
-	// Annual percentage yield net of fees, expressed as a decimal fraction.
+	// Annual percentage yield net of fees, expressed as a decimal fraction. Fees apply to the non-reward portion only; rewards_apy_pct passes through untouched.
 	NetApyPct *string `json:"netApyPct,omitempty"`
 	// Yield provider for the vault.
 	Provider *EarnProvider `json:"provider,omitempty"`
+	// The protocol-reward portion of apy_pct (e.g. Merkl campaigns), expressed as a decimal fraction.
+	RewardsApyPct *string `json:"rewardsApyPct,omitempty"`
 	// Total deposited through this wrapper (wrapper TVL), in raw on-chain units of the underlying asset.
 	TotalDeposited *string `json:"totalDeposited,omitempty"`
 	// Address of the underlying yield vault.
@@ -2548,7 +2615,7 @@ type EarnValueDisplay struct {
 }
 
 type EarnVault struct {
-	// Current annual percentage yield, expressed as a decimal fraction (e.g., '0.0812' for 8.12%).
+	// Gross annual percentage yield including protocol rewards, expressed as a decimal fraction (e.g., '0.0812' for 8.12%).
 	ApyPct *string `json:"apyPct,omitempty"`
 	// CAIP-19 asset ID of the vault's underlying asset (e.g. 'eip155:8453/erc20:0x833589...'); the chain is encoded in the identifier.
 	Caip19 *string `json:"caip19,omitempty"`
@@ -2570,6 +2637,8 @@ type EarnVault struct {
 	Name *string `json:"name,omitempty"`
 	// Yield provider for the vault.
 	Provider *EarnProvider `json:"provider,omitempty"`
+	// The protocol-reward portion of apy_pct (e.g. Merkl campaigns), expressed as a decimal fraction.
+	RewardsApyPct *string `json:"rewardsApyPct,omitempty"`
 	// Total value locked in the vault, in raw on-chain units of the underlying asset. The catalog is sorted by the USD value of this.
 	Tvl *string `json:"tvl,omitempty"`
 	// Address of the underlying yield vault.
@@ -3006,7 +3075,7 @@ type ExecuteSwapIntentV4 struct {
 }
 
 type ExecuteSwapMarketTerms struct {
-	// When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	// When true, Turnkey pays the execution costs for this swap and invoices them to the billing parent organization as Swap Execution. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
 	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
 	// When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
 	FixedRate *bool `json:"fixedRate,omitempty"`
@@ -3019,7 +3088,9 @@ type ExecuteSwapMarketTerms struct {
 }
 
 type ExecuteSwapResult struct {
-	// Whether Turnkey paid the provider fees for this swap. Set by execute_swap V4.
+	// Estimated charges this swap adds to your invoice, one field per swap line item, from the executed quote. Present when fee_sponsorship or fixed_rate is true. Informational; the final amounts are settled after execution and reported by get_swap_status. Set by execute_swap V4.
+	EstimatedCharges *SwapCharges `json:"estimatedCharges,omitempty"`
+	// Whether Turnkey paid the execution costs for this swap. Set by execute_swap V4.
 	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
 	// Whether this swap used a 1:1 fixed rate. Set by execute_swap V4.
 	FixedRate *bool `json:"fixedRate,omitempty"`
@@ -3120,6 +3191,29 @@ type Feature struct {
 	Value *string      `json:"value,omitempty"`
 }
 
+type FiatOffRampQuote struct {
+	// CAIP-19 asset of crypto_amount. Each value is supported for both Coinbase and MoonPay sell, the same set as on-ramp.
+	Caip19 string `json:"caip19"`
+	// Cryptocurrency the user would sell, in atomic units. Not locked in the session.
+	CryptoAmount FiatRampAmount `json:"cryptoAmount"`
+	// Quote expiration as a millisecond epoch string. Empty when the provider does not send one.
+	ExpiresAt *string `json:"expiresAt,omitempty"`
+	// Fiat the user receives, in atomic units of fiat_currency_code. For USD, 100 dollars is "10000".
+	FiatAmount FiatRampAmount `json:"fiatAmount"`
+	// Fiat currency of fiat_amount and total_fee.
+	FiatCurrencyCode FiatRampCurrency `json:"fiatCurrencyCode"`
+	// Payout method this quote was priced for.
+	PaymentMethod FiatRampPaymentMethod `json:"paymentMethod"`
+	// Provider that produced this quote.
+	Provider FiatRampProvider `json:"provider"`
+	// Identifier for this saved quote.
+	QuoteID string `json:"quoteId"`
+	// Underlying provider when provider aggregates several.
+	ServiceProvider *string `json:"serviceProvider,omitempty"`
+	// Total fee in atomic units of fiat_currency_code.
+	TotalFee FiatRampAmount `json:"totalFee"`
+}
+
 type FiatOnRampCredential struct {
 	// Non-secret half of the provider credential. MoonPay: publishable key (pk_test_ or pk_live_). Coinbase: CDP API key ID.
 	APIKey    string                  `json:"apiKey"`
@@ -3131,10 +3225,42 @@ type FiatOnRampCredential struct {
 	// Unique identifier for an Organization.
 	OrganizationID string `json:"organizationId"`
 	// The fiat ramp provider.
-	Provider FiatOnRampProvider `json:"provider"`
+	Provider FiatRampProvider `json:"provider"`
 	// If the on-ramp credential is a sandbox credential.
 	SandboxMode *bool                   `json:"sandboxMode,omitempty"`
 	UpdatedAt   ExternalDataV1Timestamp `json:"updatedAt"`
+}
+
+type FiatOnRampQuote struct {
+	// CAIP-19 asset of crypto_amount.
+	Caip19 string `json:"caip19"`
+	// Cryptocurrency the user would receive, in atomic units. Not locked in the session.
+	CryptoAmount FiatRampAmount `json:"cryptoAmount"`
+	// Quote expiration as a millisecond epoch string. Empty when the provider does not send one.
+	ExpiresAt *string `json:"expiresAt,omitempty"`
+	// Fiat the user pays, in atomic units of fiat_currency_code. For USD, 100 dollars is "10000".
+	FiatAmount FiatRampAmount `json:"fiatAmount"`
+	// Fiat currency of fiat_amount and total_fee.
+	FiatCurrencyCode FiatRampCurrency `json:"fiatCurrencyCode"`
+	// Payment method this quote was priced for. Bank transfers are not included.
+	PaymentMethod FiatRampPaymentMethod `json:"paymentMethod"`
+	// Provider that produced this quote.
+	Provider FiatRampProvider `json:"provider"`
+	// Identifier for this saved quote. Pass this to the create on ramp session activity.
+	QuoteID string `json:"quoteId"`
+	// Underlying provider when provider aggregates several.
+	ServiceProvider *string `json:"serviceProvider,omitempty"`
+	// Total fee in atomic units of fiat_currency_code.
+	TotalFee FiatRampAmount `json:"totalFee"`
+}
+
+type FiatRampAmount struct {
+	// Amount in atomic units. Use this to compare quotes. Do not use display.
+	Amount string `json:"amount"`
+	// Decimal places for this amount. Asset decimals for cryptocurrency, atomic-unit decimals for fiat (2 for USD).
+	Decimals int `json:"decimals"`
+	// Decimal representation in standard currency units.
+	Display string `json:"display"`
 }
 
 type AuthProxyGetAccountRequest struct {
@@ -3363,6 +3489,50 @@ type GetExternalSignerTasksResponse struct {
 	Tasks []ExternalSignerProof `json:"tasks"`
 }
 
+type GetFiatOffRampQuotesRequest struct {
+	// CAIP-19 asset to sell. Each value is supported for both Coinbase and MoonPay sell, the same set as on-ramp.
+	Caip19 string `json:"caip19"`
+	// ISO 3166-1 alpha-2 country code of the selling user, for example US. When omitted, the country is taken from the location of the request.
+	CountryCode *string `json:"countryCode,omitempty"`
+	// ISO 3166-2 subdivision code, for example NY. When omitted for a US visitor, the subdivision is taken from the location of the request.
+	CountrySubdivisionCode *string `json:"countrySubdivisionCode,omitempty"`
+	// Crypto amount the user wants to sell, in major units of the caip19 asset. For example, "0.05" for 0.05 ETH. The wallet address is not part of this query.
+	CryptoAmount string `json:"cryptoAmount"`
+	// Fiat currency the user receives, for example USD.
+	FiatCurrencyCode FiatRampCurrency `json:"fiatCurrencyCode"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// Quote sandbox credentials when true. Defaults to false.
+	SandboxMode *bool `json:"sandboxMode,omitempty"`
+}
+
+type GetFiatOffRampQuotesResponse struct {
+	// One quote per provider and payment method that can serve this route. Empty when none can.
+	Quotes []FiatOffRampQuote `json:"quotes"`
+}
+
+type GetFiatOnRampQuotesRequest struct {
+	// CAIP-19 asset to buy.
+	Caip19 string `json:"caip19"`
+	// ISO 3166-1 alpha-2 country code of the purchasing user, for example US. When omitted, the country is taken from the location of the request.
+	CountryCode *string `json:"countryCode,omitempty"`
+	// ISO 3166-2 subdivision code, for example NY. When omitted for a US visitor, the subdivision is taken from the location of the request.
+	CountrySubdivisionCode *string `json:"countrySubdivisionCode,omitempty"`
+	// Fiat amount the user wants to spend, in major units of fiat_currency_code. For example, "100" for 100 USD.
+	FiatAmount string `json:"fiatAmount"`
+	// Fiat currency for fiat_amount, for example USD.
+	FiatCurrencyCode FiatRampCurrency `json:"fiatCurrencyCode"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// Quote sandbox credentials when true. Defaults to false.
+	SandboxMode *bool `json:"sandboxMode,omitempty"`
+}
+
+type GetFiatOnRampQuotesResponse struct {
+	// One quote per provider and payment method that can serve this route. Empty when none can.
+	Quotes []FiatOnRampQuote `json:"quotes"`
+}
+
 type GetGasUsageRequest struct {
 	// Unique identifier for a given Organization.
 	OrganizationID string `json:"organizationId"`
@@ -3375,6 +3545,50 @@ type GetGasUsageResponse struct {
 	WindowDurationMinutes int `json:"windowDurationMinutes"`
 	// The window limit (in USD) for the organization or sub-organization.
 	WindowLimitUsd string `json:"windowLimitUsd"`
+}
+
+type GetIndicativeSwapQuoteRequest struct {
+	// Raw public address that would receive the output asset. Required for cross-protocol swaps and rejected otherwise.
+	DestinationAddress *string `json:"destinationAddress,omitempty"`
+	// Preview the price with Turnkey paying the provider fees. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
+	// Preview a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
+	FixedRate *bool `json:"fixedRate,omitempty"`
+	// Exact base-unit amount of the input asset.
+	InputAmount string `json:"inputAmount"`
+	// CAIP-19 asset ID for the input asset.
+	InputToken string `json:"inputToken"`
+	// Unique identifier for a given Organization.
+	OrganizationID string `json:"organizationId"`
+	// CAIP-19 asset ID for the output asset.
+	OutputToken string `json:"outputToken"`
+	// Wallet account address that would send the input asset. It must belong to the organization.
+	SignWith string `json:"signWith"`
+	// Maximum allowed slippage in basis points, at most 5000. When omitted, the provider chooses the slippage.
+	SlippageBps *string `json:"slippageBps,omitempty"`
+}
+
+type GetIndicativeSwapQuoteResponse struct {
+	// Client app fee in basis points included in this quote. "0" when no client fee applies.
+	ClientFeeBps string `json:"clientFeeBps"`
+	// Estimated charges this swap would add to your invoice, one field per swap line item. Present when fee_sponsorship or fixed_rate is true.
+	EstimatedCharges *SwapCharges `json:"estimatedCharges,omitempty"`
+	// Deprecated: use estimated_charges.fixed_rate_adjustment_usd. Estimated fixed-rate adjustment in USD from the customer's side: positive is a cost, negative an earning. Present only for fixed-rate quotes the provider priced.
+	EstimatedFixedRateAdjustmentUsd *string `json:"estimatedFixedRateAdjustmentUsd,omitempty"`
+	// Provider's estimated time to complete the swap, in seconds.
+	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
+	// Whether this quote has Turnkey paying the execution costs.
+	FeeSponsorship bool `json:"feeSponsorship"`
+	// Whether this quote uses a 1:1 fixed rate.
+	FixedRate bool `json:"fixedRate"`
+	// Minimum base-unit amount of the output asset after slippage.
+	MinOutputAmount string `json:"minOutputAmount"`
+	// Estimated base-unit amount of the output asset.
+	OutputAmount string `json:"outputAmount"`
+	// Swap provider that produced this quote.
+	Provider string `json:"provider"`
+	// Slippage tolerance in basis points the provider applied.
+	SlippageBps *string `json:"slippageBps,omitempty"`
 }
 
 type GetIPAllowlistRequest struct {
@@ -3655,6 +3869,8 @@ type GetSwapStatusRequest struct {
 }
 
 type GetSwapStatusResponse struct {
+	// Final charges this swap added to your invoice, one field per swap line item. Present once a fee-sponsored or fixed-rate swap's costs are settled; a swap that failed or was refunded settles at zero.
+	Charges *SwapCharges `json:"charges,omitempty"`
 	// Address that receives the output asset.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
 	// Provider-reported destination-chain transaction hashes; cross-chain COMPLETED only.
@@ -3967,6 +4183,27 @@ type GetWhoamiResponse struct {
 	UserID string `json:"userId"`
 	// Human-readable name for a user.
 	Username string `json:"username"`
+}
+
+type HTTPAuthzV1Inputs struct {
+	// SHA-256 digest of the bound request body, as `sha-256=:<base64>:`. For a request with no body, the digest of empty content.
+	BodyDigest string `json:"bodyDigest"`
+	// SHA-256 digest of each bound header value, as `sha-256=:<base64>:`. One entry per entry in `header_names`.
+	HeaderDigest []string `json:"headerDigest,omitempty"`
+	// Lowercase names of the bound request headers, in order. At most 32 unique names of at most 64 characters each. Cannot include `authorization` or hop-by-hop headers (`proxy-authorization`, `connection`, `keep-alive`, `proxy-connection`, `te`, `transfer-encoding`, `upgrade`).
+	HeaderNames []string `json:"headerNames,omitempty"`
+	// Unix time in seconds. Becomes the `iat` claim.
+	IssuedAt string `json:"issuedAt"`
+	// HTTP method of the bound request. One of `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE`.
+	Method string `json:"method"`
+	// Path of the bound request, starting with `/`.
+	Path string `json:"path"`
+	// Query of the bound request without the leading `?`, or empty for no query.
+	Query *string `json:"query,omitempty"`
+	// ID of a user in the organization, as a lowercase UUID. Becomes the `sub` claim.
+	Subject string `json:"subject"`
+	// Lifetime of the JWT in seconds, from 1 to 300. `exp` is `issued_at + time_to_live_seconds`.
+	TimeToLiveSeconds string `json:"timeToLiveSeconds"`
 }
 
 type ImportPrivateKeyIntent struct {
@@ -4379,12 +4616,12 @@ type Intent struct {
 	CreateTVCManifestApprovalsIntent          *CreateTVCManifestApprovalsIntent          `json:"createTvcManifestApprovalsIntent,omitempty"`
 	CreateTVCOperatorIntent                   *CreateTVCOperatorIntent                   `json:"createTvcOperatorIntent,omitempty"`
 	CreateTVCQuorumKeyIntent                  *CreateTVCQuorumKeyIntent                  `json:"createTvcQuorumKeyIntent,omitempty"`
+	CreateUsageControlIntent                  *CreateUsageControlIntent                  `json:"createUsageControlIntent,omitempty"`
 	CreateUserTagIntent                       *CreateUserTagIntent                       `json:"createUserTagIntent,omitempty"`
 	CreateUsersIntent                         *CreateUsersIntent                         `json:"createUsersIntent,omitempty"`
 	CreateUsersIntentV2                       *CreateUsersIntentV2                       `json:"createUsersIntentV2,omitempty"`
 	CreateUsersIntentV3                       *CreateUsersIntentV3                       `json:"createUsersIntentV3,omitempty"`
 	CreateUsersIntentV4                       *CreateUsersIntentV4                       `json:"createUsersIntentV4,omitempty"`
-	CreateVelocityControlIntent               *CreateVelocityControlIntent               `json:"createVelocityControlIntent,omitempty"`
 	CreateWalletAccountsIntent                *CreateWalletAccountsIntent                `json:"createWalletAccountsIntent,omitempty"`
 	CreateWalletAuthenticatorsIntent          *CreateWalletAuthenticatorsIntent          `json:"createWalletAuthenticatorsIntent,omitempty"`
 	CreateWalletIntent                        *CreateWalletIntent                        `json:"createWalletIntent,omitempty"`
@@ -4408,9 +4645,9 @@ type Intent struct {
 	DeleteSubOrganizationIntent               *DeleteSubOrganizationIntent               `json:"deleteSubOrganizationIntent,omitempty"`
 	DeleteTVCAppAndDeploymentsIntent          *DeleteTVCAppAndDeploymentsIntent          `json:"deleteTvcAppAndDeploymentsIntent,omitempty"`
 	DeleteTVCDeploymentIntent                 *DeleteTVCDeploymentIntent                 `json:"deleteTvcDeploymentIntent,omitempty"`
+	DeleteUsageControlsIntent                 *DeleteUsageControlsIntent                 `json:"deleteUsageControlsIntent,omitempty"`
 	DeleteUserTagsIntent                      *DeleteUserTagsIntent                      `json:"deleteUserTagsIntent,omitempty"`
 	DeleteUsersIntent                         *DeleteUsersIntent                         `json:"deleteUsersIntent,omitempty"`
-	DeleteVelocityControlsIntent              *DeleteVelocityControlsIntent              `json:"deleteVelocityControlsIntent,omitempty"`
 	DeleteWalletAccountsIntent                *DeleteWalletAccountsIntent                `json:"deleteWalletAccountsIntent,omitempty"`
 	DeleteWalletAuthenticatorsIntent          *DeleteWalletAuthenticatorsIntent          `json:"deleteWalletAuthenticatorsIntent,omitempty"`
 	DeleteWalletsIntent                       *DeleteWalletsIntent                       `json:"deleteWalletsIntent,omitempty"`
@@ -4455,6 +4692,7 @@ type Intent struct {
 	InitOTPIntentV3                           *InitOTPIntentV3                           `json:"initOtpIntentV3,omitempty"`
 	InitUserEmailRecoveryIntent               *InitUserEmailRecoveryIntent               `json:"initUserEmailRecoveryIntent,omitempty"`
 	InitUserEmailRecoveryIntentV2             *InitUserEmailRecoveryIntentV2             `json:"initUserEmailRecoveryIntentV2,omitempty"`
+	MintJWTIntent                             *MintJWTIntent                             `json:"mintJwtIntent,omitempty"`
 	OAuth2AuthenticateIntent                  *OAuth2AuthenticateIntent                  `json:"oauth2AuthenticateIntent,omitempty"`
 	OAuthIntent                               *OAuthIntent                               `json:"oauthIntent,omitempty"`
 	OAuthLoginIntent                          *OAuthLoginIntent                          `json:"oauthLoginIntent,omitempty"`
@@ -4782,6 +5020,22 @@ type MfaStatus struct {
 	SatisfiedMethods []AuthenticationMethod `json:"satisfiedMethods"`
 	// Unique identifier for a given User.
 	UserID string `json:"userId"`
+}
+
+type MintJWTIntent struct {
+	// Origin of the receiving service, as `https://<lowercase host>[:port]` with no default port, path, query, or fragment. At most 256 characters. Becomes the `aud` claim.
+	Audience string `json:"audience"`
+	// Inputs for the `turnkey.io/http-authz/v1` profile.
+	HTTPAuthzV1 *HTTPAuthzV1Inputs `json:"httpAuthzV1,omitempty"`
+	// Profile that defines which claims the JWT binds. Must match the set `profile_inputs` case.
+	Profile JWTProfile `json:"profile"`
+}
+
+type MintJWTResult struct {
+	// Signed JWT in JWS compact serialization.
+	JWT string `json:"jwt"`
+	// Public JWK of the key that signed the JWT. Verifiers should pin this key or fetch it from the issuer's JWKS, not trust it from this response.
+	SigningKeyJwk string `json:"signingKeyJwk"`
 }
 
 type NoopCodegenAnchorResponse struct {
@@ -5258,9 +5512,9 @@ type Result struct {
 	CreateTVCManifestApprovalsResult          *CreateTVCManifestApprovalsResult          `json:"createTvcManifestApprovalsResult,omitempty"`
 	CreateTVCOperatorResult                   *CreateTVCOperatorResult                   `json:"createTvcOperatorResult,omitempty"`
 	CreateTVCQuorumKeyResult                  *CreateTVCQuorumKeyResult                  `json:"createTvcQuorumKeyResult,omitempty"`
+	CreateUsageControlResult                  *CreateUsageControlResult                  `json:"createUsageControlResult,omitempty"`
 	CreateUserTagResult                       *CreateUserTagResult                       `json:"createUserTagResult,omitempty"`
 	CreateUsersResult                         *CreateUsersResult                         `json:"createUsersResult,omitempty"`
-	CreateVelocityControlResult               *CreateVelocityControlResult               `json:"createVelocityControlResult,omitempty"`
 	CreateWalletAccountsResult                *CreateWalletAccountsResult                `json:"createWalletAccountsResult,omitempty"`
 	CreateWalletAuthenticatorsResult          *CreateWalletAuthenticatorsResult          `json:"createWalletAuthenticatorsResult,omitempty"`
 	CreateWalletResult                        *CreateWalletResult                        `json:"createWalletResult,omitempty"`
@@ -5284,9 +5538,9 @@ type Result struct {
 	DeleteSubOrganizationResult               *DeleteSubOrganizationResult               `json:"deleteSubOrganizationResult,omitempty"`
 	DeleteTVCAppAndDeploymentsResult          *DeleteTVCAppAndDeploymentsResult          `json:"deleteTvcAppAndDeploymentsResult,omitempty"`
 	DeleteTVCDeploymentResult                 *DeleteTVCDeploymentResult                 `json:"deleteTvcDeploymentResult,omitempty"`
+	DeleteUsageControlsResult                 *DeleteUsageControlsResult                 `json:"deleteUsageControlsResult,omitempty"`
 	DeleteUserTagsResult                      *DeleteUserTagsResult                      `json:"deleteUserTagsResult,omitempty"`
 	DeleteUsersResult                         *DeleteUsersResult                         `json:"deleteUsersResult,omitempty"`
-	DeleteVelocityControlsResult              *DeleteVelocityControlsResult              `json:"deleteVelocityControlsResult,omitempty"`
 	DeleteWalletAccountsResult                *DeleteWalletAccountsResult                `json:"deleteWalletAccountsResult,omitempty"`
 	DeleteWalletAuthenticatorsResult          *DeleteWalletAuthenticatorsResult          `json:"deleteWalletAuthenticatorsResult,omitempty"`
 	DeleteWalletsResult                       *DeleteWalletsResult                       `json:"deleteWalletsResult,omitempty"`
@@ -5323,6 +5577,7 @@ type Result struct {
 	InitOTPResult                             *InitOTPResult                             `json:"initOtpResult,omitempty"`
 	InitOTPResultV2                           *InitOTPResultV2                           `json:"initOtpResultV2,omitempty"`
 	InitUserEmailRecoveryResult               *InitUserEmailRecoveryResult               `json:"initUserEmailRecoveryResult,omitempty"`
+	MintJWTResult                             *MintJWTResult                             `json:"mintJwtResult,omitempty"`
 	OAuth2AuthenticateResult                  *OAuth2AuthenticateResult                  `json:"oauth2AuthenticateResult,omitempty"`
 	OAuthLoginResult                          *OAuthLoginResult                          `json:"oauthLoginResult,omitempty"`
 	OAuthResult                               *OAuthResult                               `json:"oauthResult,omitempty"`
@@ -6045,6 +6300,15 @@ type StampLoginResult struct {
 	Session string `json:"session"`
 }
 
+type SwapCharges struct {
+	// Swap Execution: the provider's execution costs Turnkey pays, including DEX fees and price impact, the provider's fixed cost, destination gas, and provider fees. Present when fee_sponsorship is true.
+	ExecutionUsd *string `json:"executionUsd,omitempty"`
+	// Swap Fixed Rate: the difference between the 1:1 rate and the market rate. Positive is a cost billed to you; negative is an earning credited against your transaction management charges at the end of the billing period. Present when fixed_rate is true.
+	FixedRateAdjustmentUsd *string `json:"fixedRateAdjustmentUsd,omitempty"`
+	// Swap Turnkey Fee: Turnkey's fee for a fee-sponsored swap. Present when fee_sponsorship is true.
+	TurnkeyFeeUsd *string `json:"turnkeyFeeUsd,omitempty"`
+}
+
 type SwapError struct {
 	// Human-readable description of the swap failure.
 	Message string `json:"message"`
@@ -6078,13 +6342,15 @@ type SwapQuote struct {
 type SwapQuoteV2 struct {
 	// Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount.
 	ClientFeeBps string `json:"clientFeeBps"`
-	// Estimated USD adjustment for the fixed rate. Present only for fixed-rate quotes. Positive is a cost billed to you; negative is an earning credited against your transaction management charges at the end of the billing period. Informational; the final amount is settled after execution.
+	// Estimated charges this swap adds to your invoice, one field per swap line item. Present when fee_sponsorship or fixed_rate is true. Informational; the final amounts are settled after execution and reported by get_swap_status.
+	EstimatedCharges *SwapCharges `json:"estimatedCharges,omitempty"`
+	// Deprecated: use estimated_charges.fixed_rate_adjustment_usd. Estimated USD adjustment for the fixed rate. Present only for fixed-rate quotes. Positive is a cost billed to you; negative is an earning credited against your transaction management charges at the end of the billing period. Informational; the final amount is settled after execution.
 	EstimatedFixedRateAdjustmentUsd *string `json:"estimatedFixedRateAdjustmentUsd,omitempty"`
 	// Provider-estimated completion time in seconds, when available.
 	EstimatedTimeSeconds *string `json:"estimatedTimeSeconds,omitempty"`
 	// Quote expiration as a millisecond epoch string.
 	ExpiresAt string `json:"expiresAt"`
-	// Whether Turnkey pays the provider fees for this quote.
+	// Whether Turnkey pays the execution costs for this quote.
 	FeeSponsorship bool `json:"feeSponsorship"`
 	// Whether this quote uses a 1:1 fixed rate.
 	FixedRate bool `json:"fixedRate"`
@@ -6465,7 +6731,7 @@ type UpdateFiatRampCredentialIntent struct {
 	// Secret half of the provider credential, encrypted to our on-ramp encryption public key. MoonPay: secret key (sk_test_ or sk_live_). Coinbase: Ed25519 private key
 	EncryptedSecret string `json:"encryptedSecret"`
 	// The fiat ramp provider
-	Provider FiatOnRampProvider `json:"provider"`
+	Provider FiatRampProvider `json:"provider"`
 }
 
 type UpdateFiatRampCredentialResult struct {
@@ -6778,6 +7044,102 @@ type UpsertSwapFixedRateLimitConfigResult struct {
 	OrganizationID string `json:"organizationId"`
 }
 
+type UsageControlAggregation struct {
+	// Scope that partitions matching data before aggregation.
+	GroupBy UsageControlAggregationGroupBy `json:"groupBy"`
+	// Method that aggregates matching data points.
+	Method UsageControlAggregationMethod `json:"method"`
+	// Comparison between the aggregate and the threshold.
+	Operator UsageControlAggregationOperator `json:"operator"`
+	// Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits.
+	Threshold string `json:"threshold"`
+	// Time window for the aggregation.
+	Window UsageControlAggregationWindow `json:"window"`
+}
+
+type UsageControlAggregationGroupBy struct {
+	// Uses one shared bucket for the Organization.
+	Organization *UsageControlAggregationGroupByOrganization `json:"organization,omitempty"`
+	// Uses one bucket for each User.
+	User *UsageControlAggregationGroupByUser `json:"user,omitempty"`
+	// Uses one bucket for each Wallet.
+	Wallet *UsageControlAggregationGroupByWallet `json:"wallet,omitempty"`
+}
+
+type UsageControlAggregationGroupByOrganization map[string]any
+
+type UsageControlAggregationGroupByUser map[string]any
+
+type UsageControlAggregationGroupByWallet map[string]any
+
+type UsageControlAggregationWindow struct {
+	// Uses all matching data without a time limit.
+	Infinite *UsageControlAggregationWindowInfinite `json:"infinite,omitempty"`
+	// Uses a rolling time window.
+	Rolling *UsageControlAggregationWindowRolling `json:"rolling,omitempty"`
+}
+
+type UsageControlAggregationWindowInfinite map[string]any
+
+type UsageControlAggregationWindowRolling struct {
+	// Duration of the rolling window, in seconds.
+	Duration int64 `json:"duration"`
+}
+
+type UsageControlDataSource struct {
+	// Uses executed Turnkey activities as input data.
+	ActivityExecution *UsageControlDataSourceActivityExecution `json:"activityExecution,omitempty"`
+	// Uses transfers of the listed on-chain assets as input data.
+	ChainAssetTransfer *UsageControlDataSourceChainAssetTransfer `json:"chainAssetTransfer,omitempty"`
+}
+
+type UsageControlDataSourceActivityExecution struct {
+	// Filters activity executions by type.
+	Filter *UsageControlDataSourceActivityExecutionFilter `json:"filter,omitempty"`
+}
+
+type UsageControlDataSourceActivityExecutionFilter struct {
+	// Activity types whose executions are included.
+	Activity []UsageControlDataSourceFilterActivity `json:"activity,omitempty"`
+}
+
+type UsageControlDataSourceChainAssetTransfer struct {
+	// Assets whose transfers are included in the data source.
+	Definition []UsageControlDataSourceChainAssetTransferDefinition `json:"definition"`
+	// Filters asset transfers by activity type.
+	Filter *UsageControlDataSourceChainAssetTransferFilter `json:"filter,omitempty"`
+	// Selects when to measure an asset transfer.
+	Phase *UsageControlDataSourcePhase `json:"phase,omitempty"`
+}
+
+type UsageControlDataSourceChainAssetTransferDefinition struct {
+	// CAIP-19 identifier for the asset.
+	Caip19 string `json:"caip19"`
+	// Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.
+	Decimals int64 `json:"decimals"`
+}
+
+type UsageControlDataSourceChainAssetTransferFilter struct {
+	// Activity types whose asset transfers are included.
+	Activity []UsageControlDataSourceFilterActivity `json:"activity,omitempty"`
+}
+
+type UsageControlDataSourceFilterActivity struct {
+	// Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`.
+	ActivityType string `json:"activityType"`
+}
+
+type UsageControlDataSourcePhase struct {
+	// Measures the transfer when Turnkey signs the transaction and returns it to the user.
+	Signature *UsageControlDataSourcePhaseSignature `json:"signature,omitempty"`
+	// Reserved for future use. Measures the transfer after the transaction lands on chain.
+	Submission *UsageControlDataSourcePhaseSubmission `json:"submission,omitempty"`
+}
+
+type UsageControlDataSourcePhaseSignature map[string]any
+
+type UsageControlDataSourcePhaseSubmission map[string]any
+
 type User struct {
 	// A list of API Key parameters. This field, if not needed, should be an empty array in your request body.
 	APIKeys []APIKey `json:"apiKeys"`
@@ -6877,102 +7239,6 @@ type ValidateTVCImageRequest struct {
 type ValidateTVCImageResponse struct {
 	ResolvedImageDigest *string `json:"resolvedImageDigest,omitempty"`
 }
-
-type VelocityControlAggregation struct {
-	// Scope that partitions matching data before aggregation.
-	GroupBy VelocityControlAggregationGroupBy `json:"groupBy"`
-	// Method that aggregates matching data points.
-	Method VelocityControlAggregationMethod `json:"method"`
-	// Comparison between the aggregate and the threshold.
-	Operator VelocityControlAggregationOperator `json:"operator"`
-	// Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits.
-	Threshold string `json:"threshold"`
-	// Time window for the aggregation.
-	Window VelocityControlAggregationWindow `json:"window"`
-}
-
-type VelocityControlAggregationGroupBy struct {
-	// Uses one shared bucket for the Organization.
-	Organization *VelocityControlAggregationGroupByOrganization `json:"organization,omitempty"`
-	// Uses one bucket for each User.
-	User *VelocityControlAggregationGroupByUser `json:"user,omitempty"`
-	// Uses one bucket for each Wallet.
-	Wallet *VelocityControlAggregationGroupByWallet `json:"wallet,omitempty"`
-}
-
-type VelocityControlAggregationGroupByOrganization map[string]any
-
-type VelocityControlAggregationGroupByUser map[string]any
-
-type VelocityControlAggregationGroupByWallet map[string]any
-
-type VelocityControlAggregationWindow struct {
-	// Uses all matching data without a time limit.
-	Infinite *VelocityControlAggregationWindowInfinite `json:"infinite,omitempty"`
-	// Uses a rolling time window.
-	Rolling *VelocityControlAggregationWindowRolling `json:"rolling,omitempty"`
-}
-
-type VelocityControlAggregationWindowInfinite map[string]any
-
-type VelocityControlAggregationWindowRolling struct {
-	// Duration of the rolling window, in seconds.
-	Duration int64 `json:"duration"`
-}
-
-type VelocityControlDataSource struct {
-	// Uses executed Turnkey activities as input data.
-	ActivityExecution *VelocityControlDataSourceActivityExecution `json:"activityExecution,omitempty"`
-	// Uses transfers of the listed on-chain assets as input data.
-	ChainAssetTransfer *VelocityControlDataSourceChainAssetTransfer `json:"chainAssetTransfer,omitempty"`
-}
-
-type VelocityControlDataSourceActivityExecution struct {
-	// Filters activity executions by type.
-	Filter *VelocityControlDataSourceActivityExecutionFilter `json:"filter,omitempty"`
-}
-
-type VelocityControlDataSourceActivityExecutionFilter struct {
-	// Activity types whose executions are included.
-	Activity []VelocityControlDataSourceFilterActivity `json:"activity,omitempty"`
-}
-
-type VelocityControlDataSourceChainAssetTransfer struct {
-	// Assets whose transfers are included in the data source.
-	Definition []VelocityControlDataSourceChainAssetTransferDefinition `json:"definition"`
-	// Filters asset transfers by activity type.
-	Filter *VelocityControlDataSourceChainAssetTransferFilter `json:"filter,omitempty"`
-	// Selects when to measure an asset transfer.
-	Phase *VelocityControlDataSourcePhase `json:"phase,omitempty"`
-}
-
-type VelocityControlDataSourceChainAssetTransferDefinition struct {
-	// CAIP-19 identifier for the asset.
-	Caip19 string `json:"caip19"`
-	// Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.
-	Decimals int64 `json:"decimals"`
-}
-
-type VelocityControlDataSourceChainAssetTransferFilter struct {
-	// Activity types whose asset transfers are included.
-	Activity []VelocityControlDataSourceFilterActivity `json:"activity,omitempty"`
-}
-
-type VelocityControlDataSourceFilterActivity struct {
-	// Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`.
-	ActivityType string `json:"activityType"`
-}
-
-type VelocityControlDataSourcePhase struct {
-	// Measures the transfer when Turnkey signs the transaction and returns it to the user.
-	Signature *VelocityControlDataSourcePhaseSignature `json:"signature,omitempty"`
-	// Reserved for future use. Measures the transfer after the transaction lands on chain.
-	Submission *VelocityControlDataSourcePhaseSubmission `json:"submission,omitempty"`
-}
-
-type VelocityControlDataSourcePhaseSignature map[string]any
-
-type VelocityControlDataSourcePhaseSubmission map[string]any
 
 type VerifyOTPIntent struct {
 	// Expiration window (in seconds) indicating how long the verification token is valid for. If not provided, a default of 1 hour will be used. Maximum value is 86400 seconds (24 hours)
@@ -7297,6 +7563,28 @@ type CreateExternalSignerResponse struct {
 	CreateExternalSignerResultV1
 }
 
+type CreateFiatOffRampSessionRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Identifier of a saved fiat off-ramp quote. Returned by GetFiatOffRampQuotes.
+	QuoteID string `json:"quoteId"`
+	// URL the provider redirects to after the user submits the sell. Required when the saved quote is from Coinbase. When set for MoonPay, it is included in the signed sell URL so MoonPay can append the deposit address.
+	RedirectURL *string `json:"redirectUrl,omitempty"`
+	// Wallet address for this sale. Coinbase uses it as the source address. MoonPay uses it as the refund address; the user deposits the crypto to MoonPay separately.
+	WalletAddress string `json:"walletAddress"`
+}
+
+func (CreateFiatOffRampSessionRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_CREATE_FIAT_OFF_RAMP_SESSION"
+}
+
+type CreateFiatOffRampSessionResponse struct {
+	Activity Activity `json:"activity"`
+	CreateFiatOffRampSessionResult
+}
+
 type CreateFiatOnRampCredentialRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -7325,6 +7613,26 @@ type CreateFiatOnRampCredentialResponse struct {
 	CreateFiatOnRampCredentialResult
 }
 
+type CreateFiatOnRampSessionRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Identifier of a saved fiat on-ramp quote. Returned by GetFiatOnRampQuotes.
+	QuoteID string `json:"quoteId"`
+	// Destination wallet address for the buy transaction.
+	WalletAddress string `json:"walletAddress"`
+}
+
+func (CreateFiatOnRampSessionRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_CREATE_FIAT_ON_RAMP_SESSION"
+}
+
+type CreateFiatOnRampSessionResponse struct {
+	Activity Activity `json:"activity"`
+	CreateFiatOnRampSessionResult
+}
+
 type CreateFiatRampCredentialRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -7335,7 +7643,7 @@ type CreateFiatRampCredentialRequest struct {
 	// Secret half of the provider credential, encrypted to our on-ramp encryption public key. MoonPay: secret key (sk_test_ or sk_live_). Coinbase: Ed25519 private key
 	EncryptedSecret string `json:"encryptedSecret"`
 	// The fiat ramp provider
-	Provider FiatOnRampProvider `json:"provider"`
+	Provider FiatRampProvider `json:"provider"`
 	// If the credential is a sandbox credential
 	SandboxMode *bool `json:"sandboxMode,omitempty"`
 }
@@ -7649,7 +7957,7 @@ type CreateSwapQuoteRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
-	// When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
+	// When true, Turnkey pays the execution costs for this swap and invoices them to the billing parent organization as Swap Execution. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false.
 	FeeSponsorship *bool `json:"feeSponsorship,omitempty"`
 	// When true, requests a 1:1 conversion before fees between supported stablecoins. Requires the FEATURE_NAME_SWAP_FIXED_RATE organization feature. Defaults to false.
 	FixedRate *bool `json:"fixedRate,omitempty"`
@@ -8545,31 +8853,29 @@ type ExecuteSwapRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// Raw public address that receives the output asset. Required for cross-protocol swaps. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
+	// Execute a quote returned by create_swap_quote at its exact terms.
+	BoundQuote *ExecuteSwapBoundQuote `json:"boundQuote,omitempty"`
+	// Raw public address that receives the output asset. Required for cross-protocol swaps and rejected otherwise. The address must match the output token protocol. Wallet account IDs, private key IDs, and CAIP account or asset identifiers are not supported.
 	DestinationAddress *string `json:"destinationAddress,omitempty"`
 	// Exact EVM sender (EOA account) nonce. Valid only for a non-sponsored EVM swap. Honored for already-delegated (Type-2) batch swaps and single-call swaps; ignored for not-yet-delegated EIP-7702 (Type-4) batches where the outer nonce is derived from the authorization. Prefer gas_station_nonce for batch replay protection and use the nonces endpoint to fetch it. Omit to auto-fetch.
 	EvmNonce *string `json:"evmNonce,omitempty"`
 	// Exact gas station delegate contract nonce used in the BatchExecution EIP-712 message. Valid for sponsored EVM swaps and non-sponsored EVM swaps that execute as a multi-call batch (for example ERC-20 approve + swap). This is the replay-protection nonce for gas-station batches; use the nonces endpoint to fetch it. Omit to auto-fetch.
 	GasStationNonce *string `json:"gasStationNonce,omitempty"`
-	// Exact base-unit amount of the input asset committed by the quote.
+	// Exact base-unit amount of the input asset.
 	InputAmount string `json:"inputAmount"`
 	// CAIP-19 asset ID for the input asset.
 	InputToken string `json:"inputToken"`
-	// Exact minimum base-unit output committed by the quote.
-	MinOutputAmount string `json:"minOutputAmount"`
+	// Execute at the provider's price when the activity is approved, within the signed slippage and optional price floor.
+	Market *ExecuteSwapMarketTerms `json:"market,omitempty"`
 	// CAIP-19 asset ID for the output asset.
 	OutputToken string `json:"outputToken"`
-	// Quote identifier returned by create_swap_quote. Execution is bound to this quote; the signer is derived from the quote and must not be resupplied.
-	QuoteID string `json:"quoteId"`
-	// Exact quoted base-unit output amount committed by the quote.
-	QuotedOutputAmount string `json:"quotedOutputAmount"`
 	// Exact Solana recent blockhash. Valid only for a Solana swap, including sponsored swaps. Omit to auto-fetch.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
-	// Whether the quoted transaction is sponsored.
+	// Whether the swap transaction is gas sponsored.
 	Sponsor bool `json:"sponsor"`
 }
 
-func (ExecuteSwapRequest) ActivityType() string { return "ACTIVITY_TYPE_EXECUTE_SWAP_V3" }
+func (ExecuteSwapRequest) ActivityType() string { return "ACTIVITY_TYPE_EXECUTE_SWAP_V4" }
 
 type ExecuteSwapResponse struct {
 	Activity Activity `json:"activity"`
@@ -8902,6 +9208,26 @@ func (InitUserEmailRecoveryRequest) ActivityType() string {
 type InitUserEmailRecoveryResponse struct {
 	Activity Activity `json:"activity"`
 	InitUserEmailRecoveryResult
+}
+
+type MintJWTRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// Origin of the receiving service, as `https://<lowercase host>[:port]` with no default port, path, query, or fragment. At most 256 characters. Becomes the `aud` claim.
+	Audience string `json:"audience"`
+	// Inputs for the `turnkey.io/http-authz/v1` profile.
+	HTTPAuthzV1 *HTTPAuthzV1Inputs `json:"httpAuthzV1,omitempty"`
+	// Profile that defines which claims the JWT binds. Must match the set `profile_inputs` case.
+	Profile JWTProfile `json:"profile"`
+}
+
+func (MintJWTRequest) ActivityType() string { return "ACTIVITY_TYPE_MINT_JWT" }
+
+type MintJWTResponse struct {
+	Activity Activity `json:"activity"`
+	MintJWTResult
 }
 
 type OAuthRequest struct {
@@ -9440,7 +9766,7 @@ type UpdateFiatRampCredentialRequest struct {
 	// Secret half of the provider credential, encrypted to our on-ramp encryption public key. MoonPay: secret key (sk_test_ or sk_live_). Coinbase: Ed25519 private key
 	EncryptedSecret string `json:"encryptedSecret"`
 	// The fiat ramp provider
-	Provider FiatOnRampProvider `json:"provider"`
+	Provider FiatRampProvider `json:"provider"`
 }
 
 func (UpdateFiatRampCredentialRequest) ActivityType() string {

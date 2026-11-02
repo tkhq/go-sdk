@@ -373,7 +373,37 @@ func (c *Client) StampCreateExternalSigner(ctx context.Context, input CreateExte
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_external_signer", body, true)
 }
 
-// Create a fiat on ramp provider credential.
+// Open a fiat off-ramp session for a saved quote.
+func (c *Client) CreateFiatOffRampSession(ctx context.Context, input CreateFiatOffRampSessionRequest) (*CreateFiatOffRampSessionResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_off_ramp_session", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateFiatOffRampSessionResult])
+	if err := decodeActivityResponse(raw, "CreateFiatOffRampSessionResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateFiatOffRampSessionResult { return r.CreateFiatOffRampSessionResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateFiatOffRampSessionResponse{Activity: *activity, CreateFiatOffRampSessionResult: *result}, nil
+}
+
+func (c *Client) StampCreateFiatOffRampSession(ctx context.Context, input CreateFiatOffRampSessionRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_off_ramp_session", body, true)
+}
+
+// Deprecated: use CreateFiatRampCredential.
+// Deprecated: this endpoint is marked deprecated in the Swagger spec.
 func (c *Client) CreateFiatOnRampCredential(ctx context.Context, input CreateFiatOnRampCredentialRequest) (*CreateFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -400,6 +430,35 @@ func (c *Client) StampCreateFiatOnRampCredential(ctx context.Context, input Crea
 		return nil, err
 	}
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_on_ramp_credential", body, true)
+}
+
+// Open a fiat on-ramp session for a saved quote.
+func (c *Client) CreateFiatOnRampSession(ctx context.Context, input CreateFiatOnRampSessionRequest) (*CreateFiatOnRampSessionResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_on_ramp_session", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[CreateFiatOnRampSessionResult])
+	if err := decodeActivityResponse(raw, "CreateFiatOnRampSessionResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *CreateFiatOnRampSessionResult { return r.CreateFiatOnRampSessionResult })
+	if err != nil {
+		return nil, err
+	}
+	return &CreateFiatOnRampSessionResponse{Activity: *activity, CreateFiatOnRampSessionResult: *result}, nil
+}
+
+func (c *Client) StampCreateFiatOnRampSession(ctx context.Context, input CreateFiatOnRampSessionRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/create_fiat_on_ramp_session", body, true)
 }
 
 // Create a fiat ramp provider credential.
@@ -2055,7 +2114,7 @@ func (c *Client) StampEmailAuth(ctx context.Context, input EmailAuthRequest) (*S
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/email_auth", body, true)
 }
 
-// Execute the exact provider quote identified by quote_id through the activity pipeline and Turnkey broadcasting. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V3.
+// Execute a swap through the activity pipeline and Turnkey broadcasting. With bound_quote, execution is bound to the quote create_swap_quote returned. With market, the swap executes at the provider's price when the activity is approved, within slippage_bps and min_output_amount; use get_indicative_swap_quote to preview that price. Requests must use ACTIVITY_TYPE_EXECUTE_SWAP_V4.
 func (c *Client) ExecuteSwap(ctx context.Context, input ExecuteSwapRequest) (*ExecuteSwapResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -2424,6 +2483,34 @@ func (c *Client) GetExternalSignerTasks(ctx context.Context, input GetExternalSi
 	return out, nil
 }
 
+// Quote enabled fiat off-ramp providers for a sell. Returns one quote per payment method the provider can offer for this route. Providers and methods that cannot serve the route are omitted.
+func (c *Client) GetFiatOffRampQuotes(ctx context.Context, input GetFiatOffRampQuotesRequest) (*GetFiatOffRampQuotesResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetFiatOffRampQuotesResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_fiat_off_ramp_quotes", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Quote enabled fiat on-ramp providers for a buy. Returns one quote per payment method the provider can offer for this route. Providers and methods that cannot serve the route are omitted.
+func (c *Client) GetFiatOnRampQuotes(ctx context.Context, input GetFiatOnRampQuotesRequest) (*GetFiatOnRampQuotesResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetFiatOnRampQuotesResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/list_fiat_on_ramp_quotes", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Get gas usage and gas limits for either the parent organization or a sub-organization.
 func (c *Client) GetGasUsage(ctx context.Context, input GetGasUsageRequest) (*GetGasUsageResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
@@ -2447,6 +2534,20 @@ func (c *Client) GetIPAllowlist(ctx context.Context, input GetIPAllowlistRequest
 	input.OrganizationID = organizationID
 	out := new(GetIPAllowlistResponse)
 	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_ip_allowlist", input, out, true, nil); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Preview the provider's current price for a swap without creating an activity. The quote is not binding and has no quote ID: a market swap executed later fetches its own quote, so its price can differ.
+func (c *Client) GetIndicativeSwapQuote(ctx context.Context, input GetIndicativeSwapQuoteRequest) (*GetIndicativeSwapQuoteResponse, error) {
+	organizationID, err := c.organizationID(input.OrganizationID)
+	if err != nil {
+		return nil, err
+	}
+	input.OrganizationID = organizationID
+	out := new(GetIndicativeSwapQuoteResponse)
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/query/get_indicative_swap_quote", input, out, true, nil); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -3127,7 +3228,8 @@ func (c *Client) StampImportWallet(ctx context.Context, input ImportWalletReques
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/import_wallet", body, true)
 }
 
-// Initiate a fiat on ramp flow.
+// Deprecated: use CreateFiatOnRampSession with a quote from GetFiatOnRampQuotes.
+// Deprecated: this endpoint is marked deprecated in the Swagger spec.
 func (c *Client) InitFiatOnRamp(ctx context.Context, input InitFiatOnRampRequest) (*InitFiatOnRampResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
@@ -3524,6 +3626,35 @@ func (c *Client) ListWebhookEndpoints(ctx context.Context, input ListWebhookEndp
 		return nil, err
 	}
 	return out, nil
+}
+
+// Mint a Turnkey-signed JWT with a given profile. JWT semantics switch on profile.
+func (c *Client) MintJWT(ctx context.Context, input MintJWTRequest) (*MintJWTResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/mint_jwt", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[MintJWTResult])
+	if err := decodeActivityResponse(raw, "MintJWTResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *MintJWTResult { return r.MintJWTResult })
+	if err != nil {
+		return nil, err
+	}
+	return &MintJWTResponse{Activity: *activity, MintJWTResult: *result}, nil
+}
+
+func (c *Client) StampMintJWT(ctx context.Context, input MintJWTRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/mint_jwt", body, true)
 }
 
 // Authenticate a user with an OIDC token (Oauth).
@@ -4193,7 +4324,8 @@ func (c *Client) StampStampLogin(ctx context.Context, input StampLoginRequest) (
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/stamp_login", body, true)
 }
 
-// Update a fiat on ramp provider credential.
+// Deprecated: use UpdateFiatRampCredential.
+// Deprecated: this endpoint is marked deprecated in the Swagger spec.
 func (c *Client) UpdateFiatOnRampCredential(ctx context.Context, input UpdateFiatOnRampCredentialRequest) (*UpdateFiatOnRampCredentialResponse, error) {
 	body, err := c.activityEnvelope(input)
 	if err != nil {
