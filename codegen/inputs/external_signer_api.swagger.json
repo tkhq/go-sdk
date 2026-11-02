@@ -670,7 +670,7 @@
       "type": "object",
       "properties": {
         "provider": {
-          "$ref": "#/definitions/v1FiatOnRampProvider",
+          "$ref": "#/definitions/v1FiatRampProvider",
           "description": "The fiat ramp provider"
         },
         "apiKey": {
@@ -1507,7 +1507,7 @@
         },
         "feeSponsorship": {
           "type": "boolean",
-          "description": "When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
+          "description": "When true, Turnkey pays the execution costs for this swap and invoices them to the billing parent organization as Swap Execution. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
         },
         "fixedRate": {
           "type": "boolean",
@@ -1706,6 +1706,28 @@
       },
       "required": ["threshold", "operatorEncryptKeys"]
     },
+    "v1CreateUsageControlIntent": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the Usage Control."
+        },
+        "dataSource": {
+          "$ref": "#/definitions/v1UsageControlDataSource",
+          "description": "Data source for the Usage Control."
+        },
+        "aggregation": {
+          "$ref": "#/definitions/v1UsageControlAggregation",
+          "description": "Aggregation expression that the Usage Control evaluates."
+        },
+        "identifier": {
+          "type": "string",
+          "description": "Identifier for the Usage Control. Policies reference it as `controls.\u003cidentifier\u003e`. It must be unique within the Organization."
+        }
+      },
+      "required": ["name", "dataSource", "aggregation", "identifier"]
+    },
     "v1CreateUserTagIntent": {
       "type": "object",
       "properties": {
@@ -1778,28 +1800,6 @@
         }
       },
       "required": ["users"]
-    },
-    "v1CreateVelocityControlIntent": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Human-readable name for the Velocity Control."
-        },
-        "dataSource": {
-          "$ref": "#/definitions/v1VelocityControlDataSource",
-          "description": "Data source for the Velocity Control."
-        },
-        "aggregation": {
-          "$ref": "#/definitions/v1VelocityControlAggregation",
-          "description": "Aggregation expression that the Velocity Control evaluates."
-        },
-        "identifier": {
-          "type": "string",
-          "description": "Identifier for the Velocity Control. Policies reference it as `controls.\u003cidentifier\u003e`. It must be unique within the Organization."
-        }
-      },
-      "required": ["name", "dataSource", "aggregation", "identifier"]
     },
     "v1CreateWalletAccountsIntent": {
       "type": "object",
@@ -2119,6 +2119,19 @@
       },
       "required": ["deploymentId"]
     },
+    "v1DeleteUsageControlsIntent": {
+      "type": "object",
+      "properties": {
+        "usageControlIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of 1 to 32 unique identifiers for Usage Controls within an Organization."
+        }
+      },
+      "required": ["usageControlIds"]
+    },
     "v1DeleteUserTagsIntent": {
       "type": "object",
       "properties": {
@@ -2144,19 +2157,6 @@
         }
       },
       "required": ["userIds"]
-    },
-    "v1DeleteVelocityControlsIntent": {
-      "type": "object",
-      "properties": {
-        "velocityControlIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of 1 to 32 unique identifiers for Velocity Controls within an Organization."
-        }
-      },
-      "required": ["velocityControlIds"]
     },
     "v1DeleteWalletAccountsIntent": {
       "type": "object",
@@ -3094,7 +3094,7 @@
         },
         "feeSponsorship": {
           "type": "boolean",
-          "description": "When true, Turnkey pays the provider fees for this swap and invoices them to the billing parent organization. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
+          "description": "When true, Turnkey pays the execution costs for this swap and invoices them to the billing parent organization as Swap Execution. Requires the FEATURE_NAME_SWAP_FEE_SPONSORSHIP organization feature. Defaults to false."
         },
         "fixedRate": {
           "type": "boolean",
@@ -3322,8 +3322,15 @@
       "type": "string",
       "enum": [
         "FIAT_ON_RAMP_PROVIDER_COINBASE",
-        "FIAT_ON_RAMP_PROVIDER_MOONPAY",
-        "FIAT_ON_RAMP_PROVIDER_MELD"
+        "FIAT_ON_RAMP_PROVIDER_MOONPAY"
+      ]
+    },
+    "v1FiatRampProvider": {
+      "type": "string",
+      "enum": [
+        "FIAT_RAMP_PROVIDER_COINBASE",
+        "FIAT_RAMP_PROVIDER_MOONPAY",
+        "FIAT_RAMP_PROVIDER_MELD"
       ]
     },
     "v1GetExternalSignerTasksRequest": {
@@ -3366,6 +3373,61 @@
         "HASH_FUNCTION_SHA256",
         "HASH_FUNCTION_KECCAK256",
         "HASH_FUNCTION_NOT_APPLICABLE"
+      ]
+    },
+    "v1HttpAuthzV1Inputs": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "HTTP method of the bound request. One of `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE`."
+        },
+        "path": {
+          "type": "string",
+          "description": "Path of the bound request, starting with `/`."
+        },
+        "query": {
+          "type": "string",
+          "description": "Query of the bound request without the leading `?`, or empty for no query."
+        },
+        "headerNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Lowercase names of the bound request headers, in order. At most 32 unique names of at most 64 characters each. Cannot include `authorization` or hop-by-hop headers (`proxy-authorization`, `connection`, `keep-alive`, `proxy-connection`, `te`, `transfer-encoding`, `upgrade`)."
+        },
+        "headerDigest": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "SHA-256 digest of each bound header value, as `sha-256=:\u003cbase64\u003e:`. One entry per entry in `header_names`."
+        },
+        "bodyDigest": {
+          "type": "string",
+          "description": "SHA-256 digest of the bound request body, as `sha-256=:\u003cbase64\u003e:`. For a request with no body, the digest of empty content."
+        },
+        "subject": {
+          "type": "string",
+          "description": "ID of a user in the organization, as a lowercase UUID. Becomes the `sub` claim."
+        },
+        "timeToLiveSeconds": {
+          "type": "string",
+          "description": "Lifetime of the JWT in seconds, from 1 to 300. `exp` is `issued_at + time_to_live_seconds`."
+        },
+        "issuedAt": {
+          "type": "string",
+          "description": "Unix time in seconds. Becomes the `iat` claim."
+        }
+      },
+      "required": [
+        "method",
+        "path",
+        "bodyDigest",
+        "subject",
+        "timeToLiveSeconds",
+        "issuedAt"
       ]
     },
     "v1ImportPrivateKeyIntent": {
@@ -4421,11 +4483,11 @@
         "exportSecretsIntent": {
           "$ref": "#/definitions/v1ExportSecretsIntent"
         },
-        "createVelocityControlIntent": {
-          "$ref": "#/definitions/v1CreateVelocityControlIntent"
+        "createUsageControlIntent": {
+          "$ref": "#/definitions/v1CreateUsageControlIntent"
         },
-        "deleteVelocityControlsIntent": {
-          "$ref": "#/definitions/v1DeleteVelocityControlsIntent"
+        "deleteUsageControlsIntent": {
+          "$ref": "#/definitions/v1DeleteUsageControlsIntent"
         },
         "updatePaymentMethodIntent": {
           "$ref": "#/definitions/billingUpdatePaymentMethodIntent"
@@ -4489,6 +4551,9 @@
         },
         "deleteExternalSignerIntentV1": {
           "$ref": "#/definitions/v1DeleteExternalSignerIntentV1"
+        },
+        "mintJwtIntent": {
+          "$ref": "#/definitions/v1MintJwtIntent"
         }
       }
     },
@@ -4541,6 +4606,10 @@
       },
       "required": ["cidr"]
     },
+    "v1JwtProfile": {
+      "type": "string",
+      "enum": ["JWT_PROFILE_HTTP_AUTHZ_V1"]
+    },
     "v1KeyValue": {
       "type": "object",
       "properties": {
@@ -4551,6 +4620,24 @@
           "type": "string"
         }
       }
+    },
+    "v1MintJwtIntent": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "$ref": "#/definitions/v1JwtProfile",
+          "description": "Profile that defines which claims the JWT binds. Must match the set `profile_inputs` case."
+        },
+        "audience": {
+          "type": "string",
+          "description": "Origin of the receiving service, as `https://\u003clowercase host\u003e[:port]` with no default port, path, query, or fragment. At most 256 characters. Becomes the `aud` claim."
+        },
+        "httpAuthzV1": {
+          "$ref": "#/definitions/v1HttpAuthzV1Inputs",
+          "description": "Inputs for the `turnkey.io/http-authz/v1` profile."
+        }
+      },
+      "required": ["profile", "audience"]
     },
     "v1MnemonicLanguage": {
       "type": "string",
@@ -6177,7 +6264,7 @@
           "description": "The ID of the fiat ramp credential to update"
         },
         "provider": {
-          "$ref": "#/definitions/v1FiatOnRampProvider",
+          "$ref": "#/definitions/v1FiatRampProvider",
           "description": "The fiat ramp provider"
         },
         "apiKey": {
@@ -6645,6 +6732,217 @@
         "enabled"
       ]
     },
+    "v1UsageControlAggregation": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/v1UsageControlAggregationMethod",
+          "description": "Method that aggregates matching data points."
+        },
+        "operator": {
+          "$ref": "#/definitions/v1UsageControlAggregationOperator",
+          "description": "Comparison between the aggregate and the threshold."
+        },
+        "threshold": {
+          "type": "string",
+          "description": "Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits."
+        },
+        "window": {
+          "$ref": "#/definitions/v1UsageControlAggregationWindow",
+          "description": "Time window for the aggregation."
+        },
+        "groupBy": {
+          "$ref": "#/definitions/v1UsageControlAggregationGroupBy",
+          "description": "Scope that partitions matching data before aggregation."
+        }
+      },
+      "required": ["method", "operator", "threshold", "window", "groupBy"]
+    },
+    "v1UsageControlAggregationGroupBy": {
+      "type": "object",
+      "properties": {
+        "organization": {
+          "$ref": "#/definitions/v1UsageControlAggregationGroupByOrganization",
+          "description": "Uses one shared bucket for the Organization."
+        },
+        "user": {
+          "$ref": "#/definitions/v1UsageControlAggregationGroupByUser",
+          "description": "Uses one bucket for each User."
+        },
+        "wallet": {
+          "$ref": "#/definitions/v1UsageControlAggregationGroupByWallet",
+          "description": "Uses one bucket for each Wallet."
+        }
+      }
+    },
+    "v1UsageControlAggregationGroupByOrganization": {
+      "type": "object"
+    },
+    "v1UsageControlAggregationGroupByUser": {
+      "type": "object"
+    },
+    "v1UsageControlAggregationGroupByWallet": {
+      "type": "object"
+    },
+    "v1UsageControlAggregationMethod": {
+      "type": "string",
+      "enum": [
+        "USAGE_CONTROL_AGGREGATION_METHOD_SUM",
+        "USAGE_CONTROL_AGGREGATION_METHOD_COUNT"
+      ]
+    },
+    "v1UsageControlAggregationOperator": {
+      "type": "string",
+      "enum": [
+        "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN",
+        "USAGE_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL",
+        "USAGE_CONTROL_AGGREGATION_OPERATOR_EQUAL",
+        "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL",
+        "USAGE_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
+      ]
+    },
+    "v1UsageControlAggregationWindow": {
+      "type": "object",
+      "properties": {
+        "rolling": {
+          "$ref": "#/definitions/v1UsageControlAggregationWindowRolling",
+          "description": "Uses a rolling time window."
+        },
+        "infinite": {
+          "$ref": "#/definitions/v1UsageControlAggregationWindowInfinite",
+          "description": "Uses all matching data without a time limit."
+        }
+      }
+    },
+    "v1UsageControlAggregationWindowInfinite": {
+      "type": "object"
+    },
+    "v1UsageControlAggregationWindowRolling": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Duration of the rolling window, in seconds."
+        }
+      },
+      "required": ["duration"]
+    },
+    "v1UsageControlDataSource": {
+      "type": "object",
+      "properties": {
+        "chainAssetTransfer": {
+          "$ref": "#/definitions/v1UsageControlDataSourceChainAssetTransfer",
+          "description": "Uses transfers of the listed on-chain assets as input data."
+        },
+        "activityExecution": {
+          "$ref": "#/definitions/v1UsageControlDataSourceActivityExecution",
+          "description": "Uses executed Turnkey activities as input data."
+        }
+      }
+    },
+    "v1UsageControlDataSourceActivityExecution": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/v1UsageControlDataSourceActivityExecutionFilter",
+          "description": "Filters activity executions by type."
+        }
+      }
+    },
+    "v1UsageControlDataSourceActivityExecutionFilter": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UsageControlDataSourceFilterActivity"
+          },
+          "description": "Activity types whose executions are included."
+        }
+      }
+    },
+    "v1UsageControlDataSourceChainAssetTransfer": {
+      "type": "object",
+      "properties": {
+        "definition": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UsageControlDataSourceChainAssetTransferDefinition"
+          },
+          "description": "Assets whose transfers are included in the data source."
+        },
+        "filter": {
+          "$ref": "#/definitions/v1UsageControlDataSourceChainAssetTransferFilter",
+          "description": "Filters asset transfers by activity type."
+        },
+        "phase": {
+          "$ref": "#/definitions/v1UsageControlDataSourcePhase",
+          "description": "Selects when to measure an asset transfer."
+        }
+      },
+      "required": ["definition"]
+    },
+    "v1UsageControlDataSourceChainAssetTransferDefinition": {
+      "type": "object",
+      "properties": {
+        "caip19": {
+          "type": "string",
+          "description": "CAIP-19 identifier for the asset."
+        },
+        "decimals": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.",
+          "maximum": 32
+        }
+      },
+      "required": ["caip19", "decimals"]
+    },
+    "v1UsageControlDataSourceChainAssetTransferFilter": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UsageControlDataSourceFilterActivity"
+          },
+          "description": "Activity types whose asset transfers are included."
+        }
+      }
+    },
+    "v1UsageControlDataSourceFilterActivity": {
+      "type": "object",
+      "properties": {
+        "activityType": {
+          "type": "string",
+          "description": "Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`."
+        }
+      },
+      "required": ["activityType"]
+    },
+    "v1UsageControlDataSourcePhase": {
+      "type": "object",
+      "properties": {
+        "signature": {
+          "$ref": "#/definitions/v1UsageControlDataSourcePhaseSignature",
+          "description": "Measures the transfer when Turnkey signs the transaction and returns it to the user."
+        },
+        "submission": {
+          "$ref": "#/definitions/v1UsageControlDataSourcePhaseSubmission",
+          "description": "Reserved for future use. Measures the transfer after the transaction lands on chain."
+        }
+      }
+    },
+    "v1UsageControlDataSourcePhaseSignature": {
+      "type": "object"
+    },
+    "v1UsageControlDataSourcePhaseSubmission": {
+      "type": "object"
+    },
     "v1UserParams": {
       "type": "object",
       "properties": {
@@ -6838,217 +7136,6 @@
         "oauthProviders",
         "userTags"
       ]
-    },
-    "v1VelocityControlAggregation": {
-      "type": "object",
-      "properties": {
-        "method": {
-          "$ref": "#/definitions/v1VelocityControlAggregationMethod",
-          "description": "Method that aggregates matching data points."
-        },
-        "operator": {
-          "$ref": "#/definitions/v1VelocityControlAggregationOperator",
-          "description": "Comparison between the aggregate and the threshold."
-        },
-        "threshold": {
-          "type": "string",
-          "description": "Non-negative base-10 decimal string with at most 46 integer digits and 32 fractional digits."
-        },
-        "window": {
-          "$ref": "#/definitions/v1VelocityControlAggregationWindow",
-          "description": "Time window for the aggregation."
-        },
-        "groupBy": {
-          "$ref": "#/definitions/v1VelocityControlAggregationGroupBy",
-          "description": "Scope that partitions matching data before aggregation."
-        }
-      },
-      "required": ["method", "operator", "threshold", "window", "groupBy"]
-    },
-    "v1VelocityControlAggregationGroupBy": {
-      "type": "object",
-      "properties": {
-        "organization": {
-          "$ref": "#/definitions/v1VelocityControlAggregationGroupByOrganization",
-          "description": "Uses one shared bucket for the Organization."
-        },
-        "user": {
-          "$ref": "#/definitions/v1VelocityControlAggregationGroupByUser",
-          "description": "Uses one bucket for each User."
-        },
-        "wallet": {
-          "$ref": "#/definitions/v1VelocityControlAggregationGroupByWallet",
-          "description": "Uses one bucket for each Wallet."
-        }
-      }
-    },
-    "v1VelocityControlAggregationGroupByOrganization": {
-      "type": "object"
-    },
-    "v1VelocityControlAggregationGroupByUser": {
-      "type": "object"
-    },
-    "v1VelocityControlAggregationGroupByWallet": {
-      "type": "object"
-    },
-    "v1VelocityControlAggregationMethod": {
-      "type": "string",
-      "enum": [
-        "VELOCITY_CONTROL_AGGREGATION_METHOD_SUM",
-        "VELOCITY_CONTROL_AGGREGATION_METHOD_COUNT"
-      ]
-    },
-    "v1VelocityControlAggregationOperator": {
-      "type": "string",
-      "enum": [
-        "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN",
-        "VELOCITY_CONTROL_AGGREGATION_OPERATOR_LESS_THAN_OR_EQUAL",
-        "VELOCITY_CONTROL_AGGREGATION_OPERATOR_EQUAL",
-        "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN_OR_EQUAL",
-        "VELOCITY_CONTROL_AGGREGATION_OPERATOR_GREATER_THAN"
-      ]
-    },
-    "v1VelocityControlAggregationWindow": {
-      "type": "object",
-      "properties": {
-        "rolling": {
-          "$ref": "#/definitions/v1VelocityControlAggregationWindowRolling",
-          "description": "Uses a rolling time window."
-        },
-        "infinite": {
-          "$ref": "#/definitions/v1VelocityControlAggregationWindowInfinite",
-          "description": "Uses all matching data without a time limit."
-        }
-      }
-    },
-    "v1VelocityControlAggregationWindowInfinite": {
-      "type": "object"
-    },
-    "v1VelocityControlAggregationWindowRolling": {
-      "type": "object",
-      "properties": {
-        "duration": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Duration of the rolling window, in seconds."
-        }
-      },
-      "required": ["duration"]
-    },
-    "v1VelocityControlDataSource": {
-      "type": "object",
-      "properties": {
-        "chainAssetTransfer": {
-          "$ref": "#/definitions/v1VelocityControlDataSourceChainAssetTransfer",
-          "description": "Uses transfers of the listed on-chain assets as input data."
-        },
-        "activityExecution": {
-          "$ref": "#/definitions/v1VelocityControlDataSourceActivityExecution",
-          "description": "Uses executed Turnkey activities as input data."
-        }
-      }
-    },
-    "v1VelocityControlDataSourceActivityExecution": {
-      "type": "object",
-      "properties": {
-        "filter": {
-          "$ref": "#/definitions/v1VelocityControlDataSourceActivityExecutionFilter",
-          "description": "Filters activity executions by type."
-        }
-      }
-    },
-    "v1VelocityControlDataSourceActivityExecutionFilter": {
-      "type": "object",
-      "properties": {
-        "activity": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1VelocityControlDataSourceFilterActivity"
-          },
-          "description": "Activity types whose executions are included."
-        }
-      }
-    },
-    "v1VelocityControlDataSourceChainAssetTransfer": {
-      "type": "object",
-      "properties": {
-        "definition": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1VelocityControlDataSourceChainAssetTransferDefinition"
-          },
-          "description": "Assets whose transfers are included in the data source."
-        },
-        "filter": {
-          "$ref": "#/definitions/v1VelocityControlDataSourceChainAssetTransferFilter",
-          "description": "Filters asset transfers by activity type."
-        },
-        "phase": {
-          "$ref": "#/definitions/v1VelocityControlDataSourcePhase",
-          "description": "Selects when to measure an asset transfer."
-        }
-      },
-      "required": ["definition"]
-    },
-    "v1VelocityControlDataSourceChainAssetTransferDefinition": {
-      "type": "object",
-      "properties": {
-        "caip19": {
-          "type": "string",
-          "description": "CAIP-19 identifier for the asset."
-        },
-        "decimals": {
-          "type": "integer",
-          "format": "int64",
-          "description": "Integer between 0 and 32 (inclusive) that specifies the number of decimal places for the asset.",
-          "maximum": 32
-        }
-      },
-      "required": ["caip19", "decimals"]
-    },
-    "v1VelocityControlDataSourceChainAssetTransferFilter": {
-      "type": "object",
-      "properties": {
-        "activity": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1VelocityControlDataSourceFilterActivity"
-          },
-          "description": "Activity types whose asset transfers are included."
-        }
-      }
-    },
-    "v1VelocityControlDataSourceFilterActivity": {
-      "type": "object",
-      "properties": {
-        "activityType": {
-          "type": "string",
-          "description": "Name of an activity type to include, such as `ACTIVITY_TYPE_SOL_SEND_TRANSACTION`."
-        }
-      },
-      "required": ["activityType"]
-    },
-    "v1VelocityControlDataSourcePhase": {
-      "type": "object",
-      "properties": {
-        "signature": {
-          "$ref": "#/definitions/v1VelocityControlDataSourcePhaseSignature",
-          "description": "Measures the transfer when Turnkey signs the transaction and returns it to the user."
-        },
-        "submission": {
-          "$ref": "#/definitions/v1VelocityControlDataSourcePhaseSubmission",
-          "description": "Reserved for future use. Measures the transfer after the transaction lands on chain."
-        }
-      }
-    },
-    "v1VelocityControlDataSourcePhaseSignature": {
-      "type": "object"
-    },
-    "v1VelocityControlDataSourcePhaseSubmission": {
-      "type": "object"
     },
     "v1VerifyOtpIntent": {
       "type": "object",
