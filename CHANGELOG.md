@@ -1,5 +1,115 @@
 # CHANGELOG
 
+## 2.3.0 — 2026-10-30
+### Patch Changes
+- Restrict velocity control decimals to a value between 0 and 32 instead of 0 and 255.
+- Swap quotes that request fee sponsorship or a fixed rate the billing parent has not enabled now fail with the `SWAP_FEATURE_NOT_ENABLED` Turnkey error code. Enabling the feature's swap spending window turns it on.
+- Reshapes the unreleased external signer types: `GetExternalSignerTasksResponse.Tasks` now
+carries `ExternalSignerProof` values (the Ump-signed payload produced at ruling time, with
+`ExternalSignerProofPayloadV1` and a shared `Signature`/`SignatureScheme` type) instead of the
+coordinator-assembled `ExternalSignerTask`. The `ExternalSignerTask`, `ExternalCryptoV1Signature`,
+and `ExternalCryptoV1SignatureScheme` types are removed.
+- Run the `modernize` linter to replace legacy constructs with modern Go stylings
+- Use errors.AsType in ActivityFromApprovalError.
+- Fee-sponsored and fixed-rate swap quotes now return a distinct Turnkey error code for each refusal reason: `SWAP_SPENDING_LIMIT_EXCEEDED`, `SWAP_FIXED_RATE_PRICE_OUT_OF_BAND`, and `SWAP_SPONSORSHIP_BALANCE_INSUFFICIENT`. An organization that Turnkey has not enabled the feature for, and a disabled or unconfigured spending window, now return `SWAP_FEATURE_NOT_ENABLED`. The `CreateSwapQuote` description notes that V3 returns its quotes in `createSwapQuoteResultV2`.
+- Reorder generated activity type constants to match proto declaration order.
+- The saved quote id on the on-ramp and off-ramp session intents now points at `GetFiatOnRampQuotes` and `GetFiatOffRampQuotes`.
+- The `PublicDomain` field on `TvcApp` described its value as `app-<ID>.turnkey.cloud`. Apps on the TVC cluster get `app-<ID>.app.turnkey.cloud`; the old format only applied to the sunset TKMS cluster. The description now gives the current format and notes that the field may hold several comma-separated hostnames. Documentation only, no behavior change.
+- `CreateFiatOffRampSession` redirect URL docs now say MoonPay includes the URL in the signed sell widget when it is set.
+- `SetOrganizationFeatureIntent.Value` and `SetOrganizationFeatureRequest.Value` are now `*string` instead of `string`, and are omitted when nil. Features that take no value (e.g. `FEATURE_NAME_OTP_EMAIL_AUTH`) can now be set without sending `"value": ""`.
+### Minor Changes
+- Adds `AuthProxyVerifyWalletAuthenticator` (`POST /v1/verify_wallet_authenticator`). The auth proxy stamps `VERIFY_WALLET_AUTHENTICATOR` with the parent API key and returns the enclave-signed verification token. The wallet signs the SIWE/SIWS message, not the activity.
+
+```json
+{
+  "message": "<exact SIWE or SIWS login template>",
+  "signature": "<hex>"
+}
+```
+
+> Token lifetime comes from the SIWE/SIWS message with a max TTL of 24 hours.
+> Ethereum signatures are 65-byte `personal_sign` hex. Solana signatures are 64-byte ed25519 hex over the raw message.
+- Adds `VerifyWalletAuthenticator` (`POST /public/v1/submit/verify_wallet_authenticator`). The parent API key stamps it. The wallet signs the SIWE/SIWS message, not the activity. The result is an enclave-signed JWT.
+
+```json
+{
+  "type": "ACTIVITY_TYPE_VERIFY_WALLET_AUTHENTICATOR",
+  "organizationId": "<caller org>",
+  "parameters": {
+    "message": "<exact SIWE or SIWS login template>",
+    "signature": "<hex>",
+    "expirationSeconds": "3600"
+  }
+}
+```
+
+> `expirationSeconds` is optional. Default 3600, maximum 86400, and the token cannot outlive the message Expiration Time.
+> Ethereum signatures are 65-byte `personal_sign` hex. Solana signatures are 64-byte ed25519 hex over the raw message.
+> The ephemeral public key comes from `urn:turnkey:ephemeral-key` inside the message. It must be compressed P-256, lowercase hex. The nonce is the lowercase hex SHA-256 of that string.
+- Adds `CreateWalletAuthenticators`, `DeleteWalletAuthenticators`, and `GetWalletAuthenticators`.
+
+`CreateWalletAuthenticators` (`POST /public/v1/submit/create_wallet_authenticators`) adds authenticators to an existing user. Each entry is a type, address, and domain. `verificationToken` is optional. Include a wallet verification JWT to record the claim as verified. Omit it to attach the authenticator unverified.
+
+```json
+{
+  "type": "ACTIVITY_TYPE_CREATE_WALLET_AUTHENTICATORS",
+  "organizationId": "<sub-organization>",
+  "parameters": {
+    "userId": "<user>",
+    "walletAuthenticators": [
+      {
+        "type": "WALLET_AUTHENTICATOR_TYPE_ETHEREUM",
+        "address": "0x71c7656ec7ab88b098defb751b7401b5f6d8976f",
+        "domain": "app.example.com",
+        "verificationToken": "<wallet verification JWT>"
+      }
+    ]
+  }
+}
+```
+
+> The result is `walletAuthenticatorIds`. Ids are assigned by the enclave.
+> Ethereum addresses are stored lowercase with a `0x` prefix. Solana addresses are canonical base58. Domain is a host only, lowercased.
+> The same `(type, address, domain)` cannot be added twice in one sub-organization.
+
+`DeleteWalletAuthenticators` (`POST /public/v1/submit/delete_wallet_authenticators`) removes authenticators by id. The result is the deleted ids.
+
+```json
+{
+  "type": "ACTIVITY_TYPE_DELETE_WALLET_AUTHENTICATORS",
+  "organizationId": "<sub-organization>",
+  "parameters": {
+    "userId": "<user>",
+    "walletAuthenticatorIds": ["<wallet authenticator id>"]
+  }
+}
+```
+
+`GetWalletAuthenticators` (`POST /public/v1/query/get_wallet_authenticators`) returns the stored authenticators for a user. The response does not include verification status.
+
+```json
+{
+  "organizationId": "<sub-organization>",
+  "userId": "<user>"
+}
+```
+- Add the `GetTVCManifestGenerationInfo` client method, with its request and response types, and an optional `QosManifest` field on `CreateTVCDeploymentIntent`. Together these let TVC clients generate the QOS manifest for a deployment and submit it with the deployment request. Both are only available to organizations that have client-generated manifests enabled.
+- Add the `GetFiatOffRampQuote` query and the `CreateFiatOffRampSession` activity to the Go SDK. The query returns Coinbase and MoonPay sell quotes for a crypto amount, asset, and country. Each quote's `provider` field names the provider that produced it. The activity takes a saved quote id and wallet address and returns the provider session URL and off-ramp transaction id.
+- Adds ExternalCryptoV1SignatureSchemeSignatureSchemeTkQuorumP256SigningKey, used by external signer task signatures whose public key is only the signing half of the enclave quorum key.
+- Raises the minimum Go version in `go.mod` to 1.27.1.
+- Adds the CreateExternalSigner and DeleteExternalSigner activities to manage external signers
+- Add `ActivityTypeExecuteSwapV4` and the `ExecuteSwapIntentV4`, `ExecuteSwapBoundQuote`, and `ExecuteSwapMarketTerms` types. An `ExecuteSwapIntentV4` sets exactly one of `BoundQuote`, which executes a `create_swap_quote` quote at its exact terms, or `Market`, which executes at the provider's price when the activity is approved. `ExecuteSwapResult` gains optional `OutputAmount`, `MinOutputAmount`, `FeeSponsorship`, and `FixedRate`. The activity type is internal until the execute endpoint switches to it.
+- Add `CreateFiatRampCredential` and `UpdateFiatRampCredential` on `/public/v1/submit/create_fiat_ramp_credential` and `/public/v1/submit/update_fiat_ramp_credential`. Parameters are `provider`, `apiKey`, and `encryptedSecret`. Create also takes `sandboxMode`. Update also takes `credentialId` and leaves sandbox mode unchanged. `apiKey` is the MoonPay publishable key or the Coinbase CDP API key ID. `encryptedSecret` is the MoonPay secret key or the Coinbase Ed25519 private key, encrypted to the on-ramp public key.
+
+`ListFiatOnRampCredentials` returns `credentialId`, `provider`, `apiKey`, and `encryptedSecret`.
+- Adds the optional ExternalSignerWrappingKeyID parameter to CreatePrivateKeysV2, specifying the object ID of the wrapping key the external signer will use when creating the private keys.
+- Add `FiatOnRampProviderMeld` (`FIAT_ON_RAMP_PROVIDER_MELD`) to `FiatOnRampProvider`.
+- Added Enable SMS and Disable SMS for countries activity types
+- 
+- Adds `AuthenticatorTransportSmartCard` to `AuthenticatorTransport`, the WebAuthn Level 3 `smart-card` transport reported by YubiKey firmware 5.8 and newer.
+
+### [v2.2.0 ... v2.3.0](https://github.com/tkhq/go-sdk/compare/v2.2.0...v2.3.0)
+
 ## 2.2.0 — 2026-10-15
 ### Patch Changes
 - Document `destination_address` as a raw public address for the output token protocol.

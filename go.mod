@@ -5,7 +5,7 @@ go 1.27.1
 require (
 	github.com/cloudflare/circl v1.3.7
 	github.com/stretchr/testify v1.12.1
-	github.com/tkhq/go-sdk/crypto v0.2.0
+	github.com/tkhq/go-sdk/crypto v0.3.0
 )
 
 require (
@@ -191,7 +191,7 @@ require (
 	github.com/tetafro/godot v1.5.6 // indirect
 	github.com/timakin/bodyclose v0.0.0-20260723120731-857993a2939c // indirect
 	github.com/timonwong/loggercheck v0.12.0 // indirect
-	github.com/tkhq/go-sdk/encoding v0.1.1 // indirect
+	github.com/tkhq/go-sdk/encoding v0.2.0 // indirect
 	github.com/tomarrell/wrapcheck/v2 v2.12.0 // indirect
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1 // indirect
 	github.com/ultraware/funlen v0.2.0 // indirect
