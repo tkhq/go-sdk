@@ -41,10 +41,10 @@ tidy:
 	go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
 	cd crypto && go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
 	go work sync
-	go mod edit -go=1.27.1
-	cd crypto && go mod edit -go=1.27.1
-	cd encoding && go mod edit -go=1.27.1
-	go work edit -go=1.27.1
+	go mod edit -go=1.27.3
+	cd crypto && go mod edit -go=1.27.3
+	cd encoding && go mod edit -go=1.27.3
+	go work edit -go=1.27.3
 
 .PHONY: release-branch
 release-branch:
