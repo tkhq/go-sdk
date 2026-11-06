@@ -1,5 +1,55 @@
 # CHANGELOG
 
+## 2.4.0 — 2026-11-02
+### Breaking Changes
+These changes can stop existing code from compiling. Update your code when you upgrade from v2.3.0.
+
+- `ExecuteSwapRequest` moves `QuoteID`, `QuotedOutputAmount` and `MinOutputAmount` into `BoundQuote`.
+
+Before:
+
+```go
+client.ExecuteSwap(ctx, turnkey.ExecuteSwapRequest{
+	QuoteID:            quoteID,
+	QuotedOutputAmount: quotedOutputAmount,
+	MinOutputAmount:    minOutputAmount,
+	// other fields
+})
+```
+
+After:
+
+```go
+client.ExecuteSwap(ctx, turnkey.ExecuteSwapRequest{
+	BoundQuote: &turnkey.ExecuteSwapBoundQuote{
+		QuoteID:            quoteID,
+		QuotedOutputAmount: quotedOutputAmount,
+		MinOutputAmount:    minOutputAmount,
+	},
+	// other fields
+})
+```
+
+- The `VelocityControl*` types, constants and fields are renamed to `UsageControl*`.
+- `CreateFiatRampCredential`, `UpdateFiatRampCredential` and `FiatOnRampCredential` use `FiatRampProvider` for `Provider`, not `FiatOnRampProvider`.
+- `FiatOnRampProviderMeld` is removed.
+
+### Minor Changes
+- Renames the velocity controls activities and types to usage controls. The `ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL` and `ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS` activity types become `ACTIVITY_TYPE_CREATE_USAGE_CONTROL` and `ACTIVITY_TYPE_DELETE_USAGE_CONTROLS` (the `ActivityTypeCreateVelocityControl` and `ActivityTypeDeleteVelocityControls` constants become `ActivityTypeCreateUsageControl` and `ActivityTypeDeleteUsageControls`). The `CreateVelocityControlIntent`, `CreateVelocityControlResult`, `DeleteVelocityControlsIntent` and `DeleteVelocityControlsResult` types, and every `VelocityControl*` type and enum value, are renamed to their `UsageControl*` equivalents. The `VelocityControlID` and `VelocityControlIds` fields become `UsageControlID` and `UsageControlIds`.
+- Adds `SwapCharges`, with `ExecutionUsd`, `TurnkeyFeeUsd`, and `FixedRateAdjustmentUsd`, one field per swap invoice line. `SwapQuoteV2`, returned by `ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3`, gains `EstimatedCharges` on fee-sponsored and fixed-rate quotes, `ExecuteSwapResult` gains `EstimatedCharges` from the executed quote for `ACTIVITY_TYPE_EXECUTE_SWAP_V4`, and `GetSwapStatusResponse` gains `Charges`, the final billed amounts once the swap settles. Deprecates `SwapQuoteV2.EstimatedFixedRateAdjustmentUsd` in favor of `EstimatedCharges.FixedRateAdjustmentUsd`.
+- Quote and fiat ramp credential types now use `FiatRampProvider`, `FiatRampCurrency`, `FiatRampPaymentMethod`, and `FiatRampAmount`.
+
+`GetFiatOnRampQuotes`, `GetFiatOffRampQuotes`, `CreateFiatRampCredential`, and `UpdateFiatRampCredential` take those types. `FiatRampPaymentMethod` is limited to the methods those queries return: card, Apple Pay, Google Pay, PayPal, MoonPay balance, fiat wallet, and ACH.
+
+`ListFiatOnRampCredentials` returns `provider` as `FiatRampProvider`.
+
+`InitFiatOnRamp`, `CreateFiatOnRampCredential`, and `UpdateFiatOnRampCredential` stay on the `FiatOnRamp*` types and are deprecated. Use the quote and session activities, and `CreateFiatRampCredential` / `UpdateFiatRampCredential`, instead.
+- Add `MintJWT` and `StampMintJWT` on `/public/v1/submit/mint_jwt`. `MintJWTRequest` takes `audience`, `profile`, and `httpAuthzV1` (see `HTTPAuthzV1Inputs`). `MintJWTResult.JWT` is an ES256 JWT, signed by Turnkey, that authorizes one exact HTTP request. `MintJWTResult.SigningKeyJwk` is the public JWK of the key that signed it.
+- `ExecuteSwap` and `StampExecuteSwap` now use `ACTIVITY_TYPE_EXECUTE_SWAP_V4`, which executes a swap in one of two modes. Adds `GetIndicativeSwapQuote`. With `BoundQuote`, the swap executes a quote from `CreateSwapQuote` at its exact terms. With `Market`, it executes at the provider's price when the activity is approved, within `SlippageBps` and an optional `MinOutputAmount` floor. Adds `GetIndicativeSwapQuote`, a query that previews the current price for a swap without creating an activity; its result is not binding and has no quote ID. Existing `ExecuteSwap`, `ExecuteSwapV2`, and `ExecuteSwapV3` are unchanged.
+- Add RewardsApyPct to EarnVault and EarnEnabledVault; Aave ApyPct now includes Merkl rewards and NetApyPct only deducts fees from the non-reward portion.
+
+### [v2.3.0 ... v2.4.0](https://github.com/tkhq/go-sdk/compare/v2.3.0...v2.4.0)
+
 ## 2.3.0 — 2026-10-30
 ### Patch Changes
 - Restrict velocity control decimals to a value between 0 and 32 instead of 0 and 255.
