@@ -284,3 +284,33 @@ func TestNewClient_WithStamperAndOptions(t *testing.T) {
 	assert.Equal(t, "https://custom.turnkey.com", client.BaseURL())
 	assert.Equal(t, 5, client.config.http.maxRetries)
 }
+
+// SetOrganizationFeature tests
+func TestActivityEnvelope_SetOrganizationFeatureOmitsEmptyValue(t *testing.T) {
+	c, err := NewClient(nil, "client-org", WithHTTPRetries(0))
+	require.NoError(t, err)
+
+	env, err := c.activityEnvelope(SetOrganizationFeatureRequest{
+		Name: FeatureNameOTPEmailAuth,
+	})
+	require.NoError(t, err)
+
+	params, ok := env["parameters"].(map[string]any)
+	require.True(t, ok)
+	assert.NotContains(t, params, "value")
+}
+
+func TestActivityEnvelope_SetOrganizationFeatureKeepsValue(t *testing.T) {
+	c, err := NewClient(nil, "client-org", WithHTTPRetries(0))
+	require.NoError(t, err)
+
+	env, err := c.activityEnvelope(SetOrganizationFeatureRequest{
+		Name:  FeatureNameWebauthnOrigins,
+		Value: "https://example.com",
+	})
+	require.NoError(t, err)
+
+	params, ok := env["parameters"].(map[string]any)
+	require.True(t, ok)
+	assert.Equal(t, "https://example.com", params["value"])
+}
