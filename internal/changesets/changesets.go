@@ -27,6 +27,7 @@ const (
 
 	ModuleCrypto   = "crypto"
 	ModuleEncoding = "encoding"
+	ModuleProto    = "proto"
 )
 
 // ModuleOption represents a selectable module.
@@ -40,6 +41,7 @@ var KnownModules = []ModuleOption{
 	{Key: "", Label: "root (go-sdk)"},
 	{Key: ModuleCrypto, Label: ModuleCrypto},
 	{Key: ModuleEncoding, Label: ModuleEncoding},
+	{Key: ModuleProto, Label: ModuleProto},
 }
 
 // PublishConfig holds tag and module-path info for publishing a module.
@@ -55,6 +57,8 @@ func PublishConfigFor(module string) PublishConfig {
 		return PublishConfig{TagPrefix: "crypto/v", ModulePath: "github.com/tkhq/go-sdk/crypto"}
 	case ModuleEncoding:
 		return PublishConfig{TagPrefix: "encoding/v", ModulePath: "github.com/tkhq/go-sdk/encoding"}
+	case ModuleProto:
+		return PublishConfig{TagPrefix: "proto/v", ModulePath: "github.com/tkhq/go-sdk/proto"}
 	default:
 		return PublishConfig{TagPrefix: "v", ModulePath: "github.com/tkhq/go-sdk/v2"}
 	}

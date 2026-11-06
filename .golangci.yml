@@ -64,6 +64,10 @@ linters:
     depguard:
       rules:
         main:
+          files:
+            # The proto module is the sanctioned home for protobuf wire-format
+            # handling; the rest of the SDK stays JSON-only.
+            - "!**/proto/**"
           deny:
             - pkg: "github.com/golang/protobuf/proto"
               desc: not allowed

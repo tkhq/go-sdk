@@ -18,6 +18,7 @@ jobs:
       root_version: ${{ steps.read-versions.outputs.root_version }}
       crypto_version: ${{ steps.read-versions.outputs.crypto_version }}
       encoding_version: ${{ steps.read-versions.outputs.encoding_version }}
+      proto_version: ${{ steps.read-versions.outputs.proto_version }}
     steps:
       # https://github.com/actions/checkout
       - name: Checkout
@@ -42,10 +43,12 @@ jobs:
           ROOT_VERSION="$(cat VERSION | tr -d '[:space:]')"
           CRYPTO_VERSION="$(cat crypto/VERSION | tr -d '[:space:]')"
           ENCODING_VERSION="$(cat encoding/VERSION | tr -d '[:space:]')"
-          echo "Root: $ROOT_VERSION | Crypto: $CRYPTO_VERSION | Encoding: $ENCODING_VERSION"
+          PROTO_VERSION="$(cat proto/VERSION | tr -d '[:space:]')"
+          echo "Root: $ROOT_VERSION | Crypto: $CRYPTO_VERSION | Encoding: $ENCODING_VERSION | Proto: $PROTO_VERSION"
           echo "root_version=$ROOT_VERSION" >> "$GITHUB_OUTPUT"
           echo "crypto_version=$CRYPTO_VERSION" >> "$GITHUB_OUTPUT"
           echo "encoding_version=$ENCODING_VERSION" >> "$GITHUB_OUTPUT"
+          echo "proto_version=$PROTO_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up Go
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
@@ -58,11 +61,13 @@ jobs:
           args: ./...
           version: v2.14.0
 
+      # Root ./... does not traverse the nested workspace modules (crypto,
+      # encoding, proto), so each module's package pattern is enumerated.
       - name: Build
-        run: go build -v ./...
+        run: go build -v ./... ./crypto/... ./encoding/... ./proto/...
 
       - name: Test
-        run: go test -v ./...
+        run: go test -v ./... ./crypto/... ./encoding/... ./proto/...
 
   tag-and-index:
     runs-on: ubuntu-latest
@@ -79,6 +84,7 @@ jobs:
           ROOT_VERSION="${{ needs.build.outputs.root_version }}"
           CRYPTO_VERSION="${{ needs.build.outputs.crypto_version }}"
           ENCODING_VERSION="${{ needs.build.outputs.encoding_version }}"
+          PROTO_VERSION="${{ needs.build.outputs.proto_version }}"
           RELEASE_ID="${{ needs.build.outputs.release_id }}"
 
           create_release() {
@@ -95,14 +101,17 @@ jobs:
           create_release "$ROOT_VERSION"                   "go-sdk $ROOT_VERSION ($RELEASE_ID)"
           create_release "crypto/$CRYPTO_VERSION"          "crypto $CRYPTO_VERSION ($RELEASE_ID)"
           create_release "encoding/$ENCODING_VERSION"      "encoding $ENCODING_VERSION ($RELEASE_ID)"
+          create_release "proto/$PROTO_VERSION"            "proto $PROTO_VERSION ($RELEASE_ID)"
 
       - name: Trigger pkg.go.dev updates
         run: |
           ROOT_VERSION="${{ needs.build.outputs.root_version }}"
           CRYPTO_VERSION="${{ needs.build.outputs.crypto_version }}"
           ENCODING_VERSION="${{ needs.build.outputs.encoding_version }}"
+          PROTO_VERSION="${{ needs.build.outputs.proto_version }}"
           echo "Triggering pkg.go.dev updates..."
           curl -s "https://sum.golang.org/lookup/github.com/tkhq/go-sdk/v2@$ROOT_VERSION"
           curl -s "https://sum.golang.org/lookup/github.com/tkhq/go-sdk/crypto@$CRYPTO_VERSION"
           curl -s "https://sum.golang.org/lookup/github.com/tkhq/go-sdk/encoding@$ENCODING_VERSION"
+          curl -s "https://sum.golang.org/lookup/github.com/tkhq/go-sdk/proto@$PROTO_VERSION"
           echo "All modules released. Packages will be available on pkg.go.dev shortly."
