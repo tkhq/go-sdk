@@ -3,6 +3,8 @@
 
 The Turnkey Go SDK is the official Go client for interacting with the Turnkey API.
 
+Source: https://github.com/tkhq/go-sdk · API reference: https://pkg.go.dev/github.com/tkhq/go-sdk/v2 · Docs: https://docs.turnkey.com/solutions/company-wallets/integration-guide/golang
+
 > [!WARNING]
 >
 >  **Migrating from v1?** Update `github.com/tkhq/go-sdk` to the new module path:
@@ -24,6 +26,8 @@ The SDK has three importable Go modules:
 | Root | `github.com/tkhq/go-sdk/v2` | API client, generated request/response types |
 | Crypto | `github.com/tkhq/go-sdk/crypto` | API key generation, signing, encryption, attestation |
 | Encoding | `github.com/tkhq/go-sdk/encoding` | Hex, Base58, and JSON encoding utilities |
+
+> The Import Path values are Go module paths for use in `import` statements and `go get`, not URLs. The repository lives at https://github.com/tkhq/go-sdk (the `/v2` suffix is Go's major-version suffix, not a directory or branch).
 
 ```
 go-sdk/
