@@ -28,6 +28,16 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 		},
 	}
 
+	ethTransaction := &signersv1.ExternalSignerEthTransaction{
+		ConstructedTransaction: "eth-tx",
+	}
+
+	solanaTransaction := &signersv1.ExternalSignerSolanaTransaction{
+		ConstructedMessage: "sol-msg",
+		FeePayer:           "fee-payer",
+		RecentBlockhash:    "blockhash",
+	}
+
 	payload := &signersv1.ExternalSignerProofPayloadV1{
 		Intent:               intent,
 		Timestamp:            1761700000000,
@@ -35,44 +45,36 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 		OrganizationId:       "org",
 		ExternalSignerPubkey: "signer",
 		TaskId:               "task",
+		EthTransaction:       ethTransaction,
+		SolanaTransaction:    solanaTransaction,
 	}
 
 	// The descriptor is what drives encoding, so pin every field's
 	// name-to-number association and kind. This is what catches a tag swap
 	// between fields that share a wire type (e.g. organization_digest and
 	// organization_id), which a wire-type-only check would miss.
-	wantFields := []struct {
-		name   protoreflect.Name
-		number protoreflect.FieldNumber
-		kind   protoreflect.Kind
-	}{
+	assertDescriptorFields(t, payload.ProtoReflect().Descriptor(), []wantField{
 		{"intent", 1, protoreflect.MessageKind},
 		{"timestamp", 2, protoreflect.Uint64Kind},
 		{"organization_digest", 3, protoreflect.StringKind},
 		{"organization_id", 4, protoreflect.StringKind},
 		{"external_signer_pubkey", 5, protoreflect.StringKind},
 		{"task_id", 6, protoreflect.StringKind},
-	}
+		{"eth_transaction", 7, protoreflect.MessageKind},
+		{"solana_transaction", 8, protoreflect.MessageKind},
+	})
 
-	fields := payload.ProtoReflect().Descriptor().Fields()
-	if fields.Len() != len(wantFields) {
-		t.Fatalf("message has %d fields, want %d", fields.Len(), len(wantFields))
-	}
+	// The transaction messages are embedded in the signed bytes, so their
+	// fields are part of the same contract.
+	assertDescriptorFields(t, ethTransaction.ProtoReflect().Descriptor(), []wantField{
+		{"constructed_transaction", 1, protoreflect.StringKind},
+	})
 
-	for _, want := range wantFields {
-		fd := fields.ByName(want.name)
-		if fd == nil {
-			t.Fatalf("field %q missing from descriptor", want.name)
-		}
-
-		if fd.Number() != want.number {
-			t.Fatalf("field %q: number %d, want %d", want.name, fd.Number(), want.number)
-		}
-
-		if fd.Kind() != want.kind {
-			t.Fatalf("field %q: kind %v, want %v", want.name, fd.Kind(), want.kind)
-		}
-	}
+	assertDescriptorFields(t, solanaTransaction.ProtoReflect().Descriptor(), []wantField{
+		{"constructed_message", 1, protoreflect.StringKind},
+		{"fee_payer", 2, protoreflect.StringKind},
+		{"recent_blockhash", 3, protoreflect.StringKind},
+	})
 
 	encoded, err := proto.Marshal(payload)
 	if err != nil {
@@ -106,22 +108,30 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 		}
 	}
 
-	intentField, ok := seen[1]
-	if !ok {
-		t.Fatal("field 1 (intent) missing from encoding")
+	wantMessages := map[protowire.Number]proto.Message{
+		1: intent,
+		7: ethTransaction,
+		8: solanaTransaction,
 	}
 
-	if intentField.typ != protowire.BytesType {
-		t.Fatalf("field 1 (intent): wire type %d, want %d (bytes)", intentField.typ, protowire.BytesType)
-	}
+	for num, msg := range wantMessages {
+		field, ok := seen[num]
+		if !ok {
+			t.Fatalf("field %d missing from encoding", num)
+		}
 
-	wantIntent, err := proto.Marshal(intent)
-	if err != nil {
-		t.Fatalf("marshal intent: %v", err)
-	}
+		if field.typ != protowire.BytesType {
+			t.Fatalf("field %d: wire type %d, want %d (bytes)", num, field.typ, protowire.BytesType)
+		}
 
-	if !bytes.Equal(intentField.raw, wantIntent) {
-		t.Fatalf("field 1 (intent): value %x, want %x", intentField.raw, wantIntent)
+		want, err := proto.Marshal(msg)
+		if err != nil {
+			t.Fatalf("marshal field %d: %v", num, err)
+		}
+
+		if !bytes.Equal(field.raw, want) {
+			t.Fatalf("field %d: value %x, want %x", num, field.raw, want)
+		}
 	}
 
 	timestampField, ok := seen[2]
@@ -138,10 +148,11 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 	}
 
 	for num := range seen {
-		if num != 1 && num != 2 {
-			if _, ok := wantBytes[num]; !ok {
-				t.Fatalf("unexpected field number %d in encoding", num)
-			}
+		_, isBytes := wantBytes[num]
+		_, isMessage := wantMessages[num]
+
+		if num != 2 && !isBytes && !isMessage {
+			t.Fatalf("unexpected field number %d in encoding", num)
 		}
 	}
 
@@ -153,6 +164,38 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 
 	if !proto.Equal(payload, &decoded) {
 		t.Fatalf("round trip mismatch: %v != %v", payload, &decoded)
+	}
+}
+
+// wantField is the expected name, number, and kind of a descriptor field.
+type wantField struct {
+	name   protoreflect.Name
+	number protoreflect.FieldNumber
+	kind   protoreflect.Kind
+}
+
+// assertDescriptorFields checks that desc has exactly the wanted fields.
+func assertDescriptorFields(t *testing.T, desc protoreflect.MessageDescriptor, wantFields []wantField) {
+	t.Helper()
+
+	fields := desc.Fields()
+	if fields.Len() != len(wantFields) {
+		t.Fatalf("%s has %d fields, want %d", desc.Name(), fields.Len(), len(wantFields))
+	}
+
+	for _, want := range wantFields {
+		fd := fields.ByName(want.name)
+		if fd == nil {
+			t.Fatalf("%s: field %q missing from descriptor", desc.Name(), want.name)
+		}
+
+		if fd.Number() != want.number {
+			t.Fatalf("%s: field %q: number %d, want %d", desc.Name(), want.name, fd.Number(), want.number)
+		}
+
+		if fd.Kind() != want.kind {
+			t.Fatalf("%s: field %q: kind %v, want %v", desc.Name(), want.name, fd.Kind(), want.kind)
+		}
 	}
 }
 
