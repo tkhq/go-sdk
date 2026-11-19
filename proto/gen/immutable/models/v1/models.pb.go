@@ -34,6 +34,7 @@ const (
 	SignatureScheme_SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191    SignatureScheme = 6
 	SignatureScheme_SIGNATURE_SCHEME_TK_ATTESTED_P256           SignatureScheme = 7
 	SignatureScheme_SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY SignatureScheme = 8
+	SignatureScheme_SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256        SignatureScheme = 9
 )
 
 // Enum value maps for SignatureScheme.
@@ -48,6 +49,7 @@ var (
 		6: "SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191",
 		7: "SIGNATURE_SCHEME_TK_ATTESTED_P256",
 		8: "SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY",
+		9: "SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256",
 	}
 	SignatureScheme_value = map[string]int32{
 		"SIGNATURE_SCHEME_UNSPECIFIED":                0,
@@ -59,6 +61,7 @@ var (
 		"SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191":    6,
 		"SIGNATURE_SCHEME_TK_ATTESTED_P256":           7,
 		"SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY": 8,
+		"SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256":        9,
 	}
 )
 
@@ -244,6 +247,7 @@ type EncryptedIngressPurpose int32
 const (
 	EncryptedIngressPurpose_ENCRYPTED_INGRESS_PURPOSE_UNSPECIFIED         EncryptedIngressPurpose = 0
 	EncryptedIngressPurpose_ENCRYPTED_INGRESS_PURPOSE_OAUTH2_AUTHENTICATE EncryptedIngressPurpose = 1
+	EncryptedIngressPurpose_ENCRYPTED_INGRESS_PURPOSE_IMPORT_SECRETS      EncryptedIngressPurpose = 2
 )
 
 // Enum value maps for EncryptedIngressPurpose.
@@ -251,10 +255,12 @@ var (
 	EncryptedIngressPurpose_name = map[int32]string{
 		0: "ENCRYPTED_INGRESS_PURPOSE_UNSPECIFIED",
 		1: "ENCRYPTED_INGRESS_PURPOSE_OAUTH2_AUTHENTICATE",
+		2: "ENCRYPTED_INGRESS_PURPOSE_IMPORT_SECRETS",
 	}
 	EncryptedIngressPurpose_value = map[string]int32{
 		"ENCRYPTED_INGRESS_PURPOSE_UNSPECIFIED":         0,
 		"ENCRYPTED_INGRESS_PURPOSE_OAUTH2_AUTHENTICATE": 1,
+		"ENCRYPTED_INGRESS_PURPOSE_IMPORT_SECRETS":      2,
 	}
 )
 
@@ -290,6 +296,7 @@ type TransportEncryptionSuite int32
 const (
 	TransportEncryptionSuite_TRANSPORT_ENCRYPTION_SUITE_UNSPECIFIED        TransportEncryptionSuite = 0
 	TransportEncryptionSuite_TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1 TransportEncryptionSuite = 1
+	TransportEncryptionSuite_TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2 TransportEncryptionSuite = 2
 )
 
 // Enum value maps for TransportEncryptionSuite.
@@ -297,10 +304,12 @@ var (
 	TransportEncryptionSuite_name = map[int32]string{
 		0: "TRANSPORT_ENCRYPTION_SUITE_UNSPECIFIED",
 		1: "TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1",
+		2: "TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2",
 	}
 	TransportEncryptionSuite_value = map[string]int32{
 		"TRANSPORT_ENCRYPTION_SUITE_UNSPECIFIED":        0,
 		"TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1": 1,
+		"TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2": 2,
 	}
 )
 
@@ -2381,7 +2390,7 @@ const file_immutable_models_v1_models_proto_rawDesc = "" +
 	"\x06_notes\"\x9a\x01\n" +
 	"\x14SignedSessionProfile\x12D\n" +
 	"\apayload\x18\x01 \x01(\v2*.immutable.models.v1.SessionProfilePayloadR\apayload\x12<\n" +
-	"\tsignature\x18\x02 \x01(\v2\x1e.immutable.models.v1.SignatureR\tsignature*\xee\x02\n" +
+	"\tsignature\x18\x02 \x01(\v2\x1e.immutable.models.v1.SignatureR\tsignature*\x98\x03\n" +
 	"\x0fSignatureScheme\x12 \n" +
 	"\x1cSIGNATURE_SCHEME_UNSPECIFIED\x10\x00\x12 \n" +
 	"\x1cSIGNATURE_SCHEME_TK_API_P256\x10\x01\x12 \n" +
@@ -2391,7 +2400,8 @@ const file_immutable_models_v1_models_proto_rawDesc = "" +
 	"\x1fSIGNATURE_SCHEME_TK_API_ED25519\x10\x05\x12,\n" +
 	"(SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191\x10\x06\x12%\n" +
 	"!SIGNATURE_SCHEME_TK_ATTESTED_P256\x10\a\x12/\n" +
-	"+SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY\x10\b*z\n" +
+	"+SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY\x10\b\x12(\n" +
+	"$SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256\x10\t*z\n" +
 	"\x15AtRestEncryptionSuite\x12(\n" +
 	"$AT_REST_ENCRYPTION_SUITE_UNSPECIFIED\x10\x00\x127\n" +
 	"3AT_REST_ENCRYPTION_SUITE_AES_256_GCM_HKDF_SHA256_V1\x10\x01*\xda\x01\n" +
@@ -2404,13 +2414,15 @@ const file_immutable_models_v1_models_proto_rawDesc = "" +
 	"\x1fENCLAVE_APPLICATION_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aENCLAVE_APPLICATION_SIGNER\x10\x01\x12#\n" +
 	"\x1fENCLAVE_APPLICATION_TLS_FETCHER\x10\x02\x12\x1b\n" +
-	"\x17ENCLAVE_APPLICATION_UMP\x10\x03*w\n" +
+	"\x17ENCLAVE_APPLICATION_UMP\x10\x03*\xa5\x01\n" +
 	"\x17EncryptedIngressPurpose\x12)\n" +
 	"%ENCRYPTED_INGRESS_PURPOSE_UNSPECIFIED\x10\x00\x121\n" +
-	"-ENCRYPTED_INGRESS_PURPOSE_OAUTH2_AUTHENTICATE\x10\x01*y\n" +
+	"-ENCRYPTED_INGRESS_PURPOSE_OAUTH2_AUTHENTICATE\x10\x01\x12,\n" +
+	"(ENCRYPTED_INGRESS_PURPOSE_IMPORT_SECRETS\x10\x02*\xac\x01\n" +
 	"\x18TransportEncryptionSuite\x12*\n" +
 	"&TRANSPORT_ENCRYPTION_SUITE_UNSPECIFIED\x10\x00\x121\n" +
-	"-TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1\x10\x01B6Z4github.com/tkhq/go-sdk/proto/gen/immutable/models/v1b\x06proto3"
+	"-TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1\x10\x01\x121\n" +
+	"-TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2\x10\x02B6Z4github.com/tkhq/go-sdk/proto/gen/immutable/models/v1b\x06proto3"
 
 var (
 	file_immutable_models_v1_models_proto_rawDescOnce sync.Once
