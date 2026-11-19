@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/cloudflare/circl/kem"
@@ -147,33 +148,28 @@ func EncryptPrivateKeyToBundle(privateKey, keyFormat, importBundle, organization
 	return encryptImportBundle(plaintext, []byte(importBundle), organizationID, userID, signerKey)
 }
 
-// EncryptSecretToBundle verifies the target's signature and org, then returns encrypted ClientSendMsg JSON and its hex target key.
+// EncryptSecretToBundle verifies the target's signature, org, and empty user ID, then returns encrypted ClientSendMsg JSON and its hex target key.
+// The ciphertext is bound to the secret's name and static properties (see ImportSecretsPurposeBinding). The
+// ImportSecrets activity must send the same name and properties in the same order, with
+// TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2.
 // dangerouslyOverrideSignerKey replaces the production quorum key (non-production only).
-func EncryptSecretToBundle(plaintext []byte, targetBundle, organizationID string, dangerouslyOverrideSignerKey ...*ecdsa.PublicKey) (string, string, error) {
+func EncryptSecretToBundle(plaintext []byte, targetBundle, organizationID string, name *string, staticProperties []StaticProperty, dangerouslyOverrideSignerKey ...*ecdsa.PublicKey) (string, string, error) {
 	signerKey, err := resolveSignerKey(dangerouslyOverrideSignerKey...)
 	if err != nil {
 		return "", "", err
 	}
 
-	var msg ServerTargetMsgV1
-	if err := json.Unmarshal([]byte(targetBundle), &msg); err != nil {
+	signedData, err := verifyImportTarget([]byte(targetBundle), organizationID, signerKey)
+	if err != nil {
 		return "", "", err
 	}
 
-	if err := verifyEnclaveSignature(msg.EnclaveQuorumPublic, msg.DataSignature, msg.Data, signerKey); err != nil {
-		return "", "", err
+	// Secret targets are signed with an empty user ID; a non-empty one marks a private key or wallet import target.
+	if signedData.UserID != "" {
+		return "", "", fmt.Errorf("secret import target user id must be empty. Found: %s", signedData.UserID)
 	}
 
-	var signedData ServerTargetData
-	if err := json.Unmarshal(msg.Data, &signedData); err != nil {
-		return "", "", err
-	}
-
-	if signedData.OrganizationID != organizationID {
-		return "", "", fmt.Errorf("organization id does not match expected value. Expected: %s. Found: %s", organizationID, signedData.OrganizationID)
-	}
-
-	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext)
+	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext, ImportSecretsPurposeBinding(name, staticProperties))
 	if err != nil {
 		return "", "", err
 	}
@@ -181,27 +177,47 @@ func EncryptSecretToBundle(plaintext []byte, targetBundle, organizationID string
 	return payload, hex.EncodeToString(signedData.TargetPublic), nil
 }
 
+// otpAttemptBundle is the confidential VerifyOtp input encrypted to the TLS Fetcher.
+type otpAttemptBundle struct {
+	OtpCode   string `json:"otp_code"`
+	PublicKey string `json:"public_key"`
+}
+
+// String redacts the bundle, which carries the OTP code.
+func (otpAttemptBundle) String() string {
+	return "otpAttemptBundle(<redacted>)"
+}
+
+// LogValue redacts the bundle in structured logs.
+func (b otpAttemptBundle) LogValue() slog.Value {
+	return slog.StringValue(b.String())
+}
+
 // EncryptOtpCodeToBundle encrypts an OTP code and a client public key to the target bundle
 // returned by InitOtp. Verifies the enclave signature using ProductionTLSFetcherSigningPublicKey.
 // Pass dangerouslyOverrideSignerPublicKeyHex to use a custom signer key (non-production only).
-func EncryptOtpCodeToBundle(otpCode, otpEncryptionTargetBundle, publicKey string, dangerouslyOverrideSignerPublicKeyHex ...string) (string, error) {
-	signerKeyHex := ProductionTLSFetcherSigningPublicKey
+func EncryptOtpCodeToBundle(otpCode, targetBundle, publicKey string, dangerouslyOverrideSignerPublicKeyHex ...string) (string, error) {
+	var override *ecdsa.PublicKey
+
 	if len(dangerouslyOverrideSignerPublicKeyHex) > 0 && dangerouslyOverrideSignerPublicKeyHex[0] != "" {
-		signerKeyHex = dangerouslyOverrideSignerPublicKeyHex[0]
+		overrideBytes, err := hex.DecodeString(dangerouslyOverrideSignerPublicKeyHex[0])
+		if err != nil {
+			return "", fmt.Errorf("failed to decode signer public key: %w", err)
+		}
+
+		override, err = ToECDSAPublic(overrideBytes)
+		if err != nil {
+			return "", fmt.Errorf("failed to parse signer public key: %w", err)
+		}
 	}
 
-	signerKeyBytes, err := hex.DecodeString(signerKeyHex)
+	signerKey, err := resolveTLSFetcherKey(override)
 	if err != nil {
-		return "", fmt.Errorf("failed to decode signer public key: %w", err)
-	}
-
-	signerKey, err := ToECDSAPublic(signerKeyBytes)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse signer public key: %w", err)
+		return "", err
 	}
 
 	var msg ServerTargetMsgV1
-	if err := json.Unmarshal([]byte(otpEncryptionTargetBundle), &msg); err != nil {
+	if err := json.Unmarshal([]byte(targetBundle), &msg); err != nil {
 		return "", err
 	}
 
@@ -214,54 +230,122 @@ func EncryptOtpCodeToBundle(otpCode, otpEncryptionTargetBundle, publicKey string
 		return "", err
 	}
 
-	plaintext, err := json.Marshal(struct {
-		OtpCode   string `json:"otp_code"`
-		PublicKey string `json:"public_key"`
-	}{
-		OtpCode:   otpCode,
-		PublicKey: publicKey,
-	})
+	plaintext, err := json.Marshal(otpAttemptBundle{OtpCode: otpCode, PublicKey: publicKey})
 	if err != nil {
 		return "", err
 	}
 
-	return hpkeEncryptToTarget(signedData.TargetPublic, plaintext)
+	defer clear(plaintext)
+
+	return hpkeEncryptToTarget(signedData.TargetPublic, plaintext, nil)
+}
+
+// OAuth2AuthenticationBundle is the confidential OAuth2AuthenticateV2 input encrypted to the TLS Fetcher.
+// OrganizationID, OAuth2CredentialID, ClientID, and Provider must match the authenticating organization's credential.
+type OAuth2AuthenticationBundle struct {
+	OrganizationID     string `json:"organization_id"`
+	OAuth2CredentialID string `json:"oauth2_credential_id"`
+	ClientID           string `json:"client_id"`
+	// Provider is the OAuth 2.0 provider enum name, such as OAUTH2_PROVIDER_DISCORD.
+	Provider     string `json:"provider"`
+	AuthCode     string `json:"auth_code"`
+	CodeVerifier string `json:"code_verifier"`
+	RedirectURI  string `json:"redirect_uri"`
+	// Nonce is the lowercase hex SHA-256 digest bound into the issued OIDC token.
+	Nonce string `json:"nonce"`
+	// BearerTokenTargetPublicKey optionally receives the provider bearer token, encrypted to this uncompressed P-256 key.
+	BearerTokenTargetPublicKey string `json:"bearer_token_target_public_key,omitempty"`
+}
+
+// String redacts the payload, which carries the authorization code and PKCE verifier.
+func (OAuth2AuthenticationBundle) String() string {
+	return "OAuth2AuthenticationBundle(<redacted>)"
+}
+
+// LogValue redacts the payload in structured logs.
+func (b OAuth2AuthenticationBundle) LogValue() slog.Value {
+	return slog.StringValue(b.String())
+}
+
+// EncryptOAuth2ToBundle verifies the TLS Fetcher target returned by InitOAuth2Authenticate, then returns the encrypted
+// ClientSendMsg JSON and hex target public key for OAuth2AuthenticateV2's encryptedMessage and targetPublicKey.
+// dangerouslyOverrideSignerKey replaces ProductionTLSFetcherSigningPublicKey (non-production only).
+func EncryptOAuth2ToBundle(bundle OAuth2AuthenticationBundle, targetBundle string, dangerouslyOverrideSignerKey ...*ecdsa.PublicKey) (string, string, error) {
+	signerKey, err := resolveTLSFetcherKey(dangerouslyOverrideSignerKey...)
+	if err != nil {
+		return "", "", err
+	}
+
+	plaintext, err := json.Marshal(bundle)
+	if err != nil {
+		return "", "", err
+	}
+
+	defer clear(plaintext)
+
+	signedData, err := verifyImportTarget([]byte(targetBundle), bundle.OrganizationID, signerKey)
+	if err != nil {
+		return "", "", err
+	}
+
+	// TLS Fetcher OAuth2 targets are signed with an empty user ID.
+	if signedData.UserID != "" {
+		return "", "", fmt.Errorf("oauth2 target user id must be empty. Found: %s", signedData.UserID)
+	}
+
+	// OAuth2AuthenticateV2 decrypts without a purpose binding.
+	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext, nil)
+	if err != nil {
+		return "", "", err
+	}
+
+	return payload, hex.EncodeToString(signedData.TargetPublic), nil
 }
 
 // encryptImportBundle is the shared parse+verify+encrypt flow for wallet and private-key imports.
 func encryptImportBundle(plaintext, bundleBytes []byte, organizationID, userID string, signerKey *ecdsa.PublicKey) (string, error) {
-	var msg ServerTargetMsgV1
-	if err := json.Unmarshal(bundleBytes, &msg); err != nil {
+	signedData, err := verifyImportTarget(bundleBytes, organizationID, signerKey)
+	if err != nil {
 		return "", err
-	}
-
-	if err := verifyEnclaveSignature(msg.EnclaveQuorumPublic, msg.DataSignature, msg.Data, signerKey); err != nil {
-		return "", err
-	}
-
-	var signedData ServerTargetData
-	if err := json.Unmarshal(msg.Data, &signedData); err != nil {
-		return "", err
-	}
-
-	if signedData.OrganizationID != organizationID {
-		return "", fmt.Errorf("organization id does not match expected value. Expected: %s. Found: %s", organizationID, signedData.OrganizationID)
 	}
 
 	if signedData.UserID != userID {
 		return "", fmt.Errorf("user id does not match expected value. Expected: %s. Found: %s", userID, signedData.UserID)
 	}
 
-	return hpkeEncryptToTarget(signedData.TargetPublic, plaintext)
+	return hpkeEncryptToTarget(signedData.TargetPublic, plaintext, nil)
 }
 
-func hpkeEncryptToTarget(targetPublicRaw []byte, plaintext []byte) (string, error) {
+// verifyImportTarget parses a signed import target, verifies its enclave signature, and checks its organization ID.
+func verifyImportTarget(bundleBytes []byte, organizationID string, signerKey *ecdsa.PublicKey) (ServerTargetData, error) {
+	var msg ServerTargetMsgV1
+	if err := json.Unmarshal(bundleBytes, &msg); err != nil {
+		return ServerTargetData{}, err
+	}
+
+	if err := verifyEnclaveSignature(msg.EnclaveQuorumPublic, msg.DataSignature, msg.Data, signerKey); err != nil {
+		return ServerTargetData{}, err
+	}
+
+	var signedData ServerTargetData
+	if err := json.Unmarshal(msg.Data, &signedData); err != nil {
+		return ServerTargetData{}, err
+	}
+
+	if signedData.OrganizationID != organizationID {
+		return ServerTargetData{}, fmt.Errorf("organization id does not match expected value. Expected: %s. Found: %s", organizationID, signedData.OrganizationID)
+	}
+
+	return signedData, nil
+}
+
+func hpkeEncryptToTarget(targetPublicRaw []byte, plaintext, purposeBinding []byte) (string, error) {
 	targetPublic, err := KemID.Scheme().UnmarshalBinaryPublicKey(targetPublicRaw)
 	if err != nil {
 		return "", err
 	}
 
-	ciphertext, encappedPublic, err := HPKEEncrypt(&targetPublic, plaintext)
+	ciphertext, encappedPublic, err := HPKEEncryptWithPurposeBinding(&targetPublic, plaintext, purposeBinding)
 	if err != nil {
 		return "", err
 	}
@@ -300,11 +384,19 @@ func verifyEnclaveSignature(enclaveQuorumPublic, dataSignature, data []byte, exp
 }
 
 func resolveSignerKey(override ...*ecdsa.PublicKey) (*ecdsa.PublicKey, error) {
+	return resolveKey(SignerProductionPublicKey, override...)
+}
+
+func resolveTLSFetcherKey(override ...*ecdsa.PublicKey) (*ecdsa.PublicKey, error) {
+	return resolveKey(ProductionTLSFetcherSigningPublicKey, override...)
+}
+
+func resolveKey(productionKeyHex string, override ...*ecdsa.PublicKey) (*ecdsa.PublicKey, error) {
 	if len(override) > 0 && override[0] != nil {
 		return override[0], nil
 	}
 
-	keyBytes, err := hex.DecodeString(SignerProductionPublicKey)
+	keyBytes, err := hex.DecodeString(productionKeyHex)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode production signer key: %w", err)
 	}

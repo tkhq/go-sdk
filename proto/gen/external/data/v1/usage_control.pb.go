@@ -70,6 +70,55 @@ func (UsageControlAggregationMethod) EnumDescriptor() ([]byte, []int) {
 	return file_external_data_v1_usage_control_proto_rawDescGZIP(), []int{0}
 }
 
+type UsageControlScopeAggregation int32
+
+const (
+	UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED UsageControlScopeAggregation = 0
+	UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_SHARED      UsageControlScopeAggregation = 1
+	UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_PER         UsageControlScopeAggregation = 2
+)
+
+// Enum value maps for UsageControlScopeAggregation.
+var (
+	UsageControlScopeAggregation_name = map[int32]string{
+		0: "USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED",
+		1: "USAGE_CONTROL_SCOPE_AGGREGATION_SHARED",
+		2: "USAGE_CONTROL_SCOPE_AGGREGATION_PER",
+	}
+	UsageControlScopeAggregation_value = map[string]int32{
+		"USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED": 0,
+		"USAGE_CONTROL_SCOPE_AGGREGATION_SHARED":      1,
+		"USAGE_CONTROL_SCOPE_AGGREGATION_PER":         2,
+	}
+)
+
+func (x UsageControlScopeAggregation) Enum() *UsageControlScopeAggregation {
+	p := new(UsageControlScopeAggregation)
+	*p = x
+	return p
+}
+
+func (x UsageControlScopeAggregation) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (UsageControlScopeAggregation) Descriptor() protoreflect.EnumDescriptor {
+	return file_external_data_v1_usage_control_proto_enumTypes[1].Descriptor()
+}
+
+func (UsageControlScopeAggregation) Type() protoreflect.EnumType {
+	return &file_external_data_v1_usage_control_proto_enumTypes[1]
+}
+
+func (x UsageControlScopeAggregation) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use UsageControlScopeAggregation.Descriptor instead.
+func (UsageControlScopeAggregation) EnumDescriptor() ([]byte, []int) {
+	return file_external_data_v1_usage_control_proto_rawDescGZIP(), []int{1}
+}
+
 type UsageControl struct {
 	state          protoimpl.MessageState  `protogen:"open.v1"`
 	UsageControlId string                  `protobuf:"bytes,1,opt,name=usage_control_id,json=usageControlId,proto3" json:"usage_control_id,omitempty"`
@@ -683,8 +732,9 @@ func (x *UsageControlScope) GetActivity() *UsageControlScopeActivity {
 }
 
 type UsageControlScopeUser struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ids           []string               `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	state         protoimpl.MessageState        `protogen:"open.v1"`
+	Ids           []string                      `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	Aggregation   *UsageControlScopeAggregation `protobuf:"varint,2,opt,name=aggregation,proto3,enum=external.data.v1.UsageControlScopeAggregation,oneof" json:"aggregation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -726,9 +776,17 @@ func (x *UsageControlScopeUser) GetIds() []string {
 	return nil
 }
 
+func (x *UsageControlScopeUser) GetAggregation() UsageControlScopeAggregation {
+	if x != nil && x.Aggregation != nil {
+		return *x.Aggregation
+	}
+	return UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED
+}
+
 type UsageControlScopeWallet struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ids           []string               `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	state         protoimpl.MessageState        `protogen:"open.v1"`
+	Ids           []string                      `protobuf:"bytes,1,rep,name=ids,proto3" json:"ids,omitempty"`
+	Aggregation   *UsageControlScopeAggregation `protobuf:"varint,2,opt,name=aggregation,proto3,enum=external.data.v1.UsageControlScopeAggregation,oneof" json:"aggregation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -770,9 +828,17 @@ func (x *UsageControlScopeWallet) GetIds() []string {
 	return nil
 }
 
+func (x *UsageControlScopeWallet) GetAggregation() UsageControlScopeAggregation {
+	if x != nil && x.Aggregation != nil {
+		return *x.Aggregation
+	}
+	return UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED
+}
+
 type UsageControlScopeWalletAccount struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Addresses     []string               `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	state         protoimpl.MessageState        `protogen:"open.v1"`
+	Addresses     []string                      `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	Aggregation   *UsageControlScopeAggregation `protobuf:"varint,2,opt,name=aggregation,proto3,enum=external.data.v1.UsageControlScopeAggregation,oneof" json:"aggregation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -812,6 +878,13 @@ func (x *UsageControlScopeWalletAccount) GetAddresses() []string {
 		return x.Addresses
 	}
 	return nil
+}
+
+func (x *UsageControlScopeWalletAccount) GetAggregation() UsageControlScopeAggregation {
+	if x != nil && x.Aggregation != nil {
+		return *x.Aggregation
+	}
+	return UsageControlScopeAggregation_USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED
 }
 
 type UsageControlScopeActivity struct {
@@ -913,19 +986,29 @@ const file_external_data_v1_usage_control_proto_rawDesc = "" +
 	"\x05_userB\t\n" +
 	"\a_walletB\x11\n" +
 	"\x0f_wallet_accountB\v\n" +
-	"\t_activity\"+\n" +
+	"\t_activity\"\x94\x01\n" +
 	"\x15UsageControlScopeUser\x12\x12\n" +
-	"\x03ids\x18\x01 \x03(\tB\x00R\x03ids\"-\n" +
+	"\x03ids\x18\x01 \x03(\tB\x00R\x03ids\x12W\n" +
+	"\vaggregation\x18\x02 \x01(\x0e2..external.data.v1.UsageControlScopeAggregationB\x00H\x00R\vaggregation\x88\x01\x01B\x0e\n" +
+	"\f_aggregation\"\x96\x01\n" +
 	"\x17UsageControlScopeWallet\x12\x12\n" +
-	"\x03ids\x18\x01 \x03(\tB\x00R\x03ids\"@\n" +
+	"\x03ids\x18\x01 \x03(\tB\x00R\x03ids\x12W\n" +
+	"\vaggregation\x18\x02 \x01(\x0e2..external.data.v1.UsageControlScopeAggregationB\x00H\x00R\vaggregation\x88\x01\x01B\x0e\n" +
+	"\f_aggregation\"\xa9\x01\n" +
 	"\x1eUsageControlScopeWalletAccount\x12\x1e\n" +
-	"\taddresses\x18\x01 \x03(\tB\x00R\taddresses\"3\n" +
+	"\taddresses\x18\x01 \x03(\tB\x00R\taddresses\x12W\n" +
+	"\vaggregation\x18\x02 \x01(\x0e2..external.data.v1.UsageControlScopeAggregationB\x00H\x00R\vaggregation\x88\x01\x01B\x0e\n" +
+	"\f_aggregation\"3\n" +
 	"\x19UsageControlScopeActivity\x12\x16\n" +
 	"\x05types\x18\x01 \x03(\tB\x00R\x05types*\xa7\x01\n" +
 	"\x1dUsageControlAggregationMethod\x120\n" +
 	",USAGE_CONTROL_AGGREGATION_METHOD_UNSPECIFIED\x10\x00\x12(\n" +
 	"$USAGE_CONTROL_AGGREGATION_METHOD_SUM\x10\x01\x12*\n" +
-	"&USAGE_CONTROL_AGGREGATION_METHOD_COUNT\x10\x02B3Z1github.com/tkhq/go-sdk/proto/gen/external/data/v1b\x06proto3"
+	"&USAGE_CONTROL_AGGREGATION_METHOD_COUNT\x10\x02*\xa4\x01\n" +
+	"\x1cUsageControlScopeAggregation\x12/\n" +
+	"+USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED\x10\x00\x12*\n" +
+	"&USAGE_CONTROL_SCOPE_AGGREGATION_SHARED\x10\x01\x12'\n" +
+	"#USAGE_CONTROL_SCOPE_AGGREGATION_PER\x10\x02B3Z1github.com/tkhq/go-sdk/proto/gen/external/data/v1b\x06proto3"
 
 var (
 	file_external_data_v1_usage_control_proto_rawDescOnce sync.Once
@@ -939,48 +1022,52 @@ func file_external_data_v1_usage_control_proto_rawDescGZIP() []byte {
 	return file_external_data_v1_usage_control_proto_rawDescData
 }
 
-var file_external_data_v1_usage_control_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_external_data_v1_usage_control_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_external_data_v1_usage_control_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_external_data_v1_usage_control_proto_goTypes = []any{
 	(UsageControlAggregationMethod)(0),                         // 0: external.data.v1.UsageControlAggregationMethod
-	(*UsageControl)(nil),                                       // 1: external.data.v1.UsageControl
-	(*UsageControlDataSource)(nil),                             // 2: external.data.v1.UsageControlDataSource
-	(*UsageControlDataSourceChainAssetTransfer)(nil),           // 3: external.data.v1.UsageControlDataSourceChainAssetTransfer
-	(*UsageControlDataSourceChainAssetTransferDefinition)(nil), // 4: external.data.v1.UsageControlDataSourceChainAssetTransferDefinition
-	(*UsageControlDataSourceActivityExecution)(nil),            // 5: external.data.v1.UsageControlDataSourceActivityExecution
-	(*UsageControlBudget)(nil),                                 // 6: external.data.v1.UsageControlBudget
-	(*UsageControlAggregationWindow)(nil),                      // 7: external.data.v1.UsageControlAggregationWindow
-	(*UsageControlAggregationWindowRolling)(nil),               // 8: external.data.v1.UsageControlAggregationWindowRolling
-	(*UsageControlAggregationWindowInfinite)(nil),              // 9: external.data.v1.UsageControlAggregationWindowInfinite
-	(*UsageControlScope)(nil),                                  // 10: external.data.v1.UsageControlScope
-	(*UsageControlScopeUser)(nil),                              // 11: external.data.v1.UsageControlScopeUser
-	(*UsageControlScopeWallet)(nil),                            // 12: external.data.v1.UsageControlScopeWallet
-	(*UsageControlScopeWalletAccount)(nil),                     // 13: external.data.v1.UsageControlScopeWalletAccount
-	(*UsageControlScopeActivity)(nil),                          // 14: external.data.v1.UsageControlScopeActivity
-	(*Timestamp)(nil),                                          // 15: external.data.v1.Timestamp
+	(UsageControlScopeAggregation)(0),                          // 1: external.data.v1.UsageControlScopeAggregation
+	(*UsageControl)(nil),                                       // 2: external.data.v1.UsageControl
+	(*UsageControlDataSource)(nil),                             // 3: external.data.v1.UsageControlDataSource
+	(*UsageControlDataSourceChainAssetTransfer)(nil),           // 4: external.data.v1.UsageControlDataSourceChainAssetTransfer
+	(*UsageControlDataSourceChainAssetTransferDefinition)(nil), // 5: external.data.v1.UsageControlDataSourceChainAssetTransferDefinition
+	(*UsageControlDataSourceActivityExecution)(nil),            // 6: external.data.v1.UsageControlDataSourceActivityExecution
+	(*UsageControlBudget)(nil),                                 // 7: external.data.v1.UsageControlBudget
+	(*UsageControlAggregationWindow)(nil),                      // 8: external.data.v1.UsageControlAggregationWindow
+	(*UsageControlAggregationWindowRolling)(nil),               // 9: external.data.v1.UsageControlAggregationWindowRolling
+	(*UsageControlAggregationWindowInfinite)(nil),              // 10: external.data.v1.UsageControlAggregationWindowInfinite
+	(*UsageControlScope)(nil),                                  // 11: external.data.v1.UsageControlScope
+	(*UsageControlScopeUser)(nil),                              // 12: external.data.v1.UsageControlScopeUser
+	(*UsageControlScopeWallet)(nil),                            // 13: external.data.v1.UsageControlScopeWallet
+	(*UsageControlScopeWalletAccount)(nil),                     // 14: external.data.v1.UsageControlScopeWalletAccount
+	(*UsageControlScopeActivity)(nil),                          // 15: external.data.v1.UsageControlScopeActivity
+	(*Timestamp)(nil),                                          // 16: external.data.v1.Timestamp
 }
 var file_external_data_v1_usage_control_proto_depIdxs = []int32{
-	2,  // 0: external.data.v1.UsageControl.data_source:type_name -> external.data.v1.UsageControlDataSource
-	6,  // 1: external.data.v1.UsageControl.budget:type_name -> external.data.v1.UsageControlBudget
-	10, // 2: external.data.v1.UsageControl.applies_to:type_name -> external.data.v1.UsageControlScope
-	15, // 3: external.data.v1.UsageControl.created_at:type_name -> external.data.v1.Timestamp
-	15, // 4: external.data.v1.UsageControl.updated_at:type_name -> external.data.v1.Timestamp
-	3,  // 5: external.data.v1.UsageControlDataSource.chain_asset_transfer:type_name -> external.data.v1.UsageControlDataSourceChainAssetTransfer
-	5,  // 6: external.data.v1.UsageControlDataSource.activity_execution:type_name -> external.data.v1.UsageControlDataSourceActivityExecution
-	4,  // 7: external.data.v1.UsageControlDataSourceChainAssetTransfer.definition:type_name -> external.data.v1.UsageControlDataSourceChainAssetTransferDefinition
+	3,  // 0: external.data.v1.UsageControl.data_source:type_name -> external.data.v1.UsageControlDataSource
+	7,  // 1: external.data.v1.UsageControl.budget:type_name -> external.data.v1.UsageControlBudget
+	11, // 2: external.data.v1.UsageControl.applies_to:type_name -> external.data.v1.UsageControlScope
+	16, // 3: external.data.v1.UsageControl.created_at:type_name -> external.data.v1.Timestamp
+	16, // 4: external.data.v1.UsageControl.updated_at:type_name -> external.data.v1.Timestamp
+	4,  // 5: external.data.v1.UsageControlDataSource.chain_asset_transfer:type_name -> external.data.v1.UsageControlDataSourceChainAssetTransfer
+	6,  // 6: external.data.v1.UsageControlDataSource.activity_execution:type_name -> external.data.v1.UsageControlDataSourceActivityExecution
+	5,  // 7: external.data.v1.UsageControlDataSourceChainAssetTransfer.definition:type_name -> external.data.v1.UsageControlDataSourceChainAssetTransferDefinition
 	0,  // 8: external.data.v1.UsageControlBudget.method:type_name -> external.data.v1.UsageControlAggregationMethod
-	7,  // 9: external.data.v1.UsageControlBudget.window:type_name -> external.data.v1.UsageControlAggregationWindow
-	8,  // 10: external.data.v1.UsageControlAggregationWindow.rolling:type_name -> external.data.v1.UsageControlAggregationWindowRolling
-	9,  // 11: external.data.v1.UsageControlAggregationWindow.infinite:type_name -> external.data.v1.UsageControlAggregationWindowInfinite
-	11, // 12: external.data.v1.UsageControlScope.user:type_name -> external.data.v1.UsageControlScopeUser
-	12, // 13: external.data.v1.UsageControlScope.wallet:type_name -> external.data.v1.UsageControlScopeWallet
-	13, // 14: external.data.v1.UsageControlScope.wallet_account:type_name -> external.data.v1.UsageControlScopeWalletAccount
-	14, // 15: external.data.v1.UsageControlScope.activity:type_name -> external.data.v1.UsageControlScopeActivity
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	8,  // 9: external.data.v1.UsageControlBudget.window:type_name -> external.data.v1.UsageControlAggregationWindow
+	9,  // 10: external.data.v1.UsageControlAggregationWindow.rolling:type_name -> external.data.v1.UsageControlAggregationWindowRolling
+	10, // 11: external.data.v1.UsageControlAggregationWindow.infinite:type_name -> external.data.v1.UsageControlAggregationWindowInfinite
+	12, // 12: external.data.v1.UsageControlScope.user:type_name -> external.data.v1.UsageControlScopeUser
+	13, // 13: external.data.v1.UsageControlScope.wallet:type_name -> external.data.v1.UsageControlScopeWallet
+	14, // 14: external.data.v1.UsageControlScope.wallet_account:type_name -> external.data.v1.UsageControlScopeWalletAccount
+	15, // 15: external.data.v1.UsageControlScope.activity:type_name -> external.data.v1.UsageControlScopeActivity
+	1,  // 16: external.data.v1.UsageControlScopeUser.aggregation:type_name -> external.data.v1.UsageControlScopeAggregation
+	1,  // 17: external.data.v1.UsageControlScopeWallet.aggregation:type_name -> external.data.v1.UsageControlScopeAggregation
+	1,  // 18: external.data.v1.UsageControlScopeWalletAccount.aggregation:type_name -> external.data.v1.UsageControlScopeAggregation
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_external_data_v1_usage_control_proto_init() }
@@ -999,12 +1086,15 @@ func file_external_data_v1_usage_control_proto_init() {
 		(*UsageControlAggregationWindow_Infinite)(nil),
 	}
 	file_external_data_v1_usage_control_proto_msgTypes[9].OneofWrappers = []any{}
+	file_external_data_v1_usage_control_proto_msgTypes[10].OneofWrappers = []any{}
+	file_external_data_v1_usage_control_proto_msgTypes[11].OneofWrappers = []any{}
+	file_external_data_v1_usage_control_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_external_data_v1_usage_control_proto_rawDesc), len(file_external_data_v1_usage_control_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,

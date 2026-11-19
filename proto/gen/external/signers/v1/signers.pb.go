@@ -8,6 +8,7 @@ package v1
 
 import (
 	v11 "github.com/tkhq/go-sdk/proto/gen/immutable/activity/v1"
+	v12 "github.com/tkhq/go-sdk/proto/gen/immutable/common/v1"
 	v1 "github.com/tkhq/go-sdk/proto/gen/immutable/models/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -27,6 +28,7 @@ type ExternalSignerProof struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
 	Payload       *ExternalSignerProofPayloadV1 `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
 	Signature     *v1.Signature                 `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`
+	KeyRecord     *v1.Signature                 `protobuf:"bytes,3,opt,name=key_record,json=keyRecord,proto3,oneof" json:"key_record,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -75,14 +77,23 @@ func (x *ExternalSignerProof) GetSignature() *v1.Signature {
 	return nil
 }
 
+func (x *ExternalSignerProof) GetKeyRecord() *v1.Signature {
+	if x != nil {
+		return x.KeyRecord
+	}
+	return nil
+}
+
 type ExternalSignerProofPayloadV1 struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	Intent               *v11.Intent            `protobuf:"bytes,1,opt,name=intent,proto3" json:"intent,omitempty"`
-	Timestamp            uint64                 `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	OrganizationDigest   string                 `protobuf:"bytes,3,opt,name=organization_digest,json=organizationDigest,proto3" json:"organization_digest,omitempty"`
-	OrganizationId       string                 `protobuf:"bytes,4,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
-	ExternalSignerPubkey string                 `protobuf:"bytes,5,opt,name=external_signer_pubkey,json=externalSignerPubkey,proto3" json:"external_signer_pubkey,omitempty"`
-	TaskId               string                 `protobuf:"bytes,6,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	state                protoimpl.MessageState           `protogen:"open.v1"`
+	Intent               *v11.Intent                      `protobuf:"bytes,1,opt,name=intent,proto3" json:"intent,omitempty"`
+	Timestamp            uint64                           `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	OrganizationDigest   string                           `protobuf:"bytes,3,opt,name=organization_digest,json=organizationDigest,proto3" json:"organization_digest,omitempty"`
+	OrganizationId       string                           `protobuf:"bytes,4,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
+	ExternalSignerPubkey string                           `protobuf:"bytes,5,opt,name=external_signer_pubkey,json=externalSignerPubkey,proto3" json:"external_signer_pubkey,omitempty"`
+	TaskId               string                           `protobuf:"bytes,6,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	EthTransaction       *ExternalSignerEthTransaction    `protobuf:"bytes,7,opt,name=eth_transaction,json=ethTransaction,proto3" json:"eth_transaction,omitempty"`
+	SolanaTransaction    *ExternalSignerSolanaTransaction `protobuf:"bytes,8,opt,name=solana_transaction,json=solanaTransaction,proto3" json:"solana_transaction,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -159,21 +170,384 @@ func (x *ExternalSignerProofPayloadV1) GetTaskId() string {
 	return ""
 }
 
+func (x *ExternalSignerProofPayloadV1) GetEthTransaction() *ExternalSignerEthTransaction {
+	if x != nil {
+		return x.EthTransaction
+	}
+	return nil
+}
+
+func (x *ExternalSignerProofPayloadV1) GetSolanaTransaction() *ExternalSignerSolanaTransaction {
+	if x != nil {
+		return x.SolanaTransaction
+	}
+	return nil
+}
+
+type ExternalSignerEthTransaction struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	ConstructedTransaction string                 `protobuf:"bytes,1,opt,name=constructed_transaction,json=constructedTransaction,proto3" json:"constructed_transaction,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *ExternalSignerEthTransaction) Reset() {
+	*x = ExternalSignerEthTransaction{}
+	mi := &file_external_signers_v1_signers_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExternalSignerEthTransaction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExternalSignerEthTransaction) ProtoMessage() {}
+
+func (x *ExternalSignerEthTransaction) ProtoReflect() protoreflect.Message {
+	mi := &file_external_signers_v1_signers_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExternalSignerEthTransaction.ProtoReflect.Descriptor instead.
+func (*ExternalSignerEthTransaction) Descriptor() ([]byte, []int) {
+	return file_external_signers_v1_signers_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ExternalSignerEthTransaction) GetConstructedTransaction() string {
+	if x != nil {
+		return x.ConstructedTransaction
+	}
+	return ""
+}
+
+type ExternalSignerSolanaTransaction struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	ConstructedMessage string                 `protobuf:"bytes,1,opt,name=constructed_message,json=constructedMessage,proto3" json:"constructed_message,omitempty"`
+	FeePayer           string                 `protobuf:"bytes,2,opt,name=fee_payer,json=feePayer,proto3" json:"fee_payer,omitempty"`
+	RecentBlockhash    string                 `protobuf:"bytes,3,opt,name=recent_blockhash,json=recentBlockhash,proto3" json:"recent_blockhash,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ExternalSignerSolanaTransaction) Reset() {
+	*x = ExternalSignerSolanaTransaction{}
+	mi := &file_external_signers_v1_signers_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExternalSignerSolanaTransaction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExternalSignerSolanaTransaction) ProtoMessage() {}
+
+func (x *ExternalSignerSolanaTransaction) ProtoReflect() protoreflect.Message {
+	mi := &file_external_signers_v1_signers_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExternalSignerSolanaTransaction.ProtoReflect.Descriptor instead.
+func (*ExternalSignerSolanaTransaction) Descriptor() ([]byte, []int) {
+	return file_external_signers_v1_signers_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ExternalSignerSolanaTransaction) GetConstructedMessage() string {
+	if x != nil {
+		return x.ConstructedMessage
+	}
+	return ""
+}
+
+func (x *ExternalSignerSolanaTransaction) GetFeePayer() string {
+	if x != nil {
+		return x.FeePayer
+	}
+	return ""
+}
+
+func (x *ExternalSignerSolanaTransaction) GetRecentBlockhash() string {
+	if x != nil {
+		return x.RecentBlockhash
+	}
+	return ""
+}
+
+type ExternalSignerKeyRecord struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Body:
+	//
+	//	*ExternalSignerKeyRecord_ExternalSignerKeyRecordV1
+	Body          isExternalSignerKeyRecord_Body `protobuf_oneof:"body"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExternalSignerKeyRecord) Reset() {
+	*x = ExternalSignerKeyRecord{}
+	mi := &file_external_signers_v1_signers_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExternalSignerKeyRecord) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExternalSignerKeyRecord) ProtoMessage() {}
+
+func (x *ExternalSignerKeyRecord) ProtoReflect() protoreflect.Message {
+	mi := &file_external_signers_v1_signers_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExternalSignerKeyRecord.ProtoReflect.Descriptor instead.
+func (*ExternalSignerKeyRecord) Descriptor() ([]byte, []int) {
+	return file_external_signers_v1_signers_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ExternalSignerKeyRecord) GetBody() isExternalSignerKeyRecord_Body {
+	if x != nil {
+		return x.Body
+	}
+	return nil
+}
+
+func (x *ExternalSignerKeyRecord) GetExternalSignerKeyRecordV1() *ExternalSignerKeyRecordV1 {
+	if x != nil {
+		if x, ok := x.Body.(*ExternalSignerKeyRecord_ExternalSignerKeyRecordV1); ok {
+			return x.ExternalSignerKeyRecordV1
+		}
+	}
+	return nil
+}
+
+type isExternalSignerKeyRecord_Body interface {
+	isExternalSignerKeyRecord_Body()
+}
+
+type ExternalSignerKeyRecord_ExternalSignerKeyRecordV1 struct {
+	ExternalSignerKeyRecordV1 *ExternalSignerKeyRecordV1 `protobuf:"bytes,1,opt,name=external_signer_key_record_v1,json=externalSignerKeyRecordV1,proto3,oneof"`
+}
+
+func (*ExternalSignerKeyRecord_ExternalSignerKeyRecordV1) isExternalSignerKeyRecord_Body() {}
+
+type ExternalSignerKeyRecordV1 struct {
+	state                   protoimpl.MessageState      `protogen:"open.v1"`
+	OrganizationId          string                      `protobuf:"bytes,1,opt,name=organization_id,json=organizationId,proto3" json:"organization_id,omitempty"`
+	PrivateKeyId            string                      `protobuf:"bytes,2,opt,name=private_key_id,json=privateKeyId,proto3" json:"private_key_id,omitempty"`
+	ExternalSignerPublicKey string                      `protobuf:"bytes,3,opt,name=external_signer_public_key,json=externalSignerPublicKey,proto3" json:"external_signer_public_key,omitempty"`
+	Curve                   v12.Curve                   `protobuf:"varint,4,opt,name=curve,proto3,enum=immutable.common.v1.Curve" json:"curve,omitempty"`
+	PublicKey               string                      `protobuf:"bytes,5,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	Addresses               []*ExternalSignerKeyAddress `protobuf:"bytes,6,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	WrappingKeyId           string                      `protobuf:"bytes,7,opt,name=wrapping_key_id,json=wrappingKeyId,proto3" json:"wrapping_key_id,omitempty"`
+	WrappedPrivateKey       string                      `protobuf:"bytes,8,opt,name=wrapped_private_key,json=wrappedPrivateKey,proto3" json:"wrapped_private_key,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
+func (x *ExternalSignerKeyRecordV1) Reset() {
+	*x = ExternalSignerKeyRecordV1{}
+	mi := &file_external_signers_v1_signers_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExternalSignerKeyRecordV1) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExternalSignerKeyRecordV1) ProtoMessage() {}
+
+func (x *ExternalSignerKeyRecordV1) ProtoReflect() protoreflect.Message {
+	mi := &file_external_signers_v1_signers_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExternalSignerKeyRecordV1.ProtoReflect.Descriptor instead.
+func (*ExternalSignerKeyRecordV1) Descriptor() ([]byte, []int) {
+	return file_external_signers_v1_signers_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ExternalSignerKeyRecordV1) GetOrganizationId() string {
+	if x != nil {
+		return x.OrganizationId
+	}
+	return ""
+}
+
+func (x *ExternalSignerKeyRecordV1) GetPrivateKeyId() string {
+	if x != nil {
+		return x.PrivateKeyId
+	}
+	return ""
+}
+
+func (x *ExternalSignerKeyRecordV1) GetExternalSignerPublicKey() string {
+	if x != nil {
+		return x.ExternalSignerPublicKey
+	}
+	return ""
+}
+
+func (x *ExternalSignerKeyRecordV1) GetCurve() v12.Curve {
+	if x != nil {
+		return x.Curve
+	}
+	return v12.Curve(0)
+}
+
+func (x *ExternalSignerKeyRecordV1) GetPublicKey() string {
+	if x != nil {
+		return x.PublicKey
+	}
+	return ""
+}
+
+func (x *ExternalSignerKeyRecordV1) GetAddresses() []*ExternalSignerKeyAddress {
+	if x != nil {
+		return x.Addresses
+	}
+	return nil
+}
+
+func (x *ExternalSignerKeyRecordV1) GetWrappingKeyId() string {
+	if x != nil {
+		return x.WrappingKeyId
+	}
+	return ""
+}
+
+func (x *ExternalSignerKeyRecordV1) GetWrappedPrivateKey() string {
+	if x != nil {
+		return x.WrappedPrivateKey
+	}
+	return ""
+}
+
+type ExternalSignerKeyAddress struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Format        v12.AddressFormat      `protobuf:"varint,1,opt,name=format,proto3,enum=immutable.common.v1.AddressFormat" json:"format,omitempty"`
+	Address       string                 `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExternalSignerKeyAddress) Reset() {
+	*x = ExternalSignerKeyAddress{}
+	mi := &file_external_signers_v1_signers_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExternalSignerKeyAddress) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExternalSignerKeyAddress) ProtoMessage() {}
+
+func (x *ExternalSignerKeyAddress) ProtoReflect() protoreflect.Message {
+	mi := &file_external_signers_v1_signers_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExternalSignerKeyAddress.ProtoReflect.Descriptor instead.
+func (*ExternalSignerKeyAddress) Descriptor() ([]byte, []int) {
+	return file_external_signers_v1_signers_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ExternalSignerKeyAddress) GetFormat() v12.AddressFormat {
+	if x != nil {
+		return x.Format
+	}
+	return v12.AddressFormat(0)
+}
+
+func (x *ExternalSignerKeyAddress) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
 var File_external_signers_v1_signers_proto protoreflect.FileDescriptor
 
 const file_external_signers_v1_signers_proto_rawDesc = "" +
 	"\n" +
-	"!external/signers/v1/signers.proto\x12\x13external.signers.v1\x1a$immutable/activity/v1/activity.proto\x1a immutable/models/v1/models.proto\"\xa2\x01\n" +
+	"!external/signers/v1/signers.proto\x12\x13external.signers.v1\x1a$immutable/activity/v1/activity.proto\x1a immutable/common/v1/common.proto\x1a immutable/models/v1/models.proto\"\xf5\x01\n" +
 	"\x13ExternalSignerProof\x12M\n" +
 	"\apayload\x18\x01 \x01(\v21.external.signers.v1.ExternalSignerProofPayloadV1B\x00R\apayload\x12<\n" +
-	"\tsignature\x18\x02 \x01(\v2\x1e.immutable.models.v1.SignatureR\tsignature\"\x9c\x02\n" +
+	"\tsignature\x18\x02 \x01(\v2\x1e.immutable.models.v1.SignatureR\tsignature\x12B\n" +
+	"\n" +
+	"key_record\x18\x03 \x01(\v2\x1e.immutable.models.v1.SignatureH\x00R\tkeyRecord\x88\x01\x01B\r\n" +
+	"\v_key_record\"\xdd\x03\n" +
 	"\x1cExternalSignerProofPayloadV1\x125\n" +
 	"\x06intent\x18\x01 \x01(\v2\x1d.immutable.activity.v1.IntentR\x06intent\x12\x1c\n" +
 	"\ttimestamp\x18\x02 \x01(\x04R\ttimestamp\x12/\n" +
 	"\x13organization_digest\x18\x03 \x01(\tR\x12organizationDigest\x12'\n" +
 	"\x0forganization_id\x18\x04 \x01(\tR\x0eorganizationId\x124\n" +
 	"\x16external_signer_pubkey\x18\x05 \x01(\tR\x14externalSignerPubkey\x12\x17\n" +
-	"\atask_id\x18\x06 \x01(\tR\x06taskIdB6Z4github.com/tkhq/go-sdk/proto/gen/external/signers/v1b\x06proto3"
+	"\atask_id\x18\x06 \x01(\tR\x06taskId\x12Z\n" +
+	"\x0feth_transaction\x18\a \x01(\v21.external.signers.v1.ExternalSignerEthTransactionR\x0eethTransaction\x12c\n" +
+	"\x12solana_transaction\x18\b \x01(\v24.external.signers.v1.ExternalSignerSolanaTransactionR\x11solanaTransaction\"W\n" +
+	"\x1cExternalSignerEthTransaction\x127\n" +
+	"\x17constructed_transaction\x18\x01 \x01(\tR\x16constructedTransaction\"\x9a\x01\n" +
+	"\x1fExternalSignerSolanaTransaction\x12/\n" +
+	"\x13constructed_message\x18\x01 \x01(\tR\x12constructedMessage\x12\x1b\n" +
+	"\tfee_payer\x18\x02 \x01(\tR\bfeePayer\x12)\n" +
+	"\x10recent_blockhash\x18\x03 \x01(\tR\x0frecentBlockhash\"\x95\x01\n" +
+	"\x17ExternalSignerKeyRecord\x12r\n" +
+	"\x1dexternal_signer_key_record_v1\x18\x01 \x01(\v2..external.signers.v1.ExternalSignerKeyRecordV1H\x00R\x19externalSignerKeyRecordV1B\x06\n" +
+	"\x04body\"\x9d\x03\n" +
+	"\x19ExternalSignerKeyRecordV1\x12'\n" +
+	"\x0forganization_id\x18\x01 \x01(\tR\x0eorganizationId\x12$\n" +
+	"\x0eprivate_key_id\x18\x02 \x01(\tR\fprivateKeyId\x12;\n" +
+	"\x1aexternal_signer_public_key\x18\x03 \x01(\tR\x17externalSignerPublicKey\x120\n" +
+	"\x05curve\x18\x04 \x01(\x0e2\x1a.immutable.common.v1.CurveR\x05curve\x12\x1d\n" +
+	"\n" +
+	"public_key\x18\x05 \x01(\tR\tpublicKey\x12K\n" +
+	"\taddresses\x18\x06 \x03(\v2-.external.signers.v1.ExternalSignerKeyAddressR\taddresses\x12&\n" +
+	"\x0fwrapping_key_id\x18\a \x01(\tR\rwrappingKeyId\x12.\n" +
+	"\x13wrapped_private_key\x18\b \x01(\tR\x11wrappedPrivateKey\"p\n" +
+	"\x18ExternalSignerKeyAddress\x12:\n" +
+	"\x06format\x18\x01 \x01(\x0e2\".immutable.common.v1.AddressFormatR\x06format\x12\x18\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddressB6Z4github.com/tkhq/go-sdk/proto/gen/external/signers/v1b\x06proto3"
 
 var (
 	file_external_signers_v1_signers_proto_rawDescOnce sync.Once
@@ -187,22 +561,36 @@ func file_external_signers_v1_signers_proto_rawDescGZIP() []byte {
 	return file_external_signers_v1_signers_proto_rawDescData
 }
 
-var file_external_signers_v1_signers_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_external_signers_v1_signers_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_external_signers_v1_signers_proto_goTypes = []any{
-	(*ExternalSignerProof)(nil),          // 0: external.signers.v1.ExternalSignerProof
-	(*ExternalSignerProofPayloadV1)(nil), // 1: external.signers.v1.ExternalSignerProofPayloadV1
-	(*v1.Signature)(nil),                 // 2: immutable.models.v1.Signature
-	(*v11.Intent)(nil),                   // 3: immutable.activity.v1.Intent
+	(*ExternalSignerProof)(nil),             // 0: external.signers.v1.ExternalSignerProof
+	(*ExternalSignerProofPayloadV1)(nil),    // 1: external.signers.v1.ExternalSignerProofPayloadV1
+	(*ExternalSignerEthTransaction)(nil),    // 2: external.signers.v1.ExternalSignerEthTransaction
+	(*ExternalSignerSolanaTransaction)(nil), // 3: external.signers.v1.ExternalSignerSolanaTransaction
+	(*ExternalSignerKeyRecord)(nil),         // 4: external.signers.v1.ExternalSignerKeyRecord
+	(*ExternalSignerKeyRecordV1)(nil),       // 5: external.signers.v1.ExternalSignerKeyRecordV1
+	(*ExternalSignerKeyAddress)(nil),        // 6: external.signers.v1.ExternalSignerKeyAddress
+	(*v1.Signature)(nil),                    // 7: immutable.models.v1.Signature
+	(*v11.Intent)(nil),                      // 8: immutable.activity.v1.Intent
+	(v12.Curve)(0),                          // 9: immutable.common.v1.Curve
+	(v12.AddressFormat)(0),                  // 10: immutable.common.v1.AddressFormat
 }
 var file_external_signers_v1_signers_proto_depIdxs = []int32{
-	1, // 0: external.signers.v1.ExternalSignerProof.payload:type_name -> external.signers.v1.ExternalSignerProofPayloadV1
-	2, // 1: external.signers.v1.ExternalSignerProof.signature:type_name -> immutable.models.v1.Signature
-	3, // 2: external.signers.v1.ExternalSignerProofPayloadV1.intent:type_name -> immutable.activity.v1.Intent
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1,  // 0: external.signers.v1.ExternalSignerProof.payload:type_name -> external.signers.v1.ExternalSignerProofPayloadV1
+	7,  // 1: external.signers.v1.ExternalSignerProof.signature:type_name -> immutable.models.v1.Signature
+	7,  // 2: external.signers.v1.ExternalSignerProof.key_record:type_name -> immutable.models.v1.Signature
+	8,  // 3: external.signers.v1.ExternalSignerProofPayloadV1.intent:type_name -> immutable.activity.v1.Intent
+	2,  // 4: external.signers.v1.ExternalSignerProofPayloadV1.eth_transaction:type_name -> external.signers.v1.ExternalSignerEthTransaction
+	3,  // 5: external.signers.v1.ExternalSignerProofPayloadV1.solana_transaction:type_name -> external.signers.v1.ExternalSignerSolanaTransaction
+	5,  // 6: external.signers.v1.ExternalSignerKeyRecord.external_signer_key_record_v1:type_name -> external.signers.v1.ExternalSignerKeyRecordV1
+	9,  // 7: external.signers.v1.ExternalSignerKeyRecordV1.curve:type_name -> immutable.common.v1.Curve
+	6,  // 8: external.signers.v1.ExternalSignerKeyRecordV1.addresses:type_name -> external.signers.v1.ExternalSignerKeyAddress
+	10, // 9: external.signers.v1.ExternalSignerKeyAddress.format:type_name -> immutable.common.v1.AddressFormat
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_external_signers_v1_signers_proto_init() }
@@ -210,13 +598,17 @@ func file_external_signers_v1_signers_proto_init() {
 	if File_external_signers_v1_signers_proto != nil {
 		return
 	}
+	file_external_signers_v1_signers_proto_msgTypes[0].OneofWrappers = []any{}
+	file_external_signers_v1_signers_proto_msgTypes[4].OneofWrappers = []any{
+		(*ExternalSignerKeyRecord_ExternalSignerKeyRecordV1)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_external_signers_v1_signers_proto_rawDesc), len(file_external_signers_v1_signers_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

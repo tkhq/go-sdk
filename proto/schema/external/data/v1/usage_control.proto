@@ -160,6 +160,41 @@ message UsageControlAggregationWindowRolling {
 // An aggregation window without a time limit.
 message UsageControlAggregationWindowInfinite {}
 
+// Defines the way the usage control will aggregate the values
+enum UsageControlScopeAggregation {
+  USAGE_CONTROL_SCOPE_AGGREGATION_UNSPECIFIED = 0;
+
+  // The usage control will aggregate values shared across all relevant entities.
+  //
+  // For example this usage control:
+  //
+  // scope: {
+  //   user: {
+  //     ids: ["user1", "user2"]
+  //     aggregation: shared
+  //   }
+  // }
+  //
+  // will only apply to user1 and user2 and will create one shared allocation
+  // for both users
+  USAGE_CONTROL_SCOPE_AGGREGATION_SHARED = 1;
+
+  // The usage control will aggregate values per relevant entity.
+  //
+  // For example this usage control:
+  //
+  // scope: {
+  //   wallets: {
+  //     ids: ["wallet1", "wallet2"]
+  //     aggregation: per
+  //   }
+  // }
+  //
+  // will only apply to wallet1 and wallet2 and will create separate allocations
+  // for each wallet
+  USAGE_CONTROL_SCOPE_AGGREGATION_PER = 2;
+}
+
 // Scope of the usage control. Defines the boundaries within which the Usage Control operates.
 message UsageControlScope {
   optional UsageControlScopeUser user = 1 [
@@ -189,6 +224,11 @@ message UsageControlScopeUser {
     (google.api.field_behavior) = REQUIRED,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "List of User IDs for which the control will capture the usage. If empty, the control will apply to all Users."}
   ];
+
+  optional UsageControlScopeAggregation aggregation = 2 [
+    (google.api.field_behavior) = OPTIONAL,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Defines how the usage control is aggregated for the specified Users."}
+  ];
 }
 
 // Applies the usage control to particular Wallets.
@@ -197,6 +237,11 @@ message UsageControlScopeWallet {
     (google.api.field_behavior) = REQUIRED,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "List of Wallet IDs for which the control will capture the usage. If empty, the control will apply to all Wallets."}
   ];
+
+  optional UsageControlScopeAggregation aggregation = 2 [
+    (google.api.field_behavior) = OPTIONAL,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Defines how the usage control is aggregated for the specified Wallets."}
+  ];
 }
 
 // Applies the usage control to particular Wallet Accounts.
@@ -204,6 +249,11 @@ message UsageControlScopeWalletAccount {
   repeated string addresses = 1 [
     (google.api.field_behavior) = REQUIRED,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "List of Wallet Account addresses for which the control will capture the usage. If empty, the control will apply to all Wallet Accounts."}
+  ];
+
+  optional UsageControlScopeAggregation aggregation = 2 [
+    (google.api.field_behavior) = OPTIONAL,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "Defines how the usage control is aggregated for the specified Wallet Accounts."}
   ];
 }
 
