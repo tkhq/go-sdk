@@ -219,6 +219,10 @@ const (
 	ActivityTypeCreateExternalSignerV1              ActivityType = "ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1"
 	ActivityTypeDeleteExternalSignerV1              ActivityType = "ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1"
 	ActivityTypeMintJWT                             ActivityType = "ACTIVITY_TYPE_MINT_JWT"
+	ActivityTypeAddNotificationDomains              ActivityType = "ACTIVITY_TYPE_ADD_NOTIFICATION_DOMAINS"
+	ActivityTypeDeleteNotificationDomains           ActivityType = "ACTIVITY_TYPE_DELETE_NOTIFICATION_DOMAINS"
+	ActivityTypeInitOAuth2Authenticate              ActivityType = "ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE"
+	ActivityTypeOAuth2AuthenticateV2                ActivityType = "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2"
 )
 
 type AddressFormat string
@@ -596,6 +600,7 @@ const (
 	SignatureSchemeTkAPISecp256K1Eip191   SignatureScheme = "SIGNATURE_SCHEME_TK_API_SECP256K1_EIP191"
 	SignatureSchemeTkAttestedP256         SignatureScheme = "SIGNATURE_SCHEME_TK_ATTESTED_P256"
 	SignatureSchemeTkQuorumP256SigningKey SignatureScheme = "SIGNATURE_SCHEME_TK_QUORUM_P256_SIGNING_KEY"
+	SignatureSchemeTkSignedBlobP256       SignatureScheme = "SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256"
 )
 
 type SmartContractInterfaceType string
@@ -626,6 +631,7 @@ type TransportEncryptionSuite string
 
 const (
 	TransportEncryptionSuiteEnclaveEncryptV1 TransportEncryptionSuite = "TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V1"
+	TransportEncryptionSuiteEnclaveEncryptV2 TransportEncryptionSuite = "TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2"
 )
 
 type TVCHealthCheckType string
@@ -965,6 +971,13 @@ type ActivityResponse struct {
 	Activity Activity `json:"activity"`
 }
 
+type AddNotificationDomainsIntent struct {
+	// Bare domains to allow in notification links, such as example.com. Between 1 and 50.
+	Domains []string `json:"domains"`
+}
+
+type AddNotificationDomainsResult map[string]any
+
 type APIKey struct {
 	// Unique identifier for a given API Key.
 	APIKeyID string `json:"apiKeyId"`
@@ -1155,6 +1168,8 @@ type BootProof struct {
 	QosManifestEnvelopeB64 string `json:"qosManifestEnvelopeB64"`
 	// QOS manifest schema version.
 	QosManifestVersion *string `json:"qosManifestVersion,omitempty"`
+	// Hex-encoded Signer quorum-key signature over the domain-separated AWS attestation document.
+	QuorumKeyAttestationSignatureHex *string `json:"quorumKeyAttestationSignatureHex,omitempty"`
 }
 
 type BootProofResponse struct {
@@ -1858,6 +1873,8 @@ type CreateTVCAppIntent struct {
 	EnableDebugModeDeployments *bool `json:"enableDebugModeDeployments,omitempty"`
 	// Enables network egress for this TVC app. Default if not provided: false.
 	EnableEgress *bool `json:"enableEgress,omitempty"`
+	// Enables static egress IPs for this TVC app. Requires enableEgress to be true. Set at app creation. Default if not provided: false.
+	EnableStaticEgressIps *bool `json:"enableStaticEgressIps,omitempty"`
 	// Unique identifier for an existing TVC operator set to use as the Manifest Set for this TVC application. If left empty, a new Manifest Set configuration is required
 	ManifestSetID *string `json:"manifestSetId,omitempty"`
 	// Configuration to create a new TVC operator set, used as the Manifest Set for this TVC application. If left empty, a Manifest Set ID is required
@@ -2131,6 +2148,8 @@ type DeleteAuthenticatorsResult struct {
 }
 
 type DeleteExternalSignerIntentV1 struct {
+	// Optional parameter for deleting the external signer along with the wrapped keys it generated, including keys owned by other organizations in its family. Turnkey stores a copy of these wrapped keys; the operator must keep its own backup, or the keys are permanently lost.
+	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
 	// Hex-encoded public key of the external signer to delete. The external signer must belong to the organization.
 	PublicKey string `json:"publicKey"`
 }
@@ -2171,6 +2190,13 @@ type DeleteMfaPolicyResult struct {
 	// Unique identifier for a given MFA Policy.
 	MfaPolicyID string `json:"mfaPolicyId"`
 }
+
+type DeleteNotificationDomainsIntent struct {
+	// Bare domains to remove from notification links, such as example.com. Between 1 and 50.
+	Domains []string `json:"domains"`
+}
+
+type DeleteNotificationDomainsResult map[string]any
 
 type DeleteOAuth2CredentialIntent struct {
 	// The ID of the OAuth 2.0 credential to delete
@@ -2891,6 +2917,8 @@ type ETHSendTransactionIntentV2 struct {
 	Calls []ETHCallParams `json:"calls"`
 	// Unix timestamp in seconds for EIP-712 execution deadline. Only used when sponsor=true.
 	Deadline *string `json:"deadline,omitempty"`
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A wallet or private key address to sign with. This does not support private key IDs.
 	From string `json:"from"`
 	// Maximum amount of gas for the outer transaction. Omit to auto-estimate.
@@ -3128,7 +3156,7 @@ type ExportSecretParams struct {
 	RequestContext []KeyValue `json:"requestContext,omitempty"`
 	// Unique identifier for the secret to export.
 	SecretID string `json:"secretId"`
-	// Client-side public key generated by the user, to which the exported secret will be encrypted.
+	// Client-side public key generated by the user, to which the exported secret will be encrypted. This must be a fresh ephemeral key used for exactly one exported secret: do not reuse it across secrets in the same batch or across requests. Turnkey does not enforce this, so clients are responsible for generating a unique target key per secret.
 	TargetPublicKey string `json:"targetPublicKey"`
 }
 
@@ -3172,6 +3200,10 @@ type ExportWalletResult struct {
 	WalletID string `json:"walletId"`
 }
 
+type ExternalSignerETHTransaction struct {
+	ConstructedTransaction *string `json:"constructedTransaction,omitempty"`
+}
+
 type ExternalSignerProof struct {
 	// ExternalSignerPayloadV1.
 	Payload   ExternalSignerProofPayloadV1 `json:"payload"`
@@ -3179,12 +3211,20 @@ type ExternalSignerProof struct {
 }
 
 type ExternalSignerProofPayloadV1 struct {
-	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
-	Intent               *Intent `json:"intent,omitempty"`
-	OrganizationDigest   *string `json:"organizationDigest,omitempty"`
-	OrganizationID       *string `json:"organizationId,omitempty"`
-	TaskID               *string `json:"taskId,omitempty"`
-	Timestamp            *string `json:"timestamp,omitempty"`
+	ETHTransaction       *ExternalSignerETHTransaction    `json:"ethTransaction,omitempty"`
+	ExternalSignerPubkey *string                          `json:"externalSignerPubkey,omitempty"`
+	Intent               *Intent                          `json:"intent,omitempty"`
+	OrganizationDigest   *string                          `json:"organizationDigest,omitempty"`
+	OrganizationID       *string                          `json:"organizationId,omitempty"`
+	SolanaTransaction    *ExternalSignerSolanaTransaction `json:"solanaTransaction,omitempty"`
+	TaskID               *string                          `json:"taskId,omitempty"`
+	Timestamp            *string                          `json:"timestamp,omitempty"`
+}
+
+type ExternalSignerSolanaTransaction struct {
+	ConstructedMessage *string `json:"constructedMessage,omitempty"`
+	FeePayer           *string `json:"feePayer,omitempty"`
+	RecentBlockhash    *string `json:"recentBlockhash,omitempty"`
 }
 
 type Feature struct {
@@ -4334,6 +4374,32 @@ type InitImportWalletResult struct {
 	ImportBundle string `json:"importBundle"`
 }
 
+type AuthProxyInitOAuth2AuthenticateV2Request struct {
+	// The client ID registered with the OAuth 2.0 provider.
+	ClientID string `json:"clientId"`
+	// The transport encryption suite to use for the authentication inputs.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+}
+
+type AuthProxyInitOAuth2AuthenticateV2Response struct {
+	// The enclave target message used to encrypt the OAuth authentication payload.
+	EnclaveTargetMessage string `json:"enclaveTargetMessage"`
+	// The credential ID to include in the encrypted payload and subsequent authentication request.
+	OAuth2CredentialID string `json:"oauth2CredentialId"`
+}
+
+type InitOAuth2AuthenticateIntent struct {
+	// The transport encryption suite for the OAuth 2.0 authentication target.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// The OAuth 2.0 credential whose authentication inputs will be encrypted to the target.
+	OAuth2CredentialID string `json:"oauth2CredentialId"`
+}
+
+type InitOAuth2AuthenticateResult struct {
+	// The TLS Fetcher-signed encryption target for OAuth 2.0 authentication inputs.
+	EnclaveTargetMessage string `json:"enclaveTargetMessage"`
+}
+
 type InitOTPAuthIntent struct {
 	// Email or phone number to send the OTP code to
 	Contact string `json:"contact"`
@@ -4568,6 +4634,7 @@ type Intent struct {
 	AcceptInvitationIntent                    *AcceptInvitationIntent                    `json:"acceptInvitationIntent,omitempty"`
 	AcceptInvitationIntentV2                  *AcceptInvitationIntentV2                  `json:"acceptInvitationIntentV2,omitempty"`
 	ActivateBillingTierIntent                 *BillingActivateBillingTierIntent          `json:"activateBillingTierIntent,omitempty"`
+	AddNotificationDomainsIntent              *AddNotificationDomainsIntent              `json:"addNotificationDomainsIntent,omitempty"`
 	ApproveActivityIntent                     *ApproveActivityIntent                     `json:"approveActivityIntent,omitempty"`
 	ClaimEarnFeesIntent                       *ClaimEarnFeesIntent                       `json:"claimEarnFeesIntent,omitempty"`
 	ClaimSwapFeesIntent                       *ClaimSwapFeesIntent                       `json:"claimSwapFeesIntent,omitempty"`
@@ -4633,6 +4700,7 @@ type Intent struct {
 	DeleteFiatOnRampCredentialIntent          *DeleteFiatOnRampCredentialIntent          `json:"deleteFiatOnRampCredentialIntent,omitempty"`
 	DeleteInvitationIntent                    *DeleteInvitationIntent                    `json:"deleteInvitationIntent,omitempty"`
 	DeleteMfaPolicyIntent                     *DeleteMfaPolicyIntent                     `json:"deleteMfaPolicyIntent,omitempty"`
+	DeleteNotificationDomainsIntent           *DeleteNotificationDomainsIntent           `json:"deleteNotificationDomainsIntent,omitempty"`
 	DeleteOAuth2CredentialIntent              *DeleteOAuth2CredentialIntent              `json:"deleteOauth2CredentialIntent,omitempty"`
 	DeleteOAuthProvidersIntent                *DeleteOAuthProvidersIntent                `json:"deleteOauthProvidersIntent,omitempty"`
 	DeleteOrganizationIntent                  *DeleteOrganizationIntent                  `json:"deleteOrganizationIntent,omitempty"`
@@ -4685,6 +4753,7 @@ type Intent struct {
 	InitImportPrivateKeyIntent                *InitImportPrivateKeyIntent                `json:"initImportPrivateKeyIntent,omitempty"`
 	InitImportSecretsIntent                   *InitImportSecretsIntent                   `json:"initImportSecretsIntent,omitempty"`
 	InitImportWalletIntent                    *InitImportWalletIntent                    `json:"initImportWalletIntent,omitempty"`
+	InitOAuth2AuthenticateIntent              *InitOAuth2AuthenticateIntent              `json:"initOauth2AuthenticateIntent,omitempty"`
 	InitOTPAuthIntent                         *InitOTPAuthIntent                         `json:"initOtpAuthIntent,omitempty"`
 	InitOTPAuthIntentV2                       *InitOTPAuthIntentV2                       `json:"initOtpAuthIntentV2,omitempty"`
 	InitOTPAuthIntentV3                       *InitOTPAuthIntentV3                       `json:"initOtpAuthIntentV3,omitempty"`
@@ -4695,6 +4764,7 @@ type Intent struct {
 	InitUserEmailRecoveryIntentV2             *InitUserEmailRecoveryIntentV2             `json:"initUserEmailRecoveryIntentV2,omitempty"`
 	MintJWTIntent                             *MintJWTIntent                             `json:"mintJwtIntent,omitempty"`
 	OAuth2AuthenticateIntent                  *OAuth2AuthenticateIntent                  `json:"oauth2AuthenticateIntent,omitempty"`
+	OAuth2AuthenticateIntentV2                *OAuth2AuthenticateIntentV2                `json:"oauth2AuthenticateIntentV2,omitempty"`
 	OAuthIntent                               *OAuthIntent                               `json:"oauthIntent,omitempty"`
 	OAuthLoginIntent                          *OAuthLoginIntent                          `json:"oauthLoginIntent,omitempty"`
 	OTPAuthIntent                             *OTPAuthIntent                             `json:"otpAuthIntent,omitempty"`
@@ -5073,6 +5143,20 @@ type AuthProxyOAuth2AuthenticateResponse struct {
 	OidcToken string `json:"oidcToken"`
 }
 
+type AuthProxyOAuth2AuthenticateV2Request struct {
+	// Encryption suite specific ciphertext of a JSON object containing organization_id, oauth2_credential_id, client_id, provider, auth_code, code_verifier, redirect_uri, nonce, and optional bearer_token_target_public_key. For enclave encrypt v1 this is a JSON-encoded ClientSendMsg encrypted to target_public_key. Use the expected organization, client ID, and provider from the client configuration.
+	EncryptedMessage string `json:"encryptedMessage"`
+	// The OAuth credential ID returned by InitOAuth2AuthenticateV2.
+	OAuth2CredentialID string `json:"oauth2CredentialId"`
+	// Targeted transport encryption public key, from the enclave target message returned by InitOAuth2AuthenticateV2.
+	TargetPublicKey string `json:"targetPublicKey"`
+}
+
+type AuthProxyOAuth2AuthenticateV2Response struct {
+	// A Turnkey OIDC token bound to the nonce in the encrypted authentication payload.
+	OidcToken string `json:"oidcToken"`
+}
+
 type AuthProxyOAuthLoginRequest struct {
 	// Invalidate all other previously generated Login API keys
 	InvalidateExisting *bool `json:"invalidateExisting,omitempty"`
@@ -5102,6 +5186,15 @@ type OAuth2AuthenticateIntent struct {
 	OAuth2CredentialID string `json:"oauth2CredentialId"`
 	// The URI the user is redirected to after they have authenticated with the OAuth 2.0 provider
 	RedirectUri string `json:"redirectUri"`
+}
+
+type OAuth2AuthenticateIntentV2 struct {
+	// Encryption suite specific ciphertext of a JSON object containing organization_id, oauth2_credential_id, client_id, provider, auth_code, code_verifier, redirect_uri, nonce, and optional bearer_token_target_public_key. For enclave encrypt v1 this is a JSON-encoded ClientSendMsg encrypted to target_public_key.
+	EncryptedMessage string `json:"encryptedMessage"`
+	// The OAuth 2.0 credential selected by the client and repeated inside the encrypted payload.
+	OAuth2CredentialID string `json:"oauth2CredentialId"`
+	// Targeted transport encryption public key, from the enclave target message returned by InitOauth2Authenticate.
+	TargetPublicKey string `json:"targetPublicKey"`
 }
 
 type OAuth2AuthenticateResult struct {
@@ -5472,6 +5565,7 @@ type RestoreTVCDeploymentResult struct {
 type Result struct {
 	AcceptInvitationResult                    *AcceptInvitationResult                    `json:"acceptInvitationResult,omitempty"`
 	ActivateBillingTierResult                 *BillingActivateBillingTierResult          `json:"activateBillingTierResult,omitempty"`
+	AddNotificationDomainsResult              *AddNotificationDomainsResult              `json:"addNotificationDomainsResult,omitempty"`
 	ClaimEarnFeesResult                       *ClaimEarnFeesResult                       `json:"claimEarnFeesResult,omitempty"`
 	ClaimSwapFeesResult                       *ClaimSwapFeesResult                       `json:"claimSwapFeesResult,omitempty"`
 	CreateAPIKeysResult                       *CreateAPIKeysResult                       `json:"createApiKeysResult,omitempty"`
@@ -5526,6 +5620,7 @@ type Result struct {
 	DeleteFiatOnRampCredentialResult          *DeleteFiatOnRampCredentialResult          `json:"deleteFiatOnRampCredentialResult,omitempty"`
 	DeleteInvitationResult                    *DeleteInvitationResult                    `json:"deleteInvitationResult,omitempty"`
 	DeleteMfaPolicyResult                     *DeleteMfaPolicyResult                     `json:"deleteMfaPolicyResult,omitempty"`
+	DeleteNotificationDomainsResult           *DeleteNotificationDomainsResult           `json:"deleteNotificationDomainsResult,omitempty"`
 	DeleteOAuth2CredentialResult              *DeleteOAuth2CredentialResult              `json:"deleteOauth2CredentialResult,omitempty"`
 	DeleteOAuthProvidersResult                *DeleteOAuthProvidersResult                `json:"deleteOauthProvidersResult,omitempty"`
 	DeleteOrganizationResult                  *DeleteOrganizationResult                  `json:"deleteOrganizationResult,omitempty"`
@@ -5573,6 +5668,7 @@ type Result struct {
 	InitImportPrivateKeyResult                *InitImportPrivateKeyResult                `json:"initImportPrivateKeyResult,omitempty"`
 	InitImportSecretsResult                   *InitImportSecretsResult                   `json:"initImportSecretsResult,omitempty"`
 	InitImportWalletResult                    *InitImportWalletResult                    `json:"initImportWalletResult,omitempty"`
+	InitOAuth2AuthenticateResult              *InitOAuth2AuthenticateResult              `json:"initOauth2AuthenticateResult,omitempty"`
 	InitOTPAuthResult                         *InitOTPAuthResult                         `json:"initOtpAuthResult,omitempty"`
 	InitOTPAuthResultV2                       *InitOTPAuthResultV2                       `json:"initOtpAuthResultV2,omitempty"`
 	InitOTPResult                             *InitOTPResult                             `json:"initOtpResult,omitempty"`
@@ -5738,7 +5834,7 @@ type SecretMetadata struct {
 	Name *string `json:"name,omitempty"`
 	// Unique identifier for the secret.
 	SecretID string `json:"secretId"`
-	// Policy visible static properties bound to the secret at creation time.
+	// Policy visible static properties bound to the secret at creation time. For display only: the enclave does not authenticate them in this view.
 	StaticProperties []KeyValue `json:"staticProperties"`
 }
 
@@ -6014,6 +6110,8 @@ type SolSendTransactionIntent struct {
 type SolSendTransactionIntentV2 struct {
 	// CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
 	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers for legacy/V0, or up to 12 for V1 (11 when sponsored). For sponsored transactions this must list every required signer of the transaction in transaction order.
@@ -6336,6 +6434,15 @@ type SwapError struct {
 	Reason string `json:"reason"`
 }
 
+type SwapExecutionCall struct {
+	// EVM calldata, or Solana instruction JSON. Solana execution adds the blockhash, lookup tables, and, when sponsored, the fee payer and rent instructions around this payload.
+	Data string `json:"data"`
+	// Call target. Empty for a Solana transaction, whose instructions are in data.
+	To string `json:"to"`
+	// Native value in atomic units. Zero when the call sends none.
+	Value string `json:"value"`
+}
+
 type SwapQuote struct {
 	// Client fee in basis points applied for this pair. Informational only; already reflected in output_amount and min_output_amount.
 	ClientFeeBps string `json:"clientFeeBps"`
@@ -6380,6 +6487,8 @@ type SwapQuoteV2 struct {
 	QuoteID string `json:"quoteId"`
 	// Effective total slippage tolerance in basis points for this quote, taken from the provider response when present. When the request omits input slippage_bps, the provider may calculate this value.
 	SlippageBps *string `json:"slippageBps,omitempty"`
+	// Calls executed, in order, including approvals. On EVM, execution signs a batch or an EIP-7702 wrapper around these calls. On Solana, data is the instruction payload; execution adds the blockhash and address lookup tables, and when the swap is sponsored it also adds the fee payer and rent instructions.
+	Transactions []SwapExecutionCall `json:"transactions"`
 }
 
 type SwapRefund struct {
@@ -6486,6 +6595,8 @@ type TVCApp struct {
 	EnableDebugModeDeployments bool `json:"enableDebugModeDeployments"`
 	// Whether or not this TVC App has network egress enabled.
 	EnableEgress bool `json:"enableEgress"`
+	// Whether this TVC app has static egress IPs enabled. Set at app creation.
+	EnableStaticEgressIps bool `json:"enableStaticEgressIps"`
 	// Unique Identifier for this TVC App.
 	ID string `json:"id"`
 	// The deployment currently designated to receive traffic. Null if no deployment for this app is deployed.
@@ -7953,6 +8064,8 @@ type CreateTVCAppRequest struct {
 	EnableDebugModeDeployments *bool `json:"enableDebugModeDeployments,omitempty"`
 	// Enables network egress for this TVC app. Default if not provided: false.
 	EnableEgress *bool `json:"enableEgress,omitempty"`
+	// Enables static egress IPs for this TVC app. Requires enableEgress to be true. Set at app creation. Default if not provided: false.
+	EnableStaticEgressIps *bool `json:"enableStaticEgressIps,omitempty"`
 	// Unique identifier for an existing TVC operator set to use as the Manifest Set for this TVC application. If left empty, a new Manifest Set configuration is required
 	ManifestSetID *string `json:"manifestSetId,omitempty"`
 	// Configuration to create a new TVC operator set, used as the Manifest Set for this TVC application. If left empty, a Manifest Set ID is required
@@ -8243,6 +8356,8 @@ type DeleteExternalSignerRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
+	// Optional parameter for deleting the external signer along with the wrapped keys it generated, including keys owned by other organizations in its family. Turnkey stores a copy of these wrapped keys; the operator must keep its own backup, or the keys are permanently lost.
+	DeleteWithoutExport *bool `json:"deleteWithoutExport,omitempty"`
 	// Hex-encoded public key of the external signer to delete. The external signer must belong to the organization.
 	PublicKey string `json:"publicKey"`
 }
@@ -8619,6 +8734,8 @@ type ETHSendTransactionRequest struct {
 	Calls []ETHCallParams `json:"calls"`
 	// Unix timestamp in seconds for EIP-712 execution deadline. Only used when sponsor=true.
 	Deadline *string `json:"deadline,omitempty"`
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// A wallet or private key address to sign with. This does not support private key IDs.
 	From string `json:"from"`
 	// Maximum amount of gas for the outer transaction. Omit to auto-estimate.
@@ -9068,6 +9185,26 @@ type InitImportWalletResponse struct {
 	InitImportWalletResult
 }
 
+type InitOAuth2AuthenticateRequest struct {
+	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
+	OrganizationID string `json:"organizationId,omitempty"`
+	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
+	TimestampMs string `json:"timestampMs,omitempty"`
+	// The transport encryption suite for the OAuth 2.0 authentication target.
+	EncryptionSuite TransportEncryptionSuite `json:"encryptionSuite"`
+	// The OAuth 2.0 credential whose authentication inputs will be encrypted to the target.
+	OAuth2CredentialID string `json:"oauth2CredentialId"`
+}
+
+func (InitOAuth2AuthenticateRequest) ActivityType() string {
+	return "ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE"
+}
+
+type InitOAuth2AuthenticateResponse struct {
+	Activity Activity `json:"activity"`
+	InitOAuth2AuthenticateResult
+}
+
 type InitOTPRequest struct {
 	// OrganizationID defaults to the client's organization ID. Override only when targeting a sub-organization.
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -9223,21 +9360,15 @@ type OAuth2AuthenticateRequest struct {
 	OrganizationID string `json:"organizationId,omitempty"`
 	// TimestampMs is set automatically to the current time. Override only if you need a specific timestamp.
 	TimestampMs string `json:"timestampMs,omitempty"`
-	// The auth_code provided by the OAuth 2.0 provider to the end user to be exchanged for a Bearer token in the OAuth 2.0 flow
-	AuthCode string `json:"authCode"`
-	// An optional P256 public key to which, if provided, the bearer token will be encrypted and returned via the `encrypted_bearer_token` claim of the OIDC Token
-	BearerTokenTargetPublicKey *string `json:"bearerTokenTargetPublicKey,omitempty"`
-	// The code verifier used by OAuth 2.0 PKCE providers
-	CodeVerifier string `json:"codeVerifier"`
-	// A nonce value set to sha256(publicKey), used to bind the OIDC token to a specific public key
-	Nonce string `json:"nonce"`
-	// The OAuth 2.0 credential id whose client_id and client_secret will be used in the OAuth 2.0 flow
+	// Encryption suite specific ciphertext of a JSON object containing organization_id, oauth2_credential_id, client_id, provider, auth_code, code_verifier, redirect_uri, nonce, and optional bearer_token_target_public_key. For enclave encrypt v1 this is a JSON-encoded ClientSendMsg encrypted to target_public_key.
+	EncryptedMessage string `json:"encryptedMessage"`
+	// The OAuth 2.0 credential selected by the client and repeated inside the encrypted payload.
 	OAuth2CredentialID string `json:"oauth2CredentialId"`
-	// The URI the user is redirected to after they have authenticated with the OAuth 2.0 provider
-	RedirectUri string `json:"redirectUri"`
+	// Targeted transport encryption public key, from the enclave target message returned by InitOauth2Authenticate.
+	TargetPublicKey string `json:"targetPublicKey"`
 }
 
-func (OAuth2AuthenticateRequest) ActivityType() string { return "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE" }
+func (OAuth2AuthenticateRequest) ActivityType() string { return "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2" }
 
 type OAuth2AuthenticateResponse struct {
 	Activity Activity `json:"activity"`
@@ -9573,6 +9704,8 @@ type SolSendTransactionRequest struct {
 	TimestampMs string `json:"timestampMs,omitempty"`
 	// CAIP-2 chain ID (e.g., 'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp' for Solana mainnet). Human-readable Solana aliases ('solana:mainnet', 'solana:devnet') are also accepted and normalized to canonical CAIP-2 values.
 	Caip2 string `json:"caip2"`
+	// The public key of the external signer to use for signing this transaction. Only needed for external signer requests.
+	ExternalSignerPubkey *string `json:"externalSignerPubkey,omitempty"`
 	// User-provided blockhash for replay protection / deadline control. If provided, it is used as-is, including for sponsored transactions (the transaction is only broadcastable while the blockhash is current). If omitted and sponsor=true, a fresh blockhash is fetched during execution.
 	RecentBlockhash *string `json:"recentBlockhash,omitempty"`
 	// Ordered Solana signer addresses Turnkey signs with. Between 1 and 16 signers for legacy/V0, or up to 12 for V1 (11 when sponsored). For sponsored transactions this must list every required signer of the transaction in transaction order.

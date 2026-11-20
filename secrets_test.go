@@ -111,10 +111,18 @@ func newSecretsTestClient(t *testing.T, baseURL, organizationID string) *Client 
 func TestSecretWrappersImportSecret(t *testing.T) {
 	const organizationID = "8a1e6f5c-0000-4000-8000-000000000001"
 
-	enclave := newSecretsMockEnclave(t)
-	bundle, targetKey := enclave.targetBundle(organizationID)
+	const (
+		keyEnvironment = "environment"
+		keyKind        = "kind"
+		valSandbox     = "sandbox"
+		valTest        = "test"
+	)
 
-	var importedParams []ImportSecretParams
+	var (
+		enclave           = newSecretsMockEnclave(t)
+		bundle, targetKey = enclave.targetBundle(organizationID)
+		importedParams    []ImportSecretParams
+	)
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
@@ -144,22 +152,39 @@ func TestSecretWrappersImportSecret(t *testing.T) {
 	plaintext := []byte("wrapper plaintext")
 
 	secretID, err := client.ImportSecret(context.Background(), organizationID, &name, plaintext,
-		map[string]string{"kind": "test", "environment": "sandbox"}, &enclave.quorumKey.PublicKey)
+		map[string]string{keyKind: valTest, keyEnvironment: valSandbox}, &enclave.quorumKey.PublicKey)
 	require.NoError(t, err)
 	assert.Equal(t, "22222222-2222-4222-8222-222222222222", secretID)
 
 	// Decrypt the submitted payload to verify the imported plaintext.
 	require.Len(t, importedParams, 1)
 	require.Len(t, importedParams[0].StaticProperties, 2)
-	assert.Equal(t, []string{"environment", "kind"}, []string{*importedParams[0].StaticProperties[0].Key, *importedParams[0].StaticProperties[1].Key})
-	assert.Equal(t, []string{"sandbox", "test"}, []string{*importedParams[0].StaticProperties[0].Value, *importedParams[0].StaticProperties[1].Value})
+	assert.Equal(t, []string{keyEnvironment, keyKind}, []string{*importedParams[0].StaticProperties[0].Key, *importedParams[0].StaticProperties[1].Key})
+	assert.Equal(t, []string{valSandbox, valTest}, []string{*importedParams[0].StaticProperties[0].Value, *importedParams[0].StaticProperties[1].Value})
+
+	assert.Equal(t, TransportEncryptionSuiteEnclaveEncryptV2, importedParams[0].EncryptionSuite)
+
+	targetPublic, err := targetKey.Public().MarshalBinary()
+	assert.NoError(t, err)
+	assert.Equal(t, hex.EncodeToString(targetPublic), importedParams[0].TargetPublicKey)
 
 	var msg crypto.ClientSendMsg
 	require.NoError(t, json.Unmarshal([]byte(importedParams[0].SecretPayload), &msg))
 
-	decrypted, err := crypto.HPKEDecrypt(*msg.EncappedPublic, targetKey, *msg.Ciphertext)
-	require.NoError(t, err)
+	binding := crypto.ImportSecretsPurposeBinding(&name, []crypto.StaticProperty{
+		{Key: keyEnvironment, Value: valSandbox},
+		{Key: keyKind, Value: valTest},
+	})
+	decrypted, err := crypto.HPKEDecryptWithPurposeBinding(*msg.EncappedPublic, targetKey, *msg.Ciphertext, binding)
+	assert.NoError(t, err)
 	assert.Equal(t, plaintext, decrypted)
+
+	_, err = crypto.HPKEDecrypt(*msg.EncappedPublic, targetKey, *msg.Ciphertext)
+	assert.EqualError(t, err, "cipher: message authentication failed")
+
+	weaker := crypto.ImportSecretsPurposeBinding(&name, []crypto.StaticProperty{{Key: keyEnvironment, Value: valSandbox}})
+	_, err = crypto.HPKEDecryptWithPurposeBinding(*msg.EncappedPublic, targetKey, *msg.Ciphertext, weaker)
+	assert.EqualError(t, err, "cipher: message authentication failed")
 }
 
 func TestSecretWrappersExportSecret(t *testing.T) {

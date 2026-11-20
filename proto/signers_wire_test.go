@@ -52,6 +52,8 @@ func TestExternalSignerProofPayloadWireContract(t *testing.T) {
 		{"organization_id", 4, protoreflect.StringKind},
 		{"external_signer_pubkey", 5, protoreflect.StringKind},
 		{"task_id", 6, protoreflect.StringKind},
+		{"eth_transaction", 7, protoreflect.MessageKind},
+		{"solana_transaction", 8, protoreflect.MessageKind},
 	}
 
 	fields := payload.ProtoReflect().Descriptor().Fields()

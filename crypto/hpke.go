@@ -14,6 +14,12 @@ import (
 
 // HPKEEncrypt encrypts plaintext to receiverPublic with Turnkey's enclave HPKE configuration.
 func HPKEEncrypt(receiverPublic *kem.PublicKey, plaintext []byte) (ciphertext []byte, encappedPublic []byte, err error) {
+	return HPKEEncryptWithPurposeBinding(receiverPublic, plaintext, nil)
+}
+
+// HPKEEncryptWithPurposeBinding is HPKEEncrypt with purposeBinding appended to the AAD.
+// The enclave must decrypt with the same purposeBinding.
+func HPKEEncryptWithPurposeBinding(receiverPublic *kem.PublicKey, plaintext, purposeBinding []byte) (ciphertext []byte, encappedPublic []byte, err error) {
 	suite := hpke.NewSuite(KemID, KdfID, AeadID)
 
 	sender, err := suite.NewSender(*receiverPublic, []byte(TurnkeyHPKEInfo))
@@ -30,6 +36,8 @@ func HPKEEncrypt(receiverPublic *kem.PublicKey, plaintext []byte) (ciphertext []
 	if err != nil {
 		return nil, nil, err
 	}
+
+	aad = append(aad, purposeBinding...)
 
 	ciphertext, err = sealer.Seal(plaintext, aad)
 	if err != nil {
@@ -91,6 +99,11 @@ func DecodeKEMPublicKey(encodedPublicKey string) (*kem.PublicKey, error) {
 
 // HPKEDecrypt decrypts ciphertext with receiverPrivate and Turnkey's enclave HPKE configuration.
 func HPKEDecrypt(encappedPublic []byte, receiverPrivate kem.PrivateKey, ciphertext []byte) ([]byte, error) {
+	return HPKEDecryptWithPurposeBinding(encappedPublic, receiverPrivate, ciphertext, nil)
+}
+
+// HPKEDecryptWithPurposeBinding is HPKEDecrypt with purposeBinding appended to the AAD.
+func HPKEDecryptWithPurposeBinding(encappedPublic []byte, receiverPrivate kem.PrivateKey, ciphertext, purposeBinding []byte) ([]byte, error) {
 	suite := hpke.NewSuite(KemID, KdfID, AeadID)
 
 	receiver, err := suite.NewReceiver(receiverPrivate, []byte(TurnkeyHPKEInfo))
@@ -108,7 +121,7 @@ func HPKEDecrypt(encappedPublic []byte, receiverPrivate kem.PrivateKey, cipherte
 		return nil, err
 	}
 
-	return opener.Open(ciphertext, aad)
+	return opener.Open(ciphertext, append(aad, purposeBinding...))
 }
 
 // AdditionalAssociatedData derives the AAD used by Turnkey enclave HPKE messages.

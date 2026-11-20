@@ -11,9 +11,9 @@ import (
 	api "github.com/tkhq/go-sdk/proto/gen/immutable/activity/api"
 	billing "github.com/tkhq/go-sdk/proto/gen/immutable/activity/billing"
 	v1 "github.com/tkhq/go-sdk/proto/gen/immutable/common/v1"
-	v11 "github.com/tkhq/go-sdk/proto/gen/immutable/data/v1"
-	v13 "github.com/tkhq/go-sdk/proto/gen/immutable/models/v1"
-	v12 "github.com/tkhq/go-sdk/proto/gen/immutable/webauthn/v1"
+	v12 "github.com/tkhq/go-sdk/proto/gen/immutable/data/v1"
+	v11 "github.com/tkhq/go-sdk/proto/gen/immutable/models/v1"
+	v13 "github.com/tkhq/go-sdk/proto/gen/immutable/webauthn/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -218,6 +218,10 @@ const (
 	ActivityType_ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1                ActivityType = 186
 	ActivityType_ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1                ActivityType = 187
 	ActivityType_ACTIVITY_TYPE_MINT_JWT                                 ActivityType = 188
+	ActivityType_ACTIVITY_TYPE_ADD_NOTIFICATION_DOMAINS                 ActivityType = 189
+	ActivityType_ACTIVITY_TYPE_DELETE_NOTIFICATION_DOMAINS              ActivityType = 190
+	ActivityType_ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE                 ActivityType = 191
+	ActivityType_ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2                   ActivityType = 192
 )
 
 // Enum value maps for ActivityType.
@@ -410,6 +414,10 @@ var (
 		186: "ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1",
 		187: "ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1",
 		188: "ACTIVITY_TYPE_MINT_JWT",
+		189: "ACTIVITY_TYPE_ADD_NOTIFICATION_DOMAINS",
+		190: "ACTIVITY_TYPE_DELETE_NOTIFICATION_DOMAINS",
+		191: "ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE",
+		192: "ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2",
 	}
 	ActivityType_value = map[string]int32{
 		"ACTIVITY_TYPE_UNSPECIFIED":                              0,
@@ -599,6 +607,10 @@ var (
 		"ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1":                186,
 		"ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1":                187,
 		"ACTIVITY_TYPE_MINT_JWT":                                 188,
+		"ACTIVITY_TYPE_ADD_NOTIFICATION_DOMAINS":                 189,
+		"ACTIVITY_TYPE_DELETE_NOTIFICATION_DOMAINS":              190,
+		"ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE":                 191,
+		"ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2":                   192,
 	}
 )
 
@@ -987,6 +999,10 @@ type Intent struct {
 	//	*Intent_CreateExternalSignerIntentV1
 	//	*Intent_DeleteExternalSignerIntentV1
 	//	*Intent_MintJwtIntent
+	//	*Intent_AddNotificationDomainsIntent
+	//	*Intent_DeleteNotificationDomainsIntent
+	//	*Intent_InitOauth2AuthenticateIntent
+	//	*Intent_Oauth2AuthenticateIntentV2
 	Inner         isIntent_Inner `protobuf_oneof:"inner"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2703,6 +2719,42 @@ func (x *Intent) GetMintJwtIntent() *MintJwtIntent {
 	return nil
 }
 
+func (x *Intent) GetAddNotificationDomainsIntent() *AddNotificationDomainsIntent {
+	if x != nil {
+		if x, ok := x.Inner.(*Intent_AddNotificationDomainsIntent); ok {
+			return x.AddNotificationDomainsIntent
+		}
+	}
+	return nil
+}
+
+func (x *Intent) GetDeleteNotificationDomainsIntent() *DeleteNotificationDomainsIntent {
+	if x != nil {
+		if x, ok := x.Inner.(*Intent_DeleteNotificationDomainsIntent); ok {
+			return x.DeleteNotificationDomainsIntent
+		}
+	}
+	return nil
+}
+
+func (x *Intent) GetInitOauth2AuthenticateIntent() *InitOauth2AuthenticateIntent {
+	if x != nil {
+		if x, ok := x.Inner.(*Intent_InitOauth2AuthenticateIntent); ok {
+			return x.InitOauth2AuthenticateIntent
+		}
+	}
+	return nil
+}
+
+func (x *Intent) GetOauth2AuthenticateIntentV2() *Oauth2AuthenticateIntentV2 {
+	if x != nil {
+		if x, ok := x.Inner.(*Intent_Oauth2AuthenticateIntentV2); ok {
+			return x.Oauth2AuthenticateIntentV2
+		}
+	}
+	return nil
+}
+
 type isIntent_Inner interface {
 	isIntent_Inner()
 }
@@ -3451,6 +3503,22 @@ type Intent_MintJwtIntent struct {
 	MintJwtIntent *MintJwtIntent `protobuf:"bytes,189,opt,name=mint_jwt_intent,json=mintJwtIntent,proto3,oneof"`
 }
 
+type Intent_AddNotificationDomainsIntent struct {
+	AddNotificationDomainsIntent *AddNotificationDomainsIntent `protobuf:"bytes,190,opt,name=add_notification_domains_intent,json=addNotificationDomainsIntent,proto3,oneof"`
+}
+
+type Intent_DeleteNotificationDomainsIntent struct {
+	DeleteNotificationDomainsIntent *DeleteNotificationDomainsIntent `protobuf:"bytes,191,opt,name=delete_notification_domains_intent,json=deleteNotificationDomainsIntent,proto3,oneof"`
+}
+
+type Intent_InitOauth2AuthenticateIntent struct {
+	InitOauth2AuthenticateIntent *InitOauth2AuthenticateIntent `protobuf:"bytes,192,opt,name=init_oauth2_authenticate_intent,json=initOauth2AuthenticateIntent,proto3,oneof"`
+}
+
+type Intent_Oauth2AuthenticateIntentV2 struct {
+	Oauth2AuthenticateIntentV2 *Oauth2AuthenticateIntentV2 `protobuf:"bytes,193,opt,name=oauth2_authenticate_intent_v2,json=oauth2AuthenticateIntentV2,proto3,oneof"`
+}
+
 func (*Intent_CreateOrganizationIntent) isIntent_Inner() {}
 
 func (*Intent_CreateAuthenticatorsIntent) isIntent_Inner() {}
@@ -3822,6 +3890,14 @@ func (*Intent_CreateExternalSignerIntentV1) isIntent_Inner() {}
 func (*Intent_DeleteExternalSignerIntentV1) isIntent_Inner() {}
 
 func (*Intent_MintJwtIntent) isIntent_Inner() {}
+
+func (*Intent_AddNotificationDomainsIntent) isIntent_Inner() {}
+
+func (*Intent_DeleteNotificationDomainsIntent) isIntent_Inner() {}
+
+func (*Intent_InitOauth2AuthenticateIntent) isIntent_Inner() {}
+
+func (*Intent_Oauth2AuthenticateIntentV2) isIntent_Inner() {}
 
 type UpdateAuthProxyConfigIntent struct {
 	state                                     protoimpl.MessageState    `protogen:"open.v1"`
@@ -7204,14 +7280,15 @@ func (x *SolSendTransactionIntent) GetRecentBlockhash() string {
 }
 
 type SolSendTransactionIntentV2 struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
-	UnsignedTransaction string                 `protobuf:"bytes,1,opt,name=unsigned_transaction,json=unsignedTransaction,proto3" json:"unsigned_transaction,omitempty"`
-	SignWiths           []string               `protobuf:"bytes,2,rep,name=sign_withs,json=signWiths,proto3" json:"sign_withs,omitempty"`
-	Sponsor             *bool                  `protobuf:"varint,3,opt,name=sponsor,proto3,oneof" json:"sponsor,omitempty"`
-	Caip2               string                 `protobuf:"bytes,4,opt,name=caip2,proto3" json:"caip2,omitempty"`
-	RecentBlockhash     *string                `protobuf:"bytes,5,opt,name=recent_blockhash,json=recentBlockhash,proto3,oneof" json:"recent_blockhash,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	UnsignedTransaction  string                 `protobuf:"bytes,1,opt,name=unsigned_transaction,json=unsignedTransaction,proto3" json:"unsigned_transaction,omitempty"`
+	SignWiths            []string               `protobuf:"bytes,2,rep,name=sign_withs,json=signWiths,proto3" json:"sign_withs,omitempty"`
+	Sponsor              *bool                  `protobuf:"varint,3,opt,name=sponsor,proto3,oneof" json:"sponsor,omitempty"`
+	Caip2                string                 `protobuf:"bytes,4,opt,name=caip2,proto3" json:"caip2,omitempty"`
+	RecentBlockhash      *string                `protobuf:"bytes,5,opt,name=recent_blockhash,json=recentBlockhash,proto3,oneof" json:"recent_blockhash,omitempty"`
+	ExternalSignerPubkey *string                `protobuf:"bytes,6,opt,name=external_signer_pubkey,json=externalSignerPubkey,proto3,oneof" json:"external_signer_pubkey,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *SolSendTransactionIntentV2) Reset() {
@@ -7275,6 +7352,13 @@ func (x *SolSendTransactionIntentV2) GetCaip2() string {
 func (x *SolSendTransactionIntentV2) GetRecentBlockhash() string {
 	if x != nil && x.RecentBlockhash != nil {
 		return *x.RecentBlockhash
+	}
+	return ""
+}
+
+func (x *SolSendTransactionIntentV2) GetExternalSignerPubkey() string {
+	if x != nil && x.ExternalSignerPubkey != nil {
+		return *x.ExternalSignerPubkey
 	}
 	return ""
 }
@@ -7483,6 +7567,7 @@ type EthSendTransactionIntentV2 struct {
 	Deadline             *string                `protobuf:"bytes,8,opt,name=deadline,proto3,oneof" json:"deadline,omitempty"`
 	GasStationNonce      *string                `protobuf:"bytes,9,opt,name=gas_station_nonce,json=gasStationNonce,proto3,oneof" json:"gas_station_nonce,omitempty"`
 	Calls                []*EthCallParams       `protobuf:"bytes,10,rep,name=calls,proto3" json:"calls,omitempty"`
+	ExternalSignerPubkey *string                `protobuf:"bytes,11,opt,name=external_signer_pubkey,json=externalSignerPubkey,proto3,oneof" json:"external_signer_pubkey,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -7585,6 +7670,13 @@ func (x *EthSendTransactionIntentV2) GetCalls() []*EthCallParams {
 		return x.Calls
 	}
 	return nil
+}
+
+func (x *EthSendTransactionIntentV2) GetExternalSignerPubkey() string {
+	if x != nil && x.ExternalSignerPubkey != nil {
+		return *x.ExternalSignerPubkey
+	}
+	return ""
 }
 
 type ExecuteSwapIntent struct {
@@ -13980,6 +14072,119 @@ func (x *DeleteOauth2CredentialIntent) GetOauth2CredentialId() string {
 	return ""
 }
 
+type InitOauth2AuthenticateIntent struct {
+	state              protoimpl.MessageState       `protogen:"open.v1"`
+	Oauth2CredentialId string                       `protobuf:"bytes,1,opt,name=oauth2_credential_id,json=oauth2CredentialId,proto3" json:"oauth2_credential_id,omitempty"`
+	EncryptionSuite    v11.TransportEncryptionSuite `protobuf:"varint,2,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *InitOauth2AuthenticateIntent) Reset() {
+	*x = InitOauth2AuthenticateIntent{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[152]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InitOauth2AuthenticateIntent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InitOauth2AuthenticateIntent) ProtoMessage() {}
+
+func (x *InitOauth2AuthenticateIntent) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[152]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InitOauth2AuthenticateIntent.ProtoReflect.Descriptor instead.
+func (*InitOauth2AuthenticateIntent) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{152}
+}
+
+func (x *InitOauth2AuthenticateIntent) GetOauth2CredentialId() string {
+	if x != nil {
+		return x.Oauth2CredentialId
+	}
+	return ""
+}
+
+func (x *InitOauth2AuthenticateIntent) GetEncryptionSuite() v11.TransportEncryptionSuite {
+	if x != nil {
+		return x.EncryptionSuite
+	}
+	return v11.TransportEncryptionSuite(0)
+}
+
+type Oauth2AuthenticateIntentV2 struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Oauth2CredentialId string                 `protobuf:"bytes,1,opt,name=oauth2_credential_id,json=oauth2CredentialId,proto3" json:"oauth2_credential_id,omitempty"`
+	EncryptedMessage   string                 `protobuf:"bytes,2,opt,name=encrypted_message,json=encryptedMessage,proto3" json:"encrypted_message,omitempty"`
+	TargetPublicKey    string                 `protobuf:"bytes,3,opt,name=target_public_key,json=targetPublicKey,proto3" json:"target_public_key,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *Oauth2AuthenticateIntentV2) Reset() {
+	*x = Oauth2AuthenticateIntentV2{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[153]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Oauth2AuthenticateIntentV2) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Oauth2AuthenticateIntentV2) ProtoMessage() {}
+
+func (x *Oauth2AuthenticateIntentV2) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[153]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Oauth2AuthenticateIntentV2.ProtoReflect.Descriptor instead.
+func (*Oauth2AuthenticateIntentV2) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{153}
+}
+
+func (x *Oauth2AuthenticateIntentV2) GetOauth2CredentialId() string {
+	if x != nil {
+		return x.Oauth2CredentialId
+	}
+	return ""
+}
+
+func (x *Oauth2AuthenticateIntentV2) GetEncryptedMessage() string {
+	if x != nil {
+		return x.EncryptedMessage
+	}
+	return ""
+}
+
+func (x *Oauth2AuthenticateIntentV2) GetTargetPublicKey() string {
+	if x != nil {
+		return x.TargetPublicKey
+	}
+	return ""
+}
+
+// Deprecated: Marked as deprecated in immutable/activity/v1/activity.proto.
 type Oauth2AuthenticateIntent struct {
 	state                      protoimpl.MessageState `protogen:"open.v1"`
 	Oauth2CredentialId         string                 `protobuf:"bytes,1,opt,name=oauth2_credential_id,json=oauth2CredentialId,proto3" json:"oauth2_credential_id,omitempty"`
@@ -13994,7 +14199,7 @@ type Oauth2AuthenticateIntent struct {
 
 func (x *Oauth2AuthenticateIntent) Reset() {
 	*x = Oauth2AuthenticateIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[152]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[154]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14006,7 +14211,7 @@ func (x *Oauth2AuthenticateIntent) String() string {
 func (*Oauth2AuthenticateIntent) ProtoMessage() {}
 
 func (x *Oauth2AuthenticateIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[152]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[154]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14019,7 +14224,7 @@ func (x *Oauth2AuthenticateIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Oauth2AuthenticateIntent.ProtoReflect.Descriptor instead.
 func (*Oauth2AuthenticateIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{152}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{154}
 }
 
 func (x *Oauth2AuthenticateIntent) GetOauth2CredentialId() string {
@@ -14074,7 +14279,7 @@ type DeleteWalletAccountsIntent struct {
 
 func (x *DeleteWalletAccountsIntent) Reset() {
 	*x = DeleteWalletAccountsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[153]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[155]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14086,7 +14291,7 @@ func (x *DeleteWalletAccountsIntent) String() string {
 func (*DeleteWalletAccountsIntent) ProtoMessage() {}
 
 func (x *DeleteWalletAccountsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[153]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[155]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14099,7 +14304,7 @@ func (x *DeleteWalletAccountsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletAccountsIntent.ProtoReflect.Descriptor instead.
 func (*DeleteWalletAccountsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{153}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{155}
 }
 
 func (x *DeleteWalletAccountsIntent) GetWalletAccountIds() []string {
@@ -14125,7 +14330,7 @@ type DeletePoliciesIntent struct {
 
 func (x *DeletePoliciesIntent) Reset() {
 	*x = DeletePoliciesIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[154]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[156]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14137,7 +14342,7 @@ func (x *DeletePoliciesIntent) String() string {
 func (*DeletePoliciesIntent) ProtoMessage() {}
 
 func (x *DeletePoliciesIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[154]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[156]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14150,7 +14355,7 @@ func (x *DeletePoliciesIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePoliciesIntent.ProtoReflect.Descriptor instead.
 func (*DeletePoliciesIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{154}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{156}
 }
 
 func (x *DeletePoliciesIntent) GetPolicyIds() []string {
@@ -14170,7 +14375,7 @@ type EthSendRawTransactionIntent struct {
 
 func (x *EthSendRawTransactionIntent) Reset() {
 	*x = EthSendRawTransactionIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[155]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[157]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14182,7 +14387,7 @@ func (x *EthSendRawTransactionIntent) String() string {
 func (*EthSendRawTransactionIntent) ProtoMessage() {}
 
 func (x *EthSendRawTransactionIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[155]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[157]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14195,7 +14400,7 @@ func (x *EthSendRawTransactionIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthSendRawTransactionIntent.ProtoReflect.Descriptor instead.
 func (*EthSendRawTransactionIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{155}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{157}
 }
 
 func (x *EthSendRawTransactionIntent) GetSignedTransaction() string {
@@ -14227,7 +14432,7 @@ type CreateFiatOnRampCredentialIntent struct {
 
 func (x *CreateFiatOnRampCredentialIntent) Reset() {
 	*x = CreateFiatOnRampCredentialIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[156]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[158]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14239,7 +14444,7 @@ func (x *CreateFiatOnRampCredentialIntent) String() string {
 func (*CreateFiatOnRampCredentialIntent) ProtoMessage() {}
 
 func (x *CreateFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[156]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[158]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14252,7 +14457,7 @@ func (x *CreateFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatOnRampCredentialIntent.ProtoReflect.Descriptor instead.
 func (*CreateFiatOnRampCredentialIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{156}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{158}
 }
 
 func (x *CreateFiatOnRampCredentialIntent) GetOnrampProvider() v1.FiatOnRampProvider {
@@ -14309,7 +14514,7 @@ type CreateFiatRampCredentialIntent struct {
 
 func (x *CreateFiatRampCredentialIntent) Reset() {
 	*x = CreateFiatRampCredentialIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[157]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[159]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14321,7 +14526,7 @@ func (x *CreateFiatRampCredentialIntent) String() string {
 func (*CreateFiatRampCredentialIntent) ProtoMessage() {}
 
 func (x *CreateFiatRampCredentialIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[157]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[159]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14334,7 +14539,7 @@ func (x *CreateFiatRampCredentialIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatRampCredentialIntent.ProtoReflect.Descriptor instead.
 func (*CreateFiatRampCredentialIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{157}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{159}
 }
 
 func (x *CreateFiatRampCredentialIntent) GetProvider() v1.FiatRampProvider {
@@ -14380,7 +14585,7 @@ type UpdateFiatOnRampCredentialIntent struct {
 
 func (x *UpdateFiatOnRampCredentialIntent) Reset() {
 	*x = UpdateFiatOnRampCredentialIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[158]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[160]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14392,7 +14597,7 @@ func (x *UpdateFiatOnRampCredentialIntent) String() string {
 func (*UpdateFiatOnRampCredentialIntent) ProtoMessage() {}
 
 func (x *UpdateFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[158]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[160]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14405,7 +14610,7 @@ func (x *UpdateFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFiatOnRampCredentialIntent.ProtoReflect.Descriptor instead.
 func (*UpdateFiatOnRampCredentialIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{158}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{160}
 }
 
 func (x *UpdateFiatOnRampCredentialIntent) GetFiatOnrampCredentialId() string {
@@ -14462,7 +14667,7 @@ type UpdateFiatRampCredentialIntent struct {
 
 func (x *UpdateFiatRampCredentialIntent) Reset() {
 	*x = UpdateFiatRampCredentialIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[159]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[161]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14474,7 +14679,7 @@ func (x *UpdateFiatRampCredentialIntent) String() string {
 func (*UpdateFiatRampCredentialIntent) ProtoMessage() {}
 
 func (x *UpdateFiatRampCredentialIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[159]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[161]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14487,7 +14692,7 @@ func (x *UpdateFiatRampCredentialIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFiatRampCredentialIntent.ProtoReflect.Descriptor instead.
 func (*UpdateFiatRampCredentialIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{159}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{161}
 }
 
 func (x *UpdateFiatRampCredentialIntent) GetCredentialId() string {
@@ -14527,7 +14732,7 @@ type DeleteFiatOnRampCredentialIntent struct {
 
 func (x *DeleteFiatOnRampCredentialIntent) Reset() {
 	*x = DeleteFiatOnRampCredentialIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[160]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[162]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14539,7 +14744,7 @@ func (x *DeleteFiatOnRampCredentialIntent) String() string {
 func (*DeleteFiatOnRampCredentialIntent) ProtoMessage() {}
 
 func (x *DeleteFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[160]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[162]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14552,7 +14757,7 @@ func (x *DeleteFiatOnRampCredentialIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFiatOnRampCredentialIntent.ProtoReflect.Descriptor instead.
 func (*DeleteFiatOnRampCredentialIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{160}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{162}
 }
 
 func (x *DeleteFiatOnRampCredentialIntent) GetFiatOnrampCredentialId() string {
@@ -14573,13 +14778,14 @@ type CreateTvcAppIntent struct {
 	EnableEgress               *bool                  `protobuf:"varint,7,opt,name=enable_egress,json=enableEgress,proto3,oneof" json:"enable_egress,omitempty"`
 	EnableDebugModeDeployments *bool                  `protobuf:"varint,8,opt,name=enable_debug_mode_deployments,json=enableDebugModeDeployments,proto3,oneof" json:"enable_debug_mode_deployments,omitempty"`
 	Region                     *string                `protobuf:"bytes,9,opt,name=region,proto3,oneof" json:"region,omitempty"`
+	EnableStaticEgressIps      *bool                  `protobuf:"varint,10,opt,name=enable_static_egress_ips,json=enableStaticEgressIps,proto3,oneof" json:"enable_static_egress_ips,omitempty"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *CreateTvcAppIntent) Reset() {
 	*x = CreateTvcAppIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[161]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[163]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14591,7 +14797,7 @@ func (x *CreateTvcAppIntent) String() string {
 func (*CreateTvcAppIntent) ProtoMessage() {}
 
 func (x *CreateTvcAppIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[161]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[163]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14604,7 +14810,7 @@ func (x *CreateTvcAppIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcAppIntent.ProtoReflect.Descriptor instead.
 func (*CreateTvcAppIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{161}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{163}
 }
 
 func (x *CreateTvcAppIntent) GetName() string {
@@ -14670,6 +14876,13 @@ func (x *CreateTvcAppIntent) GetRegion() string {
 	return ""
 }
 
+func (x *CreateTvcAppIntent) GetEnableStaticEgressIps() bool {
+	if x != nil && x.EnableStaticEgressIps != nil {
+		return *x.EnableStaticEgressIps
+	}
+	return false
+}
+
 type CreateTvcOperatorIntent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WalletName    *string                `protobuf:"bytes,1,opt,name=wallet_name,json=walletName,proto3,oneof" json:"wallet_name,omitempty"`
@@ -14682,7 +14895,7 @@ type CreateTvcOperatorIntent struct {
 
 func (x *CreateTvcOperatorIntent) Reset() {
 	*x = CreateTvcOperatorIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[162]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[164]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14694,7 +14907,7 @@ func (x *CreateTvcOperatorIntent) String() string {
 func (*CreateTvcOperatorIntent) ProtoMessage() {}
 
 func (x *CreateTvcOperatorIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[162]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[164]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14707,7 +14920,7 @@ func (x *CreateTvcOperatorIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcOperatorIntent.ProtoReflect.Descriptor instead.
 func (*CreateTvcOperatorIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{162}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{164}
 }
 
 func (x *CreateTvcOperatorIntent) GetWalletName() string {
@@ -14750,7 +14963,7 @@ type TvcOperatorSetParams struct {
 
 func (x *TvcOperatorSetParams) Reset() {
 	*x = TvcOperatorSetParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[163]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[165]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14762,7 +14975,7 @@ func (x *TvcOperatorSetParams) String() string {
 func (*TvcOperatorSetParams) ProtoMessage() {}
 
 func (x *TvcOperatorSetParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[163]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[165]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14775,7 +14988,7 @@ func (x *TvcOperatorSetParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TvcOperatorSetParams.ProtoReflect.Descriptor instead.
 func (*TvcOperatorSetParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{163}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{165}
 }
 
 func (x *TvcOperatorSetParams) GetName() string {
@@ -14816,7 +15029,7 @@ type TvcOperatorParams struct {
 
 func (x *TvcOperatorParams) Reset() {
 	*x = TvcOperatorParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[164]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[166]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14828,7 +15041,7 @@ func (x *TvcOperatorParams) String() string {
 func (*TvcOperatorParams) ProtoMessage() {}
 
 func (x *TvcOperatorParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[164]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[166]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14841,7 +15054,7 @@ func (x *TvcOperatorParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TvcOperatorParams.ProtoReflect.Descriptor instead.
 func (*TvcOperatorParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{164}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{166}
 }
 
 func (x *TvcOperatorParams) GetName() string {
@@ -14882,7 +15095,7 @@ type CreateTvcDeploymentIntent struct {
 
 func (x *CreateTvcDeploymentIntent) Reset() {
 	*x = CreateTvcDeploymentIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[165]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[167]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14894,7 +15107,7 @@ func (x *CreateTvcDeploymentIntent) String() string {
 func (*CreateTvcDeploymentIntent) ProtoMessage() {}
 
 func (x *CreateTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[165]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[167]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14907,7 +15120,7 @@ func (x *CreateTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcDeploymentIntent.ProtoReflect.Descriptor instead.
 func (*CreateTvcDeploymentIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{165}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{167}
 }
 
 func (x *CreateTvcDeploymentIntent) GetAppId() string {
@@ -15032,7 +15245,7 @@ type CreateTvcManifestApprovalsIntent struct {
 
 func (x *CreateTvcManifestApprovalsIntent) Reset() {
 	*x = CreateTvcManifestApprovalsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[166]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[168]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15044,7 +15257,7 @@ func (x *CreateTvcManifestApprovalsIntent) String() string {
 func (*CreateTvcManifestApprovalsIntent) ProtoMessage() {}
 
 func (x *CreateTvcManifestApprovalsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[166]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[168]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15057,7 +15270,7 @@ func (x *CreateTvcManifestApprovalsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcManifestApprovalsIntent.ProtoReflect.Descriptor instead.
 func (*CreateTvcManifestApprovalsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{166}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{168}
 }
 
 func (x *CreateTvcManifestApprovalsIntent) GetManifestId() string {
@@ -15084,7 +15297,7 @@ type TvcManifestApproval struct {
 
 func (x *TvcManifestApproval) Reset() {
 	*x = TvcManifestApproval{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[167]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[169]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15096,7 +15309,7 @@ func (x *TvcManifestApproval) String() string {
 func (*TvcManifestApproval) ProtoMessage() {}
 
 func (x *TvcManifestApproval) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[167]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[169]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15109,7 +15322,7 @@ func (x *TvcManifestApproval) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TvcManifestApproval.ProtoReflect.Descriptor instead.
 func (*TvcManifestApproval) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{167}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{169}
 }
 
 func (x *TvcManifestApproval) GetOperatorId() string {
@@ -15137,7 +15350,7 @@ type PostTvcQuorumKeyShareIntent struct {
 
 func (x *PostTvcQuorumKeyShareIntent) Reset() {
 	*x = PostTvcQuorumKeyShareIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[168]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[170]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15149,7 +15362,7 @@ func (x *PostTvcQuorumKeyShareIntent) String() string {
 func (*PostTvcQuorumKeyShareIntent) ProtoMessage() {}
 
 func (x *PostTvcQuorumKeyShareIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[168]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[170]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15162,7 +15375,7 @@ func (x *PostTvcQuorumKeyShareIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostTvcQuorumKeyShareIntent.ProtoReflect.Descriptor instead.
 func (*PostTvcQuorumKeyShareIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{168}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{170}
 }
 
 func (x *PostTvcQuorumKeyShareIntent) GetDeploymentId() string {
@@ -15197,7 +15410,7 @@ type QuorumKeyShareApprovalBundle struct {
 
 func (x *QuorumKeyShareApprovalBundle) Reset() {
 	*x = QuorumKeyShareApprovalBundle{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[169]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[171]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15209,7 +15422,7 @@ func (x *QuorumKeyShareApprovalBundle) String() string {
 func (*QuorumKeyShareApprovalBundle) ProtoMessage() {}
 
 func (x *QuorumKeyShareApprovalBundle) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[169]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[171]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15222,7 +15435,7 @@ func (x *QuorumKeyShareApprovalBundle) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QuorumKeyShareApprovalBundle.ProtoReflect.Descriptor instead.
 func (*QuorumKeyShareApprovalBundle) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{169}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{171}
 }
 
 func (x *QuorumKeyShareApprovalBundle) GetOperatorId() string {
@@ -15256,7 +15469,7 @@ type CreateTvcQuorumKeyIntent struct {
 
 func (x *CreateTvcQuorumKeyIntent) Reset() {
 	*x = CreateTvcQuorumKeyIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[170]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[172]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15268,7 +15481,7 @@ func (x *CreateTvcQuorumKeyIntent) String() string {
 func (*CreateTvcQuorumKeyIntent) ProtoMessage() {}
 
 func (x *CreateTvcQuorumKeyIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[170]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[172]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15281,7 +15494,7 @@ func (x *CreateTvcQuorumKeyIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcQuorumKeyIntent.ProtoReflect.Descriptor instead.
 func (*CreateTvcQuorumKeyIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{170}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{172}
 }
 
 func (x *CreateTvcQuorumKeyIntent) GetThreshold() uint32 {
@@ -15312,7 +15525,7 @@ type ReEncryptTvcQuorumKeyShareIntent struct {
 
 func (x *ReEncryptTvcQuorumKeyShareIntent) Reset() {
 	*x = ReEncryptTvcQuorumKeyShareIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[171]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[173]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15324,7 +15537,7 @@ func (x *ReEncryptTvcQuorumKeyShareIntent) String() string {
 func (*ReEncryptTvcQuorumKeyShareIntent) ProtoMessage() {}
 
 func (x *ReEncryptTvcQuorumKeyShareIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[171]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[173]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15337,7 +15550,7 @@ func (x *ReEncryptTvcQuorumKeyShareIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReEncryptTvcQuorumKeyShareIntent.ProtoReflect.Descriptor instead.
 func (*ReEncryptTvcQuorumKeyShareIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{171}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{173}
 }
 
 func (x *ReEncryptTvcQuorumKeyShareIntent) GetAttestationDocB64() string {
@@ -15393,7 +15606,7 @@ type CreateWebhookEndpointIntent struct {
 
 func (x *CreateWebhookEndpointIntent) Reset() {
 	*x = CreateWebhookEndpointIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[172]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[174]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15405,7 +15618,7 @@ func (x *CreateWebhookEndpointIntent) String() string {
 func (*CreateWebhookEndpointIntent) ProtoMessage() {}
 
 func (x *CreateWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[172]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[174]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15418,7 +15631,7 @@ func (x *CreateWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateWebhookEndpointIntent.ProtoReflect.Descriptor instead.
 func (*CreateWebhookEndpointIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{172}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{174}
 }
 
 func (x *CreateWebhookEndpointIntent) GetUrl() string {
@@ -15454,7 +15667,7 @@ type UpdateWebhookEndpointIntent struct {
 
 func (x *UpdateWebhookEndpointIntent) Reset() {
 	*x = UpdateWebhookEndpointIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[173]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[175]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15466,7 +15679,7 @@ func (x *UpdateWebhookEndpointIntent) String() string {
 func (*UpdateWebhookEndpointIntent) ProtoMessage() {}
 
 func (x *UpdateWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[173]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[175]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15479,7 +15692,7 @@ func (x *UpdateWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateWebhookEndpointIntent.ProtoReflect.Descriptor instead.
 func (*UpdateWebhookEndpointIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{173}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{175}
 }
 
 func (x *UpdateWebhookEndpointIntent) GetEndpointId() string {
@@ -15519,7 +15732,7 @@ type DeleteWebhookEndpointIntent struct {
 
 func (x *DeleteWebhookEndpointIntent) Reset() {
 	*x = DeleteWebhookEndpointIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[174]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[176]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15531,7 +15744,7 @@ func (x *DeleteWebhookEndpointIntent) String() string {
 func (*DeleteWebhookEndpointIntent) ProtoMessage() {}
 
 func (x *DeleteWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[174]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[176]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15544,7 +15757,7 @@ func (x *DeleteWebhookEndpointIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWebhookEndpointIntent.ProtoReflect.Descriptor instead.
 func (*DeleteWebhookEndpointIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{174}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{176}
 }
 
 func (x *DeleteWebhookEndpointIntent) GetEndpointId() string {
@@ -15718,6 +15931,9 @@ type Result struct {
 	//	*Result_CreateExternalSignerResultV1
 	//	*Result_DeleteExternalSignerResultV1
 	//	*Result_MintJwtResult
+	//	*Result_AddNotificationDomainsResult
+	//	*Result_DeleteNotificationDomainsResult
+	//	*Result_InitOauth2AuthenticateResult
 	Inner         isResult_Inner `protobuf_oneof:"inner"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -15725,7 +15941,7 @@ type Result struct {
 
 func (x *Result) Reset() {
 	*x = Result{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[175]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[177]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15737,7 +15953,7 @@ func (x *Result) String() string {
 func (*Result) ProtoMessage() {}
 
 func (x *Result) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[175]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[177]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15750,7 +15966,7 @@ func (x *Result) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Result.ProtoReflect.Descriptor instead.
 func (*Result) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{175}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{177}
 }
 
 func (x *Result) GetInner() isResult_Inner {
@@ -17200,6 +17416,33 @@ func (x *Result) GetMintJwtResult() *MintJwtResult {
 	return nil
 }
 
+func (x *Result) GetAddNotificationDomainsResult() *AddNotificationDomainsResult {
+	if x != nil {
+		if x, ok := x.Inner.(*Result_AddNotificationDomainsResult); ok {
+			return x.AddNotificationDomainsResult
+		}
+	}
+	return nil
+}
+
+func (x *Result) GetDeleteNotificationDomainsResult() *DeleteNotificationDomainsResult {
+	if x != nil {
+		if x, ok := x.Inner.(*Result_DeleteNotificationDomainsResult); ok {
+			return x.DeleteNotificationDomainsResult
+		}
+	}
+	return nil
+}
+
+func (x *Result) GetInitOauth2AuthenticateResult() *InitOauth2AuthenticateResult {
+	if x != nil {
+		if x, ok := x.Inner.(*Result_InitOauth2AuthenticateResult); ok {
+			return x.InitOauth2AuthenticateResult
+		}
+	}
+	return nil
+}
+
 type isResult_Inner interface {
 	isResult_Inner()
 }
@@ -17844,6 +18087,18 @@ type Result_MintJwtResult struct {
 	MintJwtResult *MintJwtResult `protobuf:"bytes,165,opt,name=mint_jwt_result,json=mintJwtResult,proto3,oneof"`
 }
 
+type Result_AddNotificationDomainsResult struct {
+	AddNotificationDomainsResult *AddNotificationDomainsResult `protobuf:"bytes,166,opt,name=add_notification_domains_result,json=addNotificationDomainsResult,proto3,oneof"`
+}
+
+type Result_DeleteNotificationDomainsResult struct {
+	DeleteNotificationDomainsResult *DeleteNotificationDomainsResult `protobuf:"bytes,167,opt,name=delete_notification_domains_result,json=deleteNotificationDomainsResult,proto3,oneof"`
+}
+
+type Result_InitOauth2AuthenticateResult struct {
+	InitOauth2AuthenticateResult *InitOauth2AuthenticateResult `protobuf:"bytes,168,opt,name=init_oauth2_authenticate_result,json=initOauth2AuthenticateResult,proto3,oneof"`
+}
+
 func (*Result_CreateOrganizationResult) isResult_Inner() {}
 
 func (*Result_CreateAuthenticatorsResult) isResult_Inner() {}
@@ -18164,6 +18419,12 @@ func (*Result_DeleteExternalSignerResultV1) isResult_Inner() {}
 
 func (*Result_MintJwtResult) isResult_Inner() {}
 
+func (*Result_AddNotificationDomainsResult) isResult_Inner() {}
+
+func (*Result_DeleteNotificationDomainsResult) isResult_Inner() {}
+
+func (*Result_InitOauth2AuthenticateResult) isResult_Inner() {}
+
 type UpsertGasUsageConfigResult struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	GasUsageConfigId string                 `protobuf:"bytes,1,opt,name=gas_usage_config_id,json=gasUsageConfigId,proto3" json:"gas_usage_config_id,omitempty"`
@@ -18173,7 +18434,7 @@ type UpsertGasUsageConfigResult struct {
 
 func (x *UpsertGasUsageConfigResult) Reset() {
 	*x = UpsertGasUsageConfigResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[176]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[178]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18185,7 +18446,7 @@ func (x *UpsertGasUsageConfigResult) String() string {
 func (*UpsertGasUsageConfigResult) ProtoMessage() {}
 
 func (x *UpsertGasUsageConfigResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[176]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[178]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18198,7 +18459,7 @@ func (x *UpsertGasUsageConfigResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertGasUsageConfigResult.ProtoReflect.Descriptor instead.
 func (*UpsertGasUsageConfigResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{176}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{178}
 }
 
 func (x *UpsertGasUsageConfigResult) GetGasUsageConfigId() string {
@@ -18217,7 +18478,7 @@ type EnableAuthProxyResult struct {
 
 func (x *EnableAuthProxyResult) Reset() {
 	*x = EnableAuthProxyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[177]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[179]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18229,7 +18490,7 @@ func (x *EnableAuthProxyResult) String() string {
 func (*EnableAuthProxyResult) ProtoMessage() {}
 
 func (x *EnableAuthProxyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[177]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[179]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18242,7 +18503,7 @@ func (x *EnableAuthProxyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableAuthProxyResult.ProtoReflect.Descriptor instead.
 func (*EnableAuthProxyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{177}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{179}
 }
 
 func (x *EnableAuthProxyResult) GetUserId() string {
@@ -18260,7 +18521,7 @@ type DisableAuthProxyResult struct {
 
 func (x *DisableAuthProxyResult) Reset() {
 	*x = DisableAuthProxyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[178]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[180]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18272,7 +18533,7 @@ func (x *DisableAuthProxyResult) String() string {
 func (*DisableAuthProxyResult) ProtoMessage() {}
 
 func (x *DisableAuthProxyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[178]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[180]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18285,7 +18546,7 @@ func (x *DisableAuthProxyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableAuthProxyResult.ProtoReflect.Descriptor instead.
 func (*DisableAuthProxyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{178}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{180}
 }
 
 type UpsertSwapConfigResult struct {
@@ -18299,7 +18560,7 @@ type UpsertSwapConfigResult struct {
 
 func (x *UpsertSwapConfigResult) Reset() {
 	*x = UpsertSwapConfigResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[179]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[181]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18311,7 +18572,7 @@ func (x *UpsertSwapConfigResult) String() string {
 func (*UpsertSwapConfigResult) ProtoMessage() {}
 
 func (x *UpsertSwapConfigResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[179]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[181]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18324,7 +18585,7 @@ func (x *UpsertSwapConfigResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertSwapConfigResult.ProtoReflect.Descriptor instead.
 func (*UpsertSwapConfigResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{179}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{181}
 }
 
 func (x *UpsertSwapConfigResult) GetFeeReceiverWalletAddress() string {
@@ -18357,7 +18618,7 @@ type ClaimSwapFeesResult struct {
 
 func (x *ClaimSwapFeesResult) Reset() {
 	*x = ClaimSwapFeesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[180]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[182]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18369,7 +18630,7 @@ func (x *ClaimSwapFeesResult) String() string {
 func (*ClaimSwapFeesResult) ProtoMessage() {}
 
 func (x *ClaimSwapFeesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[180]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[182]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18382,7 +18643,7 @@ func (x *ClaimSwapFeesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimSwapFeesResult.ProtoReflect.Descriptor instead.
 func (*ClaimSwapFeesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{180}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{182}
 }
 
 func (x *ClaimSwapFeesResult) GetRequestId() string {
@@ -18401,7 +18662,7 @@ type CreateOrganizationResult struct {
 
 func (x *CreateOrganizationResult) Reset() {
 	*x = CreateOrganizationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[181]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[183]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18413,7 +18674,7 @@ func (x *CreateOrganizationResult) String() string {
 func (*CreateOrganizationResult) ProtoMessage() {}
 
 func (x *CreateOrganizationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[181]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[183]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18426,7 +18687,7 @@ func (x *CreateOrganizationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizationResult.ProtoReflect.Descriptor instead.
 func (*CreateOrganizationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{181}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{183}
 }
 
 func (x *CreateOrganizationResult) GetOrganizationId() string {
@@ -18445,7 +18706,7 @@ type CreateWalletAuthenticatorsResult struct {
 
 func (x *CreateWalletAuthenticatorsResult) Reset() {
 	*x = CreateWalletAuthenticatorsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[182]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[184]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18457,7 +18718,7 @@ func (x *CreateWalletAuthenticatorsResult) String() string {
 func (*CreateWalletAuthenticatorsResult) ProtoMessage() {}
 
 func (x *CreateWalletAuthenticatorsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[182]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[184]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18470,7 +18731,7 @@ func (x *CreateWalletAuthenticatorsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateWalletAuthenticatorsResult.ProtoReflect.Descriptor instead.
 func (*CreateWalletAuthenticatorsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{182}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{184}
 }
 
 func (x *CreateWalletAuthenticatorsResult) GetWalletAuthenticatorIds() []string {
@@ -18489,7 +18750,7 @@ type DeleteWalletAuthenticatorsResult struct {
 
 func (x *DeleteWalletAuthenticatorsResult) Reset() {
 	*x = DeleteWalletAuthenticatorsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[183]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[185]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18501,7 +18762,7 @@ func (x *DeleteWalletAuthenticatorsResult) String() string {
 func (*DeleteWalletAuthenticatorsResult) ProtoMessage() {}
 
 func (x *DeleteWalletAuthenticatorsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[183]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[185]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18514,7 +18775,7 @@ func (x *DeleteWalletAuthenticatorsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletAuthenticatorsResult.ProtoReflect.Descriptor instead.
 func (*DeleteWalletAuthenticatorsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{183}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{185}
 }
 
 func (x *DeleteWalletAuthenticatorsResult) GetWalletAuthenticatorIds() []string {
@@ -18533,7 +18794,7 @@ type CreateAuthenticatorsResult struct {
 
 func (x *CreateAuthenticatorsResult) Reset() {
 	*x = CreateAuthenticatorsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[184]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[186]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18545,7 +18806,7 @@ func (x *CreateAuthenticatorsResult) String() string {
 func (*CreateAuthenticatorsResult) ProtoMessage() {}
 
 func (x *CreateAuthenticatorsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[184]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[186]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18558,7 +18819,7 @@ func (x *CreateAuthenticatorsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAuthenticatorsResult.ProtoReflect.Descriptor instead.
 func (*CreateAuthenticatorsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{184}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{186}
 }
 
 func (x *CreateAuthenticatorsResult) GetAuthenticatorIds() []string {
@@ -18577,7 +18838,7 @@ type CreateApiKeysResult struct {
 
 func (x *CreateApiKeysResult) Reset() {
 	*x = CreateApiKeysResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[185]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[187]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18589,7 +18850,7 @@ func (x *CreateApiKeysResult) String() string {
 func (*CreateApiKeysResult) ProtoMessage() {}
 
 func (x *CreateApiKeysResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[185]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[187]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18602,7 +18863,7 @@ func (x *CreateApiKeysResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateApiKeysResult.ProtoReflect.Descriptor instead.
 func (*CreateApiKeysResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{185}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{187}
 }
 
 func (x *CreateApiKeysResult) GetApiKeyIds() []string {
@@ -18621,7 +18882,7 @@ type CreateUsersResult struct {
 
 func (x *CreateUsersResult) Reset() {
 	*x = CreateUsersResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[186]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[188]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18633,7 +18894,7 @@ func (x *CreateUsersResult) String() string {
 func (*CreateUsersResult) ProtoMessage() {}
 
 func (x *CreateUsersResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[186]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[188]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18646,7 +18907,7 @@ func (x *CreateUsersResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUsersResult.ProtoReflect.Descriptor instead.
 func (*CreateUsersResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{186}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{188}
 }
 
 func (x *CreateUsersResult) GetUserIds() []string {
@@ -18665,7 +18926,7 @@ type UpdateUserResult struct {
 
 func (x *UpdateUserResult) Reset() {
 	*x = UpdateUserResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[187]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[189]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18677,7 +18938,7 @@ func (x *UpdateUserResult) String() string {
 func (*UpdateUserResult) ProtoMessage() {}
 
 func (x *UpdateUserResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[187]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[189]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18690,7 +18951,7 @@ func (x *UpdateUserResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserResult.ProtoReflect.Descriptor instead.
 func (*UpdateUserResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{187}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{189}
 }
 
 func (x *UpdateUserResult) GetUserId() string {
@@ -18709,7 +18970,7 @@ type UpdateUserNameResult struct {
 
 func (x *UpdateUserNameResult) Reset() {
 	*x = UpdateUserNameResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[188]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[190]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18721,7 +18982,7 @@ func (x *UpdateUserNameResult) String() string {
 func (*UpdateUserNameResult) ProtoMessage() {}
 
 func (x *UpdateUserNameResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[188]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[190]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18734,7 +18995,7 @@ func (x *UpdateUserNameResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserNameResult.ProtoReflect.Descriptor instead.
 func (*UpdateUserNameResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{188}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{190}
 }
 
 func (x *UpdateUserNameResult) GetUserId() string {
@@ -18753,7 +19014,7 @@ type UpdateUserEmailResult struct {
 
 func (x *UpdateUserEmailResult) Reset() {
 	*x = UpdateUserEmailResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[189]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[191]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18765,7 +19026,7 @@ func (x *UpdateUserEmailResult) String() string {
 func (*UpdateUserEmailResult) ProtoMessage() {}
 
 func (x *UpdateUserEmailResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[189]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[191]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18778,7 +19039,7 @@ func (x *UpdateUserEmailResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserEmailResult.ProtoReflect.Descriptor instead.
 func (*UpdateUserEmailResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{189}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{191}
 }
 
 func (x *UpdateUserEmailResult) GetUserId() string {
@@ -18797,7 +19058,7 @@ type UpdateUserPhoneNumberResult struct {
 
 func (x *UpdateUserPhoneNumberResult) Reset() {
 	*x = UpdateUserPhoneNumberResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[190]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[192]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18809,7 +19070,7 @@ func (x *UpdateUserPhoneNumberResult) String() string {
 func (*UpdateUserPhoneNumberResult) ProtoMessage() {}
 
 func (x *UpdateUserPhoneNumberResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[190]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[192]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18822,7 +19083,7 @@ func (x *UpdateUserPhoneNumberResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPhoneNumberResult.ProtoReflect.Descriptor instead.
 func (*UpdateUserPhoneNumberResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{190}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{192}
 }
 
 func (x *UpdateUserPhoneNumberResult) GetUserId() string {
@@ -18841,7 +19102,7 @@ type UpdateWalletResult struct {
 
 func (x *UpdateWalletResult) Reset() {
 	*x = UpdateWalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[191]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[193]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18853,7 +19114,7 @@ func (x *UpdateWalletResult) String() string {
 func (*UpdateWalletResult) ProtoMessage() {}
 
 func (x *UpdateWalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[191]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[193]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18866,7 +19127,7 @@ func (x *UpdateWalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateWalletResult.ProtoReflect.Descriptor instead.
 func (*UpdateWalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{191}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{193}
 }
 
 func (x *UpdateWalletResult) GetWalletId() string {
@@ -18885,7 +19146,7 @@ type UpdateWalletAccountNameResult struct {
 
 func (x *UpdateWalletAccountNameResult) Reset() {
 	*x = UpdateWalletAccountNameResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[192]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[194]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18897,7 +19158,7 @@ func (x *UpdateWalletAccountNameResult) String() string {
 func (*UpdateWalletAccountNameResult) ProtoMessage() {}
 
 func (x *UpdateWalletAccountNameResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[192]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[194]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18910,7 +19171,7 @@ func (x *UpdateWalletAccountNameResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateWalletAccountNameResult.ProtoReflect.Descriptor instead.
 func (*UpdateWalletAccountNameResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{192}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{194}
 }
 
 func (x *UpdateWalletAccountNameResult) GetWalletAccountId() string {
@@ -18929,7 +19190,7 @@ type CreateApiOnlyUsersResult struct {
 
 func (x *CreateApiOnlyUsersResult) Reset() {
 	*x = CreateApiOnlyUsersResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[193]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[195]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18941,7 +19202,7 @@ func (x *CreateApiOnlyUsersResult) String() string {
 func (*CreateApiOnlyUsersResult) ProtoMessage() {}
 
 func (x *CreateApiOnlyUsersResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[193]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[195]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18954,7 +19215,7 @@ func (x *CreateApiOnlyUsersResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateApiOnlyUsersResult.ProtoReflect.Descriptor instead.
 func (*CreateApiOnlyUsersResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{193}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{195}
 }
 
 func (x *CreateApiOnlyUsersResult) GetUserIds() []string {
@@ -18973,7 +19234,7 @@ type CreateInvitationsResult struct {
 
 func (x *CreateInvitationsResult) Reset() {
 	*x = CreateInvitationsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[194]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[196]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -18985,7 +19246,7 @@ func (x *CreateInvitationsResult) String() string {
 func (*CreateInvitationsResult) ProtoMessage() {}
 
 func (x *CreateInvitationsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[194]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[196]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -18998,7 +19259,7 @@ func (x *CreateInvitationsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateInvitationsResult.ProtoReflect.Descriptor instead.
 func (*CreateInvitationsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{194}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{196}
 }
 
 func (x *CreateInvitationsResult) GetInvitationIds() []string {
@@ -19018,7 +19279,7 @@ type AcceptInvitationResult struct {
 
 func (x *AcceptInvitationResult) Reset() {
 	*x = AcceptInvitationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[195]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[197]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19030,7 +19291,7 @@ func (x *AcceptInvitationResult) String() string {
 func (*AcceptInvitationResult) ProtoMessage() {}
 
 func (x *AcceptInvitationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[195]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[197]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19043,7 +19304,7 @@ func (x *AcceptInvitationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptInvitationResult.ProtoReflect.Descriptor instead.
 func (*AcceptInvitationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{195}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{197}
 }
 
 func (x *AcceptInvitationResult) GetInvitationId() string {
@@ -19069,7 +19330,7 @@ type CreatePrivateKeysResult struct {
 
 func (x *CreatePrivateKeysResult) Reset() {
 	*x = CreatePrivateKeysResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[196]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[198]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19081,7 +19342,7 @@ func (x *CreatePrivateKeysResult) String() string {
 func (*CreatePrivateKeysResult) ProtoMessage() {}
 
 func (x *CreatePrivateKeysResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[196]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[198]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19094,7 +19355,7 @@ func (x *CreatePrivateKeysResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePrivateKeysResult.ProtoReflect.Descriptor instead.
 func (*CreatePrivateKeysResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{196}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{198}
 }
 
 func (x *CreatePrivateKeysResult) GetPrivateKeyIds() []string {
@@ -19113,7 +19374,7 @@ type CreatePrivateKeysResultV2 struct {
 
 func (x *CreatePrivateKeysResultV2) Reset() {
 	*x = CreatePrivateKeysResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[197]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[199]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19125,7 +19386,7 @@ func (x *CreatePrivateKeysResultV2) String() string {
 func (*CreatePrivateKeysResultV2) ProtoMessage() {}
 
 func (x *CreatePrivateKeysResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[197]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[199]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19138,7 +19399,7 @@ func (x *CreatePrivateKeysResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePrivateKeysResultV2.ProtoReflect.Descriptor instead.
 func (*CreatePrivateKeysResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{197}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{199}
 }
 
 func (x *CreatePrivateKeysResultV2) GetPrivateKeys() []*PrivateKeyResult {
@@ -19158,7 +19419,7 @@ type PrivateKeyResult struct {
 
 func (x *PrivateKeyResult) Reset() {
 	*x = PrivateKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[198]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[200]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19170,7 +19431,7 @@ func (x *PrivateKeyResult) String() string {
 func (*PrivateKeyResult) ProtoMessage() {}
 
 func (x *PrivateKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[198]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[200]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19183,7 +19444,7 @@ func (x *PrivateKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrivateKeyResult.ProtoReflect.Descriptor instead.
 func (*PrivateKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{198}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{200}
 }
 
 func (x *PrivateKeyResult) GetPrivateKeyId() string {
@@ -19210,7 +19471,7 @@ type Address struct {
 
 func (x *Address) Reset() {
 	*x = Address{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[199]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[201]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19222,7 +19483,7 @@ func (x *Address) String() string {
 func (*Address) ProtoMessage() {}
 
 func (x *Address) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[199]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[201]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19235,7 +19496,7 @@ func (x *Address) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Address.ProtoReflect.Descriptor instead.
 func (*Address) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{199}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{201}
 }
 
 func (x *Address) GetFormat() v1.AddressFormat {
@@ -19263,7 +19524,7 @@ type SignRawPayloadResult struct {
 
 func (x *SignRawPayloadResult) Reset() {
 	*x = SignRawPayloadResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[200]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[202]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19275,7 +19536,7 @@ func (x *SignRawPayloadResult) String() string {
 func (*SignRawPayloadResult) ProtoMessage() {}
 
 func (x *SignRawPayloadResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[200]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[202]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19288,7 +19549,7 @@ func (x *SignRawPayloadResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignRawPayloadResult.ProtoReflect.Descriptor instead.
 func (*SignRawPayloadResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{200}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{202}
 }
 
 func (x *SignRawPayloadResult) GetR() string {
@@ -19321,7 +19582,7 @@ type SignRawPayloadsResult struct {
 
 func (x *SignRawPayloadsResult) Reset() {
 	*x = SignRawPayloadsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[201]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[203]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19333,7 +19594,7 @@ func (x *SignRawPayloadsResult) String() string {
 func (*SignRawPayloadsResult) ProtoMessage() {}
 
 func (x *SignRawPayloadsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[201]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[203]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19346,7 +19607,7 @@ func (x *SignRawPayloadsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignRawPayloadsResult.ProtoReflect.Descriptor instead.
 func (*SignRawPayloadsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{201}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{203}
 }
 
 func (x *SignRawPayloadsResult) GetSignatures() []*SignRawPayloadResult {
@@ -19366,7 +19627,7 @@ type CreateWalletResult struct {
 
 func (x *CreateWalletResult) Reset() {
 	*x = CreateWalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[202]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[204]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19378,7 +19639,7 @@ func (x *CreateWalletResult) String() string {
 func (*CreateWalletResult) ProtoMessage() {}
 
 func (x *CreateWalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[202]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[204]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19391,7 +19652,7 @@ func (x *CreateWalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateWalletResult.ProtoReflect.Descriptor instead.
 func (*CreateWalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{202}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{204}
 }
 
 func (x *CreateWalletResult) GetWalletId() string {
@@ -19417,7 +19678,7 @@ type CreateWalletAccountsResult struct {
 
 func (x *CreateWalletAccountsResult) Reset() {
 	*x = CreateWalletAccountsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[203]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[205]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19429,7 +19690,7 @@ func (x *CreateWalletAccountsResult) String() string {
 func (*CreateWalletAccountsResult) ProtoMessage() {}
 
 func (x *CreateWalletAccountsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[203]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[205]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19442,7 +19703,7 @@ func (x *CreateWalletAccountsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateWalletAccountsResult.ProtoReflect.Descriptor instead.
 func (*CreateWalletAccountsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{203}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{205}
 }
 
 func (x *CreateWalletAccountsResult) GetAddresses() []string {
@@ -19461,7 +19722,7 @@ type InitUserEmailRecoveryResult struct {
 
 func (x *InitUserEmailRecoveryResult) Reset() {
 	*x = InitUserEmailRecoveryResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[204]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[206]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19473,7 +19734,7 @@ func (x *InitUserEmailRecoveryResult) String() string {
 func (*InitUserEmailRecoveryResult) ProtoMessage() {}
 
 func (x *InitUserEmailRecoveryResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[204]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[206]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19486,7 +19747,7 @@ func (x *InitUserEmailRecoveryResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitUserEmailRecoveryResult.ProtoReflect.Descriptor instead.
 func (*InitUserEmailRecoveryResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{204}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{206}
 }
 
 func (x *InitUserEmailRecoveryResult) GetUserId() string {
@@ -19505,7 +19766,7 @@ type OauthLoginResult struct {
 
 func (x *OauthLoginResult) Reset() {
 	*x = OauthLoginResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[205]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[207]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19517,7 +19778,7 @@ func (x *OauthLoginResult) String() string {
 func (*OauthLoginResult) ProtoMessage() {}
 
 func (x *OauthLoginResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[205]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[207]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19530,7 +19791,7 @@ func (x *OauthLoginResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OauthLoginResult.ProtoReflect.Descriptor instead.
 func (*OauthLoginResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{205}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{207}
 }
 
 func (x *OauthLoginResult) GetSession() string {
@@ -19551,7 +19812,7 @@ type CreateFiatOffRampSessionIntent struct {
 
 func (x *CreateFiatOffRampSessionIntent) Reset() {
 	*x = CreateFiatOffRampSessionIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[206]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[208]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19563,7 +19824,7 @@ func (x *CreateFiatOffRampSessionIntent) String() string {
 func (*CreateFiatOffRampSessionIntent) ProtoMessage() {}
 
 func (x *CreateFiatOffRampSessionIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[206]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[208]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19576,7 +19837,7 @@ func (x *CreateFiatOffRampSessionIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatOffRampSessionIntent.ProtoReflect.Descriptor instead.
 func (*CreateFiatOffRampSessionIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{206}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{208}
 }
 
 func (x *CreateFiatOffRampSessionIntent) GetQuoteId() string {
@@ -19610,7 +19871,7 @@ type CreateFiatOffRampSessionResult struct {
 
 func (x *CreateFiatOffRampSessionResult) Reset() {
 	*x = CreateFiatOffRampSessionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[207]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[209]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19622,7 +19883,7 @@ func (x *CreateFiatOffRampSessionResult) String() string {
 func (*CreateFiatOffRampSessionResult) ProtoMessage() {}
 
 func (x *CreateFiatOffRampSessionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[207]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[209]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19635,7 +19896,7 @@ func (x *CreateFiatOffRampSessionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatOffRampSessionResult.ProtoReflect.Descriptor instead.
 func (*CreateFiatOffRampSessionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{207}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{209}
 }
 
 func (x *CreateFiatOffRampSessionResult) GetOffRampUrl() string {
@@ -19666,7 +19927,7 @@ type MintJwtIntent struct {
 
 func (x *MintJwtIntent) Reset() {
 	*x = MintJwtIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[208]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[210]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19678,7 +19939,7 @@ func (x *MintJwtIntent) String() string {
 func (*MintJwtIntent) ProtoMessage() {}
 
 func (x *MintJwtIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[208]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[210]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19691,7 +19952,7 @@ func (x *MintJwtIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MintJwtIntent.ProtoReflect.Descriptor instead.
 func (*MintJwtIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{208}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{210}
 }
 
 func (x *MintJwtIntent) GetProfile() v1.JwtProfile {
@@ -19751,7 +20012,7 @@ type HttpAuthzV1Inputs struct {
 
 func (x *HttpAuthzV1Inputs) Reset() {
 	*x = HttpAuthzV1Inputs{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[209]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[211]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19763,7 +20024,7 @@ func (x *HttpAuthzV1Inputs) String() string {
 func (*HttpAuthzV1Inputs) ProtoMessage() {}
 
 func (x *HttpAuthzV1Inputs) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[209]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[211]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19776,7 +20037,7 @@ func (x *HttpAuthzV1Inputs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HttpAuthzV1Inputs.ProtoReflect.Descriptor instead.
 func (*HttpAuthzV1Inputs) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{209}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{211}
 }
 
 func (x *HttpAuthzV1Inputs) GetMethod() string {
@@ -19852,7 +20113,7 @@ type MintJwtResult struct {
 
 func (x *MintJwtResult) Reset() {
 	*x = MintJwtResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[210]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[212]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19864,7 +20125,7 @@ func (x *MintJwtResult) String() string {
 func (*MintJwtResult) ProtoMessage() {}
 
 func (x *MintJwtResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[210]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[212]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19877,7 +20138,7 @@ func (x *MintJwtResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MintJwtResult.ProtoReflect.Descriptor instead.
 func (*MintJwtResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{210}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{212}
 }
 
 func (x *MintJwtResult) GetJwt() string {
@@ -19906,7 +20167,7 @@ type InitFiatOnRampResult struct {
 
 func (x *InitFiatOnRampResult) Reset() {
 	*x = InitFiatOnRampResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[211]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[213]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19918,7 +20179,7 @@ func (x *InitFiatOnRampResult) String() string {
 func (*InitFiatOnRampResult) ProtoMessage() {}
 
 func (x *InitFiatOnRampResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[211]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[213]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19931,7 +20192,7 @@ func (x *InitFiatOnRampResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitFiatOnRampResult.ProtoReflect.Descriptor instead.
 func (*InitFiatOnRampResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{211}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{213}
 }
 
 func (x *InitFiatOnRampResult) GetOnRampUrl() string {
@@ -19965,7 +20226,7 @@ type CreateFiatOnRampSessionResult struct {
 
 func (x *CreateFiatOnRampSessionResult) Reset() {
 	*x = CreateFiatOnRampSessionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[212]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[214]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -19977,7 +20238,7 @@ func (x *CreateFiatOnRampSessionResult) String() string {
 func (*CreateFiatOnRampSessionResult) ProtoMessage() {}
 
 func (x *CreateFiatOnRampSessionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[212]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[214]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -19990,7 +20251,7 @@ func (x *CreateFiatOnRampSessionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatOnRampSessionResult.ProtoReflect.Descriptor instead.
 func (*CreateFiatOnRampSessionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{212}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{214}
 }
 
 func (x *CreateFiatOnRampSessionResult) GetOnRampUrl() string {
@@ -20016,7 +20277,7 @@ type StampLoginResult struct {
 
 func (x *StampLoginResult) Reset() {
 	*x = StampLoginResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[213]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[215]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20028,7 +20289,7 @@ func (x *StampLoginResult) String() string {
 func (*StampLoginResult) ProtoMessage() {}
 
 func (x *StampLoginResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[213]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[215]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20041,7 +20302,7 @@ func (x *StampLoginResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StampLoginResult.ProtoReflect.Descriptor instead.
 func (*StampLoginResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{213}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{215}
 }
 
 func (x *StampLoginResult) GetSession() string {
@@ -20060,7 +20321,7 @@ type OtpLoginResult struct {
 
 func (x *OtpLoginResult) Reset() {
 	*x = OtpLoginResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[214]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[216]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20072,7 +20333,7 @@ func (x *OtpLoginResult) String() string {
 func (*OtpLoginResult) ProtoMessage() {}
 
 func (x *OtpLoginResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[214]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[216]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20085,7 +20346,7 @@ func (x *OtpLoginResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OtpLoginResult.ProtoReflect.Descriptor instead.
 func (*OtpLoginResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{214}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{216}
 }
 
 func (x *OtpLoginResult) GetSession() string {
@@ -20104,7 +20365,7 @@ type InitOtpResult struct {
 
 func (x *InitOtpResult) Reset() {
 	*x = InitOtpResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[215]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[217]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20116,7 +20377,7 @@ func (x *InitOtpResult) String() string {
 func (*InitOtpResult) ProtoMessage() {}
 
 func (x *InitOtpResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[215]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[217]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20129,7 +20390,7 @@ func (x *InitOtpResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitOtpResult.ProtoReflect.Descriptor instead.
 func (*InitOtpResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{215}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{217}
 }
 
 func (x *InitOtpResult) GetOtpId() string {
@@ -20149,7 +20410,7 @@ type InitOtpResultV2 struct {
 
 func (x *InitOtpResultV2) Reset() {
 	*x = InitOtpResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[216]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[218]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20161,7 +20422,7 @@ func (x *InitOtpResultV2) String() string {
 func (*InitOtpResultV2) ProtoMessage() {}
 
 func (x *InitOtpResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[216]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[218]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20174,7 +20435,7 @@ func (x *InitOtpResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitOtpResultV2.ProtoReflect.Descriptor instead.
 func (*InitOtpResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{216}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{218}
 }
 
 func (x *InitOtpResultV2) GetOtpId() string {
@@ -20200,7 +20461,7 @@ type InitOtpAuthResult struct {
 
 func (x *InitOtpAuthResult) Reset() {
 	*x = InitOtpAuthResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[217]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[219]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20212,7 +20473,7 @@ func (x *InitOtpAuthResult) String() string {
 func (*InitOtpAuthResult) ProtoMessage() {}
 
 func (x *InitOtpAuthResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[217]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[219]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20225,7 +20486,7 @@ func (x *InitOtpAuthResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitOtpAuthResult.ProtoReflect.Descriptor instead.
 func (*InitOtpAuthResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{217}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{219}
 }
 
 func (x *InitOtpAuthResult) GetOtpId() string {
@@ -20244,7 +20505,7 @@ type InitOtpAuthResultV2 struct {
 
 func (x *InitOtpAuthResultV2) Reset() {
 	*x = InitOtpAuthResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[218]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[220]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20256,7 +20517,7 @@ func (x *InitOtpAuthResultV2) String() string {
 func (*InitOtpAuthResultV2) ProtoMessage() {}
 
 func (x *InitOtpAuthResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[218]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[220]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20269,7 +20530,7 @@ func (x *InitOtpAuthResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitOtpAuthResultV2.ProtoReflect.Descriptor instead.
 func (*InitOtpAuthResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{218}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{220}
 }
 
 func (x *InitOtpAuthResultV2) GetOtpId() string {
@@ -20290,7 +20551,7 @@ type OtpAuthResult struct {
 
 func (x *OtpAuthResult) Reset() {
 	*x = OtpAuthResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[219]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[221]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20302,7 +20563,7 @@ func (x *OtpAuthResult) String() string {
 func (*OtpAuthResult) ProtoMessage() {}
 
 func (x *OtpAuthResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[219]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[221]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20315,7 +20576,7 @@ func (x *OtpAuthResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OtpAuthResult.ProtoReflect.Descriptor instead.
 func (*OtpAuthResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{219}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{221}
 }
 
 func (x *OtpAuthResult) GetUserId() string {
@@ -20350,7 +20611,7 @@ type VerifyWalletAuthenticatorIntent struct {
 
 func (x *VerifyWalletAuthenticatorIntent) Reset() {
 	*x = VerifyWalletAuthenticatorIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[220]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[222]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20362,7 +20623,7 @@ func (x *VerifyWalletAuthenticatorIntent) String() string {
 func (*VerifyWalletAuthenticatorIntent) ProtoMessage() {}
 
 func (x *VerifyWalletAuthenticatorIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[220]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[222]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20375,7 +20636,7 @@ func (x *VerifyWalletAuthenticatorIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyWalletAuthenticatorIntent.ProtoReflect.Descriptor instead.
 func (*VerifyWalletAuthenticatorIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{220}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{222}
 }
 
 func (x *VerifyWalletAuthenticatorIntent) GetMessage() string {
@@ -20408,7 +20669,7 @@ type VerifyWalletAuthenticatorResult struct {
 
 func (x *VerifyWalletAuthenticatorResult) Reset() {
 	*x = VerifyWalletAuthenticatorResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[221]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[223]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20420,7 +20681,7 @@ func (x *VerifyWalletAuthenticatorResult) String() string {
 func (*VerifyWalletAuthenticatorResult) ProtoMessage() {}
 
 func (x *VerifyWalletAuthenticatorResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[221]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[223]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20433,7 +20694,7 @@ func (x *VerifyWalletAuthenticatorResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyWalletAuthenticatorResult.ProtoReflect.Descriptor instead.
 func (*VerifyWalletAuthenticatorResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{221}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{223}
 }
 
 func (x *VerifyWalletAuthenticatorResult) GetVerificationToken() string {
@@ -20452,7 +20713,7 @@ type VerifyOtpResult struct {
 
 func (x *VerifyOtpResult) Reset() {
 	*x = VerifyOtpResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[222]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[224]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20464,7 +20725,7 @@ func (x *VerifyOtpResult) String() string {
 func (*VerifyOtpResult) ProtoMessage() {}
 
 func (x *VerifyOtpResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[222]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[224]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20477,7 +20738,7 @@ func (x *VerifyOtpResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyOtpResult.ProtoReflect.Descriptor instead.
 func (*VerifyOtpResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{222}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{224}
 }
 
 func (x *VerifyOtpResult) GetVerificationToken() string {
@@ -20498,7 +20759,7 @@ type OauthResult struct {
 
 func (x *OauthResult) Reset() {
 	*x = OauthResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[223]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[225]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20510,7 +20771,7 @@ func (x *OauthResult) String() string {
 func (*OauthResult) ProtoMessage() {}
 
 func (x *OauthResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[223]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[225]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20523,7 +20784,7 @@ func (x *OauthResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OauthResult.ProtoReflect.Descriptor instead.
 func (*OauthResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{223}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{225}
 }
 
 func (x *OauthResult) GetUserId() string {
@@ -20557,7 +20818,7 @@ type EmailAuthResult struct {
 
 func (x *EmailAuthResult) Reset() {
 	*x = EmailAuthResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[224]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[226]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20569,7 +20830,7 @@ func (x *EmailAuthResult) String() string {
 func (*EmailAuthResult) ProtoMessage() {}
 
 func (x *EmailAuthResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[224]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[226]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20582,7 +20843,7 @@ func (x *EmailAuthResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmailAuthResult.ProtoReflect.Descriptor instead.
 func (*EmailAuthResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{224}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{226}
 }
 
 func (x *EmailAuthResult) GetUserId() string {
@@ -20608,7 +20869,7 @@ type CreatePolicyResult struct {
 
 func (x *CreatePolicyResult) Reset() {
 	*x = CreatePolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[225]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[227]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20620,7 +20881,7 @@ func (x *CreatePolicyResult) String() string {
 func (*CreatePolicyResult) ProtoMessage() {}
 
 func (x *CreatePolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[225]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[227]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20633,7 +20894,7 @@ func (x *CreatePolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePolicyResult.ProtoReflect.Descriptor instead.
 func (*CreatePolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{225}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{227}
 }
 
 func (x *CreatePolicyResult) GetPolicyId() string {
@@ -20652,7 +20913,7 @@ type CreatePoliciesResult struct {
 
 func (x *CreatePoliciesResult) Reset() {
 	*x = CreatePoliciesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[226]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[228]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20664,7 +20925,7 @@ func (x *CreatePoliciesResult) String() string {
 func (*CreatePoliciesResult) ProtoMessage() {}
 
 func (x *CreatePoliciesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[226]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[228]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20677,7 +20938,7 @@ func (x *CreatePoliciesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePoliciesResult.ProtoReflect.Descriptor instead.
 func (*CreatePoliciesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{226}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{228}
 }
 
 func (x *CreatePoliciesResult) GetPolicyIds() []string {
@@ -20696,7 +20957,7 @@ type UpdatePolicyResult struct {
 
 func (x *UpdatePolicyResult) Reset() {
 	*x = UpdatePolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[227]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[229]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20708,7 +20969,7 @@ func (x *UpdatePolicyResult) String() string {
 func (*UpdatePolicyResult) ProtoMessage() {}
 
 func (x *UpdatePolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[227]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[229]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20721,7 +20982,7 @@ func (x *UpdatePolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePolicyResult.ProtoReflect.Descriptor instead.
 func (*UpdatePolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{227}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{229}
 }
 
 func (x *UpdatePolicyResult) GetPolicyId() string {
@@ -20740,7 +21001,7 @@ type UpdatePolicyResultV2 struct {
 
 func (x *UpdatePolicyResultV2) Reset() {
 	*x = UpdatePolicyResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[228]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[230]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20752,7 +21013,7 @@ func (x *UpdatePolicyResultV2) String() string {
 func (*UpdatePolicyResultV2) ProtoMessage() {}
 
 func (x *UpdatePolicyResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[228]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[230]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20765,7 +21026,7 @@ func (x *UpdatePolicyResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePolicyResultV2.ProtoReflect.Descriptor instead.
 func (*UpdatePolicyResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{228}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{230}
 }
 
 func (x *UpdatePolicyResultV2) GetPolicyId() string {
@@ -20789,7 +21050,7 @@ type CreateReadOnlySessionResult struct {
 
 func (x *CreateReadOnlySessionResult) Reset() {
 	*x = CreateReadOnlySessionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[229]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[231]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20801,7 +21062,7 @@ func (x *CreateReadOnlySessionResult) String() string {
 func (*CreateReadOnlySessionResult) ProtoMessage() {}
 
 func (x *CreateReadOnlySessionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[229]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[231]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20814,7 +21075,7 @@ func (x *CreateReadOnlySessionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadOnlySessionResult.ProtoReflect.Descriptor instead.
 func (*CreateReadOnlySessionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{229}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{231}
 }
 
 func (x *CreateReadOnlySessionResult) GetOrganizationId() string {
@@ -20873,7 +21134,7 @@ type CreateReadWriteSessionResult struct {
 
 func (x *CreateReadWriteSessionResult) Reset() {
 	*x = CreateReadWriteSessionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[230]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[232]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20885,7 +21146,7 @@ func (x *CreateReadWriteSessionResult) String() string {
 func (*CreateReadWriteSessionResult) ProtoMessage() {}
 
 func (x *CreateReadWriteSessionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[230]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[232]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20898,7 +21159,7 @@ func (x *CreateReadWriteSessionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadWriteSessionResult.ProtoReflect.Descriptor instead.
 func (*CreateReadWriteSessionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{230}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{232}
 }
 
 func (x *CreateReadWriteSessionResult) GetOrganizationId() string {
@@ -20957,7 +21218,7 @@ type CreateReadWriteSessionResultV2 struct {
 
 func (x *CreateReadWriteSessionResultV2) Reset() {
 	*x = CreateReadWriteSessionResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[231]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[233]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -20969,7 +21230,7 @@ func (x *CreateReadWriteSessionResultV2) String() string {
 func (*CreateReadWriteSessionResultV2) ProtoMessage() {}
 
 func (x *CreateReadWriteSessionResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[231]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[233]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -20982,7 +21243,7 @@ func (x *CreateReadWriteSessionResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReadWriteSessionResultV2.ProtoReflect.Descriptor instead.
 func (*CreateReadWriteSessionResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{231}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{233}
 }
 
 func (x *CreateReadWriteSessionResultV2) GetOrganizationId() string {
@@ -21036,7 +21297,7 @@ type DisablePrivateKeyResult struct {
 
 func (x *DisablePrivateKeyResult) Reset() {
 	*x = DisablePrivateKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[232]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[234]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21048,7 +21309,7 @@ func (x *DisablePrivateKeyResult) String() string {
 func (*DisablePrivateKeyResult) ProtoMessage() {}
 
 func (x *DisablePrivateKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[232]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[234]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21061,7 +21322,7 @@ func (x *DisablePrivateKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisablePrivateKeyResult.ProtoReflect.Descriptor instead.
 func (*DisablePrivateKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{232}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{234}
 }
 
 func (x *DisablePrivateKeyResult) GetPrivateKeyId() string {
@@ -21080,7 +21341,7 @@ type DeleteUsersResult struct {
 
 func (x *DeleteUsersResult) Reset() {
 	*x = DeleteUsersResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[233]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[235]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21092,7 +21353,7 @@ func (x *DeleteUsersResult) String() string {
 func (*DeleteUsersResult) ProtoMessage() {}
 
 func (x *DeleteUsersResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[233]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[235]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21105,7 +21366,7 @@ func (x *DeleteUsersResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUsersResult.ProtoReflect.Descriptor instead.
 func (*DeleteUsersResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{233}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{235}
 }
 
 func (x *DeleteUsersResult) GetUserIds() []string {
@@ -21124,7 +21385,7 @@ type DeleteInvitationResult struct {
 
 func (x *DeleteInvitationResult) Reset() {
 	*x = DeleteInvitationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[234]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[236]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21136,7 +21397,7 @@ func (x *DeleteInvitationResult) String() string {
 func (*DeleteInvitationResult) ProtoMessage() {}
 
 func (x *DeleteInvitationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[234]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[236]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21149,7 +21410,7 @@ func (x *DeleteInvitationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteInvitationResult.ProtoReflect.Descriptor instead.
 func (*DeleteInvitationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{234}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{236}
 }
 
 func (x *DeleteInvitationResult) GetInvitationId() string {
@@ -21168,7 +21429,7 @@ type DeleteAuthenticatorsResult struct {
 
 func (x *DeleteAuthenticatorsResult) Reset() {
 	*x = DeleteAuthenticatorsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[235]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[237]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21180,7 +21441,7 @@ func (x *DeleteAuthenticatorsResult) String() string {
 func (*DeleteAuthenticatorsResult) ProtoMessage() {}
 
 func (x *DeleteAuthenticatorsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[235]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[237]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21193,7 +21454,7 @@ func (x *DeleteAuthenticatorsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteAuthenticatorsResult.ProtoReflect.Descriptor instead.
 func (*DeleteAuthenticatorsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{235}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{237}
 }
 
 func (x *DeleteAuthenticatorsResult) GetAuthenticatorIds() []string {
@@ -21212,7 +21473,7 @@ type DeleteApiKeysResult struct {
 
 func (x *DeleteApiKeysResult) Reset() {
 	*x = DeleteApiKeysResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[236]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[238]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21224,7 +21485,7 @@ func (x *DeleteApiKeysResult) String() string {
 func (*DeleteApiKeysResult) ProtoMessage() {}
 
 func (x *DeleteApiKeysResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[236]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[238]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21237,7 +21498,7 @@ func (x *DeleteApiKeysResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteApiKeysResult.ProtoReflect.Descriptor instead.
 func (*DeleteApiKeysResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{236}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{238}
 }
 
 func (x *DeleteApiKeysResult) GetApiKeyIds() []string {
@@ -21256,7 +21517,7 @@ type DeleteOrganizationResult struct {
 
 func (x *DeleteOrganizationResult) Reset() {
 	*x = DeleteOrganizationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[237]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[239]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21268,7 +21529,7 @@ func (x *DeleteOrganizationResult) String() string {
 func (*DeleteOrganizationResult) ProtoMessage() {}
 
 func (x *DeleteOrganizationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[237]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[239]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21281,7 +21542,7 @@ func (x *DeleteOrganizationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOrganizationResult.ProtoReflect.Descriptor instead.
 func (*DeleteOrganizationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{237}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{239}
 }
 
 func (x *DeleteOrganizationResult) GetOrganizationId() string {
@@ -21300,7 +21561,7 @@ type DeletePolicyResult struct {
 
 func (x *DeletePolicyResult) Reset() {
 	*x = DeletePolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[238]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[240]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21312,7 +21573,7 @@ func (x *DeletePolicyResult) String() string {
 func (*DeletePolicyResult) ProtoMessage() {}
 
 func (x *DeletePolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[238]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[240]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21325,7 +21586,7 @@ func (x *DeletePolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePolicyResult.ProtoReflect.Descriptor instead.
 func (*DeletePolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{238}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{240}
 }
 
 func (x *DeletePolicyResult) GetPolicyId() string {
@@ -21345,7 +21606,7 @@ type CreateUserTagResult struct {
 
 func (x *CreateUserTagResult) Reset() {
 	*x = CreateUserTagResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[239]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[241]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21357,7 +21618,7 @@ func (x *CreateUserTagResult) String() string {
 func (*CreateUserTagResult) ProtoMessage() {}
 
 func (x *CreateUserTagResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[239]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[241]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21370,7 +21631,7 @@ func (x *CreateUserTagResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserTagResult.ProtoReflect.Descriptor instead.
 func (*CreateUserTagResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{239}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{241}
 }
 
 func (x *CreateUserTagResult) GetUserTagId() string {
@@ -21396,7 +21657,7 @@ type UpdateUserTagResult struct {
 
 func (x *UpdateUserTagResult) Reset() {
 	*x = UpdateUserTagResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[240]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[242]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21408,7 +21669,7 @@ func (x *UpdateUserTagResult) String() string {
 func (*UpdateUserTagResult) ProtoMessage() {}
 
 func (x *UpdateUserTagResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[240]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[242]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21421,7 +21682,7 @@ func (x *UpdateUserTagResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserTagResult.ProtoReflect.Descriptor instead.
 func (*UpdateUserTagResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{240}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{242}
 }
 
 func (x *UpdateUserTagResult) GetUserTagId() string {
@@ -21441,7 +21702,7 @@ type DeleteUserTagsResult struct {
 
 func (x *DeleteUserTagsResult) Reset() {
 	*x = DeleteUserTagsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[241]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[243]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21453,7 +21714,7 @@ func (x *DeleteUserTagsResult) String() string {
 func (*DeleteUserTagsResult) ProtoMessage() {}
 
 func (x *DeleteUserTagsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[241]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[243]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21466,7 +21727,7 @@ func (x *DeleteUserTagsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserTagsResult.ProtoReflect.Descriptor instead.
 func (*DeleteUserTagsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{241}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{243}
 }
 
 func (x *DeleteUserTagsResult) GetUserTagIds() []string {
@@ -21493,7 +21754,7 @@ type CreatePrivateKeyTagResult struct {
 
 func (x *CreatePrivateKeyTagResult) Reset() {
 	*x = CreatePrivateKeyTagResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[242]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[244]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21505,7 +21766,7 @@ func (x *CreatePrivateKeyTagResult) String() string {
 func (*CreatePrivateKeyTagResult) ProtoMessage() {}
 
 func (x *CreatePrivateKeyTagResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[242]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[244]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21518,7 +21779,7 @@ func (x *CreatePrivateKeyTagResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePrivateKeyTagResult.ProtoReflect.Descriptor instead.
 func (*CreatePrivateKeyTagResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{242}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{244}
 }
 
 func (x *CreatePrivateKeyTagResult) GetPrivateKeyTagId() string {
@@ -21544,7 +21805,7 @@ type UpdatePrivateKeyTagResult struct {
 
 func (x *UpdatePrivateKeyTagResult) Reset() {
 	*x = UpdatePrivateKeyTagResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[243]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[245]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21556,7 +21817,7 @@ func (x *UpdatePrivateKeyTagResult) String() string {
 func (*UpdatePrivateKeyTagResult) ProtoMessage() {}
 
 func (x *UpdatePrivateKeyTagResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[243]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[245]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21569,7 +21830,7 @@ func (x *UpdatePrivateKeyTagResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePrivateKeyTagResult.ProtoReflect.Descriptor instead.
 func (*UpdatePrivateKeyTagResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{243}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{245}
 }
 
 func (x *UpdatePrivateKeyTagResult) GetPrivateKeyTagId() string {
@@ -21589,7 +21850,7 @@ type DeletePrivateKeyTagsResult struct {
 
 func (x *DeletePrivateKeyTagsResult) Reset() {
 	*x = DeletePrivateKeyTagsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[244]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[246]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21601,7 +21862,7 @@ func (x *DeletePrivateKeyTagsResult) String() string {
 func (*DeletePrivateKeyTagsResult) ProtoMessage() {}
 
 func (x *DeletePrivateKeyTagsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[244]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[246]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21614,7 +21875,7 @@ func (x *DeletePrivateKeyTagsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePrivateKeyTagsResult.ProtoReflect.Descriptor instead.
 func (*DeletePrivateKeyTagsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{244}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{246}
 }
 
 func (x *DeletePrivateKeyTagsResult) GetPrivateKeyTagIds() []string {
@@ -21641,7 +21902,7 @@ type UpdateOrganizationNameResult struct {
 
 func (x *UpdateOrganizationNameResult) Reset() {
 	*x = UpdateOrganizationNameResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[245]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[247]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21653,7 +21914,7 @@ func (x *UpdateOrganizationNameResult) String() string {
 func (*UpdateOrganizationNameResult) ProtoMessage() {}
 
 func (x *UpdateOrganizationNameResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[245]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[247]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21666,7 +21927,7 @@ func (x *UpdateOrganizationNameResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOrganizationNameResult.ProtoReflect.Descriptor instead.
 func (*UpdateOrganizationNameResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{245}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{247}
 }
 
 func (x *UpdateOrganizationNameResult) GetOrganizationId() string {
@@ -21692,7 +21953,7 @@ type SignTransactionResult struct {
 
 func (x *SignTransactionResult) Reset() {
 	*x = SignTransactionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[246]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[248]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21704,7 +21965,7 @@ func (x *SignTransactionResult) String() string {
 func (*SignTransactionResult) ProtoMessage() {}
 
 func (x *SignTransactionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[246]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[248]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21717,7 +21978,7 @@ func (x *SignTransactionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignTransactionResult.ProtoReflect.Descriptor instead.
 func (*SignTransactionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{246}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{248}
 }
 
 func (x *SignTransactionResult) GetSignedTransaction() string {
@@ -21736,7 +21997,7 @@ type CreateSmartContractInterfaceResult struct {
 
 func (x *CreateSmartContractInterfaceResult) Reset() {
 	*x = CreateSmartContractInterfaceResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[247]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[249]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21748,7 +22009,7 @@ func (x *CreateSmartContractInterfaceResult) String() string {
 func (*CreateSmartContractInterfaceResult) ProtoMessage() {}
 
 func (x *CreateSmartContractInterfaceResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[247]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[249]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21761,7 +22022,7 @@ func (x *CreateSmartContractInterfaceResult) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use CreateSmartContractInterfaceResult.ProtoReflect.Descriptor instead.
 func (*CreateSmartContractInterfaceResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{247}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{249}
 }
 
 func (x *CreateSmartContractInterfaceResult) GetSmartContractInterfaceId() string {
@@ -21780,7 +22041,7 @@ type DeleteSmartContractInterfaceResult struct {
 
 func (x *DeleteSmartContractInterfaceResult) Reset() {
 	*x = DeleteSmartContractInterfaceResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[248]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[250]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21792,7 +22053,7 @@ func (x *DeleteSmartContractInterfaceResult) String() string {
 func (*DeleteSmartContractInterfaceResult) ProtoMessage() {}
 
 func (x *DeleteSmartContractInterfaceResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[248]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[250]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21805,7 +22066,7 @@ func (x *DeleteSmartContractInterfaceResult) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use DeleteSmartContractInterfaceResult.ProtoReflect.Descriptor instead.
 func (*DeleteSmartContractInterfaceResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{248}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{250}
 }
 
 func (x *DeleteSmartContractInterfaceResult) GetSmartContractInterfaceId() string {
@@ -21823,7 +22084,7 @@ type UpdateRootQuorumResult struct {
 
 func (x *UpdateRootQuorumResult) Reset() {
 	*x = UpdateRootQuorumResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[249]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[251]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21835,7 +22096,7 @@ func (x *UpdateRootQuorumResult) String() string {
 func (*UpdateRootQuorumResult) ProtoMessage() {}
 
 func (x *UpdateRootQuorumResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[249]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[251]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21848,7 +22109,7 @@ func (x *UpdateRootQuorumResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRootQuorumResult.ProtoReflect.Descriptor instead.
 func (*UpdateRootQuorumResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{249}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{251}
 }
 
 type UpdateAllowedOriginsResult struct {
@@ -21859,7 +22120,7 @@ type UpdateAllowedOriginsResult struct {
 
 func (x *UpdateAllowedOriginsResult) Reset() {
 	*x = UpdateAllowedOriginsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[250]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[252]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21871,7 +22132,7 @@ func (x *UpdateAllowedOriginsResult) String() string {
 func (*UpdateAllowedOriginsResult) ProtoMessage() {}
 
 func (x *UpdateAllowedOriginsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[250]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[252]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21884,7 +22145,7 @@ func (x *UpdateAllowedOriginsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateAllowedOriginsResult.ProtoReflect.Descriptor instead.
 func (*UpdateAllowedOriginsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{250}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{252}
 }
 
 type CreateSubOrganizationResult struct {
@@ -21897,7 +22158,7 @@ type CreateSubOrganizationResult struct {
 
 func (x *CreateSubOrganizationResult) Reset() {
 	*x = CreateSubOrganizationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[251]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[253]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21909,7 +22170,7 @@ func (x *CreateSubOrganizationResult) String() string {
 func (*CreateSubOrganizationResult) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[251]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[253]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21922,7 +22183,7 @@ func (x *CreateSubOrganizationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResult.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{251}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{253}
 }
 
 func (x *CreateSubOrganizationResult) GetSubOrganizationId() string {
@@ -21950,7 +22211,7 @@ type CreateSubOrganizationResultV3 struct {
 
 func (x *CreateSubOrganizationResultV3) Reset() {
 	*x = CreateSubOrganizationResultV3{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[252]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[254]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -21962,7 +22223,7 @@ func (x *CreateSubOrganizationResultV3) String() string {
 func (*CreateSubOrganizationResultV3) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV3) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[252]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[254]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -21975,7 +22236,7 @@ func (x *CreateSubOrganizationResultV3) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV3.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV3) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{252}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{254}
 }
 
 func (x *CreateSubOrganizationResultV3) GetSubOrganizationId() string {
@@ -22009,7 +22270,7 @@ type WalletResult struct {
 
 func (x *WalletResult) Reset() {
 	*x = WalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[253]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[255]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22021,7 +22282,7 @@ func (x *WalletResult) String() string {
 func (*WalletResult) ProtoMessage() {}
 
 func (x *WalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[253]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[255]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22034,7 +22295,7 @@ func (x *WalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WalletResult.ProtoReflect.Descriptor instead.
 func (*WalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{253}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{255}
 }
 
 func (x *WalletResult) GetWalletId() string {
@@ -22062,7 +22323,7 @@ type CreateSubOrganizationResultV4 struct {
 
 func (x *CreateSubOrganizationResultV4) Reset() {
 	*x = CreateSubOrganizationResultV4{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[254]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[256]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22074,7 +22335,7 @@ func (x *CreateSubOrganizationResultV4) String() string {
 func (*CreateSubOrganizationResultV4) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV4) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[254]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[256]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22087,7 +22348,7 @@ func (x *CreateSubOrganizationResultV4) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV4.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV4) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{254}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{256}
 }
 
 func (x *CreateSubOrganizationResultV4) GetSubOrganizationId() string {
@@ -22122,7 +22383,7 @@ type CreateSubOrganizationResultV5 struct {
 
 func (x *CreateSubOrganizationResultV5) Reset() {
 	*x = CreateSubOrganizationResultV5{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[255]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[257]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22134,7 +22395,7 @@ func (x *CreateSubOrganizationResultV5) String() string {
 func (*CreateSubOrganizationResultV5) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV5) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[255]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[257]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22147,7 +22408,7 @@ func (x *CreateSubOrganizationResultV5) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV5.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV5) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{255}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{257}
 }
 
 func (x *CreateSubOrganizationResultV5) GetSubOrganizationId() string {
@@ -22182,7 +22443,7 @@ type CreateSubOrganizationResultV6 struct {
 
 func (x *CreateSubOrganizationResultV6) Reset() {
 	*x = CreateSubOrganizationResultV6{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[256]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[258]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22194,7 +22455,7 @@ func (x *CreateSubOrganizationResultV6) String() string {
 func (*CreateSubOrganizationResultV6) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV6) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[256]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[258]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22207,7 +22468,7 @@ func (x *CreateSubOrganizationResultV6) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV6.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV6) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{256}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{258}
 }
 
 func (x *CreateSubOrganizationResultV6) GetSubOrganizationId() string {
@@ -22242,7 +22503,7 @@ type CreateSubOrganizationResultV7 struct {
 
 func (x *CreateSubOrganizationResultV7) Reset() {
 	*x = CreateSubOrganizationResultV7{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[257]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[259]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22254,7 +22515,7 @@ func (x *CreateSubOrganizationResultV7) String() string {
 func (*CreateSubOrganizationResultV7) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV7) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[257]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[259]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22267,7 +22528,7 @@ func (x *CreateSubOrganizationResultV7) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV7.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV7) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{257}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{259}
 }
 
 func (x *CreateSubOrganizationResultV7) GetSubOrganizationId() string {
@@ -22302,7 +22563,7 @@ type CreateSubOrganizationResultV8 struct {
 
 func (x *CreateSubOrganizationResultV8) Reset() {
 	*x = CreateSubOrganizationResultV8{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[258]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[260]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22314,7 +22575,7 @@ func (x *CreateSubOrganizationResultV8) String() string {
 func (*CreateSubOrganizationResultV8) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV8) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[258]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[260]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22327,7 +22588,7 @@ func (x *CreateSubOrganizationResultV8) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV8.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV8) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{258}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{260}
 }
 
 func (x *CreateSubOrganizationResultV8) GetSubOrganizationId() string {
@@ -22362,7 +22623,7 @@ type CreateSubOrganizationResultV9 struct {
 
 func (x *CreateSubOrganizationResultV9) Reset() {
 	*x = CreateSubOrganizationResultV9{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[259]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[261]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22374,7 +22635,7 @@ func (x *CreateSubOrganizationResultV9) String() string {
 func (*CreateSubOrganizationResultV9) ProtoMessage() {}
 
 func (x *CreateSubOrganizationResultV9) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[259]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[261]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22387,7 +22648,7 @@ func (x *CreateSubOrganizationResultV9) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSubOrganizationResultV9.ProtoReflect.Descriptor instead.
 func (*CreateSubOrganizationResultV9) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{259}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{261}
 }
 
 func (x *CreateSubOrganizationResultV9) GetSubOrganizationId() string {
@@ -22420,7 +22681,7 @@ type RecoverUserResult struct {
 
 func (x *RecoverUserResult) Reset() {
 	*x = RecoverUserResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[260]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[262]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22432,7 +22693,7 @@ func (x *RecoverUserResult) String() string {
 func (*RecoverUserResult) ProtoMessage() {}
 
 func (x *RecoverUserResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[260]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[262]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22445,7 +22706,7 @@ func (x *RecoverUserResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecoverUserResult.ProtoReflect.Descriptor instead.
 func (*RecoverUserResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{260}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{262}
 }
 
 func (x *RecoverUserResult) GetAuthenticatorId() []string {
@@ -22457,14 +22718,14 @@ func (x *RecoverUserResult) GetAuthenticatorId() []string {
 
 type SetOrganizationFeatureResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Features      []*v11.Feature         `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
+	Features      []*v12.Feature         `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SetOrganizationFeatureResult) Reset() {
 	*x = SetOrganizationFeatureResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[261]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[263]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22476,7 +22737,7 @@ func (x *SetOrganizationFeatureResult) String() string {
 func (*SetOrganizationFeatureResult) ProtoMessage() {}
 
 func (x *SetOrganizationFeatureResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[261]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[263]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22489,10 +22750,10 @@ func (x *SetOrganizationFeatureResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetOrganizationFeatureResult.ProtoReflect.Descriptor instead.
 func (*SetOrganizationFeatureResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{261}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{263}
 }
 
-func (x *SetOrganizationFeatureResult) GetFeatures() []*v11.Feature {
+func (x *SetOrganizationFeatureResult) GetFeatures() []*v12.Feature {
 	if x != nil {
 		return x.Features
 	}
@@ -22501,14 +22762,14 @@ func (x *SetOrganizationFeatureResult) GetFeatures() []*v11.Feature {
 
 type RemoveOrganizationFeatureResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Features      []*v11.Feature         `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
+	Features      []*v12.Feature         `protobuf:"bytes,1,rep,name=features,proto3" json:"features,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RemoveOrganizationFeatureResult) Reset() {
 	*x = RemoveOrganizationFeatureResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[262]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[264]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22520,7 +22781,7 @@ func (x *RemoveOrganizationFeatureResult) String() string {
 func (*RemoveOrganizationFeatureResult) ProtoMessage() {}
 
 func (x *RemoveOrganizationFeatureResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[262]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[264]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22533,10 +22794,10 @@ func (x *RemoveOrganizationFeatureResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveOrganizationFeatureResult.ProtoReflect.Descriptor instead.
 func (*RemoveOrganizationFeatureResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{262}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{264}
 }
 
-func (x *RemoveOrganizationFeatureResult) GetFeatures() []*v11.Feature {
+func (x *RemoveOrganizationFeatureResult) GetFeatures() []*v12.Feature {
 	if x != nil {
 		return x.Features
 	}
@@ -22553,7 +22814,7 @@ type ExportPrivateKeyResult struct {
 
 func (x *ExportPrivateKeyResult) Reset() {
 	*x = ExportPrivateKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[263]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[265]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22565,7 +22826,7 @@ func (x *ExportPrivateKeyResult) String() string {
 func (*ExportPrivateKeyResult) ProtoMessage() {}
 
 func (x *ExportPrivateKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[263]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[265]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22578,7 +22839,7 @@ func (x *ExportPrivateKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportPrivateKeyResult.ProtoReflect.Descriptor instead.
 func (*ExportPrivateKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{263}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{265}
 }
 
 func (x *ExportPrivateKeyResult) GetPrivateKeyId() string {
@@ -22605,7 +22866,7 @@ type ExportWalletResult struct {
 
 func (x *ExportWalletResult) Reset() {
 	*x = ExportWalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[264]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[266]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22617,7 +22878,7 @@ func (x *ExportWalletResult) String() string {
 func (*ExportWalletResult) ProtoMessage() {}
 
 func (x *ExportWalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[264]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[266]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22630,7 +22891,7 @@ func (x *ExportWalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportWalletResult.ProtoReflect.Descriptor instead.
 func (*ExportWalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{264}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{266}
 }
 
 func (x *ExportWalletResult) GetWalletId() string {
@@ -22657,7 +22918,7 @@ type ExportWalletAccountResult struct {
 
 func (x *ExportWalletAccountResult) Reset() {
 	*x = ExportWalletAccountResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[265]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[267]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22669,7 +22930,7 @@ func (x *ExportWalletAccountResult) String() string {
 func (*ExportWalletAccountResult) ProtoMessage() {}
 
 func (x *ExportWalletAccountResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[265]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[267]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22682,7 +22943,7 @@ func (x *ExportWalletAccountResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportWalletAccountResult.ProtoReflect.Descriptor instead.
 func (*ExportWalletAccountResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{265}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{267}
 }
 
 func (x *ExportWalletAccountResult) GetAddress() string {
@@ -22708,7 +22969,7 @@ type InitImportWalletResult struct {
 
 func (x *InitImportWalletResult) Reset() {
 	*x = InitImportWalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[266]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[268]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22720,7 +22981,7 @@ func (x *InitImportWalletResult) String() string {
 func (*InitImportWalletResult) ProtoMessage() {}
 
 func (x *InitImportWalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[266]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[268]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22733,7 +22994,7 @@ func (x *InitImportWalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitImportWalletResult.ProtoReflect.Descriptor instead.
 func (*InitImportWalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{266}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{268}
 }
 
 func (x *InitImportWalletResult) GetImportBundle() string {
@@ -22753,7 +23014,7 @@ type ImportWalletResult struct {
 
 func (x *ImportWalletResult) Reset() {
 	*x = ImportWalletResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[267]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[269]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22765,7 +23026,7 @@ func (x *ImportWalletResult) String() string {
 func (*ImportWalletResult) ProtoMessage() {}
 
 func (x *ImportWalletResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[267]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[269]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22778,7 +23039,7 @@ func (x *ImportWalletResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportWalletResult.ProtoReflect.Descriptor instead.
 func (*ImportWalletResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{267}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{269}
 }
 
 func (x *ImportWalletResult) GetWalletId() string {
@@ -22804,7 +23065,7 @@ type InitImportPrivateKeyResult struct {
 
 func (x *InitImportPrivateKeyResult) Reset() {
 	*x = InitImportPrivateKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[268]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[270]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22816,7 +23077,7 @@ func (x *InitImportPrivateKeyResult) String() string {
 func (*InitImportPrivateKeyResult) ProtoMessage() {}
 
 func (x *InitImportPrivateKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[268]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[270]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22829,7 +23090,7 @@ func (x *InitImportPrivateKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitImportPrivateKeyResult.ProtoReflect.Descriptor instead.
 func (*InitImportPrivateKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{268}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{270}
 }
 
 func (x *InitImportPrivateKeyResult) GetImportBundle() string {
@@ -22849,7 +23110,7 @@ type ImportPrivateKeyResult struct {
 
 func (x *ImportPrivateKeyResult) Reset() {
 	*x = ImportPrivateKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[269]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[271]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22861,7 +23122,7 @@ func (x *ImportPrivateKeyResult) String() string {
 func (*ImportPrivateKeyResult) ProtoMessage() {}
 
 func (x *ImportPrivateKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[269]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[271]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22874,7 +23135,7 @@ func (x *ImportPrivateKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportPrivateKeyResult.ProtoReflect.Descriptor instead.
 func (*ImportPrivateKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{269}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{271}
 }
 
 func (x *ImportPrivateKeyResult) GetPrivateKeyId() string {
@@ -22900,7 +23161,7 @@ type CreateOauthProvidersResult struct {
 
 func (x *CreateOauthProvidersResult) Reset() {
 	*x = CreateOauthProvidersResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[270]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[272]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22912,7 +23173,7 @@ func (x *CreateOauthProvidersResult) String() string {
 func (*CreateOauthProvidersResult) ProtoMessage() {}
 
 func (x *CreateOauthProvidersResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[270]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[272]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22925,7 +23186,7 @@ func (x *CreateOauthProvidersResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOauthProvidersResult.ProtoReflect.Descriptor instead.
 func (*CreateOauthProvidersResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{270}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{272}
 }
 
 func (x *CreateOauthProvidersResult) GetProviderIds() []string {
@@ -22944,7 +23205,7 @@ type CreateOauthProvidersResultV2 struct {
 
 func (x *CreateOauthProvidersResultV2) Reset() {
 	*x = CreateOauthProvidersResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[271]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[273]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -22956,7 +23217,7 @@ func (x *CreateOauthProvidersResultV2) String() string {
 func (*CreateOauthProvidersResultV2) ProtoMessage() {}
 
 func (x *CreateOauthProvidersResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[271]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[273]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -22969,7 +23230,7 @@ func (x *CreateOauthProvidersResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOauthProvidersResultV2.ProtoReflect.Descriptor instead.
 func (*CreateOauthProvidersResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{271}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{273}
 }
 
 func (x *CreateOauthProvidersResultV2) GetProviderIds() []string {
@@ -22988,7 +23249,7 @@ type DeleteOauthProvidersResult struct {
 
 func (x *DeleteOauthProvidersResult) Reset() {
 	*x = DeleteOauthProvidersResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[272]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[274]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23000,7 +23261,7 @@ func (x *DeleteOauthProvidersResult) String() string {
 func (*DeleteOauthProvidersResult) ProtoMessage() {}
 
 func (x *DeleteOauthProvidersResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[272]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[274]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23013,7 +23274,7 @@ func (x *DeleteOauthProvidersResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOauthProvidersResult.ProtoReflect.Descriptor instead.
 func (*DeleteOauthProvidersResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{272}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{274}
 }
 
 func (x *DeleteOauthProvidersResult) GetProviderIds() []string {
@@ -23032,7 +23293,7 @@ type DeletePrivateKeysResult struct {
 
 func (x *DeletePrivateKeysResult) Reset() {
 	*x = DeletePrivateKeysResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[273]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[275]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23044,7 +23305,7 @@ func (x *DeletePrivateKeysResult) String() string {
 func (*DeletePrivateKeysResult) ProtoMessage() {}
 
 func (x *DeletePrivateKeysResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[273]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[275]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23057,7 +23318,7 @@ func (x *DeletePrivateKeysResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePrivateKeysResult.ProtoReflect.Descriptor instead.
 func (*DeletePrivateKeysResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{273}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{275}
 }
 
 func (x *DeletePrivateKeysResult) GetPrivateKeyIds() []string {
@@ -23076,7 +23337,7 @@ type DeleteWalletsResult struct {
 
 func (x *DeleteWalletsResult) Reset() {
 	*x = DeleteWalletsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[274]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[276]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23088,7 +23349,7 @@ func (x *DeleteWalletsResult) String() string {
 func (*DeleteWalletsResult) ProtoMessage() {}
 
 func (x *DeleteWalletsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[274]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[276]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23101,7 +23362,7 @@ func (x *DeleteWalletsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletsResult.ProtoReflect.Descriptor instead.
 func (*DeleteWalletsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{274}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{276}
 }
 
 func (x *DeleteWalletsResult) GetWalletIds() []string {
@@ -23120,7 +23381,7 @@ type DeleteSubOrganizationResult struct {
 
 func (x *DeleteSubOrganizationResult) Reset() {
 	*x = DeleteSubOrganizationResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[275]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[277]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23132,7 +23393,7 @@ func (x *DeleteSubOrganizationResult) String() string {
 func (*DeleteSubOrganizationResult) ProtoMessage() {}
 
 func (x *DeleteSubOrganizationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[275]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[277]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23145,7 +23406,7 @@ func (x *DeleteSubOrganizationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSubOrganizationResult.ProtoReflect.Descriptor instead.
 func (*DeleteSubOrganizationResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{275}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{277}
 }
 
 func (x *DeleteSubOrganizationResult) GetSubOrganizationUuid() string {
@@ -23164,7 +23425,7 @@ type CreateOauth2CredentialResult struct {
 
 func (x *CreateOauth2CredentialResult) Reset() {
 	*x = CreateOauth2CredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[276]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[278]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23176,7 +23437,7 @@ func (x *CreateOauth2CredentialResult) String() string {
 func (*CreateOauth2CredentialResult) ProtoMessage() {}
 
 func (x *CreateOauth2CredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[276]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[278]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23189,7 +23450,7 @@ func (x *CreateOauth2CredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOauth2CredentialResult.ProtoReflect.Descriptor instead.
 func (*CreateOauth2CredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{276}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{278}
 }
 
 func (x *CreateOauth2CredentialResult) GetOauth2CredentialId() string {
@@ -23208,7 +23469,7 @@ type UpdateOauth2CredentialResult struct {
 
 func (x *UpdateOauth2CredentialResult) Reset() {
 	*x = UpdateOauth2CredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[277]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[279]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23220,7 +23481,7 @@ func (x *UpdateOauth2CredentialResult) String() string {
 func (*UpdateOauth2CredentialResult) ProtoMessage() {}
 
 func (x *UpdateOauth2CredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[277]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[279]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23233,7 +23494,7 @@ func (x *UpdateOauth2CredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateOauth2CredentialResult.ProtoReflect.Descriptor instead.
 func (*UpdateOauth2CredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{277}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{279}
 }
 
 func (x *UpdateOauth2CredentialResult) GetOauth2CredentialId() string {
@@ -23252,7 +23513,7 @@ type DeleteOauth2CredentialResult struct {
 
 func (x *DeleteOauth2CredentialResult) Reset() {
 	*x = DeleteOauth2CredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[278]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[280]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23264,7 +23525,7 @@ func (x *DeleteOauth2CredentialResult) String() string {
 func (*DeleteOauth2CredentialResult) ProtoMessage() {}
 
 func (x *DeleteOauth2CredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[278]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[280]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23277,12 +23538,56 @@ func (x *DeleteOauth2CredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteOauth2CredentialResult.ProtoReflect.Descriptor instead.
 func (*DeleteOauth2CredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{278}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{280}
 }
 
 func (x *DeleteOauth2CredentialResult) GetOauth2CredentialId() string {
 	if x != nil {
 		return x.Oauth2CredentialId
+	}
+	return ""
+}
+
+type InitOauth2AuthenticateResult struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	EnclaveTargetMessage string                 `protobuf:"bytes,1,opt,name=enclave_target_message,json=enclaveTargetMessage,proto3" json:"enclave_target_message,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *InitOauth2AuthenticateResult) Reset() {
+	*x = InitOauth2AuthenticateResult{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[281]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InitOauth2AuthenticateResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InitOauth2AuthenticateResult) ProtoMessage() {}
+
+func (x *InitOauth2AuthenticateResult) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[281]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InitOauth2AuthenticateResult.ProtoReflect.Descriptor instead.
+func (*InitOauth2AuthenticateResult) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{281}
+}
+
+func (x *InitOauth2AuthenticateResult) GetEnclaveTargetMessage() string {
+	if x != nil {
+		return x.EnclaveTargetMessage
 	}
 	return ""
 }
@@ -23296,7 +23601,7 @@ type Oauth2AuthenticateResult struct {
 
 func (x *Oauth2AuthenticateResult) Reset() {
 	*x = Oauth2AuthenticateResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[279]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[282]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23308,7 +23613,7 @@ func (x *Oauth2AuthenticateResult) String() string {
 func (*Oauth2AuthenticateResult) ProtoMessage() {}
 
 func (x *Oauth2AuthenticateResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[279]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[282]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23321,7 +23626,7 @@ func (x *Oauth2AuthenticateResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Oauth2AuthenticateResult.ProtoReflect.Descriptor instead.
 func (*Oauth2AuthenticateResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{279}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{282}
 }
 
 func (x *Oauth2AuthenticateResult) GetOidcToken() string {
@@ -23340,7 +23645,7 @@ type DeleteWalletAccountsResult struct {
 
 func (x *DeleteWalletAccountsResult) Reset() {
 	*x = DeleteWalletAccountsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[280]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[283]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23352,7 +23657,7 @@ func (x *DeleteWalletAccountsResult) String() string {
 func (*DeleteWalletAccountsResult) ProtoMessage() {}
 
 func (x *DeleteWalletAccountsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[280]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[283]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23365,7 +23670,7 @@ func (x *DeleteWalletAccountsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletAccountsResult.ProtoReflect.Descriptor instead.
 func (*DeleteWalletAccountsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{280}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{283}
 }
 
 func (x *DeleteWalletAccountsResult) GetWalletAccountIds() []string {
@@ -23384,7 +23689,7 @@ type DeletePoliciesResult struct {
 
 func (x *DeletePoliciesResult) Reset() {
 	*x = DeletePoliciesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[281]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[284]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23396,7 +23701,7 @@ func (x *DeletePoliciesResult) String() string {
 func (*DeletePoliciesResult) ProtoMessage() {}
 
 func (x *DeletePoliciesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[281]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[284]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23409,7 +23714,7 @@ func (x *DeletePoliciesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePoliciesResult.ProtoReflect.Descriptor instead.
 func (*DeletePoliciesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{281}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{284}
 }
 
 func (x *DeletePoliciesResult) GetPolicyIds() []string {
@@ -23434,7 +23739,7 @@ type CreateTvcAppResult struct {
 
 func (x *CreateTvcAppResult) Reset() {
 	*x = CreateTvcAppResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[282]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[285]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23446,7 +23751,7 @@ func (x *CreateTvcAppResult) String() string {
 func (*CreateTvcAppResult) ProtoMessage() {}
 
 func (x *CreateTvcAppResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[282]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[285]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23459,7 +23764,7 @@ func (x *CreateTvcAppResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcAppResult.ProtoReflect.Descriptor instead.
 func (*CreateTvcAppResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{282}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{285}
 }
 
 func (x *CreateTvcAppResult) GetAppId() string {
@@ -23521,7 +23826,7 @@ type CreateTvcDeploymentResult struct {
 
 func (x *CreateTvcDeploymentResult) Reset() {
 	*x = CreateTvcDeploymentResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[283]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[286]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23533,7 +23838,7 @@ func (x *CreateTvcDeploymentResult) String() string {
 func (*CreateTvcDeploymentResult) ProtoMessage() {}
 
 func (x *CreateTvcDeploymentResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[283]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[286]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23546,7 +23851,7 @@ func (x *CreateTvcDeploymentResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcDeploymentResult.ProtoReflect.Descriptor instead.
 func (*CreateTvcDeploymentResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{283}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{286}
 }
 
 func (x *CreateTvcDeploymentResult) GetDeploymentId() string {
@@ -23572,7 +23877,7 @@ type CreateTvcManifestApprovalsResult struct {
 
 func (x *CreateTvcManifestApprovalsResult) Reset() {
 	*x = CreateTvcManifestApprovalsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[284]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[287]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23584,7 +23889,7 @@ func (x *CreateTvcManifestApprovalsResult) String() string {
 func (*CreateTvcManifestApprovalsResult) ProtoMessage() {}
 
 func (x *CreateTvcManifestApprovalsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[284]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[287]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23597,7 +23902,7 @@ func (x *CreateTvcManifestApprovalsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcManifestApprovalsResult.ProtoReflect.Descriptor instead.
 func (*CreateTvcManifestApprovalsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{284}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{287}
 }
 
 func (x *CreateTvcManifestApprovalsResult) GetApprovalIds() []string {
@@ -23616,7 +23921,7 @@ type PostTvcQuorumKeyShareResult struct {
 
 func (x *PostTvcQuorumKeyShareResult) Reset() {
 	*x = PostTvcQuorumKeyShareResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[285]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[288]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23628,7 +23933,7 @@ func (x *PostTvcQuorumKeyShareResult) String() string {
 func (*PostTvcQuorumKeyShareResult) ProtoMessage() {}
 
 func (x *PostTvcQuorumKeyShareResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[285]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[288]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23641,7 +23946,7 @@ func (x *PostTvcQuorumKeyShareResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostTvcQuorumKeyShareResult.ProtoReflect.Descriptor instead.
 func (*PostTvcQuorumKeyShareResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{285}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{288}
 }
 
 func (x *PostTvcQuorumKeyShareResult) GetProvisioningShareId() string {
@@ -23663,7 +23968,7 @@ type CreateTvcOperatorResult struct {
 
 func (x *CreateTvcOperatorResult) Reset() {
 	*x = CreateTvcOperatorResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[286]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[289]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23675,7 +23980,7 @@ func (x *CreateTvcOperatorResult) String() string {
 func (*CreateTvcOperatorResult) ProtoMessage() {}
 
 func (x *CreateTvcOperatorResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[286]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[289]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23688,7 +23993,7 @@ func (x *CreateTvcOperatorResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcOperatorResult.ProtoReflect.Descriptor instead.
 func (*CreateTvcOperatorResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{286}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{289}
 }
 
 func (x *CreateTvcOperatorResult) GetWalletId() string {
@@ -23730,7 +24035,7 @@ type CreateTvcQuorumKeyResult struct {
 
 func (x *CreateTvcQuorumKeyResult) Reset() {
 	*x = CreateTvcQuorumKeyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[287]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[290]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23742,7 +24047,7 @@ func (x *CreateTvcQuorumKeyResult) String() string {
 func (*CreateTvcQuorumKeyResult) ProtoMessage() {}
 
 func (x *CreateTvcQuorumKeyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[287]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[290]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23755,7 +24060,7 @@ func (x *CreateTvcQuorumKeyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTvcQuorumKeyResult.ProtoReflect.Descriptor instead.
 func (*CreateTvcQuorumKeyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{287}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{290}
 }
 
 func (x *CreateTvcQuorumKeyResult) GetQuorumKeyId() string {
@@ -23788,7 +24093,7 @@ type ReEncryptTvcQuorumKeyShareResult struct {
 
 func (x *ReEncryptTvcQuorumKeyShareResult) Reset() {
 	*x = ReEncryptTvcQuorumKeyShareResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[288]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[291]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23800,7 +24105,7 @@ func (x *ReEncryptTvcQuorumKeyShareResult) String() string {
 func (*ReEncryptTvcQuorumKeyShareResult) ProtoMessage() {}
 
 func (x *ReEncryptTvcQuorumKeyShareResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[288]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[291]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23813,7 +24118,7 @@ func (x *ReEncryptTvcQuorumKeyShareResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReEncryptTvcQuorumKeyShareResult.ProtoReflect.Descriptor instead.
 func (*ReEncryptTvcQuorumKeyShareResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{288}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{291}
 }
 
 func (x *ReEncryptTvcQuorumKeyShareResult) GetProvisioningShareId() string {
@@ -23832,7 +24137,7 @@ type EthSendRawTransactionResult struct {
 
 func (x *EthSendRawTransactionResult) Reset() {
 	*x = EthSendRawTransactionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[289]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[292]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23844,7 +24149,7 @@ func (x *EthSendRawTransactionResult) String() string {
 func (*EthSendRawTransactionResult) ProtoMessage() {}
 
 func (x *EthSendRawTransactionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[289]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[292]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23857,7 +24162,7 @@ func (x *EthSendRawTransactionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthSendRawTransactionResult.ProtoReflect.Descriptor instead.
 func (*EthSendRawTransactionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{289}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{292}
 }
 
 func (x *EthSendRawTransactionResult) GetTransactionHash() string {
@@ -23877,7 +24182,7 @@ type CreateFiatOnRampCredentialResult struct {
 
 func (x *CreateFiatOnRampCredentialResult) Reset() {
 	*x = CreateFiatOnRampCredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[290]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[293]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23889,7 +24194,7 @@ func (x *CreateFiatOnRampCredentialResult) String() string {
 func (*CreateFiatOnRampCredentialResult) ProtoMessage() {}
 
 func (x *CreateFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[290]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[293]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23902,7 +24207,7 @@ func (x *CreateFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatOnRampCredentialResult.ProtoReflect.Descriptor instead.
 func (*CreateFiatOnRampCredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{290}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{293}
 }
 
 func (x *CreateFiatOnRampCredentialResult) GetFiatOnRampCredentialId() string {
@@ -23921,7 +24226,7 @@ type CreateFiatRampCredentialResult struct {
 
 func (x *CreateFiatRampCredentialResult) Reset() {
 	*x = CreateFiatRampCredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[291]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[294]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23933,7 +24238,7 @@ func (x *CreateFiatRampCredentialResult) String() string {
 func (*CreateFiatRampCredentialResult) ProtoMessage() {}
 
 func (x *CreateFiatRampCredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[291]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[294]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23946,7 +24251,7 @@ func (x *CreateFiatRampCredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFiatRampCredentialResult.ProtoReflect.Descriptor instead.
 func (*CreateFiatRampCredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{291}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{294}
 }
 
 func (x *CreateFiatRampCredentialResult) GetCredentialId() string {
@@ -23966,7 +24271,7 @@ type UpdateFiatOnRampCredentialResult struct {
 
 func (x *UpdateFiatOnRampCredentialResult) Reset() {
 	*x = UpdateFiatOnRampCredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[292]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[295]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -23978,7 +24283,7 @@ func (x *UpdateFiatOnRampCredentialResult) String() string {
 func (*UpdateFiatOnRampCredentialResult) ProtoMessage() {}
 
 func (x *UpdateFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[292]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[295]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -23991,7 +24296,7 @@ func (x *UpdateFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFiatOnRampCredentialResult.ProtoReflect.Descriptor instead.
 func (*UpdateFiatOnRampCredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{292}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{295}
 }
 
 func (x *UpdateFiatOnRampCredentialResult) GetFiatOnRampCredentialId() string {
@@ -24010,7 +24315,7 @@ type UpdateFiatRampCredentialResult struct {
 
 func (x *UpdateFiatRampCredentialResult) Reset() {
 	*x = UpdateFiatRampCredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[293]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[296]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24022,7 +24327,7 @@ func (x *UpdateFiatRampCredentialResult) String() string {
 func (*UpdateFiatRampCredentialResult) ProtoMessage() {}
 
 func (x *UpdateFiatRampCredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[293]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[296]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24035,7 +24340,7 @@ func (x *UpdateFiatRampCredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFiatRampCredentialResult.ProtoReflect.Descriptor instead.
 func (*UpdateFiatRampCredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{293}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{296}
 }
 
 func (x *UpdateFiatRampCredentialResult) GetCredentialId() string {
@@ -24054,7 +24359,7 @@ type DeleteFiatOnRampCredentialResult struct {
 
 func (x *DeleteFiatOnRampCredentialResult) Reset() {
 	*x = DeleteFiatOnRampCredentialResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[294]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[297]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24066,7 +24371,7 @@ func (x *DeleteFiatOnRampCredentialResult) String() string {
 func (*DeleteFiatOnRampCredentialResult) ProtoMessage() {}
 
 func (x *DeleteFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[294]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[297]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24079,7 +24384,7 @@ func (x *DeleteFiatOnRampCredentialResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFiatOnRampCredentialResult.ProtoReflect.Descriptor instead.
 func (*DeleteFiatOnRampCredentialResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{294}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{297}
 }
 
 func (x *DeleteFiatOnRampCredentialResult) GetFiatOnRampCredentialId() string {
@@ -24098,7 +24403,7 @@ type EthSendTransactionResult struct {
 
 func (x *EthSendTransactionResult) Reset() {
 	*x = EthSendTransactionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[295]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[298]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24110,7 +24415,7 @@ func (x *EthSendTransactionResult) String() string {
 func (*EthSendTransactionResult) ProtoMessage() {}
 
 func (x *EthSendTransactionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[295]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[298]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24123,7 +24428,7 @@ func (x *EthSendTransactionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthSendTransactionResult.ProtoReflect.Descriptor instead.
 func (*EthSendTransactionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{295}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{298}
 }
 
 func (x *EthSendTransactionResult) GetSendTransactionStatusId() string {
@@ -24142,7 +24447,7 @@ type EthSendTransactionResultV2 struct {
 
 func (x *EthSendTransactionResultV2) Reset() {
 	*x = EthSendTransactionResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[296]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[299]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24154,7 +24459,7 @@ func (x *EthSendTransactionResultV2) String() string {
 func (*EthSendTransactionResultV2) ProtoMessage() {}
 
 func (x *EthSendTransactionResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[296]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[299]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24167,7 +24472,7 @@ func (x *EthSendTransactionResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthSendTransactionResultV2.ProtoReflect.Descriptor instead.
 func (*EthSendTransactionResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{296}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{299}
 }
 
 func (x *EthSendTransactionResultV2) GetSendTransactionStatusId() string {
@@ -24186,7 +24491,7 @@ type SolSendTransactionResult struct {
 
 func (x *SolSendTransactionResult) Reset() {
 	*x = SolSendTransactionResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[297]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[300]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24198,7 +24503,7 @@ func (x *SolSendTransactionResult) String() string {
 func (*SolSendTransactionResult) ProtoMessage() {}
 
 func (x *SolSendTransactionResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[297]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[300]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24211,7 +24516,7 @@ func (x *SolSendTransactionResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SolSendTransactionResult.ProtoReflect.Descriptor instead.
 func (*SolSendTransactionResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{297}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{300}
 }
 
 func (x *SolSendTransactionResult) GetSendTransactionStatusId() string {
@@ -24230,7 +24535,7 @@ type SolSendTransactionResultV2 struct {
 
 func (x *SolSendTransactionResultV2) Reset() {
 	*x = SolSendTransactionResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[298]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[301]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24242,7 +24547,7 @@ func (x *SolSendTransactionResultV2) String() string {
 func (*SolSendTransactionResultV2) ProtoMessage() {}
 
 func (x *SolSendTransactionResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[298]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[301]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24255,7 +24560,7 @@ func (x *SolSendTransactionResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SolSendTransactionResultV2.ProtoReflect.Descriptor instead.
 func (*SolSendTransactionResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{298}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{301}
 }
 
 func (x *SolSendTransactionResultV2) GetSendTransactionStatusId() string {
@@ -24281,7 +24586,7 @@ type ExecuteSwapResult struct {
 
 func (x *ExecuteSwapResult) Reset() {
 	*x = ExecuteSwapResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[299]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[302]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24293,7 +24598,7 @@ func (x *ExecuteSwapResult) String() string {
 func (*ExecuteSwapResult) ProtoMessage() {}
 
 func (x *ExecuteSwapResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[299]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[302]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24306,7 +24611,7 @@ func (x *ExecuteSwapResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapResult.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{299}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{302}
 }
 
 func (x *ExecuteSwapResult) GetSwapRequestId() string {
@@ -24381,7 +24686,7 @@ type SwapQuote struct {
 
 func (x *SwapQuote) Reset() {
 	*x = SwapQuote{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[300]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[303]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24393,7 +24698,7 @@ func (x *SwapQuote) String() string {
 func (*SwapQuote) ProtoMessage() {}
 
 func (x *SwapQuote) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[300]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[303]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24406,7 +24711,7 @@ func (x *SwapQuote) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwapQuote.ProtoReflect.Descriptor instead.
 func (*SwapQuote) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{300}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{303}
 }
 
 func (x *SwapQuote) GetQuoteId() string {
@@ -24474,7 +24779,7 @@ type CreateSwapQuoteResult struct {
 
 func (x *CreateSwapQuoteResult) Reset() {
 	*x = CreateSwapQuoteResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[301]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[304]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24486,7 +24791,7 @@ func (x *CreateSwapQuoteResult) String() string {
 func (*CreateSwapQuoteResult) ProtoMessage() {}
 
 func (x *CreateSwapQuoteResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[301]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[304]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24499,7 +24804,7 @@ func (x *CreateSwapQuoteResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSwapQuoteResult.ProtoReflect.Descriptor instead.
 func (*CreateSwapQuoteResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{301}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{304}
 }
 
 func (x *CreateSwapQuoteResult) GetQuotes() []*SwapQuote {
@@ -24523,7 +24828,7 @@ type WebhookEndpointData struct {
 
 func (x *WebhookEndpointData) Reset() {
 	*x = WebhookEndpointData{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[302]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[305]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24535,7 +24840,7 @@ func (x *WebhookEndpointData) String() string {
 func (*WebhookEndpointData) ProtoMessage() {}
 
 func (x *WebhookEndpointData) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[302]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[305]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24548,7 +24853,7 @@ func (x *WebhookEndpointData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WebhookEndpointData.ProtoReflect.Descriptor instead.
 func (*WebhookEndpointData) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{302}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{305}
 }
 
 func (x *WebhookEndpointData) GetEndpointId() string {
@@ -24603,7 +24908,7 @@ type CreateWebhookEndpointResult struct {
 
 func (x *CreateWebhookEndpointResult) Reset() {
 	*x = CreateWebhookEndpointResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[303]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[306]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24615,7 +24920,7 @@ func (x *CreateWebhookEndpointResult) String() string {
 func (*CreateWebhookEndpointResult) ProtoMessage() {}
 
 func (x *CreateWebhookEndpointResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[303]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[306]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24628,7 +24933,7 @@ func (x *CreateWebhookEndpointResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateWebhookEndpointResult.ProtoReflect.Descriptor instead.
 func (*CreateWebhookEndpointResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{303}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{306}
 }
 
 func (x *CreateWebhookEndpointResult) GetEndpointId() string {
@@ -24655,7 +24960,7 @@ type UpdateWebhookEndpointResult struct {
 
 func (x *UpdateWebhookEndpointResult) Reset() {
 	*x = UpdateWebhookEndpointResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[304]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[307]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24667,7 +24972,7 @@ func (x *UpdateWebhookEndpointResult) String() string {
 func (*UpdateWebhookEndpointResult) ProtoMessage() {}
 
 func (x *UpdateWebhookEndpointResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[304]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[307]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24680,7 +24985,7 @@ func (x *UpdateWebhookEndpointResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateWebhookEndpointResult.ProtoReflect.Descriptor instead.
 func (*UpdateWebhookEndpointResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{304}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{307}
 }
 
 func (x *UpdateWebhookEndpointResult) GetEndpointId() string {
@@ -24706,7 +25011,7 @@ type DeleteWebhookEndpointResult struct {
 
 func (x *DeleteWebhookEndpointResult) Reset() {
 	*x = DeleteWebhookEndpointResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[305]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[308]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24718,7 +25023,7 @@ func (x *DeleteWebhookEndpointResult) String() string {
 func (*DeleteWebhookEndpointResult) ProtoMessage() {}
 
 func (x *DeleteWebhookEndpointResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[305]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[308]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24731,7 +25036,7 @@ func (x *DeleteWebhookEndpointResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWebhookEndpointResult.ProtoReflect.Descriptor instead.
 func (*DeleteWebhookEndpointResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{305}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{308}
 }
 
 func (x *DeleteWebhookEndpointResult) GetEndpointId() string {
@@ -24752,7 +25057,7 @@ type WebhookSubscriptionParams struct {
 
 func (x *WebhookSubscriptionParams) Reset() {
 	*x = WebhookSubscriptionParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[306]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[309]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24764,7 +25069,7 @@ func (x *WebhookSubscriptionParams) String() string {
 func (*WebhookSubscriptionParams) ProtoMessage() {}
 
 func (x *WebhookSubscriptionParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[306]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[309]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24777,7 +25082,7 @@ func (x *WebhookSubscriptionParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WebhookSubscriptionParams.ProtoReflect.Descriptor instead.
 func (*WebhookSubscriptionParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{306}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{309}
 }
 
 func (x *WebhookSubscriptionParams) GetEventType() string {
@@ -24810,7 +25115,7 @@ type CreateMfaPolicyResult struct {
 
 func (x *CreateMfaPolicyResult) Reset() {
 	*x = CreateMfaPolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[307]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[310]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24822,7 +25127,7 @@ func (x *CreateMfaPolicyResult) String() string {
 func (*CreateMfaPolicyResult) ProtoMessage() {}
 
 func (x *CreateMfaPolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[307]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[310]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24835,7 +25140,7 @@ func (x *CreateMfaPolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateMfaPolicyResult.ProtoReflect.Descriptor instead.
 func (*CreateMfaPolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{307}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{310}
 }
 
 func (x *CreateMfaPolicyResult) GetMfaPolicyId() string {
@@ -24854,7 +25159,7 @@ type UpdateMfaPolicyResult struct {
 
 func (x *UpdateMfaPolicyResult) Reset() {
 	*x = UpdateMfaPolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[308]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[311]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24866,7 +25171,7 @@ func (x *UpdateMfaPolicyResult) String() string {
 func (*UpdateMfaPolicyResult) ProtoMessage() {}
 
 func (x *UpdateMfaPolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[308]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[311]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24879,7 +25184,7 @@ func (x *UpdateMfaPolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateMfaPolicyResult.ProtoReflect.Descriptor instead.
 func (*UpdateMfaPolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{308}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{311}
 }
 
 func (x *UpdateMfaPolicyResult) GetMfaPolicyId() string {
@@ -24898,7 +25203,7 @@ type DeleteMfaPolicyResult struct {
 
 func (x *DeleteMfaPolicyResult) Reset() {
 	*x = DeleteMfaPolicyResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[309]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[312]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24910,7 +25215,7 @@ func (x *DeleteMfaPolicyResult) String() string {
 func (*DeleteMfaPolicyResult) ProtoMessage() {}
 
 func (x *DeleteMfaPolicyResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[309]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[312]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24923,7 +25228,7 @@ func (x *DeleteMfaPolicyResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteMfaPolicyResult.ProtoReflect.Descriptor instead.
 func (*DeleteMfaPolicyResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{309}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{312}
 }
 
 func (x *DeleteMfaPolicyResult) GetMfaPolicyId() string {
@@ -24942,7 +25247,7 @@ type CreateSessionProfileResult struct {
 
 func (x *CreateSessionProfileResult) Reset() {
 	*x = CreateSessionProfileResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[310]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[313]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -24954,7 +25259,7 @@ func (x *CreateSessionProfileResult) String() string {
 func (*CreateSessionProfileResult) ProtoMessage() {}
 
 func (x *CreateSessionProfileResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[310]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[313]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -24967,7 +25272,7 @@ func (x *CreateSessionProfileResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSessionProfileResult.ProtoReflect.Descriptor instead.
 func (*CreateSessionProfileResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{310}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{313}
 }
 
 func (x *CreateSessionProfileResult) GetSessionProfileId() string {
@@ -24988,7 +25293,7 @@ type EarnDeployWrapperResult struct {
 
 func (x *EarnDeployWrapperResult) Reset() {
 	*x = EarnDeployWrapperResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[311]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[314]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25000,7 +25305,7 @@ func (x *EarnDeployWrapperResult) String() string {
 func (*EarnDeployWrapperResult) ProtoMessage() {}
 
 func (x *EarnDeployWrapperResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[311]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[314]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25013,7 +25318,7 @@ func (x *EarnDeployWrapperResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EarnDeployWrapperResult.ProtoReflect.Descriptor instead.
 func (*EarnDeployWrapperResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{311}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{314}
 }
 
 func (x *EarnDeployWrapperResult) GetWrapperAddress() string {
@@ -25046,7 +25351,7 @@ type EarnDepositResult struct {
 
 func (x *EarnDepositResult) Reset() {
 	*x = EarnDepositResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[312]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[315]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25058,7 +25363,7 @@ func (x *EarnDepositResult) String() string {
 func (*EarnDepositResult) ProtoMessage() {}
 
 func (x *EarnDepositResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[312]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[315]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25071,7 +25376,7 @@ func (x *EarnDepositResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EarnDepositResult.ProtoReflect.Descriptor instead.
 func (*EarnDepositResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{312}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{315}
 }
 
 func (x *EarnDepositResult) GetDepositRequestId() string {
@@ -25090,7 +25395,7 @@ type EarnWithdrawResult struct {
 
 func (x *EarnWithdrawResult) Reset() {
 	*x = EarnWithdrawResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[313]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[316]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25102,7 +25407,7 @@ func (x *EarnWithdrawResult) String() string {
 func (*EarnWithdrawResult) ProtoMessage() {}
 
 func (x *EarnWithdrawResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[313]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[316]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25115,7 +25420,7 @@ func (x *EarnWithdrawResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EarnWithdrawResult.ProtoReflect.Descriptor instead.
 func (*EarnWithdrawResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{313}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{316}
 }
 
 func (x *EarnWithdrawResult) GetWithdrawRequestId() string {
@@ -25135,7 +25440,7 @@ type EarnSetWrapperStateResult struct {
 
 func (x *EarnSetWrapperStateResult) Reset() {
 	*x = EarnSetWrapperStateResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[314]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[317]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25147,7 +25452,7 @@ func (x *EarnSetWrapperStateResult) String() string {
 func (*EarnSetWrapperStateResult) ProtoMessage() {}
 
 func (x *EarnSetWrapperStateResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[314]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[317]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25160,7 +25465,7 @@ func (x *EarnSetWrapperStateResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EarnSetWrapperStateResult.ProtoReflect.Descriptor instead.
 func (*EarnSetWrapperStateResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{314}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{317}
 }
 
 func (x *EarnSetWrapperStateResult) GetWrapperAddress() string {
@@ -25186,7 +25491,7 @@ type ClaimEarnFeesResult struct {
 
 func (x *ClaimEarnFeesResult) Reset() {
 	*x = ClaimEarnFeesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[315]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[318]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25198,7 +25503,7 @@ func (x *ClaimEarnFeesResult) String() string {
 func (*ClaimEarnFeesResult) ProtoMessage() {}
 
 func (x *ClaimEarnFeesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[315]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[318]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25211,7 +25516,7 @@ func (x *ClaimEarnFeesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimEarnFeesResult.ProtoReflect.Descriptor instead.
 func (*ClaimEarnFeesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{315}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{318}
 }
 
 func (x *ClaimEarnFeesResult) GetClaimRequestId() string {
@@ -25230,7 +25535,7 @@ type EarnClaimRewardsResult struct {
 
 func (x *EarnClaimRewardsResult) Reset() {
 	*x = EarnClaimRewardsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[316]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[319]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25242,7 +25547,7 @@ func (x *EarnClaimRewardsResult) String() string {
 func (*EarnClaimRewardsResult) ProtoMessage() {}
 
 func (x *EarnClaimRewardsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[316]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[319]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25255,7 +25560,7 @@ func (x *EarnClaimRewardsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EarnClaimRewardsResult.ProtoReflect.Descriptor instead.
 func (*EarnClaimRewardsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{316}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{319}
 }
 
 func (x *EarnClaimRewardsResult) GetClaimRequestId() string {
@@ -25275,7 +25580,7 @@ type OauthProviderParams struct {
 
 func (x *OauthProviderParams) Reset() {
 	*x = OauthProviderParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[317]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[320]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25287,7 +25592,7 @@ func (x *OauthProviderParams) String() string {
 func (*OauthProviderParams) ProtoMessage() {}
 
 func (x *OauthProviderParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[317]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[320]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25300,7 +25605,7 @@ func (x *OauthProviderParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OauthProviderParams.ProtoReflect.Descriptor instead.
 func (*OauthProviderParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{317}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{320}
 }
 
 func (x *OauthProviderParams) GetProviderName() string {
@@ -25331,7 +25636,7 @@ type OauthProviderParamsV2 struct {
 
 func (x *OauthProviderParamsV2) Reset() {
 	*x = OauthProviderParamsV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[318]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[321]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25343,7 +25648,7 @@ func (x *OauthProviderParamsV2) String() string {
 func (*OauthProviderParamsV2) ProtoMessage() {}
 
 func (x *OauthProviderParamsV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[318]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[321]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25356,7 +25661,7 @@ func (x *OauthProviderParamsV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OauthProviderParamsV2.ProtoReflect.Descriptor instead.
 func (*OauthProviderParamsV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{318}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{321}
 }
 
 func (x *OauthProviderParamsV2) GetProviderName() string {
@@ -25418,7 +25723,7 @@ type OidcClaims struct {
 
 func (x *OidcClaims) Reset() {
 	*x = OidcClaims{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[319]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[322]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25430,7 +25735,7 @@ func (x *OidcClaims) String() string {
 func (*OidcClaims) ProtoMessage() {}
 
 func (x *OidcClaims) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[319]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[322]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25443,7 +25748,7 @@ func (x *OidcClaims) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OidcClaims.ProtoReflect.Descriptor instead.
 func (*OidcClaims) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{319}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{322}
 }
 
 func (x *OidcClaims) GetIss() string {
@@ -25479,7 +25784,7 @@ type ApiKeyParamsV2 struct {
 
 func (x *ApiKeyParamsV2) Reset() {
 	*x = ApiKeyParamsV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[320]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[323]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25491,7 +25796,7 @@ func (x *ApiKeyParamsV2) String() string {
 func (*ApiKeyParamsV2) ProtoMessage() {}
 
 func (x *ApiKeyParamsV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[320]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[323]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25504,7 +25809,7 @@ func (x *ApiKeyParamsV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApiKeyParamsV2.ProtoReflect.Descriptor instead.
 func (*ApiKeyParamsV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{320}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{323}
 }
 
 func (x *ApiKeyParamsV2) GetApiKeyName() string {
@@ -25549,7 +25854,7 @@ type UserParams struct {
 
 func (x *UserParams) Reset() {
 	*x = UserParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[321]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[324]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25561,7 +25866,7 @@ func (x *UserParams) String() string {
 func (*UserParams) ProtoMessage() {}
 
 func (x *UserParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[321]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[324]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25574,7 +25879,7 @@ func (x *UserParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserParams.ProtoReflect.Descriptor instead.
 func (*UserParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{321}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{324}
 }
 
 func (x *UserParams) GetUserName() string {
@@ -25632,7 +25937,7 @@ type UserParamsV2 struct {
 
 func (x *UserParamsV2) Reset() {
 	*x = UserParamsV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[322]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[325]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25644,7 +25949,7 @@ func (x *UserParamsV2) String() string {
 func (*UserParamsV2) ProtoMessage() {}
 
 func (x *UserParamsV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[322]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[325]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25657,7 +25962,7 @@ func (x *UserParamsV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserParamsV2.ProtoReflect.Descriptor instead.
 func (*UserParamsV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{322}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{325}
 }
 
 func (x *UserParamsV2) GetUserName() string {
@@ -25710,7 +26015,7 @@ type UserParamsV3 struct {
 
 func (x *UserParamsV3) Reset() {
 	*x = UserParamsV3{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[323]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[326]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25722,7 +26027,7 @@ func (x *UserParamsV3) String() string {
 func (*UserParamsV3) ProtoMessage() {}
 
 func (x *UserParamsV3) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[323]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[326]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25735,7 +26040,7 @@ func (x *UserParamsV3) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserParamsV3.ProtoReflect.Descriptor instead.
 func (*UserParamsV3) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{323}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{326}
 }
 
 func (x *UserParamsV3) GetUserName() string {
@@ -25802,7 +26107,7 @@ type UserParamsV4 struct {
 
 func (x *UserParamsV4) Reset() {
 	*x = UserParamsV4{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[324]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[327]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25814,7 +26119,7 @@ func (x *UserParamsV4) String() string {
 func (*UserParamsV4) ProtoMessage() {}
 
 func (x *UserParamsV4) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[324]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[327]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25827,7 +26132,7 @@ func (x *UserParamsV4) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserParamsV4.ProtoReflect.Descriptor instead.
 func (*UserParamsV4) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{324}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{327}
 }
 
 func (x *UserParamsV4) GetUserName() string {
@@ -25883,7 +26188,7 @@ type AuthenticatorParams struct {
 	state             protoimpl.MessageState                  `protogen:"open.v1"`
 	AuthenticatorName string                                  `protobuf:"bytes,1,opt,name=authenticator_name,json=authenticatorName,proto3" json:"authenticator_name,omitempty"`
 	UserId            string                                  `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Attestation       *v12.PublicKeyCredentialWithAttestation `protobuf:"bytes,3,opt,name=attestation,proto3" json:"attestation,omitempty"`
+	Attestation       *v13.PublicKeyCredentialWithAttestation `protobuf:"bytes,3,opt,name=attestation,proto3" json:"attestation,omitempty"`
 	Challenge         string                                  `protobuf:"bytes,4,opt,name=challenge,proto3" json:"challenge,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -25891,7 +26196,7 @@ type AuthenticatorParams struct {
 
 func (x *AuthenticatorParams) Reset() {
 	*x = AuthenticatorParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[325]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[328]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25903,7 +26208,7 @@ func (x *AuthenticatorParams) String() string {
 func (*AuthenticatorParams) ProtoMessage() {}
 
 func (x *AuthenticatorParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[325]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[328]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25916,7 +26221,7 @@ func (x *AuthenticatorParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorParams.ProtoReflect.Descriptor instead.
 func (*AuthenticatorParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{325}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{328}
 }
 
 func (x *AuthenticatorParams) GetAuthenticatorName() string {
@@ -25933,7 +26238,7 @@ func (x *AuthenticatorParams) GetUserId() string {
 	return ""
 }
 
-func (x *AuthenticatorParams) GetAttestation() *v12.PublicKeyCredentialWithAttestation {
+func (x *AuthenticatorParams) GetAttestation() *v13.PublicKeyCredentialWithAttestation {
 	if x != nil {
 		return x.Attestation
 	}
@@ -25958,7 +26263,7 @@ type AuthenticatorParamsV2 struct {
 
 func (x *AuthenticatorParamsV2) Reset() {
 	*x = AuthenticatorParamsV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[326]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[329]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -25970,7 +26275,7 @@ func (x *AuthenticatorParamsV2) String() string {
 func (*AuthenticatorParamsV2) ProtoMessage() {}
 
 func (x *AuthenticatorParamsV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[326]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[329]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -25983,7 +26288,7 @@ func (x *AuthenticatorParamsV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorParamsV2.ProtoReflect.Descriptor instead.
 func (*AuthenticatorParamsV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{326}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{329}
 }
 
 func (x *AuthenticatorParamsV2) GetAuthenticatorName() string {
@@ -26012,14 +26317,14 @@ type Attestation struct {
 	CredentialId      string                       `protobuf:"bytes,1,opt,name=credential_id,json=credentialId,proto3" json:"credential_id,omitempty"`
 	ClientDataJson    string                       `protobuf:"bytes,2,opt,name=client_data_json,json=clientDataJson,proto3" json:"client_data_json,omitempty"`
 	AttestationObject string                       `protobuf:"bytes,3,opt,name=attestation_object,json=attestationObject,proto3" json:"attestation_object,omitempty"`
-	Transports        []v12.AuthenticatorTransport `protobuf:"varint,4,rep,packed,name=transports,proto3,enum=immutable.webauthn.v1.AuthenticatorTransport" json:"transports,omitempty"`
+	Transports        []v13.AuthenticatorTransport `protobuf:"varint,4,rep,packed,name=transports,proto3,enum=immutable.webauthn.v1.AuthenticatorTransport" json:"transports,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Attestation) Reset() {
 	*x = Attestation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[327]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[330]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26031,7 +26336,7 @@ func (x *Attestation) String() string {
 func (*Attestation) ProtoMessage() {}
 
 func (x *Attestation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[327]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[330]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26044,7 +26349,7 @@ func (x *Attestation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Attestation.ProtoReflect.Descriptor instead.
 func (*Attestation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{327}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{330}
 }
 
 func (x *Attestation) GetCredentialId() string {
@@ -26068,7 +26373,7 @@ func (x *Attestation) GetAttestationObject() string {
 	return ""
 }
 
-func (x *Attestation) GetTransports() []v12.AuthenticatorTransport {
+func (x *Attestation) GetTransports() []v13.AuthenticatorTransport {
 	if x != nil {
 		return x.Transports
 	}
@@ -26088,7 +26393,7 @@ type InvitationParams struct {
 
 func (x *InvitationParams) Reset() {
 	*x = InvitationParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[328]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[331]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26100,7 +26405,7 @@ func (x *InvitationParams) String() string {
 func (*InvitationParams) ProtoMessage() {}
 
 func (x *InvitationParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[328]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[331]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26113,7 +26418,7 @@ func (x *InvitationParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InvitationParams.ProtoReflect.Descriptor instead.
 func (*InvitationParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{328}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{331}
 }
 
 func (x *InvitationParams) GetReceiverUserName() string {
@@ -26163,7 +26468,7 @@ type ApiOnlyUserParams struct {
 
 func (x *ApiOnlyUserParams) Reset() {
 	*x = ApiOnlyUserParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[329]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[332]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26175,7 +26480,7 @@ func (x *ApiOnlyUserParams) String() string {
 func (*ApiOnlyUserParams) ProtoMessage() {}
 
 func (x *ApiOnlyUserParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[329]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[332]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26188,7 +26493,7 @@ func (x *ApiOnlyUserParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApiOnlyUserParams.ProtoReflect.Descriptor instead.
 func (*ApiOnlyUserParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{329}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{332}
 }
 
 func (x *ApiOnlyUserParams) GetUserName() string {
@@ -26231,7 +26536,7 @@ type PrivateKeyParams struct {
 
 func (x *PrivateKeyParams) Reset() {
 	*x = PrivateKeyParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[330]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[333]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26243,7 +26548,7 @@ func (x *PrivateKeyParams) String() string {
 func (*PrivateKeyParams) ProtoMessage() {}
 
 func (x *PrivateKeyParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[330]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[333]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26256,7 +26561,7 @@ func (x *PrivateKeyParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrivateKeyParams.ProtoReflect.Descriptor instead.
 func (*PrivateKeyParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{330}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{333}
 }
 
 func (x *PrivateKeyParams) GetPrivateKeyName() string {
@@ -26298,7 +26603,7 @@ type WalletParams struct {
 
 func (x *WalletParams) Reset() {
 	*x = WalletParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[331]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[334]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26310,7 +26615,7 @@ func (x *WalletParams) String() string {
 func (*WalletParams) ProtoMessage() {}
 
 func (x *WalletParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[331]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[334]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26323,7 +26628,7 @@ func (x *WalletParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WalletParams.ProtoReflect.Descriptor instead.
 func (*WalletParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{331}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{334}
 }
 
 func (x *WalletParams) GetWalletName() string {
@@ -26360,7 +26665,7 @@ type WalletAccountParams struct {
 
 func (x *WalletAccountParams) Reset() {
 	*x = WalletAccountParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[332]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[335]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26372,7 +26677,7 @@ func (x *WalletAccountParams) String() string {
 func (*WalletAccountParams) ProtoMessage() {}
 
 func (x *WalletAccountParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[332]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[335]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26385,7 +26690,7 @@ func (x *WalletAccountParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WalletAccountParams.ProtoReflect.Descriptor instead.
 func (*WalletAccountParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{332}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{335}
 }
 
 func (x *WalletAccountParams) GetCurve() v1.Curve {
@@ -26433,7 +26738,7 @@ type DeletePrivateKeysParams struct {
 
 func (x *DeletePrivateKeysParams) Reset() {
 	*x = DeletePrivateKeysParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[333]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[336]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26445,7 +26750,7 @@ func (x *DeletePrivateKeysParams) String() string {
 func (*DeletePrivateKeysParams) ProtoMessage() {}
 
 func (x *DeletePrivateKeysParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[333]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[336]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26458,7 +26763,7 @@ func (x *DeletePrivateKeysParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePrivateKeysParams.ProtoReflect.Descriptor instead.
 func (*DeletePrivateKeysParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{333}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{336}
 }
 
 func (x *DeletePrivateKeysParams) GetPrivateKeyIds() []string {
@@ -26485,7 +26790,7 @@ type DeleteWalletsParams struct {
 
 func (x *DeleteWalletsParams) Reset() {
 	*x = DeleteWalletsParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[334]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[337]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26497,7 +26802,7 @@ func (x *DeleteWalletsParams) String() string {
 func (*DeleteWalletsParams) ProtoMessage() {}
 
 func (x *DeleteWalletsParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[334]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[337]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26510,7 +26815,7 @@ func (x *DeleteWalletsParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletsParams.ProtoReflect.Descriptor instead.
 func (*DeleteWalletsParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{334}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{337}
 }
 
 func (x *DeleteWalletsParams) GetWalletIds() []string {
@@ -26537,7 +26842,7 @@ type DeleteWalletAccountsParams struct {
 
 func (x *DeleteWalletAccountsParams) Reset() {
 	*x = DeleteWalletAccountsParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[335]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[338]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26549,7 +26854,7 @@ func (x *DeleteWalletAccountsParams) String() string {
 func (*DeleteWalletAccountsParams) ProtoMessage() {}
 
 func (x *DeleteWalletAccountsParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[335]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[338]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26562,7 +26867,7 @@ func (x *DeleteWalletAccountsParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWalletAccountsParams.ProtoReflect.Descriptor instead.
 func (*DeleteWalletAccountsParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{335}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{338}
 }
 
 func (x *DeleteWalletAccountsParams) GetWalletAccountIds() []string {
@@ -26588,7 +26893,7 @@ type DeletePoliciesParams struct {
 
 func (x *DeletePoliciesParams) Reset() {
 	*x = DeletePoliciesParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[336]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[339]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26600,7 +26905,7 @@ func (x *DeletePoliciesParams) String() string {
 func (*DeletePoliciesParams) ProtoMessage() {}
 
 func (x *DeletePoliciesParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[336]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[339]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26613,7 +26918,7 @@ func (x *DeletePoliciesParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePoliciesParams.ProtoReflect.Descriptor instead.
 func (*DeletePoliciesParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{336}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{339}
 }
 
 func (x *DeletePoliciesParams) GetPolicyIds() []string {
@@ -26633,7 +26938,7 @@ type IpAllowlistIntentRule struct {
 
 func (x *IpAllowlistIntentRule) Reset() {
 	*x = IpAllowlistIntentRule{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[337]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[340]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26645,7 +26950,7 @@ func (x *IpAllowlistIntentRule) String() string {
 func (*IpAllowlistIntentRule) ProtoMessage() {}
 
 func (x *IpAllowlistIntentRule) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[337]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[340]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26658,7 +26963,7 @@ func (x *IpAllowlistIntentRule) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IpAllowlistIntentRule.ProtoReflect.Descriptor instead.
 func (*IpAllowlistIntentRule) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{337}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{340}
 }
 
 func (x *IpAllowlistIntentRule) GetCidr() string {
@@ -26687,7 +26992,7 @@ type SetIpAllowlistIntent struct {
 
 func (x *SetIpAllowlistIntent) Reset() {
 	*x = SetIpAllowlistIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[338]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[341]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26699,7 +27004,7 @@ func (x *SetIpAllowlistIntent) String() string {
 func (*SetIpAllowlistIntent) ProtoMessage() {}
 
 func (x *SetIpAllowlistIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[338]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[341]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26712,7 +27017,7 @@ func (x *SetIpAllowlistIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetIpAllowlistIntent.ProtoReflect.Descriptor instead.
 func (*SetIpAllowlistIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{338}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{341}
 }
 
 func (x *SetIpAllowlistIntent) GetPublicKey() string {
@@ -26752,7 +27057,7 @@ type RemoveIpAllowlistIntent struct {
 
 func (x *RemoveIpAllowlistIntent) Reset() {
 	*x = RemoveIpAllowlistIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[339]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[342]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26764,7 +27069,7 @@ func (x *RemoveIpAllowlistIntent) String() string {
 func (*RemoveIpAllowlistIntent) ProtoMessage() {}
 
 func (x *RemoveIpAllowlistIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[339]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[342]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26777,7 +27082,7 @@ func (x *RemoveIpAllowlistIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveIpAllowlistIntent.ProtoReflect.Descriptor instead.
 func (*RemoveIpAllowlistIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{339}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{342}
 }
 
 func (x *RemoveIpAllowlistIntent) GetPublicKey() string {
@@ -26795,7 +27100,7 @@ type SetIpAllowlistResult struct {
 
 func (x *SetIpAllowlistResult) Reset() {
 	*x = SetIpAllowlistResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[340]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[343]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26807,7 +27112,7 @@ func (x *SetIpAllowlistResult) String() string {
 func (*SetIpAllowlistResult) ProtoMessage() {}
 
 func (x *SetIpAllowlistResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[340]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[343]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26820,7 +27125,7 @@ func (x *SetIpAllowlistResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetIpAllowlistResult.ProtoReflect.Descriptor instead.
 func (*SetIpAllowlistResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{340}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{343}
 }
 
 type RemoveIpAllowlistResult struct {
@@ -26831,7 +27136,7 @@ type RemoveIpAllowlistResult struct {
 
 func (x *RemoveIpAllowlistResult) Reset() {
 	*x = RemoveIpAllowlistResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[341]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[344]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26843,7 +27148,7 @@ func (x *RemoveIpAllowlistResult) String() string {
 func (*RemoveIpAllowlistResult) ProtoMessage() {}
 
 func (x *RemoveIpAllowlistResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[341]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[344]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26856,7 +27161,7 @@ func (x *RemoveIpAllowlistResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveIpAllowlistResult.ProtoReflect.Descriptor instead.
 func (*RemoveIpAllowlistResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{341}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{344}
 }
 
 type EnableSmsForCountriesIntent struct {
@@ -26868,7 +27173,7 @@ type EnableSmsForCountriesIntent struct {
 
 func (x *EnableSmsForCountriesIntent) Reset() {
 	*x = EnableSmsForCountriesIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[342]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[345]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26880,7 +27185,7 @@ func (x *EnableSmsForCountriesIntent) String() string {
 func (*EnableSmsForCountriesIntent) ProtoMessage() {}
 
 func (x *EnableSmsForCountriesIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[342]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[345]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26893,7 +27198,7 @@ func (x *EnableSmsForCountriesIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableSmsForCountriesIntent.ProtoReflect.Descriptor instead.
 func (*EnableSmsForCountriesIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{342}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{345}
 }
 
 func (x *EnableSmsForCountriesIntent) GetIsoCodes() []string {
@@ -26912,7 +27217,7 @@ type DisableSmsForCountriesIntent struct {
 
 func (x *DisableSmsForCountriesIntent) Reset() {
 	*x = DisableSmsForCountriesIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[343]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[346]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26924,7 +27229,7 @@ func (x *DisableSmsForCountriesIntent) String() string {
 func (*DisableSmsForCountriesIntent) ProtoMessage() {}
 
 func (x *DisableSmsForCountriesIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[343]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[346]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26937,7 +27242,7 @@ func (x *DisableSmsForCountriesIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableSmsForCountriesIntent.ProtoReflect.Descriptor instead.
 func (*DisableSmsForCountriesIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{343}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{346}
 }
 
 func (x *DisableSmsForCountriesIntent) GetIsoCodes() []string {
@@ -26955,7 +27260,7 @@ type EnableSmsForCountriesResult struct {
 
 func (x *EnableSmsForCountriesResult) Reset() {
 	*x = EnableSmsForCountriesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[344]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[347]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -26967,7 +27272,7 @@ func (x *EnableSmsForCountriesResult) String() string {
 func (*EnableSmsForCountriesResult) ProtoMessage() {}
 
 func (x *EnableSmsForCountriesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[344]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[347]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -26980,7 +27285,7 @@ func (x *EnableSmsForCountriesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableSmsForCountriesResult.ProtoReflect.Descriptor instead.
 func (*EnableSmsForCountriesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{344}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{347}
 }
 
 type DisableSmsForCountriesResult struct {
@@ -26991,7 +27296,7 @@ type DisableSmsForCountriesResult struct {
 
 func (x *DisableSmsForCountriesResult) Reset() {
 	*x = DisableSmsForCountriesResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[345]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[348]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27003,7 +27308,7 @@ func (x *DisableSmsForCountriesResult) String() string {
 func (*DisableSmsForCountriesResult) ProtoMessage() {}
 
 func (x *DisableSmsForCountriesResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[345]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[348]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27016,7 +27321,167 @@ func (x *DisableSmsForCountriesResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableSmsForCountriesResult.ProtoReflect.Descriptor instead.
 func (*DisableSmsForCountriesResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{345}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{348}
+}
+
+type AddNotificationDomainsIntent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Domains       []string               `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddNotificationDomainsIntent) Reset() {
+	*x = AddNotificationDomainsIntent{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[349]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddNotificationDomainsIntent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddNotificationDomainsIntent) ProtoMessage() {}
+
+func (x *AddNotificationDomainsIntent) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[349]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddNotificationDomainsIntent.ProtoReflect.Descriptor instead.
+func (*AddNotificationDomainsIntent) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{349}
+}
+
+func (x *AddNotificationDomainsIntent) GetDomains() []string {
+	if x != nil {
+		return x.Domains
+	}
+	return nil
+}
+
+type DeleteNotificationDomainsIntent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Domains       []string               `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteNotificationDomainsIntent) Reset() {
+	*x = DeleteNotificationDomainsIntent{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[350]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteNotificationDomainsIntent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteNotificationDomainsIntent) ProtoMessage() {}
+
+func (x *DeleteNotificationDomainsIntent) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[350]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteNotificationDomainsIntent.ProtoReflect.Descriptor instead.
+func (*DeleteNotificationDomainsIntent) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{350}
+}
+
+func (x *DeleteNotificationDomainsIntent) GetDomains() []string {
+	if x != nil {
+		return x.Domains
+	}
+	return nil
+}
+
+type AddNotificationDomainsResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddNotificationDomainsResult) Reset() {
+	*x = AddNotificationDomainsResult{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[351]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddNotificationDomainsResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddNotificationDomainsResult) ProtoMessage() {}
+
+func (x *AddNotificationDomainsResult) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[351]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddNotificationDomainsResult.ProtoReflect.Descriptor instead.
+func (*AddNotificationDomainsResult) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{351}
+}
+
+type DeleteNotificationDomainsResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteNotificationDomainsResult) Reset() {
+	*x = DeleteNotificationDomainsResult{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[352]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteNotificationDomainsResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteNotificationDomainsResult) ProtoMessage() {}
+
+func (x *DeleteNotificationDomainsResult) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[352]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteNotificationDomainsResult.ProtoReflect.Descriptor instead.
+func (*DeleteNotificationDomainsResult) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{352}
 }
 
 type SparkFrostCommitment struct {
@@ -27030,7 +27495,7 @@ type SparkFrostCommitment struct {
 
 func (x *SparkFrostCommitment) Reset() {
 	*x = SparkFrostCommitment{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[346]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[353]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27042,7 +27507,7 @@ func (x *SparkFrostCommitment) String() string {
 func (*SparkFrostCommitment) ProtoMessage() {}
 
 func (x *SparkFrostCommitment) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[346]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[353]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27055,7 +27520,7 @@ func (x *SparkFrostCommitment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkFrostCommitment.ProtoReflect.Descriptor instead.
 func (*SparkFrostCommitment) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{346}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{353}
 }
 
 func (x *SparkFrostCommitment) GetId() string {
@@ -27089,7 +27554,7 @@ type SparkOperatorRecipient struct {
 
 func (x *SparkOperatorRecipient) Reset() {
 	*x = SparkOperatorRecipient{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[347]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[354]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27101,7 +27566,7 @@ func (x *SparkOperatorRecipient) String() string {
 func (*SparkOperatorRecipient) ProtoMessage() {}
 
 func (x *SparkOperatorRecipient) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[347]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[354]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27114,7 +27579,7 @@ func (x *SparkOperatorRecipient) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkOperatorRecipient.ProtoReflect.Descriptor instead.
 func (*SparkOperatorRecipient) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{347}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{354}
 }
 
 func (x *SparkOperatorRecipient) GetOperatorId() string {
@@ -27145,7 +27610,7 @@ type SparkTransferLeaf struct {
 
 func (x *SparkTransferLeaf) Reset() {
 	*x = SparkTransferLeaf{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[348]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[355]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27157,7 +27622,7 @@ func (x *SparkTransferLeaf) String() string {
 func (*SparkTransferLeaf) ProtoMessage() {}
 
 func (x *SparkTransferLeaf) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[348]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[355]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27170,7 +27635,7 @@ func (x *SparkTransferLeaf) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkTransferLeaf.ProtoReflect.Descriptor instead.
 func (*SparkTransferLeaf) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{348}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{355}
 }
 
 func (x *SparkTransferLeaf) GetLeafId() string {
@@ -27226,7 +27691,7 @@ type SparkClaimLeaf struct {
 
 func (x *SparkClaimLeaf) Reset() {
 	*x = SparkClaimLeaf{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[349]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[356]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27238,7 +27703,7 @@ func (x *SparkClaimLeaf) String() string {
 func (*SparkClaimLeaf) ProtoMessage() {}
 
 func (x *SparkClaimLeaf) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[349]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[356]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27251,7 +27716,7 @@ func (x *SparkClaimLeaf) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkClaimLeaf.ProtoReflect.Descriptor instead.
 func (*SparkClaimLeaf) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{349}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{356}
 }
 
 func (x *SparkClaimLeaf) GetLeafId() string {
@@ -27288,7 +27753,7 @@ type SparkTransferPackage struct {
 
 func (x *SparkTransferPackage) Reset() {
 	*x = SparkTransferPackage{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[350]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[357]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27300,7 +27765,7 @@ func (x *SparkTransferPackage) String() string {
 func (*SparkTransferPackage) ProtoMessage() {}
 
 func (x *SparkTransferPackage) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[350]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[357]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27313,7 +27778,7 @@ func (x *SparkTransferPackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkTransferPackage.ProtoReflect.Descriptor instead.
 func (*SparkTransferPackage) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{350}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{357}
 }
 
 func (x *SparkTransferPackage) GetTransferId() string {
@@ -27364,7 +27829,7 @@ type SparkClaimPackage struct {
 
 func (x *SparkClaimPackage) Reset() {
 	*x = SparkClaimPackage{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[351]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[358]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27376,7 +27841,7 @@ func (x *SparkClaimPackage) String() string {
 func (*SparkClaimPackage) ProtoMessage() {}
 
 func (x *SparkClaimPackage) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[351]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[358]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27389,7 +27854,7 @@ func (x *SparkClaimPackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkClaimPackage.ProtoReflect.Descriptor instead.
 func (*SparkClaimPackage) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{351}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{358}
 }
 
 func (x *SparkClaimPackage) GetLeaves() []*SparkClaimLeaf {
@@ -27437,7 +27902,7 @@ type SparkLightningReceivePackage struct {
 
 func (x *SparkLightningReceivePackage) Reset() {
 	*x = SparkLightningReceivePackage{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[352]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[359]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27449,7 +27914,7 @@ func (x *SparkLightningReceivePackage) String() string {
 func (*SparkLightningReceivePackage) ProtoMessage() {}
 
 func (x *SparkLightningReceivePackage) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[352]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[359]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27462,7 +27927,7 @@ func (x *SparkLightningReceivePackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkLightningReceivePackage.ProtoReflect.Descriptor instead.
 func (*SparkLightningReceivePackage) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{352}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{359}
 }
 
 func (x *SparkLightningReceivePackage) GetThreshold() uint32 {
@@ -27489,7 +27954,7 @@ type SparkEncryptedOperatorPackage struct {
 
 func (x *SparkEncryptedOperatorPackage) Reset() {
 	*x = SparkEncryptedOperatorPackage{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[353]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[360]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27501,7 +27966,7 @@ func (x *SparkEncryptedOperatorPackage) String() string {
 func (*SparkEncryptedOperatorPackage) ProtoMessage() {}
 
 func (x *SparkEncryptedOperatorPackage) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[353]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[360]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27514,7 +27979,7 @@ func (x *SparkEncryptedOperatorPackage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkEncryptedOperatorPackage.ProtoReflect.Descriptor instead.
 func (*SparkEncryptedOperatorPackage) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{353}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{360}
 }
 
 func (x *SparkEncryptedOperatorPackage) GetOperatorId() string {
@@ -27544,7 +28009,7 @@ type SparkSignatureRequest struct {
 
 func (x *SparkSignatureRequest) Reset() {
 	*x = SparkSignatureRequest{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[354]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[361]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27556,7 +28021,7 @@ func (x *SparkSignatureRequest) String() string {
 func (*SparkSignatureRequest) ProtoMessage() {}
 
 func (x *SparkSignatureRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[354]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[361]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27569,7 +28034,7 @@ func (x *SparkSignatureRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkSignatureRequest.ProtoReflect.Descriptor instead.
 func (*SparkSignatureRequest) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{354}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{361}
 }
 
 func (x *SparkSignatureRequest) GetDerivation() *SparkKeyDerivation {
@@ -27618,7 +28083,7 @@ type SparkPartialSignature struct {
 
 func (x *SparkPartialSignature) Reset() {
 	*x = SparkPartialSignature{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[355]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[362]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27630,7 +28095,7 @@ func (x *SparkPartialSignature) String() string {
 func (*SparkPartialSignature) ProtoMessage() {}
 
 func (x *SparkPartialSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[355]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[362]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27643,7 +28108,7 @@ func (x *SparkPartialSignature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkPartialSignature.ProtoReflect.Descriptor instead.
 func (*SparkPartialSignature) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{355}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{362}
 }
 
 func (x *SparkPartialSignature) GetSignatureShare() string {
@@ -27677,7 +28142,7 @@ type SparkLeafPublicKey struct {
 
 func (x *SparkLeafPublicKey) Reset() {
 	*x = SparkLeafPublicKey{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[356]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[363]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27689,7 +28154,7 @@ func (x *SparkLeafPublicKey) String() string {
 func (*SparkLeafPublicKey) ProtoMessage() {}
 
 func (x *SparkLeafPublicKey) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[356]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[363]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27702,7 +28167,7 @@ func (x *SparkLeafPublicKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkLeafPublicKey.ProtoReflect.Descriptor instead.
 func (*SparkLeafPublicKey) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{356}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{363}
 }
 
 func (x *SparkLeafPublicKey) GetLeafId() string {
@@ -27729,7 +28194,7 @@ type SparkSignFrostIntent struct {
 
 func (x *SparkSignFrostIntent) Reset() {
 	*x = SparkSignFrostIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[357]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[364]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27741,7 +28206,7 @@ func (x *SparkSignFrostIntent) String() string {
 func (*SparkSignFrostIntent) ProtoMessage() {}
 
 func (x *SparkSignFrostIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[357]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[364]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27754,7 +28219,7 @@ func (x *SparkSignFrostIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkSignFrostIntent.ProtoReflect.Descriptor instead.
 func (*SparkSignFrostIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{357}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{364}
 }
 
 func (x *SparkSignFrostIntent) GetSignWith() string {
@@ -27780,7 +28245,7 @@ type SparkSignFrostResult struct {
 
 func (x *SparkSignFrostResult) Reset() {
 	*x = SparkSignFrostResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[358]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[365]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27792,7 +28257,7 @@ func (x *SparkSignFrostResult) String() string {
 func (*SparkSignFrostResult) ProtoMessage() {}
 
 func (x *SparkSignFrostResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[358]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[365]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27805,7 +28270,7 @@ func (x *SparkSignFrostResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkSignFrostResult.ProtoReflect.Descriptor instead.
 func (*SparkSignFrostResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{358}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{365}
 }
 
 func (x *SparkSignFrostResult) GetSignatures() []*SparkPartialSignature {
@@ -27825,7 +28290,7 @@ type SparkPrepareTransferIntent struct {
 
 func (x *SparkPrepareTransferIntent) Reset() {
 	*x = SparkPrepareTransferIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[359]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[366]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27837,7 +28302,7 @@ func (x *SparkPrepareTransferIntent) String() string {
 func (*SparkPrepareTransferIntent) ProtoMessage() {}
 
 func (x *SparkPrepareTransferIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[359]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[366]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27850,7 +28315,7 @@ func (x *SparkPrepareTransferIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkPrepareTransferIntent.ProtoReflect.Descriptor instead.
 func (*SparkPrepareTransferIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{359}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{366}
 }
 
 func (x *SparkPrepareTransferIntent) GetSignWith() string {
@@ -27878,7 +28343,7 @@ type SparkPrepareTransferResult struct {
 
 func (x *SparkPrepareTransferResult) Reset() {
 	*x = SparkPrepareTransferResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[360]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[367]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27890,7 +28355,7 @@ func (x *SparkPrepareTransferResult) String() string {
 func (*SparkPrepareTransferResult) ProtoMessage() {}
 
 func (x *SparkPrepareTransferResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[360]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[367]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27903,7 +28368,7 @@ func (x *SparkPrepareTransferResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkPrepareTransferResult.ProtoReflect.Descriptor instead.
 func (*SparkPrepareTransferResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{360}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{367}
 }
 
 func (x *SparkPrepareTransferResult) GetOperatorPackages() []*SparkEncryptedOperatorPackage {
@@ -27937,7 +28402,7 @@ type SparkClaimTransferIntent struct {
 
 func (x *SparkClaimTransferIntent) Reset() {
 	*x = SparkClaimTransferIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[361]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[368]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -27949,7 +28414,7 @@ func (x *SparkClaimTransferIntent) String() string {
 func (*SparkClaimTransferIntent) ProtoMessage() {}
 
 func (x *SparkClaimTransferIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[361]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[368]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -27962,7 +28427,7 @@ func (x *SparkClaimTransferIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkClaimTransferIntent.ProtoReflect.Descriptor instead.
 func (*SparkClaimTransferIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{361}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{368}
 }
 
 func (x *SparkClaimTransferIntent) GetSignWith() string {
@@ -27989,7 +28454,7 @@ type SparkClaimTransferResult struct {
 
 func (x *SparkClaimTransferResult) Reset() {
 	*x = SparkClaimTransferResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[362]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[369]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28001,7 +28466,7 @@ func (x *SparkClaimTransferResult) String() string {
 func (*SparkClaimTransferResult) ProtoMessage() {}
 
 func (x *SparkClaimTransferResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[362]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[369]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28014,7 +28479,7 @@ func (x *SparkClaimTransferResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkClaimTransferResult.ProtoReflect.Descriptor instead.
 func (*SparkClaimTransferResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{362}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{369}
 }
 
 func (x *SparkClaimTransferResult) GetOperatorPackages() []*SparkEncryptedOperatorPackage {
@@ -28041,7 +28506,7 @@ type SparkPrepareLightningReceiveIntent struct {
 
 func (x *SparkPrepareLightningReceiveIntent) Reset() {
 	*x = SparkPrepareLightningReceiveIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[363]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[370]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28053,7 +28518,7 @@ func (x *SparkPrepareLightningReceiveIntent) String() string {
 func (*SparkPrepareLightningReceiveIntent) ProtoMessage() {}
 
 func (x *SparkPrepareLightningReceiveIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[363]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[370]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28066,7 +28531,7 @@ func (x *SparkPrepareLightningReceiveIntent) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use SparkPrepareLightningReceiveIntent.ProtoReflect.Descriptor instead.
 func (*SparkPrepareLightningReceiveIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{363}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{370}
 }
 
 func (x *SparkPrepareLightningReceiveIntent) GetSignWith() string {
@@ -28093,7 +28558,7 @@ type SparkPrepareLightningReceiveResult struct {
 
 func (x *SparkPrepareLightningReceiveResult) Reset() {
 	*x = SparkPrepareLightningReceiveResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[364]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[371]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28105,7 +28570,7 @@ func (x *SparkPrepareLightningReceiveResult) String() string {
 func (*SparkPrepareLightningReceiveResult) ProtoMessage() {}
 
 func (x *SparkPrepareLightningReceiveResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[364]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[371]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28118,7 +28583,7 @@ func (x *SparkPrepareLightningReceiveResult) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use SparkPrepareLightningReceiveResult.ProtoReflect.Descriptor instead.
 func (*SparkPrepareLightningReceiveResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{364}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{371}
 }
 
 func (x *SparkPrepareLightningReceiveResult) GetOperatorPackages() []*SparkEncryptedOperatorPackage {
@@ -28137,7 +28602,7 @@ func (x *SparkPrepareLightningReceiveResult) GetPaymentHash() string {
 
 type InitImportSecretsIntent struct {
 	state           protoimpl.MessageState       `protogen:"open.v1"`
-	EncryptionSuite v13.TransportEncryptionSuite `protobuf:"varint,1,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
+	EncryptionSuite v11.TransportEncryptionSuite `protobuf:"varint,1,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
 	NumSecrets      int32                        `protobuf:"varint,2,opt,name=num_secrets,json=numSecrets,proto3" json:"num_secrets,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -28145,7 +28610,7 @@ type InitImportSecretsIntent struct {
 
 func (x *InitImportSecretsIntent) Reset() {
 	*x = InitImportSecretsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[365]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[372]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28157,7 +28622,7 @@ func (x *InitImportSecretsIntent) String() string {
 func (*InitImportSecretsIntent) ProtoMessage() {}
 
 func (x *InitImportSecretsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[365]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[372]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28170,14 +28635,14 @@ func (x *InitImportSecretsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitImportSecretsIntent.ProtoReflect.Descriptor instead.
 func (*InitImportSecretsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{365}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{372}
 }
 
-func (x *InitImportSecretsIntent) GetEncryptionSuite() v13.TransportEncryptionSuite {
+func (x *InitImportSecretsIntent) GetEncryptionSuite() v11.TransportEncryptionSuite {
 	if x != nil {
 		return x.EncryptionSuite
 	}
-	return v13.TransportEncryptionSuite(0)
+	return v11.TransportEncryptionSuite(0)
 }
 
 func (x *InitImportSecretsIntent) GetNumSecrets() int32 {
@@ -28196,7 +28661,7 @@ type InitImportSecretsResult struct {
 
 func (x *InitImportSecretsResult) Reset() {
 	*x = InitImportSecretsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[366]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[373]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28208,7 +28673,7 @@ func (x *InitImportSecretsResult) String() string {
 func (*InitImportSecretsResult) ProtoMessage() {}
 
 func (x *InitImportSecretsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[366]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[373]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28221,7 +28686,7 @@ func (x *InitImportSecretsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitImportSecretsResult.ProtoReflect.Descriptor instead.
 func (*InitImportSecretsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{366}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{373}
 }
 
 func (x *InitImportSecretsResult) GetEnclaveTargetMessages() []string {
@@ -28240,7 +28705,7 @@ type ImportSecretsIntent struct {
 
 func (x *ImportSecretsIntent) Reset() {
 	*x = ImportSecretsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[367]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[374]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28252,7 +28717,7 @@ func (x *ImportSecretsIntent) String() string {
 func (*ImportSecretsIntent) ProtoMessage() {}
 
 func (x *ImportSecretsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[367]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[374]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28265,7 +28730,7 @@ func (x *ImportSecretsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportSecretsIntent.ProtoReflect.Descriptor instead.
 func (*ImportSecretsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{367}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{374}
 }
 
 func (x *ImportSecretsIntent) GetSecrets() []*ImportSecretParams {
@@ -28280,15 +28745,15 @@ type ImportSecretParams struct {
 	Name             *string                      `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	SecretPayload    string                       `protobuf:"bytes,2,opt,name=secret_payload,json=secretPayload,proto3" json:"secret_payload,omitempty"`
 	TargetPublicKey  string                       `protobuf:"bytes,3,opt,name=target_public_key,json=targetPublicKey,proto3" json:"target_public_key,omitempty"`
-	EncryptionSuite  v13.TransportEncryptionSuite `protobuf:"varint,4,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
-	StaticProperties []*v13.KeyValue              `protobuf:"bytes,5,rep,name=static_properties,json=staticProperties,proto3" json:"static_properties,omitempty"`
+	EncryptionSuite  v11.TransportEncryptionSuite `protobuf:"varint,4,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
+	StaticProperties []*v11.KeyValue              `protobuf:"bytes,5,rep,name=static_properties,json=staticProperties,proto3" json:"static_properties,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
 
 func (x *ImportSecretParams) Reset() {
 	*x = ImportSecretParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[368]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[375]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28300,7 +28765,7 @@ func (x *ImportSecretParams) String() string {
 func (*ImportSecretParams) ProtoMessage() {}
 
 func (x *ImportSecretParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[368]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[375]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28313,7 +28778,7 @@ func (x *ImportSecretParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportSecretParams.ProtoReflect.Descriptor instead.
 func (*ImportSecretParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{368}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{375}
 }
 
 func (x *ImportSecretParams) GetName() string {
@@ -28337,14 +28802,14 @@ func (x *ImportSecretParams) GetTargetPublicKey() string {
 	return ""
 }
 
-func (x *ImportSecretParams) GetEncryptionSuite() v13.TransportEncryptionSuite {
+func (x *ImportSecretParams) GetEncryptionSuite() v11.TransportEncryptionSuite {
 	if x != nil {
 		return x.EncryptionSuite
 	}
-	return v13.TransportEncryptionSuite(0)
+	return v11.TransportEncryptionSuite(0)
 }
 
-func (x *ImportSecretParams) GetStaticProperties() []*v13.KeyValue {
+func (x *ImportSecretParams) GetStaticProperties() []*v11.KeyValue {
 	if x != nil {
 		return x.StaticProperties
 	}
@@ -28360,7 +28825,7 @@ type ImportSecretsResult struct {
 
 func (x *ImportSecretsResult) Reset() {
 	*x = ImportSecretsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[369]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[376]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28372,7 +28837,7 @@ func (x *ImportSecretsResult) String() string {
 func (*ImportSecretsResult) ProtoMessage() {}
 
 func (x *ImportSecretsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[369]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[376]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28385,7 +28850,7 @@ func (x *ImportSecretsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportSecretsResult.ProtoReflect.Descriptor instead.
 func (*ImportSecretsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{369}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{376}
 }
 
 func (x *ImportSecretsResult) GetSecretIds() []string {
@@ -28404,7 +28869,7 @@ type DeleteSecretsIntent struct {
 
 func (x *DeleteSecretsIntent) Reset() {
 	*x = DeleteSecretsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[370]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[377]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28416,7 +28881,7 @@ func (x *DeleteSecretsIntent) String() string {
 func (*DeleteSecretsIntent) ProtoMessage() {}
 
 func (x *DeleteSecretsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[370]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[377]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28429,7 +28894,7 @@ func (x *DeleteSecretsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSecretsIntent.ProtoReflect.Descriptor instead.
 func (*DeleteSecretsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{370}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{377}
 }
 
 func (x *DeleteSecretsIntent) GetSecretIds() []string {
@@ -28448,7 +28913,7 @@ type DeleteSecretsResult struct {
 
 func (x *DeleteSecretsResult) Reset() {
 	*x = DeleteSecretsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[371]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[378]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28460,7 +28925,7 @@ func (x *DeleteSecretsResult) String() string {
 func (*DeleteSecretsResult) ProtoMessage() {}
 
 func (x *DeleteSecretsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[371]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[378]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28473,7 +28938,7 @@ func (x *DeleteSecretsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSecretsResult.ProtoReflect.Descriptor instead.
 func (*DeleteSecretsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{371}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{378}
 }
 
 func (x *DeleteSecretsResult) GetSecretIds() []string {
@@ -28492,7 +28957,7 @@ type ExportSecretsIntent struct {
 
 func (x *ExportSecretsIntent) Reset() {
 	*x = ExportSecretsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[372]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[379]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28504,7 +28969,7 @@ func (x *ExportSecretsIntent) String() string {
 func (*ExportSecretsIntent) ProtoMessage() {}
 
 func (x *ExportSecretsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[372]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[379]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28517,7 +28982,7 @@ func (x *ExportSecretsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportSecretsIntent.ProtoReflect.Descriptor instead.
 func (*ExportSecretsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{372}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{379}
 }
 
 func (x *ExportSecretsIntent) GetSecrets() []*ExportSecretParams {
@@ -28531,15 +28996,15 @@ type ExportSecretParams struct {
 	state           protoimpl.MessageState       `protogen:"open.v1"`
 	SecretId        string                       `protobuf:"bytes,1,opt,name=secret_id,json=secretId,proto3" json:"secret_id,omitempty"`
 	TargetPublicKey string                       `protobuf:"bytes,2,opt,name=target_public_key,json=targetPublicKey,proto3" json:"target_public_key,omitempty"`
-	EncryptionSuite v13.TransportEncryptionSuite `protobuf:"varint,3,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
-	RequestContext  []*v13.KeyValue              `protobuf:"bytes,4,rep,name=request_context,json=requestContext,proto3" json:"request_context,omitempty"`
+	EncryptionSuite v11.TransportEncryptionSuite `protobuf:"varint,3,opt,name=encryption_suite,json=encryptionSuite,proto3,enum=immutable.models.v1.TransportEncryptionSuite" json:"encryption_suite,omitempty"`
+	RequestContext  []*v11.KeyValue              `protobuf:"bytes,4,rep,name=request_context,json=requestContext,proto3" json:"request_context,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
 
 func (x *ExportSecretParams) Reset() {
 	*x = ExportSecretParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[373]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[380]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28551,7 +29016,7 @@ func (x *ExportSecretParams) String() string {
 func (*ExportSecretParams) ProtoMessage() {}
 
 func (x *ExportSecretParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[373]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[380]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28564,7 +29029,7 @@ func (x *ExportSecretParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportSecretParams.ProtoReflect.Descriptor instead.
 func (*ExportSecretParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{373}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{380}
 }
 
 func (x *ExportSecretParams) GetSecretId() string {
@@ -28581,14 +29046,14 @@ func (x *ExportSecretParams) GetTargetPublicKey() string {
 	return ""
 }
 
-func (x *ExportSecretParams) GetEncryptionSuite() v13.TransportEncryptionSuite {
+func (x *ExportSecretParams) GetEncryptionSuite() v11.TransportEncryptionSuite {
 	if x != nil {
 		return x.EncryptionSuite
 	}
-	return v13.TransportEncryptionSuite(0)
+	return v11.TransportEncryptionSuite(0)
 }
 
-func (x *ExportSecretParams) GetRequestContext() []*v13.KeyValue {
+func (x *ExportSecretParams) GetRequestContext() []*v11.KeyValue {
 	if x != nil {
 		return x.RequestContext
 	}
@@ -28604,7 +29069,7 @@ type ExportSecretsResult struct {
 
 func (x *ExportSecretsResult) Reset() {
 	*x = ExportSecretsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[374]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[381]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28616,7 +29081,7 @@ func (x *ExportSecretsResult) String() string {
 func (*ExportSecretsResult) ProtoMessage() {}
 
 func (x *ExportSecretsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[374]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[381]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28629,7 +29094,7 @@ func (x *ExportSecretsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportSecretsResult.ProtoReflect.Descriptor instead.
 func (*ExportSecretsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{374}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{381}
 }
 
 func (x *ExportSecretsResult) GetSecretPayloads() []string {
@@ -28651,7 +29116,7 @@ type CreateUsageControlIntent struct {
 
 func (x *CreateUsageControlIntent) Reset() {
 	*x = CreateUsageControlIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[375]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[382]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28663,7 +29128,7 @@ func (x *CreateUsageControlIntent) String() string {
 func (*CreateUsageControlIntent) ProtoMessage() {}
 
 func (x *CreateUsageControlIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[375]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[382]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28676,7 +29141,7 @@ func (x *CreateUsageControlIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUsageControlIntent.ProtoReflect.Descriptor instead.
 func (*CreateUsageControlIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{375}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{382}
 }
 
 func (x *CreateUsageControlIntent) GetName() string {
@@ -28716,7 +29181,7 @@ type CreateUsageControlResult struct {
 
 func (x *CreateUsageControlResult) Reset() {
 	*x = CreateUsageControlResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[376]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[383]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28728,7 +29193,7 @@ func (x *CreateUsageControlResult) String() string {
 func (*CreateUsageControlResult) ProtoMessage() {}
 
 func (x *CreateUsageControlResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[376]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[383]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28741,7 +29206,7 @@ func (x *CreateUsageControlResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUsageControlResult.ProtoReflect.Descriptor instead.
 func (*CreateUsageControlResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{376}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{383}
 }
 
 func (x *CreateUsageControlResult) GetUsageControlId() string {
@@ -28760,7 +29225,7 @@ type DeleteUsageControlsIntent struct {
 
 func (x *DeleteUsageControlsIntent) Reset() {
 	*x = DeleteUsageControlsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[377]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[384]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28772,7 +29237,7 @@ func (x *DeleteUsageControlsIntent) String() string {
 func (*DeleteUsageControlsIntent) ProtoMessage() {}
 
 func (x *DeleteUsageControlsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[377]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[384]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28785,7 +29250,7 @@ func (x *DeleteUsageControlsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUsageControlsIntent.ProtoReflect.Descriptor instead.
 func (*DeleteUsageControlsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{377}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{384}
 }
 
 func (x *DeleteUsageControlsIntent) GetUsageControlIds() []string {
@@ -28804,7 +29269,7 @@ type DeleteUsageControlsResult struct {
 
 func (x *DeleteUsageControlsResult) Reset() {
 	*x = DeleteUsageControlsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[378]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[385]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28816,7 +29281,7 @@ func (x *DeleteUsageControlsResult) String() string {
 func (*DeleteUsageControlsResult) ProtoMessage() {}
 
 func (x *DeleteUsageControlsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[378]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[385]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28829,7 +29294,7 @@ func (x *DeleteUsageControlsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUsageControlsResult.ProtoReflect.Descriptor instead.
 func (*DeleteUsageControlsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{378}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{385}
 }
 
 func (x *DeleteUsageControlsResult) GetUsageControlIds() []string {
@@ -28851,7 +29316,7 @@ type ClientSignature struct {
 
 func (x *ClientSignature) Reset() {
 	*x = ClientSignature{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[379]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[386]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28863,7 +29328,7 @@ func (x *ClientSignature) String() string {
 func (*ClientSignature) ProtoMessage() {}
 
 func (x *ClientSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[379]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[386]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28876,7 +29341,7 @@ func (x *ClientSignature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientSignature.ProtoReflect.Descriptor instead.
 func (*ClientSignature) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{379}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{386}
 }
 
 func (x *ClientSignature) GetPublicKey() string {
@@ -28916,7 +29381,7 @@ type UpdateTvcAppLiveDeploymentIntent struct {
 
 func (x *UpdateTvcAppLiveDeploymentIntent) Reset() {
 	*x = UpdateTvcAppLiveDeploymentIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[380]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[387]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28928,7 +29393,7 @@ func (x *UpdateTvcAppLiveDeploymentIntent) String() string {
 func (*UpdateTvcAppLiveDeploymentIntent) ProtoMessage() {}
 
 func (x *UpdateTvcAppLiveDeploymentIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[380]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[387]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28941,7 +29406,7 @@ func (x *UpdateTvcAppLiveDeploymentIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTvcAppLiveDeploymentIntent.ProtoReflect.Descriptor instead.
 func (*UpdateTvcAppLiveDeploymentIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{380}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{387}
 }
 
 func (x *UpdateTvcAppLiveDeploymentIntent) GetDeploymentId() string {
@@ -28959,7 +29424,7 @@ type UpdateTvcAppLiveDeploymentResult struct {
 
 func (x *UpdateTvcAppLiveDeploymentResult) Reset() {
 	*x = UpdateTvcAppLiveDeploymentResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[381]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[388]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -28971,7 +29436,7 @@ func (x *UpdateTvcAppLiveDeploymentResult) String() string {
 func (*UpdateTvcAppLiveDeploymentResult) ProtoMessage() {}
 
 func (x *UpdateTvcAppLiveDeploymentResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[381]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[388]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -28984,7 +29449,7 @@ func (x *UpdateTvcAppLiveDeploymentResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTvcAppLiveDeploymentResult.ProtoReflect.Descriptor instead.
 func (*UpdateTvcAppLiveDeploymentResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{381}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{388}
 }
 
 type DeleteTvcDeploymentIntent struct {
@@ -28996,7 +29461,7 @@ type DeleteTvcDeploymentIntent struct {
 
 func (x *DeleteTvcDeploymentIntent) Reset() {
 	*x = DeleteTvcDeploymentIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[382]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[389]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29008,7 +29473,7 @@ func (x *DeleteTvcDeploymentIntent) String() string {
 func (*DeleteTvcDeploymentIntent) ProtoMessage() {}
 
 func (x *DeleteTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[382]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[389]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29021,7 +29486,7 @@ func (x *DeleteTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTvcDeploymentIntent.ProtoReflect.Descriptor instead.
 func (*DeleteTvcDeploymentIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{382}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{389}
 }
 
 func (x *DeleteTvcDeploymentIntent) GetDeploymentId() string {
@@ -29040,7 +29505,7 @@ type DeleteTvcDeploymentResult struct {
 
 func (x *DeleteTvcDeploymentResult) Reset() {
 	*x = DeleteTvcDeploymentResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[383]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[390]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29052,7 +29517,7 @@ func (x *DeleteTvcDeploymentResult) String() string {
 func (*DeleteTvcDeploymentResult) ProtoMessage() {}
 
 func (x *DeleteTvcDeploymentResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[383]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[390]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29065,7 +29530,7 @@ func (x *DeleteTvcDeploymentResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTvcDeploymentResult.ProtoReflect.Descriptor instead.
 func (*DeleteTvcDeploymentResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{383}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{390}
 }
 
 func (x *DeleteTvcDeploymentResult) GetDeploymentId() string {
@@ -29084,7 +29549,7 @@ type DeleteTvcAppAndDeploymentsIntent struct {
 
 func (x *DeleteTvcAppAndDeploymentsIntent) Reset() {
 	*x = DeleteTvcAppAndDeploymentsIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[384]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[391]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29096,7 +29561,7 @@ func (x *DeleteTvcAppAndDeploymentsIntent) String() string {
 func (*DeleteTvcAppAndDeploymentsIntent) ProtoMessage() {}
 
 func (x *DeleteTvcAppAndDeploymentsIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[384]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[391]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29109,7 +29574,7 @@ func (x *DeleteTvcAppAndDeploymentsIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTvcAppAndDeploymentsIntent.ProtoReflect.Descriptor instead.
 func (*DeleteTvcAppAndDeploymentsIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{384}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{391}
 }
 
 func (x *DeleteTvcAppAndDeploymentsIntent) GetAppId() string {
@@ -29128,7 +29593,7 @@ type DeleteTvcAppAndDeploymentsResult struct {
 
 func (x *DeleteTvcAppAndDeploymentsResult) Reset() {
 	*x = DeleteTvcAppAndDeploymentsResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[385]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[392]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29140,7 +29605,7 @@ func (x *DeleteTvcAppAndDeploymentsResult) String() string {
 func (*DeleteTvcAppAndDeploymentsResult) ProtoMessage() {}
 
 func (x *DeleteTvcAppAndDeploymentsResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[385]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[392]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29153,7 +29618,7 @@ func (x *DeleteTvcAppAndDeploymentsResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTvcAppAndDeploymentsResult.ProtoReflect.Descriptor instead.
 func (*DeleteTvcAppAndDeploymentsResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{385}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{392}
 }
 
 func (x *DeleteTvcAppAndDeploymentsResult) GetAppId() string {
@@ -29172,7 +29637,7 @@ type RestoreTvcDeploymentIntent struct {
 
 func (x *RestoreTvcDeploymentIntent) Reset() {
 	*x = RestoreTvcDeploymentIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[386]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[393]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29184,7 +29649,7 @@ func (x *RestoreTvcDeploymentIntent) String() string {
 func (*RestoreTvcDeploymentIntent) ProtoMessage() {}
 
 func (x *RestoreTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[386]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[393]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29197,7 +29662,7 @@ func (x *RestoreTvcDeploymentIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RestoreTvcDeploymentIntent.ProtoReflect.Descriptor instead.
 func (*RestoreTvcDeploymentIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{386}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{393}
 }
 
 func (x *RestoreTvcDeploymentIntent) GetDeploymentId() string {
@@ -29216,7 +29681,7 @@ type RestoreTvcDeploymentResult struct {
 
 func (x *RestoreTvcDeploymentResult) Reset() {
 	*x = RestoreTvcDeploymentResult{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[387]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[394]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29228,7 +29693,7 @@ func (x *RestoreTvcDeploymentResult) String() string {
 func (*RestoreTvcDeploymentResult) ProtoMessage() {}
 
 func (x *RestoreTvcDeploymentResult) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[387]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[394]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29241,7 +29706,7 @@ func (x *RestoreTvcDeploymentResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RestoreTvcDeploymentResult.ProtoReflect.Descriptor instead.
 func (*RestoreTvcDeploymentResult) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{387}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{394}
 }
 
 func (x *RestoreTvcDeploymentResult) GetDeploymentId() string {
@@ -29260,7 +29725,7 @@ type RequiredAuthenticationMethodParams struct {
 
 func (x *RequiredAuthenticationMethodParams) Reset() {
 	*x = RequiredAuthenticationMethodParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[388]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[395]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29272,7 +29737,7 @@ func (x *RequiredAuthenticationMethodParams) String() string {
 func (*RequiredAuthenticationMethodParams) ProtoMessage() {}
 
 func (x *RequiredAuthenticationMethodParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[388]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[395]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29285,7 +29750,7 @@ func (x *RequiredAuthenticationMethodParams) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use RequiredAuthenticationMethodParams.ProtoReflect.Descriptor instead.
 func (*RequiredAuthenticationMethodParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{388}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{395}
 }
 
 func (x *RequiredAuthenticationMethodParams) GetAny() []*AuthenticationMethodParams {
@@ -29305,7 +29770,7 @@ type AuthenticationMethodParams struct {
 
 func (x *AuthenticationMethodParams) Reset() {
 	*x = AuthenticationMethodParams{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[389]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[396]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29317,7 +29782,7 @@ func (x *AuthenticationMethodParams) String() string {
 func (*AuthenticationMethodParams) ProtoMessage() {}
 
 func (x *AuthenticationMethodParams) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[389]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[396]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29330,7 +29795,7 @@ func (x *AuthenticationMethodParams) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticationMethodParams.ProtoReflect.Descriptor instead.
 func (*AuthenticationMethodParams) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{389}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{396}
 }
 
 func (x *AuthenticationMethodParams) GetType() v1.AuthenticationType {
@@ -29363,7 +29828,7 @@ type SparkKeyDerivation struct {
 
 func (x *SparkKeyDerivation) Reset() {
 	*x = SparkKeyDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[390]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[397]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29375,7 +29840,7 @@ func (x *SparkKeyDerivation) String() string {
 func (*SparkKeyDerivation) ProtoMessage() {}
 
 func (x *SparkKeyDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[390]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[397]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29388,7 +29853,7 @@ func (x *SparkKeyDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkKeyDerivation.ProtoReflect.Descriptor instead.
 func (*SparkKeyDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{390}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{397}
 }
 
 func (x *SparkKeyDerivation) GetKey() isSparkKeyDerivation_Key {
@@ -29485,7 +29950,7 @@ type SparkIdentityDerivation struct {
 
 func (x *SparkIdentityDerivation) Reset() {
 	*x = SparkIdentityDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[391]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[398]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29497,7 +29962,7 @@ func (x *SparkIdentityDerivation) String() string {
 func (*SparkIdentityDerivation) ProtoMessage() {}
 
 func (x *SparkIdentityDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[391]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[398]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29510,7 +29975,7 @@ func (x *SparkIdentityDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkIdentityDerivation.ProtoReflect.Descriptor instead.
 func (*SparkIdentityDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{391}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{398}
 }
 
 type SparkSigningLeafDerivation struct {
@@ -29522,7 +29987,7 @@ type SparkSigningLeafDerivation struct {
 
 func (x *SparkSigningLeafDerivation) Reset() {
 	*x = SparkSigningLeafDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[392]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[399]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29534,7 +29999,7 @@ func (x *SparkSigningLeafDerivation) String() string {
 func (*SparkSigningLeafDerivation) ProtoMessage() {}
 
 func (x *SparkSigningLeafDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[392]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[399]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29547,7 +30012,7 @@ func (x *SparkSigningLeafDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkSigningLeafDerivation.ProtoReflect.Descriptor instead.
 func (*SparkSigningLeafDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{392}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{399}
 }
 
 func (x *SparkSigningLeafDerivation) GetLeafId() string {
@@ -29565,7 +30030,7 @@ type SparkDepositDerivation struct {
 
 func (x *SparkDepositDerivation) Reset() {
 	*x = SparkDepositDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[393]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[400]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29577,7 +30042,7 @@ func (x *SparkDepositDerivation) String() string {
 func (*SparkDepositDerivation) ProtoMessage() {}
 
 func (x *SparkDepositDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[393]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[400]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29590,7 +30055,7 @@ func (x *SparkDepositDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkDepositDerivation.ProtoReflect.Descriptor instead.
 func (*SparkDepositDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{393}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{400}
 }
 
 type SparkStaticDepositDerivation struct {
@@ -29602,7 +30067,7 @@ type SparkStaticDepositDerivation struct {
 
 func (x *SparkStaticDepositDerivation) Reset() {
 	*x = SparkStaticDepositDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[394]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[401]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29614,7 +30079,7 @@ func (x *SparkStaticDepositDerivation) String() string {
 func (*SparkStaticDepositDerivation) ProtoMessage() {}
 
 func (x *SparkStaticDepositDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[394]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[401]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29627,7 +30092,7 @@ func (x *SparkStaticDepositDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkStaticDepositDerivation.ProtoReflect.Descriptor instead.
 func (*SparkStaticDepositDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{394}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{401}
 }
 
 func (x *SparkStaticDepositDerivation) GetIndex() uint32 {
@@ -29645,7 +30110,7 @@ type SparkHtlcPreimageDerivation struct {
 
 func (x *SparkHtlcPreimageDerivation) Reset() {
 	*x = SparkHtlcPreimageDerivation{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[395]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[402]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29657,7 +30122,7 @@ func (x *SparkHtlcPreimageDerivation) String() string {
 func (*SparkHtlcPreimageDerivation) ProtoMessage() {}
 
 func (x *SparkHtlcPreimageDerivation) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[395]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[402]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29670,7 +30135,7 @@ func (x *SparkHtlcPreimageDerivation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SparkHtlcPreimageDerivation.ProtoReflect.Descriptor instead.
 func (*SparkHtlcPreimageDerivation) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{395}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{402}
 }
 
 type EthUndelegate7702Intent struct {
@@ -29687,7 +30152,7 @@ type EthUndelegate7702Intent struct {
 
 func (x *EthUndelegate7702Intent) Reset() {
 	*x = EthUndelegate7702Intent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[396]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[403]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29699,7 +30164,7 @@ func (x *EthUndelegate7702Intent) String() string {
 func (*EthUndelegate7702Intent) ProtoMessage() {}
 
 func (x *EthUndelegate7702Intent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[396]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[403]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29712,7 +30177,7 @@ func (x *EthUndelegate7702Intent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthUndelegate7702Intent.ProtoReflect.Descriptor instead.
 func (*EthUndelegate7702Intent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{396}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{403}
 }
 
 func (x *EthUndelegate7702Intent) GetFrom() string {
@@ -29766,7 +30231,7 @@ type EthUndelegate7702Result struct {
 
 func (x *EthUndelegate7702Result) Reset() {
 	*x = EthUndelegate7702Result{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[397]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[404]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29778,7 +30243,7 @@ func (x *EthUndelegate7702Result) String() string {
 func (*EthUndelegate7702Result) ProtoMessage() {}
 
 func (x *EthUndelegate7702Result) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[397]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[404]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29791,7 +30256,7 @@ func (x *EthUndelegate7702Result) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EthUndelegate7702Result.ProtoReflect.Descriptor instead.
 func (*EthUndelegate7702Result) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{397}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{404}
 }
 
 func (x *EthUndelegate7702Result) GetSendTransactionStatusId() string {
@@ -29819,7 +30284,7 @@ type ExecuteSwapIntentV2 struct {
 
 func (x *ExecuteSwapIntentV2) Reset() {
 	*x = ExecuteSwapIntentV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[398]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[405]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29831,7 +30296,7 @@ func (x *ExecuteSwapIntentV2) String() string {
 func (*ExecuteSwapIntentV2) ProtoMessage() {}
 
 func (x *ExecuteSwapIntentV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[398]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[405]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29844,7 +30309,7 @@ func (x *ExecuteSwapIntentV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapIntentV2.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapIntentV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{398}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{405}
 }
 
 func (x *ExecuteSwapIntentV2) GetQuoteId() string {
@@ -29936,7 +30401,7 @@ type ExecuteSwapIntentV3 struct {
 
 func (x *ExecuteSwapIntentV3) Reset() {
 	*x = ExecuteSwapIntentV3{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[399]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[406]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -29948,7 +30413,7 @@ func (x *ExecuteSwapIntentV3) String() string {
 func (*ExecuteSwapIntentV3) ProtoMessage() {}
 
 func (x *ExecuteSwapIntentV3) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[399]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[406]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -29961,7 +30426,7 @@ func (x *ExecuteSwapIntentV3) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapIntentV3.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapIntentV3) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{399}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{406}
 }
 
 func (x *ExecuteSwapIntentV3) GetQuoteId() string {
@@ -30054,7 +30519,7 @@ type CreateSwapQuoteIntent struct {
 
 func (x *CreateSwapQuoteIntent) Reset() {
 	*x = CreateSwapQuoteIntent{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[400]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[407]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30066,7 +30531,7 @@ func (x *CreateSwapQuoteIntent) String() string {
 func (*CreateSwapQuoteIntent) ProtoMessage() {}
 
 func (x *CreateSwapQuoteIntent) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[400]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[407]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30079,7 +30544,7 @@ func (x *CreateSwapQuoteIntent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSwapQuoteIntent.ProtoReflect.Descriptor instead.
 func (*CreateSwapQuoteIntent) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{400}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{407}
 }
 
 func (x *CreateSwapQuoteIntent) GetSignWith() string {
@@ -30131,7 +30596,7 @@ type CreateSwapQuoteIntentV2 struct {
 
 func (x *CreateSwapQuoteIntentV2) Reset() {
 	*x = CreateSwapQuoteIntentV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[401]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[408]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30143,7 +30608,7 @@ func (x *CreateSwapQuoteIntentV2) String() string {
 func (*CreateSwapQuoteIntentV2) ProtoMessage() {}
 
 func (x *CreateSwapQuoteIntentV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[401]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[408]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30156,7 +30621,7 @@ func (x *CreateSwapQuoteIntentV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSwapQuoteIntentV2.ProtoReflect.Descriptor instead.
 func (*CreateSwapQuoteIntentV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{401}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{408}
 }
 
 func (x *CreateSwapQuoteIntentV2) GetSignWith() string {
@@ -30217,7 +30682,7 @@ type CreateSwapQuoteIntentV3 struct {
 
 func (x *CreateSwapQuoteIntentV3) Reset() {
 	*x = CreateSwapQuoteIntentV3{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[402]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[409]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30229,7 +30694,7 @@ func (x *CreateSwapQuoteIntentV3) String() string {
 func (*CreateSwapQuoteIntentV3) ProtoMessage() {}
 
 func (x *CreateSwapQuoteIntentV3) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[402]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[409]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30242,7 +30707,7 @@ func (x *CreateSwapQuoteIntentV3) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSwapQuoteIntentV3.ProtoReflect.Descriptor instead.
 func (*CreateSwapQuoteIntentV3) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{402}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{409}
 }
 
 func (x *CreateSwapQuoteIntentV3) GetSignWith() string {
@@ -30315,13 +30780,14 @@ type SwapQuoteV2 struct {
 	FixedRate                       bool                   `protobuf:"varint,11,opt,name=fixed_rate,json=fixedRate,proto3" json:"fixed_rate,omitempty"`
 	EstimatedFixedRateAdjustmentUsd *string                `protobuf:"bytes,17,opt,name=estimated_fixed_rate_adjustment_usd,json=estimatedFixedRateAdjustmentUsd,proto3,oneof" json:"estimated_fixed_rate_adjustment_usd,omitempty"`
 	EstimatedCharges                *SwapCharges           `protobuf:"bytes,18,opt,name=estimated_charges,json=estimatedCharges,proto3,oneof" json:"estimated_charges,omitempty"`
+	Transactions                    []*SwapExecutionCall   `protobuf:"bytes,19,rep,name=transactions,proto3" json:"transactions,omitempty"`
 	unknownFields                   protoimpl.UnknownFields
 	sizeCache                       protoimpl.SizeCache
 }
 
 func (x *SwapQuoteV2) Reset() {
 	*x = SwapQuoteV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[403]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[410]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30333,7 +30799,7 @@ func (x *SwapQuoteV2) String() string {
 func (*SwapQuoteV2) ProtoMessage() {}
 
 func (x *SwapQuoteV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[403]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[410]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30346,7 +30812,7 @@ func (x *SwapQuoteV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwapQuoteV2.ProtoReflect.Descriptor instead.
 func (*SwapQuoteV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{403}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{410}
 }
 
 func (x *SwapQuoteV2) GetQuoteId() string {
@@ -30433,6 +30899,73 @@ func (x *SwapQuoteV2) GetEstimatedCharges() *SwapCharges {
 	return nil
 }
 
+func (x *SwapQuoteV2) GetTransactions() []*SwapExecutionCall {
+	if x != nil {
+		return x.Transactions
+	}
+	return nil
+}
+
+type SwapExecutionCall struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	To            string                 `protobuf:"bytes,1,opt,name=to,proto3" json:"to,omitempty"`
+	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Data          string                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SwapExecutionCall) Reset() {
+	*x = SwapExecutionCall{}
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[411]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SwapExecutionCall) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SwapExecutionCall) ProtoMessage() {}
+
+func (x *SwapExecutionCall) ProtoReflect() protoreflect.Message {
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[411]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SwapExecutionCall.ProtoReflect.Descriptor instead.
+func (*SwapExecutionCall) Descriptor() ([]byte, []int) {
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{411}
+}
+
+func (x *SwapExecutionCall) GetTo() string {
+	if x != nil {
+		return x.To
+	}
+	return ""
+}
+
+func (x *SwapExecutionCall) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *SwapExecutionCall) GetData() string {
+	if x != nil {
+		return x.Data
+	}
+	return ""
+}
+
 type SwapCharges struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
 	ExecutionUsd           *string                `protobuf:"bytes,1,opt,name=execution_usd,json=executionUsd,proto3,oneof" json:"execution_usd,omitempty"`
@@ -30444,7 +30977,7 @@ type SwapCharges struct {
 
 func (x *SwapCharges) Reset() {
 	*x = SwapCharges{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[404]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[412]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30456,7 +30989,7 @@ func (x *SwapCharges) String() string {
 func (*SwapCharges) ProtoMessage() {}
 
 func (x *SwapCharges) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[404]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[412]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30469,7 +31002,7 @@ func (x *SwapCharges) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwapCharges.ProtoReflect.Descriptor instead.
 func (*SwapCharges) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{404}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{412}
 }
 
 func (x *SwapCharges) GetExecutionUsd() string {
@@ -30502,7 +31035,7 @@ type CreateSwapQuoteResultV2 struct {
 
 func (x *CreateSwapQuoteResultV2) Reset() {
 	*x = CreateSwapQuoteResultV2{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[405]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[413]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30514,7 +31047,7 @@ func (x *CreateSwapQuoteResultV2) String() string {
 func (*CreateSwapQuoteResultV2) ProtoMessage() {}
 
 func (x *CreateSwapQuoteResultV2) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[405]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[413]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30527,7 +31060,7 @@ func (x *CreateSwapQuoteResultV2) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSwapQuoteResultV2.ProtoReflect.Descriptor instead.
 func (*CreateSwapQuoteResultV2) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{405}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{413}
 }
 
 func (x *CreateSwapQuoteResultV2) GetQuotes() []*SwapQuoteV2 {
@@ -30558,7 +31091,7 @@ type ExecuteSwapIntentV4 struct {
 
 func (x *ExecuteSwapIntentV4) Reset() {
 	*x = ExecuteSwapIntentV4{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[406]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[414]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30570,7 +31103,7 @@ func (x *ExecuteSwapIntentV4) String() string {
 func (*ExecuteSwapIntentV4) ProtoMessage() {}
 
 func (x *ExecuteSwapIntentV4) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[406]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[414]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30583,7 +31116,7 @@ func (x *ExecuteSwapIntentV4) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapIntentV4.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapIntentV4) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{406}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{414}
 }
 
 func (x *ExecuteSwapIntentV4) GetInputToken() string {
@@ -30694,7 +31227,7 @@ type ExecuteSwapBoundQuote struct {
 
 func (x *ExecuteSwapBoundQuote) Reset() {
 	*x = ExecuteSwapBoundQuote{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[407]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[415]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30706,7 +31239,7 @@ func (x *ExecuteSwapBoundQuote) String() string {
 func (*ExecuteSwapBoundQuote) ProtoMessage() {}
 
 func (x *ExecuteSwapBoundQuote) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[407]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[415]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30719,7 +31252,7 @@ func (x *ExecuteSwapBoundQuote) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapBoundQuote.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapBoundQuote) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{407}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{415}
 }
 
 func (x *ExecuteSwapBoundQuote) GetQuoteId() string {
@@ -30756,7 +31289,7 @@ type ExecuteSwapMarketTerms struct {
 
 func (x *ExecuteSwapMarketTerms) Reset() {
 	*x = ExecuteSwapMarketTerms{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[408]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[416]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30768,7 +31301,7 @@ func (x *ExecuteSwapMarketTerms) String() string {
 func (*ExecuteSwapMarketTerms) ProtoMessage() {}
 
 func (x *ExecuteSwapMarketTerms) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[408]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[416]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30781,7 +31314,7 @@ func (x *ExecuteSwapMarketTerms) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSwapMarketTerms.ProtoReflect.Descriptor instead.
 func (*ExecuteSwapMarketTerms) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{408}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{416}
 }
 
 func (x *ExecuteSwapMarketTerms) GetSignWith() string {
@@ -30829,7 +31362,7 @@ type CreateExternalSignerIntentV1 struct {
 
 func (x *CreateExternalSignerIntentV1) Reset() {
 	*x = CreateExternalSignerIntentV1{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[409]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[417]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30841,7 +31374,7 @@ func (x *CreateExternalSignerIntentV1) String() string {
 func (*CreateExternalSignerIntentV1) ProtoMessage() {}
 
 func (x *CreateExternalSignerIntentV1) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[409]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[417]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30854,7 +31387,7 @@ func (x *CreateExternalSignerIntentV1) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateExternalSignerIntentV1.ProtoReflect.Descriptor instead.
 func (*CreateExternalSignerIntentV1) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{409}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{417}
 }
 
 func (x *CreateExternalSignerIntentV1) GetName() string {
@@ -30880,7 +31413,7 @@ type CreateExternalSignerResultV1 struct {
 
 func (x *CreateExternalSignerResultV1) Reset() {
 	*x = CreateExternalSignerResultV1{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[410]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[418]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30892,7 +31425,7 @@ func (x *CreateExternalSignerResultV1) String() string {
 func (*CreateExternalSignerResultV1) ProtoMessage() {}
 
 func (x *CreateExternalSignerResultV1) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[410]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[418]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30905,7 +31438,7 @@ func (x *CreateExternalSignerResultV1) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateExternalSignerResultV1.ProtoReflect.Descriptor instead.
 func (*CreateExternalSignerResultV1) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{410}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{418}
 }
 
 func (x *CreateExternalSignerResultV1) GetPublicKey() string {
@@ -30916,15 +31449,16 @@ func (x *CreateExternalSignerResultV1) GetPublicKey() string {
 }
 
 type DeleteExternalSignerIntentV1 struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PublicKey     string                 `protobuf:"bytes,1,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	PublicKey           string                 `protobuf:"bytes,1,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	DeleteWithoutExport *bool                  `protobuf:"varint,2,opt,name=delete_without_export,json=deleteWithoutExport,proto3,oneof" json:"delete_without_export,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *DeleteExternalSignerIntentV1) Reset() {
 	*x = DeleteExternalSignerIntentV1{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[411]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[419]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30936,7 +31470,7 @@ func (x *DeleteExternalSignerIntentV1) String() string {
 func (*DeleteExternalSignerIntentV1) ProtoMessage() {}
 
 func (x *DeleteExternalSignerIntentV1) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[411]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[419]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30949,7 +31483,7 @@ func (x *DeleteExternalSignerIntentV1) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteExternalSignerIntentV1.ProtoReflect.Descriptor instead.
 func (*DeleteExternalSignerIntentV1) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{411}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{419}
 }
 
 func (x *DeleteExternalSignerIntentV1) GetPublicKey() string {
@@ -30957,6 +31491,13 @@ func (x *DeleteExternalSignerIntentV1) GetPublicKey() string {
 		return x.PublicKey
 	}
 	return ""
+}
+
+func (x *DeleteExternalSignerIntentV1) GetDeleteWithoutExport() bool {
+	if x != nil && x.DeleteWithoutExport != nil {
+		return *x.DeleteWithoutExport
+	}
+	return false
 }
 
 type DeleteExternalSignerResultV1 struct {
@@ -30968,7 +31509,7 @@ type DeleteExternalSignerResultV1 struct {
 
 func (x *DeleteExternalSignerResultV1) Reset() {
 	*x = DeleteExternalSignerResultV1{}
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[412]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[420]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -30980,7 +31521,7 @@ func (x *DeleteExternalSignerResultV1) String() string {
 func (*DeleteExternalSignerResultV1) ProtoMessage() {}
 
 func (x *DeleteExternalSignerResultV1) ProtoReflect() protoreflect.Message {
-	mi := &file_immutable_activity_v1_activity_proto_msgTypes[412]
+	mi := &file_immutable_activity_v1_activity_proto_msgTypes[420]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -30993,7 +31534,7 @@ func (x *DeleteExternalSignerResultV1) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteExternalSignerResultV1.ProtoReflect.Descriptor instead.
 func (*DeleteExternalSignerResultV1) Descriptor() ([]byte, []int) {
-	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{412}
+	return file_immutable_activity_v1_activity_proto_rawDescGZIP(), []int{420}
 }
 
 func (x *DeleteExternalSignerResultV1) GetPublicKey() string {
@@ -31007,7 +31548,7 @@ var File_immutable_activity_v1_activity_proto protoreflect.FileDescriptor
 
 const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\n" +
-	"$immutable/activity/v1/activity.proto\x12\x15immutable.activity.v1\x1a$external/data/v1/usage_control.proto\x1a$immutable/activity/api/api_key.proto\x1a6immutable/activity/billing/activate_billing_tier.proto\x1a6immutable/activity/billing/delete_payment_method.proto\x1a3immutable/activity/billing/set_payment_method.proto\x1a6immutable/activity/billing/update_payment_method.proto\x1a immutable/common/v1/common.proto\x1a\x1eimmutable/data/v1/common.proto\x1a immutable/models/v1/models.proto\x1a$immutable/webauthn/v1/webauthn.proto\"\x8f\xa5\x01\n" +
+	"$immutable/activity/v1/activity.proto\x12\x15immutable.activity.v1\x1a$external/data/v1/usage_control.proto\x1a$immutable/activity/api/api_key.proto\x1a6immutable/activity/billing/activate_billing_tier.proto\x1a6immutable/activity/billing/delete_payment_method.proto\x1a3immutable/activity/billing/set_payment_method.proto\x1a6immutable/activity/billing/update_payment_method.proto\x1a immutable/common/v1/common.proto\x1a\x1eimmutable/data/v1/common.proto\x1a immutable/models/v1/models.proto\x1a$immutable/webauthn/v1/webauthn.proto\"\x8f\xa9\x01\n" +
 	"\x06Intent\x12o\n" +
 	"\x1acreate_organization_intent\x18\x01 \x01(\v2/.immutable.activity.v1.CreateOrganizationIntentH\x00R\x18createOrganizationIntent\x12u\n" +
 	"\x1ccreate_authenticators_intent\x18\x03 \x01(\v21.immutable.activity.v1.CreateAuthenticatorsIntentH\x00R\x1acreateAuthenticatorsIntent\x12Z\n" +
@@ -31195,7 +31736,11 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\"update_fiat_ramp_credential_intent\x18\xba\x01 \x01(\v25.immutable.activity.v1.UpdateFiatRampCredentialIntentH\x00R\x1eupdateFiatRampCredentialIntent\x12~\n" +
 	" create_external_signer_intent_v1\x18\xbb\x01 \x01(\v23.immutable.activity.v1.CreateExternalSignerIntentV1H\x00R\x1ccreateExternalSignerIntentV1\x12~\n" +
 	" delete_external_signer_intent_v1\x18\xbc\x01 \x01(\v23.immutable.activity.v1.DeleteExternalSignerIntentV1H\x00R\x1cdeleteExternalSignerIntentV1\x12O\n" +
-	"\x0fmint_jwt_intent\x18\xbd\x01 \x01(\v2$.immutable.activity.v1.MintJwtIntentH\x00R\rmintJwtIntentB\a\n" +
+	"\x0fmint_jwt_intent\x18\xbd\x01 \x01(\v2$.immutable.activity.v1.MintJwtIntentH\x00R\rmintJwtIntent\x12}\n" +
+	"\x1fadd_notification_domains_intent\x18\xbe\x01 \x01(\v23.immutable.activity.v1.AddNotificationDomainsIntentH\x00R\x1caddNotificationDomainsIntent\x12\x86\x01\n" +
+	"\"delete_notification_domains_intent\x18\xbf\x01 \x01(\v26.immutable.activity.v1.DeleteNotificationDomainsIntentH\x00R\x1fdeleteNotificationDomainsIntent\x12}\n" +
+	"\x1finit_oauth2_authenticate_intent\x18\xc0\x01 \x01(\v23.immutable.activity.v1.InitOauth2AuthenticateIntentH\x00R\x1cinitOauth2AuthenticateIntent\x12w\n" +
+	"\x1doauth2_authenticate_intent_v2\x18\xc1\x01 \x01(\v21.immutable.activity.v1.Oauth2AuthenticateIntentV2H\x00R\x1aoauth2AuthenticateIntentV2B\a\n" +
 	"\x05innerJ\x06\b\x94\x01\x10\x95\x01J\x06\b\xad\x01\x10\xae\x01R$upsert_earn_client_fee_config_intent\"\xa9\r\n" +
 	"\x1bUpdateAuthProxyConfigIntent\x12)\n" +
 	"\x0fallowed_origins\x18\x01 \x03(\tB\x00R\x0eallowedOrigins\x122\n" +
@@ -31484,17 +32029,19 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x10recent_blockhash\x18\x05 \x01(\tB\x00H\x01R\x0frecentBlockhash\x88\x01\x01B\n" +
 	"\n" +
 	"\b_sponsorB\x13\n" +
-	"\x11_recent_blockhash\"\xfe\x01\n" +
+	"\x11_recent_blockhash\"\xd6\x02\n" +
 	"\x1aSolSendTransactionIntentV2\x123\n" +
 	"\x14unsigned_transaction\x18\x01 \x01(\tB\x00R\x13unsignedTransaction\x12\x1f\n" +
 	"\n" +
 	"sign_withs\x18\x02 \x03(\tB\x00R\tsignWiths\x12\x1f\n" +
 	"\asponsor\x18\x03 \x01(\bB\x00H\x00R\asponsor\x88\x01\x01\x12\x16\n" +
 	"\x05caip2\x18\x04 \x01(\tB\x00R\x05caip2\x120\n" +
-	"\x10recent_blockhash\x18\x05 \x01(\tB\x00H\x01R\x0frecentBlockhash\x88\x01\x01B\n" +
+	"\x10recent_blockhash\x18\x05 \x01(\tB\x00H\x01R\x0frecentBlockhash\x88\x01\x01\x12;\n" +
+	"\x16external_signer_pubkey\x18\x06 \x01(\tB\x00H\x02R\x14externalSignerPubkey\x88\x01\x01B\n" +
 	"\n" +
 	"\b_sponsorB\x13\n" +
-	"\x11_recent_blockhash\"\xc2\x04\n" +
+	"\x11_recent_blockhashB\x19\n" +
+	"\x17_external_signer_pubkey\"\xc2\x04\n" +
 	"\x18EthSendTransactionIntent\x12\x14\n" +
 	"\x04from\x18\x01 \x01(\tB\x00R\x04from\x12\x1f\n" +
 	"\asponsor\x18\x02 \x01(\bB\x00H\x00R\asponsor\x88\x01\x01\x12\x16\n" +
@@ -31525,7 +32072,7 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tB\x00H\x00R\x05value\x88\x01\x01\x12\x19\n" +
 	"\x04data\x18\x03 \x01(\tB\x00H\x01R\x04data\x88\x01\x01B\b\n" +
 	"\x06_valueB\a\n" +
-	"\x05_data\"\xa5\x04\n" +
+	"\x05_data\"\xfd\x04\n" +
 	"\x1aEthSendTransactionIntentV2\x12\x14\n" +
 	"\x04from\x18\x01 \x01(\tB\x00R\x04from\x12\x16\n" +
 	"\x05caip2\x18\x02 \x01(\tB\x00R\x05caip2\x12\x1f\n" +
@@ -31537,7 +32084,8 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\bdeadline\x18\b \x01(\tB\x00H\x05R\bdeadline\x88\x01\x01\x121\n" +
 	"\x11gas_station_nonce\x18\t \x01(\tB\x00H\x06R\x0fgasStationNonce\x88\x01\x01\x12<\n" +
 	"\x05calls\x18\n" +
-	" \x03(\v2$.immutable.activity.v1.EthCallParamsB\x00R\x05callsB\n" +
+	" \x03(\v2$.immutable.activity.v1.EthCallParamsB\x00R\x05calls\x12;\n" +
+	"\x16external_signer_pubkey\x18\v \x01(\tB\x00H\aR\x14externalSignerPubkey\x88\x01\x01B\n" +
 	"\n" +
 	"\b_sponsorB\b\n" +
 	"\x06_nonceB\f\n" +
@@ -31546,7 +32094,8 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x10_max_fee_per_gasB\x1b\n" +
 	"\x19_max_priority_fee_per_gasB\v\n" +
 	"\t_deadlineB\x14\n" +
-	"\x12_gas_station_nonce\"\xe4\x02\n" +
+	"\x12_gas_station_nonceB\x19\n" +
+	"\x17_external_signer_pubkey\"\xe4\x02\n" +
 	"\x11ExecuteSwapIntent\x12!\n" +
 	"\vinput_token\x18\x01 \x01(\tB\x00R\n" +
 	"inputToken\x12#\n" +
@@ -32293,14 +32842,21 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\tclient_id\x18\x03 \x01(\tB\x00R\bclientId\x128\n" +
 	"\x17encrypted_client_secret\x18\x04 \x01(\tB\x00R\x15encryptedClientSecret\"R\n" +
 	"\x1cDeleteOauth2CredentialIntent\x122\n" +
-	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\"\xbf\x02\n" +
+	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\"\xae\x01\n" +
+	"\x1cInitOauth2AuthenticateIntent\x122\n" +
+	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\x12Z\n" +
+	"\x10encryption_suite\x18\x02 \x01(\x0e2-.immutable.models.v1.TransportEncryptionSuiteB\x00R\x0fencryptionSuite\"\xad\x01\n" +
+	"\x1aOauth2AuthenticateIntentV2\x122\n" +
+	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\x12-\n" +
+	"\x11encrypted_message\x18\x02 \x01(\tB\x00R\x10encryptedMessage\x12,\n" +
+	"\x11target_public_key\x18\x03 \x01(\tB\x00R\x0ftargetPublicKey\"\xc3\x02\n" +
 	"\x18Oauth2AuthenticateIntent\x122\n" +
 	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\x12\x1d\n" +
 	"\tauth_code\x18\x02 \x01(\tB\x00R\bauthCode\x12#\n" +
 	"\fredirect_uri\x18\x03 \x01(\tB\x00R\vredirectUri\x12%\n" +
 	"\rcode_verifier\x18\x04 \x01(\tB\x00R\fcodeVerifier\x12\x16\n" +
 	"\x05nonce\x18\x05 \x01(\tB\x00R\x05nonce\x12I\n" +
-	"\x1ebearer_token_target_public_key\x18\x06 \x01(\tB\x00H\x00R\x1abearerTokenTargetPublicKey\x88\x01\x01B!\n" +
+	"\x1ebearer_token_target_public_key\x18\x06 \x01(\tB\x00H\x00R\x1abearerTokenTargetPublicKey\x88\x01\x01:\x02\x18\x01B!\n" +
 	"\x1f_bearer_token_target_public_key\"\xa1\x01\n" +
 	"\x1aDeleteWalletAccountsIntent\x12.\n" +
 	"\x12wallet_account_ids\x18\x01 \x03(\tB\x00R\x10walletAccountIds\x129\n" +
@@ -32343,7 +32899,7 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\aapi_key\x18\x03 \x01(\tB\x00R\x06apiKey\x12+\n" +
 	"\x10encrypted_secret\x18\x04 \x01(\tB\x00R\x0fencryptedSecret\"_\n" +
 	" DeleteFiatOnRampCredentialIntent\x12;\n" +
-	"\x19fiat_onramp_credential_id\x18\x01 \x01(\tB\x00R\x16fiatOnrampCredentialId\"\x98\x05\n" +
+	"\x19fiat_onramp_credential_id\x18\x01 \x01(\tB\x00R\x16fiatOnrampCredentialId\"\xf5\x05\n" +
 	"\x12CreateTvcAppIntent\x12\x14\n" +
 	"\x04name\x18\x01 \x01(\tB\x00R\x04name\x12,\n" +
 	"\x11quorum_public_key\x18\x02 \x01(\tB\x00R\x0fquorumPublicKey\x12-\n" +
@@ -32354,14 +32910,17 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x10share_set_params\x18\x06 \x01(\v2+.immutable.activity.v1.TvcOperatorSetParamsB\x00H\x03R\x0eshareSetParams\x88\x01\x01\x12*\n" +
 	"\renable_egress\x18\a \x01(\bB\x00H\x04R\fenableEgress\x88\x01\x01\x12H\n" +
 	"\x1denable_debug_mode_deployments\x18\b \x01(\bB\x00H\x05R\x1aenableDebugModeDeployments\x88\x01\x01\x12\x1d\n" +
-	"\x06region\x18\t \x01(\tB\x00H\x06R\x06region\x88\x01\x01B\x12\n" +
+	"\x06region\x18\t \x01(\tB\x00H\x06R\x06region\x88\x01\x01\x12>\n" +
+	"\x18enable_static_egress_ips\x18\n" +
+	" \x01(\bB\x00H\aR\x15enableStaticEgressIps\x88\x01\x01B\x12\n" +
 	"\x10_manifest_set_idB\x16\n" +
 	"\x14_manifest_set_paramsB\x0f\n" +
 	"\r_share_set_idB\x13\n" +
 	"\x11_share_set_paramsB\x10\n" +
 	"\x0e_enable_egressB \n" +
 	"\x1e_enable_debug_mode_deploymentsB\t\n" +
-	"\a_region\"\xc0\x01\n" +
+	"\a_regionB\x1b\n" +
+	"\x19_enable_static_egress_ips\"\xc0\x01\n" +
 	"\x17CreateTvcOperatorIntent\x12&\n" +
 	"\vwallet_name\x18\x01 \x01(\tB\x00H\x00R\n" +
 	"walletName\x88\x01\x01\x12\"\n" +
@@ -32452,7 +33011,7 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"_is_active\"@\n" +
 	"\x1bDeleteWebhookEndpointIntent\x12!\n" +
 	"\vendpoint_id\x18\x01 \x01(\tB\x00R\n" +
-	"endpointId\"\xba\x8f\x01\n" +
+	"endpointId\"\xc1\x92\x01\n" +
 	"\x06Result\x12o\n" +
 	"\x1acreate_organization_result\x18\x01 \x01(\v2/.immutable.activity.v1.CreateOrganizationResultH\x00R\x18createOrganizationResult\x12u\n" +
 	"\x1ccreate_authenticators_result\x18\x03 \x01(\v21.immutable.activity.v1.CreateAuthenticatorsResultH\x00R\x1acreateAuthenticatorsResult\x12Z\n" +
@@ -32614,7 +33173,10 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\"update_fiat_ramp_credential_result\x18\xa2\x01 \x01(\v25.immutable.activity.v1.UpdateFiatRampCredentialResultH\x00R\x1eupdateFiatRampCredentialResult\x12~\n" +
 	" create_external_signer_result_v1\x18\xa3\x01 \x01(\v23.immutable.activity.v1.CreateExternalSignerResultV1H\x00R\x1ccreateExternalSignerResultV1\x12~\n" +
 	" delete_external_signer_result_v1\x18\xa4\x01 \x01(\v23.immutable.activity.v1.DeleteExternalSignerResultV1H\x00R\x1cdeleteExternalSignerResultV1\x12O\n" +
-	"\x0fmint_jwt_result\x18\xa5\x01 \x01(\v2$.immutable.activity.v1.MintJwtResultH\x00R\rmintJwtResultB\a\n" +
+	"\x0fmint_jwt_result\x18\xa5\x01 \x01(\v2$.immutable.activity.v1.MintJwtResultH\x00R\rmintJwtResult\x12}\n" +
+	"\x1fadd_notification_domains_result\x18\xa6\x01 \x01(\v23.immutable.activity.v1.AddNotificationDomainsResultH\x00R\x1caddNotificationDomainsResult\x12\x86\x01\n" +
+	"\"delete_notification_domains_result\x18\xa7\x01 \x01(\v26.immutable.activity.v1.DeleteNotificationDomainsResultH\x00R\x1fdeleteNotificationDomainsResult\x12}\n" +
+	"\x1finit_oauth2_authenticate_result\x18\xa8\x01 \x01(\v23.immutable.activity.v1.InitOauth2AuthenticateResultH\x00R\x1cinitOauth2AuthenticateResultB\a\n" +
 	"\x05innerJ\x05\b\x7f\x10\x80\x01R$upsert_earn_client_fee_config_result\"M\n" +
 	"\x1aUpsertGasUsageConfigResult\x12/\n" +
 	"\x13gas_usage_config_id\x18\x01 \x01(\tB\x00R\x10gasUsageConfigId\"2\n" +
@@ -32918,7 +33480,9 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x1cUpdateOauth2CredentialResult\x122\n" +
 	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\"R\n" +
 	"\x1cDeleteOauth2CredentialResult\x122\n" +
-	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\";\n" +
+	"\x14oauth2_credential_id\x18\x01 \x01(\tB\x00R\x12oauth2CredentialId\"V\n" +
+	"\x1cInitOauth2AuthenticateResult\x126\n" +
+	"\x16enclave_target_message\x18\x01 \x01(\tB\x00R\x14enclaveTargetMessage\";\n" +
 	"\x18Oauth2AuthenticateResult\x12\x1f\n" +
 	"\n" +
 	"oidc_token\x18\x01 \x01(\tB\x00R\toidcToken\"L\n" +
@@ -33213,7 +33777,13 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\x1cDisableSmsForCountriesIntent\x12\x1d\n" +
 	"\tiso_codes\x18\x01 \x03(\tB\x00R\bisoCodes\"\x1d\n" +
 	"\x1bEnableSmsForCountriesResult\"\x1e\n" +
-	"\x1cDisableSmsForCountriesResult\"^\n" +
+	"\x1cDisableSmsForCountriesResult\":\n" +
+	"\x1cAddNotificationDomainsIntent\x12\x1a\n" +
+	"\adomains\x18\x01 \x03(\tB\x00R\adomains\"=\n" +
+	"\x1fDeleteNotificationDomainsIntent\x12\x1a\n" +
+	"\adomains\x18\x01 \x03(\tB\x00R\adomains\"\x1e\n" +
+	"\x1cAddNotificationDomainsResult\"!\n" +
+	"\x1fDeleteNotificationDomainsResult\"^\n" +
 	"\x14SparkFrostCommitment\x12\x10\n" +
 	"\x02id\x18\x01 \x01(\tB\x00R\x02id\x12\x18\n" +
 	"\x06hiding\x18\x02 \x01(\tB\x00R\x06hiding\x12\x1a\n" +
@@ -33478,7 +34048,7 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\r_slippage_bpsB\x16\n" +
 	"\x14_destination_addressB\x12\n" +
 	"\x10_fee_sponsorshipB\r\n" +
-	"\v_fixed_rateJ\x04\b\x06\x10\a\"\xa0\x06\n" +
+	"\v_fixed_rateJ\x04\b\x06\x10\a\"\xf0\x06\n" +
 	"\vSwapQuoteV2\x12\x1b\n" +
 	"\bquote_id\x18\x01 \x01(\tB\x00R\aquoteId\x12\x1c\n" +
 	"\bprovider\x18\x02 \x01(\tB\x00R\bprovider\x12%\n" +
@@ -33494,11 +34064,16 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"\n" +
 	"fixed_rate\x18\v \x01(\bB\x00R\tfixedRate\x12S\n" +
 	"#estimated_fixed_rate_adjustment_usd\x18\x11 \x01(\tB\x00H\x02R\x1festimatedFixedRateAdjustmentUsd\x88\x01\x01\x12V\n" +
-	"\x11estimated_charges\x18\x12 \x01(\v2\".immutable.activity.v1.SwapChargesB\x00H\x03R\x10estimatedCharges\x88\x01\x01B\x0f\n" +
+	"\x11estimated_charges\x18\x12 \x01(\v2\".immutable.activity.v1.SwapChargesB\x00H\x03R\x10estimatedCharges\x88\x01\x01\x12N\n" +
+	"\ftransactions\x18\x13 \x03(\v2(.immutable.activity.v1.SwapExecutionCallB\x00R\ftransactionsB\x0f\n" +
 	"\r_slippage_bpsB\x19\n" +
 	"\x17_estimated_time_secondsB&\n" +
 	"$_estimated_fixed_rate_adjustment_usdB\x14\n" +
-	"\x12_estimated_chargesJ\x04\b\x06\x10\aJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fJ\x04\b\x0f\x10\x10J\x04\b\x10\x10\x11R\x16turnkey_fee_collectionR\x18sponsored_fee_componentsR\x18remaining_fee_components\"\xee\x01\n" +
+	"\x12_estimated_chargesJ\x04\b\x06\x10\aJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fJ\x04\b\x0f\x10\x10J\x04\b\x10\x10\x11R\x16turnkey_fee_collectionR\x18sponsored_fee_componentsR\x18remaining_fee_components\"S\n" +
+	"\x11SwapExecutionCall\x12\x10\n" +
+	"\x02to\x18\x01 \x01(\tB\x00R\x02to\x12\x16\n" +
+	"\x05value\x18\x02 \x01(\tB\x00R\x05value\x12\x14\n" +
+	"\x04data\x18\x03 \x01(\tB\x00R\x04data\"\xee\x01\n" +
 	"\vSwapCharges\x12*\n" +
 	"\rexecution_usd\x18\x01 \x01(\tB\x00H\x00R\fexecutionUsd\x88\x01\x01\x12-\n" +
 	"\x0fturnkey_fee_usd\x18\x02 \x01(\tB\x00H\x01R\rturnkeyFeeUsd\x88\x01\x01\x12@\n" +
@@ -33551,13 +34126,15 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	"public_key\x18\x02 \x01(\tB\x00R\tpublicKey\"?\n" +
 	"\x1cCreateExternalSignerResultV1\x12\x1f\n" +
 	"\n" +
-	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey\"?\n" +
+	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey\"\x94\x01\n" +
 	"\x1cDeleteExternalSignerIntentV1\x12\x1f\n" +
 	"\n" +
-	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey\"?\n" +
+	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey\x129\n" +
+	"\x15delete_without_export\x18\x02 \x01(\bB\x00H\x00R\x13deleteWithoutExport\x88\x01\x01B\x18\n" +
+	"\x16_delete_without_export\"?\n" +
 	"\x1cDeleteExternalSignerResultV1\x12\x1f\n" +
 	"\n" +
-	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey*\xf6:\n" +
+	"public_key\x18\x01 \x01(\tB\x00R\tpublicKey*\xab<\n" +
 	"\fActivityType\x12\x1d\n" +
 	"\x19ACTIVITY_TYPE_UNSPECIFIED\x10\x00\x12!\n" +
 	"\x1dACTIVITY_TYPE_CREATE_API_KEYS\x10\x01\x12\x1e\n" +
@@ -33746,7 +34323,11 @@ const file_immutable_activity_v1_activity_proto_rawDesc = "" +
 	")ACTIVITY_TYPE_UPDATE_FIAT_RAMP_CREDENTIAL\x10\xb9\x01\x12,\n" +
 	"'ACTIVITY_TYPE_CREATE_EXTERNAL_SIGNER_V1\x10\xba\x01\x12,\n" +
 	"'ACTIVITY_TYPE_DELETE_EXTERNAL_SIGNER_V1\x10\xbb\x01\x12\x1b\n" +
-	"\x16ACTIVITY_TYPE_MINT_JWT\x10\xbc\x01\"\x06\b\x93\x01\x10\x93\x01\"\x06\b\xac\x01\x10\xac\x01*+ACTIVITY_TYPE_UPSERT_EARN_CLIENT_FEE_CONFIG*\x95\x02\n" +
+	"\x16ACTIVITY_TYPE_MINT_JWT\x10\xbc\x01\x12+\n" +
+	"&ACTIVITY_TYPE_ADD_NOTIFICATION_DOMAINS\x10\xbd\x01\x12.\n" +
+	")ACTIVITY_TYPE_DELETE_NOTIFICATION_DOMAINS\x10\xbe\x01\x12+\n" +
+	"&ACTIVITY_TYPE_INIT_OAUTH2_AUTHENTICATE\x10\xbf\x01\x12)\n" +
+	"$ACTIVITY_TYPE_OAUTH2_AUTHENTICATE_V2\x10\xc0\x01\"\x06\b\x93\x01\x10\x93\x01\"\x06\b\xac\x01\x10\xac\x01*+ACTIVITY_TYPE_UPSERT_EARN_CLIENT_FEE_CONFIG*\x95\x02\n" +
 	"\x0eActivityStatus\x12\x1f\n" +
 	"\x1bACTIVITY_STATUS_UNSPECIFIED\x10\x00\x12\x1b\n" +
 	"\x17ACTIVITY_STATUS_CREATED\x10\x01\x12\x1b\n" +
@@ -33780,7 +34361,7 @@ func file_immutable_activity_v1_activity_proto_rawDescGZIP() []byte {
 }
 
 var file_immutable_activity_v1_activity_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_immutable_activity_v1_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 414)
+var file_immutable_activity_v1_activity_proto_msgTypes = make([]protoimpl.MessageInfo, 422)
 var file_immutable_activity_v1_activity_proto_goTypes = []any{
 	(ActivityType)(0),                                 // 0: immutable.activity.v1.ActivityType
 	(ActivityStatus)(0),                               // 1: immutable.activity.v1.ActivityStatus
@@ -33938,310 +34519,318 @@ var file_immutable_activity_v1_activity_proto_goTypes = []any{
 	(*CreateOauth2CredentialIntent)(nil),              // 153: immutable.activity.v1.CreateOauth2CredentialIntent
 	(*UpdateOauth2CredentialIntent)(nil),              // 154: immutable.activity.v1.UpdateOauth2CredentialIntent
 	(*DeleteOauth2CredentialIntent)(nil),              // 155: immutable.activity.v1.DeleteOauth2CredentialIntent
-	(*Oauth2AuthenticateIntent)(nil),                  // 156: immutable.activity.v1.Oauth2AuthenticateIntent
-	(*DeleteWalletAccountsIntent)(nil),                // 157: immutable.activity.v1.DeleteWalletAccountsIntent
-	(*DeletePoliciesIntent)(nil),                      // 158: immutable.activity.v1.DeletePoliciesIntent
-	(*EthSendRawTransactionIntent)(nil),               // 159: immutable.activity.v1.EthSendRawTransactionIntent
-	(*CreateFiatOnRampCredentialIntent)(nil),          // 160: immutable.activity.v1.CreateFiatOnRampCredentialIntent
-	(*CreateFiatRampCredentialIntent)(nil),            // 161: immutable.activity.v1.CreateFiatRampCredentialIntent
-	(*UpdateFiatOnRampCredentialIntent)(nil),          // 162: immutable.activity.v1.UpdateFiatOnRampCredentialIntent
-	(*UpdateFiatRampCredentialIntent)(nil),            // 163: immutable.activity.v1.UpdateFiatRampCredentialIntent
-	(*DeleteFiatOnRampCredentialIntent)(nil),          // 164: immutable.activity.v1.DeleteFiatOnRampCredentialIntent
-	(*CreateTvcAppIntent)(nil),                        // 165: immutable.activity.v1.CreateTvcAppIntent
-	(*CreateTvcOperatorIntent)(nil),                   // 166: immutable.activity.v1.CreateTvcOperatorIntent
-	(*TvcOperatorSetParams)(nil),                      // 167: immutable.activity.v1.TvcOperatorSetParams
-	(*TvcOperatorParams)(nil),                         // 168: immutable.activity.v1.TvcOperatorParams
-	(*CreateTvcDeploymentIntent)(nil),                 // 169: immutable.activity.v1.CreateTvcDeploymentIntent
-	(*CreateTvcManifestApprovalsIntent)(nil),          // 170: immutable.activity.v1.CreateTvcManifestApprovalsIntent
-	(*TvcManifestApproval)(nil),                       // 171: immutable.activity.v1.TvcManifestApproval
-	(*PostTvcQuorumKeyShareIntent)(nil),               // 172: immutable.activity.v1.PostTvcQuorumKeyShareIntent
-	(*QuorumKeyShareApprovalBundle)(nil),              // 173: immutable.activity.v1.QuorumKeyShareApprovalBundle
-	(*CreateTvcQuorumKeyIntent)(nil),                  // 174: immutable.activity.v1.CreateTvcQuorumKeyIntent
-	(*ReEncryptTvcQuorumKeyShareIntent)(nil),          // 175: immutable.activity.v1.ReEncryptTvcQuorumKeyShareIntent
-	(*CreateWebhookEndpointIntent)(nil),               // 176: immutable.activity.v1.CreateWebhookEndpointIntent
-	(*UpdateWebhookEndpointIntent)(nil),               // 177: immutable.activity.v1.UpdateWebhookEndpointIntent
-	(*DeleteWebhookEndpointIntent)(nil),               // 178: immutable.activity.v1.DeleteWebhookEndpointIntent
-	(*Result)(nil),                                    // 179: immutable.activity.v1.Result
-	(*UpsertGasUsageConfigResult)(nil),                // 180: immutable.activity.v1.UpsertGasUsageConfigResult
-	(*EnableAuthProxyResult)(nil),                     // 181: immutable.activity.v1.EnableAuthProxyResult
-	(*DisableAuthProxyResult)(nil),                    // 182: immutable.activity.v1.DisableAuthProxyResult
-	(*UpsertSwapConfigResult)(nil),                    // 183: immutable.activity.v1.UpsertSwapConfigResult
-	(*ClaimSwapFeesResult)(nil),                       // 184: immutable.activity.v1.ClaimSwapFeesResult
-	(*CreateOrganizationResult)(nil),                  // 185: immutable.activity.v1.CreateOrganizationResult
-	(*CreateWalletAuthenticatorsResult)(nil),          // 186: immutable.activity.v1.CreateWalletAuthenticatorsResult
-	(*DeleteWalletAuthenticatorsResult)(nil),          // 187: immutable.activity.v1.DeleteWalletAuthenticatorsResult
-	(*CreateAuthenticatorsResult)(nil),                // 188: immutable.activity.v1.CreateAuthenticatorsResult
-	(*CreateApiKeysResult)(nil),                       // 189: immutable.activity.v1.CreateApiKeysResult
-	(*CreateUsersResult)(nil),                         // 190: immutable.activity.v1.CreateUsersResult
-	(*UpdateUserResult)(nil),                          // 191: immutable.activity.v1.UpdateUserResult
-	(*UpdateUserNameResult)(nil),                      // 192: immutable.activity.v1.UpdateUserNameResult
-	(*UpdateUserEmailResult)(nil),                     // 193: immutable.activity.v1.UpdateUserEmailResult
-	(*UpdateUserPhoneNumberResult)(nil),               // 194: immutable.activity.v1.UpdateUserPhoneNumberResult
-	(*UpdateWalletResult)(nil),                        // 195: immutable.activity.v1.UpdateWalletResult
-	(*UpdateWalletAccountNameResult)(nil),             // 196: immutable.activity.v1.UpdateWalletAccountNameResult
-	(*CreateApiOnlyUsersResult)(nil),                  // 197: immutable.activity.v1.CreateApiOnlyUsersResult
-	(*CreateInvitationsResult)(nil),                   // 198: immutable.activity.v1.CreateInvitationsResult
-	(*AcceptInvitationResult)(nil),                    // 199: immutable.activity.v1.AcceptInvitationResult
-	(*CreatePrivateKeysResult)(nil),                   // 200: immutable.activity.v1.CreatePrivateKeysResult
-	(*CreatePrivateKeysResultV2)(nil),                 // 201: immutable.activity.v1.CreatePrivateKeysResultV2
-	(*PrivateKeyResult)(nil),                          // 202: immutable.activity.v1.PrivateKeyResult
-	(*Address)(nil),                                   // 203: immutable.activity.v1.Address
-	(*SignRawPayloadResult)(nil),                      // 204: immutable.activity.v1.SignRawPayloadResult
-	(*SignRawPayloadsResult)(nil),                     // 205: immutable.activity.v1.SignRawPayloadsResult
-	(*CreateWalletResult)(nil),                        // 206: immutable.activity.v1.CreateWalletResult
-	(*CreateWalletAccountsResult)(nil),                // 207: immutable.activity.v1.CreateWalletAccountsResult
-	(*InitUserEmailRecoveryResult)(nil),               // 208: immutable.activity.v1.InitUserEmailRecoveryResult
-	(*OauthLoginResult)(nil),                          // 209: immutable.activity.v1.OauthLoginResult
-	(*CreateFiatOffRampSessionIntent)(nil),            // 210: immutable.activity.v1.CreateFiatOffRampSessionIntent
-	(*CreateFiatOffRampSessionResult)(nil),            // 211: immutable.activity.v1.CreateFiatOffRampSessionResult
-	(*MintJwtIntent)(nil),                             // 212: immutable.activity.v1.MintJwtIntent
-	(*HttpAuthzV1Inputs)(nil),                         // 213: immutable.activity.v1.HttpAuthzV1Inputs
-	(*MintJwtResult)(nil),                             // 214: immutable.activity.v1.MintJwtResult
-	(*InitFiatOnRampResult)(nil),                      // 215: immutable.activity.v1.InitFiatOnRampResult
-	(*CreateFiatOnRampSessionResult)(nil),             // 216: immutable.activity.v1.CreateFiatOnRampSessionResult
-	(*StampLoginResult)(nil),                          // 217: immutable.activity.v1.StampLoginResult
-	(*OtpLoginResult)(nil),                            // 218: immutable.activity.v1.OtpLoginResult
-	(*InitOtpResult)(nil),                             // 219: immutable.activity.v1.InitOtpResult
-	(*InitOtpResultV2)(nil),                           // 220: immutable.activity.v1.InitOtpResultV2
-	(*InitOtpAuthResult)(nil),                         // 221: immutable.activity.v1.InitOtpAuthResult
-	(*InitOtpAuthResultV2)(nil),                       // 222: immutable.activity.v1.InitOtpAuthResultV2
-	(*OtpAuthResult)(nil),                             // 223: immutable.activity.v1.OtpAuthResult
-	(*VerifyWalletAuthenticatorIntent)(nil),           // 224: immutable.activity.v1.VerifyWalletAuthenticatorIntent
-	(*VerifyWalletAuthenticatorResult)(nil),           // 225: immutable.activity.v1.VerifyWalletAuthenticatorResult
-	(*VerifyOtpResult)(nil),                           // 226: immutable.activity.v1.VerifyOtpResult
-	(*OauthResult)(nil),                               // 227: immutable.activity.v1.OauthResult
-	(*EmailAuthResult)(nil),                           // 228: immutable.activity.v1.EmailAuthResult
-	(*CreatePolicyResult)(nil),                        // 229: immutable.activity.v1.CreatePolicyResult
-	(*CreatePoliciesResult)(nil),                      // 230: immutable.activity.v1.CreatePoliciesResult
-	(*UpdatePolicyResult)(nil),                        // 231: immutable.activity.v1.UpdatePolicyResult
-	(*UpdatePolicyResultV2)(nil),                      // 232: immutable.activity.v1.UpdatePolicyResultV2
-	(*CreateReadOnlySessionResult)(nil),               // 233: immutable.activity.v1.CreateReadOnlySessionResult
-	(*CreateReadWriteSessionResult)(nil),              // 234: immutable.activity.v1.CreateReadWriteSessionResult
-	(*CreateReadWriteSessionResultV2)(nil),            // 235: immutable.activity.v1.CreateReadWriteSessionResultV2
-	(*DisablePrivateKeyResult)(nil),                   // 236: immutable.activity.v1.DisablePrivateKeyResult
-	(*DeleteUsersResult)(nil),                         // 237: immutable.activity.v1.DeleteUsersResult
-	(*DeleteInvitationResult)(nil),                    // 238: immutable.activity.v1.DeleteInvitationResult
-	(*DeleteAuthenticatorsResult)(nil),                // 239: immutable.activity.v1.DeleteAuthenticatorsResult
-	(*DeleteApiKeysResult)(nil),                       // 240: immutable.activity.v1.DeleteApiKeysResult
-	(*DeleteOrganizationResult)(nil),                  // 241: immutable.activity.v1.DeleteOrganizationResult
-	(*DeletePolicyResult)(nil),                        // 242: immutable.activity.v1.DeletePolicyResult
-	(*CreateUserTagResult)(nil),                       // 243: immutable.activity.v1.CreateUserTagResult
-	(*UpdateUserTagResult)(nil),                       // 244: immutable.activity.v1.UpdateUserTagResult
-	(*DeleteUserTagsResult)(nil),                      // 245: immutable.activity.v1.DeleteUserTagsResult
-	(*CreatePrivateKeyTagResult)(nil),                 // 246: immutable.activity.v1.CreatePrivateKeyTagResult
-	(*UpdatePrivateKeyTagResult)(nil),                 // 247: immutable.activity.v1.UpdatePrivateKeyTagResult
-	(*DeletePrivateKeyTagsResult)(nil),                // 248: immutable.activity.v1.DeletePrivateKeyTagsResult
-	(*UpdateOrganizationNameResult)(nil),              // 249: immutable.activity.v1.UpdateOrganizationNameResult
-	(*SignTransactionResult)(nil),                     // 250: immutable.activity.v1.SignTransactionResult
-	(*CreateSmartContractInterfaceResult)(nil),        // 251: immutable.activity.v1.CreateSmartContractInterfaceResult
-	(*DeleteSmartContractInterfaceResult)(nil),        // 252: immutable.activity.v1.DeleteSmartContractInterfaceResult
-	(*UpdateRootQuorumResult)(nil),                    // 253: immutable.activity.v1.UpdateRootQuorumResult
-	(*UpdateAllowedOriginsResult)(nil),                // 254: immutable.activity.v1.UpdateAllowedOriginsResult
-	(*CreateSubOrganizationResult)(nil),               // 255: immutable.activity.v1.CreateSubOrganizationResult
-	(*CreateSubOrganizationResultV3)(nil),             // 256: immutable.activity.v1.CreateSubOrganizationResultV3
-	(*WalletResult)(nil),                              // 257: immutable.activity.v1.WalletResult
-	(*CreateSubOrganizationResultV4)(nil),             // 258: immutable.activity.v1.CreateSubOrganizationResultV4
-	(*CreateSubOrganizationResultV5)(nil),             // 259: immutable.activity.v1.CreateSubOrganizationResultV5
-	(*CreateSubOrganizationResultV6)(nil),             // 260: immutable.activity.v1.CreateSubOrganizationResultV6
-	(*CreateSubOrganizationResultV7)(nil),             // 261: immutable.activity.v1.CreateSubOrganizationResultV7
-	(*CreateSubOrganizationResultV8)(nil),             // 262: immutable.activity.v1.CreateSubOrganizationResultV8
-	(*CreateSubOrganizationResultV9)(nil),             // 263: immutable.activity.v1.CreateSubOrganizationResultV9
-	(*RecoverUserResult)(nil),                         // 264: immutable.activity.v1.RecoverUserResult
-	(*SetOrganizationFeatureResult)(nil),              // 265: immutable.activity.v1.SetOrganizationFeatureResult
-	(*RemoveOrganizationFeatureResult)(nil),           // 266: immutable.activity.v1.RemoveOrganizationFeatureResult
-	(*ExportPrivateKeyResult)(nil),                    // 267: immutable.activity.v1.ExportPrivateKeyResult
-	(*ExportWalletResult)(nil),                        // 268: immutable.activity.v1.ExportWalletResult
-	(*ExportWalletAccountResult)(nil),                 // 269: immutable.activity.v1.ExportWalletAccountResult
-	(*InitImportWalletResult)(nil),                    // 270: immutable.activity.v1.InitImportWalletResult
-	(*ImportWalletResult)(nil),                        // 271: immutable.activity.v1.ImportWalletResult
-	(*InitImportPrivateKeyResult)(nil),                // 272: immutable.activity.v1.InitImportPrivateKeyResult
-	(*ImportPrivateKeyResult)(nil),                    // 273: immutable.activity.v1.ImportPrivateKeyResult
-	(*CreateOauthProvidersResult)(nil),                // 274: immutable.activity.v1.CreateOauthProvidersResult
-	(*CreateOauthProvidersResultV2)(nil),              // 275: immutable.activity.v1.CreateOauthProvidersResultV2
-	(*DeleteOauthProvidersResult)(nil),                // 276: immutable.activity.v1.DeleteOauthProvidersResult
-	(*DeletePrivateKeysResult)(nil),                   // 277: immutable.activity.v1.DeletePrivateKeysResult
-	(*DeleteWalletsResult)(nil),                       // 278: immutable.activity.v1.DeleteWalletsResult
-	(*DeleteSubOrganizationResult)(nil),               // 279: immutable.activity.v1.DeleteSubOrganizationResult
-	(*CreateOauth2CredentialResult)(nil),              // 280: immutable.activity.v1.CreateOauth2CredentialResult
-	(*UpdateOauth2CredentialResult)(nil),              // 281: immutable.activity.v1.UpdateOauth2CredentialResult
-	(*DeleteOauth2CredentialResult)(nil),              // 282: immutable.activity.v1.DeleteOauth2CredentialResult
-	(*Oauth2AuthenticateResult)(nil),                  // 283: immutable.activity.v1.Oauth2AuthenticateResult
-	(*DeleteWalletAccountsResult)(nil),                // 284: immutable.activity.v1.DeleteWalletAccountsResult
-	(*DeletePoliciesResult)(nil),                      // 285: immutable.activity.v1.DeletePoliciesResult
-	(*CreateTvcAppResult)(nil),                        // 286: immutable.activity.v1.CreateTvcAppResult
-	(*CreateTvcDeploymentResult)(nil),                 // 287: immutable.activity.v1.CreateTvcDeploymentResult
-	(*CreateTvcManifestApprovalsResult)(nil),          // 288: immutable.activity.v1.CreateTvcManifestApprovalsResult
-	(*PostTvcQuorumKeyShareResult)(nil),               // 289: immutable.activity.v1.PostTvcQuorumKeyShareResult
-	(*CreateTvcOperatorResult)(nil),                   // 290: immutable.activity.v1.CreateTvcOperatorResult
-	(*CreateTvcQuorumKeyResult)(nil),                  // 291: immutable.activity.v1.CreateTvcQuorumKeyResult
-	(*ReEncryptTvcQuorumKeyShareResult)(nil),          // 292: immutable.activity.v1.ReEncryptTvcQuorumKeyShareResult
-	(*EthSendRawTransactionResult)(nil),               // 293: immutable.activity.v1.EthSendRawTransactionResult
-	(*CreateFiatOnRampCredentialResult)(nil),          // 294: immutable.activity.v1.CreateFiatOnRampCredentialResult
-	(*CreateFiatRampCredentialResult)(nil),            // 295: immutable.activity.v1.CreateFiatRampCredentialResult
-	(*UpdateFiatOnRampCredentialResult)(nil),          // 296: immutable.activity.v1.UpdateFiatOnRampCredentialResult
-	(*UpdateFiatRampCredentialResult)(nil),            // 297: immutable.activity.v1.UpdateFiatRampCredentialResult
-	(*DeleteFiatOnRampCredentialResult)(nil),          // 298: immutable.activity.v1.DeleteFiatOnRampCredentialResult
-	(*EthSendTransactionResult)(nil),                  // 299: immutable.activity.v1.EthSendTransactionResult
-	(*EthSendTransactionResultV2)(nil),                // 300: immutable.activity.v1.EthSendTransactionResultV2
-	(*SolSendTransactionResult)(nil),                  // 301: immutable.activity.v1.SolSendTransactionResult
-	(*SolSendTransactionResultV2)(nil),                // 302: immutable.activity.v1.SolSendTransactionResultV2
-	(*ExecuteSwapResult)(nil),                         // 303: immutable.activity.v1.ExecuteSwapResult
-	(*SwapQuote)(nil),                                 // 304: immutable.activity.v1.SwapQuote
-	(*CreateSwapQuoteResult)(nil),                     // 305: immutable.activity.v1.CreateSwapQuoteResult
-	(*WebhookEndpointData)(nil),                       // 306: immutable.activity.v1.WebhookEndpointData
-	(*CreateWebhookEndpointResult)(nil),               // 307: immutable.activity.v1.CreateWebhookEndpointResult
-	(*UpdateWebhookEndpointResult)(nil),               // 308: immutable.activity.v1.UpdateWebhookEndpointResult
-	(*DeleteWebhookEndpointResult)(nil),               // 309: immutable.activity.v1.DeleteWebhookEndpointResult
-	(*WebhookSubscriptionParams)(nil),                 // 310: immutable.activity.v1.WebhookSubscriptionParams
-	(*CreateMfaPolicyResult)(nil),                     // 311: immutable.activity.v1.CreateMfaPolicyResult
-	(*UpdateMfaPolicyResult)(nil),                     // 312: immutable.activity.v1.UpdateMfaPolicyResult
-	(*DeleteMfaPolicyResult)(nil),                     // 313: immutable.activity.v1.DeleteMfaPolicyResult
-	(*CreateSessionProfileResult)(nil),                // 314: immutable.activity.v1.CreateSessionProfileResult
-	(*EarnDeployWrapperResult)(nil),                   // 315: immutable.activity.v1.EarnDeployWrapperResult
-	(*EarnDepositResult)(nil),                         // 316: immutable.activity.v1.EarnDepositResult
-	(*EarnWithdrawResult)(nil),                        // 317: immutable.activity.v1.EarnWithdrawResult
-	(*EarnSetWrapperStateResult)(nil),                 // 318: immutable.activity.v1.EarnSetWrapperStateResult
-	(*ClaimEarnFeesResult)(nil),                       // 319: immutable.activity.v1.ClaimEarnFeesResult
-	(*EarnClaimRewardsResult)(nil),                    // 320: immutable.activity.v1.EarnClaimRewardsResult
-	(*OauthProviderParams)(nil),                       // 321: immutable.activity.v1.OauthProviderParams
-	(*OauthProviderParamsV2)(nil),                     // 322: immutable.activity.v1.OauthProviderParamsV2
-	(*OidcClaims)(nil),                                // 323: immutable.activity.v1.OidcClaims
-	(*ApiKeyParamsV2)(nil),                            // 324: immutable.activity.v1.ApiKeyParamsV2
-	(*UserParams)(nil),                                // 325: immutable.activity.v1.UserParams
-	(*UserParamsV2)(nil),                              // 326: immutable.activity.v1.UserParamsV2
-	(*UserParamsV3)(nil),                              // 327: immutable.activity.v1.UserParamsV3
-	(*UserParamsV4)(nil),                              // 328: immutable.activity.v1.UserParamsV4
-	(*AuthenticatorParams)(nil),                       // 329: immutable.activity.v1.AuthenticatorParams
-	(*AuthenticatorParamsV2)(nil),                     // 330: immutable.activity.v1.AuthenticatorParamsV2
-	(*Attestation)(nil),                               // 331: immutable.activity.v1.Attestation
-	(*InvitationParams)(nil),                          // 332: immutable.activity.v1.InvitationParams
-	(*ApiOnlyUserParams)(nil),                         // 333: immutable.activity.v1.ApiOnlyUserParams
-	(*PrivateKeyParams)(nil),                          // 334: immutable.activity.v1.PrivateKeyParams
-	(*WalletParams)(nil),                              // 335: immutable.activity.v1.WalletParams
-	(*WalletAccountParams)(nil),                       // 336: immutable.activity.v1.WalletAccountParams
-	(*DeletePrivateKeysParams)(nil),                   // 337: immutable.activity.v1.DeletePrivateKeysParams
-	(*DeleteWalletsParams)(nil),                       // 338: immutable.activity.v1.DeleteWalletsParams
-	(*DeleteWalletAccountsParams)(nil),                // 339: immutable.activity.v1.DeleteWalletAccountsParams
-	(*DeletePoliciesParams)(nil),                      // 340: immutable.activity.v1.DeletePoliciesParams
-	(*IpAllowlistIntentRule)(nil),                     // 341: immutable.activity.v1.IpAllowlistIntentRule
-	(*SetIpAllowlistIntent)(nil),                      // 342: immutable.activity.v1.SetIpAllowlistIntent
-	(*RemoveIpAllowlistIntent)(nil),                   // 343: immutable.activity.v1.RemoveIpAllowlistIntent
-	(*SetIpAllowlistResult)(nil),                      // 344: immutable.activity.v1.SetIpAllowlistResult
-	(*RemoveIpAllowlistResult)(nil),                   // 345: immutable.activity.v1.RemoveIpAllowlistResult
-	(*EnableSmsForCountriesIntent)(nil),               // 346: immutable.activity.v1.EnableSmsForCountriesIntent
-	(*DisableSmsForCountriesIntent)(nil),              // 347: immutable.activity.v1.DisableSmsForCountriesIntent
-	(*EnableSmsForCountriesResult)(nil),               // 348: immutable.activity.v1.EnableSmsForCountriesResult
-	(*DisableSmsForCountriesResult)(nil),              // 349: immutable.activity.v1.DisableSmsForCountriesResult
-	(*SparkFrostCommitment)(nil),                      // 350: immutable.activity.v1.SparkFrostCommitment
-	(*SparkOperatorRecipient)(nil),                    // 351: immutable.activity.v1.SparkOperatorRecipient
-	(*SparkTransferLeaf)(nil),                         // 352: immutable.activity.v1.SparkTransferLeaf
-	(*SparkClaimLeaf)(nil),                            // 353: immutable.activity.v1.SparkClaimLeaf
-	(*SparkTransferPackage)(nil),                      // 354: immutable.activity.v1.SparkTransferPackage
-	(*SparkClaimPackage)(nil),                         // 355: immutable.activity.v1.SparkClaimPackage
-	(*SparkLightningReceivePackage)(nil),              // 356: immutable.activity.v1.SparkLightningReceivePackage
-	(*SparkEncryptedOperatorPackage)(nil),             // 357: immutable.activity.v1.SparkEncryptedOperatorPackage
-	(*SparkSignatureRequest)(nil),                     // 358: immutable.activity.v1.SparkSignatureRequest
-	(*SparkPartialSignature)(nil),                     // 359: immutable.activity.v1.SparkPartialSignature
-	(*SparkLeafPublicKey)(nil),                        // 360: immutable.activity.v1.SparkLeafPublicKey
-	(*SparkSignFrostIntent)(nil),                      // 361: immutable.activity.v1.SparkSignFrostIntent
-	(*SparkSignFrostResult)(nil),                      // 362: immutable.activity.v1.SparkSignFrostResult
-	(*SparkPrepareTransferIntent)(nil),                // 363: immutable.activity.v1.SparkPrepareTransferIntent
-	(*SparkPrepareTransferResult)(nil),                // 364: immutable.activity.v1.SparkPrepareTransferResult
-	(*SparkClaimTransferIntent)(nil),                  // 365: immutable.activity.v1.SparkClaimTransferIntent
-	(*SparkClaimTransferResult)(nil),                  // 366: immutable.activity.v1.SparkClaimTransferResult
-	(*SparkPrepareLightningReceiveIntent)(nil),        // 367: immutable.activity.v1.SparkPrepareLightningReceiveIntent
-	(*SparkPrepareLightningReceiveResult)(nil),        // 368: immutable.activity.v1.SparkPrepareLightningReceiveResult
-	(*InitImportSecretsIntent)(nil),                   // 369: immutable.activity.v1.InitImportSecretsIntent
-	(*InitImportSecretsResult)(nil),                   // 370: immutable.activity.v1.InitImportSecretsResult
-	(*ImportSecretsIntent)(nil),                       // 371: immutable.activity.v1.ImportSecretsIntent
-	(*ImportSecretParams)(nil),                        // 372: immutable.activity.v1.ImportSecretParams
-	(*ImportSecretsResult)(nil),                       // 373: immutable.activity.v1.ImportSecretsResult
-	(*DeleteSecretsIntent)(nil),                       // 374: immutable.activity.v1.DeleteSecretsIntent
-	(*DeleteSecretsResult)(nil),                       // 375: immutable.activity.v1.DeleteSecretsResult
-	(*ExportSecretsIntent)(nil),                       // 376: immutable.activity.v1.ExportSecretsIntent
-	(*ExportSecretParams)(nil),                        // 377: immutable.activity.v1.ExportSecretParams
-	(*ExportSecretsResult)(nil),                       // 378: immutable.activity.v1.ExportSecretsResult
-	(*CreateUsageControlIntent)(nil),                  // 379: immutable.activity.v1.CreateUsageControlIntent
-	(*CreateUsageControlResult)(nil),                  // 380: immutable.activity.v1.CreateUsageControlResult
-	(*DeleteUsageControlsIntent)(nil),                 // 381: immutable.activity.v1.DeleteUsageControlsIntent
-	(*DeleteUsageControlsResult)(nil),                 // 382: immutable.activity.v1.DeleteUsageControlsResult
-	(*ClientSignature)(nil),                           // 383: immutable.activity.v1.ClientSignature
-	(*UpdateTvcAppLiveDeploymentIntent)(nil),          // 384: immutable.activity.v1.UpdateTvcAppLiveDeploymentIntent
-	(*UpdateTvcAppLiveDeploymentResult)(nil),          // 385: immutable.activity.v1.UpdateTvcAppLiveDeploymentResult
-	(*DeleteTvcDeploymentIntent)(nil),                 // 386: immutable.activity.v1.DeleteTvcDeploymentIntent
-	(*DeleteTvcDeploymentResult)(nil),                 // 387: immutable.activity.v1.DeleteTvcDeploymentResult
-	(*DeleteTvcAppAndDeploymentsIntent)(nil),          // 388: immutable.activity.v1.DeleteTvcAppAndDeploymentsIntent
-	(*DeleteTvcAppAndDeploymentsResult)(nil),          // 389: immutable.activity.v1.DeleteTvcAppAndDeploymentsResult
-	(*RestoreTvcDeploymentIntent)(nil),                // 390: immutable.activity.v1.RestoreTvcDeploymentIntent
-	(*RestoreTvcDeploymentResult)(nil),                // 391: immutable.activity.v1.RestoreTvcDeploymentResult
-	(*RequiredAuthenticationMethodParams)(nil),        // 392: immutable.activity.v1.RequiredAuthenticationMethodParams
-	(*AuthenticationMethodParams)(nil),                // 393: immutable.activity.v1.AuthenticationMethodParams
-	(*SparkKeyDerivation)(nil),                        // 394: immutable.activity.v1.SparkKeyDerivation
-	(*SparkIdentityDerivation)(nil),                   // 395: immutable.activity.v1.SparkIdentityDerivation
-	(*SparkSigningLeafDerivation)(nil),                // 396: immutable.activity.v1.SparkSigningLeafDerivation
-	(*SparkDepositDerivation)(nil),                    // 397: immutable.activity.v1.SparkDepositDerivation
-	(*SparkStaticDepositDerivation)(nil),              // 398: immutable.activity.v1.SparkStaticDepositDerivation
-	(*SparkHtlcPreimageDerivation)(nil),               // 399: immutable.activity.v1.SparkHtlcPreimageDerivation
-	(*EthUndelegate7702Intent)(nil),                   // 400: immutable.activity.v1.EthUndelegate7702Intent
-	(*EthUndelegate7702Result)(nil),                   // 401: immutable.activity.v1.EthUndelegate7702Result
-	(*ExecuteSwapIntentV2)(nil),                       // 402: immutable.activity.v1.ExecuteSwapIntentV2
-	(*ExecuteSwapIntentV3)(nil),                       // 403: immutable.activity.v1.ExecuteSwapIntentV3
-	(*CreateSwapQuoteIntent)(nil),                     // 404: immutable.activity.v1.CreateSwapQuoteIntent
-	(*CreateSwapQuoteIntentV2)(nil),                   // 405: immutable.activity.v1.CreateSwapQuoteIntentV2
-	(*CreateSwapQuoteIntentV3)(nil),                   // 406: immutable.activity.v1.CreateSwapQuoteIntentV3
-	(*SwapQuoteV2)(nil),                               // 407: immutable.activity.v1.SwapQuoteV2
-	(*SwapCharges)(nil),                               // 408: immutable.activity.v1.SwapCharges
-	(*CreateSwapQuoteResultV2)(nil),                   // 409: immutable.activity.v1.CreateSwapQuoteResultV2
-	(*ExecuteSwapIntentV4)(nil),                       // 410: immutable.activity.v1.ExecuteSwapIntentV4
-	(*ExecuteSwapBoundQuote)(nil),                     // 411: immutable.activity.v1.ExecuteSwapBoundQuote
-	(*ExecuteSwapMarketTerms)(nil),                    // 412: immutable.activity.v1.ExecuteSwapMarketTerms
-	(*CreateExternalSignerIntentV1)(nil),              // 413: immutable.activity.v1.CreateExternalSignerIntentV1
-	(*CreateExternalSignerResultV1)(nil),              // 414: immutable.activity.v1.CreateExternalSignerResultV1
-	(*DeleteExternalSignerIntentV1)(nil),              // 415: immutable.activity.v1.DeleteExternalSignerIntentV1
-	(*DeleteExternalSignerResultV1)(nil),              // 416: immutable.activity.v1.DeleteExternalSignerResultV1
-	nil,                                               // 417: immutable.activity.v1.WalletKitSettingsParams.OauthClientIdsEntry
-	(*billing.SetPaymentMethodIntent)(nil),            // 418: immutable.activity.billing.SetPaymentMethodIntent
-	(*billing.ActivateBillingTierIntent)(nil),         // 419: immutable.activity.billing.ActivateBillingTierIntent
-	(*billing.DeletePaymentMethodIntent)(nil),         // 420: immutable.activity.billing.DeletePaymentMethodIntent
-	(*billing.SetPaymentMethodIntentV2)(nil),          // 421: immutable.activity.billing.SetPaymentMethodIntentV2
-	(*billing.UpdatePaymentMethodIntent)(nil),         // 422: immutable.activity.billing.UpdatePaymentMethodIntent
-	(*api.ApiKeyParams)(nil),                          // 423: immutable.activity.api.ApiKeyParams
-	(v1.PayloadEncoding)(0),                           // 424: immutable.common.v1.PayloadEncoding
-	(v1.HashFunction)(0),                              // 425: immutable.common.v1.HashFunction
-	(v1.Effect)(0),                                    // 426: immutable.common.v1.Effect
-	(v1.Operator)(0),                                  // 427: immutable.common.v1.Operator
-	(v1.TransactionType)(0),                           // 428: immutable.common.v1.TransactionType
-	(v1.SmartContractInterfaceType)(0),                // 429: immutable.common.v1.SmartContractInterfaceType
-	(v1.FeatureName)(0),                               // 430: immutable.common.v1.FeatureName
-	(v1.MnemonicLanguage)(0),                          // 431: immutable.common.v1.MnemonicLanguage
-	(v1.WalletAuthenticatorType)(0),                   // 432: immutable.common.v1.WalletAuthenticatorType
-	(v1.FiatOnRampProvider)(0),                        // 433: immutable.common.v1.FiatOnRampProvider
-	(v1.FiatOnRampBlockchainNetwork)(0),               // 434: immutable.common.v1.FiatOnRampBlockchainNetwork
-	(v1.FiatOnRampCryptoCurrency)(0),                  // 435: immutable.common.v1.FiatOnRampCryptoCurrency
-	(v1.FiatOnRampCurrency)(0),                        // 436: immutable.common.v1.FiatOnRampCurrency
-	(v1.FiatOnRampPaymentMethod)(0),                   // 437: immutable.common.v1.FiatOnRampPaymentMethod
-	(v1.Curve)(0),                                     // 438: immutable.common.v1.Curve
-	(v1.AddressFormat)(0),                             // 439: immutable.common.v1.AddressFormat
-	(v1.Oauth2Provider)(0),                            // 440: immutable.common.v1.Oauth2Provider
-	(v1.FiatRampProvider)(0),                          // 441: immutable.common.v1.FiatRampProvider
-	(v1.TvcHealthCheckType)(0),                        // 442: immutable.common.v1.TvcHealthCheckType
-	(*billing.SetPaymentMethodResult)(nil),            // 443: immutable.activity.billing.SetPaymentMethodResult
-	(*billing.ActivateBillingTierResult)(nil),         // 444: immutable.activity.billing.ActivateBillingTierResult
-	(*billing.DeletePaymentMethodResult)(nil),         // 445: immutable.activity.billing.DeletePaymentMethodResult
-	(*billing.UpdatePaymentMethodResult)(nil),         // 446: immutable.activity.billing.UpdatePaymentMethodResult
-	(v1.JwtProfile)(0),                                // 447: immutable.common.v1.JwtProfile
-	(*v11.Feature)(nil),                               // 448: immutable.data.v1.Feature
-	(v1.ApiKeyCurve)(0),                               // 449: immutable.common.v1.ApiKeyCurve
-	(v1.AccessType)(0),                                // 450: immutable.common.v1.AccessType
-	(*v12.PublicKeyCredentialWithAttestation)(nil),    // 451: immutable.webauthn.v1.PublicKeyCredentialWithAttestation
-	(v12.AuthenticatorTransport)(0),                   // 452: immutable.webauthn.v1.AuthenticatorTransport
-	(v1.PathFormat)(0),                                // 453: immutable.common.v1.PathFormat
-	(v13.TransportEncryptionSuite)(0),                 // 454: immutable.models.v1.TransportEncryptionSuite
-	(*v13.KeyValue)(nil),                              // 455: immutable.models.v1.KeyValue
-	(*v14.UsageControlDataSource)(nil),                // 456: external.data.v1.UsageControlDataSource
-	(*v14.UsageControlBudget)(nil),                    // 457: external.data.v1.UsageControlBudget
-	(v1.ClientSignatureScheme)(0),                     // 458: immutable.common.v1.ClientSignatureScheme
-	(v1.AuthenticationType)(0),                        // 459: immutable.common.v1.AuthenticationType
+	(*InitOauth2AuthenticateIntent)(nil),              // 156: immutable.activity.v1.InitOauth2AuthenticateIntent
+	(*Oauth2AuthenticateIntentV2)(nil),                // 157: immutable.activity.v1.Oauth2AuthenticateIntentV2
+	(*Oauth2AuthenticateIntent)(nil),                  // 158: immutable.activity.v1.Oauth2AuthenticateIntent
+	(*DeleteWalletAccountsIntent)(nil),                // 159: immutable.activity.v1.DeleteWalletAccountsIntent
+	(*DeletePoliciesIntent)(nil),                      // 160: immutable.activity.v1.DeletePoliciesIntent
+	(*EthSendRawTransactionIntent)(nil),               // 161: immutable.activity.v1.EthSendRawTransactionIntent
+	(*CreateFiatOnRampCredentialIntent)(nil),          // 162: immutable.activity.v1.CreateFiatOnRampCredentialIntent
+	(*CreateFiatRampCredentialIntent)(nil),            // 163: immutable.activity.v1.CreateFiatRampCredentialIntent
+	(*UpdateFiatOnRampCredentialIntent)(nil),          // 164: immutable.activity.v1.UpdateFiatOnRampCredentialIntent
+	(*UpdateFiatRampCredentialIntent)(nil),            // 165: immutable.activity.v1.UpdateFiatRampCredentialIntent
+	(*DeleteFiatOnRampCredentialIntent)(nil),          // 166: immutable.activity.v1.DeleteFiatOnRampCredentialIntent
+	(*CreateTvcAppIntent)(nil),                        // 167: immutable.activity.v1.CreateTvcAppIntent
+	(*CreateTvcOperatorIntent)(nil),                   // 168: immutable.activity.v1.CreateTvcOperatorIntent
+	(*TvcOperatorSetParams)(nil),                      // 169: immutable.activity.v1.TvcOperatorSetParams
+	(*TvcOperatorParams)(nil),                         // 170: immutable.activity.v1.TvcOperatorParams
+	(*CreateTvcDeploymentIntent)(nil),                 // 171: immutable.activity.v1.CreateTvcDeploymentIntent
+	(*CreateTvcManifestApprovalsIntent)(nil),          // 172: immutable.activity.v1.CreateTvcManifestApprovalsIntent
+	(*TvcManifestApproval)(nil),                       // 173: immutable.activity.v1.TvcManifestApproval
+	(*PostTvcQuorumKeyShareIntent)(nil),               // 174: immutable.activity.v1.PostTvcQuorumKeyShareIntent
+	(*QuorumKeyShareApprovalBundle)(nil),              // 175: immutable.activity.v1.QuorumKeyShareApprovalBundle
+	(*CreateTvcQuorumKeyIntent)(nil),                  // 176: immutable.activity.v1.CreateTvcQuorumKeyIntent
+	(*ReEncryptTvcQuorumKeyShareIntent)(nil),          // 177: immutable.activity.v1.ReEncryptTvcQuorumKeyShareIntent
+	(*CreateWebhookEndpointIntent)(nil),               // 178: immutable.activity.v1.CreateWebhookEndpointIntent
+	(*UpdateWebhookEndpointIntent)(nil),               // 179: immutable.activity.v1.UpdateWebhookEndpointIntent
+	(*DeleteWebhookEndpointIntent)(nil),               // 180: immutable.activity.v1.DeleteWebhookEndpointIntent
+	(*Result)(nil),                                    // 181: immutable.activity.v1.Result
+	(*UpsertGasUsageConfigResult)(nil),                // 182: immutable.activity.v1.UpsertGasUsageConfigResult
+	(*EnableAuthProxyResult)(nil),                     // 183: immutable.activity.v1.EnableAuthProxyResult
+	(*DisableAuthProxyResult)(nil),                    // 184: immutable.activity.v1.DisableAuthProxyResult
+	(*UpsertSwapConfigResult)(nil),                    // 185: immutable.activity.v1.UpsertSwapConfigResult
+	(*ClaimSwapFeesResult)(nil),                       // 186: immutable.activity.v1.ClaimSwapFeesResult
+	(*CreateOrganizationResult)(nil),                  // 187: immutable.activity.v1.CreateOrganizationResult
+	(*CreateWalletAuthenticatorsResult)(nil),          // 188: immutable.activity.v1.CreateWalletAuthenticatorsResult
+	(*DeleteWalletAuthenticatorsResult)(nil),          // 189: immutable.activity.v1.DeleteWalletAuthenticatorsResult
+	(*CreateAuthenticatorsResult)(nil),                // 190: immutable.activity.v1.CreateAuthenticatorsResult
+	(*CreateApiKeysResult)(nil),                       // 191: immutable.activity.v1.CreateApiKeysResult
+	(*CreateUsersResult)(nil),                         // 192: immutable.activity.v1.CreateUsersResult
+	(*UpdateUserResult)(nil),                          // 193: immutable.activity.v1.UpdateUserResult
+	(*UpdateUserNameResult)(nil),                      // 194: immutable.activity.v1.UpdateUserNameResult
+	(*UpdateUserEmailResult)(nil),                     // 195: immutable.activity.v1.UpdateUserEmailResult
+	(*UpdateUserPhoneNumberResult)(nil),               // 196: immutable.activity.v1.UpdateUserPhoneNumberResult
+	(*UpdateWalletResult)(nil),                        // 197: immutable.activity.v1.UpdateWalletResult
+	(*UpdateWalletAccountNameResult)(nil),             // 198: immutable.activity.v1.UpdateWalletAccountNameResult
+	(*CreateApiOnlyUsersResult)(nil),                  // 199: immutable.activity.v1.CreateApiOnlyUsersResult
+	(*CreateInvitationsResult)(nil),                   // 200: immutable.activity.v1.CreateInvitationsResult
+	(*AcceptInvitationResult)(nil),                    // 201: immutable.activity.v1.AcceptInvitationResult
+	(*CreatePrivateKeysResult)(nil),                   // 202: immutable.activity.v1.CreatePrivateKeysResult
+	(*CreatePrivateKeysResultV2)(nil),                 // 203: immutable.activity.v1.CreatePrivateKeysResultV2
+	(*PrivateKeyResult)(nil),                          // 204: immutable.activity.v1.PrivateKeyResult
+	(*Address)(nil),                                   // 205: immutable.activity.v1.Address
+	(*SignRawPayloadResult)(nil),                      // 206: immutable.activity.v1.SignRawPayloadResult
+	(*SignRawPayloadsResult)(nil),                     // 207: immutable.activity.v1.SignRawPayloadsResult
+	(*CreateWalletResult)(nil),                        // 208: immutable.activity.v1.CreateWalletResult
+	(*CreateWalletAccountsResult)(nil),                // 209: immutable.activity.v1.CreateWalletAccountsResult
+	(*InitUserEmailRecoveryResult)(nil),               // 210: immutable.activity.v1.InitUserEmailRecoveryResult
+	(*OauthLoginResult)(nil),                          // 211: immutable.activity.v1.OauthLoginResult
+	(*CreateFiatOffRampSessionIntent)(nil),            // 212: immutable.activity.v1.CreateFiatOffRampSessionIntent
+	(*CreateFiatOffRampSessionResult)(nil),            // 213: immutable.activity.v1.CreateFiatOffRampSessionResult
+	(*MintJwtIntent)(nil),                             // 214: immutable.activity.v1.MintJwtIntent
+	(*HttpAuthzV1Inputs)(nil),                         // 215: immutable.activity.v1.HttpAuthzV1Inputs
+	(*MintJwtResult)(nil),                             // 216: immutable.activity.v1.MintJwtResult
+	(*InitFiatOnRampResult)(nil),                      // 217: immutable.activity.v1.InitFiatOnRampResult
+	(*CreateFiatOnRampSessionResult)(nil),             // 218: immutable.activity.v1.CreateFiatOnRampSessionResult
+	(*StampLoginResult)(nil),                          // 219: immutable.activity.v1.StampLoginResult
+	(*OtpLoginResult)(nil),                            // 220: immutable.activity.v1.OtpLoginResult
+	(*InitOtpResult)(nil),                             // 221: immutable.activity.v1.InitOtpResult
+	(*InitOtpResultV2)(nil),                           // 222: immutable.activity.v1.InitOtpResultV2
+	(*InitOtpAuthResult)(nil),                         // 223: immutable.activity.v1.InitOtpAuthResult
+	(*InitOtpAuthResultV2)(nil),                       // 224: immutable.activity.v1.InitOtpAuthResultV2
+	(*OtpAuthResult)(nil),                             // 225: immutable.activity.v1.OtpAuthResult
+	(*VerifyWalletAuthenticatorIntent)(nil),           // 226: immutable.activity.v1.VerifyWalletAuthenticatorIntent
+	(*VerifyWalletAuthenticatorResult)(nil),           // 227: immutable.activity.v1.VerifyWalletAuthenticatorResult
+	(*VerifyOtpResult)(nil),                           // 228: immutable.activity.v1.VerifyOtpResult
+	(*OauthResult)(nil),                               // 229: immutable.activity.v1.OauthResult
+	(*EmailAuthResult)(nil),                           // 230: immutable.activity.v1.EmailAuthResult
+	(*CreatePolicyResult)(nil),                        // 231: immutable.activity.v1.CreatePolicyResult
+	(*CreatePoliciesResult)(nil),                      // 232: immutable.activity.v1.CreatePoliciesResult
+	(*UpdatePolicyResult)(nil),                        // 233: immutable.activity.v1.UpdatePolicyResult
+	(*UpdatePolicyResultV2)(nil),                      // 234: immutable.activity.v1.UpdatePolicyResultV2
+	(*CreateReadOnlySessionResult)(nil),               // 235: immutable.activity.v1.CreateReadOnlySessionResult
+	(*CreateReadWriteSessionResult)(nil),              // 236: immutable.activity.v1.CreateReadWriteSessionResult
+	(*CreateReadWriteSessionResultV2)(nil),            // 237: immutable.activity.v1.CreateReadWriteSessionResultV2
+	(*DisablePrivateKeyResult)(nil),                   // 238: immutable.activity.v1.DisablePrivateKeyResult
+	(*DeleteUsersResult)(nil),                         // 239: immutable.activity.v1.DeleteUsersResult
+	(*DeleteInvitationResult)(nil),                    // 240: immutable.activity.v1.DeleteInvitationResult
+	(*DeleteAuthenticatorsResult)(nil),                // 241: immutable.activity.v1.DeleteAuthenticatorsResult
+	(*DeleteApiKeysResult)(nil),                       // 242: immutable.activity.v1.DeleteApiKeysResult
+	(*DeleteOrganizationResult)(nil),                  // 243: immutable.activity.v1.DeleteOrganizationResult
+	(*DeletePolicyResult)(nil),                        // 244: immutable.activity.v1.DeletePolicyResult
+	(*CreateUserTagResult)(nil),                       // 245: immutable.activity.v1.CreateUserTagResult
+	(*UpdateUserTagResult)(nil),                       // 246: immutable.activity.v1.UpdateUserTagResult
+	(*DeleteUserTagsResult)(nil),                      // 247: immutable.activity.v1.DeleteUserTagsResult
+	(*CreatePrivateKeyTagResult)(nil),                 // 248: immutable.activity.v1.CreatePrivateKeyTagResult
+	(*UpdatePrivateKeyTagResult)(nil),                 // 249: immutable.activity.v1.UpdatePrivateKeyTagResult
+	(*DeletePrivateKeyTagsResult)(nil),                // 250: immutable.activity.v1.DeletePrivateKeyTagsResult
+	(*UpdateOrganizationNameResult)(nil),              // 251: immutable.activity.v1.UpdateOrganizationNameResult
+	(*SignTransactionResult)(nil),                     // 252: immutable.activity.v1.SignTransactionResult
+	(*CreateSmartContractInterfaceResult)(nil),        // 253: immutable.activity.v1.CreateSmartContractInterfaceResult
+	(*DeleteSmartContractInterfaceResult)(nil),        // 254: immutable.activity.v1.DeleteSmartContractInterfaceResult
+	(*UpdateRootQuorumResult)(nil),                    // 255: immutable.activity.v1.UpdateRootQuorumResult
+	(*UpdateAllowedOriginsResult)(nil),                // 256: immutable.activity.v1.UpdateAllowedOriginsResult
+	(*CreateSubOrganizationResult)(nil),               // 257: immutable.activity.v1.CreateSubOrganizationResult
+	(*CreateSubOrganizationResultV3)(nil),             // 258: immutable.activity.v1.CreateSubOrganizationResultV3
+	(*WalletResult)(nil),                              // 259: immutable.activity.v1.WalletResult
+	(*CreateSubOrganizationResultV4)(nil),             // 260: immutable.activity.v1.CreateSubOrganizationResultV4
+	(*CreateSubOrganizationResultV5)(nil),             // 261: immutable.activity.v1.CreateSubOrganizationResultV5
+	(*CreateSubOrganizationResultV6)(nil),             // 262: immutable.activity.v1.CreateSubOrganizationResultV6
+	(*CreateSubOrganizationResultV7)(nil),             // 263: immutable.activity.v1.CreateSubOrganizationResultV7
+	(*CreateSubOrganizationResultV8)(nil),             // 264: immutable.activity.v1.CreateSubOrganizationResultV8
+	(*CreateSubOrganizationResultV9)(nil),             // 265: immutable.activity.v1.CreateSubOrganizationResultV9
+	(*RecoverUserResult)(nil),                         // 266: immutable.activity.v1.RecoverUserResult
+	(*SetOrganizationFeatureResult)(nil),              // 267: immutable.activity.v1.SetOrganizationFeatureResult
+	(*RemoveOrganizationFeatureResult)(nil),           // 268: immutable.activity.v1.RemoveOrganizationFeatureResult
+	(*ExportPrivateKeyResult)(nil),                    // 269: immutable.activity.v1.ExportPrivateKeyResult
+	(*ExportWalletResult)(nil),                        // 270: immutable.activity.v1.ExportWalletResult
+	(*ExportWalletAccountResult)(nil),                 // 271: immutable.activity.v1.ExportWalletAccountResult
+	(*InitImportWalletResult)(nil),                    // 272: immutable.activity.v1.InitImportWalletResult
+	(*ImportWalletResult)(nil),                        // 273: immutable.activity.v1.ImportWalletResult
+	(*InitImportPrivateKeyResult)(nil),                // 274: immutable.activity.v1.InitImportPrivateKeyResult
+	(*ImportPrivateKeyResult)(nil),                    // 275: immutable.activity.v1.ImportPrivateKeyResult
+	(*CreateOauthProvidersResult)(nil),                // 276: immutable.activity.v1.CreateOauthProvidersResult
+	(*CreateOauthProvidersResultV2)(nil),              // 277: immutable.activity.v1.CreateOauthProvidersResultV2
+	(*DeleteOauthProvidersResult)(nil),                // 278: immutable.activity.v1.DeleteOauthProvidersResult
+	(*DeletePrivateKeysResult)(nil),                   // 279: immutable.activity.v1.DeletePrivateKeysResult
+	(*DeleteWalletsResult)(nil),                       // 280: immutable.activity.v1.DeleteWalletsResult
+	(*DeleteSubOrganizationResult)(nil),               // 281: immutable.activity.v1.DeleteSubOrganizationResult
+	(*CreateOauth2CredentialResult)(nil),              // 282: immutable.activity.v1.CreateOauth2CredentialResult
+	(*UpdateOauth2CredentialResult)(nil),              // 283: immutable.activity.v1.UpdateOauth2CredentialResult
+	(*DeleteOauth2CredentialResult)(nil),              // 284: immutable.activity.v1.DeleteOauth2CredentialResult
+	(*InitOauth2AuthenticateResult)(nil),              // 285: immutable.activity.v1.InitOauth2AuthenticateResult
+	(*Oauth2AuthenticateResult)(nil),                  // 286: immutable.activity.v1.Oauth2AuthenticateResult
+	(*DeleteWalletAccountsResult)(nil),                // 287: immutable.activity.v1.DeleteWalletAccountsResult
+	(*DeletePoliciesResult)(nil),                      // 288: immutable.activity.v1.DeletePoliciesResult
+	(*CreateTvcAppResult)(nil),                        // 289: immutable.activity.v1.CreateTvcAppResult
+	(*CreateTvcDeploymentResult)(nil),                 // 290: immutable.activity.v1.CreateTvcDeploymentResult
+	(*CreateTvcManifestApprovalsResult)(nil),          // 291: immutable.activity.v1.CreateTvcManifestApprovalsResult
+	(*PostTvcQuorumKeyShareResult)(nil),               // 292: immutable.activity.v1.PostTvcQuorumKeyShareResult
+	(*CreateTvcOperatorResult)(nil),                   // 293: immutable.activity.v1.CreateTvcOperatorResult
+	(*CreateTvcQuorumKeyResult)(nil),                  // 294: immutable.activity.v1.CreateTvcQuorumKeyResult
+	(*ReEncryptTvcQuorumKeyShareResult)(nil),          // 295: immutable.activity.v1.ReEncryptTvcQuorumKeyShareResult
+	(*EthSendRawTransactionResult)(nil),               // 296: immutable.activity.v1.EthSendRawTransactionResult
+	(*CreateFiatOnRampCredentialResult)(nil),          // 297: immutable.activity.v1.CreateFiatOnRampCredentialResult
+	(*CreateFiatRampCredentialResult)(nil),            // 298: immutable.activity.v1.CreateFiatRampCredentialResult
+	(*UpdateFiatOnRampCredentialResult)(nil),          // 299: immutable.activity.v1.UpdateFiatOnRampCredentialResult
+	(*UpdateFiatRampCredentialResult)(nil),            // 300: immutable.activity.v1.UpdateFiatRampCredentialResult
+	(*DeleteFiatOnRampCredentialResult)(nil),          // 301: immutable.activity.v1.DeleteFiatOnRampCredentialResult
+	(*EthSendTransactionResult)(nil),                  // 302: immutable.activity.v1.EthSendTransactionResult
+	(*EthSendTransactionResultV2)(nil),                // 303: immutable.activity.v1.EthSendTransactionResultV2
+	(*SolSendTransactionResult)(nil),                  // 304: immutable.activity.v1.SolSendTransactionResult
+	(*SolSendTransactionResultV2)(nil),                // 305: immutable.activity.v1.SolSendTransactionResultV2
+	(*ExecuteSwapResult)(nil),                         // 306: immutable.activity.v1.ExecuteSwapResult
+	(*SwapQuote)(nil),                                 // 307: immutable.activity.v1.SwapQuote
+	(*CreateSwapQuoteResult)(nil),                     // 308: immutable.activity.v1.CreateSwapQuoteResult
+	(*WebhookEndpointData)(nil),                       // 309: immutable.activity.v1.WebhookEndpointData
+	(*CreateWebhookEndpointResult)(nil),               // 310: immutable.activity.v1.CreateWebhookEndpointResult
+	(*UpdateWebhookEndpointResult)(nil),               // 311: immutable.activity.v1.UpdateWebhookEndpointResult
+	(*DeleteWebhookEndpointResult)(nil),               // 312: immutable.activity.v1.DeleteWebhookEndpointResult
+	(*WebhookSubscriptionParams)(nil),                 // 313: immutable.activity.v1.WebhookSubscriptionParams
+	(*CreateMfaPolicyResult)(nil),                     // 314: immutable.activity.v1.CreateMfaPolicyResult
+	(*UpdateMfaPolicyResult)(nil),                     // 315: immutable.activity.v1.UpdateMfaPolicyResult
+	(*DeleteMfaPolicyResult)(nil),                     // 316: immutable.activity.v1.DeleteMfaPolicyResult
+	(*CreateSessionProfileResult)(nil),                // 317: immutable.activity.v1.CreateSessionProfileResult
+	(*EarnDeployWrapperResult)(nil),                   // 318: immutable.activity.v1.EarnDeployWrapperResult
+	(*EarnDepositResult)(nil),                         // 319: immutable.activity.v1.EarnDepositResult
+	(*EarnWithdrawResult)(nil),                        // 320: immutable.activity.v1.EarnWithdrawResult
+	(*EarnSetWrapperStateResult)(nil),                 // 321: immutable.activity.v1.EarnSetWrapperStateResult
+	(*ClaimEarnFeesResult)(nil),                       // 322: immutable.activity.v1.ClaimEarnFeesResult
+	(*EarnClaimRewardsResult)(nil),                    // 323: immutable.activity.v1.EarnClaimRewardsResult
+	(*OauthProviderParams)(nil),                       // 324: immutable.activity.v1.OauthProviderParams
+	(*OauthProviderParamsV2)(nil),                     // 325: immutable.activity.v1.OauthProviderParamsV2
+	(*OidcClaims)(nil),                                // 326: immutable.activity.v1.OidcClaims
+	(*ApiKeyParamsV2)(nil),                            // 327: immutable.activity.v1.ApiKeyParamsV2
+	(*UserParams)(nil),                                // 328: immutable.activity.v1.UserParams
+	(*UserParamsV2)(nil),                              // 329: immutable.activity.v1.UserParamsV2
+	(*UserParamsV3)(nil),                              // 330: immutable.activity.v1.UserParamsV3
+	(*UserParamsV4)(nil),                              // 331: immutable.activity.v1.UserParamsV4
+	(*AuthenticatorParams)(nil),                       // 332: immutable.activity.v1.AuthenticatorParams
+	(*AuthenticatorParamsV2)(nil),                     // 333: immutable.activity.v1.AuthenticatorParamsV2
+	(*Attestation)(nil),                               // 334: immutable.activity.v1.Attestation
+	(*InvitationParams)(nil),                          // 335: immutable.activity.v1.InvitationParams
+	(*ApiOnlyUserParams)(nil),                         // 336: immutable.activity.v1.ApiOnlyUserParams
+	(*PrivateKeyParams)(nil),                          // 337: immutable.activity.v1.PrivateKeyParams
+	(*WalletParams)(nil),                              // 338: immutable.activity.v1.WalletParams
+	(*WalletAccountParams)(nil),                       // 339: immutable.activity.v1.WalletAccountParams
+	(*DeletePrivateKeysParams)(nil),                   // 340: immutable.activity.v1.DeletePrivateKeysParams
+	(*DeleteWalletsParams)(nil),                       // 341: immutable.activity.v1.DeleteWalletsParams
+	(*DeleteWalletAccountsParams)(nil),                // 342: immutable.activity.v1.DeleteWalletAccountsParams
+	(*DeletePoliciesParams)(nil),                      // 343: immutable.activity.v1.DeletePoliciesParams
+	(*IpAllowlistIntentRule)(nil),                     // 344: immutable.activity.v1.IpAllowlistIntentRule
+	(*SetIpAllowlistIntent)(nil),                      // 345: immutable.activity.v1.SetIpAllowlistIntent
+	(*RemoveIpAllowlistIntent)(nil),                   // 346: immutable.activity.v1.RemoveIpAllowlistIntent
+	(*SetIpAllowlistResult)(nil),                      // 347: immutable.activity.v1.SetIpAllowlistResult
+	(*RemoveIpAllowlistResult)(nil),                   // 348: immutable.activity.v1.RemoveIpAllowlistResult
+	(*EnableSmsForCountriesIntent)(nil),               // 349: immutable.activity.v1.EnableSmsForCountriesIntent
+	(*DisableSmsForCountriesIntent)(nil),              // 350: immutable.activity.v1.DisableSmsForCountriesIntent
+	(*EnableSmsForCountriesResult)(nil),               // 351: immutable.activity.v1.EnableSmsForCountriesResult
+	(*DisableSmsForCountriesResult)(nil),              // 352: immutable.activity.v1.DisableSmsForCountriesResult
+	(*AddNotificationDomainsIntent)(nil),              // 353: immutable.activity.v1.AddNotificationDomainsIntent
+	(*DeleteNotificationDomainsIntent)(nil),           // 354: immutable.activity.v1.DeleteNotificationDomainsIntent
+	(*AddNotificationDomainsResult)(nil),              // 355: immutable.activity.v1.AddNotificationDomainsResult
+	(*DeleteNotificationDomainsResult)(nil),           // 356: immutable.activity.v1.DeleteNotificationDomainsResult
+	(*SparkFrostCommitment)(nil),                      // 357: immutable.activity.v1.SparkFrostCommitment
+	(*SparkOperatorRecipient)(nil),                    // 358: immutable.activity.v1.SparkOperatorRecipient
+	(*SparkTransferLeaf)(nil),                         // 359: immutable.activity.v1.SparkTransferLeaf
+	(*SparkClaimLeaf)(nil),                            // 360: immutable.activity.v1.SparkClaimLeaf
+	(*SparkTransferPackage)(nil),                      // 361: immutable.activity.v1.SparkTransferPackage
+	(*SparkClaimPackage)(nil),                         // 362: immutable.activity.v1.SparkClaimPackage
+	(*SparkLightningReceivePackage)(nil),              // 363: immutable.activity.v1.SparkLightningReceivePackage
+	(*SparkEncryptedOperatorPackage)(nil),             // 364: immutable.activity.v1.SparkEncryptedOperatorPackage
+	(*SparkSignatureRequest)(nil),                     // 365: immutable.activity.v1.SparkSignatureRequest
+	(*SparkPartialSignature)(nil),                     // 366: immutable.activity.v1.SparkPartialSignature
+	(*SparkLeafPublicKey)(nil),                        // 367: immutable.activity.v1.SparkLeafPublicKey
+	(*SparkSignFrostIntent)(nil),                      // 368: immutable.activity.v1.SparkSignFrostIntent
+	(*SparkSignFrostResult)(nil),                      // 369: immutable.activity.v1.SparkSignFrostResult
+	(*SparkPrepareTransferIntent)(nil),                // 370: immutable.activity.v1.SparkPrepareTransferIntent
+	(*SparkPrepareTransferResult)(nil),                // 371: immutable.activity.v1.SparkPrepareTransferResult
+	(*SparkClaimTransferIntent)(nil),                  // 372: immutable.activity.v1.SparkClaimTransferIntent
+	(*SparkClaimTransferResult)(nil),                  // 373: immutable.activity.v1.SparkClaimTransferResult
+	(*SparkPrepareLightningReceiveIntent)(nil),        // 374: immutable.activity.v1.SparkPrepareLightningReceiveIntent
+	(*SparkPrepareLightningReceiveResult)(nil),        // 375: immutable.activity.v1.SparkPrepareLightningReceiveResult
+	(*InitImportSecretsIntent)(nil),                   // 376: immutable.activity.v1.InitImportSecretsIntent
+	(*InitImportSecretsResult)(nil),                   // 377: immutable.activity.v1.InitImportSecretsResult
+	(*ImportSecretsIntent)(nil),                       // 378: immutable.activity.v1.ImportSecretsIntent
+	(*ImportSecretParams)(nil),                        // 379: immutable.activity.v1.ImportSecretParams
+	(*ImportSecretsResult)(nil),                       // 380: immutable.activity.v1.ImportSecretsResult
+	(*DeleteSecretsIntent)(nil),                       // 381: immutable.activity.v1.DeleteSecretsIntent
+	(*DeleteSecretsResult)(nil),                       // 382: immutable.activity.v1.DeleteSecretsResult
+	(*ExportSecretsIntent)(nil),                       // 383: immutable.activity.v1.ExportSecretsIntent
+	(*ExportSecretParams)(nil),                        // 384: immutable.activity.v1.ExportSecretParams
+	(*ExportSecretsResult)(nil),                       // 385: immutable.activity.v1.ExportSecretsResult
+	(*CreateUsageControlIntent)(nil),                  // 386: immutable.activity.v1.CreateUsageControlIntent
+	(*CreateUsageControlResult)(nil),                  // 387: immutable.activity.v1.CreateUsageControlResult
+	(*DeleteUsageControlsIntent)(nil),                 // 388: immutable.activity.v1.DeleteUsageControlsIntent
+	(*DeleteUsageControlsResult)(nil),                 // 389: immutable.activity.v1.DeleteUsageControlsResult
+	(*ClientSignature)(nil),                           // 390: immutable.activity.v1.ClientSignature
+	(*UpdateTvcAppLiveDeploymentIntent)(nil),          // 391: immutable.activity.v1.UpdateTvcAppLiveDeploymentIntent
+	(*UpdateTvcAppLiveDeploymentResult)(nil),          // 392: immutable.activity.v1.UpdateTvcAppLiveDeploymentResult
+	(*DeleteTvcDeploymentIntent)(nil),                 // 393: immutable.activity.v1.DeleteTvcDeploymentIntent
+	(*DeleteTvcDeploymentResult)(nil),                 // 394: immutable.activity.v1.DeleteTvcDeploymentResult
+	(*DeleteTvcAppAndDeploymentsIntent)(nil),          // 395: immutable.activity.v1.DeleteTvcAppAndDeploymentsIntent
+	(*DeleteTvcAppAndDeploymentsResult)(nil),          // 396: immutable.activity.v1.DeleteTvcAppAndDeploymentsResult
+	(*RestoreTvcDeploymentIntent)(nil),                // 397: immutable.activity.v1.RestoreTvcDeploymentIntent
+	(*RestoreTvcDeploymentResult)(nil),                // 398: immutable.activity.v1.RestoreTvcDeploymentResult
+	(*RequiredAuthenticationMethodParams)(nil),        // 399: immutable.activity.v1.RequiredAuthenticationMethodParams
+	(*AuthenticationMethodParams)(nil),                // 400: immutable.activity.v1.AuthenticationMethodParams
+	(*SparkKeyDerivation)(nil),                        // 401: immutable.activity.v1.SparkKeyDerivation
+	(*SparkIdentityDerivation)(nil),                   // 402: immutable.activity.v1.SparkIdentityDerivation
+	(*SparkSigningLeafDerivation)(nil),                // 403: immutable.activity.v1.SparkSigningLeafDerivation
+	(*SparkDepositDerivation)(nil),                    // 404: immutable.activity.v1.SparkDepositDerivation
+	(*SparkStaticDepositDerivation)(nil),              // 405: immutable.activity.v1.SparkStaticDepositDerivation
+	(*SparkHtlcPreimageDerivation)(nil),               // 406: immutable.activity.v1.SparkHtlcPreimageDerivation
+	(*EthUndelegate7702Intent)(nil),                   // 407: immutable.activity.v1.EthUndelegate7702Intent
+	(*EthUndelegate7702Result)(nil),                   // 408: immutable.activity.v1.EthUndelegate7702Result
+	(*ExecuteSwapIntentV2)(nil),                       // 409: immutable.activity.v1.ExecuteSwapIntentV2
+	(*ExecuteSwapIntentV3)(nil),                       // 410: immutable.activity.v1.ExecuteSwapIntentV3
+	(*CreateSwapQuoteIntent)(nil),                     // 411: immutable.activity.v1.CreateSwapQuoteIntent
+	(*CreateSwapQuoteIntentV2)(nil),                   // 412: immutable.activity.v1.CreateSwapQuoteIntentV2
+	(*CreateSwapQuoteIntentV3)(nil),                   // 413: immutable.activity.v1.CreateSwapQuoteIntentV3
+	(*SwapQuoteV2)(nil),                               // 414: immutable.activity.v1.SwapQuoteV2
+	(*SwapExecutionCall)(nil),                         // 415: immutable.activity.v1.SwapExecutionCall
+	(*SwapCharges)(nil),                               // 416: immutable.activity.v1.SwapCharges
+	(*CreateSwapQuoteResultV2)(nil),                   // 417: immutable.activity.v1.CreateSwapQuoteResultV2
+	(*ExecuteSwapIntentV4)(nil),                       // 418: immutable.activity.v1.ExecuteSwapIntentV4
+	(*ExecuteSwapBoundQuote)(nil),                     // 419: immutable.activity.v1.ExecuteSwapBoundQuote
+	(*ExecuteSwapMarketTerms)(nil),                    // 420: immutable.activity.v1.ExecuteSwapMarketTerms
+	(*CreateExternalSignerIntentV1)(nil),              // 421: immutable.activity.v1.CreateExternalSignerIntentV1
+	(*CreateExternalSignerResultV1)(nil),              // 422: immutable.activity.v1.CreateExternalSignerResultV1
+	(*DeleteExternalSignerIntentV1)(nil),              // 423: immutable.activity.v1.DeleteExternalSignerIntentV1
+	(*DeleteExternalSignerResultV1)(nil),              // 424: immutable.activity.v1.DeleteExternalSignerResultV1
+	nil,                                               // 425: immutable.activity.v1.WalletKitSettingsParams.OauthClientIdsEntry
+	(*billing.SetPaymentMethodIntent)(nil),            // 426: immutable.activity.billing.SetPaymentMethodIntent
+	(*billing.ActivateBillingTierIntent)(nil),         // 427: immutable.activity.billing.ActivateBillingTierIntent
+	(*billing.DeletePaymentMethodIntent)(nil),         // 428: immutable.activity.billing.DeletePaymentMethodIntent
+	(*billing.SetPaymentMethodIntentV2)(nil),          // 429: immutable.activity.billing.SetPaymentMethodIntentV2
+	(*billing.UpdatePaymentMethodIntent)(nil),         // 430: immutable.activity.billing.UpdatePaymentMethodIntent
+	(*api.ApiKeyParams)(nil),                          // 431: immutable.activity.api.ApiKeyParams
+	(v1.PayloadEncoding)(0),                           // 432: immutable.common.v1.PayloadEncoding
+	(v1.HashFunction)(0),                              // 433: immutable.common.v1.HashFunction
+	(v1.Effect)(0),                                    // 434: immutable.common.v1.Effect
+	(v1.Operator)(0),                                  // 435: immutable.common.v1.Operator
+	(v1.TransactionType)(0),                           // 436: immutable.common.v1.TransactionType
+	(v1.SmartContractInterfaceType)(0),                // 437: immutable.common.v1.SmartContractInterfaceType
+	(v1.FeatureName)(0),                               // 438: immutable.common.v1.FeatureName
+	(v1.MnemonicLanguage)(0),                          // 439: immutable.common.v1.MnemonicLanguage
+	(v1.WalletAuthenticatorType)(0),                   // 440: immutable.common.v1.WalletAuthenticatorType
+	(v1.FiatOnRampProvider)(0),                        // 441: immutable.common.v1.FiatOnRampProvider
+	(v1.FiatOnRampBlockchainNetwork)(0),               // 442: immutable.common.v1.FiatOnRampBlockchainNetwork
+	(v1.FiatOnRampCryptoCurrency)(0),                  // 443: immutable.common.v1.FiatOnRampCryptoCurrency
+	(v1.FiatOnRampCurrency)(0),                        // 444: immutable.common.v1.FiatOnRampCurrency
+	(v1.FiatOnRampPaymentMethod)(0),                   // 445: immutable.common.v1.FiatOnRampPaymentMethod
+	(v1.Curve)(0),                                     // 446: immutable.common.v1.Curve
+	(v1.AddressFormat)(0),                             // 447: immutable.common.v1.AddressFormat
+	(v1.Oauth2Provider)(0),                            // 448: immutable.common.v1.Oauth2Provider
+	(v11.TransportEncryptionSuite)(0),                 // 449: immutable.models.v1.TransportEncryptionSuite
+	(v1.FiatRampProvider)(0),                          // 450: immutable.common.v1.FiatRampProvider
+	(v1.TvcHealthCheckType)(0),                        // 451: immutable.common.v1.TvcHealthCheckType
+	(*billing.SetPaymentMethodResult)(nil),            // 452: immutable.activity.billing.SetPaymentMethodResult
+	(*billing.ActivateBillingTierResult)(nil),         // 453: immutable.activity.billing.ActivateBillingTierResult
+	(*billing.DeletePaymentMethodResult)(nil),         // 454: immutable.activity.billing.DeletePaymentMethodResult
+	(*billing.UpdatePaymentMethodResult)(nil),         // 455: immutable.activity.billing.UpdatePaymentMethodResult
+	(v1.JwtProfile)(0),                                // 456: immutable.common.v1.JwtProfile
+	(*v12.Feature)(nil),                               // 457: immutable.data.v1.Feature
+	(v1.ApiKeyCurve)(0),                               // 458: immutable.common.v1.ApiKeyCurve
+	(v1.AccessType)(0),                                // 459: immutable.common.v1.AccessType
+	(*v13.PublicKeyCredentialWithAttestation)(nil),    // 460: immutable.webauthn.v1.PublicKeyCredentialWithAttestation
+	(v13.AuthenticatorTransport)(0),                   // 461: immutable.webauthn.v1.AuthenticatorTransport
+	(v1.PathFormat)(0),                                // 462: immutable.common.v1.PathFormat
+	(*v11.KeyValue)(nil),                              // 463: immutable.models.v1.KeyValue
+	(*v14.UsageControlDataSource)(nil),                // 464: external.data.v1.UsageControlDataSource
+	(*v14.UsageControlBudget)(nil),                    // 465: external.data.v1.UsageControlBudget
+	(v1.ClientSignatureScheme)(0),                     // 466: immutable.common.v1.ClientSignatureScheme
+	(v1.AuthenticationType)(0),                        // 467: immutable.common.v1.AuthenticationType
 }
 var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	11,  // 0: immutable.activity.v1.Intent.create_organization_intent:type_name -> immutable.activity.v1.CreateOrganizationIntent
@@ -34268,9 +34857,9 @@ var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	58,  // 21: immutable.activity.v1.Intent.create_private_key_tag_intent:type_name -> immutable.activity.v1.CreatePrivateKeyTagIntent
 	60,  // 22: immutable.activity.v1.Intent.delete_private_key_tags_intent:type_name -> immutable.activity.v1.DeletePrivateKeyTagsIntent
 	40,  // 23: immutable.activity.v1.Intent.create_policy_intent_v2:type_name -> immutable.activity.v1.CreatePolicyIntentV2
-	418, // 24: immutable.activity.v1.Intent.set_payment_method_intent:type_name -> immutable.activity.billing.SetPaymentMethodIntent
-	419, // 25: immutable.activity.v1.Intent.activate_billing_tier_intent:type_name -> immutable.activity.billing.ActivateBillingTierIntent
-	420, // 26: immutable.activity.v1.Intent.delete_payment_method_intent:type_name -> immutable.activity.billing.DeletePaymentMethodIntent
+	426, // 24: immutable.activity.v1.Intent.set_payment_method_intent:type_name -> immutable.activity.billing.SetPaymentMethodIntent
+	427, // 25: immutable.activity.v1.Intent.activate_billing_tier_intent:type_name -> immutable.activity.billing.ActivateBillingTierIntent
+	428, // 26: immutable.activity.v1.Intent.delete_payment_method_intent:type_name -> immutable.activity.billing.DeletePaymentMethodIntent
 	41,  // 27: immutable.activity.v1.Intent.create_policy_intent_v3:type_name -> immutable.activity.v1.CreatePolicyIntentV3
 	31,  // 28: immutable.activity.v1.Intent.create_api_only_users_intent:type_name -> immutable.activity.v1.CreateApiOnlyUsersIntent
 	71,  // 29: immutable.activity.v1.Intent.update_root_quorum_intent:type_name -> immutable.activity.v1.UpdateRootQuorumIntent
@@ -34286,7 +34875,7 @@ var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	35,  // 39: immutable.activity.v1.Intent.create_private_keys_intent_v2:type_name -> immutable.activity.v1.CreatePrivateKeysIntentV2
 	21,  // 40: immutable.activity.v1.Intent.update_user_intent:type_name -> immutable.activity.v1.UpdateUserIntent
 	84,  // 41: immutable.activity.v1.Intent.update_policy_intent:type_name -> immutable.activity.v1.UpdatePolicyIntent
-	421, // 42: immutable.activity.v1.Intent.set_payment_method_intent_v2:type_name -> immutable.activity.billing.SetPaymentMethodIntentV2
+	429, // 42: immutable.activity.v1.Intent.set_payment_method_intent_v2:type_name -> immutable.activity.billing.SetPaymentMethodIntentV2
 	77,  // 43: immutable.activity.v1.Intent.create_sub_organization_intent_v3:type_name -> immutable.activity.v1.CreateSubOrganizationIntentV3
 	32,  // 44: immutable.activity.v1.Intent.create_wallet_intent:type_name -> immutable.activity.v1.CreateWalletIntent
 	33,  // 45: immutable.activity.v1.Intent.create_wallet_accounts_intent:type_name -> immutable.activity.v1.CreateWalletAccountsIntent
@@ -34344,22 +34933,22 @@ var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	153, // 97: immutable.activity.v1.Intent.create_oauth2_credential_intent:type_name -> immutable.activity.v1.CreateOauth2CredentialIntent
 	154, // 98: immutable.activity.v1.Intent.update_oauth2_credential_intent:type_name -> immutable.activity.v1.UpdateOauth2CredentialIntent
 	155, // 99: immutable.activity.v1.Intent.delete_oauth2_credential_intent:type_name -> immutable.activity.v1.DeleteOauth2CredentialIntent
-	156, // 100: immutable.activity.v1.Intent.oauth2_authenticate_intent:type_name -> immutable.activity.v1.Oauth2AuthenticateIntent
-	157, // 101: immutable.activity.v1.Intent.delete_wallet_accounts_intent:type_name -> immutable.activity.v1.DeleteWalletAccountsIntent
-	158, // 102: immutable.activity.v1.Intent.delete_policies_intent:type_name -> immutable.activity.v1.DeletePoliciesIntent
-	159, // 103: immutable.activity.v1.Intent.eth_send_raw_transaction_intent:type_name -> immutable.activity.v1.EthSendRawTransactionIntent
+	158, // 100: immutable.activity.v1.Intent.oauth2_authenticate_intent:type_name -> immutable.activity.v1.Oauth2AuthenticateIntent
+	159, // 101: immutable.activity.v1.Intent.delete_wallet_accounts_intent:type_name -> immutable.activity.v1.DeleteWalletAccountsIntent
+	160, // 102: immutable.activity.v1.Intent.delete_policies_intent:type_name -> immutable.activity.v1.DeletePoliciesIntent
+	161, // 103: immutable.activity.v1.Intent.eth_send_raw_transaction_intent:type_name -> immutable.activity.v1.EthSendRawTransactionIntent
 	65,  // 104: immutable.activity.v1.Intent.eth_send_transaction_intent:type_name -> immutable.activity.v1.EthSendTransactionIntent
-	160, // 105: immutable.activity.v1.Intent.create_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.CreateFiatOnRampCredentialIntent
-	162, // 106: immutable.activity.v1.Intent.update_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.UpdateFiatOnRampCredentialIntent
-	164, // 107: immutable.activity.v1.Intent.delete_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.DeleteFiatOnRampCredentialIntent
+	162, // 105: immutable.activity.v1.Intent.create_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.CreateFiatOnRampCredentialIntent
+	164, // 106: immutable.activity.v1.Intent.update_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.UpdateFiatOnRampCredentialIntent
+	166, // 107: immutable.activity.v1.Intent.delete_fiat_on_ramp_credential_intent:type_name -> immutable.activity.v1.DeleteFiatOnRampCredentialIntent
 	142, // 108: immutable.activity.v1.Intent.email_auth_intent_v3:type_name -> immutable.activity.v1.EmailAuthIntentV3
 	119, // 109: immutable.activity.v1.Intent.init_user_email_recovery_intent_v2:type_name -> immutable.activity.v1.InitUserEmailRecoveryIntentV2
 	126, // 110: immutable.activity.v1.Intent.init_otp_intent_v2:type_name -> immutable.activity.v1.InitOtpIntentV2
 	129, // 111: immutable.activity.v1.Intent.init_otp_auth_intent_v3:type_name -> immutable.activity.v1.InitOtpAuthIntentV3
 	135, // 112: immutable.activity.v1.Intent.upsert_gas_usage_config_intent:type_name -> immutable.activity.v1.UpsertGasUsageConfigIntent
-	165, // 113: immutable.activity.v1.Intent.create_tvc_app_intent:type_name -> immutable.activity.v1.CreateTvcAppIntent
-	169, // 114: immutable.activity.v1.Intent.create_tvc_deployment_intent:type_name -> immutable.activity.v1.CreateTvcDeploymentIntent
-	170, // 115: immutable.activity.v1.Intent.create_tvc_manifest_approvals_intent:type_name -> immutable.activity.v1.CreateTvcManifestApprovalsIntent
+	167, // 113: immutable.activity.v1.Intent.create_tvc_app_intent:type_name -> immutable.activity.v1.CreateTvcAppIntent
+	171, // 114: immutable.activity.v1.Intent.create_tvc_deployment_intent:type_name -> immutable.activity.v1.CreateTvcDeploymentIntent
+	172, // 115: immutable.activity.v1.Intent.create_tvc_manifest_approvals_intent:type_name -> immutable.activity.v1.CreateTvcManifestApprovalsIntent
 	63,  // 116: immutable.activity.v1.Intent.sol_send_transaction_intent:type_name -> immutable.activity.v1.SolSendTransactionIntent
 	127, // 117: immutable.activity.v1.Intent.init_otp_intent_v3:type_name -> immutable.activity.v1.InitOtpIntentV3
 	137, // 118: immutable.activity.v1.Intent.verify_otp_intent_v2:type_name -> immutable.activity.v1.VerifyOtpIntentV2
@@ -34368,20 +34957,20 @@ var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	82,  // 121: immutable.activity.v1.Intent.create_sub_organization_intent_v8:type_name -> immutable.activity.v1.CreateSubOrganizationIntentV8
 	148, // 122: immutable.activity.v1.Intent.create_oauth_providers_intent_v2:type_name -> immutable.activity.v1.CreateOauthProvidersIntentV2
 	20,  // 123: immutable.activity.v1.Intent.create_users_intent_v4:type_name -> immutable.activity.v1.CreateUsersIntentV4
-	176, // 124: immutable.activity.v1.Intent.create_webhook_endpoint_intent:type_name -> immutable.activity.v1.CreateWebhookEndpointIntent
-	177, // 125: immutable.activity.v1.Intent.update_webhook_endpoint_intent:type_name -> immutable.activity.v1.UpdateWebhookEndpointIntent
-	178, // 126: immutable.activity.v1.Intent.delete_webhook_endpoint_intent:type_name -> immutable.activity.v1.DeleteWebhookEndpointIntent
-	342, // 127: immutable.activity.v1.Intent.set_ip_allowlist_intent:type_name -> immutable.activity.v1.SetIpAllowlistIntent
-	343, // 128: immutable.activity.v1.Intent.remove_ip_allowlist_intent:type_name -> immutable.activity.v1.RemoveIpAllowlistIntent
-	384, // 129: immutable.activity.v1.Intent.update_tvc_app_live_deployment_intent:type_name -> immutable.activity.v1.UpdateTvcAppLiveDeploymentIntent
-	386, // 130: immutable.activity.v1.Intent.delete_tvc_deployment_intent:type_name -> immutable.activity.v1.DeleteTvcDeploymentIntent
-	388, // 131: immutable.activity.v1.Intent.delete_tvc_app_and_deployments_intent:type_name -> immutable.activity.v1.DeleteTvcAppAndDeploymentsIntent
-	390, // 132: immutable.activity.v1.Intent.restore_tvc_deployment_intent:type_name -> immutable.activity.v1.RestoreTvcDeploymentIntent
-	361, // 133: immutable.activity.v1.Intent.spark_sign_frost_intent:type_name -> immutable.activity.v1.SparkSignFrostIntent
-	363, // 134: immutable.activity.v1.Intent.spark_prepare_transfer_intent:type_name -> immutable.activity.v1.SparkPrepareTransferIntent
-	365, // 135: immutable.activity.v1.Intent.spark_claim_transfer_intent:type_name -> immutable.activity.v1.SparkClaimTransferIntent
-	367, // 136: immutable.activity.v1.Intent.spark_prepare_lightning_receive_intent:type_name -> immutable.activity.v1.SparkPrepareLightningReceiveIntent
-	172, // 137: immutable.activity.v1.Intent.post_tvc_quorum_key_share_intent:type_name -> immutable.activity.v1.PostTvcQuorumKeyShareIntent
+	178, // 124: immutable.activity.v1.Intent.create_webhook_endpoint_intent:type_name -> immutable.activity.v1.CreateWebhookEndpointIntent
+	179, // 125: immutable.activity.v1.Intent.update_webhook_endpoint_intent:type_name -> immutable.activity.v1.UpdateWebhookEndpointIntent
+	180, // 126: immutable.activity.v1.Intent.delete_webhook_endpoint_intent:type_name -> immutable.activity.v1.DeleteWebhookEndpointIntent
+	345, // 127: immutable.activity.v1.Intent.set_ip_allowlist_intent:type_name -> immutable.activity.v1.SetIpAllowlistIntent
+	346, // 128: immutable.activity.v1.Intent.remove_ip_allowlist_intent:type_name -> immutable.activity.v1.RemoveIpAllowlistIntent
+	391, // 129: immutable.activity.v1.Intent.update_tvc_app_live_deployment_intent:type_name -> immutable.activity.v1.UpdateTvcAppLiveDeploymentIntent
+	393, // 130: immutable.activity.v1.Intent.delete_tvc_deployment_intent:type_name -> immutable.activity.v1.DeleteTvcDeploymentIntent
+	395, // 131: immutable.activity.v1.Intent.delete_tvc_app_and_deployments_intent:type_name -> immutable.activity.v1.DeleteTvcAppAndDeploymentsIntent
+	397, // 132: immutable.activity.v1.Intent.restore_tvc_deployment_intent:type_name -> immutable.activity.v1.RestoreTvcDeploymentIntent
+	368, // 133: immutable.activity.v1.Intent.spark_sign_frost_intent:type_name -> immutable.activity.v1.SparkSignFrostIntent
+	370, // 134: immutable.activity.v1.Intent.spark_prepare_transfer_intent:type_name -> immutable.activity.v1.SparkPrepareTransferIntent
+	372, // 135: immutable.activity.v1.Intent.spark_claim_transfer_intent:type_name -> immutable.activity.v1.SparkClaimTransferIntent
+	374, // 136: immutable.activity.v1.Intent.spark_prepare_lightning_receive_intent:type_name -> immutable.activity.v1.SparkPrepareLightningReceiveIntent
+	174, // 137: immutable.activity.v1.Intent.post_tvc_quorum_key_share_intent:type_name -> immutable.activity.v1.PostTvcQuorumKeyShareIntent
 	67,  // 138: immutable.activity.v1.Intent.eth_send_transaction_intent_v2:type_name -> immutable.activity.v1.EthSendTransactionIntentV2
 	94,  // 139: immutable.activity.v1.Intent.create_mfa_policy_intent:type_name -> immutable.activity.v1.CreateMfaPolicyIntent
 	95,  // 140: immutable.activity.v1.Intent.update_mfa_policy_intent:type_name -> immutable.activity.v1.UpdateMfaPolicyIntent
@@ -34392,425 +34981,434 @@ var file_immutable_activity_v1_activity_proto_depIdxs = []int32{
 	100, // 145: immutable.activity.v1.Intent.earn_withdraw_intent:type_name -> immutable.activity.v1.EarnWithdrawIntent
 	68,  // 146: immutable.activity.v1.Intent.execute_swap_intent:type_name -> immutable.activity.v1.ExecuteSwapIntent
 	9,   // 147: immutable.activity.v1.Intent.upsert_swap_config_intent:type_name -> immutable.activity.v1.UpsertSwapConfigIntent
-	166, // 148: immutable.activity.v1.Intent.create_tvc_operator_intent:type_name -> immutable.activity.v1.CreateTvcOperatorIntent
-	174, // 149: immutable.activity.v1.Intent.create_tvc_quorum_key_intent:type_name -> immutable.activity.v1.CreateTvcQuorumKeyIntent
-	175, // 150: immutable.activity.v1.Intent.re_encrypt_tvc_quorum_key_share_intent:type_name -> immutable.activity.v1.ReEncryptTvcQuorumKeyShareIntent
-	369, // 151: immutable.activity.v1.Intent.init_import_secrets_intent:type_name -> immutable.activity.v1.InitImportSecretsIntent
+	168, // 148: immutable.activity.v1.Intent.create_tvc_operator_intent:type_name -> immutable.activity.v1.CreateTvcOperatorIntent
+	176, // 149: immutable.activity.v1.Intent.create_tvc_quorum_key_intent:type_name -> immutable.activity.v1.CreateTvcQuorumKeyIntent
+	177, // 150: immutable.activity.v1.Intent.re_encrypt_tvc_quorum_key_share_intent:type_name -> immutable.activity.v1.ReEncryptTvcQuorumKeyShareIntent
+	376, // 151: immutable.activity.v1.Intent.init_import_secrets_intent:type_name -> immutable.activity.v1.InitImportSecretsIntent
 	64,  // 152: immutable.activity.v1.Intent.sol_send_transaction_intent_v2:type_name -> immutable.activity.v1.SolSendTransactionIntentV2
 	10,  // 153: immutable.activity.v1.Intent.claim_swap_fees_intent:type_name -> immutable.activity.v1.ClaimSwapFeesIntent
 	101, // 154: immutable.activity.v1.Intent.earn_set_wrapper_state_intent:type_name -> immutable.activity.v1.EarnSetWrapperStateIntent
 	102, // 155: immutable.activity.v1.Intent.claim_earn_fees_intent:type_name -> immutable.activity.v1.ClaimEarnFeesIntent
 	26,  // 156: immutable.activity.v1.Intent.update_wallet_account_name_intent:type_name -> immutable.activity.v1.UpdateWalletAccountNameIntent
-	400, // 157: immutable.activity.v1.Intent.eth_undelegate7702_intent:type_name -> immutable.activity.v1.EthUndelegate7702Intent
-	402, // 158: immutable.activity.v1.Intent.execute_swap_intent_v2:type_name -> immutable.activity.v1.ExecuteSwapIntentV2
-	404, // 159: immutable.activity.v1.Intent.create_swap_quote_intent:type_name -> immutable.activity.v1.CreateSwapQuoteIntent
-	371, // 160: immutable.activity.v1.Intent.import_secrets_intent:type_name -> immutable.activity.v1.ImportSecretsIntent
-	376, // 161: immutable.activity.v1.Intent.export_secrets_intent:type_name -> immutable.activity.v1.ExportSecretsIntent
-	379, // 162: immutable.activity.v1.Intent.create_usage_control_intent:type_name -> immutable.activity.v1.CreateUsageControlIntent
-	381, // 163: immutable.activity.v1.Intent.delete_usage_controls_intent:type_name -> immutable.activity.v1.DeleteUsageControlsIntent
-	422, // 164: immutable.activity.v1.Intent.update_payment_method_intent:type_name -> immutable.activity.billing.UpdatePaymentMethodIntent
-	405, // 165: immutable.activity.v1.Intent.create_swap_quote_intent_v2:type_name -> immutable.activity.v1.CreateSwapQuoteIntentV2
-	403, // 166: immutable.activity.v1.Intent.execute_swap_intent_v3:type_name -> immutable.activity.v1.ExecuteSwapIntentV3
-	374, // 167: immutable.activity.v1.Intent.delete_secrets_intent:type_name -> immutable.activity.v1.DeleteSecretsIntent
+	407, // 157: immutable.activity.v1.Intent.eth_undelegate7702_intent:type_name -> immutable.activity.v1.EthUndelegate7702Intent
+	409, // 158: immutable.activity.v1.Intent.execute_swap_intent_v2:type_name -> immutable.activity.v1.ExecuteSwapIntentV2
+	411, // 159: immutable.activity.v1.Intent.create_swap_quote_intent:type_name -> immutable.activity.v1.CreateSwapQuoteIntent
+	378, // 160: immutable.activity.v1.Intent.import_secrets_intent:type_name -> immutable.activity.v1.ImportSecretsIntent
+	383, // 161: immutable.activity.v1.Intent.export_secrets_intent:type_name -> immutable.activity.v1.ExportSecretsIntent
+	386, // 162: immutable.activity.v1.Intent.create_usage_control_intent:type_name -> immutable.activity.v1.CreateUsageControlIntent
+	388, // 163: immutable.activity.v1.Intent.delete_usage_controls_intent:type_name -> immutable.activity.v1.DeleteUsageControlsIntent
+	430, // 164: immutable.activity.v1.Intent.update_payment_method_intent:type_name -> immutable.activity.billing.UpdatePaymentMethodIntent
+	412, // 165: immutable.activity.v1.Intent.create_swap_quote_intent_v2:type_name -> immutable.activity.v1.CreateSwapQuoteIntentV2
+	410, // 166: immutable.activity.v1.Intent.execute_swap_intent_v3:type_name -> immutable.activity.v1.ExecuteSwapIntentV3
+	381, // 167: immutable.activity.v1.Intent.delete_secrets_intent:type_name -> immutable.activity.v1.DeleteSecretsIntent
 	103, // 168: immutable.activity.v1.Intent.earn_claim_rewards_intent:type_name -> immutable.activity.v1.EarnClaimRewardsIntent
-	406, // 169: immutable.activity.v1.Intent.create_swap_quote_intent_v3:type_name -> immutable.activity.v1.CreateSwapQuoteIntentV3
+	413, // 169: immutable.activity.v1.Intent.create_swap_quote_intent_v3:type_name -> immutable.activity.v1.CreateSwapQuoteIntentV3
 	83,  // 170: immutable.activity.v1.Intent.create_sub_organization_intent_v9:type_name -> immutable.activity.v1.CreateSubOrganizationIntentV9
-	224, // 171: immutable.activity.v1.Intent.verify_wallet_authenticator_intent:type_name -> immutable.activity.v1.VerifyWalletAuthenticatorIntent
+	226, // 171: immutable.activity.v1.Intent.verify_wallet_authenticator_intent:type_name -> immutable.activity.v1.VerifyWalletAuthenticatorIntent
 	131, // 172: immutable.activity.v1.Intent.upsert_swap_fee_sponsorship_limit_config_intent:type_name -> immutable.activity.v1.UpsertSwapFeeSponsorshipLimitConfigIntent
 	133, // 173: immutable.activity.v1.Intent.upsert_swap_fixed_rate_limit_config_intent:type_name -> immutable.activity.v1.UpsertSwapFixedRateLimitConfigIntent
 	144, // 174: immutable.activity.v1.Intent.create_fiat_on_ramp_session_intent:type_name -> immutable.activity.v1.CreateFiatOnRampSessionIntent
-	210, // 175: immutable.activity.v1.Intent.create_fiat_off_ramp_session_intent:type_name -> immutable.activity.v1.CreateFiatOffRampSessionIntent
-	410, // 176: immutable.activity.v1.Intent.execute_swap_intent_v4:type_name -> immutable.activity.v1.ExecuteSwapIntentV4
+	212, // 175: immutable.activity.v1.Intent.create_fiat_off_ramp_session_intent:type_name -> immutable.activity.v1.CreateFiatOffRampSessionIntent
+	418, // 176: immutable.activity.v1.Intent.execute_swap_intent_v4:type_name -> immutable.activity.v1.ExecuteSwapIntentV4
 	111, // 177: immutable.activity.v1.Intent.create_wallet_authenticators_intent:type_name -> immutable.activity.v1.CreateWalletAuthenticatorsIntent
 	112, // 178: immutable.activity.v1.Intent.delete_wallet_authenticators_intent:type_name -> immutable.activity.v1.DeleteWalletAuthenticatorsIntent
-	346, // 179: immutable.activity.v1.Intent.enable_sms_for_countries_intent:type_name -> immutable.activity.v1.EnableSmsForCountriesIntent
-	347, // 180: immutable.activity.v1.Intent.disable_sms_for_countries_intent:type_name -> immutable.activity.v1.DisableSmsForCountriesIntent
-	161, // 181: immutable.activity.v1.Intent.create_fiat_ramp_credential_intent:type_name -> immutable.activity.v1.CreateFiatRampCredentialIntent
-	163, // 182: immutable.activity.v1.Intent.update_fiat_ramp_credential_intent:type_name -> immutable.activity.v1.UpdateFiatRampCredentialIntent
-	413, // 183: immutable.activity.v1.Intent.create_external_signer_intent_v1:type_name -> immutable.activity.v1.CreateExternalSignerIntentV1
-	415, // 184: immutable.activity.v1.Intent.delete_external_signer_intent_v1:type_name -> immutable.activity.v1.DeleteExternalSignerIntentV1
-	212, // 185: immutable.activity.v1.Intent.mint_jwt_intent:type_name -> immutable.activity.v1.MintJwtIntent
-	113, // 186: immutable.activity.v1.UpdateAuthProxyConfigIntent.email_customization_params:type_name -> immutable.activity.v1.EmailCustomizationParams
-	116, // 187: immutable.activity.v1.UpdateAuthProxyConfigIntent.sms_customization_params:type_name -> immutable.activity.v1.SmsCustomizationParams
-	117, // 188: immutable.activity.v1.UpdateAuthProxyConfigIntent.wallet_kit_settings:type_name -> immutable.activity.v1.WalletKitSettingsParams
-	329, // 189: immutable.activity.v1.CreateOrganizationIntent.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParams
-	330, // 190: immutable.activity.v1.CreateOrganizationIntentV2.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	329, // 191: immutable.activity.v1.CreateAuthenticatorsIntent.authenticators:type_name -> immutable.activity.v1.AuthenticatorParams
-	330, // 192: immutable.activity.v1.CreateAuthenticatorsIntentV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	423, // 193: immutable.activity.v1.CreateApiKeysIntent.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	324, // 194: immutable.activity.v1.CreateApiKeysIntentV2.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	325, // 195: immutable.activity.v1.CreateUsersIntent.users:type_name -> immutable.activity.v1.UserParams
-	326, // 196: immutable.activity.v1.CreateUsersIntentV2.users:type_name -> immutable.activity.v1.UserParamsV2
-	327, // 197: immutable.activity.v1.CreateUsersIntentV3.users:type_name -> immutable.activity.v1.UserParamsV3
-	328, // 198: immutable.activity.v1.CreateUsersIntentV4.users:type_name -> immutable.activity.v1.UserParamsV4
-	332, // 199: immutable.activity.v1.CreateInvitationsIntent.invitations:type_name -> immutable.activity.v1.InvitationParams
-	329, // 200: immutable.activity.v1.AcceptInvitationIntent.authenticator:type_name -> immutable.activity.v1.AuthenticatorParams
-	330, // 201: immutable.activity.v1.AcceptInvitationIntentV2.authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	333, // 202: immutable.activity.v1.CreateApiOnlyUsersIntent.api_only_users:type_name -> immutable.activity.v1.ApiOnlyUserParams
-	336, // 203: immutable.activity.v1.CreateWalletIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
-	336, // 204: immutable.activity.v1.CreateWalletAccountsIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
-	334, // 205: immutable.activity.v1.CreatePrivateKeysIntent.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
-	334, // 206: immutable.activity.v1.CreatePrivateKeysIntentV2.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
-	424, // 207: immutable.activity.v1.SignRawPayloadIntent.encoding:type_name -> immutable.common.v1.PayloadEncoding
-	425, // 208: immutable.activity.v1.SignRawPayloadIntent.hash_function:type_name -> immutable.common.v1.HashFunction
-	424, // 209: immutable.activity.v1.SignRawPayloadIntentV2.encoding:type_name -> immutable.common.v1.PayloadEncoding
-	425, // 210: immutable.activity.v1.SignRawPayloadIntentV2.hash_function:type_name -> immutable.common.v1.HashFunction
-	424, // 211: immutable.activity.v1.SignRawPayloadsIntent.encoding:type_name -> immutable.common.v1.PayloadEncoding
-	425, // 212: immutable.activity.v1.SignRawPayloadsIntent.hash_function:type_name -> immutable.common.v1.HashFunction
-	46,  // 213: immutable.activity.v1.CreatePolicyIntent.selectors:type_name -> immutable.activity.v1.Selector
-	426, // 214: immutable.activity.v1.CreatePolicyIntent.effect:type_name -> immutable.common.v1.Effect
-	47,  // 215: immutable.activity.v1.CreatePolicyIntentV2.selectors:type_name -> immutable.activity.v1.SelectorV2
-	426, // 216: immutable.activity.v1.CreatePolicyIntentV2.effect:type_name -> immutable.common.v1.Effect
-	426, // 217: immutable.activity.v1.CreatePolicyIntentV3.effect:type_name -> immutable.common.v1.Effect
-	41,  // 218: immutable.activity.v1.CreatePoliciesIntent.policies:type_name -> immutable.activity.v1.CreatePolicyIntentV3
-	427, // 219: immutable.activity.v1.Selector.operator:type_name -> immutable.common.v1.Operator
-	427, // 220: immutable.activity.v1.SelectorV2.operator:type_name -> immutable.common.v1.Operator
-	428, // 221: immutable.activity.v1.SignTransactionIntent.type:type_name -> immutable.common.v1.TransactionType
-	428, // 222: immutable.activity.v1.SignTransactionIntentV2.type:type_name -> immutable.common.v1.TransactionType
-	66,  // 223: immutable.activity.v1.EthSendTransactionIntentV2.calls:type_name -> immutable.activity.v1.EthCallParams
-	429, // 224: immutable.activity.v1.CreateSmartContractInterfaceIntent.type:type_name -> immutable.common.v1.SmartContractInterfaceType
-	330, // 225: immutable.activity.v1.CreateSubOrganizationIntent.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	104, // 226: immutable.activity.v1.CreateSubOrganizationIntentV2.root_users:type_name -> immutable.activity.v1.RootUserParams
-	104, // 227: immutable.activity.v1.CreateSubOrganizationIntentV3.root_users:type_name -> immutable.activity.v1.RootUserParams
-	334, // 228: immutable.activity.v1.CreateSubOrganizationIntentV3.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
-	104, // 229: immutable.activity.v1.CreateSubOrganizationIntentV4.root_users:type_name -> immutable.activity.v1.RootUserParams
-	335, // 230: immutable.activity.v1.CreateSubOrganizationIntentV4.wallet:type_name -> immutable.activity.v1.WalletParams
-	105, // 231: immutable.activity.v1.CreateSubOrganizationIntentV5.root_users:type_name -> immutable.activity.v1.RootUserParamsV2
-	335, // 232: immutable.activity.v1.CreateSubOrganizationIntentV5.wallet:type_name -> immutable.activity.v1.WalletParams
-	106, // 233: immutable.activity.v1.CreateSubOrganizationIntentV6.root_users:type_name -> immutable.activity.v1.RootUserParamsV3
-	335, // 234: immutable.activity.v1.CreateSubOrganizationIntentV6.wallet:type_name -> immutable.activity.v1.WalletParams
-	107, // 235: immutable.activity.v1.CreateSubOrganizationIntentV7.root_users:type_name -> immutable.activity.v1.RootUserParamsV4
-	335, // 236: immutable.activity.v1.CreateSubOrganizationIntentV7.wallet:type_name -> immutable.activity.v1.WalletParams
-	383, // 237: immutable.activity.v1.CreateSubOrganizationIntentV7.client_signature:type_name -> immutable.activity.v1.ClientSignature
-	108, // 238: immutable.activity.v1.CreateSubOrganizationIntentV8.root_users:type_name -> immutable.activity.v1.RootUserParamsV5
-	335, // 239: immutable.activity.v1.CreateSubOrganizationIntentV8.wallet:type_name -> immutable.activity.v1.WalletParams
-	383, // 240: immutable.activity.v1.CreateSubOrganizationIntentV8.client_signature:type_name -> immutable.activity.v1.ClientSignature
-	109, // 241: immutable.activity.v1.CreateSubOrganizationIntentV9.root_users:type_name -> immutable.activity.v1.RootUserParamsV6
-	335, // 242: immutable.activity.v1.CreateSubOrganizationIntentV9.wallet:type_name -> immutable.activity.v1.WalletParams
-	383, // 243: immutable.activity.v1.CreateSubOrganizationIntentV9.client_signature:type_name -> immutable.activity.v1.ClientSignature
-	426, // 244: immutable.activity.v1.UpdatePolicyIntent.policy_effect:type_name -> immutable.common.v1.Effect
-	426, // 245: immutable.activity.v1.UpdatePolicyIntentV2.policy_effect:type_name -> immutable.common.v1.Effect
-	330, // 246: immutable.activity.v1.RecoverUserIntent.authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	430, // 247: immutable.activity.v1.SetOrganizationFeatureIntent.name:type_name -> immutable.common.v1.FeatureName
-	430, // 248: immutable.activity.v1.RemoveOrganizationFeatureIntent.name:type_name -> immutable.common.v1.FeatureName
-	431, // 249: immutable.activity.v1.ExportWalletIntent.language:type_name -> immutable.common.v1.MnemonicLanguage
-	392, // 250: immutable.activity.v1.CreateMfaPolicyIntent.required_authentication_methods:type_name -> immutable.activity.v1.RequiredAuthenticationMethodParams
-	392, // 251: immutable.activity.v1.UpdateMfaPolicyIntent.required_authentication_methods:type_name -> immutable.activity.v1.RequiredAuthenticationMethodParams
-	423, // 252: immutable.activity.v1.RootUserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	330, // 253: immutable.activity.v1.RootUserParams.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	423, // 254: immutable.activity.v1.RootUserParamsV2.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	330, // 255: immutable.activity.v1.RootUserParamsV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	321, // 256: immutable.activity.v1.RootUserParamsV2.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
-	324, // 257: immutable.activity.v1.RootUserParamsV3.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 258: immutable.activity.v1.RootUserParamsV3.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	321, // 259: immutable.activity.v1.RootUserParamsV3.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
-	324, // 260: immutable.activity.v1.RootUserParamsV4.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 261: immutable.activity.v1.RootUserParamsV4.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	321, // 262: immutable.activity.v1.RootUserParamsV4.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
-	324, // 263: immutable.activity.v1.RootUserParamsV5.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 264: immutable.activity.v1.RootUserParamsV5.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	322, // 265: immutable.activity.v1.RootUserParamsV5.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
-	324, // 266: immutable.activity.v1.RootUserParamsV6.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 267: immutable.activity.v1.RootUserParamsV6.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	322, // 268: immutable.activity.v1.RootUserParamsV6.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
-	110, // 269: immutable.activity.v1.RootUserParamsV6.wallet_authenticators:type_name -> immutable.activity.v1.WalletAuthenticatorParams
-	432, // 270: immutable.activity.v1.WalletAuthenticatorParams.type:type_name -> immutable.common.v1.WalletAuthenticatorType
-	110, // 271: immutable.activity.v1.CreateWalletAuthenticatorsIntent.wallet_authenticators:type_name -> immutable.activity.v1.WalletAuthenticatorParams
-	417, // 272: immutable.activity.v1.WalletKitSettingsParams.oauth_client_ids:type_name -> immutable.activity.v1.WalletKitSettingsParams.OauthClientIdsEntry
-	113, // 273: immutable.activity.v1.InitUserEmailRecoveryIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	115, // 274: immutable.activity.v1.InitUserEmailRecoveryIntentV2.email_customization:type_name -> immutable.activity.v1.EmailAuthCustomizationParams
-	383, // 275: immutable.activity.v1.OtpLoginIntent.client_signature:type_name -> immutable.activity.v1.ClientSignature
-	383, // 276: immutable.activity.v1.OtpLoginIntentV2.client_signature:type_name -> immutable.activity.v1.ClientSignature
-	113, // 277: immutable.activity.v1.InitOtpAuthIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	116, // 278: immutable.activity.v1.InitOtpAuthIntent.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	113, // 279: immutable.activity.v1.InitOtpIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	116, // 280: immutable.activity.v1.InitOtpIntent.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	114, // 281: immutable.activity.v1.InitOtpIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
-	116, // 282: immutable.activity.v1.InitOtpIntentV2.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	114, // 283: immutable.activity.v1.InitOtpIntentV3.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
-	116, // 284: immutable.activity.v1.InitOtpIntentV3.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	113, // 285: immutable.activity.v1.InitOtpAuthIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	116, // 286: immutable.activity.v1.InitOtpAuthIntentV2.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	114, // 287: immutable.activity.v1.InitOtpAuthIntentV3.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
-	116, // 288: immutable.activity.v1.InitOtpAuthIntentV3.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
-	130, // 289: immutable.activity.v1.UpsertGasUsageConfigIntent.solana_config:type_name -> immutable.activity.v1.SolanaConfig
-	113, // 290: immutable.activity.v1.EmailAuthIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	113, // 291: immutable.activity.v1.EmailAuthIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
-	115, // 292: immutable.activity.v1.EmailAuthIntentV3.email_customization:type_name -> immutable.activity.v1.EmailAuthCustomizationParams
-	433, // 293: immutable.activity.v1.InitFiatOnRampIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
-	434, // 294: immutable.activity.v1.InitFiatOnRampIntent.network:type_name -> immutable.common.v1.FiatOnRampBlockchainNetwork
-	435, // 295: immutable.activity.v1.InitFiatOnRampIntent.crypto_currency_code:type_name -> immutable.common.v1.FiatOnRampCryptoCurrency
-	436, // 296: immutable.activity.v1.InitFiatOnRampIntent.fiat_currency_code:type_name -> immutable.common.v1.FiatOnRampCurrency
-	437, // 297: immutable.activity.v1.InitFiatOnRampIntent.payment_method:type_name -> immutable.common.v1.FiatOnRampPaymentMethod
-	336, // 298: immutable.activity.v1.ImportWalletIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
-	438, // 299: immutable.activity.v1.ImportPrivateKeyIntent.curve:type_name -> immutable.common.v1.Curve
-	439, // 300: immutable.activity.v1.ImportPrivateKeyIntent.address_formats:type_name -> immutable.common.v1.AddressFormat
-	321, // 301: immutable.activity.v1.CreateOauthProvidersIntent.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
-	322, // 302: immutable.activity.v1.CreateOauthProvidersIntentV2.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
-	440, // 303: immutable.activity.v1.CreateOauth2CredentialIntent.provider:type_name -> immutable.common.v1.Oauth2Provider
-	440, // 304: immutable.activity.v1.UpdateOauth2CredentialIntent.provider:type_name -> immutable.common.v1.Oauth2Provider
-	433, // 305: immutable.activity.v1.CreateFiatOnRampCredentialIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
-	441, // 306: immutable.activity.v1.CreateFiatRampCredentialIntent.provider:type_name -> immutable.common.v1.FiatRampProvider
-	433, // 307: immutable.activity.v1.UpdateFiatOnRampCredentialIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
-	441, // 308: immutable.activity.v1.UpdateFiatRampCredentialIntent.provider:type_name -> immutable.common.v1.FiatRampProvider
-	167, // 309: immutable.activity.v1.CreateTvcAppIntent.manifest_set_params:type_name -> immutable.activity.v1.TvcOperatorSetParams
-	167, // 310: immutable.activity.v1.CreateTvcAppIntent.share_set_params:type_name -> immutable.activity.v1.TvcOperatorSetParams
-	168, // 311: immutable.activity.v1.TvcOperatorSetParams.new_operators:type_name -> immutable.activity.v1.TvcOperatorParams
-	442, // 312: immutable.activity.v1.CreateTvcDeploymentIntent.health_check_type:type_name -> immutable.common.v1.TvcHealthCheckType
-	171, // 313: immutable.activity.v1.CreateTvcManifestApprovalsIntent.approvals:type_name -> immutable.activity.v1.TvcManifestApproval
-	173, // 314: immutable.activity.v1.PostTvcQuorumKeyShareIntent.share_approval_bundle:type_name -> immutable.activity.v1.QuorumKeyShareApprovalBundle
-	310, // 315: immutable.activity.v1.CreateWebhookEndpointIntent.subscriptions:type_name -> immutable.activity.v1.WebhookSubscriptionParams
-	185, // 316: immutable.activity.v1.Result.create_organization_result:type_name -> immutable.activity.v1.CreateOrganizationResult
-	188, // 317: immutable.activity.v1.Result.create_authenticators_result:type_name -> immutable.activity.v1.CreateAuthenticatorsResult
-	190, // 318: immutable.activity.v1.Result.create_users_result:type_name -> immutable.activity.v1.CreateUsersResult
-	200, // 319: immutable.activity.v1.Result.create_private_keys_result:type_name -> immutable.activity.v1.CreatePrivateKeysResult
-	198, // 320: immutable.activity.v1.Result.create_invitations_result:type_name -> immutable.activity.v1.CreateInvitationsResult
-	199, // 321: immutable.activity.v1.Result.accept_invitation_result:type_name -> immutable.activity.v1.AcceptInvitationResult
-	204, // 322: immutable.activity.v1.Result.sign_raw_payload_result:type_name -> immutable.activity.v1.SignRawPayloadResult
-	229, // 323: immutable.activity.v1.Result.create_policy_result:type_name -> immutable.activity.v1.CreatePolicyResult
-	236, // 324: immutable.activity.v1.Result.disable_private_key_result:type_name -> immutable.activity.v1.DisablePrivateKeyResult
-	237, // 325: immutable.activity.v1.Result.delete_users_result:type_name -> immutable.activity.v1.DeleteUsersResult
-	239, // 326: immutable.activity.v1.Result.delete_authenticators_result:type_name -> immutable.activity.v1.DeleteAuthenticatorsResult
-	238, // 327: immutable.activity.v1.Result.delete_invitation_result:type_name -> immutable.activity.v1.DeleteInvitationResult
-	241, // 328: immutable.activity.v1.Result.delete_organization_result:type_name -> immutable.activity.v1.DeleteOrganizationResult
-	242, // 329: immutable.activity.v1.Result.delete_policy_result:type_name -> immutable.activity.v1.DeletePolicyResult
-	243, // 330: immutable.activity.v1.Result.create_user_tag_result:type_name -> immutable.activity.v1.CreateUserTagResult
-	245, // 331: immutable.activity.v1.Result.delete_user_tags_result:type_name -> immutable.activity.v1.DeleteUserTagsResult
-	250, // 332: immutable.activity.v1.Result.sign_transaction_result:type_name -> immutable.activity.v1.SignTransactionResult
-	240, // 333: immutable.activity.v1.Result.delete_api_keys_result:type_name -> immutable.activity.v1.DeleteApiKeysResult
-	189, // 334: immutable.activity.v1.Result.create_api_keys_result:type_name -> immutable.activity.v1.CreateApiKeysResult
-	246, // 335: immutable.activity.v1.Result.create_private_key_tag_result:type_name -> immutable.activity.v1.CreatePrivateKeyTagResult
-	248, // 336: immutable.activity.v1.Result.delete_private_key_tags_result:type_name -> immutable.activity.v1.DeletePrivateKeyTagsResult
-	443, // 337: immutable.activity.v1.Result.set_payment_method_result:type_name -> immutable.activity.billing.SetPaymentMethodResult
-	444, // 338: immutable.activity.v1.Result.activate_billing_tier_result:type_name -> immutable.activity.billing.ActivateBillingTierResult
-	445, // 339: immutable.activity.v1.Result.delete_payment_method_result:type_name -> immutable.activity.billing.DeletePaymentMethodResult
-	197, // 340: immutable.activity.v1.Result.create_api_only_users_result:type_name -> immutable.activity.v1.CreateApiOnlyUsersResult
-	253, // 341: immutable.activity.v1.Result.update_root_quorum_result:type_name -> immutable.activity.v1.UpdateRootQuorumResult
-	244, // 342: immutable.activity.v1.Result.update_user_tag_result:type_name -> immutable.activity.v1.UpdateUserTagResult
-	247, // 343: immutable.activity.v1.Result.update_private_key_tag_result:type_name -> immutable.activity.v1.UpdatePrivateKeyTagResult
-	255, // 344: immutable.activity.v1.Result.create_sub_organization_result:type_name -> immutable.activity.v1.CreateSubOrganizationResult
-	254, // 345: immutable.activity.v1.Result.update_allowed_origins_result:type_name -> immutable.activity.v1.UpdateAllowedOriginsResult
-	201, // 346: immutable.activity.v1.Result.create_private_keys_result_v2:type_name -> immutable.activity.v1.CreatePrivateKeysResultV2
-	191, // 347: immutable.activity.v1.Result.update_user_result:type_name -> immutable.activity.v1.UpdateUserResult
-	231, // 348: immutable.activity.v1.Result.update_policy_result:type_name -> immutable.activity.v1.UpdatePolicyResult
-	256, // 349: immutable.activity.v1.Result.create_sub_organization_result_v3:type_name -> immutable.activity.v1.CreateSubOrganizationResultV3
-	206, // 350: immutable.activity.v1.Result.create_wallet_result:type_name -> immutable.activity.v1.CreateWalletResult
-	207, // 351: immutable.activity.v1.Result.create_wallet_accounts_result:type_name -> immutable.activity.v1.CreateWalletAccountsResult
-	208, // 352: immutable.activity.v1.Result.init_user_email_recovery_result:type_name -> immutable.activity.v1.InitUserEmailRecoveryResult
-	264, // 353: immutable.activity.v1.Result.recover_user_result:type_name -> immutable.activity.v1.RecoverUserResult
-	265, // 354: immutable.activity.v1.Result.set_organization_feature_result:type_name -> immutable.activity.v1.SetOrganizationFeatureResult
-	266, // 355: immutable.activity.v1.Result.remove_organization_feature_result:type_name -> immutable.activity.v1.RemoveOrganizationFeatureResult
-	267, // 356: immutable.activity.v1.Result.export_private_key_result:type_name -> immutable.activity.v1.ExportPrivateKeyResult
-	268, // 357: immutable.activity.v1.Result.export_wallet_result:type_name -> immutable.activity.v1.ExportWalletResult
-	258, // 358: immutable.activity.v1.Result.create_sub_organization_result_v4:type_name -> immutable.activity.v1.CreateSubOrganizationResultV4
-	228, // 359: immutable.activity.v1.Result.email_auth_result:type_name -> immutable.activity.v1.EmailAuthResult
-	269, // 360: immutable.activity.v1.Result.export_wallet_account_result:type_name -> immutable.activity.v1.ExportWalletAccountResult
-	270, // 361: immutable.activity.v1.Result.init_import_wallet_result:type_name -> immutable.activity.v1.InitImportWalletResult
-	271, // 362: immutable.activity.v1.Result.import_wallet_result:type_name -> immutable.activity.v1.ImportWalletResult
-	272, // 363: immutable.activity.v1.Result.init_import_private_key_result:type_name -> immutable.activity.v1.InitImportPrivateKeyResult
-	273, // 364: immutable.activity.v1.Result.import_private_key_result:type_name -> immutable.activity.v1.ImportPrivateKeyResult
-	230, // 365: immutable.activity.v1.Result.create_policies_result:type_name -> immutable.activity.v1.CreatePoliciesResult
-	205, // 366: immutable.activity.v1.Result.sign_raw_payloads_result:type_name -> immutable.activity.v1.SignRawPayloadsResult
-	233, // 367: immutable.activity.v1.Result.create_read_only_session_result:type_name -> immutable.activity.v1.CreateReadOnlySessionResult
-	274, // 368: immutable.activity.v1.Result.create_oauth_providers_result:type_name -> immutable.activity.v1.CreateOauthProvidersResult
-	276, // 369: immutable.activity.v1.Result.delete_oauth_providers_result:type_name -> immutable.activity.v1.DeleteOauthProvidersResult
-	259, // 370: immutable.activity.v1.Result.create_sub_organization_result_v5:type_name -> immutable.activity.v1.CreateSubOrganizationResultV5
-	227, // 371: immutable.activity.v1.Result.oauth_result:type_name -> immutable.activity.v1.OauthResult
-	234, // 372: immutable.activity.v1.Result.create_read_write_session_result:type_name -> immutable.activity.v1.CreateReadWriteSessionResult
-	260, // 373: immutable.activity.v1.Result.create_sub_organization_result_v6:type_name -> immutable.activity.v1.CreateSubOrganizationResultV6
-	277, // 374: immutable.activity.v1.Result.delete_private_keys_result:type_name -> immutable.activity.v1.DeletePrivateKeysResult
-	278, // 375: immutable.activity.v1.Result.delete_wallets_result:type_name -> immutable.activity.v1.DeleteWalletsResult
-	235, // 376: immutable.activity.v1.Result.create_read_write_session_result_v2:type_name -> immutable.activity.v1.CreateReadWriteSessionResultV2
-	279, // 377: immutable.activity.v1.Result.delete_sub_organization_result:type_name -> immutable.activity.v1.DeleteSubOrganizationResult
-	221, // 378: immutable.activity.v1.Result.init_otp_auth_result:type_name -> immutable.activity.v1.InitOtpAuthResult
-	223, // 379: immutable.activity.v1.Result.otp_auth_result:type_name -> immutable.activity.v1.OtpAuthResult
-	261, // 380: immutable.activity.v1.Result.create_sub_organization_result_v7:type_name -> immutable.activity.v1.CreateSubOrganizationResultV7
-	195, // 381: immutable.activity.v1.Result.update_wallet_result:type_name -> immutable.activity.v1.UpdateWalletResult
-	232, // 382: immutable.activity.v1.Result.update_policy_result_v2:type_name -> immutable.activity.v1.UpdatePolicyResultV2
-	222, // 383: immutable.activity.v1.Result.init_otp_auth_result_v2:type_name -> immutable.activity.v1.InitOtpAuthResultV2
-	219, // 384: immutable.activity.v1.Result.init_otp_result:type_name -> immutable.activity.v1.InitOtpResult
-	226, // 385: immutable.activity.v1.Result.verify_otp_result:type_name -> immutable.activity.v1.VerifyOtpResult
-	218, // 386: immutable.activity.v1.Result.otp_login_result:type_name -> immutable.activity.v1.OtpLoginResult
-	217, // 387: immutable.activity.v1.Result.stamp_login_result:type_name -> immutable.activity.v1.StampLoginResult
-	209, // 388: immutable.activity.v1.Result.oauth_login_result:type_name -> immutable.activity.v1.OauthLoginResult
-	192, // 389: immutable.activity.v1.Result.update_user_name_result:type_name -> immutable.activity.v1.UpdateUserNameResult
-	193, // 390: immutable.activity.v1.Result.update_user_email_result:type_name -> immutable.activity.v1.UpdateUserEmailResult
-	194, // 391: immutable.activity.v1.Result.update_user_phone_number_result:type_name -> immutable.activity.v1.UpdateUserPhoneNumberResult
-	215, // 392: immutable.activity.v1.Result.init_fiat_on_ramp_result:type_name -> immutable.activity.v1.InitFiatOnRampResult
-	251, // 393: immutable.activity.v1.Result.create_smart_contract_interface_result:type_name -> immutable.activity.v1.CreateSmartContractInterfaceResult
-	252, // 394: immutable.activity.v1.Result.delete_smart_contract_interface_result:type_name -> immutable.activity.v1.DeleteSmartContractInterfaceResult
-	181, // 395: immutable.activity.v1.Result.enable_auth_proxy_result:type_name -> immutable.activity.v1.EnableAuthProxyResult
-	182, // 396: immutable.activity.v1.Result.disable_auth_proxy_result:type_name -> immutable.activity.v1.DisableAuthProxyResult
-	6,   // 397: immutable.activity.v1.Result.update_auth_proxy_config_result:type_name -> immutable.activity.v1.UpdateAuthProxyConfigResult
-	280, // 398: immutable.activity.v1.Result.create_oauth2_credential_result:type_name -> immutable.activity.v1.CreateOauth2CredentialResult
-	281, // 399: immutable.activity.v1.Result.update_oauth2_credential_result:type_name -> immutable.activity.v1.UpdateOauth2CredentialResult
-	282, // 400: immutable.activity.v1.Result.delete_oauth2_credential_result:type_name -> immutable.activity.v1.DeleteOauth2CredentialResult
-	283, // 401: immutable.activity.v1.Result.oauth2_authenticate_result:type_name -> immutable.activity.v1.Oauth2AuthenticateResult
-	284, // 402: immutable.activity.v1.Result.delete_wallet_accounts_result:type_name -> immutable.activity.v1.DeleteWalletAccountsResult
-	285, // 403: immutable.activity.v1.Result.delete_policies_result:type_name -> immutable.activity.v1.DeletePoliciesResult
-	293, // 404: immutable.activity.v1.Result.eth_send_raw_transaction_result:type_name -> immutable.activity.v1.EthSendRawTransactionResult
-	294, // 405: immutable.activity.v1.Result.create_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.CreateFiatOnRampCredentialResult
-	296, // 406: immutable.activity.v1.Result.update_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.UpdateFiatOnRampCredentialResult
-	298, // 407: immutable.activity.v1.Result.delete_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.DeleteFiatOnRampCredentialResult
-	299, // 408: immutable.activity.v1.Result.eth_send_transaction_result:type_name -> immutable.activity.v1.EthSendTransactionResult
-	180, // 409: immutable.activity.v1.Result.upsert_gas_usage_config_result:type_name -> immutable.activity.v1.UpsertGasUsageConfigResult
-	286, // 410: immutable.activity.v1.Result.create_tvc_app_result:type_name -> immutable.activity.v1.CreateTvcAppResult
-	287, // 411: immutable.activity.v1.Result.create_tvc_deployment_result:type_name -> immutable.activity.v1.CreateTvcDeploymentResult
-	288, // 412: immutable.activity.v1.Result.create_tvc_manifest_approvals_result:type_name -> immutable.activity.v1.CreateTvcManifestApprovalsResult
-	301, // 413: immutable.activity.v1.Result.sol_send_transaction_result:type_name -> immutable.activity.v1.SolSendTransactionResult
-	220, // 414: immutable.activity.v1.Result.init_otp_result_v2:type_name -> immutable.activity.v1.InitOtpResultV2
-	249, // 415: immutable.activity.v1.Result.update_organization_name_result:type_name -> immutable.activity.v1.UpdateOrganizationNameResult
-	262, // 416: immutable.activity.v1.Result.create_sub_organization_result_v8:type_name -> immutable.activity.v1.CreateSubOrganizationResultV8
-	275, // 417: immutable.activity.v1.Result.create_oauth_providers_result_v2:type_name -> immutable.activity.v1.CreateOauthProvidersResultV2
-	307, // 418: immutable.activity.v1.Result.create_webhook_endpoint_result:type_name -> immutable.activity.v1.CreateWebhookEndpointResult
-	308, // 419: immutable.activity.v1.Result.update_webhook_endpoint_result:type_name -> immutable.activity.v1.UpdateWebhookEndpointResult
-	309, // 420: immutable.activity.v1.Result.delete_webhook_endpoint_result:type_name -> immutable.activity.v1.DeleteWebhookEndpointResult
-	344, // 421: immutable.activity.v1.Result.set_ip_allowlist_result:type_name -> immutable.activity.v1.SetIpAllowlistResult
-	345, // 422: immutable.activity.v1.Result.remove_ip_allowlist_result:type_name -> immutable.activity.v1.RemoveIpAllowlistResult
-	385, // 423: immutable.activity.v1.Result.update_tvc_app_live_deployment_result:type_name -> immutable.activity.v1.UpdateTvcAppLiveDeploymentResult
-	387, // 424: immutable.activity.v1.Result.delete_tvc_deployment_result:type_name -> immutable.activity.v1.DeleteTvcDeploymentResult
-	389, // 425: immutable.activity.v1.Result.delete_tvc_app_and_deployments_result:type_name -> immutable.activity.v1.DeleteTvcAppAndDeploymentsResult
-	391, // 426: immutable.activity.v1.Result.restore_tvc_deployment_result:type_name -> immutable.activity.v1.RestoreTvcDeploymentResult
-	362, // 427: immutable.activity.v1.Result.spark_sign_frost_result:type_name -> immutable.activity.v1.SparkSignFrostResult
-	364, // 428: immutable.activity.v1.Result.spark_prepare_transfer_result:type_name -> immutable.activity.v1.SparkPrepareTransferResult
-	366, // 429: immutable.activity.v1.Result.spark_claim_transfer_result:type_name -> immutable.activity.v1.SparkClaimTransferResult
-	368, // 430: immutable.activity.v1.Result.spark_prepare_lightning_receive_result:type_name -> immutable.activity.v1.SparkPrepareLightningReceiveResult
-	289, // 431: immutable.activity.v1.Result.post_tvc_quorum_key_share_result:type_name -> immutable.activity.v1.PostTvcQuorumKeyShareResult
-	300, // 432: immutable.activity.v1.Result.eth_send_transaction_result_v2:type_name -> immutable.activity.v1.EthSendTransactionResultV2
-	311, // 433: immutable.activity.v1.Result.create_mfa_policy_result:type_name -> immutable.activity.v1.CreateMfaPolicyResult
-	312, // 434: immutable.activity.v1.Result.update_mfa_policy_result:type_name -> immutable.activity.v1.UpdateMfaPolicyResult
-	313, // 435: immutable.activity.v1.Result.delete_mfa_policy_result:type_name -> immutable.activity.v1.DeleteMfaPolicyResult
-	314, // 436: immutable.activity.v1.Result.create_session_profile_result:type_name -> immutable.activity.v1.CreateSessionProfileResult
-	315, // 437: immutable.activity.v1.Result.earn_deploy_wrapper_result:type_name -> immutable.activity.v1.EarnDeployWrapperResult
-	316, // 438: immutable.activity.v1.Result.earn_deposit_result:type_name -> immutable.activity.v1.EarnDepositResult
-	317, // 439: immutable.activity.v1.Result.earn_withdraw_result:type_name -> immutable.activity.v1.EarnWithdrawResult
-	303, // 440: immutable.activity.v1.Result.execute_swap_result:type_name -> immutable.activity.v1.ExecuteSwapResult
-	183, // 441: immutable.activity.v1.Result.upsert_swap_config_result:type_name -> immutable.activity.v1.UpsertSwapConfigResult
-	290, // 442: immutable.activity.v1.Result.create_tvc_operator_result:type_name -> immutable.activity.v1.CreateTvcOperatorResult
-	291, // 443: immutable.activity.v1.Result.create_tvc_quorum_key_result:type_name -> immutable.activity.v1.CreateTvcQuorumKeyResult
-	292, // 444: immutable.activity.v1.Result.re_encrypt_tvc_quorum_key_share_result:type_name -> immutable.activity.v1.ReEncryptTvcQuorumKeyShareResult
-	370, // 445: immutable.activity.v1.Result.init_import_secrets_result:type_name -> immutable.activity.v1.InitImportSecretsResult
-	302, // 446: immutable.activity.v1.Result.sol_send_transaction_result_v2:type_name -> immutable.activity.v1.SolSendTransactionResultV2
-	184, // 447: immutable.activity.v1.Result.claim_swap_fees_result:type_name -> immutable.activity.v1.ClaimSwapFeesResult
-	318, // 448: immutable.activity.v1.Result.earn_set_wrapper_state_result:type_name -> immutable.activity.v1.EarnSetWrapperStateResult
-	319, // 449: immutable.activity.v1.Result.claim_earn_fees_result:type_name -> immutable.activity.v1.ClaimEarnFeesResult
-	196, // 450: immutable.activity.v1.Result.update_wallet_account_name_result:type_name -> immutable.activity.v1.UpdateWalletAccountNameResult
-	401, // 451: immutable.activity.v1.Result.eth_undelegate7702_result:type_name -> immutable.activity.v1.EthUndelegate7702Result
-	305, // 452: immutable.activity.v1.Result.create_swap_quote_result:type_name -> immutable.activity.v1.CreateSwapQuoteResult
-	373, // 453: immutable.activity.v1.Result.import_secrets_result:type_name -> immutable.activity.v1.ImportSecretsResult
-	378, // 454: immutable.activity.v1.Result.export_secrets_result:type_name -> immutable.activity.v1.ExportSecretsResult
-	380, // 455: immutable.activity.v1.Result.create_usage_control_result:type_name -> immutable.activity.v1.CreateUsageControlResult
-	382, // 456: immutable.activity.v1.Result.delete_usage_controls_result:type_name -> immutable.activity.v1.DeleteUsageControlsResult
-	446, // 457: immutable.activity.v1.Result.update_payment_method_result:type_name -> immutable.activity.billing.UpdatePaymentMethodResult
-	375, // 458: immutable.activity.v1.Result.delete_secrets_result:type_name -> immutable.activity.v1.DeleteSecretsResult
-	320, // 459: immutable.activity.v1.Result.earn_claim_rewards_result:type_name -> immutable.activity.v1.EarnClaimRewardsResult
-	409, // 460: immutable.activity.v1.Result.create_swap_quote_result_v2:type_name -> immutable.activity.v1.CreateSwapQuoteResultV2
-	263, // 461: immutable.activity.v1.Result.create_sub_organization_result_v9:type_name -> immutable.activity.v1.CreateSubOrganizationResultV9
-	225, // 462: immutable.activity.v1.Result.verify_wallet_authenticator_result:type_name -> immutable.activity.v1.VerifyWalletAuthenticatorResult
-	132, // 463: immutable.activity.v1.Result.upsert_swap_fee_sponsorship_limit_config_result:type_name -> immutable.activity.v1.UpsertSwapFeeSponsorshipLimitConfigResult
-	134, // 464: immutable.activity.v1.Result.upsert_swap_fixed_rate_limit_config_result:type_name -> immutable.activity.v1.UpsertSwapFixedRateLimitConfigResult
-	216, // 465: immutable.activity.v1.Result.create_fiat_on_ramp_session_result:type_name -> immutable.activity.v1.CreateFiatOnRampSessionResult
-	211, // 466: immutable.activity.v1.Result.create_fiat_off_ramp_session_result:type_name -> immutable.activity.v1.CreateFiatOffRampSessionResult
-	186, // 467: immutable.activity.v1.Result.create_wallet_authenticators_result:type_name -> immutable.activity.v1.CreateWalletAuthenticatorsResult
-	187, // 468: immutable.activity.v1.Result.delete_wallet_authenticators_result:type_name -> immutable.activity.v1.DeleteWalletAuthenticatorsResult
-	348, // 469: immutable.activity.v1.Result.enable_sms_for_countries_result:type_name -> immutable.activity.v1.EnableSmsForCountriesResult
-	349, // 470: immutable.activity.v1.Result.disable_sms_for_countries_result:type_name -> immutable.activity.v1.DisableSmsForCountriesResult
-	295, // 471: immutable.activity.v1.Result.create_fiat_ramp_credential_result:type_name -> immutable.activity.v1.CreateFiatRampCredentialResult
-	297, // 472: immutable.activity.v1.Result.update_fiat_ramp_credential_result:type_name -> immutable.activity.v1.UpdateFiatRampCredentialResult
-	414, // 473: immutable.activity.v1.Result.create_external_signer_result_v1:type_name -> immutable.activity.v1.CreateExternalSignerResultV1
-	416, // 474: immutable.activity.v1.Result.delete_external_signer_result_v1:type_name -> immutable.activity.v1.DeleteExternalSignerResultV1
-	214, // 475: immutable.activity.v1.Result.mint_jwt_result:type_name -> immutable.activity.v1.MintJwtResult
-	202, // 476: immutable.activity.v1.CreatePrivateKeysResultV2.private_keys:type_name -> immutable.activity.v1.PrivateKeyResult
-	203, // 477: immutable.activity.v1.PrivateKeyResult.addresses:type_name -> immutable.activity.v1.Address
-	439, // 478: immutable.activity.v1.Address.format:type_name -> immutable.common.v1.AddressFormat
-	204, // 479: immutable.activity.v1.SignRawPayloadsResult.signatures:type_name -> immutable.activity.v1.SignRawPayloadResult
-	447, // 480: immutable.activity.v1.MintJwtIntent.profile:type_name -> immutable.common.v1.JwtProfile
-	213, // 481: immutable.activity.v1.MintJwtIntent.http_authz_v1:type_name -> immutable.activity.v1.HttpAuthzV1Inputs
-	202, // 482: immutable.activity.v1.CreateSubOrganizationResultV3.private_keys:type_name -> immutable.activity.v1.PrivateKeyResult
-	257, // 483: immutable.activity.v1.CreateSubOrganizationResultV4.wallet:type_name -> immutable.activity.v1.WalletResult
-	257, // 484: immutable.activity.v1.CreateSubOrganizationResultV5.wallet:type_name -> immutable.activity.v1.WalletResult
-	257, // 485: immutable.activity.v1.CreateSubOrganizationResultV6.wallet:type_name -> immutable.activity.v1.WalletResult
-	257, // 486: immutable.activity.v1.CreateSubOrganizationResultV7.wallet:type_name -> immutable.activity.v1.WalletResult
-	257, // 487: immutable.activity.v1.CreateSubOrganizationResultV8.wallet:type_name -> immutable.activity.v1.WalletResult
-	257, // 488: immutable.activity.v1.CreateSubOrganizationResultV9.wallet:type_name -> immutable.activity.v1.WalletResult
-	448, // 489: immutable.activity.v1.SetOrganizationFeatureResult.features:type_name -> immutable.data.v1.Feature
-	448, // 490: immutable.activity.v1.RemoveOrganizationFeatureResult.features:type_name -> immutable.data.v1.Feature
-	203, // 491: immutable.activity.v1.ImportPrivateKeyResult.addresses:type_name -> immutable.activity.v1.Address
-	408, // 492: immutable.activity.v1.ExecuteSwapResult.estimated_charges:type_name -> immutable.activity.v1.SwapCharges
-	304, // 493: immutable.activity.v1.CreateSwapQuoteResult.quotes:type_name -> immutable.activity.v1.SwapQuote
-	310, // 494: immutable.activity.v1.WebhookEndpointData.subscriptions:type_name -> immutable.activity.v1.WebhookSubscriptionParams
-	306, // 495: immutable.activity.v1.CreateWebhookEndpointResult.webhook_endpoint:type_name -> immutable.activity.v1.WebhookEndpointData
-	306, // 496: immutable.activity.v1.UpdateWebhookEndpointResult.webhook_endpoint:type_name -> immutable.activity.v1.WebhookEndpointData
-	323, // 497: immutable.activity.v1.OauthProviderParamsV2.oidc_claims:type_name -> immutable.activity.v1.OidcClaims
-	449, // 498: immutable.activity.v1.ApiKeyParamsV2.curve_type:type_name -> immutable.common.v1.ApiKeyCurve
-	450, // 499: immutable.activity.v1.UserParams.access_type:type_name -> immutable.common.v1.AccessType
-	423, // 500: immutable.activity.v1.UserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	329, // 501: immutable.activity.v1.UserParams.authenticators:type_name -> immutable.activity.v1.AuthenticatorParams
-	423, // 502: immutable.activity.v1.UserParamsV2.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	330, // 503: immutable.activity.v1.UserParamsV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	324, // 504: immutable.activity.v1.UserParamsV3.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 505: immutable.activity.v1.UserParamsV3.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	321, // 506: immutable.activity.v1.UserParamsV3.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
-	324, // 507: immutable.activity.v1.UserParamsV4.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
-	330, // 508: immutable.activity.v1.UserParamsV4.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
-	322, // 509: immutable.activity.v1.UserParamsV4.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
-	451, // 510: immutable.activity.v1.AuthenticatorParams.attestation:type_name -> immutable.webauthn.v1.PublicKeyCredentialWithAttestation
-	331, // 511: immutable.activity.v1.AuthenticatorParamsV2.attestation:type_name -> immutable.activity.v1.Attestation
-	452, // 512: immutable.activity.v1.Attestation.transports:type_name -> immutable.webauthn.v1.AuthenticatorTransport
-	450, // 513: immutable.activity.v1.InvitationParams.access_type:type_name -> immutable.common.v1.AccessType
-	423, // 514: immutable.activity.v1.ApiOnlyUserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
-	438, // 515: immutable.activity.v1.PrivateKeyParams.curve:type_name -> immutable.common.v1.Curve
-	439, // 516: immutable.activity.v1.PrivateKeyParams.address_formats:type_name -> immutable.common.v1.AddressFormat
-	336, // 517: immutable.activity.v1.WalletParams.accounts:type_name -> immutable.activity.v1.WalletAccountParams
-	438, // 518: immutable.activity.v1.WalletAccountParams.curve:type_name -> immutable.common.v1.Curve
-	453, // 519: immutable.activity.v1.WalletAccountParams.path_format:type_name -> immutable.common.v1.PathFormat
-	439, // 520: immutable.activity.v1.WalletAccountParams.address_format:type_name -> immutable.common.v1.AddressFormat
-	341, // 521: immutable.activity.v1.SetIpAllowlistIntent.rules:type_name -> immutable.activity.v1.IpAllowlistIntentRule
-	394, // 522: immutable.activity.v1.SparkTransferLeaf.old_leaf_derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
-	394, // 523: immutable.activity.v1.SparkTransferLeaf.new_leaf_derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
-	352, // 524: immutable.activity.v1.SparkTransferPackage.leaves:type_name -> immutable.activity.v1.SparkTransferLeaf
-	351, // 525: immutable.activity.v1.SparkTransferPackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
-	353, // 526: immutable.activity.v1.SparkClaimPackage.leaves:type_name -> immutable.activity.v1.SparkClaimLeaf
-	351, // 527: immutable.activity.v1.SparkClaimPackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
-	351, // 528: immutable.activity.v1.SparkLightningReceivePackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
-	394, // 529: immutable.activity.v1.SparkSignatureRequest.derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
-	350, // 530: immutable.activity.v1.SparkSignatureRequest.operator_commitments:type_name -> immutable.activity.v1.SparkFrostCommitment
-	358, // 531: immutable.activity.v1.SparkSignFrostIntent.signatures:type_name -> immutable.activity.v1.SparkSignatureRequest
-	359, // 532: immutable.activity.v1.SparkSignFrostResult.signatures:type_name -> immutable.activity.v1.SparkPartialSignature
-	354, // 533: immutable.activity.v1.SparkPrepareTransferIntent.transfer:type_name -> immutable.activity.v1.SparkTransferPackage
-	357, // 534: immutable.activity.v1.SparkPrepareTransferResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
-	360, // 535: immutable.activity.v1.SparkPrepareTransferResult.new_leaf_public_keys:type_name -> immutable.activity.v1.SparkLeafPublicKey
-	355, // 536: immutable.activity.v1.SparkClaimTransferIntent.claim:type_name -> immutable.activity.v1.SparkClaimPackage
-	357, // 537: immutable.activity.v1.SparkClaimTransferResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
-	360, // 538: immutable.activity.v1.SparkClaimTransferResult.new_leaf_public_keys:type_name -> immutable.activity.v1.SparkLeafPublicKey
-	356, // 539: immutable.activity.v1.SparkPrepareLightningReceiveIntent.lightning_receive:type_name -> immutable.activity.v1.SparkLightningReceivePackage
-	357, // 540: immutable.activity.v1.SparkPrepareLightningReceiveResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
-	454, // 541: immutable.activity.v1.InitImportSecretsIntent.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
-	372, // 542: immutable.activity.v1.ImportSecretsIntent.secrets:type_name -> immutable.activity.v1.ImportSecretParams
-	454, // 543: immutable.activity.v1.ImportSecretParams.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
-	455, // 544: immutable.activity.v1.ImportSecretParams.static_properties:type_name -> immutable.models.v1.KeyValue
-	377, // 545: immutable.activity.v1.ExportSecretsIntent.secrets:type_name -> immutable.activity.v1.ExportSecretParams
-	454, // 546: immutable.activity.v1.ExportSecretParams.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
-	455, // 547: immutable.activity.v1.ExportSecretParams.request_context:type_name -> immutable.models.v1.KeyValue
-	456, // 548: immutable.activity.v1.CreateUsageControlIntent.data_source:type_name -> external.data.v1.UsageControlDataSource
-	457, // 549: immutable.activity.v1.CreateUsageControlIntent.budget:type_name -> external.data.v1.UsageControlBudget
-	458, // 550: immutable.activity.v1.ClientSignature.scheme:type_name -> immutable.common.v1.ClientSignatureScheme
-	393, // 551: immutable.activity.v1.RequiredAuthenticationMethodParams.any:type_name -> immutable.activity.v1.AuthenticationMethodParams
-	459, // 552: immutable.activity.v1.AuthenticationMethodParams.type:type_name -> immutable.common.v1.AuthenticationType
-	395, // 553: immutable.activity.v1.SparkKeyDerivation.identity:type_name -> immutable.activity.v1.SparkIdentityDerivation
-	396, // 554: immutable.activity.v1.SparkKeyDerivation.signing_leaf:type_name -> immutable.activity.v1.SparkSigningLeafDerivation
-	397, // 555: immutable.activity.v1.SparkKeyDerivation.deposit:type_name -> immutable.activity.v1.SparkDepositDerivation
-	398, // 556: immutable.activity.v1.SparkKeyDerivation.static_deposit:type_name -> immutable.activity.v1.SparkStaticDepositDerivation
-	399, // 557: immutable.activity.v1.SparkKeyDerivation.htlc_preimage:type_name -> immutable.activity.v1.SparkHtlcPreimageDerivation
-	408, // 558: immutable.activity.v1.SwapQuoteV2.estimated_charges:type_name -> immutable.activity.v1.SwapCharges
-	407, // 559: immutable.activity.v1.CreateSwapQuoteResultV2.quotes:type_name -> immutable.activity.v1.SwapQuoteV2
-	411, // 560: immutable.activity.v1.ExecuteSwapIntentV4.bound_quote:type_name -> immutable.activity.v1.ExecuteSwapBoundQuote
-	412, // 561: immutable.activity.v1.ExecuteSwapIntentV4.market:type_name -> immutable.activity.v1.ExecuteSwapMarketTerms
-	562, // [562:562] is the sub-list for method output_type
-	562, // [562:562] is the sub-list for method input_type
-	562, // [562:562] is the sub-list for extension type_name
-	562, // [562:562] is the sub-list for extension extendee
-	0,   // [0:562] is the sub-list for field type_name
+	349, // 179: immutable.activity.v1.Intent.enable_sms_for_countries_intent:type_name -> immutable.activity.v1.EnableSmsForCountriesIntent
+	350, // 180: immutable.activity.v1.Intent.disable_sms_for_countries_intent:type_name -> immutable.activity.v1.DisableSmsForCountriesIntent
+	163, // 181: immutable.activity.v1.Intent.create_fiat_ramp_credential_intent:type_name -> immutable.activity.v1.CreateFiatRampCredentialIntent
+	165, // 182: immutable.activity.v1.Intent.update_fiat_ramp_credential_intent:type_name -> immutable.activity.v1.UpdateFiatRampCredentialIntent
+	421, // 183: immutable.activity.v1.Intent.create_external_signer_intent_v1:type_name -> immutable.activity.v1.CreateExternalSignerIntentV1
+	423, // 184: immutable.activity.v1.Intent.delete_external_signer_intent_v1:type_name -> immutable.activity.v1.DeleteExternalSignerIntentV1
+	214, // 185: immutable.activity.v1.Intent.mint_jwt_intent:type_name -> immutable.activity.v1.MintJwtIntent
+	353, // 186: immutable.activity.v1.Intent.add_notification_domains_intent:type_name -> immutable.activity.v1.AddNotificationDomainsIntent
+	354, // 187: immutable.activity.v1.Intent.delete_notification_domains_intent:type_name -> immutable.activity.v1.DeleteNotificationDomainsIntent
+	156, // 188: immutable.activity.v1.Intent.init_oauth2_authenticate_intent:type_name -> immutable.activity.v1.InitOauth2AuthenticateIntent
+	157, // 189: immutable.activity.v1.Intent.oauth2_authenticate_intent_v2:type_name -> immutable.activity.v1.Oauth2AuthenticateIntentV2
+	113, // 190: immutable.activity.v1.UpdateAuthProxyConfigIntent.email_customization_params:type_name -> immutable.activity.v1.EmailCustomizationParams
+	116, // 191: immutable.activity.v1.UpdateAuthProxyConfigIntent.sms_customization_params:type_name -> immutable.activity.v1.SmsCustomizationParams
+	117, // 192: immutable.activity.v1.UpdateAuthProxyConfigIntent.wallet_kit_settings:type_name -> immutable.activity.v1.WalletKitSettingsParams
+	332, // 193: immutable.activity.v1.CreateOrganizationIntent.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParams
+	333, // 194: immutable.activity.v1.CreateOrganizationIntentV2.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	332, // 195: immutable.activity.v1.CreateAuthenticatorsIntent.authenticators:type_name -> immutable.activity.v1.AuthenticatorParams
+	333, // 196: immutable.activity.v1.CreateAuthenticatorsIntentV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	431, // 197: immutable.activity.v1.CreateApiKeysIntent.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	327, // 198: immutable.activity.v1.CreateApiKeysIntentV2.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	328, // 199: immutable.activity.v1.CreateUsersIntent.users:type_name -> immutable.activity.v1.UserParams
+	329, // 200: immutable.activity.v1.CreateUsersIntentV2.users:type_name -> immutable.activity.v1.UserParamsV2
+	330, // 201: immutable.activity.v1.CreateUsersIntentV3.users:type_name -> immutable.activity.v1.UserParamsV3
+	331, // 202: immutable.activity.v1.CreateUsersIntentV4.users:type_name -> immutable.activity.v1.UserParamsV4
+	335, // 203: immutable.activity.v1.CreateInvitationsIntent.invitations:type_name -> immutable.activity.v1.InvitationParams
+	332, // 204: immutable.activity.v1.AcceptInvitationIntent.authenticator:type_name -> immutable.activity.v1.AuthenticatorParams
+	333, // 205: immutable.activity.v1.AcceptInvitationIntentV2.authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	336, // 206: immutable.activity.v1.CreateApiOnlyUsersIntent.api_only_users:type_name -> immutable.activity.v1.ApiOnlyUserParams
+	339, // 207: immutable.activity.v1.CreateWalletIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
+	339, // 208: immutable.activity.v1.CreateWalletAccountsIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
+	337, // 209: immutable.activity.v1.CreatePrivateKeysIntent.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
+	337, // 210: immutable.activity.v1.CreatePrivateKeysIntentV2.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
+	432, // 211: immutable.activity.v1.SignRawPayloadIntent.encoding:type_name -> immutable.common.v1.PayloadEncoding
+	433, // 212: immutable.activity.v1.SignRawPayloadIntent.hash_function:type_name -> immutable.common.v1.HashFunction
+	432, // 213: immutable.activity.v1.SignRawPayloadIntentV2.encoding:type_name -> immutable.common.v1.PayloadEncoding
+	433, // 214: immutable.activity.v1.SignRawPayloadIntentV2.hash_function:type_name -> immutable.common.v1.HashFunction
+	432, // 215: immutable.activity.v1.SignRawPayloadsIntent.encoding:type_name -> immutable.common.v1.PayloadEncoding
+	433, // 216: immutable.activity.v1.SignRawPayloadsIntent.hash_function:type_name -> immutable.common.v1.HashFunction
+	46,  // 217: immutable.activity.v1.CreatePolicyIntent.selectors:type_name -> immutable.activity.v1.Selector
+	434, // 218: immutable.activity.v1.CreatePolicyIntent.effect:type_name -> immutable.common.v1.Effect
+	47,  // 219: immutable.activity.v1.CreatePolicyIntentV2.selectors:type_name -> immutable.activity.v1.SelectorV2
+	434, // 220: immutable.activity.v1.CreatePolicyIntentV2.effect:type_name -> immutable.common.v1.Effect
+	434, // 221: immutable.activity.v1.CreatePolicyIntentV3.effect:type_name -> immutable.common.v1.Effect
+	41,  // 222: immutable.activity.v1.CreatePoliciesIntent.policies:type_name -> immutable.activity.v1.CreatePolicyIntentV3
+	435, // 223: immutable.activity.v1.Selector.operator:type_name -> immutable.common.v1.Operator
+	435, // 224: immutable.activity.v1.SelectorV2.operator:type_name -> immutable.common.v1.Operator
+	436, // 225: immutable.activity.v1.SignTransactionIntent.type:type_name -> immutable.common.v1.TransactionType
+	436, // 226: immutable.activity.v1.SignTransactionIntentV2.type:type_name -> immutable.common.v1.TransactionType
+	66,  // 227: immutable.activity.v1.EthSendTransactionIntentV2.calls:type_name -> immutable.activity.v1.EthCallParams
+	437, // 228: immutable.activity.v1.CreateSmartContractInterfaceIntent.type:type_name -> immutable.common.v1.SmartContractInterfaceType
+	333, // 229: immutable.activity.v1.CreateSubOrganizationIntent.root_authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	104, // 230: immutable.activity.v1.CreateSubOrganizationIntentV2.root_users:type_name -> immutable.activity.v1.RootUserParams
+	104, // 231: immutable.activity.v1.CreateSubOrganizationIntentV3.root_users:type_name -> immutable.activity.v1.RootUserParams
+	337, // 232: immutable.activity.v1.CreateSubOrganizationIntentV3.private_keys:type_name -> immutable.activity.v1.PrivateKeyParams
+	104, // 233: immutable.activity.v1.CreateSubOrganizationIntentV4.root_users:type_name -> immutable.activity.v1.RootUserParams
+	338, // 234: immutable.activity.v1.CreateSubOrganizationIntentV4.wallet:type_name -> immutable.activity.v1.WalletParams
+	105, // 235: immutable.activity.v1.CreateSubOrganizationIntentV5.root_users:type_name -> immutable.activity.v1.RootUserParamsV2
+	338, // 236: immutable.activity.v1.CreateSubOrganizationIntentV5.wallet:type_name -> immutable.activity.v1.WalletParams
+	106, // 237: immutable.activity.v1.CreateSubOrganizationIntentV6.root_users:type_name -> immutable.activity.v1.RootUserParamsV3
+	338, // 238: immutable.activity.v1.CreateSubOrganizationIntentV6.wallet:type_name -> immutable.activity.v1.WalletParams
+	107, // 239: immutable.activity.v1.CreateSubOrganizationIntentV7.root_users:type_name -> immutable.activity.v1.RootUserParamsV4
+	338, // 240: immutable.activity.v1.CreateSubOrganizationIntentV7.wallet:type_name -> immutable.activity.v1.WalletParams
+	390, // 241: immutable.activity.v1.CreateSubOrganizationIntentV7.client_signature:type_name -> immutable.activity.v1.ClientSignature
+	108, // 242: immutable.activity.v1.CreateSubOrganizationIntentV8.root_users:type_name -> immutable.activity.v1.RootUserParamsV5
+	338, // 243: immutable.activity.v1.CreateSubOrganizationIntentV8.wallet:type_name -> immutable.activity.v1.WalletParams
+	390, // 244: immutable.activity.v1.CreateSubOrganizationIntentV8.client_signature:type_name -> immutable.activity.v1.ClientSignature
+	109, // 245: immutable.activity.v1.CreateSubOrganizationIntentV9.root_users:type_name -> immutable.activity.v1.RootUserParamsV6
+	338, // 246: immutable.activity.v1.CreateSubOrganizationIntentV9.wallet:type_name -> immutable.activity.v1.WalletParams
+	390, // 247: immutable.activity.v1.CreateSubOrganizationIntentV9.client_signature:type_name -> immutable.activity.v1.ClientSignature
+	434, // 248: immutable.activity.v1.UpdatePolicyIntent.policy_effect:type_name -> immutable.common.v1.Effect
+	434, // 249: immutable.activity.v1.UpdatePolicyIntentV2.policy_effect:type_name -> immutable.common.v1.Effect
+	333, // 250: immutable.activity.v1.RecoverUserIntent.authenticator:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	438, // 251: immutable.activity.v1.SetOrganizationFeatureIntent.name:type_name -> immutable.common.v1.FeatureName
+	438, // 252: immutable.activity.v1.RemoveOrganizationFeatureIntent.name:type_name -> immutable.common.v1.FeatureName
+	439, // 253: immutable.activity.v1.ExportWalletIntent.language:type_name -> immutable.common.v1.MnemonicLanguage
+	399, // 254: immutable.activity.v1.CreateMfaPolicyIntent.required_authentication_methods:type_name -> immutable.activity.v1.RequiredAuthenticationMethodParams
+	399, // 255: immutable.activity.v1.UpdateMfaPolicyIntent.required_authentication_methods:type_name -> immutable.activity.v1.RequiredAuthenticationMethodParams
+	431, // 256: immutable.activity.v1.RootUserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	333, // 257: immutable.activity.v1.RootUserParams.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	431, // 258: immutable.activity.v1.RootUserParamsV2.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	333, // 259: immutable.activity.v1.RootUserParamsV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	324, // 260: immutable.activity.v1.RootUserParamsV2.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
+	327, // 261: immutable.activity.v1.RootUserParamsV3.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 262: immutable.activity.v1.RootUserParamsV3.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	324, // 263: immutable.activity.v1.RootUserParamsV3.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
+	327, // 264: immutable.activity.v1.RootUserParamsV4.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 265: immutable.activity.v1.RootUserParamsV4.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	324, // 266: immutable.activity.v1.RootUserParamsV4.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
+	327, // 267: immutable.activity.v1.RootUserParamsV5.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 268: immutable.activity.v1.RootUserParamsV5.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	325, // 269: immutable.activity.v1.RootUserParamsV5.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
+	327, // 270: immutable.activity.v1.RootUserParamsV6.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 271: immutable.activity.v1.RootUserParamsV6.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	325, // 272: immutable.activity.v1.RootUserParamsV6.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
+	110, // 273: immutable.activity.v1.RootUserParamsV6.wallet_authenticators:type_name -> immutable.activity.v1.WalletAuthenticatorParams
+	440, // 274: immutable.activity.v1.WalletAuthenticatorParams.type:type_name -> immutable.common.v1.WalletAuthenticatorType
+	110, // 275: immutable.activity.v1.CreateWalletAuthenticatorsIntent.wallet_authenticators:type_name -> immutable.activity.v1.WalletAuthenticatorParams
+	425, // 276: immutable.activity.v1.WalletKitSettingsParams.oauth_client_ids:type_name -> immutable.activity.v1.WalletKitSettingsParams.OauthClientIdsEntry
+	113, // 277: immutable.activity.v1.InitUserEmailRecoveryIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	115, // 278: immutable.activity.v1.InitUserEmailRecoveryIntentV2.email_customization:type_name -> immutable.activity.v1.EmailAuthCustomizationParams
+	390, // 279: immutable.activity.v1.OtpLoginIntent.client_signature:type_name -> immutable.activity.v1.ClientSignature
+	390, // 280: immutable.activity.v1.OtpLoginIntentV2.client_signature:type_name -> immutable.activity.v1.ClientSignature
+	113, // 281: immutable.activity.v1.InitOtpAuthIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	116, // 282: immutable.activity.v1.InitOtpAuthIntent.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	113, // 283: immutable.activity.v1.InitOtpIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	116, // 284: immutable.activity.v1.InitOtpIntent.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	114, // 285: immutable.activity.v1.InitOtpIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
+	116, // 286: immutable.activity.v1.InitOtpIntentV2.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	114, // 287: immutable.activity.v1.InitOtpIntentV3.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
+	116, // 288: immutable.activity.v1.InitOtpIntentV3.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	113, // 289: immutable.activity.v1.InitOtpAuthIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	116, // 290: immutable.activity.v1.InitOtpAuthIntentV2.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	114, // 291: immutable.activity.v1.InitOtpAuthIntentV3.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParamsV2
+	116, // 292: immutable.activity.v1.InitOtpAuthIntentV3.sms_customization:type_name -> immutable.activity.v1.SmsCustomizationParams
+	130, // 293: immutable.activity.v1.UpsertGasUsageConfigIntent.solana_config:type_name -> immutable.activity.v1.SolanaConfig
+	113, // 294: immutable.activity.v1.EmailAuthIntent.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	113, // 295: immutable.activity.v1.EmailAuthIntentV2.email_customization:type_name -> immutable.activity.v1.EmailCustomizationParams
+	115, // 296: immutable.activity.v1.EmailAuthIntentV3.email_customization:type_name -> immutable.activity.v1.EmailAuthCustomizationParams
+	441, // 297: immutable.activity.v1.InitFiatOnRampIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
+	442, // 298: immutable.activity.v1.InitFiatOnRampIntent.network:type_name -> immutable.common.v1.FiatOnRampBlockchainNetwork
+	443, // 299: immutable.activity.v1.InitFiatOnRampIntent.crypto_currency_code:type_name -> immutable.common.v1.FiatOnRampCryptoCurrency
+	444, // 300: immutable.activity.v1.InitFiatOnRampIntent.fiat_currency_code:type_name -> immutable.common.v1.FiatOnRampCurrency
+	445, // 301: immutable.activity.v1.InitFiatOnRampIntent.payment_method:type_name -> immutable.common.v1.FiatOnRampPaymentMethod
+	339, // 302: immutable.activity.v1.ImportWalletIntent.accounts:type_name -> immutable.activity.v1.WalletAccountParams
+	446, // 303: immutable.activity.v1.ImportPrivateKeyIntent.curve:type_name -> immutable.common.v1.Curve
+	447, // 304: immutable.activity.v1.ImportPrivateKeyIntent.address_formats:type_name -> immutable.common.v1.AddressFormat
+	324, // 305: immutable.activity.v1.CreateOauthProvidersIntent.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
+	325, // 306: immutable.activity.v1.CreateOauthProvidersIntentV2.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
+	448, // 307: immutable.activity.v1.CreateOauth2CredentialIntent.provider:type_name -> immutable.common.v1.Oauth2Provider
+	448, // 308: immutable.activity.v1.UpdateOauth2CredentialIntent.provider:type_name -> immutable.common.v1.Oauth2Provider
+	449, // 309: immutable.activity.v1.InitOauth2AuthenticateIntent.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
+	441, // 310: immutable.activity.v1.CreateFiatOnRampCredentialIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
+	450, // 311: immutable.activity.v1.CreateFiatRampCredentialIntent.provider:type_name -> immutable.common.v1.FiatRampProvider
+	441, // 312: immutable.activity.v1.UpdateFiatOnRampCredentialIntent.onramp_provider:type_name -> immutable.common.v1.FiatOnRampProvider
+	450, // 313: immutable.activity.v1.UpdateFiatRampCredentialIntent.provider:type_name -> immutable.common.v1.FiatRampProvider
+	169, // 314: immutable.activity.v1.CreateTvcAppIntent.manifest_set_params:type_name -> immutable.activity.v1.TvcOperatorSetParams
+	169, // 315: immutable.activity.v1.CreateTvcAppIntent.share_set_params:type_name -> immutable.activity.v1.TvcOperatorSetParams
+	170, // 316: immutable.activity.v1.TvcOperatorSetParams.new_operators:type_name -> immutable.activity.v1.TvcOperatorParams
+	451, // 317: immutable.activity.v1.CreateTvcDeploymentIntent.health_check_type:type_name -> immutable.common.v1.TvcHealthCheckType
+	173, // 318: immutable.activity.v1.CreateTvcManifestApprovalsIntent.approvals:type_name -> immutable.activity.v1.TvcManifestApproval
+	175, // 319: immutable.activity.v1.PostTvcQuorumKeyShareIntent.share_approval_bundle:type_name -> immutable.activity.v1.QuorumKeyShareApprovalBundle
+	313, // 320: immutable.activity.v1.CreateWebhookEndpointIntent.subscriptions:type_name -> immutable.activity.v1.WebhookSubscriptionParams
+	187, // 321: immutable.activity.v1.Result.create_organization_result:type_name -> immutable.activity.v1.CreateOrganizationResult
+	190, // 322: immutable.activity.v1.Result.create_authenticators_result:type_name -> immutable.activity.v1.CreateAuthenticatorsResult
+	192, // 323: immutable.activity.v1.Result.create_users_result:type_name -> immutable.activity.v1.CreateUsersResult
+	202, // 324: immutable.activity.v1.Result.create_private_keys_result:type_name -> immutable.activity.v1.CreatePrivateKeysResult
+	200, // 325: immutable.activity.v1.Result.create_invitations_result:type_name -> immutable.activity.v1.CreateInvitationsResult
+	201, // 326: immutable.activity.v1.Result.accept_invitation_result:type_name -> immutable.activity.v1.AcceptInvitationResult
+	206, // 327: immutable.activity.v1.Result.sign_raw_payload_result:type_name -> immutable.activity.v1.SignRawPayloadResult
+	231, // 328: immutable.activity.v1.Result.create_policy_result:type_name -> immutable.activity.v1.CreatePolicyResult
+	238, // 329: immutable.activity.v1.Result.disable_private_key_result:type_name -> immutable.activity.v1.DisablePrivateKeyResult
+	239, // 330: immutable.activity.v1.Result.delete_users_result:type_name -> immutable.activity.v1.DeleteUsersResult
+	241, // 331: immutable.activity.v1.Result.delete_authenticators_result:type_name -> immutable.activity.v1.DeleteAuthenticatorsResult
+	240, // 332: immutable.activity.v1.Result.delete_invitation_result:type_name -> immutable.activity.v1.DeleteInvitationResult
+	243, // 333: immutable.activity.v1.Result.delete_organization_result:type_name -> immutable.activity.v1.DeleteOrganizationResult
+	244, // 334: immutable.activity.v1.Result.delete_policy_result:type_name -> immutable.activity.v1.DeletePolicyResult
+	245, // 335: immutable.activity.v1.Result.create_user_tag_result:type_name -> immutable.activity.v1.CreateUserTagResult
+	247, // 336: immutable.activity.v1.Result.delete_user_tags_result:type_name -> immutable.activity.v1.DeleteUserTagsResult
+	252, // 337: immutable.activity.v1.Result.sign_transaction_result:type_name -> immutable.activity.v1.SignTransactionResult
+	242, // 338: immutable.activity.v1.Result.delete_api_keys_result:type_name -> immutable.activity.v1.DeleteApiKeysResult
+	191, // 339: immutable.activity.v1.Result.create_api_keys_result:type_name -> immutable.activity.v1.CreateApiKeysResult
+	248, // 340: immutable.activity.v1.Result.create_private_key_tag_result:type_name -> immutable.activity.v1.CreatePrivateKeyTagResult
+	250, // 341: immutable.activity.v1.Result.delete_private_key_tags_result:type_name -> immutable.activity.v1.DeletePrivateKeyTagsResult
+	452, // 342: immutable.activity.v1.Result.set_payment_method_result:type_name -> immutable.activity.billing.SetPaymentMethodResult
+	453, // 343: immutable.activity.v1.Result.activate_billing_tier_result:type_name -> immutable.activity.billing.ActivateBillingTierResult
+	454, // 344: immutable.activity.v1.Result.delete_payment_method_result:type_name -> immutable.activity.billing.DeletePaymentMethodResult
+	199, // 345: immutable.activity.v1.Result.create_api_only_users_result:type_name -> immutable.activity.v1.CreateApiOnlyUsersResult
+	255, // 346: immutable.activity.v1.Result.update_root_quorum_result:type_name -> immutable.activity.v1.UpdateRootQuorumResult
+	246, // 347: immutable.activity.v1.Result.update_user_tag_result:type_name -> immutable.activity.v1.UpdateUserTagResult
+	249, // 348: immutable.activity.v1.Result.update_private_key_tag_result:type_name -> immutable.activity.v1.UpdatePrivateKeyTagResult
+	257, // 349: immutable.activity.v1.Result.create_sub_organization_result:type_name -> immutable.activity.v1.CreateSubOrganizationResult
+	256, // 350: immutable.activity.v1.Result.update_allowed_origins_result:type_name -> immutable.activity.v1.UpdateAllowedOriginsResult
+	203, // 351: immutable.activity.v1.Result.create_private_keys_result_v2:type_name -> immutable.activity.v1.CreatePrivateKeysResultV2
+	193, // 352: immutable.activity.v1.Result.update_user_result:type_name -> immutable.activity.v1.UpdateUserResult
+	233, // 353: immutable.activity.v1.Result.update_policy_result:type_name -> immutable.activity.v1.UpdatePolicyResult
+	258, // 354: immutable.activity.v1.Result.create_sub_organization_result_v3:type_name -> immutable.activity.v1.CreateSubOrganizationResultV3
+	208, // 355: immutable.activity.v1.Result.create_wallet_result:type_name -> immutable.activity.v1.CreateWalletResult
+	209, // 356: immutable.activity.v1.Result.create_wallet_accounts_result:type_name -> immutable.activity.v1.CreateWalletAccountsResult
+	210, // 357: immutable.activity.v1.Result.init_user_email_recovery_result:type_name -> immutable.activity.v1.InitUserEmailRecoveryResult
+	266, // 358: immutable.activity.v1.Result.recover_user_result:type_name -> immutable.activity.v1.RecoverUserResult
+	267, // 359: immutable.activity.v1.Result.set_organization_feature_result:type_name -> immutable.activity.v1.SetOrganizationFeatureResult
+	268, // 360: immutable.activity.v1.Result.remove_organization_feature_result:type_name -> immutable.activity.v1.RemoveOrganizationFeatureResult
+	269, // 361: immutable.activity.v1.Result.export_private_key_result:type_name -> immutable.activity.v1.ExportPrivateKeyResult
+	270, // 362: immutable.activity.v1.Result.export_wallet_result:type_name -> immutable.activity.v1.ExportWalletResult
+	260, // 363: immutable.activity.v1.Result.create_sub_organization_result_v4:type_name -> immutable.activity.v1.CreateSubOrganizationResultV4
+	230, // 364: immutable.activity.v1.Result.email_auth_result:type_name -> immutable.activity.v1.EmailAuthResult
+	271, // 365: immutable.activity.v1.Result.export_wallet_account_result:type_name -> immutable.activity.v1.ExportWalletAccountResult
+	272, // 366: immutable.activity.v1.Result.init_import_wallet_result:type_name -> immutable.activity.v1.InitImportWalletResult
+	273, // 367: immutable.activity.v1.Result.import_wallet_result:type_name -> immutable.activity.v1.ImportWalletResult
+	274, // 368: immutable.activity.v1.Result.init_import_private_key_result:type_name -> immutable.activity.v1.InitImportPrivateKeyResult
+	275, // 369: immutable.activity.v1.Result.import_private_key_result:type_name -> immutable.activity.v1.ImportPrivateKeyResult
+	232, // 370: immutable.activity.v1.Result.create_policies_result:type_name -> immutable.activity.v1.CreatePoliciesResult
+	207, // 371: immutable.activity.v1.Result.sign_raw_payloads_result:type_name -> immutable.activity.v1.SignRawPayloadsResult
+	235, // 372: immutable.activity.v1.Result.create_read_only_session_result:type_name -> immutable.activity.v1.CreateReadOnlySessionResult
+	276, // 373: immutable.activity.v1.Result.create_oauth_providers_result:type_name -> immutable.activity.v1.CreateOauthProvidersResult
+	278, // 374: immutable.activity.v1.Result.delete_oauth_providers_result:type_name -> immutable.activity.v1.DeleteOauthProvidersResult
+	261, // 375: immutable.activity.v1.Result.create_sub_organization_result_v5:type_name -> immutable.activity.v1.CreateSubOrganizationResultV5
+	229, // 376: immutable.activity.v1.Result.oauth_result:type_name -> immutable.activity.v1.OauthResult
+	236, // 377: immutable.activity.v1.Result.create_read_write_session_result:type_name -> immutable.activity.v1.CreateReadWriteSessionResult
+	262, // 378: immutable.activity.v1.Result.create_sub_organization_result_v6:type_name -> immutable.activity.v1.CreateSubOrganizationResultV6
+	279, // 379: immutable.activity.v1.Result.delete_private_keys_result:type_name -> immutable.activity.v1.DeletePrivateKeysResult
+	280, // 380: immutable.activity.v1.Result.delete_wallets_result:type_name -> immutable.activity.v1.DeleteWalletsResult
+	237, // 381: immutable.activity.v1.Result.create_read_write_session_result_v2:type_name -> immutable.activity.v1.CreateReadWriteSessionResultV2
+	281, // 382: immutable.activity.v1.Result.delete_sub_organization_result:type_name -> immutable.activity.v1.DeleteSubOrganizationResult
+	223, // 383: immutable.activity.v1.Result.init_otp_auth_result:type_name -> immutable.activity.v1.InitOtpAuthResult
+	225, // 384: immutable.activity.v1.Result.otp_auth_result:type_name -> immutable.activity.v1.OtpAuthResult
+	263, // 385: immutable.activity.v1.Result.create_sub_organization_result_v7:type_name -> immutable.activity.v1.CreateSubOrganizationResultV7
+	197, // 386: immutable.activity.v1.Result.update_wallet_result:type_name -> immutable.activity.v1.UpdateWalletResult
+	234, // 387: immutable.activity.v1.Result.update_policy_result_v2:type_name -> immutable.activity.v1.UpdatePolicyResultV2
+	224, // 388: immutable.activity.v1.Result.init_otp_auth_result_v2:type_name -> immutable.activity.v1.InitOtpAuthResultV2
+	221, // 389: immutable.activity.v1.Result.init_otp_result:type_name -> immutable.activity.v1.InitOtpResult
+	228, // 390: immutable.activity.v1.Result.verify_otp_result:type_name -> immutable.activity.v1.VerifyOtpResult
+	220, // 391: immutable.activity.v1.Result.otp_login_result:type_name -> immutable.activity.v1.OtpLoginResult
+	219, // 392: immutable.activity.v1.Result.stamp_login_result:type_name -> immutable.activity.v1.StampLoginResult
+	211, // 393: immutable.activity.v1.Result.oauth_login_result:type_name -> immutable.activity.v1.OauthLoginResult
+	194, // 394: immutable.activity.v1.Result.update_user_name_result:type_name -> immutable.activity.v1.UpdateUserNameResult
+	195, // 395: immutable.activity.v1.Result.update_user_email_result:type_name -> immutable.activity.v1.UpdateUserEmailResult
+	196, // 396: immutable.activity.v1.Result.update_user_phone_number_result:type_name -> immutable.activity.v1.UpdateUserPhoneNumberResult
+	217, // 397: immutable.activity.v1.Result.init_fiat_on_ramp_result:type_name -> immutable.activity.v1.InitFiatOnRampResult
+	253, // 398: immutable.activity.v1.Result.create_smart_contract_interface_result:type_name -> immutable.activity.v1.CreateSmartContractInterfaceResult
+	254, // 399: immutable.activity.v1.Result.delete_smart_contract_interface_result:type_name -> immutable.activity.v1.DeleteSmartContractInterfaceResult
+	183, // 400: immutable.activity.v1.Result.enable_auth_proxy_result:type_name -> immutable.activity.v1.EnableAuthProxyResult
+	184, // 401: immutable.activity.v1.Result.disable_auth_proxy_result:type_name -> immutable.activity.v1.DisableAuthProxyResult
+	6,   // 402: immutable.activity.v1.Result.update_auth_proxy_config_result:type_name -> immutable.activity.v1.UpdateAuthProxyConfigResult
+	282, // 403: immutable.activity.v1.Result.create_oauth2_credential_result:type_name -> immutable.activity.v1.CreateOauth2CredentialResult
+	283, // 404: immutable.activity.v1.Result.update_oauth2_credential_result:type_name -> immutable.activity.v1.UpdateOauth2CredentialResult
+	284, // 405: immutable.activity.v1.Result.delete_oauth2_credential_result:type_name -> immutable.activity.v1.DeleteOauth2CredentialResult
+	286, // 406: immutable.activity.v1.Result.oauth2_authenticate_result:type_name -> immutable.activity.v1.Oauth2AuthenticateResult
+	287, // 407: immutable.activity.v1.Result.delete_wallet_accounts_result:type_name -> immutable.activity.v1.DeleteWalletAccountsResult
+	288, // 408: immutable.activity.v1.Result.delete_policies_result:type_name -> immutable.activity.v1.DeletePoliciesResult
+	296, // 409: immutable.activity.v1.Result.eth_send_raw_transaction_result:type_name -> immutable.activity.v1.EthSendRawTransactionResult
+	297, // 410: immutable.activity.v1.Result.create_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.CreateFiatOnRampCredentialResult
+	299, // 411: immutable.activity.v1.Result.update_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.UpdateFiatOnRampCredentialResult
+	301, // 412: immutable.activity.v1.Result.delete_fiat_on_ramp_credential_result:type_name -> immutable.activity.v1.DeleteFiatOnRampCredentialResult
+	302, // 413: immutable.activity.v1.Result.eth_send_transaction_result:type_name -> immutable.activity.v1.EthSendTransactionResult
+	182, // 414: immutable.activity.v1.Result.upsert_gas_usage_config_result:type_name -> immutable.activity.v1.UpsertGasUsageConfigResult
+	289, // 415: immutable.activity.v1.Result.create_tvc_app_result:type_name -> immutable.activity.v1.CreateTvcAppResult
+	290, // 416: immutable.activity.v1.Result.create_tvc_deployment_result:type_name -> immutable.activity.v1.CreateTvcDeploymentResult
+	291, // 417: immutable.activity.v1.Result.create_tvc_manifest_approvals_result:type_name -> immutable.activity.v1.CreateTvcManifestApprovalsResult
+	304, // 418: immutable.activity.v1.Result.sol_send_transaction_result:type_name -> immutable.activity.v1.SolSendTransactionResult
+	222, // 419: immutable.activity.v1.Result.init_otp_result_v2:type_name -> immutable.activity.v1.InitOtpResultV2
+	251, // 420: immutable.activity.v1.Result.update_organization_name_result:type_name -> immutable.activity.v1.UpdateOrganizationNameResult
+	264, // 421: immutable.activity.v1.Result.create_sub_organization_result_v8:type_name -> immutable.activity.v1.CreateSubOrganizationResultV8
+	277, // 422: immutable.activity.v1.Result.create_oauth_providers_result_v2:type_name -> immutable.activity.v1.CreateOauthProvidersResultV2
+	310, // 423: immutable.activity.v1.Result.create_webhook_endpoint_result:type_name -> immutable.activity.v1.CreateWebhookEndpointResult
+	311, // 424: immutable.activity.v1.Result.update_webhook_endpoint_result:type_name -> immutable.activity.v1.UpdateWebhookEndpointResult
+	312, // 425: immutable.activity.v1.Result.delete_webhook_endpoint_result:type_name -> immutable.activity.v1.DeleteWebhookEndpointResult
+	347, // 426: immutable.activity.v1.Result.set_ip_allowlist_result:type_name -> immutable.activity.v1.SetIpAllowlistResult
+	348, // 427: immutable.activity.v1.Result.remove_ip_allowlist_result:type_name -> immutable.activity.v1.RemoveIpAllowlistResult
+	392, // 428: immutable.activity.v1.Result.update_tvc_app_live_deployment_result:type_name -> immutable.activity.v1.UpdateTvcAppLiveDeploymentResult
+	394, // 429: immutable.activity.v1.Result.delete_tvc_deployment_result:type_name -> immutable.activity.v1.DeleteTvcDeploymentResult
+	396, // 430: immutable.activity.v1.Result.delete_tvc_app_and_deployments_result:type_name -> immutable.activity.v1.DeleteTvcAppAndDeploymentsResult
+	398, // 431: immutable.activity.v1.Result.restore_tvc_deployment_result:type_name -> immutable.activity.v1.RestoreTvcDeploymentResult
+	369, // 432: immutable.activity.v1.Result.spark_sign_frost_result:type_name -> immutable.activity.v1.SparkSignFrostResult
+	371, // 433: immutable.activity.v1.Result.spark_prepare_transfer_result:type_name -> immutable.activity.v1.SparkPrepareTransferResult
+	373, // 434: immutable.activity.v1.Result.spark_claim_transfer_result:type_name -> immutable.activity.v1.SparkClaimTransferResult
+	375, // 435: immutable.activity.v1.Result.spark_prepare_lightning_receive_result:type_name -> immutable.activity.v1.SparkPrepareLightningReceiveResult
+	292, // 436: immutable.activity.v1.Result.post_tvc_quorum_key_share_result:type_name -> immutable.activity.v1.PostTvcQuorumKeyShareResult
+	303, // 437: immutable.activity.v1.Result.eth_send_transaction_result_v2:type_name -> immutable.activity.v1.EthSendTransactionResultV2
+	314, // 438: immutable.activity.v1.Result.create_mfa_policy_result:type_name -> immutable.activity.v1.CreateMfaPolicyResult
+	315, // 439: immutable.activity.v1.Result.update_mfa_policy_result:type_name -> immutable.activity.v1.UpdateMfaPolicyResult
+	316, // 440: immutable.activity.v1.Result.delete_mfa_policy_result:type_name -> immutable.activity.v1.DeleteMfaPolicyResult
+	317, // 441: immutable.activity.v1.Result.create_session_profile_result:type_name -> immutable.activity.v1.CreateSessionProfileResult
+	318, // 442: immutable.activity.v1.Result.earn_deploy_wrapper_result:type_name -> immutable.activity.v1.EarnDeployWrapperResult
+	319, // 443: immutable.activity.v1.Result.earn_deposit_result:type_name -> immutable.activity.v1.EarnDepositResult
+	320, // 444: immutable.activity.v1.Result.earn_withdraw_result:type_name -> immutable.activity.v1.EarnWithdrawResult
+	306, // 445: immutable.activity.v1.Result.execute_swap_result:type_name -> immutable.activity.v1.ExecuteSwapResult
+	185, // 446: immutable.activity.v1.Result.upsert_swap_config_result:type_name -> immutable.activity.v1.UpsertSwapConfigResult
+	293, // 447: immutable.activity.v1.Result.create_tvc_operator_result:type_name -> immutable.activity.v1.CreateTvcOperatorResult
+	294, // 448: immutable.activity.v1.Result.create_tvc_quorum_key_result:type_name -> immutable.activity.v1.CreateTvcQuorumKeyResult
+	295, // 449: immutable.activity.v1.Result.re_encrypt_tvc_quorum_key_share_result:type_name -> immutable.activity.v1.ReEncryptTvcQuorumKeyShareResult
+	377, // 450: immutable.activity.v1.Result.init_import_secrets_result:type_name -> immutable.activity.v1.InitImportSecretsResult
+	305, // 451: immutable.activity.v1.Result.sol_send_transaction_result_v2:type_name -> immutable.activity.v1.SolSendTransactionResultV2
+	186, // 452: immutable.activity.v1.Result.claim_swap_fees_result:type_name -> immutable.activity.v1.ClaimSwapFeesResult
+	321, // 453: immutable.activity.v1.Result.earn_set_wrapper_state_result:type_name -> immutable.activity.v1.EarnSetWrapperStateResult
+	322, // 454: immutable.activity.v1.Result.claim_earn_fees_result:type_name -> immutable.activity.v1.ClaimEarnFeesResult
+	198, // 455: immutable.activity.v1.Result.update_wallet_account_name_result:type_name -> immutable.activity.v1.UpdateWalletAccountNameResult
+	408, // 456: immutable.activity.v1.Result.eth_undelegate7702_result:type_name -> immutable.activity.v1.EthUndelegate7702Result
+	308, // 457: immutable.activity.v1.Result.create_swap_quote_result:type_name -> immutable.activity.v1.CreateSwapQuoteResult
+	380, // 458: immutable.activity.v1.Result.import_secrets_result:type_name -> immutable.activity.v1.ImportSecretsResult
+	385, // 459: immutable.activity.v1.Result.export_secrets_result:type_name -> immutable.activity.v1.ExportSecretsResult
+	387, // 460: immutable.activity.v1.Result.create_usage_control_result:type_name -> immutable.activity.v1.CreateUsageControlResult
+	389, // 461: immutable.activity.v1.Result.delete_usage_controls_result:type_name -> immutable.activity.v1.DeleteUsageControlsResult
+	455, // 462: immutable.activity.v1.Result.update_payment_method_result:type_name -> immutable.activity.billing.UpdatePaymentMethodResult
+	382, // 463: immutable.activity.v1.Result.delete_secrets_result:type_name -> immutable.activity.v1.DeleteSecretsResult
+	323, // 464: immutable.activity.v1.Result.earn_claim_rewards_result:type_name -> immutable.activity.v1.EarnClaimRewardsResult
+	417, // 465: immutable.activity.v1.Result.create_swap_quote_result_v2:type_name -> immutable.activity.v1.CreateSwapQuoteResultV2
+	265, // 466: immutable.activity.v1.Result.create_sub_organization_result_v9:type_name -> immutable.activity.v1.CreateSubOrganizationResultV9
+	227, // 467: immutable.activity.v1.Result.verify_wallet_authenticator_result:type_name -> immutable.activity.v1.VerifyWalletAuthenticatorResult
+	132, // 468: immutable.activity.v1.Result.upsert_swap_fee_sponsorship_limit_config_result:type_name -> immutable.activity.v1.UpsertSwapFeeSponsorshipLimitConfigResult
+	134, // 469: immutable.activity.v1.Result.upsert_swap_fixed_rate_limit_config_result:type_name -> immutable.activity.v1.UpsertSwapFixedRateLimitConfigResult
+	218, // 470: immutable.activity.v1.Result.create_fiat_on_ramp_session_result:type_name -> immutable.activity.v1.CreateFiatOnRampSessionResult
+	213, // 471: immutable.activity.v1.Result.create_fiat_off_ramp_session_result:type_name -> immutable.activity.v1.CreateFiatOffRampSessionResult
+	188, // 472: immutable.activity.v1.Result.create_wallet_authenticators_result:type_name -> immutable.activity.v1.CreateWalletAuthenticatorsResult
+	189, // 473: immutable.activity.v1.Result.delete_wallet_authenticators_result:type_name -> immutable.activity.v1.DeleteWalletAuthenticatorsResult
+	351, // 474: immutable.activity.v1.Result.enable_sms_for_countries_result:type_name -> immutable.activity.v1.EnableSmsForCountriesResult
+	352, // 475: immutable.activity.v1.Result.disable_sms_for_countries_result:type_name -> immutable.activity.v1.DisableSmsForCountriesResult
+	298, // 476: immutable.activity.v1.Result.create_fiat_ramp_credential_result:type_name -> immutable.activity.v1.CreateFiatRampCredentialResult
+	300, // 477: immutable.activity.v1.Result.update_fiat_ramp_credential_result:type_name -> immutable.activity.v1.UpdateFiatRampCredentialResult
+	422, // 478: immutable.activity.v1.Result.create_external_signer_result_v1:type_name -> immutable.activity.v1.CreateExternalSignerResultV1
+	424, // 479: immutable.activity.v1.Result.delete_external_signer_result_v1:type_name -> immutable.activity.v1.DeleteExternalSignerResultV1
+	216, // 480: immutable.activity.v1.Result.mint_jwt_result:type_name -> immutable.activity.v1.MintJwtResult
+	355, // 481: immutable.activity.v1.Result.add_notification_domains_result:type_name -> immutable.activity.v1.AddNotificationDomainsResult
+	356, // 482: immutable.activity.v1.Result.delete_notification_domains_result:type_name -> immutable.activity.v1.DeleteNotificationDomainsResult
+	285, // 483: immutable.activity.v1.Result.init_oauth2_authenticate_result:type_name -> immutable.activity.v1.InitOauth2AuthenticateResult
+	204, // 484: immutable.activity.v1.CreatePrivateKeysResultV2.private_keys:type_name -> immutable.activity.v1.PrivateKeyResult
+	205, // 485: immutable.activity.v1.PrivateKeyResult.addresses:type_name -> immutable.activity.v1.Address
+	447, // 486: immutable.activity.v1.Address.format:type_name -> immutable.common.v1.AddressFormat
+	206, // 487: immutable.activity.v1.SignRawPayloadsResult.signatures:type_name -> immutable.activity.v1.SignRawPayloadResult
+	456, // 488: immutable.activity.v1.MintJwtIntent.profile:type_name -> immutable.common.v1.JwtProfile
+	215, // 489: immutable.activity.v1.MintJwtIntent.http_authz_v1:type_name -> immutable.activity.v1.HttpAuthzV1Inputs
+	204, // 490: immutable.activity.v1.CreateSubOrganizationResultV3.private_keys:type_name -> immutable.activity.v1.PrivateKeyResult
+	259, // 491: immutable.activity.v1.CreateSubOrganizationResultV4.wallet:type_name -> immutable.activity.v1.WalletResult
+	259, // 492: immutable.activity.v1.CreateSubOrganizationResultV5.wallet:type_name -> immutable.activity.v1.WalletResult
+	259, // 493: immutable.activity.v1.CreateSubOrganizationResultV6.wallet:type_name -> immutable.activity.v1.WalletResult
+	259, // 494: immutable.activity.v1.CreateSubOrganizationResultV7.wallet:type_name -> immutable.activity.v1.WalletResult
+	259, // 495: immutable.activity.v1.CreateSubOrganizationResultV8.wallet:type_name -> immutable.activity.v1.WalletResult
+	259, // 496: immutable.activity.v1.CreateSubOrganizationResultV9.wallet:type_name -> immutable.activity.v1.WalletResult
+	457, // 497: immutable.activity.v1.SetOrganizationFeatureResult.features:type_name -> immutable.data.v1.Feature
+	457, // 498: immutable.activity.v1.RemoveOrganizationFeatureResult.features:type_name -> immutable.data.v1.Feature
+	205, // 499: immutable.activity.v1.ImportPrivateKeyResult.addresses:type_name -> immutable.activity.v1.Address
+	416, // 500: immutable.activity.v1.ExecuteSwapResult.estimated_charges:type_name -> immutable.activity.v1.SwapCharges
+	307, // 501: immutable.activity.v1.CreateSwapQuoteResult.quotes:type_name -> immutable.activity.v1.SwapQuote
+	313, // 502: immutable.activity.v1.WebhookEndpointData.subscriptions:type_name -> immutable.activity.v1.WebhookSubscriptionParams
+	309, // 503: immutable.activity.v1.CreateWebhookEndpointResult.webhook_endpoint:type_name -> immutable.activity.v1.WebhookEndpointData
+	309, // 504: immutable.activity.v1.UpdateWebhookEndpointResult.webhook_endpoint:type_name -> immutable.activity.v1.WebhookEndpointData
+	326, // 505: immutable.activity.v1.OauthProviderParamsV2.oidc_claims:type_name -> immutable.activity.v1.OidcClaims
+	458, // 506: immutable.activity.v1.ApiKeyParamsV2.curve_type:type_name -> immutable.common.v1.ApiKeyCurve
+	459, // 507: immutable.activity.v1.UserParams.access_type:type_name -> immutable.common.v1.AccessType
+	431, // 508: immutable.activity.v1.UserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	332, // 509: immutable.activity.v1.UserParams.authenticators:type_name -> immutable.activity.v1.AuthenticatorParams
+	431, // 510: immutable.activity.v1.UserParamsV2.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	333, // 511: immutable.activity.v1.UserParamsV2.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	327, // 512: immutable.activity.v1.UserParamsV3.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 513: immutable.activity.v1.UserParamsV3.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	324, // 514: immutable.activity.v1.UserParamsV3.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParams
+	327, // 515: immutable.activity.v1.UserParamsV4.api_keys:type_name -> immutable.activity.v1.ApiKeyParamsV2
+	333, // 516: immutable.activity.v1.UserParamsV4.authenticators:type_name -> immutable.activity.v1.AuthenticatorParamsV2
+	325, // 517: immutable.activity.v1.UserParamsV4.oauth_providers:type_name -> immutable.activity.v1.OauthProviderParamsV2
+	460, // 518: immutable.activity.v1.AuthenticatorParams.attestation:type_name -> immutable.webauthn.v1.PublicKeyCredentialWithAttestation
+	334, // 519: immutable.activity.v1.AuthenticatorParamsV2.attestation:type_name -> immutable.activity.v1.Attestation
+	461, // 520: immutable.activity.v1.Attestation.transports:type_name -> immutable.webauthn.v1.AuthenticatorTransport
+	459, // 521: immutable.activity.v1.InvitationParams.access_type:type_name -> immutable.common.v1.AccessType
+	431, // 522: immutable.activity.v1.ApiOnlyUserParams.api_keys:type_name -> immutable.activity.api.ApiKeyParams
+	446, // 523: immutable.activity.v1.PrivateKeyParams.curve:type_name -> immutable.common.v1.Curve
+	447, // 524: immutable.activity.v1.PrivateKeyParams.address_formats:type_name -> immutable.common.v1.AddressFormat
+	339, // 525: immutable.activity.v1.WalletParams.accounts:type_name -> immutable.activity.v1.WalletAccountParams
+	446, // 526: immutable.activity.v1.WalletAccountParams.curve:type_name -> immutable.common.v1.Curve
+	462, // 527: immutable.activity.v1.WalletAccountParams.path_format:type_name -> immutable.common.v1.PathFormat
+	447, // 528: immutable.activity.v1.WalletAccountParams.address_format:type_name -> immutable.common.v1.AddressFormat
+	344, // 529: immutable.activity.v1.SetIpAllowlistIntent.rules:type_name -> immutable.activity.v1.IpAllowlistIntentRule
+	401, // 530: immutable.activity.v1.SparkTransferLeaf.old_leaf_derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
+	401, // 531: immutable.activity.v1.SparkTransferLeaf.new_leaf_derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
+	359, // 532: immutable.activity.v1.SparkTransferPackage.leaves:type_name -> immutable.activity.v1.SparkTransferLeaf
+	358, // 533: immutable.activity.v1.SparkTransferPackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
+	360, // 534: immutable.activity.v1.SparkClaimPackage.leaves:type_name -> immutable.activity.v1.SparkClaimLeaf
+	358, // 535: immutable.activity.v1.SparkClaimPackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
+	358, // 536: immutable.activity.v1.SparkLightningReceivePackage.operator_recipients:type_name -> immutable.activity.v1.SparkOperatorRecipient
+	401, // 537: immutable.activity.v1.SparkSignatureRequest.derivation:type_name -> immutable.activity.v1.SparkKeyDerivation
+	357, // 538: immutable.activity.v1.SparkSignatureRequest.operator_commitments:type_name -> immutable.activity.v1.SparkFrostCommitment
+	365, // 539: immutable.activity.v1.SparkSignFrostIntent.signatures:type_name -> immutable.activity.v1.SparkSignatureRequest
+	366, // 540: immutable.activity.v1.SparkSignFrostResult.signatures:type_name -> immutable.activity.v1.SparkPartialSignature
+	361, // 541: immutable.activity.v1.SparkPrepareTransferIntent.transfer:type_name -> immutable.activity.v1.SparkTransferPackage
+	364, // 542: immutable.activity.v1.SparkPrepareTransferResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
+	367, // 543: immutable.activity.v1.SparkPrepareTransferResult.new_leaf_public_keys:type_name -> immutable.activity.v1.SparkLeafPublicKey
+	362, // 544: immutable.activity.v1.SparkClaimTransferIntent.claim:type_name -> immutable.activity.v1.SparkClaimPackage
+	364, // 545: immutable.activity.v1.SparkClaimTransferResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
+	367, // 546: immutable.activity.v1.SparkClaimTransferResult.new_leaf_public_keys:type_name -> immutable.activity.v1.SparkLeafPublicKey
+	363, // 547: immutable.activity.v1.SparkPrepareLightningReceiveIntent.lightning_receive:type_name -> immutable.activity.v1.SparkLightningReceivePackage
+	364, // 548: immutable.activity.v1.SparkPrepareLightningReceiveResult.operator_packages:type_name -> immutable.activity.v1.SparkEncryptedOperatorPackage
+	449, // 549: immutable.activity.v1.InitImportSecretsIntent.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
+	379, // 550: immutable.activity.v1.ImportSecretsIntent.secrets:type_name -> immutable.activity.v1.ImportSecretParams
+	449, // 551: immutable.activity.v1.ImportSecretParams.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
+	463, // 552: immutable.activity.v1.ImportSecretParams.static_properties:type_name -> immutable.models.v1.KeyValue
+	384, // 553: immutable.activity.v1.ExportSecretsIntent.secrets:type_name -> immutable.activity.v1.ExportSecretParams
+	449, // 554: immutable.activity.v1.ExportSecretParams.encryption_suite:type_name -> immutable.models.v1.TransportEncryptionSuite
+	463, // 555: immutable.activity.v1.ExportSecretParams.request_context:type_name -> immutable.models.v1.KeyValue
+	464, // 556: immutable.activity.v1.CreateUsageControlIntent.data_source:type_name -> external.data.v1.UsageControlDataSource
+	465, // 557: immutable.activity.v1.CreateUsageControlIntent.budget:type_name -> external.data.v1.UsageControlBudget
+	466, // 558: immutable.activity.v1.ClientSignature.scheme:type_name -> immutable.common.v1.ClientSignatureScheme
+	400, // 559: immutable.activity.v1.RequiredAuthenticationMethodParams.any:type_name -> immutable.activity.v1.AuthenticationMethodParams
+	467, // 560: immutable.activity.v1.AuthenticationMethodParams.type:type_name -> immutable.common.v1.AuthenticationType
+	402, // 561: immutable.activity.v1.SparkKeyDerivation.identity:type_name -> immutable.activity.v1.SparkIdentityDerivation
+	403, // 562: immutable.activity.v1.SparkKeyDerivation.signing_leaf:type_name -> immutable.activity.v1.SparkSigningLeafDerivation
+	404, // 563: immutable.activity.v1.SparkKeyDerivation.deposit:type_name -> immutable.activity.v1.SparkDepositDerivation
+	405, // 564: immutable.activity.v1.SparkKeyDerivation.static_deposit:type_name -> immutable.activity.v1.SparkStaticDepositDerivation
+	406, // 565: immutable.activity.v1.SparkKeyDerivation.htlc_preimage:type_name -> immutable.activity.v1.SparkHtlcPreimageDerivation
+	416, // 566: immutable.activity.v1.SwapQuoteV2.estimated_charges:type_name -> immutable.activity.v1.SwapCharges
+	415, // 567: immutable.activity.v1.SwapQuoteV2.transactions:type_name -> immutable.activity.v1.SwapExecutionCall
+	414, // 568: immutable.activity.v1.CreateSwapQuoteResultV2.quotes:type_name -> immutable.activity.v1.SwapQuoteV2
+	419, // 569: immutable.activity.v1.ExecuteSwapIntentV4.bound_quote:type_name -> immutable.activity.v1.ExecuteSwapBoundQuote
+	420, // 570: immutable.activity.v1.ExecuteSwapIntentV4.market:type_name -> immutable.activity.v1.ExecuteSwapMarketTerms
+	571, // [571:571] is the sub-list for method output_type
+	571, // [571:571] is the sub-list for method input_type
+	571, // [571:571] is the sub-list for extension type_name
+	571, // [571:571] is the sub-list for extension extendee
+	0,   // [0:571] is the sub-list for field type_name
 }
 
 func init() { file_immutable_activity_v1_activity_proto_init() }
@@ -35005,6 +35603,10 @@ func file_immutable_activity_v1_activity_proto_init() {
 		(*Intent_CreateExternalSignerIntentV1)(nil),
 		(*Intent_DeleteExternalSignerIntentV1)(nil),
 		(*Intent_MintJwtIntent)(nil),
+		(*Intent_AddNotificationDomainsIntent)(nil),
+		(*Intent_DeleteNotificationDomainsIntent)(nil),
+		(*Intent_InitOauth2AuthenticateIntent)(nil),
+		(*Intent_Oauth2AuthenticateIntentV2)(nil),
 	}
 	file_immutable_activity_v1_activity_proto_msgTypes[1].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[5].OneofWrappers = []any{}
@@ -35085,15 +35687,15 @@ func file_immutable_activity_v1_activity_proto_init() {
 	file_immutable_activity_v1_activity_proto_msgTypes[146].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[147].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[148].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[152].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[153].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[156].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[154].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[155].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[158].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[161].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[162].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[165].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[173].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[175].OneofWrappers = []any{
+	file_immutable_activity_v1_activity_proto_msgTypes[160].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[163].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[164].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[167].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[175].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[177].OneofWrappers = []any{
 		(*Result_CreateOrganizationResult)(nil),
 		(*Result_CreateAuthenticatorsResult)(nil),
 		(*Result_CreateUsersResult)(nil),
@@ -35254,70 +35856,74 @@ func file_immutable_activity_v1_activity_proto_init() {
 		(*Result_CreateExternalSignerResultV1)(nil),
 		(*Result_DeleteExternalSignerResultV1)(nil),
 		(*Result_MintJwtResult)(nil),
+		(*Result_AddNotificationDomainsResult)(nil),
+		(*Result_DeleteNotificationDomainsResult)(nil),
+		(*Result_InitOauth2AuthenticateResult)(nil),
 	}
-	file_immutable_activity_v1_activity_proto_msgTypes[179].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[206].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[208].OneofWrappers = []any{
+	file_immutable_activity_v1_activity_proto_msgTypes[181].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[208].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[210].OneofWrappers = []any{
 		(*MintJwtIntent_HttpAuthzV1)(nil),
 	}
-	file_immutable_activity_v1_activity_proto_msgTypes[254].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[255].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[256].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[257].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[258].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[259].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[299].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[300].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[306].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[318].OneofWrappers = []any{
+	file_immutable_activity_v1_activity_proto_msgTypes[260].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[261].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[302].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[303].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[309].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[321].OneofWrappers = []any{
 		(*OauthProviderParamsV2_OidcToken)(nil),
 		(*OauthProviderParamsV2_OidcClaims)(nil),
 	}
-	file_immutable_activity_v1_activity_proto_msgTypes[320].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[321].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[322].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[323].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[324].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[329].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[331].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[325].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[326].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[327].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[332].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[333].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[334].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[335].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[336].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[337].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[338].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[339].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[348].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[354].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[368].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[389].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[390].OneofWrappers = []any{
+	file_immutable_activity_v1_activity_proto_msgTypes[340].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[341].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[342].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[355].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[361].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[375].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[396].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[397].OneofWrappers = []any{
 		(*SparkKeyDerivation_Identity)(nil),
 		(*SparkKeyDerivation_SigningLeaf)(nil),
 		(*SparkKeyDerivation_Deposit)(nil),
 		(*SparkKeyDerivation_StaticDeposit)(nil),
 		(*SparkKeyDerivation_HtlcPreimage)(nil),
 	}
-	file_immutable_activity_v1_activity_proto_msgTypes[396].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[398].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[399].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[400].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[401].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[402].OneofWrappers = []any{}
 	file_immutable_activity_v1_activity_proto_msgTypes[403].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[404].OneofWrappers = []any{}
-	file_immutable_activity_v1_activity_proto_msgTypes[406].OneofWrappers = []any{
+	file_immutable_activity_v1_activity_proto_msgTypes[405].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[406].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[407].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[408].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[409].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[410].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[412].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[414].OneofWrappers = []any{
 		(*ExecuteSwapIntentV4_BoundQuote)(nil),
 		(*ExecuteSwapIntentV4_Market)(nil),
 	}
-	file_immutable_activity_v1_activity_proto_msgTypes[408].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[416].OneofWrappers = []any{}
+	file_immutable_activity_v1_activity_proto_msgTypes[419].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_immutable_activity_v1_activity_proto_rawDesc), len(file_immutable_activity_v1_activity_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   414,
+			NumMessages:   422,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
