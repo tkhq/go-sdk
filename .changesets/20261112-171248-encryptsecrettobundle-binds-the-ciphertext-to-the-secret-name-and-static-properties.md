@@ -1,6 +1,6 @@
 ---
 module: "crypto"
-bump: "major"
+bump: "minor"
 title: "EncryptSecretToBundle binds the ciphertext to the secret name and static properties"
 date: "2026-11-12"
 ---
