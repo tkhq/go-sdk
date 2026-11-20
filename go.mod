@@ -5,7 +5,7 @@ go 1.27.1
 require (
 	github.com/cloudflare/circl v1.3.7
 	github.com/stretchr/testify v1.12.1
-	github.com/tkhq/go-sdk/crypto v0.3.0
+	github.com/tkhq/go-sdk/crypto v0.4.0
 )
 
 require (

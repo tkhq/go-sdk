@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## 2.4.0 — 2026-11-19
+### Patch Changes
+- Modifying the UC API shape to satisfy product requirements
+- Add the optional `deleteWithoutExport` field to `DeleteExternalSignerIntentV1` and `DeleteExternalSignerV1Request`. When set, the external signer is deleted together with the wrapped keys it generated.
+- The ListSecrets docs now state that the returned metadata, including static properties, is for display only. For efficiency, the enclave does not authenticate it in this view, so do not use it for security-sensitive decisions.
+- ExportSecretParams.TargetPublicKey docs now state that each exported secret needs its own fresh ephemeral target key and that Turnkey does not enforce this.
+- `ImportSecret` now calls `crypto.EncryptSecretToBundle`, which binds the ciphertext to the secret name and static properties. No change to the `ImportSecret` signature.
+- Add `SIGNATURE_SCHEME_TK_SIGNED_BLOB_P256` for domain-separated DER protobuf blob signatures.
+- Removed subdomain from the query description.
+### Minor Changes
+- Add optional eth.fee (gasUsed, effectiveGasPrice) and solana.fee (feeLamports, sponsoredRentLamports) to GetSendTransactionStatusResponse for landed transactions, including ones that reverted. Sponsored mainnet transactions also report totalCostUsd, and Solana adds feeCostUsd and rentCostUsd.
+- Add InitOAuth2Authenticate and OAuth2AuthenticateV2 client methods, plus AuthProxyInitOAuth2AuthenticateV2 and AuthProxyOAuth2AuthenticateV2, for initializing and submitting encrypted OAuth authentication inputs.
+- Breaking: renames the velocity controls activities and types to usage controls. The `ACTIVITY_TYPE_CREATE_VELOCITY_CONTROL` and `ACTIVITY_TYPE_DELETE_VELOCITY_CONTROLS` activity types become `ACTIVITY_TYPE_CREATE_USAGE_CONTROL` and `ACTIVITY_TYPE_DELETE_USAGE_CONTROLS` (the `ActivityTypeCreateVelocityControl` and `ActivityTypeDeleteVelocityControls` constants become `ActivityTypeCreateUsageControl` and `ActivityTypeDeleteUsageControls`). The `CreateVelocityControlIntent`, `CreateVelocityControlResult`, `DeleteVelocityControlsIntent` and `DeleteVelocityControlsResult` types, and every `VelocityControl*` type and enum value, are renamed to their `UsageControl*` equivalents. The `VelocityControlID` and `VelocityControlIds` fields become `UsageControlID` and `UsageControlIds`.
+- Adds `SwapCharges`, with `ExecutionUsd`, `TurnkeyFeeUsd`, and `FixedRateAdjustmentUsd`, one field per swap invoice line. `SwapQuoteV2`, returned by `ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3`, gains `EstimatedCharges` on fee-sponsored and fixed-rate quotes, `ExecuteSwapResult` gains `EstimatedCharges` from the executed quote for `ACTIVITY_TYPE_EXECUTE_SWAP_V4`, and `GetSwapStatusResponse` gains `Charges`, the final billed amounts once the swap settles. Deprecates `SwapQuoteV2.EstimatedFixedRateAdjustmentUsd` in favor of `EstimatedCharges.FixedRateAdjustmentUsd`.
+- Quote and fiat ramp credential types now use `FiatRampProvider`, `FiatRampCurrency`, `FiatRampPaymentMethod`, and `FiatRampAmount`.
+
+`GetFiatOnRampQuotes`, `GetFiatOffRampQuotes`, `CreateFiatRampCredential`, and `UpdateFiatRampCredential` take those types. `FiatRampPaymentMethod` is limited to the methods those queries return: card, Apple Pay, Google Pay, PayPal, MoonPay balance, fiat wallet, and ACH.
+
+`ListFiatOnRampCredentials` returns `provider` as `FiatRampProvider`.
+
+`InitFiatOnRamp`, `CreateFiatOnRampCredential`, and `UpdateFiatOnRampCredential` stay on the `FiatOnRamp*` types and are deprecated. Use the quote and session activities, and `CreateFiatRampCredential` / `UpdateFiatRampCredential`, instead.
+- Add `MintJWT` and `StampMintJWT` on `/public/v1/submit/mint_jwt`. `MintJWTRequest` takes `audience`, `profile`, and `httpAuthzV1` (see `HTTPAuthzV1Inputs`). `MintJWTResult.JWT` is an ES256 JWT, signed by Turnkey, that authorizes one exact HTTP request. `MintJWTResult.SigningKeyJwk` is the public JWK of the key that signed it.
+- Breaking: `ExecuteSwap` and `StampExecuteSwap` now use `ACTIVITY_TYPE_EXECUTE_SWAP_V4`, which executes a swap in one of two modes. `QuoteID`, `QuotedOutputAmount`, and `MinOutputAmount` move from `ExecuteSwapRequest` into `BoundQuote`. With `BoundQuote`, the swap executes a quote from `CreateSwapQuote` at its exact terms. With `Market`, it executes at the provider's price when the activity is approved, within `SlippageBps` and an optional `MinOutputAmount` floor. Adds `GetIndicativeSwapQuote`, a query that previews the current price for a swap without creating an activity; its result is not binding and has no quote ID.
+- Add RewardsApyPct to EarnVault and EarnEnabledVault; Aave ApyPct now includes Merkl rewards and NetApyPct only deducts fees from the non-reward portion.
+- SwapQuoteV2, returned by ACTIVITY_TYPE_CREATE_SWAP_QUOTE_V3, now includes Transactions. Each call is executed in order, including approvals. On EVM, execution signs a batch or an EIP-7702 wrapper around these calls. On Solana, data is the instruction payload; execution adds the blockhash and address lookup tables, and when the swap is sponsored it also adds the fee payer and rent instructions.
+- Add optional `BootProof.QuorumKeyAttestationSignatureHex`, containing the Signer quorum-key signature over the domain-separated AWS attestation document.
+- Adds the new externalSignerPubkey field for use with external signers (HSM) with EthSendTransaction and SolSendTransaction.
+The new fields can currently only be used with unsponsored sends.
+- `Client.ImportSecret` now uses `TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2` and binds the ciphertext to the secret's name and static properties. Adds `TransportEncryptionSuiteEnclaveEncryptV2`.
+- Adds ActivityTypeAddNotificationDomains and ActivityTypeDeleteNotificationDomains to types
+- Enable static egress IPs for TVC apps
+
+### [v2.3.0 ... v2.4.0](https://github.com/tkhq/go-sdk/compare/v2.3.0...v2.4.0)
+
 ## 2.3.0 — 2026-10-30
 ### Patch Changes
 - Restrict velocity control decimals to a value between 0 and 32 instead of 0 and 255.
