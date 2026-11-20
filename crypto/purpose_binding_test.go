@@ -18,6 +18,52 @@ const (
 
 var vectorProperties = []StaticProperty{{Key: "kind", Value: "credit-card"}, {Key: "dual-agent-consensus", Value: "true"}}
 
+// Vector from turnkey_enclave_encrypt::purpose_binding::oauth2_authenticate.
+const vectorOAuth2Binding = "0000002d454e435259505445445f494e47524553535f505552504f53455f4f41555448325f41555448454e54494341544500000001000000146f61757468325f63726564656e7469616c5f69640000002431303030303030302d303030302d343030302d383030302d303030303030303030303031"
+
+func TestOAuth2AuthenticatePurposeBinding(t *testing.T) {
+	const credentialID = "10000000-0000-4000-8000-000000000001"
+
+	assert.Equal(t, vectorOAuth2Binding, hex.EncodeToString(OAuth2AuthenticatePurposeBinding(credentialID)))
+
+	targetPublicHex, targetPrivate, err := GenerateEncryptionKeyPair()
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	targetPublicBytes, err := hex.DecodeString(targetPublicHex)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	targetPublic, err := KemID.Scheme().UnmarshalBinaryPublicKey(targetPublicBytes)
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	ciphertext, encappedPublic, err := HPKEEncryptWithPurposeBinding(&targetPublic, []byte("oauth inputs"), OAuth2AuthenticatePurposeBinding(credentialID))
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	plaintext, err := HPKEDecryptWithPurposeBinding(encappedPublic, targetPrivate, ciphertext, OAuth2AuthenticatePurposeBinding(credentialID))
+	assert.NoError(t, err)
+	assert.Equal(t, "oauth inputs", string(plaintext))
+
+	name := credentialID
+	for _, binding := range [][]byte{
+		nil,
+		OAuth2AuthenticatePurposeBinding("10000000-0000-4000-8000-000000000002"),
+		OAuth2AuthenticatePurposeBinding("10000000000040008000000000000001"),
+		encodePurposeBinding(oauth2AuthenticatePurpose, []purposeBindingField{{key: "credential_id", value: credentialID}}),
+		encodePurposeBinding(oauth2AuthenticatePurpose, nil),
+		ImportSecretsPurposeBinding(&name, nil),
+	} {
+		_, err = HPKEDecryptWithPurposeBinding(encappedPublic, targetPrivate, ciphertext, binding)
+		assert.EqualError(t, err, "cipher: message authentication failed")
+	}
+}
+
 func TestImportSecretsPurposeBindingVector(t *testing.T) {
 	name := "corp-amex"
 	assert.Equal(t, vectorBinding, hex.EncodeToString(ImportSecretsPurposeBinding(&name, vectorProperties)))

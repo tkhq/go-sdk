@@ -12,7 +12,7 @@ import (
 )
 
 func TestEncryptOtpCodeToBundle(t *testing.T) {
-	quorumKey, bundle, _, targetPrivate := newSignedTestTarget(t, "8a1e6f5c-0000-4000-8000-000000000001")
+	quorumKey, bundle, _, targetPrivate := newSignedTestTarget(t, "8a1e6f5c-0000-4000-8000-000000000001", "")
 	quorumPublicKey, err := quorumKey.PublicKey.ECDH()
 	require.NoError(t, err)
 

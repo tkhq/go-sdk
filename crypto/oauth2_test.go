@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// newSignedTestTarget returns a quorum key, a target bundle it signed for organizationID, and the target's key pair.
-func newSignedTestTarget(t *testing.T, organizationID string) (*ecdsa.PrivateKey, string, string, kem.PrivateKey) {
+// newSignedTestTarget returns a quorum key, a target bundle it signed for organizationID and userID, and the target's key pair.
+func newSignedTestTarget(t *testing.T, organizationID, userID string) (*ecdsa.PrivateKey, string, string, kem.PrivateKey) {
 	t.Helper()
 
 	quorumKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -29,7 +29,7 @@ func newSignedTestTarget(t *testing.T, organizationID string) (*ecdsa.PrivateKey
 	targetPublic, err := hex.DecodeString(targetPublicHex)
 	require.NoError(t, err)
 
-	data, err := json.Marshal(ServerTargetData{TargetPublic: targetPublic, OrganizationID: organizationID})
+	data, err := json.Marshal(ServerTargetData{TargetPublic: targetPublic, OrganizationID: organizationID, UserID: userID})
 	require.NoError(t, err)
 
 	signature, err := P256Sign(quorumKey, data)
@@ -53,10 +53,17 @@ func newSignedTestTarget(t *testing.T, organizationID string) (*ecdsa.PrivateKey
 func decryptTestMessage(t *testing.T, message string, targetPrivate kem.PrivateKey) map[string]any {
 	t.Helper()
 
+	return decryptBoundTestMessage(t, message, targetPrivate, nil)
+}
+
+// decryptBoundTestMessage opens ClientSendMsg JSON with the target's private key and purposeBinding.
+func decryptBoundTestMessage(t *testing.T, message string, targetPrivate kem.PrivateKey, purposeBinding []byte) map[string]any {
+	t.Helper()
+
 	var sent ClientSendMsg
 	require.NoError(t, json.Unmarshal([]byte(message), &sent))
 
-	plaintext, err := HPKEDecrypt(*sent.EncappedPublic, targetPrivate, *sent.Ciphertext)
+	plaintext, err := HPKEDecryptWithPurposeBinding(*sent.EncappedPublic, targetPrivate, *sent.Ciphertext, purposeBinding)
 	require.NoError(t, err)
 
 	var decrypted map[string]any
@@ -68,7 +75,7 @@ func decryptTestMessage(t *testing.T, message string, targetPrivate kem.PrivateK
 func TestEncryptOAuth2ToBundle(t *testing.T) {
 	const organizationID = "8a1e6f5c-0000-4000-8000-000000000001"
 
-	quorumKey, bundle, targetPublicHex, targetPrivate := newSignedTestTarget(t, organizationID)
+	quorumKey, bundle, targetPublicHex, targetPrivate := newSignedTestTarget(t, organizationID, "")
 	payload := OAuth2AuthenticationBundle{
 		OrganizationID:     organizationID,
 		OAuth2CredentialID: "10000000-0000-4000-8000-000000000001",
@@ -103,13 +110,33 @@ func TestEncryptOAuth2ToBundle(t *testing.T) {
 				expected["bearer_token_target_public_key"] = bearerTokenTargetPublicKey
 			}
 
-			assert.Equal(t, expected, decryptTestMessage(t, message, targetPrivate))
+			assert.Equal(t, expected, decryptBoundTestMessage(t, message, targetPrivate, OAuth2AuthenticatePurposeBinding(payload.OAuth2CredentialID)))
+		}
+	})
+
+	t.Run("bindsCredentialID", func(t *testing.T) {
+		message, _, err := EncryptOAuth2ToBundle(payload, bundle, &quorumKey.PublicKey)
+		require.NoError(t, err)
+
+		var sent ClientSendMsg
+		require.NoError(t, json.Unmarshal([]byte(message), &sent))
+
+		for _, binding := range [][]byte{nil, OAuth2AuthenticatePurposeBinding("10000000-0000-4000-8000-000000000002")} {
+			_, err = HPKEDecryptWithPurposeBinding(*sent.EncappedPublic, targetPrivate, *sent.Ciphertext, binding)
+			assert.EqualError(t, err, "cipher: message authentication failed")
 		}
 	})
 
 	t.Run("productionKeyByDefault", func(t *testing.T) {
 		_, _, err := EncryptOAuth2ToBundle(payload, bundle)
 		assert.ErrorContains(t, err, "enclave quorum public keys from client and message do not match")
+	})
+
+	t.Run("userTarget", func(t *testing.T) {
+		quorumKey, bundle, _, _ := newSignedTestTarget(t, organizationID, "user-1")
+
+		_, _, err := EncryptOAuth2ToBundle(payload, bundle, &quorumKey.PublicKey)
+		assert.EqualError(t, err, "oauth2 target user id must be empty. Found: user-1")
 	})
 
 	t.Run("organizationMismatch", func(t *testing.T) {

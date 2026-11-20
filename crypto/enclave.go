@@ -269,6 +269,8 @@ func (b OAuth2AuthenticationBundle) LogValue() slog.Value {
 
 // EncryptOAuth2ToBundle verifies the TLS Fetcher target returned by InitOAuth2Authenticate, then returns the encrypted
 // ClientSendMsg JSON and hex target public key for OAuth2AuthenticateV2's encryptedMessage and targetPublicKey.
+// The ciphertext is bound to bundle.OAuth2CredentialID (see OAuth2AuthenticatePurposeBinding). InitOAuth2Authenticate
+// must request TRANSPORT_ENCRYPTION_SUITE_ENCLAVE_ENCRYPT_V2, and OAuth2AuthenticateV2 must send the same credential ID.
 // dangerouslyOverrideSignerKey replaces ProductionTLSFetcherSigningPublicKey (non-production only).
 func EncryptOAuth2ToBundle(bundle OAuth2AuthenticationBundle, targetBundle string, dangerouslyOverrideSignerKey ...*ecdsa.PublicKey) (string, string, error) {
 	signerKey, err := resolveTLSFetcherKey(dangerouslyOverrideSignerKey...)
@@ -293,8 +295,7 @@ func EncryptOAuth2ToBundle(bundle OAuth2AuthenticationBundle, targetBundle strin
 		return "", "", fmt.Errorf("oauth2 target user id must be empty. Found: %s", signedData.UserID)
 	}
 
-	// OAuth2AuthenticateV2 decrypts without a purpose binding.
-	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext, nil)
+	payload, err := hpkeEncryptToTarget(signedData.TargetPublic, plaintext, OAuth2AuthenticatePurposeBinding(bundle.OAuth2CredentialID))
 	if err != nil {
 		return "", "", err
 	}
