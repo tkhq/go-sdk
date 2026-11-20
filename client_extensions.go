@@ -92,7 +92,7 @@ func (c *Client) ImportSecret(ctx context.Context, organizationID string, name *
 
 	initRes, err := c.InitImportSecrets(ctx, InitImportSecretsRequest{
 		OrganizationID:  organizationID,
-		EncryptionSuite: TransportEncryptionSuiteEnclaveEncryptV1,
+		EncryptionSuite: TransportEncryptionSuiteEnclaveEncryptV2,
 		NumSecrets:      1,
 	})
 	if err != nil {
@@ -104,7 +104,16 @@ func (c *Client) ImportSecret(ctx context.Context, organizationID string, name *
 		return "", err
 	}
 
-	payload, targetPublicKey, err := crypto.EncryptSecretToBundle(plaintext, targetBundle, organizationID, signerKey...)
+	bound := make([]crypto.StaticProperty, 0, len(staticProperties))
+
+	keyValues := make([]KeyValue, 0, len(staticProperties))
+	for _, k := range slices.Sorted(maps.Keys(staticProperties)) {
+		key, value := k, staticProperties[k]
+		bound = append(bound, crypto.StaticProperty{Key: key, Value: value})
+		keyValues = append(keyValues, KeyValue{Key: &key, Value: &value})
+	}
+
+	payload, targetPublicKey, err := crypto.EncryptSecretToBundle(plaintext, targetBundle, organizationID, name, bound, signerKey...)
 	if err != nil {
 		return "", fmt.Errorf("failed to encrypt secret to target bundle: %w", err)
 	}
@@ -115,8 +124,8 @@ func (c *Client) ImportSecret(ctx context.Context, organizationID string, name *
 			Name:             name,
 			SecretPayload:    payload,
 			TargetPublicKey:  targetPublicKey,
-			EncryptionSuite:  TransportEncryptionSuiteEnclaveEncryptV1,
-			StaticProperties: keyValuesFromMap(staticProperties),
+			EncryptionSuite:  TransportEncryptionSuiteEnclaveEncryptV2,
+			StaticProperties: keyValues,
 		}},
 	})
 	if err != nil {
@@ -172,15 +181,4 @@ func exactlyOne[T any](items []T, what string) (T, error) {
 	}
 
 	return items[0], nil
-}
-
-// keyValuesFromMap converts a map to KeyValue pairs sorted by key.
-func keyValuesFromMap(m map[string]string) []KeyValue {
-	out := make([]KeyValue, 0, len(m))
-	for _, k := range slices.Sorted(maps.Keys(m)) {
-		key, value := k, m[k]
-		out = append(out, KeyValue{Key: &key, Value: &value})
-	}
-
-	return out
 }

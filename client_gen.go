@@ -72,6 +72,19 @@ func (c *Client) AuthProxyGetWalletKitConfig(ctx context.Context, input AuthProx
 	return out, nil
 }
 
+// Initialize an encryption target for OAuth 2.0 authentication.
+func (c *Client) AuthProxyInitOAuth2AuthenticateV2(ctx context.Context, input AuthProxyInitOAuth2AuthenticateV2Request) (*AuthProxyInitOAuth2AuthenticateV2Response, error) {
+	extraHeaders := map[string]string{}
+	if c.config.authProxyConfigID != "" {
+		extraHeaders["X-Auth-Proxy-Config-ID"] = c.config.authProxyConfigID
+	}
+	out := new(AuthProxyInitOAuth2AuthenticateV2Response)
+	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/init_oauth2_authenticate_v2", input, out, false, extraHeaders); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Initialize an OTP (email or SMS) for a user.
 func (c *Client) AuthProxyInitOTP(ctx context.Context, input AuthProxyInitOTPRequest) (*AuthProxyInitOTPResponse, error) {
 	extraHeaders := map[string]string{}
@@ -98,7 +111,8 @@ func (c *Client) AuthProxyInitOTPV2(ctx context.Context, input AuthProxyInitOTPV
 	return out, nil
 }
 
-// Authenticate with an OAuth 2.0 provider and receive an OIDC token issued by Turnkey in response.
+// Deprecated: use InitOAuth2AuthenticateV2 and OAuth2AuthenticateV2.
+// Deprecated: this endpoint is marked deprecated in the Swagger spec.
 func (c *Client) AuthProxyOAuth2Authenticate(ctx context.Context, input AuthProxyOAuth2AuthenticateRequest) (*AuthProxyOAuth2AuthenticateResponse, error) {
 	extraHeaders := map[string]string{}
 	if c.config.authProxyConfigID != "" {
@@ -106,6 +120,19 @@ func (c *Client) AuthProxyOAuth2Authenticate(ctx context.Context, input AuthProx
 	}
 	out := new(AuthProxyOAuth2AuthenticateResponse)
 	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/oauth2_authenticate", input, out, false, extraHeaders); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Authenticate with an OAuth 2.0 provider using encrypted client inputs and receive a Turnkey OIDC token.
+func (c *Client) AuthProxyOAuth2AuthenticateV2(ctx context.Context, input AuthProxyOAuth2AuthenticateV2Request) (*AuthProxyOAuth2AuthenticateV2Response, error) {
+	extraHeaders := map[string]string{}
+	if c.config.authProxyConfigID != "" {
+		extraHeaders["X-Auth-Proxy-Config-ID"] = c.config.authProxyConfigID
+	}
+	out := new(AuthProxyOAuth2AuthenticateV2Response)
+	if err := c.postJSON(ctx, c.config.urls.authProxyBaseURL, "/v1/oauth2_authenticate_v2", input, out, false, extraHeaders); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -3345,6 +3372,35 @@ func (c *Client) StampInitImportWallet(ctx context.Context, input InitImportWall
 	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/init_import_wallet", body, true)
 }
 
+// Create an encryption target for confidential OAuth 2.0 authentication inputs.
+func (c *Client) InitOAuth2Authenticate(ctx context.Context, input InitOAuth2AuthenticateRequest) (*InitOAuth2AuthenticateResponse, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	var raw map[string]any
+	if err := c.postJSON(ctx, c.config.urls.baseURL, "/public/v1/submit/init_oauth2_authenticate", body, &raw, true, nil); err != nil {
+		return nil, err
+	}
+	out := new(ActivityResult[InitOAuth2AuthenticateResult])
+	if err := decodeActivityResponse(raw, "InitOAuth2AuthenticateResult", out); err != nil {
+		return nil, err
+	}
+	result, activity, err := activityAndWait(ctx, c, out, func(r Result) *InitOAuth2AuthenticateResult { return r.InitOAuth2AuthenticateResult })
+	if err != nil {
+		return nil, err
+	}
+	return &InitOAuth2AuthenticateResponse{Activity: *activity, InitOAuth2AuthenticateResult: *result}, nil
+}
+
+func (c *Client) StampInitOAuth2Authenticate(ctx context.Context, input InitOAuth2AuthenticateRequest) (*SignedRequest, error) {
+	body, err := c.activityEnvelope(input)
+	if err != nil {
+		return nil, err
+	}
+	return c.signedRequest(ctx, c.config.urls.baseURL, "/public/v1/submit/init_oauth2_authenticate", body, true)
+}
+
 // Initiate a generic OTP activity.
 func (c *Client) InitOTP(ctx context.Context, input InitOTPRequest) (*InitOTPResponse, error) {
 	body, err := c.activityEnvelope(input)
@@ -3558,7 +3614,7 @@ func (c *Client) ListPrivateKeyTags(ctx context.Context, input ListPrivateKeyTag
 	return out, nil
 }
 
-// List secret metadata for an organization.
+// List secret metadata for an organization. The returned metadata, including static properties, is for display only. For efficiency, the enclave does not authenticate it in this view, so do not use it for security-sensitive decisions.
 func (c *Client) ListSecrets(ctx context.Context, input ListSecretsRequest) (*ListSecretsResponse, error) {
 	organizationID, err := c.organizationID(input.OrganizationID)
 	if err != nil {
