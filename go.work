@@ -5,6 +5,7 @@ use (
 	./crypto
 	./encoding
 	./proto
+	./tools
 )
 
 replace github.com/tkhq/go-sdk/crypto v0.4.0 => ./crypto

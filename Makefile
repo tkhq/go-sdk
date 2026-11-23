@@ -51,6 +51,7 @@ tidy:
 	cd crypto && GOWORK=off go mod tidy
 	cd encoding && GOWORK=off go mod tidy
 	cd proto && GOWORK=off go mod tidy
+	cd tools && GOWORK=off go mod tidy
 	go mod edit -dropreplace github.com/tkhq/go-sdk/crypto
 	go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
 	cd crypto && go mod edit -dropreplace github.com/tkhq/go-sdk/encoding
@@ -59,6 +60,7 @@ tidy:
 	cd crypto && go mod edit -go=1.27.1
 	cd encoding && go mod edit -go=1.27.1
 	cd proto && go mod edit -go=1.27.1
+	cd tools && go mod edit -go=1.27.1
 	go work edit -go=1.27.1
 
 .PHONY: release-branch
