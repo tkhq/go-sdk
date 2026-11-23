@@ -69,6 +69,13 @@ go-sdk/
 - [Crypto README](./crypto/README.md)
 - [Encoding README](./encoding/README.md)
 
+## Development tools
+
+Lint and format tools are pinned in [`tools/go.mod`](./tools/go.mod). The checked-in
+workspace makes them available through `go tool` from the repository root, so
+`make fmt`, `make lint`, and `make generate` keep using those versions. `make tidy`
+also tidies the tools module. SDK consumers do not inherit these tool dependencies.
+
 ## Installation
 
 ```bash
